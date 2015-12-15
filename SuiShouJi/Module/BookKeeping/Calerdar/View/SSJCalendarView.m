@@ -11,8 +11,8 @@
 #import "SSJCalendarCollectionViewCell.h"
 
 @interface SSJCalendarView()
-@property(nonatomic)int year;
-@property(nonatomic)int month;
+@property(nonatomic)long year;
+@property(nonatomic)long month;
 @end
 
 @implementation SSJCalendarView
@@ -59,7 +59,7 @@
         return cell;
     }else{
        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-        cell.currentDay = [[NSString alloc] initWithFormat:@"%d",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 1];
+        cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 1];
         return cell;
     }
 }
@@ -95,11 +95,11 @@
 }
 
 //获得某个月的第一天是星期几
--(int)getWeekOfFirstDayOfMonth:(int)year withMonth:(int)month{
+-(long)getWeekOfFirstDayOfMonth:(long)year withMonth:(long)month{
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSString *firstWeekDayMonth = [[NSString alloc] initWithFormat:@"%d",year];
+    NSString *firstWeekDayMonth = [[NSString alloc] initWithFormat:@"%ld",year];
     firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%s","-"]];
-    firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%d",month]];
+    firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%ld",month]];
     firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%s","-"]];
     firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%d",1]];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -110,7 +110,7 @@
 }
 
 //返回一个月有多少天
--(int)getDaysOfMonth:(int)year withMonth:(int)month{
+-(long)getDaysOfMonth:(long)year withMonth:(long)month{
     NSInteger days = 0;
     //1,3,5,7,8,10,12
     NSArray *bigMoth = [[NSArray alloc] initWithObjects:@"1",@"3",@"5",@"7",@"8",@"10",@"12", nil];
