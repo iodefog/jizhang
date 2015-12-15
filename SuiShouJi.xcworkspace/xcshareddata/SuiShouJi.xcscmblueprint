@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "DFF574CDD606896E274E3371441052B10480B888",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "DFF574CDD606896E274E3371441052B10480B888" : 0,
+    "D8B080C4DAB4AAB619ECF701263730F6567298DF" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "02B7E827-C8CC-4683-9CBF-E470E81C3769",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "DFF574CDD606896E274E3371441052B10480B888" : "SuiShouJi\/",
+    "D8B080C4DAB4AAB619ECF701263730F6567298DF" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SuiShouJi",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SuiShouJi.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.5.228\/caiyi.yydb\/ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D8B080C4DAB4AAB619ECF701263730F6567298DF"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.5.228\/caiyi.financial.huishuaka.tools\/accountbook_ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DFF574CDD606896E274E3371441052B10480B888"
+    }
+  ]
+}
