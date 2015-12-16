@@ -43,6 +43,10 @@
     self.tableView.height = self.view.height - 69;
 }
 
+-(BOOL)prefersStatusBarHidden{
+    return YES;
+}
+
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 100;

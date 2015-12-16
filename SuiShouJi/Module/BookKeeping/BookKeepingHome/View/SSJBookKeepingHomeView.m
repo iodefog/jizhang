@@ -30,10 +30,10 @@
 -(void)layoutSubviews{
     self.categoryImageButton.bottom = self.height;
     self.categoryImageButton.centerX = self.centerX;
-    self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
-    self.incomeLabel.centerY = self.categoryImageButton.centerY;
-    self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
+    self.expenditureLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
     self.expenditureLabel.centerY = self.categoryImageButton.centerY;
+    self.incomeLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
+    self.incomeLabel.centerY = self.categoryImageButton.centerY;
 
 }
 
