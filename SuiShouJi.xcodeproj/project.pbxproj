@@ -57,6 +57,11 @@
 		BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433BB1C1AA3320051E7AB /* SSJReportFormsViewController.m */; };
 		BD0433BF1C1AA3520051E7AB /* SSJFinancingHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433BE1C1AA3520051E7AB /* SSJFinancingHomeViewController.m */; };
 		BD0433C21C1AA3630051E7AB /* SSJMoreHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433C11C1AA3630051E7AB /* SSJMoreHomeViewController.m */; };
+		BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */; };
+		BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */; };
+		BD0E43F01C2118E600F9179D /* homeSeperator.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43ED1C2118E600F9179D /* homeSeperator.png */; };
+		BD0E43F11C2118E600F9179D /* 进度条－点 测试.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */; };
+		BD0E43F21C2118E600F9179D /* 餐饮 测试.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */; };
 		BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */; };
 		BD543C411C1A6DBC00910D61 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C401C1A6DBC00910D61 /* main.m */; };
 		BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C431C1A6DBC00910D61 /* AppDelegate.m */; };
@@ -71,11 +76,8 @@
 		BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */; };
 		BDD78B121C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B101C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m */; };
 		BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78B111C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib */; };
-		BDD78B241C1FC55700C7EE0E /* 进度条－点 测试.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD78B231C1FC55700C7EE0E /* 进度条－点 测试.png */; };
 		BDD78B2C1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */; };
 		BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */; };
-		BDD78B311C20090400C7EE0E /* homeSeperator.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD78B301C20090400C7EE0E /* homeSeperator.png */; };
-		BDD78B331C202AA900C7EE0E /* 餐饮 测试.png in Resources */ = {isa = PBXBuildFile; fileRef = BDD78B321C202AA900C7EE0E /* 餐饮 测试.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +194,13 @@
 		BD0433BE1C1AA3520051E7AB /* SSJFinancingHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeViewController.m; sourceTree = "<group>"; };
 		BD0433C01C1AA3630051E7AB /* SSJMoreHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMoreHomeViewController.h; sourceTree = "<group>"; };
 		BD0433C11C1AA3630051E7AB /* SSJMoreHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMoreHomeViewController.m; sourceTree = "<group>"; };
+		BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
+		BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
+		BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
+		BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyBoardButton.m; sourceTree = "<group>"; };
+		BD0E43ED1C2118E600F9179D /* homeSeperator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeSeperator.png; sourceTree = "<group>"; };
+		BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "进度条－点 测试.png"; sourceTree = "<group>"; };
+		BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "餐饮 测试.png"; sourceTree = "<group>"; };
 		BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
 		BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHeader.m; sourceTree = "<group>"; };
 		BD543C3C1C1A6DBC00910D61 /* SuiShouJi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,13 +227,10 @@
 		BDD78B0F1C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingSummaryView.h; sourceTree = "<group>"; };
 		BDD78B101C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingSummaryView.m; sourceTree = "<group>"; };
 		BDD78B111C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingSummaryView.xib; sourceTree = "<group>"; };
-		BDD78B231C1FC55700C7EE0E /* 进度条－点 测试.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "进度条－点 测试.png"; sourceTree = "<group>"; };
 		BDD78B2A1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeView.h; sourceTree = "<group>"; };
 		BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeView.m; sourceTree = "<group>"; };
 		BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeTableViewCell.h; sourceTree = "<group>"; };
 		BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeTableViewCell.m; sourceTree = "<group>"; };
-		BDD78B301C20090400C7EE0E /* homeSeperator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeSeperator.png; sourceTree = "<group>"; };
-		BDD78B321C202AA900C7EE0E /* 餐饮 测试.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "餐饮 测试.png"; sourceTree = "<group>"; };
 		DA9C2C669BC49A563D49451D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D0B59F205FC504E005DB6B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -508,6 +514,7 @@
 		BD04339F1C1A9DFB0051E7AB /* BookKeeping */ = {
 			isa = PBXGroup;
 			children = (
+				BD0E43E01C21009900F9179D /* RecordMaking */,
 				BDD78AF01C1EE71700C7EE0E /* Calerdar */,
 				BD0433A31C1A9EBD0051E7AB /* BookKeepingHome */,
 			);
@@ -712,6 +719,67 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
+		BD0E43E01C21009900F9179D /* RecordMaking */ = {
+			isa = PBXGroup;
+			children = (
+				BD0E43E11C21009900F9179D /* Model */,
+				BD0E43E21C21009900F9179D /* Network */,
+				BD0E43E31C21009900F9179D /* View */,
+				BD0E43E41C21009900F9179D /* ViewController */,
+			);
+			path = RecordMaking;
+			sourceTree = "<group>";
+		};
+		BD0E43E11C21009900F9179D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BD0E43E21C21009900F9179D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		BD0E43E31C21009900F9179D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */,
+				BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */,
+				BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */,
+				BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		BD0E43E41C21009900F9179D /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		BD0E43EB1C2118E600F9179D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				BD0E43EC1C2118E600F9179D /* Image */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		BD0E43EC1C2118E600F9179D /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				BD0E43ED1C2118E600F9179D /* homeSeperator.png */,
+				BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */,
+				BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
@@ -739,9 +807,9 @@
 			children = (
 				BD04336F1C1A8DA50051E7AB /* Module */,
 				BD0432F81C1A78B40051E7AB /* Additons */,
-				BDD78B1F1C1FC51300C7EE0E /* Resource */,
 				BD04333B1C1A82730051E7AB /* Util */,
 				BD0433301C1A82110051E7AB /* Constant */,
+				BD0E43EB1C2118E600F9179D /* Resource */,
 				BD0432CD1C1A77BB0051E7AB /* Vendor */,
 				BD0432CB1C1A772A0051E7AB /* Macro */,
 				BD543C3F1C1A6DBC00910D61 /* Supporting Files */,
@@ -825,24 +893,6 @@
 			children = (
 			);
 			path = ViewController;
-			sourceTree = "<group>";
-		};
-		BDD78B1F1C1FC51300C7EE0E /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				BDD78B201C1FC52900C7EE0E /* Image */,
-			);
-			name = Resource;
-			sourceTree = "<group>";
-		};
-		BDD78B201C1FC52900C7EE0E /* Image */ = {
-			isa = PBXGroup;
-			children = (
-				BDD78B321C202AA900C7EE0E /* 餐饮 测试.png */,
-				BDD78B231C1FC55700C7EE0E /* 进度条－点 测试.png */,
-				BDD78B301C20090400C7EE0E /* homeSeperator.png */,
-			);
-			name = Image;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -954,17 +1004,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BDD78B311C20090400C7EE0E /* homeSeperator.png in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
+				BD0E43F11C2118E600F9179D /* 进度条－点 测试.png in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
+				BD0E43F01C2118E600F9179D /* homeSeperator.png in Resources */,
+				BD0E43F21C2118E600F9179D /* 餐饮 测试.png in Resources */,
 				BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */,
-				BDD78B241C1FC55700C7EE0E /* 进度条－点 测试.png in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
-				BDD78B331C202AA900C7EE0E /* 餐饮 测试.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1045,6 +1095,8 @@
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
+				BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */,
+				BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				BD04331C1C1A78B40051E7AB /* SSJArrayAddition.m in Sources */,
