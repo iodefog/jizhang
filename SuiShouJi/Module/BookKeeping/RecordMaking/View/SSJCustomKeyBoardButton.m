@@ -15,8 +15,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:104.0/255 green:104.0/255 blue:104.0/255 alpha:1.0];
-        self.layer.borderColor = [UIColor blackColor].CGColor;
         [self ssj_setBorderStyle:SSJBorderStyleRight | SSJBorderStyleTop];
+        [self ssj_setBorderColor:[UIColor blackColor]];
+        [self ssj_setBorderWidth:1];
     }
     return self;
 }

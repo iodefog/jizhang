@@ -9,6 +9,7 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBookKeepingHeader.h"
 #import "SSJBookKeepingHomeTableViewCell.h"
+#import "SSJRecordMakingViewController.h"
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -57,6 +58,11 @@
     bookKeepingHeader.income = @"4000.04";
     bookKeepingHeader.expenditure = @"5000.08";
     bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 187);
+    __weak typeof(self) weakSelf = self;
+    bookKeepingHeader.BtnClickBlock = ^{
+        SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
+        [weakSelf.navigationController pushViewController:recordmaking animated:YES];
+    };
     return bookKeepingHeader;
 }
 
@@ -90,6 +96,8 @@
 -(void)rightBarButtonClicked{
     NSLog(@"日历");
 }
+
+
 
 -(NSString*)BarTitle{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

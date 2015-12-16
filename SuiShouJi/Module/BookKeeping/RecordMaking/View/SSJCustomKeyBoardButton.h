@@ -9,18 +9,4 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJCustomKeyBoardButton : UIButton
-
-//键盘上按键类型
-typedef NS_ENUM(NSUInteger, KeyType) {
-    KeyTypeNumKey = 1,
-    KeyTypeDecimalPointKey,
-    KeyTypeBackspaceKey,
-    KeyTypeClearKey,
-    KeyTypePlusKey,
-    KeyTypeMinusKey,
-    KeyTypeComfirmKey
-};
-
-@property (nonatomic, assign)   KeyType   keyboardButtonType;
-
 @end

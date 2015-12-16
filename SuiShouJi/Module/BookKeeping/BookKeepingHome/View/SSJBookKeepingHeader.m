@@ -7,6 +7,7 @@
 //
 
 #import "SSJBookKeepingHeader.h"
+#import "SSJRecordMakingViewController.h"
 
 @interface SSJBookKeepingHeader()
 @property (weak, nonatomic) IBOutlet UILabel *expenditureLabel;
@@ -47,6 +48,8 @@
 }
 
 - (IBAction)bookKeeping:(id)sender {
-    NSLog(@"记一笔");
+    if (self.BtnClickBlock) {
+        self.BtnClickBlock();
+    }
 }
 @end
