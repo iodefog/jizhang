@@ -171,3 +171,10 @@ NSArray *SSJQQList();
  *  @return (BOOL) 是否保存成功
  */
 BOOL SSJSaveQQList(NSArray *qqList);
+
+/**
+ *  获取用户唯一设备编号
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJUUID();

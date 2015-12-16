@@ -59,9 +59,11 @@
 		BD0433C21C1AA3630051E7AB /* SSJMoreHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433C11C1AA3630051E7AB /* SSJMoreHomeViewController.m */; };
 		BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */; };
 		BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */; };
-		BD0E43F01C2118E600F9179D /* homeSeperator.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43ED1C2118E600F9179D /* homeSeperator.png */; };
+		BD0E43F01C2118E600F9179D /* homeSeperator test.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43ED1C2118E600F9179D /* homeSeperator test.png */; };
 		BD0E43F11C2118E600F9179D /* 进度条－点 测试.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */; };
 		BD0E43F21C2118E600F9179D /* 餐饮 测试.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */; };
+		BD0E43F71C21365100F9179D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
+		BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */; };
 		BD543C411C1A6DBC00910D61 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C401C1A6DBC00910D61 /* main.m */; };
 		BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C431C1A6DBC00910D61 /* AppDelegate.m */; };
@@ -198,9 +200,12 @@
 		BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
 		BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyBoardButton.m; sourceTree = "<group>"; };
-		BD0E43ED1C2118E600F9179D /* homeSeperator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeSeperator.png; sourceTree = "<group>"; };
+		BD0E43ED1C2118E600F9179D /* homeSeperator test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homeSeperator test.png"; sourceTree = "<group>"; };
 		BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "进度条－点 测试.png"; sourceTree = "<group>"; };
 		BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "餐饮 测试.png"; sourceTree = "<group>"; };
+		BD0E43F61C21365100F9179D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BD0E43F91C21380F00F9179D /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
+		BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
 		BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHeader.m; sourceTree = "<group>"; };
 		BD543C3C1C1A6DBC00910D61 /* SuiShouJi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD0E43F71C21365100F9179D /* Security.framework in Frameworks */,
 				BD0432ED1C1A77BB0051E7AB /* libssl.a in Frameworks */,
 				B10901D63166F7C1976D8083 /* libPods.a in Frameworks */,
 				BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */,
@@ -267,6 +273,7 @@
 		72D2CCC3D3120C3CD45EDEB9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BD0E43F61C21365100F9179D /* Security.framework */,
 				DA9C2C669BC49A563D49451D /* libPods.a */,
 			);
 			name = Frameworks;
@@ -292,6 +299,7 @@
 		BD0432CD1C1A77BB0051E7AB /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				BD0E43F81C21380F00F9179D /* SFHFKeychainUtils */,
 				BD0432CE1C1A77BB0051E7AB /* AlipayZF */,
 				BD0432D31C1A77BB0051E7AB /* CDAutoHideMessageHUD */,
 				BD0432D61C1A77BB0051E7AB /* CDPointActivityIndicator */,
@@ -773,11 +781,21 @@
 		BD0E43EC1C2118E600F9179D /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				BD0E43ED1C2118E600F9179D /* homeSeperator.png */,
+				BD0E43ED1C2118E600F9179D /* homeSeperator test.png */,
 				BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */,
 				BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */,
 			);
 			path = Image;
+			sourceTree = "<group>";
+		};
+		BD0E43F81C21380F00F9179D /* SFHFKeychainUtils */ = {
+			isa = PBXGroup;
+			children = (
+				BD0E43F91C21380F00F9179D /* SFHFKeychainUtils.h */,
+				BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */,
+			);
+			name = SFHFKeychainUtils;
+			path = security;
 			sourceTree = "<group>";
 		};
 		BD543C331C1A6DBC00910D61 = {
@@ -1010,7 +1028,7 @@
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
-				BD0E43F01C2118E600F9179D /* homeSeperator.png in Resources */,
+				BD0E43F01C2118E600F9179D /* homeSeperator test.png in Resources */,
 				BD0E43F21C2118E600F9179D /* 餐饮 测试.png in Resources */,
 				BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
@@ -1100,6 +1118,7 @@
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				BD04331C1C1A78B40051E7AB /* SSJArrayAddition.m in Sources */,
+				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				BDD78B011C1FA4E100C7EE0E /* SSJCalendarNIlCollectionViewCell.m in Sources */,
 				BD0433291C1A78B40051E7AB /* SSJViewControllerAddition.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,

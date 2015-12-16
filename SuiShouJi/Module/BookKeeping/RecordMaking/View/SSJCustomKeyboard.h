@@ -8,7 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+
+@protocol SSJCustomKeyboardDelegate <NSObject>
+- (void)didNumKeyPressed:(UIButton *)button;
+- (void)didDecimalPointKeyPressed;
+- (void)didClearKeyPressed;
+- (void)didBackspaceKeyPressed;
+- (void)didPlusKeyPressed;
+- (void)didMinusKeyPressed;
+- (void)didComfirmKeyPressed;
+
+@end
 @interface SSJCustomKeyboard : UIView
 
+@property(nonatomic) BOOL decimal;
+@property(nonatomic, assign) id<SSJCustomKeyboardDelegate> delegate;
 
 @end

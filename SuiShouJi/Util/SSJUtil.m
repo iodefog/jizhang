@@ -8,6 +8,7 @@
 
 #import "SSJUtil.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "SFHFKeychainUtils.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
     return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
@@ -249,4 +250,15 @@ BOOL SSJSaveQQList(NSArray *qqList) {
         return [[NSUserDefaults standardUserDefaults] synchronize];
     }
     return NO;
+}
+
+NSString *SSJUUID(){
+    NSString *serviceName = @"";
+    NSString *strUUID = [SFHFKeychainUtils getPasswordForUsername:@"UUID" andServiceName:serviceName error:nil];
+    if (!strUUID | [strUUID isEqualToString:@""]) {
+        CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+        strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
+        [SFHFKeychainUtils storeUsername:@"UUID" andPassword:strUUID forServiceName:serviceName updateExisting:NO error:nil];
+    }
+    return strUUID;
 }

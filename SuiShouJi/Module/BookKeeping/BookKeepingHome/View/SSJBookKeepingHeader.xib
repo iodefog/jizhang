@@ -54,7 +54,7 @@
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeSeperator.png" translatesAutoresizingMaskIntoConstraints="NO" id="CtE-PP-Ayo">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeSeperator test.png" translatesAutoresizingMaskIntoConstraints="NO" id="CtE-PP-Ayo">
                                     <rect key="frame" x="0.0" y="10" width="1" height="75"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="1" id="9iG-g6-ksy"/>
@@ -87,7 +87,7 @@
                                     <color key="textColor" red="0.9882352941176471" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeSeperator.png" translatesAutoresizingMaskIntoConstraints="NO" id="2Nn-hB-DDQ">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeSeperator test.png" translatesAutoresizingMaskIntoConstraints="NO" id="2Nn-hB-DDQ">
                                     <rect key="frame" x="106" y="10" width="1" height="75"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="1" id="VVd-mZ-X58"/>
@@ -154,6 +154,6 @@
         </view>
     </objects>
     <resources>
-        <image name="homeSeperator.png" width="2" height="2"/>
+        <image name="homeSeperator test.png" width="2" height="2"/>
     </resources>
 </document>

@@ -14,10 +14,11 @@
 typedef NS_ENUM(NSUInteger, KeyType) {
     KeyTypeNumKey = 1,
     KeyTypeDecimalPointKey,
-    KeyTypeReturnKey,
+    KeyTypeBackspaceKey,
     KeyTypeClearKey,
     KeyTypePlusKey,
-    KeyTypeMinusKey
+    KeyTypeMinusKey,
+    KeyTypeComfirmKey
 };
 
 @property (nonatomic, assign)   KeyType   keyboardButtonType;
