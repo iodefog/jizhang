@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJCustomKeyboard.h"
 
-@interface SSJRecordMakingViewController : SSJBaseViewController
+@interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate>
 
 @end

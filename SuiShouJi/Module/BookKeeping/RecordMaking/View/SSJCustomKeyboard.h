@@ -16,7 +16,7 @@
 - (void)didBackspaceKeyPressed;
 - (void)didPlusKeyPressed;
 - (void)didMinusKeyPressed;
-- (void)didComfirmKeyPressed;
+- (void)didComfirmKeyPressed:(UIButton*)button;
 
 @end
 @interface SSJCustomKeyboard : UIView

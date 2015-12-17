@@ -30,7 +30,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor redColor];
+//        self.backgroundColor = [UIColor redColor];
         _buttonHeight = self.height / 4;
         _buttonWight = self.width / 4;
         self.decimal = NO;
@@ -194,6 +194,7 @@
 
 -(void)MinusKeyClicked:(UIButton*)button{
     [self.delegate didMinusKeyPressed];
+    
 }
 
 -(void)PlusKeyClicked:(UIButton*)button{
@@ -201,6 +202,6 @@
 }
 
 -(void)ComfirmKeyClicked:(UIButton*)button{
-    [self.delegate didComfirmKeyPressed];
+    [self.delegate didComfirmKeyPressed:button];
 }
 @end
