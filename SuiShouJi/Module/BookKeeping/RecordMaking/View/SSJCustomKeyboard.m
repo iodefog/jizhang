@@ -30,11 +30,12 @@
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-//        self.backgroundColor = [UIColor redColor];
+        self.backgroundColor = [UIColor redColor];
         _buttonHeight = self.height / 4;
         _buttonWight = self.width / 4;
-        self.decimal = NO;
+        self.decimalModel = NO;
         self.numButtonArray = [[NSMutableArray alloc]init];
+        self.backgroundColor = [UIColor clearColor];
         [self setNumKey];
     }
     return self;
@@ -58,7 +59,6 @@
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.ComfirmButton.rightBottom = CGPointMake(self.right, self.bottom);
     self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-
 }
 
 //数字键
@@ -111,7 +111,6 @@
         [_ClearButton setTintColor:[UIColor whiteColor]];
         [_ClearButton addTarget:self action:@selector(ClearKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_ClearButton];
-
     }
     return _ClearButton;
 }
@@ -193,15 +192,20 @@
 }
 
 -(void)MinusKeyClicked:(UIButton*)button{
+    self.ComfirmButton.selected = YES;
     [self.delegate didMinusKeyPressed];
     
 }
 
 -(void)PlusKeyClicked:(UIButton*)button{
+    self.ComfirmButton.selected = YES;
     [self.delegate didPlusKeyPressed];
 }
 
 -(void)ComfirmKeyClicked:(UIButton*)button{
+    if (button.selected == YES) {
+        button.selected = NO;
+    }
     [self.delegate didComfirmKeyPressed:button];
 }
 @end

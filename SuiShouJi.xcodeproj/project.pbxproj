@@ -81,7 +81,6 @@
 		BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78B111C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib */; };
 		BDD78B2C1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */; };
 		BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */; };
-		BDD8B6111C2263BA005C5FEA /* SSJCunstomtextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD8B6101C2263BA005C5FEA /* SSJCunstomtextField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,8 +239,6 @@
 		BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeView.m; sourceTree = "<group>"; };
 		BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeTableViewCell.h; sourceTree = "<group>"; };
 		BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeTableViewCell.m; sourceTree = "<group>"; };
-		BDD8B60F1C2263BA005C5FEA /* SSJCunstomtextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCunstomtextField.h; sourceTree = "<group>"; };
-		BDD8B6101C2263BA005C5FEA /* SSJCunstomtextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCunstomtextField.m; sourceTree = "<group>"; };
 		DA9C2C669BC49A563D49451D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D0B59F205FC504E005DB6B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -761,8 +758,6 @@
 		BD0E43E31C21009900F9179D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BDD8B60F1C2263BA005C5FEA /* SSJCunstomtextField.h */,
-				BDD8B6101C2263BA005C5FEA /* SSJCunstomtextField.m */,
 				BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */,
 				BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */,
 				BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */,
@@ -1120,7 +1115,6 @@
 				BD04331F1C1A78B40051E7AB /* SSJObjectAddition.m in Sources */,
 				BD0432F61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m in Sources */,
 				BD0433241C1A78B40051E7AB /* SSJImageAddition.m in Sources */,
-				BDD8B6111C2263BA005C5FEA /* SSJCunstomtextField.m in Sources */,
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,

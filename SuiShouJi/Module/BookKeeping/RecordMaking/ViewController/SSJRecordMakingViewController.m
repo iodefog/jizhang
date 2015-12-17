@@ -8,27 +8,39 @@
 
 #import "SSJRecordMakingViewController.h"
 #import "SSJCustomKeyboard.h"
-#import "SSJCunstomtextField.h"
-@interface SSJRecordMakingViewController ()
 
+@interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
 @property (nonatomic,strong) UICollectionView* collectionView;
 @property (nonatomic,strong) UIView* selectedCategoryView;
-@property (nonatomic,strong) SSJCunstomtextField* textInput;
+@property (nonatomic,strong) UIView* inputView;
+
+@property (nonatomic,strong) UILabel* textInput;
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
 
 @end
 
-@implementation SSJRecordMakingViewController
-
+@implementation SSJRecordMakingViewController{
+    NSString *_caculationResult;
+}
 #pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesBottomBarWhenPushed = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryNameLabel];
     [self.selectedCategoryView addSubview:self.categoryImage];
+    [self.view addSubview:self.inputView];
+    [self.inputView addSubview:self.customKeyBoard];
+
 }
 
 -(void)viewDidLayoutSubviews{
@@ -39,19 +51,42 @@
     self.textInput.centerY = self.categoryImage.centerY;
     self.categoryNameLabel.left = self.categoryImage.right + 5;
     self.categoryNameLabel.centerY = self.categoryImage.centerY;
+    self.inputView.bottom = self.view.bottom;
 }
 
 #pragma mark SSJCustomKeyboardDelegate
 - (void)didNumKeyPressed:(UIButton *)button{
-    
+    if (self.customKeyBoard.decimalModel == NO) {
+        if ([self.textInput.text isEqualToString:@"0.00"]) {
+            self.textInput.text = [NSString stringWithFormat:@"%.2f",[[NSString stringWithFormat:@"%@",button.titleLabel.text] floatValue] ];
+            return;
+        }
+        self.textInput.text = [NSString stringWithFormat:@"%ld%@.00",[self.textInput.text integerValue],button.titleLabel.text];
+    }else{
+        NSString *intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+        NSString *decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+        if ([decimalPart isEqualToString:@"00"] && ![button.titleLabel.text isEqualToString:@"0"]) {
+            self.textInput.text = [NSString stringWithFormat:@"%@.%@0",intPart,button.titleLabel.text];
+        }else{
+            if ([decimalPart hasSuffix:@"0"]) {
+                decimalPart = [decimalPart substringWithRange:NSMakeRange(0, 1)];
+                self.textInput.text =[NSString stringWithFormat:@"%@.%@%@",intPart,decimalPart,button.titleLabel.text];
+                    return;
+            }
+            decimalPart = [NSString stringWithFormat:@"%@%@",decimalPart,button.titleLabel.text];
+                decimalPart = [decimalPart substringWithRange:NSMakeRange(0, 2)];
+            self.textInput.text = [NSString stringWithFormat:@"%@.%@",intPart,decimalPart];
+        }
+    }
 }
 
 - (void)didDecimalPointKeyPressed{
-    
+    self.customKeyBoard.decimalModel = YES;
 }
 
 - (void)didClearKeyPressed{
-    
+    self.textInput.text = @"0.00";
+    self.customKeyBoard.decimalModel = NO;
 }
 
 - (void)didBackspaceKeyPressed{
@@ -67,7 +102,11 @@
 }
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
-    
+    if ([button.titleLabel.text isEqualToString:@"确定"]) {
+        NSLog(@"确定");
+    }else if ([button.titleLabel.text isEqualToString:@"="]){
+        
+    }
 }
 
 #pragma mark - Getter
@@ -89,14 +128,12 @@
     return _selectedCategoryView;
 }
 
--(UITextField*)textInput{
+-(UILabel*)textInput{
     if (!_textInput) {
-        _textInput = [[SSJCunstomtextField alloc]initWithFrame:CGRectMake(0, 0, 150, 44)];
+        _textInput = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 150, 44)];
         _textInput.font = [UIFont systemFontOfSize:18];
         _textInput.textAlignment = NSTextAlignmentRight;
-        _textInput.inputView = self.customKeyBoard;
         _textInput.text = @"0.00";
-        [[_textInput valueForKey:@"textInputTraits"] setValue:[UIColor clearColor] forKey:@"insertionPointColor"];
     }
     return _textInput;
 }
@@ -109,6 +146,14 @@
         _categoryImage.image = [UIImage imageNamed:@"餐饮 测试"];
     }
     return _categoryImage;
+}
+
+-(UIView*)inputView{
+    if (!_inputView ) {
+        _inputView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 216)];
+        _inputView.backgroundColor = [UIColor yellowColor];
+    }
+    return _inputView;
 }
 
 -(UILabel*)categoryNameLabel{

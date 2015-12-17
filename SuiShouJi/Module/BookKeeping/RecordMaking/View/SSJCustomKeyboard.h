@@ -21,7 +21,7 @@
 @end
 @interface SSJCustomKeyboard : UIView
 
-@property(nonatomic) BOOL decimal;
+@property(nonatomic) BOOL decimalModel;
 @property(nonatomic, assign) id<SSJCustomKeyboardDelegate> delegate;
 
 @end
