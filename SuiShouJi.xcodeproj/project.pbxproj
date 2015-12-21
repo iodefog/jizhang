@@ -73,6 +73,9 @@
 		BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4D1C1A6DBC00910D61 /* LaunchScreen.storyboard */; };
 		BD543C5A1C1A6DBC00910D61 /* SuiShouJiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C591C1A6DBC00910D61 /* SuiShouJiTests.m */; };
 		BD543C651C1A6DBC00910D61 /* SuiShouJiUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C641C1A6DBC00910D61 /* SuiShouJiUITests.m */; };
+		BD6B90DC1C23A27500032C8A /* SSJCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DA1C23A27500032C8A /* SSJCategoryCollectionViewCell.m */; };
+		BD6B90DD1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD6B90DB1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib */; };
+		BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
 		BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */; };
 		BDD78B011C1FA4E100C7EE0E /* SSJCalendarNIlCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFD1C1FA4E100C7EE0E /* SSJCalendarNIlCollectionViewCell.m */; };
@@ -225,6 +228,11 @@
 		BD543C601C1A6DBC00910D61 /* SuiShouJiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuiShouJiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD543C641C1A6DBC00910D61 /* SuiShouJiUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SuiShouJiUITests.m; sourceTree = "<group>"; };
 		BD543C661C1A6DBC00910D61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BD6B90D91C23A27500032C8A /* SSJCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionViewCell.h; sourceTree = "<group>"; };
+		BD6B90DA1C23A27500032C8A /* SSJCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionViewCell.m; sourceTree = "<group>"; };
+		BD6B90DB1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJCategoryCollectionViewCell.xib; sourceTree = "<group>"; };
+		BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionView.h; sourceTree = "<group>"; };
+		BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionView.m; sourceTree = "<group>"; };
 		BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHeader.xib; sourceTree = "<group>"; };
 		BDD78AFA1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarCollectionViewCell.h; sourceTree = "<group>"; };
 		BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarCollectionViewCell.m; sourceTree = "<group>"; };
@@ -762,6 +770,11 @@
 				BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */,
 				BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */,
 				BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */,
+				BD6B90D91C23A27500032C8A /* SSJCategoryCollectionViewCell.h */,
+				BD6B90DA1C23A27500032C8A /* SSJCategoryCollectionViewCell.m */,
+				BD6B90DB1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib */,
+				BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */,
+				BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1032,6 +1045,7 @@
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
+				BD6B90DD1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
 				BD0E43F01C2118E600F9179D /* homeSeperator test.png in Resources */,
 				BD0E43F21C2118E600F9179D /* 餐饮 测试.png in Resources */,
@@ -1112,6 +1126,7 @@
 			files = (
 				BD0432F31C1A77BB0051E7AB /* SRSlimeView.m in Sources */,
 				BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */,
+				BD6B90DC1C23A27500032C8A /* SSJCategoryCollectionViewCell.m in Sources */,
 				BD04331F1C1A78B40051E7AB /* SSJObjectAddition.m in Sources */,
 				BD0432F61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m in Sources */,
 				BD0433241C1A78B40051E7AB /* SSJImageAddition.m in Sources */,
@@ -1158,6 +1173,7 @@
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
+				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,

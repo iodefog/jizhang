@@ -8,7 +8,6 @@
 //
 
 #import "SSJCustomKeyboard.h"
-#import "SSJCustomKeyBoardButton.h"
 
 @interface SSJCustomKeyboard()
 @property(nonatomic,strong)SSJCustomKeyBoardButton *BackspaceButton;
@@ -16,7 +15,6 @@
 @property(nonatomic,strong)SSJCustomKeyBoardButton *PlusButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *MinusButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *DecimalButton;
-@property(nonatomic,strong)SSJCustomKeyBoardButton *ComfirmButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *ZeroButton;
 @property(nonatomic,strong)NSMutableArray *numButtonArray;
 
@@ -39,6 +37,10 @@
         [self setNumKey];
     }
     return self;
+}
+
+-(void)drawRect:(CGRect)rect{
+    
 }
 
 -(void)layoutSubviews{
@@ -70,6 +72,10 @@
         [numButton setTintColor:[UIColor whiteColor]];
         [numButton addTarget:self action:@selector(NumKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.numButtonArray addObject:numButton];
+        numButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        numButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        numButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        numButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:numButton];
     }
 
@@ -83,6 +89,10 @@
         _ZeroButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_ZeroButton setTintColor:[UIColor whiteColor]];
         [_ZeroButton addTarget:self action:@selector(NumKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _ZeroButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        _ZeroButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _ZeroButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _ZeroButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:_ZeroButton];
     }
     return _ZeroButton;
@@ -97,6 +107,10 @@
         _BackspaceButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_BackspaceButton setTintColor:[UIColor whiteColor]];
         [_BackspaceButton addTarget:self action:@selector(BackspaceKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _BackspaceButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        _BackspaceButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _BackspaceButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _BackspaceButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:_BackspaceButton];
     }
     return _BackspaceButton;
@@ -111,6 +125,10 @@
         [_ClearButton setTintColor:[UIColor whiteColor]];
         [_ClearButton addTarget:self action:@selector(ClearKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_ClearButton];
+        _ClearButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        _ClearButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _ClearButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _ClearButton.layer.borderWidth = 1.0f / 2;
     }
     return _ClearButton;
 }
@@ -124,8 +142,11 @@
         _PlusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_PlusButton setTintColor:[UIColor whiteColor]];
         [_PlusButton addTarget:self action:@selector(PlusKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _PlusButton.titleLabel.font = [UIFont systemFontOfSize:24];
         [self addSubview:_PlusButton];
-
+        _PlusButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _PlusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _PlusButton.layer.borderWidth = 1.0f / 2;
     }
     return _PlusButton;
 }
@@ -137,9 +158,12 @@
         [_MinusButton setTitle:@"-" forState:UIControlStateNormal];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_MinusButton setTintColor:[UIColor whiteColor]];
-        [_MinusButton addTarget:self action:@selector(MinusKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_MinusButton addTarget:self action:@selector(MinusKeyClicked:) forControlEvents:UIControlEventTouchUpInside];\
+        _MinusButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        _MinusButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _MinusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _MinusButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:_MinusButton];
-
     }
     return _MinusButton;
 }
@@ -153,8 +177,11 @@
         _DecimalButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_DecimalButton setTintColor:[UIColor whiteColor]];
         [_DecimalButton addTarget:self action:@selector(DecimalKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _DecimalButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        _DecimalButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _DecimalButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _DecimalButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:_DecimalButton];
-
     }
     return _DecimalButton;
 }
@@ -165,12 +192,14 @@
         _ComfirmButton = [[SSJCustomKeyBoardButton alloc]init];
         _ComfirmButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
         [_ComfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_ComfirmButton setTitle:@"=" forState:UIControlStateSelected];
         _ComfirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_ComfirmButton setTintColor:[UIColor whiteColor]];
         [_ComfirmButton addTarget:self action:@selector(ComfirmKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _ComfirmButton.titleLabel.font = [UIFont systemFontOfSize:24];
+        _ComfirmButton.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        _ComfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _ComfirmButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:_ComfirmButton];
-
     }
     return _ComfirmButton;
 }
@@ -192,9 +221,8 @@
 }
 
 -(void)MinusKeyClicked:(UIButton*)button{
-    self.ComfirmButton.selected = YES;
     [self.delegate didMinusKeyPressed];
-    
+    self.ComfirmButton.selected = YES;
 }
 
 -(void)PlusKeyClicked:(UIButton*)button{
@@ -203,9 +231,8 @@
 }
 
 -(void)ComfirmKeyClicked:(UIButton*)button{
-    if (button.selected == YES) {
-        button.selected = NO;
-    }
     [self.delegate didComfirmKeyPressed:button];
 }
+
+
 @end
