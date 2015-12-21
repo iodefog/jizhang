@@ -76,6 +76,8 @@
 		BD6B90DC1C23A27500032C8A /* SSJCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DA1C23A27500032C8A /* SSJCategoryCollectionViewCell.m */; };
 		BD6B90DD1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD6B90DB1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib */; };
 		BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */; };
+		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
+		BD7676891C27DDB800CDD507 /* edit test.png in Resources */ = {isa = PBXBuildFile; fileRef = BD7676881C27DDB800CDD507 /* edit test.png */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
 		BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */; };
 		BDD78B011C1FA4E100C7EE0E /* SSJCalendarNIlCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFD1C1FA4E100C7EE0E /* SSJCalendarNIlCollectionViewCell.m */; };
@@ -233,6 +235,9 @@
 		BD6B90DB1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJCategoryCollectionViewCell.xib; sourceTree = "<group>"; };
 		BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionView.h; sourceTree = "<group>"; };
 		BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionView.m; sourceTree = "<group>"; };
+		BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryListView.h; sourceTree = "<group>"; };
+		BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryListView.m; sourceTree = "<group>"; };
+		BD7676881C27DDB800CDD507 /* edit test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit test.png"; path = "../../Module/BookKeeping/RecordMaking/View/edit test.png"; sourceTree = "<group>"; };
 		BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHeader.xib; sourceTree = "<group>"; };
 		BDD78AFA1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarCollectionViewCell.h; sourceTree = "<group>"; };
 		BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarCollectionViewCell.m; sourceTree = "<group>"; };
@@ -775,6 +780,8 @@
 				BD6B90DB1C23A27500032C8A /* SSJCategoryCollectionViewCell.xib */,
 				BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */,
 				BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */,
+				BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */,
+				BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -799,6 +806,7 @@
 		BD0E43EC1C2118E600F9179D /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				BD7676881C27DDB800CDD507 /* edit test.png */,
 				BD0E43ED1C2118E600F9179D /* homeSeperator test.png */,
 				BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */,
 				BD0E43EF1C2118E600F9179D /* 餐饮 测试.png */,
@@ -1049,6 +1057,7 @@
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
 				BD0E43F01C2118E600F9179D /* homeSeperator test.png in Resources */,
 				BD0E43F21C2118E600F9179D /* 餐饮 测试.png in Resources */,
+				BD7676891C27DDB800CDD507 /* edit test.png in Resources */,
 				BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
@@ -1180,6 +1189,7 @@
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
+				BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 			);

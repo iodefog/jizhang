@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJCategoryCollectionViewCell : UICollectionViewCell
-
+@property (weak, nonatomic) IBOutlet UIImageView *categoryImage;
+@property (weak, nonatomic) IBOutlet UILabel *categoryName;
+@property (nonatomic) BOOL EditeModel;
 @end

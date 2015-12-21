@@ -10,4 +10,8 @@
 
 @interface SSJCategoryCollectionView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
+typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImage);
+
+@property (nonatomic, copy) ItemClickedBlock ItemClickedBlock;
+
 @end

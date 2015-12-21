@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="52" height="58"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="餐饮 测试.png" translatesAutoresizingMaskIntoConstraints="NO" id="Dax-gO-Z66">
-                        <rect key="frame" x="6" y="-10" width="40" height="40"/>
+                        <rect key="frame" x="6" y="-9" width="40" height="40"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="40" id="qcG-7U-9TP"/>
                             <constraint firstAttribute="height" constant="40" id="x10-Uh-uZw"/>
@@ -26,41 +26,37 @@
                         <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6eQ-ez-qRS">
+                        <rect key="frame" x="1" y="-16" width="12" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="12" id="JPg-Kf-uFo"/>
+                            <constraint firstAttribute="height" constant="12" id="MLF-UX-gSe"/>
+                        </constraints>
+                        <state key="normal" title="Button" image="edit test.png"/>
+                    </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="OAz-1g-kqs" secondAttribute="trailing" id="Dc0-k1-Wkm"/>
                 <constraint firstAttribute="bottom" secondItem="OAz-1g-kqs" secondAttribute="bottom" id="GQ5-5b-XhJ"/>
-                <constraint firstItem="Dax-gO-Z66" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Jeo-X7-m2l"/>
-                <constraint firstAttribute="bottom" secondItem="Dax-gO-Z66" secondAttribute="bottom" constant="20" id="KSZ-r5-Ltc"/>
-                <constraint firstItem="Dax-gO-Z66" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="PhB-VY-rjz"/>
                 <constraint firstItem="OAz-1g-kqs" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Rer-ym-isB"/>
-                <constraint firstAttribute="bottom" secondItem="Dax-gO-Z66" secondAttribute="bottom" constant="20" id="V84-Ef-1Hu"/>
-                <constraint firstItem="Dax-gO-Z66" firstAttribute="bottom" secondItem="OAz-1g-kqs" secondAttribute="top" constant="-10" id="ZkC-Ui-X9m"/>
+                <constraint firstItem="Dax-gO-Z66" firstAttribute="bottom" secondItem="OAz-1g-kqs" secondAttribute="top" constant="-9" id="ZkC-Ui-X9m"/>
                 <constraint firstItem="Dax-gO-Z66" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="fha-6Y-fOB"/>
-                <constraint firstAttribute="trailing" secondItem="Dax-gO-Z66" secondAttribute="trailing" id="myM-FA-ahA"/>
-                <constraint firstItem="OAz-1g-kqs" firstAttribute="top" secondItem="Dax-gO-Z66" secondAttribute="bottom" constant="10" id="ofJ-7h-JwV"/>
+                <constraint firstItem="6eQ-ez-qRS" firstAttribute="leading" secondItem="Dax-gO-Z66" secondAttribute="leading" constant="-5" id="l74-Sc-zDE"/>
+                <constraint firstItem="6eQ-ez-qRS" firstAttribute="bottom" secondItem="Dax-gO-Z66" secondAttribute="top" constant="5" id="s4s-EL-yq1"/>
             </constraints>
             <size key="customSize" width="52" height="58"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="Jeo-X7-m2l"/>
-                    <exclude reference="KSZ-r5-Ltc"/>
-                    <exclude reference="PhB-VY-rjz"/>
-                    <exclude reference="V84-Ef-1Hu"/>
-                    <exclude reference="myM-FA-ahA"/>
-                    <exclude reference="ofJ-7h-JwV"/>
-                </mask>
-            </variation>
             <connections>
-                <outlet property="categoryImage" destination="Dax-gO-Z66" id="7Ox-nF-bBP"/>
-                <outlet property="categoryName" destination="OAz-1g-kqs" id="Ike-k1-NYL"/>
+                <outlet property="categoryImage" destination="Dax-gO-Z66" id="w81-8e-rPG"/>
+                <outlet property="categoryName" destination="OAz-1g-kqs" id="wRW-9b-i8g"/>
+                <outlet property="editButton" destination="6eQ-ez-qRS" id="oh7-vX-k5L"/>
             </connections>
             <point key="canvasLocation" x="287" y="211"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="edit test.png" width="26" height="26"/>
         <image name="餐饮 测试.png" width="60" height="60"/>
     </resources>
 </document>

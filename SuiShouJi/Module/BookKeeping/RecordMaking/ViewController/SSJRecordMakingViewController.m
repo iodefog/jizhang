@@ -9,16 +9,19 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJCategoryCollectionView.h"
+#import "SSJCategoryListView.h"
 
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
 @property (nonatomic,strong) SSJCategoryCollectionView* collectionView;
 @property (nonatomic,strong) UIView* selectedCategoryView;
 @property (nonatomic,strong) UIView* inputView;
+@property (nonatomic,strong) UIView* inputAccessoryView;
 @property (nonatomic,strong) UISegmentedControl *titleSegment;
 @property (nonatomic,strong) UILabel* textInput;
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
+@property (nonatomic,strong) SSJCategoryListView* categoryListView;
 
 @end
 
@@ -50,9 +53,11 @@
     [self.selectedCategoryView addSubview:self.categoryImage];
     [self.view addSubview:self.inputView];
     [self.inputView addSubview:self.customKeyBoard];
+    [self.view addSubview:self.inputAccessoryView];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.collectionView];
+//    [self.view addSubview:self.collectionView];
+    [self.view addSubview:self.categoryListView];
     _intPart = @"0";
     _decimalPart = @"00";
 }
@@ -69,7 +74,8 @@
     self.categoryNameLabel.left = self.categoryImage.right + 5;
     self.categoryNameLabel.centerY = self.categoryImage.centerY;
     self.inputView.bottom = self.view.bottom;
-    self.collectionView.top = self.selectedCategoryView.bottom;
+    self.categoryListView.top = self.selectedCategoryView.bottom;
+    self.inputAccessoryView.bottom = self.inputView.top;
 }
 
 #pragma mark SSJCustomKeyboardDelegate
@@ -231,6 +237,16 @@
     return _selectedCategoryView;
 }
 
+-(SSJCategoryListView*)categoryListView{
+    if (_categoryListView == nil) {
+        _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 230)];
+        _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage){
+            NSLog(@"%@",categoryTitle);
+        };
+    }
+    return _categoryListView;
+}
+
 -(UILabel*)textInput{
     if (!_textInput) {
         _textInput = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -258,6 +274,34 @@
     return _inputView;
 }
 
+-(UIView*)inputAccessoryView{
+    if (!_inputAccessoryView ) {
+        _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
+        _inputAccessoryView.backgroundColor = [UIColor whiteColor];
+        [_inputAccessoryView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e2e2e2"]];
+        [_inputAccessoryView ssj_setBorderStyle:SSJBorderStyleTop];
+        UIButton *fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width / 2, 50)];
+        [fundingTypeButton setTitle:@"选择资金类型" forState:UIControlStateNormal];
+        [fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        fundingTypeButton.layer.borderWidth = 1.0f / 2;
+        [_inputAccessoryView addSubview:fundingTypeButton];
+        UIButton *datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM-dd"];
+        NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
+        [datePickerButton setTitle:currentDateStr forState:UIControlStateNormal];
+        [datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        datePickerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        datePickerButton.layer.borderWidth = 1.0f / 2;
+        [_inputAccessoryView addSubview:datePickerButton];
+
+    }
+    return _inputAccessoryView;
+}
+
 -(UILabel*)categoryNameLabel{
     if (!_categoryNameLabel) {
         _categoryNameLabel = [[UILabel alloc]init];
@@ -271,7 +315,7 @@
 -(SSJCategoryCollectionView*)collectionView{
     if (!_collectionView) {
         _collectionView = [[SSJCategoryCollectionView alloc]init];
-        _collectionView.frame = CGRectMake(0, 0, self.view.width, 200);
+        _collectionView.frame = CGRectMake(0, 0, self.view.width, 230);
     }
     return _collectionView;
 }

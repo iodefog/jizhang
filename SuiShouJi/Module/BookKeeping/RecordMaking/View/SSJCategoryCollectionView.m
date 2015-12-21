@@ -56,7 +56,12 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"clicked");
+    if (self.ItemClickedBlock != nil) {
+        SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+        UIImage *image = cell.categoryImage.image;
+        NSString *title = cell.categoryName.text;
+        self.ItemClickedBlock(title,image);
+    }
 }
 
 - (UICollectionView *)collectionView{
@@ -64,7 +69,7 @@
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 15;
-        flowLayout.minimumLineSpacing = 20;
+        flowLayout.minimumLineSpacing = 20  ;
         _collectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height) collectionViewLayout:flowLayout];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
