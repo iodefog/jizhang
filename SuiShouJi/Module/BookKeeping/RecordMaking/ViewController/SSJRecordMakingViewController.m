@@ -88,12 +88,13 @@
     }else{
         if (_decimalCount == 0) {
             _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:button.titleLabel.text];
+            _decimalCount = _decimalCount + 1;
         }else if (_decimalCount == 1) {
             _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(1, 1) withString:button.titleLabel.text];
+            _decimalCount = _decimalCount + 1;
         }
         self.textInput.text = [NSString stringWithFormat:@"%@.%@",_intPart,_decimalPart];
     _lastPressNum = [button.titleLabel.text integerValue];
-    _decimalCount = _decimalCount + 1;
     }
 }
 
@@ -137,20 +138,23 @@
             self.customKeyBoard.decimalModel = NO;
             if ([intPart isEqualToString:@"0"]) {
                 self.textInput.text = @"0.00";
+                _decimalCount = 0;
                 return;
             }
             if ([intPart length] == 1) {
                 self.textInput.text = @"0.00";
+                _decimalCount = 0;
                 return;
             }
             intPart = [intPart substringToIndex:[intPart length] - 1];
             self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
         }else if ([decimalPart hasSuffix:@"0"]){
             self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
-
+            _decimalCount = _decimalCount - 1;
         }else{
             decimalPart = [decimalPart substringToIndex:1];
             self.textInput.text = [NSString stringWithFormat:@"%@.%@0",intPart,decimalPart];
+            _decimalCount = _decimalCount - 1;
         }
     }
     _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
