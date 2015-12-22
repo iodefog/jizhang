@@ -82,14 +82,24 @@
         SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
         cell.currentDay = [_weekArray objectAtIndex:indexPath.row];
         cell.userInteractionEnabled = NO;
+        cell.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
         return cell;
     }
     if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
         SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
         cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",[self getDaysOfMonth:self.year withMonth:self.month - 1] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + indexPath.row - 5] ;
+        cell.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        cell.userInteractionEnabled = NO;
         cell.isSelected = NO;
         return cell;
     }else{
+        if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
+            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+            cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getDaysOfMonth:self.year withMonth:self.month] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5] ;
+            cell.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+            cell.userInteractionEnabled = NO;
+            return cell;
+        }
        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
         cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
         cell.isSelected = NO;

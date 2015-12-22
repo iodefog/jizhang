@@ -80,11 +80,12 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    __weak typeof(self) weakSelf = self;
     if (self.ItemClickedBlock != nil) {
         SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
         UIImage *image = cell.categoryImage.image;
         NSString *title = cell.categoryName.text;
-        self.ItemClickedBlock(title,image);
+        weakSelf.ItemClickedBlock(title,image);
     }
 }
 

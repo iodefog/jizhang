@@ -8,7 +8,6 @@
 
 #import "SSJCalendarCollectionViewCell.h"
 @interface SSJCalendarCollectionViewCell()
-@property(nonatomic,strong)UILabel *dateLabel;
 @end
 @implementation SSJCalendarCollectionViewCell
 
@@ -32,6 +31,8 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _dateLabel.font = [UIFont systemFontOfSize:15];
     }
     return _dateLabel;
 }
