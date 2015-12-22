@@ -11,7 +11,7 @@
 @interface SSJCalendarView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
 //当前日期必传格式为yyyy-MM-dd
-@property(nonatomic,strong) NSDate *currentNSDate;
+@property(nonatomic,strong) NSDate *currentDate;
 @property (nonatomic,strong)UICollectionView *calendar;
 - (CGFloat)viewHeight;
 @end

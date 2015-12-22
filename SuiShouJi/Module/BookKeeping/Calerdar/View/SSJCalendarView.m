@@ -7,7 +7,6 @@
 //
 
 #import "SSJCalendarView.h"
-#import "SSJCalendarNIlCollectionViewCell.h"
 #import "SSJCalendarCollectionViewCell.h"
 
 @interface SSJCalendarView()
@@ -15,28 +14,43 @@
 @property(nonatomic)long month;
 @end
 
-@implementation SSJCalendarView
+@implementation SSJCalendarView{
+    CGFloat _marginForHorizon;
+    CGFloat _marginForvertical;
+    NSArray *_weekArray;
+}
 #pragma mark - Lifecycle
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor whiteColor];
+        _marginForHorizon = (self.width - 35*7) / 9;
+        _marginForvertical = (self.height - 35*7) / 14;
+        _weekArray = [NSArray arrayWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六",  nil];
         [self addSubview:self.calendar];
-        [self getYearAndMonth];
         [self.calendar registerClass:[SSJCalendarCollectionViewCell class] forCellWithReuseIdentifier:@"NormalCell"];
-        [self.calendar registerClass:[SSJCalendarNIlCollectionViewCell class] forCellWithReuseIdentifier:@"NilCell"];
     }
     return self;
 }
 
+-(void)layoutSubviews{
+    self.calendar.frame = CGRectMake(0, 0, self.width, self.height);
+}
+
+-(void)setCurrentDate:(NSDate *)currentDate{
+    _currentDate = currentDate;
+    [self getYearAndMonth];
+}
 #pragma mark - Getter
 - (UICollectionView *)calendar{
-    if (_calendar==nil) {
+    if (_calendar == nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-        flowLayout.headerReferenceSize=CGSizeMake(self.width, 7);
+        flowLayout.minimumInteritemSpacing = _marginForHorizon;
         _calendar =[[UICollectionView alloc]initWithFrame:self.bounds collectionViewLayout:flowLayout];
-        _calendar.backgroundColor=[UIColor groupTableViewBackgroundColor];
+        _calendar.backgroundColor=[UIColor whiteColor];
         _calendar.dataSource=self;
         _calendar.delegate=self;
+        _calendar.allowsMultipleSelection = NO;
     }
     return _calendar;
 }
@@ -49,17 +63,36 @@
 
 //返回section中的cell个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self getDaysOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month];
+    NSLog(@"%ld",[self getDaysOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month]);
+    return 49;
+
 }
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
+                        layout:(UICollectionViewLayout*)collectionViewLayout
+        insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(_marginForvertical,_marginForHorizon,_marginForvertical,_marginForHorizon);
+}
+
 
 //返回cell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month]) {
-        SSJCalendarNIlCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cellNil" forIndexPath:indexPath];
+    if (indexPath.row < 7) {
+        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+        cell.currentDay = [_weekArray objectAtIndex:indexPath.row];
+        cell.userInteractionEnabled = NO;
+        return cell;
+    }
+    if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
+        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+        cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",[self getDaysOfMonth:self.year withMonth:self.month - 1] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + indexPath.row - 5] ;
+        cell.isSelected = NO;
         return cell;
     }else{
        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-        cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 1];
+        cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
+        cell.isSelected = NO;
         return cell;
     }
 }
@@ -67,20 +100,28 @@
 #pragma mark - UICollectionViewDelegate
 //返回cell的宽和高
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewFlowLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    CGFloat cellWidth = self.width / 7;
-    CGFloat cellHight = 40;
-    return CGSizeMake(cellWidth, cellHight);
+    return CGSizeMake(36, 36);
 }
 
 //每行cell之间的间隔
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-    return 0;
+    return _marginForvertical;
 }
 
-//返回头尾
--(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
-        return nil;
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    SSJCalendarCollectionViewCell *cell = (SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    if (cell.isSelected == NO) {
+        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
+            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
+        }
+        cell.isSelected = YES;
+    }else{
+        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
+            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
+        }
+    }
+
 }
 
 #pragma mark - Private
@@ -89,7 +130,7 @@
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];//设置成中国阳历
     NSDateComponents *comps = [[NSDateComponents alloc] init];
     NSInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekdayCalendarUnit | NSHourCalendarUnit;
-    comps = [calendar components:unitFlags fromDate:self.currentNSDate];
+    comps = [calendar components:unitFlags fromDate:self.currentDate];
     self.year = [comps year];
     self.month = [comps month];
 }
@@ -139,7 +180,8 @@
 
 //返回日历高度
 - (CGFloat)viewHeight{
-    return ([self getDaysOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month])/7*40;
+
+    return 315;
 }
 
 /*

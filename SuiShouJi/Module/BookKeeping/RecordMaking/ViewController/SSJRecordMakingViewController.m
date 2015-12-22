@@ -10,6 +10,8 @@
 #import "SSJCustomKeyboard.h"
 #import "SSJCategoryCollectionView.h"
 #import "SSJCategoryListView.h"
+#import "SSJCalendarView.h"
+#import "SSJDateSelectedView.h"
 
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
@@ -22,6 +24,7 @@
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
 @property (nonatomic,strong) SSJCategoryListView* categoryListView;
+@property (nonatomic,strong) SSJDateSelectedView *calendarView;
 
 @end
 
@@ -76,6 +79,7 @@
     self.inputView.bottom = self.view.bottom;
     self.categoryListView.top = self.selectedCategoryView.bottom;
     self.inputAccessoryView.bottom = self.inputView.top;
+    self.categoryListView.size = CGSizeMake(self.view.width, self.inputAccessoryView.top - self.selectedCategoryView.bottom);
 }
 
 #pragma mark SSJCustomKeyboardDelegate
@@ -239,7 +243,7 @@
 
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
-        _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 230)];
+        _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
         _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage){
             NSLog(@"%@",categoryTitle);
         };
@@ -289,13 +293,14 @@
         [_inputAccessoryView addSubview:fundingTypeButton];
         UIButton *datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MM-dd"];
+        [dateFormatter setDateFormat:@"MM月dd日"];
         NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
         [datePickerButton setTitle:currentDateStr forState:UIControlStateNormal];
         [datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
         datePickerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         datePickerButton.layer.borderWidth = 1.0f / 2;
+        [datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:datePickerButton];
 
     }
@@ -310,6 +315,14 @@
         [_categoryNameLabel sizeToFit];
     }
     return _categoryNameLabel;
+}
+
+
+-(SSJDateSelectedView*)calendarView{
+    if (!_calendarView) {
+        _calendarView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    }
+    return _calendarView;
 }
 
 -(SSJCategoryCollectionView*)collectionView{
@@ -331,6 +344,10 @@
     [_titleSegment setTitleTextAttributes:dictForSelected forState:UIControlStateSelected];
     _titleSegment.selectedSegmentIndex = 1;
     self.navigationItem.titleView = _titleSegment;
+}
+
+-(void)datePickerButtonClicked:(UIButton*)button{
+    [[UIApplication sharedApplication].keyWindow addSubview:self.calendarView];
 }
 
 - (void)didReceiveMemoryWarning {

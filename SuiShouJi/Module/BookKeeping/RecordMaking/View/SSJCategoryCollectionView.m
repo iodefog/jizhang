@@ -13,12 +13,17 @@
 @property(nonatomic,strong)UICollectionView *collectionView;
 @end
 
-@implementation SSJCategoryCollectionView
+@implementation SSJCategoryCollectionView{
+    CGFloat _screenWidth;
+    CGFloat _screenHeight;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _screenHeight = [UIScreen mainScreen].bounds.size.height;
+        _screenWidth = [UIScreen mainScreen].bounds.size.width;
         [self addSubview:self.collectionView];
     }
     return self;
@@ -30,7 +35,16 @@
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 8;
+    if (_screenWidth == 320) {
+        if (_screenHeight == 480) {
+            return 4;
+        }else{
+            return 8;
+        }
+    }else if (_screenWidth == 375){
+        return 8;
+    }
+    return 12;
 }
 
 - (NSInteger)numberOfSections{
@@ -44,13 +58,23 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake((self.width - 80)/4, (self.height - 45) / 2);
+    if (_screenWidth == 320) {
+        return CGSizeMake((self.width - 80)/4, (self.height - 20) / 2);
+    }else if(_screenWidth == 375){
+        return CGSizeMake((self.width - 80)/4, (self.height - 20) / 3);
+    }
+    return CGSizeMake((self.width - 80)/4, (self.height - 40) / 3);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
                         layout:(UICollectionViewLayout*)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section
 {
+    if (_screenWidth == 320) {
+        return UIEdgeInsetsMake(5, 10, 15, 10);
+    }else if (_screenWidth == 375){
+        return UIEdgeInsetsMake(20, 10, 15, 10);
+    }
     return UIEdgeInsetsMake(15, 10, 15, 10);
 }
 
@@ -69,11 +93,17 @@
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 15;
-        flowLayout.minimumLineSpacing = 20  ;
+        if (_screenWidth == 320 && _screenHeight == 568) {
+            flowLayout.minimumLineSpacing = 5;
+        }else if(_screenWidth == 375){
+            flowLayout.minimumLineSpacing = 30;
+        }else if (_screenWidth == 414){
+            flowLayout.minimumLineSpacing = 10;
+        }
         _collectionView =[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height) collectionViewLayout:flowLayout];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
-        [_collectionView registerNib:[UINib nibWithNibName:NSStringFromClass([SSJCategoryCollectionViewCell class]) bundle:nil] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
+        [_collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
         _collectionView.scrollEnabled = NO;
         _collectionView.backgroundColor = [UIColor whiteColor];
     }

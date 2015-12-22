@@ -14,15 +14,21 @@
 @property(nonatomic,strong) UIPageControl *pageControl;
 @property(nonatomic,strong) UIScrollView *scrolView;
 @end
-@implementation SSJCategoryListView
+@implementation SSJCategoryListView{
+    CGFloat _screenWidth;
+    CGFloat _screenHeight;
+}
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-
+        self.collectionViewArray = [[NSMutableArray alloc]init];
         [self addSubview:self.pageControl];
         [self addSubview:self.scrolView];
+        _screenHeight = [UIScreen mainScreen].bounds.size.height;
+        _screenWidth = [UIScreen mainScreen].bounds.size.width;
     }
     return self;
 }
@@ -30,14 +36,23 @@
 -(void)layoutSubviews{
     self.pageControl.top = self.scrolView.bottom;
     self.pageControl.centerX = self.centerX;
+    if (_screenWidth == 375 | _screenWidth == 414) {
+        self.scrolView.frame = CGRectMake(0, 0, self.width, self.height - 20);
+    }else{
+        self.scrolView.frame = CGRectMake(0, 0, self.width, self.height - 10);
+    }
+    _scrolView.contentSize = CGSizeMake(self.width * 2, 0);
+    for (int i = 0; i < 2; i++) {
+        CGFloat positionX = i * self.width;
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).frame = CGRectMake(positionX, 0, self.scrolView.width, self.scrolView.height);;
+    }
+
 }
 
 -(void)setCollectionView{
     for (int i = 0; i < 2; i++) {
-        CGFloat positionX = i * self.width;
-
         SSJCategoryCollectionView *collectionView = [[SSJCategoryCollectionView alloc]init];
-        collectionView.frame = CGRectMake(positionX, 0, self.scrolView.width, self.scrolView.height);
+        collectionView.frame = CGRectZero;
         collectionView.ItemClickedBlock = ^(NSString *categoryTitle , UIImage *categoryImage){
             if (self.CategorySelected) {
                 self.CategorySelected(categoryTitle,categoryImage);
@@ -51,7 +66,7 @@
 -(UIPageControl*)pageControl{
     if (_pageControl == nil) {
         _pageControl = [[UIPageControl alloc]init];
-        _pageControl.frame = CGRectMake(0, 0, 70, 30);
+        _pageControl.frame = CGRectMake(0, 0, 70, 10);
         _pageControl.numberOfPages = 2;
         _pageControl.currentPageIndicatorTintColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
@@ -60,7 +75,7 @@
 
 -(UIScrollView*)scrolView{
     if (!_scrolView) {
-        _scrolView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height - 30)];
+        _scrolView = [[UIScrollView alloc]initWithFrame:CGRectZero];
         [self setCollectionView];
         _scrolView.showsHorizontalScrollIndicator = NO;
         _scrolView.pagingEnabled = YES;

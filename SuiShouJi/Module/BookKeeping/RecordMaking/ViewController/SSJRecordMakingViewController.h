@@ -9,6 +9,6 @@
 #import "SSJBaseViewController.h"
 #import "SSJCustomKeyboard.h"
 
-@interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate,UIScrollViewDelegate>
+@interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 
 @end

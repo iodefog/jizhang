@@ -10,4 +10,5 @@
 
 @interface SSJCalendarCollectionViewCell : UICollectionViewCell
 @property(nonatomic,strong)NSString *currentDay;
+@property (nonatomic) BOOL isSelected;
 @end

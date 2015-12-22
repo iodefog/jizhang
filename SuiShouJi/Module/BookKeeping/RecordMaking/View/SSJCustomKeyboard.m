@@ -53,14 +53,14 @@
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.DecimalButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.DecimalButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.BackspaceButton.rightTop = CGPointMake(self.right, 0);
-    self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.PlusButton.rightTop = CGPointMake(self.right, self.BackspaceButton.bottom);
+    self.ComfirmButton.rightTop = CGPointMake(self.right, 0);
+    self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.PlusButton.rightTop = CGPointMake(self.right, self.ComfirmButton.bottom);
     self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.MinusButton.rightTop = CGPointMake(self.right, self.PlusButton.bottom);
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.ComfirmButton.rightBottom = CGPointMake(self.right, self.bottom);
-    self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.BackspaceButton.rightBottom = CGPointMake(self.right, self.bottom);
+    self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
 }
 
 //数字键
@@ -78,7 +78,6 @@
         numButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:numButton];
     }
-
 }
 
 -(SSJCustomKeyBoardButton*)ZeroButton{
@@ -191,7 +190,7 @@
     if (!_ComfirmButton) {
         _ComfirmButton = [[SSJCustomKeyBoardButton alloc]init];
         _ComfirmButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
-        [_ComfirmButton setTitle:@"确定" forState:UIControlStateNormal];
+        [_ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
         _ComfirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_ComfirmButton setTintColor:[UIColor whiteColor]];
         [_ComfirmButton addTarget:self action:@selector(ComfirmKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
