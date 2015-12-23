@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
+		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
+		9C434E311C2ABF5400A3D61E /* closebutton test.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C434E301C2ABF5400A3D61E /* closebutton test.png */; };
+		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
@@ -107,6 +111,13 @@
 
 /* Begin PBXFileReference section */
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
+		9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectView.m; sourceTree = "<group>"; };
+		9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeTableViewCell.h; sourceTree = "<group>"; };
+		9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeTableViewCell.m; sourceTree = "<group>"; };
+		9C434E301C2ABF5400A3D61E /* closebutton test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closebutton test.png"; sourceTree = "<group>"; };
+		9C434E321C2AD4DF00A3D61E /* SSJCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCalendarViewController.h; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.h; sourceTree = SOURCE_ROOT; };
+		9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCalendarViewController.m; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.m; sourceTree = SOURCE_ROOT; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -783,6 +794,10 @@
 				BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */,
 				BDDC5B911C291ADF00FC2887 /* SSJDateSelectedView.h */,
 				BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */,
+				9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */,
+				9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */,
+				9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */,
+				9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -807,6 +822,7 @@
 		BD0E43EC1C2118E600F9179D /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				9C434E301C2ABF5400A3D61E /* closebutton test.png */,
 				BD7676881C27DDB800CDD507 /* edit test.png */,
 				BD0E43ED1C2118E600F9179D /* homeSeperator test.png */,
 				BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */,
@@ -935,6 +951,8 @@
 		BDD78AF41C1EE71700C7EE0E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				9C434E321C2AD4DF00A3D61E /* SSJCalendarViewController.h */,
+				9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1049,6 +1067,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDDC5B8E1C28F7B300FC2887 /* 食材采购@3x.png in Resources */,
+				9C434E311C2ABF5400A3D61E /* closebutton test.png in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
 				BD0E43F11C2118E600F9179D /* 进度条－点 测试.png in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
@@ -1146,6 +1165,7 @@
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
+				9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */,
 				BD04331C1C1A78B40051E7AB /* SSJArrayAddition.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */,
@@ -1189,7 +1209,9 @@
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
+				9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */,
 				BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */,
+				9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 			);

@@ -13,6 +13,7 @@
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
 #import "SSJCalendarCollectionViewCell.h"
+#import "SSJFundingTypeSelectView.h"
 
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
@@ -27,6 +28,10 @@
 @property (nonatomic,strong) SSJCategoryListView* categoryListView;
 @property (nonatomic,strong) SSJDateSelectedView *DateSelectedView;
 @property (nonatomic,strong) UIButton *datePickerButton;
+@property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
+@property (nonatomic,strong) UIButton *fundingTypeButton;
+
+
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
@@ -89,6 +94,7 @@
     self.categoryListView.top = self.selectedCategoryView.bottom;
     self.inputAccessoryView.bottom = self.inputView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.inputAccessoryView.top - self.selectedCategoryView.bottom);
+
 }
 
 #pragma mark SSJCustomKeyboardDelegate
@@ -293,13 +299,14 @@
         _inputAccessoryView.backgroundColor = [UIColor whiteColor];
         [_inputAccessoryView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e2e2e2"]];
         [_inputAccessoryView ssj_setBorderStyle:SSJBorderStyleTop];
-        UIButton *fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width / 2, 50)];
-        [fundingTypeButton setTitle:@"选择资金类型" forState:UIControlStateNormal];
-        [fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
-        fundingTypeButton.layer.borderWidth = 1.0f / 2;
-        [_inputAccessoryView addSubview:fundingTypeButton];
+        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width / 2, 50)];
+        [_fundingTypeButton setTitle:@"选择资金类型" forState:UIControlStateNormal];
+        [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        _fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _fundingTypeButton.layer.borderWidth = 1.0f / 2;
+        [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_inputAccessoryView addSubview:_fundingTypeButton];
         self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
         [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",_currentMonth,_currentDay] forState:UIControlStateNormal];
         [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
@@ -353,6 +360,18 @@
     }
     return _collectionView;
 }
+
+-(SSJFundingTypeSelectView *)FundingTypeSelectView{
+    if (!_FundingTypeSelectView) {
+        __weak typeof(self) weakSelf = self;
+        _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _FundingTypeSelectView.fundingTypeSelectBlock = ^(NSString *fundingTitle){
+            [weakSelf.fundingTypeButton setTitle:fundingTitle forState:UIControlStateNormal];
+            [weakSelf.FundingTypeSelectView removeFromSuperview];
+        };
+    }
+    return _FundingTypeSelectView;
+}
 #pragma mark - private
 -(void)settitleSegment{
     NSArray *segmentArray = @[@"收入",@"支出"];
@@ -369,6 +388,10 @@
 
 -(void)datePickerButtonClicked:(UIButton*)button{
     [[UIApplication sharedApplication].keyWindow addSubview:self.DateSelectedView];
+}
+
+-(void)fundingTypeButtonClicked:(UIButton*)button{
+    [[UIApplication sharedApplication].keyWindow addSubview:self.FundingTypeSelectView];
 }
 
 -(void)getCurrentDate{

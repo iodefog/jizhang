@@ -30,7 +30,6 @@
 - (void)awakeFromNib{
     [self.bookKeepingButton setBackgroundColor:[UIColor whiteColor]];
     self.bookKeepingButton.layer.cornerRadius = 51.0f;
-    self.bookKeepingButton.layer.masksToBounds = YES;
     self.bookKeepingButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.bookKeepingButton.layer.borderWidth = 5;
     self.backgroundColor = [UIColor clearColor];

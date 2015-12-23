@@ -72,8 +72,8 @@
         _titleLabel.font = [UIFont systemFontOfSize:18];
         [_titleLabel sizeToFit];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-        _closeButton.backgroundColor = [UIColor yellowColor];
+        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
+        [_closeButton setImage:[UIImage imageNamed:@"closebutton test"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_titleView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_titleView ssj_setBorderWidth:1];

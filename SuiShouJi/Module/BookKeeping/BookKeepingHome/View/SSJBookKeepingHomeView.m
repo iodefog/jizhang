@@ -63,7 +63,6 @@
     if (_categoryImageButton == nil) {
         _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
         _categoryImageButton.layer.cornerRadius = 15;
-        _categoryImageButton.layer.masksToBounds = YES;
         [_categoryImageButton setImage:[UIImage imageNamed:@"餐饮 测试"] forState:UIControlStateNormal];
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
