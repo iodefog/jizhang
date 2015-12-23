@@ -10,8 +10,16 @@
 
 @interface SSJCalendarView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
-//当前日期必传格式为yyyy-MM-dd
-@property(nonatomic,strong) NSDate *currentDate;
+//当前选中的年份和月份
+@property(nonatomic)long year;
+@property(nonatomic)long month;
 @property (nonatomic,strong)UICollectionView *calendar;
+
+//选中日期的回调
+typedef void (^DateSelectedBlock)(long year , long month ,long day);
+
+@property (nonatomic, copy) DateSelectedBlock DateSelectedBlock;
+
 - (CGFloat)viewHeight;
+
 @end

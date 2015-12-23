@@ -10,14 +10,17 @@
 #import "SSJCalendarCollectionViewCell.h"
 
 @interface SSJCalendarView()
-@property(nonatomic)long year;
-@property(nonatomic)long month;
+
 @end
 
 @implementation SSJCalendarView{
     CGFloat _marginForHorizon;
     CGFloat _marginForvertical;
     NSArray *_weekArray;
+    long _currentYear;
+    long _currentMonth;
+    long _currentDay;
+
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -28,6 +31,7 @@
         _weekArray = [NSArray arrayWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六",  nil];
         [self addSubview:self.calendar];
         [self.calendar registerClass:[SSJCalendarCollectionViewCell class] forCellWithReuseIdentifier:@"NormalCell"];
+        [self getCurrentDate];
     }
     return self;
 }
@@ -36,10 +40,6 @@
     self.calendar.frame = CGRectMake(0, 0, self.width, self.height);
 }
 
--(void)setCurrentDate:(NSDate *)currentDate{
-    _currentDate = currentDate;
-    [self getYearAndMonth];
-}
 #pragma mark - Getter
 - (UICollectionView *)calendar{
     if (_calendar == nil) {
@@ -63,7 +63,6 @@
 
 //返回section中的cell个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"%ld",[self getDaysOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month]);
     return 49;
 
 }
@@ -81,29 +80,44 @@
     if (indexPath.row < 7) {
         SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
         cell.currentDay = [_weekArray objectAtIndex:indexPath.row];
-        cell.userInteractionEnabled = NO;
-        cell.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        cell.selectable = NO;
+        cell.isSelected = NO;
         return cell;
     }
     if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
         SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
         cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",[self getDaysOfMonth:self.year withMonth:self.month - 1] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + indexPath.row - 5] ;
-        cell.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
-        cell.userInteractionEnabled = NO;
+        cell.selectable = NO;
         cell.isSelected = NO;
         return cell;
     }else{
         if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
             SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
             cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getDaysOfMonth:self.year withMonth:self.month] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5] ;
-            cell.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
-            cell.userInteractionEnabled = NO;
+            cell.selectable = NO;
+            return cell;
+        }else{
+            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+            cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
+            if (_year > _currentYear) {
+                cell.selectable = NO;
+                cell.isSelected = NO;
+            }else if (_month > _currentMonth){
+                cell.selectable = NO;
+                cell.isSelected = NO;
+            }else if ([cell.currentDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
+                cell.selectable = NO;
+                cell.isSelected = NO;
+            }else{
+                if ([cell.currentDay integerValue] == _currentDay && _year == _currentYear && _month == _currentMonth) {
+                    cell.isSelected = YES;
+                }else{
+                    cell.isSelected = NO;
+                }
+                cell.selectable = YES;
+            }
             return cell;
         }
-       SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-        cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
-        cell.isSelected = NO;
-        return cell;
     }
 }
 
@@ -126,27 +140,26 @@
             ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
         }
         cell.isSelected = YES;
+        if (self.DateSelectedBlock) {
+            self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).currentDay integerValue]);
+        }
     }else{
         for (int i = 0; i < [collectionView.visibleCells count]; i++) {
             ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
         }
     }
-
 }
 
 #pragma mark - Private
-//得到当前的年份和月份
--(void)getYearAndMonth{
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];//设置成中国阳历
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
-    NSInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSWeekdayCalendarUnit | NSHourCalendarUnit;
-    comps = [calendar components:unitFlags fromDate:self.currentDate];
-    self.year = [comps year];
-    self.month = [comps month];
-}
-
 //获得某个月的第一天是星期几
 -(long)getWeekOfFirstDayOfMonth:(long)year withMonth:(long)month{
+    if (month == 0) {
+        month = 12;
+        year = year - 1;
+    }else if(month == 13){
+        month = 1;
+        year = year + 1;
+    }
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSString *firstWeekDayMonth = [[NSString alloc] initWithFormat:@"%ld",year];
     firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%s","-"]];
@@ -162,6 +175,13 @@
 
 //返回一个月有多少天
 -(long)getDaysOfMonth:(long)year withMonth:(long)month{
+    if (month == 0) {
+        month = 12;
+        year = year - 1;
+    }else if(month == 13){
+        month = 1;
+        year = year + 1;
+    }
     NSInteger days = 0;
     //1,3,5,7,8,10,12
     NSArray *bigMoth = [[NSArray alloc] initWithObjects:@"1",@"3",@"5",@"7",@"8",@"10",@"12", nil];
@@ -193,6 +213,22 @@
 
     return 315;
 }
+
+-(void)setMonth:(long)month{
+    _month = month;
+    [self.calendar reloadData];
+}
+
+-(void)getCurrentDate{
+    NSDate *now = [NSDate date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+    _currentYear = [dateComponent year];
+    _currentDay = [dateComponent day];
+    _currentMonth = [dateComponent month];
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

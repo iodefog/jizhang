@@ -12,6 +12,7 @@
 #import "SSJCategoryListView.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
+#import "SSJCalendarCollectionViewCell.h"
 
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
@@ -24,8 +25,14 @@
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
 @property (nonatomic,strong) SSJCategoryListView* categoryListView;
-@property (nonatomic,strong) SSJDateSelectedView *calendarView;
-
+@property (nonatomic,strong) SSJDateSelectedView *DateSelectedView;
+@property (nonatomic,strong) UIButton *datePickerButton;
+@property (nonatomic) long selectedYear;
+@property (nonatomic) long selectedMonth;
+@property (nonatomic) long selectedDay;
+@property (nonatomic) long currentYear;
+@property (nonatomic) long currentMonth;
+@property (nonatomic) long currentDay;
 @end
 
 @implementation SSJRecordMakingViewController{
@@ -37,6 +44,7 @@
     NSString *_intPart;
     NSString *_decimalPart;
     int _decimalCount;
+
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -50,6 +58,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _numkeyHavePressed = NO;
+    [self getCurrentDate];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryNameLabel];
@@ -291,17 +300,14 @@
         fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         fundingTypeButton.layer.borderWidth = 1.0f / 2;
         [_inputAccessoryView addSubview:fundingTypeButton];
-        UIButton *datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MM月dd日"];
-        NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-        [datePickerButton setTitle:currentDateStr forState:UIControlStateNormal];
-        [datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        datePickerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
-        datePickerButton.layer.borderWidth = 1.0f / 2;
-        [datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_inputAccessoryView addSubview:datePickerButton];
+        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
+        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",_currentMonth,_currentDay] forState:UIControlStateNormal];
+        [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        self.datePickerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        self.datePickerButton.layer.borderWidth = 1.0f / 2;
+        [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_inputAccessoryView addSubview:self.datePickerButton];
 
     }
     return _inputAccessoryView;
@@ -318,11 +324,26 @@
 }
 
 
--(SSJDateSelectedView*)calendarView{
-    if (!_calendarView) {
-        _calendarView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+-(SSJDateSelectedView*)DateSelectedView{
+    if (!_DateSelectedView) {
+        _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        __weak typeof(self) weakSelf = self;
+        _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day){
+            _selectedDay = day;
+            _selectedMonth = month;
+            _selectedYear = year;
+            [weakSelf.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",weakSelf.selectedMonth,weakSelf.selectedDay] forState:UIControlStateNormal];
+            for (int i = 0; i < [self.DateSelectedView.calendarView.calendar.visibleCells count]; i ++) {
+                if ([((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == day && ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES) {
+                    ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;
+                }else{
+                    ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = NO;
+                }
+            }
+            [weakSelf.DateSelectedView removeFromSuperview];
+        };
     }
-    return _calendarView;
+    return _DateSelectedView;
 }
 
 -(SSJCategoryCollectionView*)collectionView{
@@ -347,7 +368,17 @@
 }
 
 -(void)datePickerButtonClicked:(UIButton*)button{
-    [[UIApplication sharedApplication].keyWindow addSubview:self.calendarView];
+    [[UIApplication sharedApplication].keyWindow addSubview:self.DateSelectedView];
+}
+
+-(void)getCurrentDate{
+    NSDate *now = [NSDate date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+    _currentYear= [dateComponent year];
+    _currentDay = [dateComponent day];
+    _currentMonth = [dateComponent month];
 }
 
 - (void)didReceiveMemoryWarning {

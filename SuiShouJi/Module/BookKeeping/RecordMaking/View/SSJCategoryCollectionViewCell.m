@@ -20,8 +20,6 @@
         //        self.backgroundColor = [UIColor redColor];
         [self.contentView addSubview:self.categoryImage];
         [self.contentView addSubview:self.categoryName];
-
-
         //        [self addSubview:self.editButton];
     }
     return self;

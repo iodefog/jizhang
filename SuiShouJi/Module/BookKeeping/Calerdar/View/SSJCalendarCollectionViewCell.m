@@ -52,4 +52,16 @@
         self.layer.borderWidth = 0;
     }
 }
+
+-(void)setSelectable:(BOOL)selectable{
+    _selectable = selectable;
+    if (_selectable == YES) {
+        self.userInteractionEnabled = YES;
+        self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+    }else if (_selectable == NO){
+        self.userInteractionEnabled = NO;
+        self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+    }
+}
+
 @end
