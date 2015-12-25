@@ -14,7 +14,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#efeeee"];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#f1f1f1"];
         [self ssj_setBorderStyle:SSJBorderStyleRight | SSJBorderStyleTop];
         [self ssj_setBorderColor:[UIColor blackColor]];
         [self ssj_setBorderWidth:1];
