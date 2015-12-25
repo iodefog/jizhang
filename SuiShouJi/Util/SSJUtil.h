@@ -192,4 +192,4 @@ NSString *SSJUUID();
  *
  *  @return (NSString *)
  */
-NSString *SSJUSERID(){
+NSString *SSJUSERID();

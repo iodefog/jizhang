@@ -31,7 +31,7 @@
 #import "NSString+MoneyDisplayFormat.h"
 
 #import "SSJUtil.h"
-//#import "CDAutoHideMessageHUD.h"
+#import "CDAutoHideMessageHUD.h"
 #import "MJExtension.h"
 //#import "SSJAlertViewAdapter.h"
 #import "UIImageView+WebCache.h"
