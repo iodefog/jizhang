@@ -238,6 +238,21 @@ BOOL SSJSaveSSLCertificate(NSData *certificate) {
     return NO;
 }
 
+static NSString *const kDatabasePath = @"mydatabase.db";
+
+NSString *SSJSQLitePath() {
+    NSString *documentPath = SSJDocumentPath();
+    NSString *databaseDirectory = [documentPath stringByAppendingPathComponent:[NSString stringWithFormat:@"SQLite"]];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:databaseDirectory]) {
+        NSError *error = nil;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:databaseDirectory withIntermediateDirectories:YES attributes:nil error:&error]) {
+            SSJPRINT(@"error:%@",[error localizedDescription]);
+        }
+    }
+    
+    return [databaseDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",kDatabasePath]];
+}
+
 static NSString *const kQQListKey = @"";
 
 NSArray *SSJQQList() {

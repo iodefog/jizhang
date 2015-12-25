@@ -157,6 +157,13 @@ NSString *SSJSSLCertificatePath();
 BOOL SSJSaveSSLCertificate(NSData *certificate);
 
 /**
+ *  返回数据库文件目录
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJSQLitePath();
+
+/**
  *  获取qq客服联系人列表，例如：@[@{@"cqqnum": @"2766500669",@"crealname": @"婷婷"}]
  *
  *  @param certificate 证书
