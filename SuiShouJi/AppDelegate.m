@@ -90,23 +90,23 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
         return;
     }
     
+    //  用户表 CUSERID:用户唯一序列id CPWD:登录密码 CFPWD:资金密码 CNICKID:昵称 CMOBILENO:手机号 CREALNAME:用户真实姓名 CIDCARD:身份证号 CICONS:头像
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER (CUSERID text primary key, CPWD text, CFPWD text, CNICKID text, CMOBILENO text, CREALNAME text, CIDCARD text, CICONS text)"];
+    
+    //  用户收支类型中间表 CUSERID:用户ID CBILLID:收支类型ID ISTATE:是否启用 0启用  1 禁用
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_BILL (CUSERID text, CBILLID text, ISTATE int, CWRITEDATE text, IVERSION int, OPERATORTYPE int, constraint PK_BK_USER_BILL primary key (CUSERID, CBILLID))"];
+    
+    //  收支类型表 ID:收支类型ID CNAME:账单类型名称 ITYPE:0收入 1支出 2平帐收入 3平帐支出
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_BILL_TYPE (ID text primary key, CNAME text, ITYPE int, IBOOKSTYPE int, CCOIN text)"];
+    
     //  资金账户信息表 CFUNDID:账户ID CACCTNAME:账户名称 CICOIN:图标 CPARENT:父账户(若为一级账户则父账户记为 root) CCOLOR:颜色编号 CADDDATE:添加时间
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_FUND_ACCT (CFUNDID text primary key, CACCTNAME text, CICOIN text, CPARENT text, CCOLOR text, CADDDATE text)"];
     
     //  用户资金账户金额表 CUSERID:用户id CFUNDID:用户资金账户编号 IBALANCE:用户资金金额
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_FUNS_ACCT (CUSERID text, CFUNDID text, IBALANCE real, constraint PK_BK_FUNS_ACCT primary key(CUSERID, CFUNDID))"];
     
-    //  用户表 CUSERID:用户唯一序列id CPWD:登录密码 CFPWD:资金密码 CNICKID:昵称 CMOBILENO:手机号 ISOURCE:渠道值 CIMEI:手机IMEI CREALNAME:用户真实姓名 CIDCARD:身份证号 CICONS:头像 ISTATE:账户状态 0正常 1注销 CADDDATE:注册时间 CACTIVEDATE:活跃时间
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER (CUSERID text primary key, CPWD text, CFPWD text, CNICKID text, CMOBILENO text, ISOURCE int, CIMEI text, CREALNAME text, CIDCARD text, CICONS text, ISTATE int, CADDDATE text, CACTIVEDATE text)"];
-    
-    //  收支类型表 ID:收支类型ID CNAME:账单类型名称 ITYPE:0收入 1支出 2平帐收入 3平帐支出
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_BILL_TYPE (ID text primary key, CNAME text, ITYPE int, IBOOKSTYPE int, CCOIN text)"];
-    
-    //  用户收支类型中间表 CUSERID:用户ID CBILLID:收支类型ID ISTATE:是否启用 0启用  1 禁用
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_BILL (CUSERID text, CBILLID text, ISTATE int, constraint PK_BK_USER_BILL primary key (CUSERID, CBILLID))"];
-    
     //  用户记账流水表 ICHARGEID:流水编号 CUSERID:用户ID IMONEY:金额 IBILLID:收支类型 IFID:资金账户类型 CADDDATE:日期 IOLDMONEY:变化前余额 IBALANCE:当前余额 EDITORDATE:编辑时间 CLIENTDATE:客户端修改时间
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_CHARGE (ICHARGEID text primary key, CUSERID text, IMONEY real, IBILLID text, IFID text, CADDDATE text, IOLDMONEY real, IBALANCE real, EDITORDATE text, CLIENTDATE text)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_CHARGE (ICHARGEID text primary key, CUSERID text, IMONEY real, IBILLID text, IFID text, CADDDATE text, IOLDMONEY real, IBALANCE real, EDITORDATE text, CLIENTDATE text, CWRITEDATE text, IVERSION int, OPERATORTYPE int)"];
     
     [db close];
 }
