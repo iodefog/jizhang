@@ -278,8 +278,8 @@ NSString *SSJUUID(){
     return strUUID;
 }
 
-NSString *SSJUSERID(){
-    NSDate *datenow = [NSDate date];
-    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
-    return timeSp;
-}
+//NSString *SSJUSERID(){
+//    NSDate *datenow = [NSDate date];
+//    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
+//    return timeSp;
+//}

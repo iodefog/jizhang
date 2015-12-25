@@ -43,8 +43,8 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.height = self.view.height - 69;
-    NSString *timestamp = SSJUSERID();
-    NSLog(@"%@",timestamp);
+//    NSString *timestamp = SSJUSERID();
+//    NSLog(@"%@",timestamp);
 }
 
 -(BOOL)prefersStatusBarHidden{
