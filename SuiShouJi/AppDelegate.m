@@ -85,6 +85,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
 
 - (void)createTables {
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    NSLog(@"%@",SSJSQLitePath());
     if (![db open]) {
         return;
     }

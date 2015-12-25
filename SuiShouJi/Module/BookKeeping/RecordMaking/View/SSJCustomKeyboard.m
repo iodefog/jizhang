@@ -28,7 +28,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor redColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"f1f1f1"];
         _buttonHeight = self.height / 4;
         _buttonWight = self.width / 4;
         self.decimalModel = NO;
@@ -37,10 +37,6 @@
         [self setNumKey];
     }
     return self;
-}
-
--(void)drawRect:(CGRect)rect{
-    
 }
 
 -(void)layoutSubviews{

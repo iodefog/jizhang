@@ -17,7 +17,6 @@
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
 		BD0432EC1C1A77BB0051E7AB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D11C1A77BB0051E7AB /* libcrypto.a */; };
 		BD0432ED1C1A77BB0051E7AB /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D21C1A77BB0051E7AB /* libssl.a */; };
-		BD0432EE1C1A77BB0051E7AB /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432D51C1A77BB0051E7AB /* CDAutoHideMessageHUD.m */; };
 		BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */; };
 		BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
 		BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DB1C1A77BB0051E7AB /* sr_refresh@2x.png */; };
@@ -126,8 +125,6 @@
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
 		BD0432D11C1A77BB0051E7AB /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		BD0432D21C1A77BB0051E7AB /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
-		BD0432D41C1A77BB0051E7AB /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
-		BD0432D51C1A77BB0051E7AB /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BD0432D71C1A77BB0051E7AB /* CDPointActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDPointActivityIndicator.h; sourceTree = "<group>"; };
 		BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDPointActivityIndicator.m; sourceTree = "<group>"; };
 		BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sr_refresh.png; sourceTree = "<group>"; };
@@ -331,7 +328,6 @@
 			children = (
 				BD0E43F81C21380F00F9179D /* SFHFKeychainUtils */,
 				BD0432CE1C1A77BB0051E7AB /* AlipayZF */,
-				BD0432D31C1A77BB0051E7AB /* CDAutoHideMessageHUD */,
 				BD0432D61C1A77BB0051E7AB /* CDPointActivityIndicator */,
 				BD0432D91C1A77BB0051E7AB /* SlimeRefresh */,
 				BD0432E11C1A77BB0051E7AB /* TPKeyboardAvoiding */,
@@ -349,15 +345,6 @@
 				BD0432D21C1A77BB0051E7AB /* libssl.a */,
 			);
 			path = AlipayZF;
-			sourceTree = "<group>";
-		};
-		BD0432D31C1A77BB0051E7AB /* CDAutoHideMessageHUD */ = {
-			isa = PBXGroup;
-			children = (
-				BD0432D41C1A77BB0051E7AB /* CDAutoHideMessageHUD.h */,
-				BD0432D51C1A77BB0051E7AB /* CDAutoHideMessageHUD.m */,
-			);
-			path = CDAutoHideMessageHUD;
 			sourceTree = "<group>";
 		};
 		BD0432D61C1A77BB0051E7AB /* CDPointActivityIndicator */ = {
@@ -1188,7 +1175,6 @@
 				BD04339B1C1A8DA50051E7AB /* SSJNormalWebViewController.m in Sources */,
 				BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */,
 				BD0433261C1A78B40051E7AB /* SSJScrollViewAddition.m in Sources */,
-				BD0432EE1C1A77BB0051E7AB /* CDAutoHideMessageHUD.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
 				BD0433C21C1AA3630051E7AB /* SSJMoreHomeViewController.m in Sources */,
 				BD04331D1C1A78B40051E7AB /* SSJDataAddition.m in Sources */,
