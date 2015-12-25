@@ -7,3 +7,4 @@ pod 'SDWebImage', '~>3.7'
 pod 'MJExtension'
 pod 'UMengAnalytics-NO-IDFA'
 
+pod 'FMDB'
