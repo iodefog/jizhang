@@ -24,14 +24,14 @@
     long _currentDay;
     
 }
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame forYear:(long)year Month:(long)month Day:(long)day
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.selectedYear = 2015;
-        self.selectedMonth = 12 ;
+        self.selectedDay = day;
+        self.selectedMonth = month;
+        self.selectedYear = year;
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-        [self getCurrentDate];
         [self addSubview:self.calendarView];
         [self addSubview:self.titleView];
         [self addSubview:self.dateChangeView];
@@ -57,8 +57,11 @@
 -(SSJCalendarView*)calendarView{
     if (!_calendarView) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.width, 270)];
+        _calendarView.selectedYear = self.selectedYear;
+        _calendarView.selectedMonth = self.selectedMonth;
         _calendarView.year = self.selectedYear;
         _calendarView.month = self.selectedMonth;
+        _calendarView.day = self.selectedDay;
     }
     return _calendarView;
 }
@@ -123,6 +126,7 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
+    [self.calendarView.calendar reloadData];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -135,11 +139,14 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
+    [self.calendarView.calendar reloadData];
 }
 
 -(void)closeButtonClicked:(UIButton*)button{
     for (int i = 0; i < [self.calendarView.calendar.visibleCells count]; i ++) {
-        if ([((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == _currentDay) {
+        if ([((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == _currentDay && ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES) {
+            ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;
+        }else if([((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == self.selectedDay && self.calendarView.month == self.selectedMonth &&self.calendarView.year == self.selectedYear && ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES){
             ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;
         }else{
             ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = NO;

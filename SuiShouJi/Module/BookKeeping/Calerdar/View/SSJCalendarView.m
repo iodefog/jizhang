@@ -111,6 +111,8 @@
             }else{
                 if ([cell.currentDay integerValue] == _currentDay && _year == _currentYear && _month == _currentMonth) {
                     cell.isSelected = YES;
+                }else if([cell.currentDay integerValue] == self.day && _year == self.selectedYear && _month == self.selectedMonth){
+                    cell.isSelected = YES;
                 }else{
                     cell.isSelected = NO;
                 }

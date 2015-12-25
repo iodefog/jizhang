@@ -10,6 +10,7 @@
 #import "SSJBookKeepingHeader.h"
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJRecordMakingViewController.h"
+#import "SSJCalendarViewController.h"
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -94,7 +95,8 @@
 
 #pragma mark - Private
 -(void)rightBarButtonClicked{
-    NSLog(@"日历");
+    SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
+    [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
 

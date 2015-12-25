@@ -32,9 +32,6 @@
 @property (nonatomic,strong) UIButton *fundingTypeButton;
 
 
-@property (nonatomic) long selectedYear;
-@property (nonatomic) long selectedMonth;
-@property (nonatomic) long selectedDay;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -64,6 +61,15 @@
     [super viewDidLoad];
     _numkeyHavePressed = NO;
     [self getCurrentDate];
+    if (_selectedYear == 0) {
+        self.selectedYear = _currentYear;
+    }
+    if (_selectedMonth == 0) {
+        self.selectedMonth = _currentMonth;
+    }
+    if (_selectedDay == 0) {
+        self.selectedDay = _currentDay;
+    }
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryNameLabel];
@@ -308,7 +314,7 @@
         [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:_fundingTypeButton];
         self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
-        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",_currentMonth,_currentDay] forState:UIControlStateNormal];
+        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",self.selectedMonth,self.selectedDay] forState:UIControlStateNormal];
         [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
         self.datePickerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
@@ -333,7 +339,7 @@
 
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
-        _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
         __weak typeof(self) weakSelf = self;
         _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day){
             _selectedDay = day;

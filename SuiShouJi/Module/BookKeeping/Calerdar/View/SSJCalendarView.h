@@ -11,8 +11,11 @@
 @interface SSJCalendarView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
 //当前选中的年份和月份
-@property(nonatomic)long year;
-@property(nonatomic)long month;
+@property (nonatomic)long year;
+@property (nonatomic)long month;
+@property (nonatomic) long day;
+@property (nonatomic)long selectedYear;
+@property (nonatomic)long selectedMonth;
 @property (nonatomic,strong)UICollectionView *calendar;
 
 //选中日期的回调

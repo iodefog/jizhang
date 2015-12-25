@@ -10,5 +10,8 @@
 #import "SSJCustomKeyboard.h"
 
 @interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate,UIScrollViewDelegate,UITextFieldDelegate>
+@property (nonatomic) long selectedYear;
+@property (nonatomic) long selectedMonth;
+@property (nonatomic) long selectedDay;
 
 @end

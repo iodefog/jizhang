@@ -11,6 +11,7 @@
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E311C2ABF5400A3D61E /* closebutton test.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C434E301C2ABF5400A3D61E /* closebutton test.png */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
+		9C75F6BD1C2B9101002789EF /* SSJCalendarTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C75F6BC1C2B9101002789EF /* SSJCalendarTableViewCell.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
@@ -118,6 +119,8 @@
 		9C434E301C2ABF5400A3D61E /* closebutton test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closebutton test.png"; sourceTree = "<group>"; };
 		9C434E321C2AD4DF00A3D61E /* SSJCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCalendarViewController.h; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.h; sourceTree = SOURCE_ROOT; };
 		9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCalendarViewController.m; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.m; sourceTree = SOURCE_ROOT; };
+		9C75F6BB1C2B9101002789EF /* SSJCalendarTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarTableViewCell.h; sourceTree = "<group>"; };
+		9C75F6BC1C2B9101002789EF /* SSJCalendarTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarTableViewCell.m; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -940,6 +943,8 @@
 		BDD78AF31C1EE71700C7EE0E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9C75F6BB1C2B9101002789EF /* SSJCalendarTableViewCell.h */,
+				9C75F6BC1C2B9101002789EF /* SSJCalendarTableViewCell.m */,
 				BDD78AFA1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.h */,
 				BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */,
 				BDD78AFE1C1FA4E100C7EE0E /* SSJCalendarView.h */,
@@ -1195,6 +1200,7 @@
 				BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
 				BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */,
+				9C75F6BD1C2B9101002789EF /* SSJCalendarTableViewCell.m in Sources */,
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,

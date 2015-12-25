@@ -14,4 +14,5 @@
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
 @property (nonatomic,strong) SSJCalendarView *calendarView;
+- (instancetype)initWithFrame:(CGRect)frame forYear:(long)year Month:(long)month Day:(long)day;
 @end
