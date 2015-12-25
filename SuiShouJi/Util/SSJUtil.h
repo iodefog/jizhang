@@ -185,3 +185,11 @@ BOOL SSJSaveQQList(NSArray *qqList);
  *  @return (NSString *)
  */
 NSString *SSJUUID();
+
+
+/**
+ *  获取USERID
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJUSERID(){
