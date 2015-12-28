@@ -97,7 +97,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_BILL (CUSERID text, CBILLID text, ISTATE int, CWRITEDATE text, IVERSION int, OPERATORTYPE int, constraint PK_BK_USER_BILL primary key (CUSERID, CBILLID))"];
     
     //  收支类型表 ID:收支类型ID CNAME:账单类型名称 ITYPE:0收入 1支出 2平帐收入 3平帐支出
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_BILL_TYPE (ID text primary key, CNAME text, ITYPE int, IBOOKSTYPE int, CCOIN text)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_BILL_TYPE (ID text primary key, CNAME text, ITYPE int, IBOOKSTYPE int, CCOIN text, CCOLOR text, ISTATE int)"];
     
     //  资金账户信息表 CFUNDID:账户ID CACCTNAME:账户名称 CICOIN:图标 CPARENT:父账户(若为一级账户则父账户记为 root) CCOLOR:颜色编号 CADDDATE:添加时间
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_FUND_ACCT (CFUNDID text primary key, CACCTNAME text, CICOIN text, CPARENT text, CCOLOR text, CADDDATE text)"];
