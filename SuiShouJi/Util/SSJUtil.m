@@ -268,18 +268,20 @@ BOOL SSJSaveQQList(NSArray *qqList) {
 }
 
 NSString *SSJUUID(){
-    NSString *serviceName = @"";
-    NSString *strUUID = [SFHFKeychainUtils getPasswordForUsername:@"UUID" andServiceName:serviceName error:nil];
-    if (!strUUID | [strUUID isEqualToString:@""]) {
-        CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
-        strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
-        [SFHFKeychainUtils storeUsername:@"UUID" andPassword:strUUID forServiceName:serviceName updateExisting:NO error:nil];
-    }
+    CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
     return strUUID;
 }
 
-//NSString *SSJUSERID(){
-//    NSDate *datenow = [NSDate date];
-//    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
-//    return timeSp;
-//}
+NSString *SSJUSERID(){
+    NSString *strUSERID = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
+    NSString *userid = SSJUUID();
+    if (!strUSERID | [strUSERID isEqualToString:@""]) {
+        NSDate *datenow = [NSDate date];
+        NSTimeInterval timeSince1970 = [datenow timeIntervalSince1970]*1000;
+        NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)timeSince1970];
+        strUSERID = [[[NSString stringWithFormat:@"%@%@",userid,timeSp] ssj_md5HexDigest] uppercaseString];
+        [[NSUserDefaults standardUserDefaults]setObject:strUSERID forKey:@"USERID"];
+    }
+    return strUSERID;
+}

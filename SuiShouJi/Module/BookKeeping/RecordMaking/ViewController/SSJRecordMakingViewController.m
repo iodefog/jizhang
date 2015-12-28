@@ -14,6 +14,8 @@
 #import "SSJDateSelectedView.h"
 #import "SSJCalendarCollectionViewCell.h"
 #import "SSJFundingTypeSelectView.h"
+#import "FMDB.h"
+
 
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
@@ -219,8 +221,9 @@
 }
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
-    if ([button.titleLabel.text isEqualToString:@"确定"]) {
-        NSLog(@"确定");
+    if ([button.titleLabel.text isEqualToString:@"OK"]) {
+        NSLog(@"OK");
+        [self makeArecord];
     }else if ([button.titleLabel.text isEqualToString:@"="]){
         if (self.customKeyBoard.PlusOrMinusModel == YES) {
             _caculationValue = _caculationValue + [self.textInput.text floatValue];
@@ -408,6 +411,28 @@
     _currentYear= [dateComponent year];
     _currentDay = [dateComponent day];
     _currentMonth = [dateComponent month];
+}
+
+-(void)makeArecord{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    NSString *chargeID = SSJUUID();
+    NSString *userID = SSJUSERID();
+    float chargeMoney = [self.textInput.text floatValue];
+    NSString *billType = self.categoryNameLabel.text;
+    NSString *fundingType = self.fundingTypeButton.titleLabel.text;
+    NSString *operationTime = [NSString stringWithFormat:@"%@",[NSDate date]];
+    int operationType = 0;
+    BOOL result = [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE ) VALUES(?,?,?,?,?,?,?,?,?,?,?);",chargeID,userID,[NSNumber numberWithFloat:chargeMoney],billType,fundingType,@"111",[NSNumber numberWithFloat:100.08],[NSNumber numberWithFloat:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithInt:operationType]];
+    if (result) {
+        NSLog(@"创表成功");
+    }else
+    {
+        NSLog(@"创表失败");
+    }
 }
 
 - (void)didReceiveMemoryWarning {

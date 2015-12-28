@@ -106,7 +106,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_FUNS_ACCT (CUSERID text, CFUNDID text, IBALANCE real, constraint PK_BK_FUNS_ACCT primary key(CUSERID, CFUNDID))"];
     
     //  用户记账流水表 ICHARGEID:流水编号 CUSERID:用户ID IMONEY:金额 IBILLID:收支类型 IFID:资金账户类型 CADDDATE:日期 IOLDMONEY:变化前余额 IBALANCE:当前余额 EDITORDATE:编辑时间 CLIENTDATE:客户端修改时间
-    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_CHARGE (ICHARGEID text primary key, CUSERID text, IMONEY real, IBILLID text, IFID text, CADDDATE text, IOLDMONEY real, IBALANCE real, EDITORDATE text, CLIENTDATE text, CWRITEDATE text, IVERSION int, OPERATORTYPE int)"];
+    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_CHARGE (ICHARGEID text primary key, CUSERID text, IMONEY real, IBILLID text, IFID text, CADDDATE text, IOLDMONEY real, IBALANCE real, CWRITEDATE text, IVERSION int, OPERATORTYPE int)"];
     
     [db close];
 }

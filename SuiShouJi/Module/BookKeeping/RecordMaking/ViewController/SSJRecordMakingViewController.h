@@ -22,4 +22,5 @@ typedef NS_ENUM(NSUInteger, SSJRecordMakingType){
     SSJRecordMakingTypeEdite
 };
 
+
 @end
