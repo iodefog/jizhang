@@ -11,4 +11,7 @@
 @interface SSJRecordMakingCategoryItem : NSObject
 @property (nonatomic,strong) NSString *categoryTitle;
 @property (nonatomic,strong) NSString *categoryImage;
+@property (nonatomic,strong) NSString *categoryColor;
+@property (nonatomic,strong) NSString *categoryID;
+
 @end

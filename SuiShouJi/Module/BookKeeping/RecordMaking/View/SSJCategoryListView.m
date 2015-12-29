@@ -29,7 +29,6 @@
     if (self) {
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
-        self.incomeOrExpence = YES;
         _page = 0;
         [self getPage];
         self.collectionViewArray = [[NSMutableArray alloc]init];
@@ -58,10 +57,11 @@
 -(void)setCollectionView{
     for (int i = 0; i < _page; i++) {
         SSJCategoryCollectionView *collectionView = [[SSJCategoryCollectionView alloc]init];
+        collectionView.incomeOrExpence = self.incomeOrExpence;
         collectionView.frame = CGRectZero;
-        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , UIImage *categoryImage){
+        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID){
             if (self.CategorySelected) {
-                self.CategorySelected(categoryTitle,categoryImage);
+                self.CategorySelected(categoryTitle,categoryImage,categoryID);
             }
         };
         [self.collectionViewArray addObject:collectionView];

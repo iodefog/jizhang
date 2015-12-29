@@ -8,11 +8,12 @@
 
 #import "SSJCategoryCollectionView.h"
 #import "SSJCategoryCollectionViewCell.h"
+#import "SSJRecordMakingCategoryItem.h"
+#import "FMDB.h"
 
 @interface SSJCategoryCollectionView()
 @property(nonatomic,strong)UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *Items;
-
 @end
 
 @implementation SSJCategoryCollectionView{
@@ -24,8 +25,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.incomeOrExpence = 1;
+        self.Items = [[NSMutableArray alloc]init];
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
+        [self getDateFromDB];
         [self addSubview:self.collectionView];
     }
     return self;
@@ -46,6 +50,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
+    cell.item = (SSJRecordMakingCategoryItem*)[self.Items objectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -78,7 +83,8 @@
         SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
         UIImage *image = cell.categoryImage.image;
         NSString *title = cell.categoryName.text;
-        weakSelf.ItemClickedBlock(title,image);
+        NSString *categoryID = cell.item.categoryID;
+        weakSelf.ItemClickedBlock(title,image,categoryID);
     }
 }
 
@@ -104,6 +110,30 @@
     return _collectionView;
 }
 
+-(void)getDateFromDB{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    FMResultSet *rs;
+    if (_screenWidth == 320) {
+        rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+    }else if(_screenWidth == 375){
+        rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+    }else{
+        rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 12]];
+    }
+    while ([rs next]) {
+        SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+        item.categoryTitle = [rs stringForColumn:@"CNAME"];
+        item.categoryImage = [rs stringForColumn:@"CCOIN"];
+        item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+        item.categoryID = [rs stringForColumn:@"ID"];
+        [self.Items addObject:item];
+    }
+    [db close];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

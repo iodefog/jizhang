@@ -135,7 +135,7 @@
             categoryName = [rs stringForColumn:@"CNAME"];
             categoryType = [rs intForColumn:@"ITYPE"];
         }
-        if (categoryType) {
+        if (!categoryType) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
             [self.incomeLabel sizeToFit];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
