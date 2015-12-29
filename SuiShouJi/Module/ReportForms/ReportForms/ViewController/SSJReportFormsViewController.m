@@ -17,7 +17,7 @@
 
 static const CGFloat kHeaderFirstPartHeight = 49;
 static const CGFloat kHeaderSecondPartHeight = 40;
-static const CGFloat kHeaderThirdPartHeight = 79;
+static const CGFloat kHeaderThirdPartHeight = 247;
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -59,6 +59,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+//    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
     
     self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
     
@@ -151,6 +153,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (UISegmentedControl *)segmentControl {
     if (!_segmentControl) {
         _segmentControl = [[UISegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
+        _segmentControl.selectedSegmentIndex = 0;
         _segmentControl.center = CGPointMake(self.headerView.width * 0.5, kHeaderFirstPartHeight * 0.5);
         _segmentControl.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
         [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
@@ -161,7 +164,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (SSJReportFormsSwitchYearControl *)switchYearControl {
     if (!_switchYearControl) {
         _switchYearControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight, self.headerView.width, kHeaderSecondPartHeight)];
-        _switchYearControl.title = @"2015";
+        _switchYearControl.title = @"2015年收入明细图表";
+        _switchYearControl.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
         _switchYearControl.preAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
             
         };
@@ -185,7 +189,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     if (!_monthCircleView) {
         _monthCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
         _monthCircleView.circleInsets = UIEdgeInsetsMake(15, 80, 60, 80);
-        _monthCircleView.circleWidth = 78;
+        _monthCircleView.circleWidth = 39;
         _monthCircleView.dataSource = self;
     }
     return _monthCircleView;
@@ -195,7 +199,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     if (!_yearCircleView) {
         _yearCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
         _yearCircleView.circleInsets = UIEdgeInsetsMake(15, 80, 60, 80);
-        _yearCircleView.circleWidth = 78;
+        _yearCircleView.circleWidth = 39;
         _monthCircleView.dataSource = self;
     }
     return _yearCircleView;
@@ -225,7 +229,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.tableHeaderView = self.headerView;
         _tableView.rowHeight = 55;
         _tableView.dataSource = self;

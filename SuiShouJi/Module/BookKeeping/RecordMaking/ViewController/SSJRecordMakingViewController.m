@@ -222,7 +222,7 @@
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
     if (self.textInput.text == @"0.00") {
-        <#statements#>
+        
     }
     if ([button.titleLabel.text isEqualToString:@"OK"]) {
         NSLog(@"OK");
