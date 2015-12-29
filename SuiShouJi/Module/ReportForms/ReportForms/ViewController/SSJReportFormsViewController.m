@@ -50,7 +50,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     
-    [SSJReportFormsUtil queryForIncomeInYear:@"12"];
+    [SSJReportFormsUtil queryForIncomeInYear:@"2015"];
 }
 
 - (void)viewDidLayoutSubviews {

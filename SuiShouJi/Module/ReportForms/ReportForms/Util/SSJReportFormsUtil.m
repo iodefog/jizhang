@@ -7,7 +7,7 @@
 //
 
 #import "SSJReportFormsUtil.h"
-#import "SSJReportFormsIncomeAndPayCellItem.h"
+#import "SSJReportFormsModel.h"
 #import "FMDB.h"
 
 @implementation SSJReportFormsUtil
@@ -19,7 +19,7 @@
         return nil;
     }
     
-    FMResultSet *resultSet = [db executeQuery:@"SELECT A.AMOUNT, B.CNAME, B.CCOIN, B.CCOLOR FROM (SELECT SUM(IMONEY) AS AMOUNT, IBILLID FROM BK_USER_CHARGE GROUP BY IBILLID) AS A, BK_BILL_TYPE AS B WHERE A.IBILLID = B.ID AND B.ITYPE = ?",@"0"];
+    FMResultSet *resultSet = [db executeQuery:@"SELECT A.AMOUNT, B.CNAME, B.CCOIN, B.CCOLOR FROM (SELECT SUM(IMONEY) AS AMOUNT, IBILLID FROM BK_USER_CHARGE WHERE CBILLDATE LIKE '?年%' GROUP BY IBILLID) AS A, BK_BILL_TYPE AS B WHERE A.IBILLID = B.ID AND B.ITYPE = ?",year,@"0"];
     
 //    FMResultSet *resultSet = [db executeQuery:@"SELECT SUM(IMONEY), CNAME, CCOIN, CCOLOR FROM (SELECT A.IMONEY, B.CNAME, B.CCOIN, B.CCOLOR FROM BK_USER_CHARGE AS A, BK_BILL_TYPE AS B WHERE A.IBILLID = B.ID) GROUP BY CNAME"];
     
@@ -27,9 +27,15 @@
         return nil;
     }
     
-    NSMutableArray *result;
+    NSMutableArray *result = [@[] mutableCopy];
     while ([resultSet next]) {
-        [resultSet doubleForColumn:@""];
+        SSJReportFormsModel *item = [[SSJReportFormsModel alloc] init];
+//        item.scale = [resultSet doubleForColumn:@""];
+        item.money = [resultSet doubleForColumn:@"AMOUNT"];
+        item.color = [resultSet stringForColumn:@"CCOLOR"];
+        item.imageName = [resultSet stringForColumn:@"CCOIN"];
+        item.incomeOrPayName = [resultSet stringForColumn:@"CNAME"];
+        [result addObject:item];
     }
     return result;
 }
