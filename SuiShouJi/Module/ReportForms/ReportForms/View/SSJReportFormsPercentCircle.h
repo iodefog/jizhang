@@ -9,12 +9,24 @@
 #import <UIKit/UIKit.h>
 #import "SSJReportFormsPercentCircleItem.h"
 
+@class SSJReportFormsPercentCircle;
+
+@protocol SSJReportFormsPercentCircleDataSource <NSObject>
+
+- (NSUInteger)numberOfComponentsInPercentCircle:(SSJReportFormsPercentCircle *)circle;
+
+- (SSJReportFormsPercentCircleItem *)percentCircle:(SSJReportFormsPercentCircle *)circle itemForComponentAtIndex:(NSUInteger)index;
+
+@end
+
 @interface SSJReportFormsPercentCircle : UIView
 
 @property (nonatomic) UIEdgeInsets circleInsets;
 
 @property (nonatomic) CGFloat circleWidth;
 
-@property (nonatomic, strong) NSArray *items;
+@property (nonatomic, weak) id <SSJReportFormsPercentCircleDataSource> dataSource;
+
+- (void)reloadData;
 
 @end

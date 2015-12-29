@@ -7,11 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJReportFormsItem.h"
+
+typedef NS_ENUM(NSUInteger, SSJReportFormsIncomeOrPayType) {
+    SSJReportFormsIncomeOrPayTypeUnknown,
+    SSJReportFormsIncomeOrPayTypeIncome,
+    SSJReportFormsIncomeOrPayTypePay,
+    SSJReportFormsIncomeOrPayTypeSurplus
+};
 
 @interface SSJReportFormsUtil : NSObject
 
-+ (NSArray *)queryForIncomeInYear:(NSString *)year;
++ (NSArray *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inYear:(NSString *)year;
 
-//+ (NSArray *)queryForIncomeInMonth:(NSString *)month;
++ (NSArray *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inMonth:(NSString *)month;
 
 @end
