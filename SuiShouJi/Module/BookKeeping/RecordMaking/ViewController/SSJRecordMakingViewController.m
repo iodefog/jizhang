@@ -430,9 +430,17 @@
     NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
     NSString *selectDate;
     if (self.selectedDay < 10) {
-        selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        if (self.selectedMonth < 10) {
+            selectDate = [NSString stringWithFormat:@"%ld-%0ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }else{
+            selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }
     }else{
-        selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        if (self.selectedMonth < 10) {
+            selectDate = [NSString stringWithFormat:@"%ld-%0ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }else{
+            selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }
     }
     [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],billType,fundingType,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
     int count = 0;

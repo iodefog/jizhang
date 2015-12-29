@@ -42,13 +42,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.height = self.view.height - 69;
-
+    NSString *path = SSJSQLitePath();
+    NSLog(@"%@",path);
 }
 
 -(BOOL)prefersStatusBarHidden{
@@ -106,8 +106,6 @@
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
-
-
 
 -(NSString*)BarTitle{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
