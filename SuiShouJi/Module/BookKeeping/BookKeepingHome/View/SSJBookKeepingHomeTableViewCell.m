@@ -98,6 +98,7 @@
             self.incomeLabel.hidden = NO;
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
             self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
+            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             if (month == currentMonth) {
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
@@ -109,6 +110,7 @@
         }else{
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
             self.incomeLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
+            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.incomeLabel sizeToFit];
             if (month == currentMonth) {
                 self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
@@ -136,9 +138,11 @@
         if (categoryType) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
             [self.incomeLabel sizeToFit];
+            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             self.expenditureLabel.hidden = YES;
         }else{
             self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
+            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.hidden = YES;
         }

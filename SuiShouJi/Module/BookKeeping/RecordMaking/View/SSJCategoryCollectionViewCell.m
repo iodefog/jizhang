@@ -35,7 +35,7 @@
 -(UIImageView*)categoryImage{
     if (!_categoryImage) {
         _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-        _categoryImage.image = [UIImage imageNamed:@"食材采购"];
+        _categoryImage.image = [UIImage imageNamed:self.item.categoryImage];
         _categoryImage.layer.cornerRadius = 25;
         _categoryImage.layer.masksToBounds = YES;
         _categoryImage.contentMode = UIViewContentModeScaleAspectFit;
@@ -46,7 +46,7 @@
 -(UILabel*)categoryName{
     if (!_categoryName) {
         _categoryName = [[UILabel alloc]init];
-        _categoryName.text = @"餐饮";
+        _categoryName.text = _item.categoryTitle;
         [_categoryName sizeToFit];
         _categoryName.font = [UIFont systemFontOfSize:15];
         _categoryName.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];

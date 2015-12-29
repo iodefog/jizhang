@@ -14,4 +14,5 @@ typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImag
 
 @property (nonatomic, copy) ItemClickedBlock ItemClickedBlock;
 
+@property (nonatomic) int page;
 @end

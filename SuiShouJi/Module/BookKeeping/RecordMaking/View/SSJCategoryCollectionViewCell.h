@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJCategoryCollectionViewCell : UICollectionViewCell
 @property (strong, nonatomic) UIImageView *categoryImage;
 @property (strong, nonatomic) UILabel *categoryName;
 @property (nonatomic) BOOL EditeModel;
+@property (nonatomic,strong) SSJRecordMakingCategoryItem *item;
 @end

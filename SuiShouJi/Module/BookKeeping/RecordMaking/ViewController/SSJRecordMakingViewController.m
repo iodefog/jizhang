@@ -221,8 +221,9 @@
 }
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
-    if (self.textInput.text == @"0.00") {
-        <#statements#>
+    if ([self.textInput.text isEqualToString:@"0.00"]) {
+        [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
+        return;
     }
     if ([button.titleLabel.text isEqualToString:@"OK"]) {
         NSLog(@"OK");

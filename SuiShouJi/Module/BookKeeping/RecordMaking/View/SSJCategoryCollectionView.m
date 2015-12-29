@@ -11,6 +11,8 @@
 
 @interface SSJCategoryCollectionView()
 @property(nonatomic,strong)UICollectionView *collectionView;
+@property (nonatomic,strong) NSMutableArray *Items;
+
 @end
 
 @implementation SSJCategoryCollectionView{
@@ -35,16 +37,7 @@
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    if (_screenWidth == 320) {
-        if (_screenHeight == 480) {
-            return 4;
-        }else{
-            return 8;
-        }
-    }else if (_screenWidth == 375){
-        return 8;
-    }
-    return 12;
+    return self.Items.count;
 }
 
 - (NSInteger)numberOfSections{

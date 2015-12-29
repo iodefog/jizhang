@@ -12,6 +12,9 @@
 
 typedef void (^CategorySelected)(NSString *categoryTitle , UIImage *categoryImage);
 
+//收入或支出 1为支出,0为收入
+@property (nonatomic) BOOL incomeOrExpence;
+
 //选择类型的回调
 @property (nonatomic, copy) CategorySelected CategorySelected;
 
