@@ -219,6 +219,7 @@
     recordMakingVC.selectedDay = self.selectedDay;
     recordMakingVC.selectedMonth = self.selectedMonth;
     recordMakingVC.selectedYear = self.selectedYear;
+    recordMakingVC.recordMakingType = 1;
     [self.navigationController pushViewController:recordMakingVC animated:YES];
 }
 

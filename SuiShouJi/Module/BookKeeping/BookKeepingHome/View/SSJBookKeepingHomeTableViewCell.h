@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJBookKeepHomeItem.h"
 
 @interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
-
+@property (nonatomic,strong) SSJBookKeepHomeItem *item;
 @end

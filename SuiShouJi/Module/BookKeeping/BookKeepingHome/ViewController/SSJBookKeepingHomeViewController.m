@@ -11,10 +11,14 @@
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
+#import "SSJBookKeepHomeItem.h"
+#import "FMDB.h"
+
 
 @interface SSJBookKeepingHomeViewController ()
 
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
+@property (nonatomic,strong) NSMutableArray *items;
 
 @end
 
@@ -33,6 +37,7 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getDateFromDatebase];
 }
 
 - (void)viewDidLoad {
@@ -52,7 +57,7 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 100;
+    return 70;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -64,6 +69,7 @@
     bookKeepingHeader.BtnClickBlock = ^{
         SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
         [weakSelf.navigationController pushViewController:recordmaking animated:YES];
+        recordmaking.recordMakingType = 1;
     };
     return bookKeepingHeader;
 }
@@ -73,7 +79,7 @@
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return self.items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -81,6 +87,7 @@
     SSJBookKeepingHomeTableViewCell *bookKeepingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!bookKeepingCell) {
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
     }
     return bookKeepingCell;
 }
@@ -107,6 +114,28 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
     return currentDateStr;
+}
+
+-(void)getDateFromDatebase{
+    self.items = [[NSMutableArray alloc]init];
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7)) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
+    FMResultSet *rs = [db executeQuery:sql];
+    while ([rs next]) {
+        SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
+        item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
+        item.billDate = [rs stringForColumn:@"CBILLDATE"];
+        item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
+        item.chargeID = [rs stringForColumn:@"ICHARGEID"];
+        item.billID = [rs stringForColumn:@"IBILLID"];
+        [self.items addObject:item];
+    }
+    [db close];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -14,13 +14,8 @@
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
 
-/**
- *  区分新建还是修改
- */
-typedef NS_ENUM(NSUInteger, SSJRecordMakingType){
-    SSJRecordMakingTypeNew = 0,
-    SSJRecordMakingTypeEdite
-};
+//区分新建还是修改 1为新建,0为修改(必传)
+@property (nonatomic) BOOL recordMakingType;
 
 
 @end
