@@ -221,6 +221,9 @@
 }
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
+    if (self.textInput.text == @"0.00") {
+        <#statements#>
+    }
     if ([button.titleLabel.text isEqualToString:@"OK"]) {
         NSLog(@"OK");
         [self makeArecord];
@@ -431,13 +434,13 @@
     NSString *selectDate;
     if (self.selectedDay < 10) {
         if (self.selectedMonth < 10) {
-            selectDate = [NSString stringWithFormat:@"%ld-%0ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+            selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         }else{
             selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         }
     }else{
         if (self.selectedMonth < 10) {
-            selectDate = [NSString stringWithFormat:@"%ld-%0ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+            selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         }else{
             selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         }
