@@ -80,12 +80,10 @@
 		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
 		BD7676891C27DDB800CDD507 /* edit test.png in Resources */ = {isa = PBXBuildFile; fileRef = BD7676881C27DDB800CDD507 /* edit test.png */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
+		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
 		BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */; };
 		BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */; };
-		BDD78B121C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B101C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m */; };
-		BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78B111C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib */; };
-		BDD78B2C1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */; };
 		BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */; };
 		BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */; };
 		BDDC5B8E1C28F7B300FC2887 /* 食材采购@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDDC5B8D1C28F7B300FC2887 /* 食材采购@3x.png */; };
@@ -248,16 +246,13 @@
 		BD7676881C27DDB800CDD507 /* edit test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit test.png"; path = "../../Module/BookKeeping/RecordMaking/View/edit test.png"; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
+		BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepHomeItem.h; sourceTree = "<group>"; };
+		BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepHomeItem.m; sourceTree = "<group>"; };
 		BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHeader.xib; sourceTree = "<group>"; };
 		BDD78AFA1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarCollectionViewCell.h; sourceTree = "<group>"; };
 		BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarCollectionViewCell.m; sourceTree = "<group>"; };
 		BDD78AFE1C1FA4E100C7EE0E /* SSJCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarView.h; sourceTree = "<group>"; };
 		BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarView.m; sourceTree = "<group>"; };
-		BDD78B0F1C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingSummaryView.h; sourceTree = "<group>"; };
-		BDD78B101C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingSummaryView.m; sourceTree = "<group>"; };
-		BDD78B111C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingSummaryView.xib; sourceTree = "<group>"; };
-		BDD78B2A1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeView.h; sourceTree = "<group>"; };
-		BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeView.m; sourceTree = "<group>"; };
 		BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeTableViewCell.h; sourceTree = "<group>"; };
 		BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeTableViewCell.m; sourceTree = "<group>"; };
 		BDDC5B8A1C2850D500FC2887 /* SSJCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionViewCell.h; sourceTree = "<group>"; };
@@ -588,6 +583,8 @@
 		BD0433A41C1A9EBD0051E7AB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */,
+				BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -602,14 +599,9 @@
 		BD0433A61C1A9EBD0051E7AB /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BDD78B0F1C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.h */,
-				BDD78B101C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m */,
-				BDD78B111C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib */,
 				BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */,
 				BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */,
 				BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */,
-				BDD78B2A1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.h */,
-				BDD78B2B1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m */,
 				BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */,
 				BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */,
 			);
@@ -1081,7 +1073,6 @@
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
 				BD0E43F01C2118E600F9179D /* homeSeperator test.png in Resources */,
 				BD7676891C27DDB800CDD507 /* edit test.png in Resources */,
-				BDD78B131C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.xib in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
 				BDDC5B901C28F7BD00FC2887 /* 食材采购@2x.png in Resources */,
@@ -1165,6 +1156,7 @@
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
+				BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */,
 				BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
 				BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */,
@@ -1179,9 +1171,7 @@
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
-				BDD78B2C1C1FD8A200C7EE0E /* SSJBookKeepingHomeView.m in Sources */,
 				BD0433951C1A8DA50051E7AB /* SSJBaseTableViewCell.m in Sources */,
-				BDD78B121C1FC2C400C7EE0E /* SSJBookKeepingSummaryView.m in Sources */,
 				BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */,
 				BD0432F41C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */,
