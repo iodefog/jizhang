@@ -21,6 +21,7 @@
         [self addSubview:self.categoryImageButton];
         [self addSubview:self.expenditureLabel];
         [self addSubview:self.incomeLabel];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
@@ -28,10 +29,10 @@
 -(void)layoutSubviews{
     self.categoryImageButton.bottom = self.height;
     self.categoryImageButton.centerX = self.centerX;
-    self.expenditureLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
-    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
-    self.incomeLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
+    self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
     self.incomeLabel.centerY = self.categoryImageButton.centerY;
+    self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
+    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
     
 }
 
@@ -82,24 +83,38 @@
     _item = item;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSDate *billDate=[dateFormatter dateFromString:_item.billDate];
+    NSDate *billDate=[dateFormatter dateFromString:item.billDate];
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
     NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:billDate];
+    NSDateComponents *currentdateComponent = [calendar components:unitFlags fromDate:[NSDate date]];
     long day = [dateComponent day];
-    if ([_item.billID isEqualToString:@"-1"]) {
+    long month = [dateComponent month];
+    long currentMonth = [currentdateComponent month];
+    if ([item.billID isEqualToString:@"-1"]) {
         [self.categoryImageButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        if (_item.chargeMoney < 0) {
+        if (item.chargeMoney < 0) {
+            self.expenditureLabel.hidden = NO;
+            self.incomeLabel.hidden = NO;
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%f",_item.chargeMoney];
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
             [self.expenditureLabel sizeToFit];
-            self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
+            if (month == currentMonth) {
+                self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
+            }else{
+                self.incomeLabel.text = [NSString stringWithFormat:@"%ld月%ld日",month,day];
+            }
             [self.incomeLabel sizeToFit];
 
         }else{
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.incomeLabel.text = [NSString stringWithFormat:@"%f",_item.chargeMoney];
+            self.incomeLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
             [self.incomeLabel sizeToFit];
+            if (month == currentMonth) {
+                self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
+            }else{
+                self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
+            }
             self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
             [self.expenditureLabel sizeToFit];
         }
@@ -119,12 +134,13 @@
             categoryType = [rs intForColumn:@"ITYPE"];
         }
         if (categoryType) {
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%f",categoryName,_item.chargeMoney];
-            [self.expenditureLabel sizeToFit];
-        }else{
-            self.incomeLabel.text = [NSString stringWithFormat:@"%@%f",categoryName,_item.chargeMoney];
+            self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
             [self.incomeLabel sizeToFit];
-
+            self.expenditureLabel.hidden = YES;
+        }else{
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
+            [self.expenditureLabel sizeToFit];
+            self.incomeLabel.hidden = YES;
         }
         [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
         [db close];

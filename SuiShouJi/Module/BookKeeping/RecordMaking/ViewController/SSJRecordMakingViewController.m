@@ -221,6 +221,9 @@
 }
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
+    if (self.textInput.text == @"0.00") {
+        <#statements#>
+    }
     if ([button.titleLabel.text isEqualToString:@"OK"]) {
         NSLog(@"OK");
         [self makeArecord];
@@ -428,7 +431,20 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
     NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
     NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
-    NSString *selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    NSString *selectDate;
+    if (self.selectedDay < 10) {
+        if (self.selectedMonth < 10) {
+            selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }else{
+            selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }
+    }else{
+        if (self.selectedMonth < 10) {
+            selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }else{
+            selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }
+    }
     [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],billType,fundingType,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
     int count = 0;
     FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];

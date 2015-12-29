@@ -42,13 +42,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.height = self.view.height - 69;
-
+    NSString *path = SSJSQLitePath();
+    NSLog(@"%@",path);
 }
 
 -(BOOL)prefersStatusBarHidden{
@@ -87,8 +87,8 @@
     SSJBookKeepingHomeTableViewCell *bookKeepingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!bookKeepingCell) {
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
     }
+    bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
     return bookKeepingCell;
 }
 
@@ -107,8 +107,6 @@
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
-
-
 -(NSString*)BarTitle{
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
@@ -123,7 +121,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7)) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7)) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
