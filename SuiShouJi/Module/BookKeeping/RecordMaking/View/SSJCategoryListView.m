@@ -20,6 +20,7 @@
     CGFloat _screenWidth;
     CGFloat _screenHeight;
     long _page;
+    long _totalPage;
 }
 
 
@@ -27,6 +28,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.incomeOrExpence = YES;
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         _page = 0;
@@ -55,14 +57,36 @@
 }
 
 -(void)setCollectionView{
-    for (int i = 0; i < _page; i++) {
+    if (_screenWidth == 320) {
+        if (_screenHeight == 568) {
+            _totalPage = 3;
+        }else{
+            _totalPage = 5;
+        }
+    }else if(_screenWidth == 375){
+        _totalPage = 3;
+    }else{
+        _totalPage = 2;
+    }
+    for (int i = 0; i < _totalPage; i++) {
         SSJCategoryCollectionView *collectionView = [[SSJCategoryCollectionView alloc]init];
         collectionView.incomeOrExpence = self.incomeOrExpence;
         collectionView.frame = CGRectZero;
-        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID){
-            if (self.CategorySelected) {
-                self.CategorySelected(categoryTitle,categoryImage,categoryID);
+        collectionView.page = i;
+        collectionView.incomeOrExpence = self.incomeOrExpence;
+        __weak typeof(self) weakSelf = self;
+        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID , NSString *categoryColor , int page){
+            for (int i = 0; i < _page; i++) {
+                if (i != page) {
+                    [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
+                }
             }
+            if (weakSelf.CategorySelected) {
+                weakSelf.CategorySelected(categoryTitle,categoryImage,categoryID,categoryColor);
+            }
+        };
+        collectionView.removeFromCategoryListBlock = ^{
+            [self reloadData];
         };
         [self.collectionViewArray addObject:collectionView];
         [self.scrollView addSubview:collectionView];
@@ -100,7 +124,13 @@
 }
 
 -(void)reloadData{
-    
+    [self getPage];
+    self.scrollView.contentSize = CGSizeMake(self.width * _page, 0);
+    for (int i = 0; i < _page; i ++) {
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
+        [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
+    }
 }
 
 -(void)getPage{
@@ -111,13 +141,31 @@
     }
     NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 20",[NSNumber numberWithBool:self.incomeOrExpence]];
     if (_screenWidth == 320) {
-        _page = count / 4 + 1;
+        if (_screenHeight == 568) {
+            if (count % 8 == 0) {
+                _page = count / 8;
+            }else{
+                _page = count / 8 + 1;
+            }
+        }else{
+            if (count % 8 == 0) {
+                _page = count / 4;
+            }else{
+                _page = count / 4 + 1;
+            }        }
     }else if(_screenWidth == 375){
-        _page = count / 8 + 1;
+        if (count % 8 == 0) {
+            _page = count / 8;
+        }else{
+            _page = count / 8 + 1;
+        }
     }else{
-        _page = count / 12 + 1;
+        if (count % 8 == 0) {
+            _page = count / 12;
+        }else{
+            _page = count / 12 + 1;
+        }
     }
     [db close];
 }
-
 @end

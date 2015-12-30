@@ -12,10 +12,7 @@
 @protocol SSJCustomKeyboardDelegate <NSObject>
 - (void)didNumKeyPressed:(UIButton *)button;
 - (void)didDecimalPointKeyPressed;
-- (void)didClearKeyPressed;
 - (void)didBackspaceKeyPressed;
-- (void)didPlusKeyPressed;
-- (void)didMinusKeyPressed;
 - (void)didComfirmKeyPressed:(UIButton*)button;
 
 @end

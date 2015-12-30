@@ -12,7 +12,6 @@
 #import "FMDB.h"
 
 @interface SSJCategoryCollectionView()
-@property(nonatomic,strong)UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *Items;
 @end
 
@@ -25,7 +24,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.incomeOrExpence = 1;
         self.Items = [[NSMutableArray alloc]init];
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
@@ -51,15 +49,30 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.Items objectAtIndex:indexPath.row];
+    if (self.page == 0 && indexPath.row == 0) {
+        cell.categorySelected = YES;
+    }else{
+        cell.categorySelected = NO;
+    }
+    __weak typeof(self) weakSelf = self;
+    cell.removeCategoryBlock = ^(){
+        if (weakSelf.removeFromCategoryListBlock) {
+            weakSelf.removeFromCategoryListBlock();
+        }
+    };
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (_screenWidth == 320) {
-        return CGSizeMake((self.width - 80)/4, (self.height - 20) / 2);
+        if (_screenHeight == 568) {
+            return CGSizeMake((self.width - 80)/4, (self.height - 20) / 2);
+        }else{
+            return CGSizeMake((self.width - 80)/4, self.height - 5);
+        }
     }else if(_screenWidth == 375){
-        return CGSizeMake((self.width - 80)/4, (self.height - 20) / 3);
+        return CGSizeMake((self.width - 80)/4, (self.height - 80) / 2);
     }
     return CGSizeMake((self.width - 80)/4, (self.height - 40) / 3);
 }
@@ -78,13 +91,22 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    for (int i = 0; i < [self.collectionView.visibleCells count]; i ++) {
+        ((SSJCategoryCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).categorySelected = NO;
+    }
+    SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    if ([cell.item.categoryTitle isEqualToString:@"添加"]) {
+        
+    }else{
+        cell.categorySelected = YES;
+    }
     __weak typeof(self) weakSelf = self;
-    if (self.ItemClickedBlock != nil) {
-        SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    if (self.ItemClickedBlock) {
         UIImage *image = cell.categoryImage.image;
         NSString *title = cell.categoryName.text;
         NSString *categoryID = cell.item.categoryID;
-        weakSelf.ItemClickedBlock(title,image,categoryID);
+        NSString *categoryColor = cell.item.categoryColor;
+        weakSelf.ItemClickedBlock(title,image,categoryID,categoryColor,self.page);
     }
 }
 
@@ -94,7 +116,7 @@
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 15;
         if (_screenWidth == 320 && _screenHeight == 568) {
-            flowLayout.minimumLineSpacing = 5;
+            flowLayout.minimumLineSpacing = 10;
         }else if(_screenWidth == 375){
             flowLayout.minimumLineSpacing = 30;
         }else if (_screenWidth == 414){
@@ -106,6 +128,7 @@
         [_collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
         _collectionView.scrollEnabled = NO;
         _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.contentOffset = CGPointMake(0, 0);
     }
     return _collectionView;
 }
@@ -118,7 +141,11 @@
     }
     FMResultSet *rs;
     if (_screenWidth == 320) {
-        rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+        if (_screenHeight == 568) {
+            rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+        }else{
+            rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+        }
     }else if(_screenWidth == 375){
         rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
     }else{
@@ -133,6 +160,13 @@
         [self.Items addObject:item];
     }
     [db close];
+}
+
+-(void)setIncomeOrExpence:(BOOL)incomeOrExpence{
+    _incomeOrExpence = incomeOrExpence;
+    [self.Items removeAllObjects];
+    [self getDateFromDB];
+    [self.collectionView reloadData];
 }
 
 /*

@@ -10,7 +10,13 @@
 
 @interface SSJCategoryCollectionView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
-typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID);
+@property(nonatomic,strong)UICollectionView *collectionView;
+
+typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID , NSString *categoryColor , int currentPage);
+
+typedef void (^removeFromCategoryListBlock)();
+
+@property(nonatomic, copy)removeFromCategoryListBlock removeFromCategoryListBlock;
 
 @property (nonatomic, copy) ItemClickedBlock ItemClickedBlock;
 

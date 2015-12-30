@@ -49,6 +49,7 @@
     NSString *_decimalPart;
     int _decimalCount;
     NSString *_categoryID;
+    NSString *_defualtColor;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -72,9 +73,9 @@
     if (_selectedDay == 0) {
         self.selectedDay = _currentDay;
     }
+    [self getDefualtColor];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
-    [self.selectedCategoryView addSubview:self.categoryNameLabel];
     [self.selectedCategoryView addSubview:self.categoryImage];
     [self.view addSubview:self.inputView];
     [self.inputView addSubview:self.customKeyBoard];
@@ -90,15 +91,14 @@
 
 -(void)viewDidLayoutSubviews{
     self.selectedCategoryView.leftTop = CGPointMake(0, 0);
-    self.selectedCategoryView.size = CGSizeMake(self.view.width, 60);
+    self.selectedCategoryView.size = CGSizeMake(self.view.width, 71);
     self.categoryImage.left = 12.0f;
     _decimalCount = 0;
     self.categoryImage.centerY = self.selectedCategoryView.centerY;
     self.textInput.right = self.selectedCategoryView.right - 12;
     self.textInput.centerY = self.categoryImage.centerY;
-    self.categoryNameLabel.left = self.categoryImage.right + 5;
-    self.categoryNameLabel.centerY = self.categoryImage.centerY;
     self.inputView.bottom = self.view.bottom;
+    self.customKeyBoard.height = 210;
     self.categoryListView.top = self.selectedCategoryView.bottom;
     self.inputAccessoryView.bottom = self.inputView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.inputAccessoryView.top - self.selectedCategoryView.bottom);
@@ -107,6 +107,7 @@
 
 #pragma mark SSJCustomKeyboardDelegate
 - (void)didNumKeyPressed:(UIButton *)button{
+    self.textInput.textColor = [UIColor whiteColor];
     if ([_intPart length] > 7 && self.customKeyBoard.decimalModel == NO) {
         return;
     }
@@ -114,6 +115,9 @@
         if ([self.textInput.text isEqualToString:@"0.00"]) {
             _intPart = button.titleLabel.text;
             self.textInput.text = [NSString stringWithFormat:@"%@.00",_intPart];
+            if ([self.textInput.text isEqualToString:@"0.00"]) {
+                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+            }
         }else{
         self.textInput.text = [NSString stringWithFormat:@"%@%@.00",_intPart,button.titleLabel.text];
         _intPart = [NSString stringWithFormat:@"%@%@",_intPart,button.titleLabel.text];
@@ -131,21 +135,20 @@
     }
 }
 
-
-
 - (void)didDecimalPointKeyPressed{
     self.customKeyBoard.decimalModel = YES;
 }
 
-- (void)didClearKeyPressed{
-    self.textInput.text = @"0.00";
-    self.customKeyBoard.decimalModel = NO;
-    _decimalPart = @"00";
-    _intPart = @"0";
-    _decimalCount = 0;
-}
+//- (void)didClearKeyPressed{
+//    self.textInput.text = @"0.00";
+//    self.customKeyBoard.decimalModel = NO;
+//    _decimalPart = @"00";
+//    _intPart = @"0";
+//    _decimalCount = 0;
+//}
 
 - (void)didBackspaceKeyPressed{
+    self.textInput.textColor = [UIColor whiteColor];
     NSString *intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
     NSString *decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
     if (![decimalPart isEqualToString:@"00"]) {
@@ -154,12 +157,15 @@
     if (self.customKeyBoard.decimalModel == NO) {
         if ([intPart isEqualToString:@"0"] | ([intPart length] == 1)) {
             self.textInput.text = @"0.00";
+            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
             _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
             _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
             return;
         }
         if ([intPart hasPrefix:@"-"]&&[intPart length] == 2) {
             self.textInput.text = @"0.00";
+            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
             _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
             _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
             return;
@@ -171,11 +177,14 @@
             self.customKeyBoard.decimalModel = NO;
             if ([intPart isEqualToString:@"0"]) {
                 self.textInput.text = @"0.00";
+                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
                 _decimalCount = 0;
                 return;
             }
             if ([intPart length] == 1) {
                 self.textInput.text = @"0.00";
+                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
                 _decimalCount = 0;
                 return;
             }
@@ -183,6 +192,7 @@
             self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
         }else if ([decimalPart hasSuffix:@"0"]){
             self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
+            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
             _decimalCount = _decimalCount - 1;
         }else{
             decimalPart = [decimalPart substringToIndex:1];
@@ -194,31 +204,31 @@
     _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
 }
 
-- (void)didPlusKeyPressed{
-    self.customKeyBoard.PlusOrMinusModel = YES;
-    _caculationValue =_caculationValue + [self.textInput.text floatValue];
-    self.textInput.text = @"0.00";
-    [self.customKeyBoard.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    self.customKeyBoard.decimalModel = NO;
-    _decimalPart = @"00";
-    _intPart = @"0";
-    _decimalCount = 0;
-}
-
-- (void)didMinusKeyPressed{
-    self.customKeyBoard.PlusOrMinusModel = NO;
-    if (_numkeyHavePressed == NO) {
-        _caculationValue = [self.textInput.text floatValue];
-    }else{
-        _caculationValue = _caculationValue - [self.textInput.text floatValue];
-    }
-    self.textInput.text = @"0.00";
-    [self.customKeyBoard.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    self.customKeyBoard.decimalModel = NO;
-    _decimalPart = @"00";
-    _intPart = @"0";
-    _decimalCount = 0;
-}
+//- (void)didPlusKeyPressed{
+//    self.customKeyBoard.PlusOrMinusModel = YES;
+//    _caculationValue =_caculationValue + [self.textInput.text floatValue];
+//    self.textInput.text = @"0.00";
+//    [self.customKeyBoard.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+//    self.customKeyBoard.decimalModel = NO;
+//    _decimalPart = @"00";
+//    _intPart = @"0";
+//    _decimalCount = 0;
+//}
+//
+//- (void)didMinusKeyPressed{
+//    self.customKeyBoard.PlusOrMinusModel = NO;
+//    if (_numkeyHavePressed == NO) {
+//        _caculationValue = [self.textInput.text floatValue];
+//    }else{
+//        _caculationValue = _caculationValue - [self.textInput.text floatValue];
+//    }
+//    self.textInput.text = @"0.00";
+//    [self.customKeyBoard.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+//    self.customKeyBoard.decimalModel = NO;
+//    _decimalPart = @"00";
+//    _intPart = @"0";
+//    _decimalCount = 0;
+//}
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
     if ([self.textInput.text isEqualToString:@"0.00"]) {
@@ -265,6 +275,7 @@
 //        _selectedCategoryView.backgroundColor = [UIColor redColor];
         _selectedCategoryView.layer.borderColor = [UIColor ssj_colorWithHex:@"cccccc"].CGColor;
         _selectedCategoryView.layer.borderWidth = 1.0f;
+        _selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     }
     return _selectedCategoryView;
 }
@@ -272,8 +283,17 @@
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
-        _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage,NSString *categoryID){
+        _categoryListView.incomeOrExpence = _titleSegment.selectedSegmentIndex;
+        __weak typeof(self) weakSelf = self;
+        _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage,NSString *categoryID , NSString *categoryColor){
             _categoryID = categoryID;
+            if (![categoryTitle isEqualToString:@"添加"]) {
+                weakSelf.categoryNameLabel.text = categoryTitle;
+                [weakSelf.categoryNameLabel sizeToFit];
+                weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:categoryColor];
+            }else{
+                
+            }
         };
     }
     return _categoryListView;
@@ -282,9 +302,10 @@
 -(UILabel*)textInput{
     if (!_textInput) {
         _textInput = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
-        _textInput.font = [UIFont systemFontOfSize:24];
+        _textInput.font = [UIFont systemFontOfSize:30];
         _textInput.textAlignment = NSTextAlignmentRight;
         _textInput.text = @"0.00";
+        _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
     }
     return _textInput;
 }
@@ -333,17 +354,6 @@
     return _inputAccessoryView;
 }
 
--(UILabel*)categoryNameLabel{
-    if (!_categoryNameLabel) {
-        _categoryNameLabel = [[UILabel alloc]init];
-        _categoryNameLabel.text = @"餐饮";
-        _categoryNameLabel.font = [UIFont systemFontOfSize:24];
-        [_categoryNameLabel sizeToFit];
-    }
-    return _categoryNameLabel;
-}
-
-
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
@@ -387,7 +397,7 @@
 }
 #pragma mark - private
 -(void)settitleSegment{
-    NSArray *segmentArray = @[@"收入",@"支出"];
+    NSArray *segmentArray = @[@"支出",@"收入"];
     _titleSegment = [[UISegmentedControl alloc]initWithItems:segmentArray];
     _titleSegment.size = CGSizeMake(115, 30);
     _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
@@ -395,7 +405,8 @@
     [_titleSegment setTitleTextAttributes:dictForNormal forState:UIControlStateNormal];
     NSDictionary *dictForSelected = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForSelected forState:UIControlStateSelected];
-    _titleSegment.selectedSegmentIndex = 1;
+    _titleSegment.selectedSegmentIndex = 0;
+    [_titleSegment addTarget: self action: @selector(segmentPressed:)forControlEvents: UIControlEventValueChanged];
     self.navigationItem.titleView = _titleSegment;
 }
 
@@ -482,6 +493,26 @@
     }
     [db close];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)segmentPressed:(id)sender{
+    self.categoryListView.incomeOrExpence = !self.titleSegment.selectedSegmentIndex;
+    [self getDefualtColor];
+    self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
+    [self.categoryListView reloadData];
+}
+
+-(void)getDefualtColor{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    FMResultSet *rs = [db executeQuery:@"SELECT CCOLOR FROM BK_BILL_TYPE WHERE ITYPE = 0 AND ISTATE = ? LIMIT 1",[NSNumber numberWithDouble:self.titleSegment.selectedSegmentIndex]];
+    while([rs next]) {
+        _defualtColor = [rs stringForColumn:@"CCOLOR"];
+    }
+    [db close];
 }
 
 - (void)didReceiveMemoryWarning {
