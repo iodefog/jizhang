@@ -89,6 +89,7 @@
 		BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */; };
 		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
 		BD7676891C27DDB800CDD507 /* edit test.png in Resources */ = {isa = PBXBuildFile; fileRef = BD7676881C27DDB800CDD507 /* edit test.png */; };
+		BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
@@ -273,6 +274,8 @@
 		BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryListView.h; sourceTree = "<group>"; };
 		BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryListView.m; sourceTree = "<group>"; };
 		BD7676881C27DDB800CDD507 /* edit test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit test.png"; path = "../../Module/BookKeeping/RecordMaking/View/edit test.png"; sourceTree = "<group>"; };
+		BD8FD8291C3266CD00B7AABA /* SSJRecordMakingCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingCategoryItem.h; sourceTree = "<group>"; };
+		BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingCategoryItem.m; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepHomeItem.h; sourceTree = "<group>"; };
@@ -848,6 +851,8 @@
 		BD0E43E11C21009900F9179D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BD8FD8291C3266CD00B7AABA /* SSJRecordMakingCategoryItem.h */,
+				BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1297,6 +1302,7 @@
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
+				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
 				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,
 				7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */,

@@ -48,7 +48,7 @@
     NSString *_intPart;
     NSString *_decimalPart;
     int _decimalCount;
-
+    NSString *_categoryID;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -221,8 +221,9 @@
 }
 
 - (void)didComfirmKeyPressed:(UIButton*)button{
-    if (self.textInput.text == @"0.00") {
-        
+    if ([self.textInput.text isEqualToString:@"0.00"]) {
+        [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
+        return;
     }
     if ([button.titleLabel.text isEqualToString:@"OK"]) {
         NSLog(@"OK");
@@ -271,8 +272,8 @@
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
-        _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage){
-            NSLog(@"%@",categoryTitle);
+        _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage,NSString *categoryID){
+            _categoryID = categoryID;
         };
     }
     return _categoryListView;
@@ -425,7 +426,6 @@
     NSString *chargeID = SSJUUID();
     NSString *userID = SSJUSERID();
     double chargeMoney = [self.textInput.text doubleValue];
-    NSString *billType = self.categoryNameLabel.text;
     NSString *fundingType = self.fundingTypeButton.titleLabel.text;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
@@ -445,7 +445,7 @@
             selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         }
     }
-    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],billType,fundingType,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
+    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
     int count = 0;
     FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
     if ([s next]) {

@@ -10,8 +10,11 @@
 
 @interface SSJCategoryCollectionView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
-typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImage);
+typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID);
 
 @property (nonatomic, copy) ItemClickedBlock ItemClickedBlock;
 
+@property (nonatomic) int page;
+
+@property (nonatomic) BOOL incomeOrExpence;
 @end
