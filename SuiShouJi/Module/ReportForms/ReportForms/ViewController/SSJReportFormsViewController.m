@@ -122,6 +122,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         circleItem.scale = model.scale;
         circleItem.image = [UIImage imageNamed:model.imageName];
         circleItem.color = [UIColor ssj_colorWithHex:model.colorValue];
+        circleItem.identifier = model.incomeOrPayName;
         return circleItem;
     }
     
