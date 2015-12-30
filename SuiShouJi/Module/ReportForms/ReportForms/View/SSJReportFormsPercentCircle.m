@@ -11,6 +11,8 @@
 @interface SSJReportFormsPercentCircle ()
 
 @property (nonatomic, strong) NSMutableArray *layers;
+@property (nonatomic, strong) NSMutableArray *lineLayers;
+@property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic) CGRect circleFrame;
 
 @end
@@ -20,6 +22,8 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.layers = [NSMutableArray array];
+        self.lineLayers = [NSMutableArray array];
+        self.images = [NSMutableArray array];
     }
     return self;
 }
@@ -61,40 +65,71 @@
 - (void)reloadData {
     
     if (!self.dataSource
+        || ![self.dataSource respondsToSelector:@selector(numberOfComponentsInPercentCircle:)]
+        || ![self.dataSource respondsToSelector:@selector(percentCircle:itemForComponentAtIndex:)]
+        || self.circleWidth <= 0
         || CGRectIsEmpty(self.bounds)
-        || CGRectIsEmpty(self.circleFrame)
-        || self.circleWidth <= 0) {
+        || CGRectIsEmpty(self.circleFrame)) {
         return;
     }
     
-    if ([self.dataSource respondsToSelector:@selector(numberOfComponentsInPercentCircle:)]) {
+    [self.layers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.layers removeAllObjects];
+    
+    [self.lineLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.lineLayers removeAllObjects];
+    
+    [self.images makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.images removeAllObjects];
+    
+    NSUInteger numberOfComponents = [self.dataSource numberOfComponentsInPercentCircle:self];
+    
+    CGFloat overlapScale = 0;
+    CALayer *lastLayer = nil;
+    
+    UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame)) radius:(CGRectGetWidth(self.circleFrame) - self.circleWidth * 0.5) * 0.5 startAngle:-M_PI_2 endAngle:M_PI * 1.5 clockwise:YES];
+    
+    for (NSUInteger idx = 0; idx < numberOfComponents; idx ++) {
         
-        NSUInteger numberOfComponents = [self.dataSource numberOfComponentsInPercentCircle:self];
-        
-        for (NSUInteger idx = 0; idx < numberOfComponents; idx ++) {
-            
-            if ([self.dataSource respondsToSelector:@selector(percentCircle:itemForComponentAtIndex:)]) {
-                SSJReportFormsPercentCircleItem *item = [self.dataSource percentCircle:self itemForComponentAtIndex:idx];
-                if (!item) {
-                    return;
-                }
-                
-                UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame)) radius:(CGRectGetWidth(self.circleFrame) - self.circleWidth * 0.5) * 0.5 startAngle:0 endAngle:M_PI * 2 clockwise:YES];
-                
-                [self.layers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-                
-                CAShapeLayer *layer = [CAShapeLayer layer];
-                layer.path = circlePath.CGPath;
-                layer.fillColor = [UIColor whiteColor].CGColor;
-                layer.lineWidth = self.circleWidth;
-                layer.strokeColor = item.color.CGColor;
-                layer.strokeEnd = item.scale;
-                [self.layer addSublayer:layer];
-                [self.layers addObject:layer];
+        if ([self.dataSource respondsToSelector:@selector(percentCircle:itemForComponentAtIndex:)]) {
+            SSJReportFormsPercentCircleItem *item = [self.dataSource percentCircle:self itemForComponentAtIndex:idx];
+            if (!item) {
+                return;
             }
+            
+            CAShapeLayer *layer = [CAShapeLayer layer];
+            layer.path = circlePath.CGPath;
+            layer.fillColor = [UIColor whiteColor].CGColor;
+            layer.lineWidth = self.circleWidth;
+            layer.strokeColor = item.color.CGColor;
+            layer.strokeEnd = 0;
+            layer.zPosition = numberOfComponents - idx;
+            
+            [self.layer addSublayer:layer];
+            [self.layers addObject:layer];
+            
+            overlapScale += item.scale;
+            lastLayer = layer;
+            
+            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+            animation.toValue = @(overlapScale);
+            animation.duration = 0.7;
+            animation.delegate = self;
+            animation.removedOnCompletion = NO;
+            animation.fillMode = kCAFillModeForwards;
+            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+            [layer addAnimation:animation forKey:@"circleAnimation"];
         }
-        
-        
+    }
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    for (CAShapeLayer *circleLayer in self.layers) {
+        if ([circleLayer animationForKey:@"circleAnimation"] == anim) {
+            CABasicAnimation *basicAnimation = (CABasicAnimation *)anim;
+            [circleLayer removeAnimationForKey:@"circleAnimation"];
+            circleLayer.strokeEnd = [basicAnimation.toValue floatValue];
+        }
     }
 }
 

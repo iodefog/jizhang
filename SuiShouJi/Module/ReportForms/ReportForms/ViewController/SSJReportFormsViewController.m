@@ -63,7 +63,12 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 //    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
     
     self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
-    
+    if (self.scrollView.currentIndex == 0) {
+        [self.monthCircleView reloadData];
+    } else if (self.scrollView.currentIndex == 1) {
+        [self.yearCircleView reloadData];
+    }
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -72,11 +77,12 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return self.datas.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
+    [incomeAndPayCell setCellItem:[self.datas ssj_safeObjectAtIndex:indexPath.row]];
     return incomeAndPayCell;
 }
 
@@ -188,7 +194,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (SSJReportFormsPercentCircle *)monthCircleView {
     if (!_monthCircleView) {
         _monthCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
-        _monthCircleView.circleInsets = UIEdgeInsetsMake(15, 80, 60, 80);
+        _monthCircleView.circleInsets = UIEdgeInsetsMake(30, 80, 60, 80);
         _monthCircleView.circleWidth = 39;
         _monthCircleView.dataSource = self;
     }
@@ -198,7 +204,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (SSJReportFormsPercentCircle *)yearCircleView {
     if (!_yearCircleView) {
         _yearCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
-        _yearCircleView.circleInsets = UIEdgeInsetsMake(15, 80, 60, 80);
+        _yearCircleView.circleInsets = UIEdgeInsetsMake(30, 80, 60, 80);
         _yearCircleView.circleWidth = 39;
         _monthCircleView.dataSource = self;
     }

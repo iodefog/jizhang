@@ -28,13 +28,13 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    [self setRootViewController];
-    
     //  添加友盟统计
     [self umengTrack];
     
     //  创建数据表
     [self createTables];
+    
+    [self setRootViewController];
     
     return YES;
 }
@@ -89,7 +89,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
         NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];
         
         NSError *error = nil;
-        if (![[NSFileManager defaultManager] moveItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
+        if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
             SSJPRINT(@"move database error:%@",[error localizedDescription]);
         }
     }

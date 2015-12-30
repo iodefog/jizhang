@@ -42,15 +42,17 @@
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
-    SSJReportFormsItem *item = (SSJReportFormsItem *)cellItem;
-    self.imageView.image = [UIImage imageNamed:item.imageName];
-    self.textLabel.text = item.incomeOrPayName;
-    self.percentLabel.text = [NSString stringWithFormat:@"%.0f％",item.scale];
-    self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
-    
-    [self.percentLabel sizeToFit];
-    [self.moneyLabel sizeToFit];
-    [self setNeedsLayout];
+    if (cellItem) {
+        SSJReportFormsItem *item = (SSJReportFormsItem *)cellItem;
+        self.imageView.image = [UIImage imageNamed:item.imageName];
+        self.textLabel.text = item.incomeOrPayName;
+        self.percentLabel.text = [NSString stringWithFormat:@"%.0f％",item.scale * 100];
+        self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
+        
+        [self.percentLabel sizeToFit];
+        [self.moneyLabel sizeToFit];
+        [self setNeedsLayout];
+    }
 }
 
 - (UILabel *)percentLabel {
