@@ -10,7 +10,8 @@
 
 @interface SSJCategoryListView : UIView<UIScrollViewDelegate>
 
-typedef void (^CategorySelected)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID);
+typedef void (^CategorySelected)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID , NSString *categoryColor);
+
 
 //收入或支出 1为支出,0为收入
 @property (nonatomic) BOOL incomeOrExpence;

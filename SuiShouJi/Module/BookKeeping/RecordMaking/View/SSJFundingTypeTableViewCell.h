@@ -12,5 +12,6 @@
 
 //是否选中
 @property (nonatomic) BOOL selectedOrNot;
+
 @property (nonatomic,strong) UILabel *fundingTitle;
 @end
