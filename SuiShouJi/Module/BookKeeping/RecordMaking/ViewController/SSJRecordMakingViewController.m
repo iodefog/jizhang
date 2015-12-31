@@ -14,6 +14,8 @@
 #import "SSJDateSelectedView.h"
 #import "SSJCalendarCollectionViewCell.h"
 #import "SSJFundingTypeSelectView.h"
+#import "SSJCategoryCollectionViewCell.h"
+#import "SSJADDNewTypeViewController.h"
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
 
@@ -84,6 +86,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.categoryListView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewType) name:@"addNewTypeNotification" object:nil];
     _intPart = @"0";
     _decimalPart = @"00";
 }
@@ -285,14 +288,18 @@
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
         _categoryListView.incomeOrExpence = _titleSegment.selectedSegmentIndex;
         __weak typeof(self) weakSelf = self;
-        _categoryListView.CategorySelected = ^(NSString *categoryTitle , UIImage *categoryImage,NSString *categoryID , NSString *categoryColor){
+        _categoryListView.CategorySelected = ^(NSString *categoryTitle , NSString *categoryImage,NSString *categoryID , NSString *categoryColor){
             _categoryID = categoryID;
             if (![categoryTitle isEqualToString:@"添加"]) {
                 weakSelf.categoryNameLabel.text = categoryTitle;
                 [weakSelf.categoryNameLabel sizeToFit];
                 weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:categoryColor];
+                weakSelf.categoryImage.tintColor = [UIColor whiteColor];
+                weakSelf.categoryImage.image = [[UIImage imageNamed:categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }else{
-                
+                SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
+                addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
+                [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];
             }
         };
     }
@@ -315,7 +322,6 @@
         _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
         _categoryImage.layer.cornerRadius = 13;
         _categoryImage.layer.masksToBounds = YES;
-        _categoryImage.image = [UIImage imageNamed:@"餐饮 测试"];
     }
     return _categoryImage;
 }
@@ -497,6 +503,7 @@
 
 -(void)segmentPressed:(id)sender{
     self.categoryListView.incomeOrExpence = !self.titleSegment.selectedSegmentIndex;
+    self.categoryListView.scrollView.contentOffset = CGPointMake(0, 0);
     [self getDefualtColor];
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     [self.categoryListView reloadData];
@@ -515,10 +522,17 @@
     [db close];
 }
 
+-(void)addNewType{
+    [self.categoryListView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
 
 /*
 #pragma mark - Navigation

@@ -8,12 +8,11 @@
 
 #import "SSJCategoryListView.h"
 #import "SSJCategoryCollectionView.h"
+#import "SSJCategoryCollectionViewCell.h"
 #import "FMDB.h"
 
 @interface SSJCategoryListView()
-@property(nonatomic,strong) NSMutableArray *collectionViewArray;
 @property(nonatomic,strong) UIPageControl *pageControl;
-@property(nonatomic,strong) UIScrollView *scrollView;
 @property (nonatomic,strong) NSMutableArray *Items;
 @end
 @implementation SSJCategoryListView{
@@ -21,6 +20,8 @@
     CGFloat _screenHeight;
     long _page;
     long _totalPage;
+    long _selectedPage;
+    NSIndexPath *_selectedIndex;
 }
 
 
@@ -29,6 +30,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.incomeOrExpence = YES;
+        _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+        _selectedPage = 0;
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         _page = 0;
@@ -51,9 +54,8 @@
     _scrollView.contentSize = CGSizeMake(self.width * _page, 0);
     for (int i = 0; i < _page; i++) {
         CGFloat positionX = i * self.width;
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).frame = CGRectMake(positionX, 0, self.scrollView.width, self.scrollView.height);;
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).frame = CGRectMake(positionX, 0, self.scrollView.width, self.scrollView.height);
     }
-
 }
 
 -(void)setCollectionView{
@@ -74,11 +76,19 @@
         collectionView.frame = CGRectZero;
         collectionView.page = i;
         collectionView.incomeOrExpence = self.incomeOrExpence;
+        collectionView.selectedIndex = _selectedIndex;
+        collectionView.selectedPage = _selectedPage;
         __weak typeof(self) weakSelf = self;
-        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID , NSString *categoryColor , int page){
-            for (int i = 0; i < _page; i++) {
-                if (i != page) {
+        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , NSString *categoryImage , NSString *categoryID , NSString *categoryColor , int page , NSIndexPath *index){
+            if ([categoryTitle isEqualToString:@"添加"]){
+            }else{
+                _selectedPage = page;
+                _selectedIndex = index;
+                for (int i = 0; i < _page; i++) {
+                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
+                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
                     [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
+                    
                 }
             }
             if (weakSelf.CategorySelected) {
@@ -88,6 +98,7 @@
         collectionView.removeFromCategoryListBlock = ^{
             [self reloadData];
         };
+
         [self.collectionViewArray addObject:collectionView];
         [self.scrollView addSubview:collectionView];
     }
@@ -126,7 +137,10 @@
 -(void)reloadData{
     [self getPage];
     self.scrollView.contentSize = CGSizeMake(self.width * _page, 0);
-    for (int i = 0; i < _page; i ++) {
+    _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+    _selectedPage = 0;
+    for (int i = 0; i < _page; i ++) {                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
         [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];

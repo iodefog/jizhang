@@ -12,7 +12,7 @@
 
 @property(nonatomic,strong)UICollectionView *collectionView;
 
-typedef void (^ItemClickedBlock)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID , NSString *categoryColor , int currentPage);
+typedef void (^ItemClickedBlock)(NSString *categoryTitle , NSString *categoryImage , NSString *categoryID , NSString *categoryColor , int currentPage , NSIndexPath *index);
 
 typedef void (^removeFromCategoryListBlock)();
 
@@ -23,4 +23,8 @@ typedef void (^removeFromCategoryListBlock)();
 @property (nonatomic) int page;
 
 @property (nonatomic) BOOL incomeOrExpence;
+
+@property (nonatomic,strong) NSIndexPath *selectedIndex;
+
+@property (nonatomic) long selectedPage;
 @end

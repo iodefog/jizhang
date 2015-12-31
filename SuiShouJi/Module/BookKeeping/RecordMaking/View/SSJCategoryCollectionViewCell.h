@@ -15,7 +15,6 @@
 @property (nonatomic) BOOL EditeModel;
 @property (nonatomic) BOOL categorySelected;
 @property (nonatomic,strong) SSJRecordMakingCategoryItem *item;
-
 typedef void (^removeCategoryBlock)();
 
 @property(nonatomic,copy) removeCategoryBlock removeCategoryBlock;
