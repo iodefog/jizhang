@@ -286,7 +286,7 @@
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
-        _categoryListView.incomeOrExpence = _titleSegment.selectedSegmentIndex;
+        _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
         __weak typeof(self) weakSelf = self;
         _categoryListView.CategorySelected = ^(NSString *categoryTitle , NSString *categoryImage,NSString *categoryID , NSString *categoryColor){
             _categoryID = categoryID;

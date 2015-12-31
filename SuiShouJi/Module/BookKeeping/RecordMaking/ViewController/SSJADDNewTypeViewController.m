@@ -57,9 +57,12 @@
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
     if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
+        cell.categoryImage.tintColor = [UIColor whiteColor];
+        [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
     }else{
         cell.categoryImage.backgroundColor = [UIColor clearColor];
+        [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
     
     return cell;

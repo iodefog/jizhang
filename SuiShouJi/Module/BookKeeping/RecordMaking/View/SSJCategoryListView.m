@@ -139,7 +139,7 @@
     self.scrollView.contentSize = CGSizeMake(self.width * _page, 0);
     _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
     _selectedPage = 0;
-    for (int i = 0; i < _page; i ++) {                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
+    for (int i = 0; i < _totalPage; i ++) {                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
@@ -162,11 +162,12 @@
                 _page = count / 8 + 1;
             }
         }else{
-            if (count % 8 == 0) {
+            if (count % 4 == 0) {
                 _page = count / 4;
             }else{
                 _page = count / 4 + 1;
-            }        }
+            }
+        }
     }else if(_screenWidth == 375){
         if (count % 8 == 0) {
             _page = count / 8;
