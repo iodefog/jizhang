@@ -90,7 +90,7 @@
 		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
 		BD7676891C27DDB800CDD507 /* edit test.png in Resources */ = {isa = PBXBuildFile; fileRef = BD7676881C27DDB800CDD507 /* edit test.png */; };
 		BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */; };
-		BD8FD82E1C33AF8F00B7AABA /* SSJADDNewTypeController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD82D1C33AF8F00B7AABA /* SSJADDNewTypeController.m */; };
+		BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
@@ -277,8 +277,8 @@
 		BD7676881C27DDB800CDD507 /* edit test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit test.png"; path = "../../Module/BookKeeping/RecordMaking/View/edit test.png"; sourceTree = "<group>"; };
 		BD8FD8291C3266CD00B7AABA /* SSJRecordMakingCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingCategoryItem.h; sourceTree = "<group>"; };
 		BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingCategoryItem.m; sourceTree = "<group>"; };
-		BD8FD82C1C33AF8F00B7AABA /* SSJADDNewTypeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJADDNewTypeController.h; sourceTree = "<group>"; };
-		BD8FD82D1C33AF8F00B7AABA /* SSJADDNewTypeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJADDNewTypeController.m; sourceTree = "<group>"; };
+		BD8FD8321C34DA1F00B7AABA /* SSJADDNewTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJADDNewTypeViewController.h; sourceTree = "<group>"; };
+		BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJADDNewTypeViewController.m; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepHomeItem.h; sourceTree = "<group>"; };
@@ -893,10 +893,10 @@
 		BD0E43E41C21009900F9179D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				BD8FD82C1C33AF8F00B7AABA /* SSJADDNewTypeController.h */,
-				BD8FD82D1C33AF8F00B7AABA /* SSJADDNewTypeController.m */,
 				BD0E43FC1C216C7600F9179D /* SSJRecordMakingViewController.h */,
 				BD0E43FD1C216C7600F9179D /* SSJRecordMakingViewController.m */,
+				BD8FD8321C34DA1F00B7AABA /* SSJADDNewTypeViewController.h */,
+				BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1282,6 +1282,7 @@
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				BD0433951C1A8DA50051E7AB /* SSJBaseTableViewCell.m in Sources */,
 				BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */,
+				BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */,
 				BD0432F41C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */,
 				BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */,
@@ -1307,7 +1308,6 @@
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
-				BD8FD82E1C33AF8F00B7AABA /* SSJADDNewTypeController.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
 				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,

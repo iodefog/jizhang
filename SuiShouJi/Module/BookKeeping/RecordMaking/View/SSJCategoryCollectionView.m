@@ -9,6 +9,7 @@
 #import "SSJCategoryCollectionView.h"
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJRecordMakingCategoryItem.h"
+#import "SSJADDNewTypeViewController.h"
 #import "FMDB.h"
 
 @interface SSJCategoryCollectionView()
@@ -49,7 +50,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.Items objectAtIndex:indexPath.row];
-    if (self.page == 0 && indexPath.row == 0) {
+    if (self.page == self.selectedPage && [indexPath compare:self.selectedIndex] == NSOrderedSame) {
         cell.categorySelected = YES;
     }else{
         cell.categorySelected = NO;
@@ -91,22 +92,18 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    for (int i = 0; i < [self.collectionView.visibleCells count]; i ++) {
-        ((SSJCategoryCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).categorySelected = NO;
-    }
     SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
     if ([cell.item.categoryTitle isEqualToString:@"添加"]) {
-        
-    }else{
-        cell.categorySelected = YES;
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"addButtonClickedNotification" object:nil];
     }
     __weak typeof(self) weakSelf = self;
     if (self.ItemClickedBlock) {
-        UIImage *image = cell.categoryImage.image;
+        NSString *image = cell.item.categoryImage;
         NSString *title = cell.categoryName.text;
         NSString *categoryID = cell.item.categoryID;
         NSString *categoryColor = cell.item.categoryColor;
-        weakSelf.ItemClickedBlock(title,image,categoryID,categoryColor,self.page);
+        NSIndexPath *index = indexPath;
+        weakSelf.ItemClickedBlock(title,image,categoryID,categoryColor,self.page,index);
     }
 }
 

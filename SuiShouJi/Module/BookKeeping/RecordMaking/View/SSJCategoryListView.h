@@ -10,7 +10,7 @@
 
 @interface SSJCategoryListView : UIView<UIScrollViewDelegate>
 
-typedef void (^CategorySelected)(NSString *categoryTitle , UIImage *categoryImage , NSString *categoryID , NSString *categoryColor);
+typedef void (^CategorySelected)(NSString *categoryTitle , NSString *categoryImage , NSString *categoryID , NSString *categoryColor);
 
 
 //收入或支出 1为支出,0为收入
@@ -21,4 +21,9 @@ typedef void (^CategorySelected)(NSString *categoryTitle , UIImage *categoryImag
 
 //重载数据
 -(void)reloadData;
+
+@property(nonatomic,strong) UIScrollView *scrollView;
+
+@property(nonatomic,strong) NSMutableArray *collectionViewArray;
+
 @end
