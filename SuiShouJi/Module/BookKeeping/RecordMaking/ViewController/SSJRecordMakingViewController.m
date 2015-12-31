@@ -34,6 +34,7 @@
 @property (nonatomic,strong) UIButton *datePickerButton;
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 @property (nonatomic,strong) UIButton *fundingTypeButton;
+@property (nonatomic,strong) UIBarButtonItem *rightbutton;
 
 
 @property (nonatomic) long currentYear;
@@ -87,6 +88,7 @@
 //    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.categoryListView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewType) name:@"addNewTypeNotification" object:nil];
+    self.navigationItem.rightBarButtonItem = self.rightbutton;
     _intPart = @"0";
     _decimalPart = @"00";
 }
@@ -233,34 +235,32 @@
 //    _decimalCount = 0;
 //}
 
-- (void)didComfirmKeyPressed:(UIButton*)button{
+- (void)comfirmButtonClick:(id)sender{
     if ([self.textInput.text isEqualToString:@"0.00"]) {
         [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
         return;
     }
-    if ([button.titleLabel.text isEqualToString:@"OK"]) {
-        NSLog(@"OK");
-        [self makeArecord];
-    }else if ([button.titleLabel.text isEqualToString:@"="]){
-        if (self.customKeyBoard.PlusOrMinusModel == YES) {
-            _caculationValue = _caculationValue + [self.textInput.text floatValue];
-            self.textInput.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-            _caculationValue = 0.0f;
-            self.customKeyBoard.decimalModel = NO;
-            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-            _decimalCount = 0;
-        }else{
-            _caculationValue = _caculationValue  - [self.textInput.text floatValue];
-            self.textInput.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-            _caculationValue = 0.0f;
-            self.customKeyBoard.decimalModel = NO;
-            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-            _decimalCount = 0;
-        }
-        [self.customKeyBoard.ComfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-    }
+    [self makeArecord];
+//    }else if ([button.titleLabel.text isEqualToString:@"="]){
+//        if (self.customKeyBoard.PlusOrMinusModel == YES) {
+//            _caculationValue = _caculationValue + [self.textInput.text floatValue];
+//            self.textInput.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+//            _caculationValue = 0.0f;
+//            self.customKeyBoard.decimalModel = NO;
+//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+//            _decimalCount = 0;
+//        }else{
+//            _caculationValue = _caculationValue  - [self.textInput.text floatValue];
+//            self.textInput.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+//            _caculationValue = 0.0f;
+//            self.customKeyBoard.decimalModel = NO;
+//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+//            _decimalCount = 0;
+//        }
+//        [self.customKeyBoard.ComfirmButton setTitle:@"确定" forState:UIControlStateNormal];
+//    }
 }
 
 #pragma mark - Getter
@@ -322,6 +322,8 @@
         _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
         _categoryImage.layer.cornerRadius = 13;
         _categoryImage.layer.masksToBounds = YES;
+        _categoryImage.tintColor = [UIColor whiteColor];
+        [_categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return _categoryImage;
 }
@@ -401,6 +403,13 @@
     }
     return _FundingTypeSelectView;
 }
+
+-(UIBarButtonItem *)rightbutton{
+    if (!_rightbutton) {
+        _rightbutton = [[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStyleBordered target:self action:@selector(comfirmButtonClick:)];
+    }
+    return _rightbutton;
+}
 #pragma mark - private
 -(void)settitleSegment{
     NSArray *segmentArray = @[@"支出",@"收入"];
@@ -473,11 +482,11 @@
     double sum = 0.0;
     if (count == 0) {
         if (self.titleSegment.selectedSegmentIndex == 0) {
-            incomeSum = incomeSum + chargeMoney;
-            sum = sum + chargeMoney;
+            incomeSum = incomeSum - chargeMoney;
+            sum = sum - chargeMoney;
         }else{
             expenseSum = expenseSum + chargeMoney;
-            sum = sum - chargeMoney;
+            sum = sum + chargeMoney;
         }
         [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT  , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],@"0",@"-1",@"0"];
     }else{
@@ -493,7 +502,7 @@
             [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],selectDate];
         }else{
             expenseSum = expenseSum + chargeMoney;
-            sum = sum - chargeMoney;
+            sum = sum + chargeMoney;
             [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:sum],selectDate];
         }
     }

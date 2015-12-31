@@ -73,7 +73,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     SSJMoreHomeViewController *moreVC = [[SSJMoreHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
-    moreNavi.tabBarItem.title = @"更多";
+    moreNavi.tabBarItem.title = @"我的";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@""];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
