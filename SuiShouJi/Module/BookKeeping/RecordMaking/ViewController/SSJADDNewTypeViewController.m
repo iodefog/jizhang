@@ -57,9 +57,12 @@
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
     if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
+        cell.categoryImage.tintColor = [UIColor whiteColor];
+        [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
     }else{
         cell.categoryImage.backgroundColor = [UIColor clearColor];
+        [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
     
     return cell;
@@ -134,8 +137,8 @@
         return ;
     }
     NSInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1",[NSNumber numberWithBool:self.incomeOrExpence]];
-    if (count > 20) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"首页类型已满," delegate:self cancelButtonTitle:@"类别已满，请移除一些类别后再添加。" otherButtonTitles: nil];
+    if (count >= 20) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"首页类型已满,类别已满，请移除一些类别后再添加" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
     }else{
         [db executeUpdate:@"UPDATE BK_BILL_TYPE SET ISTATE = 1 WHERE ID = ? AND ITYPE = ?",_selectedID,[NSNumber numberWithBool:self.incomeOrExpence]];

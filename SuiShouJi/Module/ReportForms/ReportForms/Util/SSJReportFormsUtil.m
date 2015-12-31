@@ -7,7 +7,7 @@
 //
 
 #import "SSJReportFormsUtil.h"
-#import "FMDB.h"
+#import "SSJDatabaseQueue.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,9 +15,14 @@
 
 @implementation SSJReportFormsDatabaseUtil
 
-+ (NSArray<SSJReportFormsItem *> *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inYear:(NSInteger)year month:(NSInteger)month {
++ (void)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
+                         inYear:(NSInteger)year
+                          month:(NSInteger)month
+                        success:(void(^)(NSArray<SSJReportFormsItem *> *))success
+                        failure:(void (^)(NSError *error))failure {
+    
     if (year <= 0 || month > 12) {
-        return nil;
+        failure(nil);
     }
     
     NSString *dateStr = nil;
@@ -30,19 +35,24 @@
     switch (type) {
         case SSJReportFormsIncomeOrPayTypeIncome:
         case SSJReportFormsIncomeOrPayTypePay:
-            return [self queryForIncomeOrPay:type billDate:dateStr];
+            [self queryForIncomeOrPay:type billDate:dateStr success:success failure:failure];
+            break;
             
         case SSJReportFormsIncomeOrPayTypeSurplus:
-            return [self queryForSurplusWithBillDate:dateStr];
+            [self queryForSurplusWithBillDate:dateStr success:success failure:failure];
+            break;
+            
         case SSJReportFormsIncomeOrPayTypeUnknown:
-            return nil;
+            failure(nil);
+            break;
     }
-    
-    return nil;
 }
 
 //  查询收支数据
-+ (NSArray *)queryForIncomeOrPay:(SSJReportFormsIncomeOrPayType)type billDate:(NSString *)billDate {
++ (void)queryForIncomeOrPay:(SSJReportFormsIncomeOrPayType)type
+                   billDate:(NSString *)billDate
+                    success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                    failure:(void (^)(NSError *error))failure {
     
     NSString *incomeOrPayType = nil;
     switch (type) {
@@ -56,83 +66,102 @@
             
         case SSJReportFormsIncomeOrPayTypeSurplus:
         case SSJReportFormsIncomeOrPayTypeUnknown:
-            return nil;
+            failure(nil);
+            return;
     }
     
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        return nil;
-    }
-    
-    FMResultSet *amountResultSet = [db executeQuery:@"SELECT SUM(IMONEY) FROM (SELECT A.IMONEY FROM BK_USER_CHARGE AS A, BK_BILL_TYPE AS B WHERE A.IBILLID = B.ID AND A.CBILLDATE LIKE ? AND B.ITYPE = ?)",billDate,incomeOrPayType];
-    
-    if (!amountResultSet) {
-        [db close];
-        return nil;
-    }
-    
-    double amount = 0;
-    while ([amountResultSet next]) {
-        amount = [amountResultSet doubleForColumnIndex:0];
-    }
-    
-    if (amount == 0) {
-        [db close];
-        return nil;
-    }
-    
-    FMResultSet *resultSet = [db executeQuery:@"SELECT A.AMOUNT, B.CNAME, B.CCOIN, B.CCOLOR FROM (SELECT SUM(IMONEY) AS AMOUNT, IBILLID FROM BK_USER_CHARGE WHERE CBILLDATE LIKE ? GROUP BY IBILLID) AS A, BK_BILL_TYPE AS B WHERE A.IBILLID = B.ID AND B.ITYPE = ?",billDate,incomeOrPayType];
-    
-    if (!resultSet) {
-        [db close];
-        return nil;
-    }
-    
-    NSMutableArray *result = [@[] mutableCopy];
-    while ([resultSet next]) {
-        SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-        item.money = [resultSet doubleForColumn:@"AMOUNT"];
-        item.scale = item.money / amount;
-        item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
-        item.imageName = [resultSet stringForColumn:@"CCOIN"];
-        item.incomeOrPayName = [resultSet stringForColumn:@"CNAME"];
-        [result addObject:item];
-    }
-    return result;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *amountResultSet = [db executeQuery:@"select sum(IMONEY) from (select a.IMONEY from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and b.ITYPE = ?)",billDate,incomeOrPayType];
+        
+        if (!amountResultSet) {
+//            [[SSJDatabaseQueue sharedInstance] close];
+            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        
+        double amount = 0;
+        while ([amountResultSet next]) {
+            amount = [amountResultSet doubleForColumnIndex:0];
+        }
+        
+        if (amount == 0) {
+//            [[SSJDatabaseQueue sharedInstance] close];
+            SSJDispatch_main_async_safe(^{
+                success(nil);
+            });
+            
+            return;
+        }
+        
+        FMResultSet *resultSet = [db executeQuery:@"select a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?",billDate,incomeOrPayType];
+        
+        if (!resultSet) {
+//            [[SSJDatabaseQueue sharedInstance] close];
+            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        
+        NSMutableArray *result = [@[] mutableCopy];
+        while ([resultSet next]) {
+            SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.money = [resultSet doubleForColumn:@"AMOUNT"];
+            item.scale = item.money / amount;
+            item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
+            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.incomeOrPayName = [resultSet stringForColumn:@"CNAME"];
+            [result addObject:item];
+        }
+        
+        SSJDispatch_main_async_safe(^{
+            success(result);
+        });
+    }];
 }
 
 //  查询盈余数据
-+ (NSArray *)queryForSurplusWithBillDate:(NSString *)billDate {
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        return nil;
-    }
++ (void)queryForSurplusWithBillDate:(NSString *)billDate
+                            success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                            failure:(void (^)(NSError *error))failure {
     
-    FMResultSet *resultSet = [db executeQuery:@"SELECT SUM(IMONEY) FROM (SELECT A.IMONEY, B.ITYPE, FROM BK_USER_CHARGE AS A, BK_BILL_TYPE AS B WHERE A.IBILLID = B.ID AND A.CBILLDATE LIKE ?) GROUP BY ITYPE ORDER BY ITYPE DESC",billDate];
-    
-    if (!resultSet) {
-        [db close];
-        return nil;
-    }
-    
-    double amount = 0;
-    
-    NSMutableArray *result = [NSMutableArray arrayWithCapacity:2];
-    while ([resultSet next]) {
-        SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-        item.money = [resultSet doubleForColumn:@"SUM(IMONEY)"];
-        item.colorValue = @"#64b3fe";
-        item.imageName = @"";
-        [result addObject:item];
-        amount += item.money;
-    }
-    
-    for (int i = 0; i < result.count; i ++) {
-        SSJReportFormsItem *item = result[i];
-        item.scale = item.money / amount;
-    }
-    
-    return result;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY) from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ?) group by ITYPE order by ITYPE desc",billDate];
+        
+        if (!resultSet) {
+//            [[SSJDatabaseQueue sharedInstance] close];
+            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        
+        double amount = 0;
+        
+        NSMutableArray *result = [NSMutableArray arrayWithCapacity:2];
+        while ([resultSet next]) {
+            SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.money = [resultSet doubleForColumn:@"SUM(IMONEY)"];
+            item.colorValue = @"#64b3fe";
+            item.imageName = @"";
+            [result addObject:item];
+            amount += item.money;
+        }
+        
+        for (int i = 0; i < result.count; i ++) {
+            SSJReportFormsItem *item = result[i];
+            item.scale = item.money / amount;
+        }
+        
+        SSJDispatch_main_async_safe(^{
+            success(result);
+        });
+    }];
 }
 
 @end
