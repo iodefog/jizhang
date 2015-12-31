@@ -497,8 +497,8 @@
             sum = [rs doubleForColumn:@"SUMAMOUNT"];
         }
         if (self.titleSegment.selectedSegmentIndex == 0) {
-            incomeSum = incomeSum + chargeMoney;
-            sum = sum + chargeMoney;
+            incomeSum = incomeSum - chargeMoney;
+            sum = sum - chargeMoney;
             [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],selectDate];
         }else{
             expenseSum = expenseSum + chargeMoney;

@@ -13,7 +13,6 @@
 - (void)didNumKeyPressed:(UIButton *)button;
 - (void)didDecimalPointKeyPressed;
 - (void)didBackspaceKeyPressed;
-- (void)didComfirmKeyPressed:(UIButton*)button;
 
 @end
 @interface SSJCustomKeyboard : UIView

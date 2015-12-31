@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SSJBookKeepingHomeViewController.h"
-#import "SSJMoreHomeViewController.h"
+#import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "MobClick.h"
@@ -71,7 +71,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     financingNavi.tabBarItem.title = @"资金";
     financingNavi.tabBarItem.image = [UIImage imageNamed:@""];
     
-    SSJMoreHomeViewController *moreVC = [[SSJMoreHomeViewController alloc] initWithNibName:nil bundle:nil];
+    SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@""];
