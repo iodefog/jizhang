@@ -45,30 +45,39 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 @property (nonatomic, strong) NSArray *datas;
 
+@property (nonatomic, strong) SSJReportFormsCalendarUtil *calendarUtil;
+
 @end
 
 @implementation SSJReportFormsViewController
 
 #pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
+    [self updateSwithDateControlTitle];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-//    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self reloadDatas];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     
-    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
-    if (self.scrollView.currentIndex == 0) {
-        [self.monthCircleView reloadData];
-    } else if (self.scrollView.currentIndex == 1) {
-        [self.yearCircleView reloadData];
-    }
-    [self.tableView reloadData];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -87,6 +96,10 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 }
 
 #pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
 
 #pragma mark - SCYUnlimitedScrollViewDataSource
 - (NSUInteger)numberOfPagesInScrollView:(SCYUnlimitedScrollView *)scrollView {
@@ -105,7 +118,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 #pragma mark - SCYUnlimitedScrollViewDelegate
 - (void)scrollView:(SCYUnlimitedScrollView *)scrollView didScrollAtPageIndex:(NSUInteger)index {
-    
+    [self reloadDatas];
+    [self updateSwithDateControlTitle];
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -131,17 +145,12 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 #pragma mark - Event
 - (void)segmentControlValueDidChange {
-    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
-    
-    [self.tableView reloadData];
-    if (self.scrollView.currentIndex == 0) {
-        [self.monthCircleView reloadData];
-    } else if (self.scrollView.currentIndex == 1) {
-        [self.yearCircleView reloadData];
-    }
+    [self reloadDatas];
+    [self updateSwithDateControlTitle];
 }
 
 #pragma mark - Private
+//  返回当前收支类型
 - (SSJReportFormsIncomeOrPayType)currentType {
     NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
     
@@ -154,6 +163,43 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     } else {
         return SSJReportFormsIncomeOrPayTypeUnknown;
     }
+}
+
+//  更新切换年、月控件标题
+- (void)updateSwithDateControlTitle {
+    NSMutableString *title = [NSMutableString string];
+    
+    if (self.scrollView.currentIndex == 0) {
+        [title appendFormat:@"%d月",(int)self.calendarUtil.month];
+    } else if (self.scrollView.currentIndex == 1) {
+        [title appendFormat:@"%d年",(int)self.calendarUtil.year];
+    }
+    
+    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
+        [title appendString:@"支出明细图表"];
+    } else if ([selectedTitle isEqualToString:kSegmentTitleIncome]) {
+        [title appendString:@"收入明细图表"];
+    } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+        [title appendString:@"收支盈余明细图表"];
+    }
+    
+    self.switchYearControl.title = title;
+}
+
+- (void)reloadDatas {
+    if (self.scrollView.currentIndex == 0) {
+        self.datas = [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inMonth:[NSString stringWithFormat:@"%02d",(int)self.calendarUtil.month]];
+        [self.monthCircleView reloadData];
+    } else if (self.scrollView.currentIndex == 1) {
+        self.datas = [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:[NSString stringWithFormat:@"%04d",(int)self.calendarUtil.year]];
+        [self.yearCircleView reloadData];
+    }
+    
+    [self.tableView reloadData];
+//    [self.tableView beginUpdates];
+//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
+//    [self.tableView endUpdates];
 }
 
 #pragma mark - Getter
@@ -170,14 +216,26 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (SSJReportFormsSwitchYearControl *)switchYearControl {
     if (!_switchYearControl) {
+        __weak typeof(self) weakSelf = self;
         _switchYearControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight, self.headerView.width, kHeaderSecondPartHeight)];
-        _switchYearControl.title = @"2015年收入明细图表";
         _switchYearControl.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
         _switchYearControl.preAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
-            
+            if (weakSelf.scrollView.currentIndex == 0) {
+                [weakSelf.calendarUtil preMonth];
+            } else if (weakSelf.scrollView.currentIndex == 1) {
+                [weakSelf.calendarUtil preYear];
+            }
+            [weakSelf updateSwithDateControlTitle];
+            [weakSelf reloadDatas];
         };
         _switchYearControl.nextAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
-            
+            if (weakSelf.scrollView.currentIndex == 0) {
+                [weakSelf.calendarUtil nextMonth];
+            } else if (weakSelf.scrollView.currentIndex == 1) {
+                [weakSelf.calendarUtil nextYear];
+            }
+            [weakSelf updateSwithDateControlTitle];
+            [weakSelf reloadDatas];
         };
     }
     return _switchYearControl;
@@ -237,6 +295,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.tableHeaderView = self.headerView;
         _tableView.rowHeight = 55;
         _tableView.dataSource = self;

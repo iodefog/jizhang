@@ -18,6 +18,7 @@
 		7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */ = {isa = PBXBuildFile; fileRef = 7D6AAB731C322E0C0007C0A3 /* mydatabase.db */; };
 		7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */; };
 		7D6AAB871C33C9D60007C0A3 /* SSJReportFormsPercentCircleComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB861C33C9D60007C0A3 /* SSJReportFormsPercentCircleComponent.m */; };
+		7D6AAB8D1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB8C1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.m */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E311C2ABF5400A3D61E /* closebutton test.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C434E301C2ABF5400A3D61E /* closebutton test.png */; };
@@ -144,6 +145,8 @@
 		7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsItem.m; sourceTree = "<group>"; };
 		7D6AAB851C33C9D60007C0A3 /* SSJReportFormsPercentCircleComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircleComponent.h; sourceTree = "<group>"; };
 		7D6AAB861C33C9D60007C0A3 /* SSJReportFormsPercentCircleComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPercentCircleComponent.m; sourceTree = "<group>"; };
+		7D6AAB8B1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircleLayer.h; sourceTree = "<group>"; };
+		7D6AAB8C1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPercentCircleLayer.m; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
 		9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectView.m; sourceTree = "<group>"; };
 		9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeTableViewCell.h; sourceTree = "<group>"; };
@@ -362,6 +365,8 @@
 				7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */,
 				7D6AAB541C310D330007C0A3 /* SSJReportFormsPercentCircle.h */,
 				7D6AAB551C310D330007C0A3 /* SSJReportFormsPercentCircle.m */,
+				7D6AAB8B1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.h */,
+				7D6AAB8C1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.m */,
 				7D6AAB5A1C312B560007C0A3 /* SSJReportFormsHeaderView.h */,
 				7D6AAB5B1C312B560007C0A3 /* SSJReportFormsHeaderView.m */,
 				7D6AAB681C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.h */,
@@ -1311,6 +1316,7 @@
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
+				7D6AAB8D1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				BD8FD82E1C33AF8F00B7AABA /* SSJADDNewTypeController.m in Sources */,
