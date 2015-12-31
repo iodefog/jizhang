@@ -15,32 +15,33 @@
 
 @implementation SSJReportFormsDatabaseUtil
 
-+ (NSArray *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inYear:(NSString *)year {
++ (NSArray<SSJReportFormsItem *> *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inYear:(NSInteger)year month:(NSInteger)month {
+    if (year <= 0 || month > 12) {
+        return nil;
+    }
+    
+    NSString *dateStr = nil;
+    if (month > 0 && month <= 12) {
+        dateStr = [NSString stringWithFormat:@"%04d-%02d-__",(int)year,(int)month];
+    } else {
+        dateStr = [NSString stringWithFormat:@"%04d-__-__",(int)year];
+    }
+    
     switch (type) {
         case SSJReportFormsIncomeOrPayTypeIncome:
         case SSJReportFormsIncomeOrPayTypePay:
-            return [self queryForIncomeOrPay:type billDate:[NSString stringWithFormat:@"%@-__-__",year]];
+            return [self queryForIncomeOrPay:type billDate:dateStr];
             
         case SSJReportFormsIncomeOrPayTypeSurplus:
-            return [self queryForSurplusWithBillDate:[NSString stringWithFormat:@"%@-__-__",year]];
+            return [self queryForSurplusWithBillDate:dateStr];
         case SSJReportFormsIncomeOrPayTypeUnknown:
             return nil;
     }
+    
+    return nil;
 }
 
-+ (NSArray *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inMonth:(NSString *)month {
-    switch (type) {
-        case SSJReportFormsIncomeOrPayTypeIncome:
-        case SSJReportFormsIncomeOrPayTypePay:
-            return [self queryForIncomeOrPay:type billDate:[NSString stringWithFormat:@"____-%@-__",month]];
-            
-        case SSJReportFormsIncomeOrPayTypeSurplus:
-            return [self queryForSurplusWithBillDate:[NSString stringWithFormat:@"____-%@-__",month]];
-        case SSJReportFormsIncomeOrPayTypeUnknown:
-            return nil;
-    }
-}
-
+//  查询收支数据
 + (NSArray *)queryForIncomeOrPay:(SSJReportFormsIncomeOrPayType)type billDate:(NSString *)billDate {
     
     NSString *incomeOrPayType = nil;
@@ -100,6 +101,7 @@
     return result;
 }
 
+//  查询盈余数据
 + (NSArray *)queryForSurplusWithBillDate:(NSString *)billDate {
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {

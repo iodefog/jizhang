@@ -22,11 +22,8 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsIncomeOrPayType) {
 
 @interface SSJReportFormsDatabaseUtil : NSObject
 
-// 查询某个年份的收入／支出／盈余的收支类型数据
-+ (NSArray<SSJReportFormsItem *> *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inYear:(NSString *)year;
-
-// 查询某个月份的收入／支出／盈余的收支类型数据
-+ (NSArray<SSJReportFormsItem *> *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inMonth:(NSString *)month;
+// 查询某个年份、月份的收入／支出／盈余的收支类型数据；如果月份传0，则查询整年的数据；月份最大不能超过12，年份小于1，否则返回nil
++ (NSArray<SSJReportFormsItem *> *)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type inYear:(NSInteger)year month:(NSInteger)month;
 
 @end
 

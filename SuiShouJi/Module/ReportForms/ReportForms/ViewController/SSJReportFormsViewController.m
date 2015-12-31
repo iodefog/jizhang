@@ -189,17 +189,14 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (void)reloadDatas {
     if (self.scrollView.currentIndex == 0) {
-        self.datas = [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inMonth:[NSString stringWithFormat:@"%02d",(int)self.calendarUtil.month]];
+        self.datas = [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:self.calendarUtil.year month:self.calendarUtil.month];
         [self.monthCircleView reloadData];
     } else if (self.scrollView.currentIndex == 1) {
-        self.datas = [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:[NSString stringWithFormat:@"%04d",(int)self.calendarUtil.year]];
+        self.datas = [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:self.calendarUtil.year month:0];
         [self.yearCircleView reloadData];
     }
     
     [self.tableView reloadData];
-//    [self.tableView beginUpdates];
-//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
-//    [self.tableView endUpdates];
 }
 
 #pragma mark - Getter
@@ -265,7 +262,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _yearCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
         _yearCircleView.circleInsets = UIEdgeInsetsMake(30, 80, 60, 80);
         _yearCircleView.circleWidth = 39;
-        _monthCircleView.dataSource = self;
+        _yearCircleView.dataSource = self;
     }
     return _yearCircleView;
 }
