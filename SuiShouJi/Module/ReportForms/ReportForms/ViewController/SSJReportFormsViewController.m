@@ -13,6 +13,8 @@
 #import "SCYPageControl.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
+
+#import "SSJBillingChargeViewController.h"
 #import "SSJReportFormsUtil.h"
 
 static const CGFloat kHeaderFirstPartHeight = 49;
@@ -121,6 +123,16 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    if (self.datas.count > indexPath.row) {
+        SSJReportFormsItem *item = self.datas[indexPath.row];
+        SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
+        billingChargeVC.billTypeID = item.ID;
+        billingChargeVC.year = self.calendarUtil.year;
+        if (self.scrollView.currentIndex == 0) {
+            billingChargeVC.month = self.calendarUtil.month;
+        }
+        [self.navigationController pushViewController:billingChargeVC animated:YES];
+    }
 }
 
 #pragma mark - SCYUnlimitedScrollViewDataSource

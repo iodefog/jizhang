@@ -70,6 +70,7 @@
             return;
     }
     
+    //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *amountResultSet = [db executeQuery:@"select sum(IMONEY) from (select a.IMONEY from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and b.ITYPE = ?)",billDate,incomeOrPayType];
         
@@ -96,7 +97,8 @@
             return;
         }
         
-        FMResultSet *resultSet = [db executeQuery:@"select a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?",billDate,incomeOrPayType];
+        //  查询不同收支类型相应的金额、名称、图标、颜色
+        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?",billDate,incomeOrPayType];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -110,6 +112,7 @@
         NSMutableArray *result = [@[] mutableCopy];
         while ([resultSet next]) {
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.ID = [resultSet stringForColumn:@"IBILLID"];
             item.money = [resultSet doubleForColumn:@"AMOUNT"];
             item.scale = item.money / amount;
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];

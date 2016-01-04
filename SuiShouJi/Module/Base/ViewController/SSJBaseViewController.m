@@ -41,6 +41,7 @@
     [super viewWillAppear:animated];
     
     self.navigationController.navigationBar.barTintColor = nil;
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                     NSForegroundColorAttributeName:[UIColor blackColor]};
 }
