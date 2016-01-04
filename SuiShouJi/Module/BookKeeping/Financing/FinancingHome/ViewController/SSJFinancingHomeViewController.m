@@ -9,7 +9,7 @@
 #import "SSJFinancingHomeViewController.h"
 #import "SSJFinancingHomeCollectionViewCell.h"
 #import "SSJFinancingHomeitem.h"
-
+#import "SSJFundingDetailsViewController.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -42,10 +42,17 @@
     [self.view addSubview:self.collectionView];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getDateFromDateBase];
+    [self.collectionView reloadData];
+}
 
 -(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 66);
-    self.headerView.leftTop = CGPointMake(0, 74);
+    self.headerView.leftTop = CGPointMake(0, 10);
     [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
     [_headerView ssj_setBorderStyle:SSJBorderStyleBottom];
     [_headerView ssj_setBorderWidth:1];
@@ -72,6 +79,10 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJFinancingHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FinancingHomeCollectionViewCell" forIndexPath:indexPath];
     cell.item = (SSJFinancingHomeitem*)[self.items objectAtIndex:indexPath.row];
+    if (indexPath.row == [collectionView numberOfItemsInSection:0])
+    {
+        cell.fundingBalanceLabel.hidden = YES;
+    }
     return cell;
 }
 
@@ -90,6 +101,11 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJFinancingHomeCollectionViewCell *cell = (SSJFinancingHomeCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    if (![cell.item.fundingName isEqualToString:@"添加资金账户"]) {
+        SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
+        fundingDetailVC.item = cell.item;
+        [self.navigationController pushViewController:fundingDetailVC animated:YES];
+    }
 }
 
 #pragma mark - Getter
@@ -140,8 +156,7 @@
         _profitAmountLabel = [[UILabel alloc]init];
         _profitAmountLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _profitAmountLabel.font = [UIFont systemFontOfSize:24];
-        _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
-        [_profitAmountLabel sizeToFit];
+
     }
     return _profitAmountLabel;
 }
@@ -169,6 +184,8 @@
     item.fundingColor = @"cccccc";
     [self.items addObject:item];
     _profitAmount = [db doubleForQuery:@"SELECT SUM(IBALANCE) FROM BK_FUNS_ACCT"];
+    _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
+    [_profitAmountLabel sizeToFit];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -12,4 +12,7 @@
 @interface SSJFinancingHomeCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic,strong) SSJFinancingHomeitem *item;
+
+@property (nonatomic,strong) UILabel *fundingBalanceLabel;
+
 @end

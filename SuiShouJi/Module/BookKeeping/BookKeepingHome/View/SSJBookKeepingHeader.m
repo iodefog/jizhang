@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *incomeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *profitLabel;
 @property (weak, nonatomic) IBOutlet UIButton *bookKeepingButton;
+
 - (IBAction)bookKeeping:(id)sender;
 @end
 @implementation SSJBookKeepingHeader

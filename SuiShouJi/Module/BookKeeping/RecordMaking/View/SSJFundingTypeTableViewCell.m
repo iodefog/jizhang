@@ -10,6 +10,7 @@
 @interface SSJFundingTypeTableViewCell()
 @property (nonatomic,strong) UIImageView *fundingImage;
 @property (nonatomic,strong) UIImageView *checkMark;
+@property (nonatomic,strong) UILabel *fundingTitle;
 
 @end
 @implementation SSJFundingTypeTableViewCell
@@ -37,7 +38,6 @@
 -(UIImageView *)fundingImage{
     if (!_fundingImage) {
         _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 25, 25)];
-        _fundingImage.image = [UIImage imageNamed:@""];
     }
     return _fundingImage;
 }
@@ -45,10 +45,8 @@
 -(UILabel *)fundingTitle{
     if (!_fundingTitle) {
         _fundingTitle = [[UILabel alloc]initWithFrame:CGRectZero];
-        _fundingTitle.text = @"招商银行信用卡";
         _fundingTitle.font = [UIFont systemFontOfSize:18];
         _fundingTitle.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        [_fundingTitle sizeToFit];
     }
     return _fundingTitle;
 }
@@ -69,6 +67,13 @@
     }else{
         self.checkMark.hidden = YES;
     }
+}
+
+-(void)setItem:(SSJFundingItem *)item{
+    _item = item;
+    _fundingTitle.text = self.item.fundingName;
+    [_fundingTitle sizeToFit];
+    _fundingImage.image = [UIImage imageNamed:self.item.fundingIcon];
 }
 
 /*

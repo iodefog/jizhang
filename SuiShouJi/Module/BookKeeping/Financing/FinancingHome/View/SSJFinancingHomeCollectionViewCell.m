@@ -12,7 +12,6 @@
 //@property(nonatomic, strong) UIView *fundingColorView;
 @property(nonatomic, strong) UILabel *fundingNameLabel;
 @property(nonatomic, strong) UIImageView *fundingIcon;
-@property (nonatomic,strong) UILabel *fundingBalanceLabel;
 @end
 
 @implementation SSJFinancingHomeCollectionViewCell

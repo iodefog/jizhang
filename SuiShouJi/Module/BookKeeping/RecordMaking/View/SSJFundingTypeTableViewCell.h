@@ -7,11 +7,12 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJFundingItem.h"
 
 @interface SSJFundingTypeTableViewCell : SSJBaseTableViewCell
 
 //是否选中
 @property (nonatomic) BOOL selectedOrNot;
 
-@property (nonatomic,strong) UILabel *fundingTitle;
+@property (nonatomic,strong) SSJFundingItem *item;
 @end

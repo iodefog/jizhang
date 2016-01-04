@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJFundingItem.h"
 
 @interface SSJFundingTypeSelectView : UIView<UITableViewDataSource,UITableViewDelegate>
 
-typedef void (^fundingTypeSelectBlock)(NSString *fundingTitle);
+typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
 
 //选择类型的回调
 @property (nonatomic, copy) fundingTypeSelectBlock fundingTypeSelectBlock;

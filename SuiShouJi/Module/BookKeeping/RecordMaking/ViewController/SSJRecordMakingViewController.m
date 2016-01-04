@@ -54,6 +54,8 @@
     NSString *_categoryID;
     NSString *_defualtColor;
     NSString *_defualtID;
+    SSJFundingItem *_selectItem;
+    SSJFundingItem *_defualtItem;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -77,6 +79,7 @@
     if (_selectedDay == 0) {
         self.selectedDay = _currentDay;
     }
+    [self getDefualtItem];
     [self getDefualtColorAndDefualtId];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
@@ -343,7 +346,7 @@
         [_inputAccessoryView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e2e2e2"]];
         [_inputAccessoryView ssj_setBorderStyle:SSJBorderStyleTop];
         _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width / 2, 50)];
-        [_fundingTypeButton setTitle:@"选择资金类型" forState:UIControlStateNormal];
+        [_fundingTypeButton setTitle:_defualtItem.fundingName forState:UIControlStateNormal];
         [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
         _fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
@@ -397,8 +400,9 @@
     if (!_FundingTypeSelectView) {
         __weak typeof(self) weakSelf = self;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        _FundingTypeSelectView.fundingTypeSelectBlock = ^(NSString *fundingTitle){
-            [weakSelf.fundingTypeButton setTitle:fundingTitle forState:UIControlStateNormal];
+        _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
+            [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+            _selectItem = fundingItem;
             [weakSelf.FundingTypeSelectView removeFromSuperview];
         };
     }
@@ -456,7 +460,19 @@
     NSString *chargeID = SSJUUID();
     NSString *userID = SSJUSERID();
     double chargeMoney = [self.textInput.text doubleValue];
-    NSString *fundingType = self.fundingTypeButton.titleLabel.text;
+    SSJFundingItem *fundingType;
+    if (_selectItem == nil) {
+        fundingType = _defualtItem;
+    }else{
+        fundingType = _selectItem;
+    }
+    double fundingSum;
+    if (self.titleSegment.selectedSegmentIndex == 0) {
+        fundingSum = fundingType.fundingBalance - chargeMoney;
+    }else{
+        fundingSum = fundingType.fundingBalance + chargeMoney;
+    }
+    [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:fundingSum],fundingType.fundingID];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
     NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
@@ -475,7 +491,7 @@
             selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         }
     }
-    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
+    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
     int count = 0;
     FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
     if ([s next]) {
@@ -536,8 +552,23 @@
     [db close];
 }
 
--(void)addNewType{
-    [self.categoryListView reloadData];
+-(void)getDefualtItem{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID LIMIT 1",@"root"];
+    _defualtItem = [[SSJFundingItem alloc]init];
+    while ([rs next]) {
+        _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+        _defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+        _defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+        _defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+        _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+        _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+    }
+    [db close];
 }
 
 - (void)didReceiveMemoryWarning {
