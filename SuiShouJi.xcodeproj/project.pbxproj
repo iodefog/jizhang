@@ -10,6 +10,7 @@
 		7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */; };
 		7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */; };
+		7D2B23FD1C3A1B63009A74A8 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
 		7D6AAB561C310D330007C0A3 /* SSJReportFormsPercentCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB551C310D330007C0A3 /* SSJReportFormsPercentCircle.m */; };
 		7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */; };
@@ -143,6 +144,8 @@
 		7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeCell.m; sourceTree = "<group>"; };
 		7D2B23F71C3A18DF009A74A8 /* SSJBillingChargeCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeCellItem.h; sourceTree = "<group>"; };
 		7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeCellItem.m; sourceTree = "<group>"; };
+		7D2B23FB1C3A1B63009A74A8 /* SSJBillingChargeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeHelper.h; sourceTree = "<group>"; };
+		7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeHelper.m; sourceTree = "<group>"; };
 		7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchYearControl.h; sourceTree = "<group>"; };
 		7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchYearControl.m; sourceTree = "<group>"; };
 		7D6AAB541C310D330007C0A3 /* SSJReportFormsPercentCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircle.h; sourceTree = "<group>"; };
@@ -386,6 +389,7 @@
 		7D2B23ED1C3A11EC009A74A8 /* BillingCharge */ = {
 			isa = PBXGroup;
 			children = (
+				7D2B23FA1C3A1B4C009A74A8 /* Helper */,
 				7D2B23EE1C3A11EC009A74A8 /* Controller */,
 				7D2B23EF1C3A11EC009A74A8 /* Model */,
 				7D2B23F01C3A11EC009A74A8 /* View */,
@@ -418,6 +422,15 @@
 				7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		7D2B23FA1C3A1B4C009A74A8 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				7D2B23FB1C3A1B63009A74A8 /* SSJBillingChargeHelper.h */,
+				7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		7D6AAB4E1C30EC1F0007C0A3 /* Model */ = {
@@ -1457,6 +1470,7 @@
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
 				BD0433BF1C1AA3520051E7AB /* SSJFinancingHomeViewController.m in Sources */,
 				7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */,
+				7D2B23FD1C3A1B63009A74A8 /* SSJBillingChargeHelper.m in Sources */,
 				BD0432F71C1A77BB0051E7AB /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */,
 				7D99D4621C355130006EB113 /* SSJReportFormsSurplusView.m in Sources */,

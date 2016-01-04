@@ -10,4 +10,13 @@
 
 @implementation SSJBillingChargeCellItem
 
+- (id)copyWithZone:(NSZone *)zone {
+    SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+    item.imageName = self.imageName;
+    item.typeName = self.typeName;
+    item.money = self.money;
+    item.ID = self.ID;
+    return item;
+}
+
 @end

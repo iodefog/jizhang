@@ -19,4 +19,7 @@
 // 收支金额
 @property (nonatomic, copy) NSString *money;
 
+// 流水id
+@property (nonatomic, copy) NSString *ID;
+
 @end
