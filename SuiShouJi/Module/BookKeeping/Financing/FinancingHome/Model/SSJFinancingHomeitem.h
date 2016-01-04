@@ -27,4 +27,8 @@
 
 //账户余额
 @property (nonatomic) double fundingAmount;
+
+//是否是添加按钮
+@property (nonatomic) BOOL isAddOrNot;
+
 @end

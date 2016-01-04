@@ -78,9 +78,13 @@
     self.fundingIcon.image = [UIImage imageNamed:_item.fundingIcon];
     self.fundingNameLabel.text = _item.fundingName;
     [self.fundingNameLabel sizeToFit];
-    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
+    if (item.isAddOrNot == NO) {
+        self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",_item.fundingAmount];
         [self.fundingBalanceLabel sizeToFit];
+    }else{
+        self.fundingBalanceLabel.hidden = YES;
     }
 }
+
 @end
