@@ -1476,11 +1476,8 @@
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
-<<<<<<< HEAD
 				BD7BC8351C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m in Sources */,
-=======
 				7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */,
->>>>>>> 4f982a28347a4c20a657e2c4ae347acf8a90a467
 				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,
 				7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
