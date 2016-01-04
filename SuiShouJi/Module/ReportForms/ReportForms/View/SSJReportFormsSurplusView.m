@@ -96,19 +96,26 @@
 }
 
 - (void)setIncome:(double)income pay:(double)pay {
+    if (self.income == income && self.pay == pay) {
+        return;
+    }
+    
     if (self.income != income) {
         self.income = income;
         self.incomeValueLab.text = [[NSString stringWithFormat:@"%.2f",income] ssj_moneyDisplayFormat];
         [self.incomeValueLab sizeToFit];
-        [self setNeedsLayout];
     }
     
     if (self.pay != pay) {
         self.pay = pay;
         self.payValueLab.text = [[NSString stringWithFormat:@"%.2f",pay] ssj_moneyDisplayFormat];
         [self.payValueLab sizeToFit];
-        [self setNeedsLayout];
     }
+    
+    self.sumValueLab.text = [[NSString stringWithFormat:@"%.2f",(self.income - self.pay)] ssj_moneyDisplayFormat];
+    [self.sumValueLab sizeToFit];
+    
+    [self setNeedsLayout];
 }
 
 - (UILabel *)sumTitleLab {
