@@ -8,11 +8,18 @@
 
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingDetailHeader.h"
+#import "SSJFundingDetailHelper.h"
+#import "SSJBillingChargeCell.h"
+#import "SSJBillingChargeHeaderView.h"
 
 #import "FMDB.h"
 
+static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
+static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID";
+
 @interface SSJFundingDetailsViewController ()
 @property (nonatomic,strong) SSJFundingDetailHeader *header;
+@property (nonatomic, strong) NSArray *datas;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -22,7 +29,6 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-
     }
     return self;
 }
@@ -30,8 +36,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = self.item.fundingName;
+    self.tableView.rowHeight = 55;
+    self.tableView.sectionHeaderHeight = 40;
+    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kFundingDetailCellID];
+    [self.tableView registerClass:[SSJBillingChargeHeaderView class] forHeaderFooterViewReuseIdentifier:kFundingDetailHeaderViewID];
     self.tableView.tableHeaderView = self.header;
     [self getTotalIcomeAndExpence];
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
+        self.datas = data;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -39,6 +54,33 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [self.datas count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
+    NSArray *datas = sectionInfo[SSJFundingDetailRecordKey];
+    return [datas count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
+    NSArray *datas = sectionInfo[SSJFundingDetailRecordKey];
+    [cell setCellItem:[datas ssj_safeObjectAtIndex:indexPath.row]];
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
+    SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingDetailHeaderViewID];
+    headerView.textLabel.text = sectionInfo[SSJFundingDetailDateKey];
+    return headerView;
 }
 
 #pragma mark - Getter
