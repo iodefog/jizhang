@@ -8,7 +8,7 @@
 
 
 #import "SSJFundingDetailHelper.h"
-#import "SSJFundingDetailItem.h"
+#import "SSJBillingChargeCellItem.h"
 #import "SSJDatabaseQueue.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
@@ -58,10 +58,11 @@ NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
         NSCalendar *calendar = [NSCalendar currentCalendar];
         
         while ([resultSet next]) {
-            SSJFundingDetailItem *item = [[SSJFundingDetailItem alloc] init];
-            item.fundingIcon = [resultSet stringForColumn:@"CCOIN"];
-            item.fundingName = [resultSet stringForColumn:@"CNAME"];
+            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
+            item.ID = [resultSet stringForColumn:@"ICHARGEID"];
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             if ([tempDate isEqualToString:billDate]) {
                 NSMutableArray *items = subDic[SSJFundingDetailRecordKey];
