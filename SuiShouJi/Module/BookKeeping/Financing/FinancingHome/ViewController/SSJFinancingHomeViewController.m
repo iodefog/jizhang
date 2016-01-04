@@ -79,10 +79,6 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJFinancingHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FinancingHomeCollectionViewCell" forIndexPath:indexPath];
     cell.item = (SSJFinancingHomeitem*)[self.items objectAtIndex:indexPath.row];
-    if (indexPath.row == [collectionView numberOfItemsInSection:0])
-    {
-        cell.fundingBalanceLabel.hidden = YES;
-    }
     return cell;
 }
 
@@ -177,11 +173,13 @@
         item.fundingName = [rs stringForColumn:@"CACCTNAME"];
         item.fundingParent = [rs stringForColumn:@"CPARENT"];
         item.fundingAmount = [rs doubleForColumn:@"IBALANCE"];
+        item.isAddOrNot = NO;
         [self.items addObject:item];
     }
     SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
     item.fundingName = @"添加资金账户";
     item.fundingColor = @"cccccc";
+    item.isAddOrNot = YES;
     [self.items addObject:item];
     _profitAmount = [db doubleForQuery:@"SELECT SUM(IBALANCE) FROM BK_FUNS_ACCT"];
     _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];

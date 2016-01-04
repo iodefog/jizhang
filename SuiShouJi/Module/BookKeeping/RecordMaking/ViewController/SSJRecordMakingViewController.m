@@ -571,6 +571,10 @@
     [db close];
 }
 
+-(void)addNewType{
+    [self.categoryListView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -108,6 +108,8 @@
 		BD7BC8361C3A1A0F001DE5D8 /* SSJNewFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8321C3A1A0F001DE5D8 /* SSJNewFundingViewController.m */; };
 		BD7BC83E1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC83D1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m */; };
 		BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8401C3A2633001DE5D8 /* SSJFundingItem.m */; };
+		BD7BC8481C3A63A5001DE5D8 /* SSJFundingDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8471C3A63A5001DE5D8 /* SSJFundingDetailItem.m */; };
+		BD7BC84B1C3A6716001DE5D8 /* SSJFundingDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC84A1C3A6716001DE5D8 /* SSJFundingDetailHelper.m */; };
 		BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */; };
 		BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
@@ -331,6 +333,10 @@
 		BD7BC83D1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailsViewController.m; sourceTree = "<group>"; };
 		BD7BC83F1C3A2633001DE5D8 /* SSJFundingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingItem.h; sourceTree = "<group>"; };
 		BD7BC8401C3A2633001DE5D8 /* SSJFundingItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingItem.m; sourceTree = "<group>"; };
+		BD7BC8461C3A63A5001DE5D8 /* SSJFundingDetailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailItem.h; sourceTree = "<group>"; };
+		BD7BC8471C3A63A5001DE5D8 /* SSJFundingDetailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailItem.m; sourceTree = "<group>"; };
+		BD7BC8491C3A6716001DE5D8 /* SSJFundingDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailHelper.h; sourceTree = "<group>"; };
+		BD7BC84A1C3A6716001DE5D8 /* SSJFundingDetailHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailHelper.m; sourceTree = "<group>"; };
 		BD8FD8291C3266CD00B7AABA /* SSJRecordMakingCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingCategoryItem.h; sourceTree = "<group>"; };
 		BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingCategoryItem.m; sourceTree = "<group>"; };
 		BD8FD8321C34DA1F00B7AABA /* SSJADDNewTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJADDNewTypeViewController.h; sourceTree = "<group>"; };
@@ -1190,6 +1196,7 @@
 		BD7BC8371C3A1DC7001DE5D8 /* FundingDetails */ = {
 			isa = PBXGroup;
 			children = (
+				BD7BC8421C3A60DF001DE5D8 /* Helper */,
 				BD7BC8381C3A1DC7001DE5D8 /* Model */,
 				BD7BC8391C3A1DC7001DE5D8 /* Network */,
 				BD7BC83A1C3A1DC7001DE5D8 /* View */,
@@ -1201,6 +1208,8 @@
 		BD7BC8381C3A1DC7001DE5D8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BD7BC8461C3A63A5001DE5D8 /* SSJFundingDetailItem.h */,
+				BD7BC8471C3A63A5001DE5D8 /* SSJFundingDetailItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1226,6 +1235,15 @@
 				BD7BC83D1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		BD7BC8421C3A60DF001DE5D8 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				BD7BC8491C3A6716001DE5D8 /* SSJFundingDetailHelper.h */,
+				BD7BC84A1C3A6716001DE5D8 /* SSJFundingDetailHelper.m */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		BDC01FF01C2D92E3008B1F75 /* CDAutoHideMessageHUD */ = {
@@ -1519,6 +1537,7 @@
 				BD7BC83E1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m in Sources */,
 				BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */,
 				BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */,
+				BD7BC8481C3A63A5001DE5D8 /* SSJFundingDetailItem.m in Sources */,
 				BD0433261C1A78B40051E7AB /* SSJScrollViewAddition.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
 				7D2B24001C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m in Sources */,
@@ -1549,6 +1568,7 @@
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
 				BD7BC8351C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m in Sources */,
+				BD7BC84B1C3A6716001DE5D8 /* SSJFundingDetailHelper.m in Sources */,
 				7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */,
 				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,
 				7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */,
