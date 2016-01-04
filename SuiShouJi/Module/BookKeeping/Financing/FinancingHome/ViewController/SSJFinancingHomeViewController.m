@@ -9,7 +9,7 @@
 #import "SSJFinancingHomeViewController.h"
 #import "SSJFinancingHomeCollectionViewCell.h"
 #import "SSJFinancingHomeitem.h"
-
+#import "SSJFundingDetailsViewController.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -42,10 +42,15 @@
     [self.view addSubview:self.collectionView];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+}
 
 -(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 66);
-    self.headerView.leftTop = CGPointMake(0, 74);
+    self.headerView.leftTop = CGPointMake(0, 10);
     [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
     [_headerView ssj_setBorderStyle:SSJBorderStyleBottom];
     [_headerView ssj_setBorderWidth:1];
@@ -90,6 +95,11 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJFinancingHomeCollectionViewCell *cell = (SSJFinancingHomeCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    if (![cell.item.fundingName isEqualToString:@"添加资金账户"]) {
+        SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
+        fundingDetailVC.item = cell.item;
+        [self.navigationController pushViewController:fundingDetailVC animated:YES];
+    }
 }
 
 #pragma mark - Getter
