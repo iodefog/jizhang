@@ -10,7 +10,7 @@
 
 @implementation NSString (MoneyDisplayFormat)
 
--(NSString *)moneyDisplayFormat{
+-(NSString *)ssj_moneyDisplayFormat{
     if (self!=nil && self.length>0) {
         if ([self doubleValue]>=1000) {
             NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc]init];

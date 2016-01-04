@@ -15,6 +15,6 @@
  *
  *  @return (NSString *)格式化后的金额字符串
  */
--(NSString *)moneyDisplayFormat;
+-(NSString *)ssj_moneyDisplayFormat;
 
 @end

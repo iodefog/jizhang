@@ -10,14 +10,19 @@
 
 @interface SSJReportFormsItem : SSJBaseItem
 
+// 比例
 @property (nonatomic) double scale;
 
+// 金额
 @property (nonatomic) double money;
 
+// 图片名称
 @property (nonatomic, copy) NSString *imageName;
 
+// 收支类型名称
 @property (nonatomic, copy) NSString *incomeOrPayName;
 
+// 颜色值
 @property (nonatomic, copy) NSString *colorValue;
 
 @end

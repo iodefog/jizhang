@@ -11,8 +11,8 @@
 #import "SSJReportFormsPercentCircle.h"
 #import "SSJReportFormsSwitchYearControl.h"
 #import "SCYPageControl.h"
+#import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
-
 #import "SSJReportFormsUtil.h"
 
 static const CGFloat kHeaderFirstPartHeight = 49;
@@ -27,48 +27,72 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 @interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, SCYUnlimitedScrollViewDataSource, SCYUnlimitedScrollViewDelegate, SSJReportFormsPercentCircleDataSource>
 
+//  收入、支出、盈余切换控件
 @property (nonatomic, strong) UISegmentedControl *segmentControl;
 
+//  切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsSwitchYearControl *switchYearControl;
 
+//  装载年份、月份收支图表的滚动视图
 @property (nonatomic, strong) SCYUnlimitedScrollView *scrollView;
 
+//  月份收支图表
 @property (nonatomic, strong) SSJReportFormsPercentCircle *monthCircleView;
 
+//  年份收支图表
 @property (nonatomic, strong) SSJReportFormsPercentCircle *yearCircleView;
 
+//
 @property (nonatomic, strong) SCYPageControl *pageControl;
 
+//  盈余金额视图
+@property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
+
+//  装载segmentControl、switchYearControl、scrollView的头部视图
 @property (nonatomic, strong) UIView *headerView;
 
+//
 @property (nonatomic, strong) UITableView *tableView;
 
+//  数据源
 @property (nonatomic, strong) NSArray *datas;
+
+//  计算年份、月份的工具
+@property (nonatomic, strong) SSJReportFormsCalendarUtil *calendarUtil;
 
 @end
 
 @implementation SSJReportFormsViewController
 
 #pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     [self.view addSubview:self.tableView];
+    self.tableView.tableHeaderView = self.headerView;
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
+    [self updateSurplusViewTitle];
+    [self updateSwithDateControlTitle];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-//    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self reloadDatas];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     
-    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
-    if (self.scrollView.currentIndex == 0) {
-        [self.monthCircleView reloadData];
-    } else if (self.scrollView.currentIndex == 1) {
-        [self.yearCircleView reloadData];
-    }
-    [self.tableView reloadData];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -77,7 +101,14 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.datas.count;
+    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    
+    if ([selectedTitle isEqualToString:kSegmentTitlePay]
+        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
+        return self.datas.count;
+    }
+    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,6 +118,10 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 }
 
 #pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
 
 #pragma mark - SCYUnlimitedScrollViewDataSource
 - (NSUInteger)numberOfPagesInScrollView:(SCYUnlimitedScrollView *)scrollView {
@@ -105,7 +140,9 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 #pragma mark - SCYUnlimitedScrollViewDelegate
 - (void)scrollView:(SCYUnlimitedScrollView *)scrollView didScrollAtPageIndex:(NSUInteger)index {
-    
+    [self reloadDatas];
+    [self updateSurplusViewTitle];
+    [self updateSwithDateControlTitle];
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -116,13 +153,32 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (SSJReportFormsPercentCircleItem *)percentCircle:(SSJReportFormsPercentCircle *)circle itemForComponentAtIndex:(NSUInteger)index {
     
     if (self.datas.count > index) {
+        
         SSJReportFormsItem *model = self.datas[index];
         
-        SSJReportFormsPercentCircleItem *circleItem = [[SSJReportFormsPercentCircleItem alloc] init];
-        circleItem.scale = model.scale;
-        circleItem.image = [UIImage imageNamed:model.imageName];
-        circleItem.color = [UIColor ssj_colorWithHex:model.colorValue];
-        return circleItem;
+        NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+        
+        if ([selectedTitle isEqualToString:kSegmentTitlePay]
+            || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
+            //  收入、支出
+            SSJReportFormsPercentCircleItem *circleItem = [[SSJReportFormsPercentCircleItem alloc] init];
+            circleItem.scale = model.scale;
+            circleItem.image = [UIImage imageNamed:model.imageName];
+            circleItem.color = [UIColor ssj_colorWithHex:model.colorValue];
+            circleItem.identifier = model.incomeOrPayName;
+            return circleItem;
+            
+        } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+            //  盈余，盈余最多只有收入、支出两种类型
+            if (index <= 1) {
+                SSJReportFormsPercentCircleItem *circleItem = [[SSJReportFormsPercentCircleItem alloc] init];
+                circleItem.scale = model.scale;
+                circleItem.image = [UIImage imageNamed:model.imageName];
+                circleItem.color = [UIColor ssj_colorWithHex:model.colorValue];
+                circleItem.identifier = index == 0 ? @"支出" : @"收入";
+                return circleItem;
+            }
+        }
     }
     
     return nil;
@@ -130,20 +186,23 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 #pragma mark - Event
 - (void)segmentControlValueDidChange {
-    self.datas = [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] inYear:@"2015"];
+    [self reloadDatas];
+    [self updateSwithDateControlTitle];
     
-    [self.tableView reloadData];
-    if (self.scrollView.currentIndex == 0) {
-        [self.monthCircleView reloadData];
-    } else if (self.scrollView.currentIndex == 1) {
-        [self.yearCircleView reloadData];
+    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    if ([selectedTitle isEqualToString:kSegmentTitlePay]
+        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
+        self.tableView.tableFooterView = nil;
+    } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+        self.tableView.tableFooterView = self.surplusView;
     }
 }
 
 #pragma mark - Private
+//  返回当前收支类型
 - (SSJReportFormsIncomeOrPayType)currentType {
     NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
-    
+
     if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
         return SSJReportFormsIncomeOrPayTypePay;
     } else if ([selectedTitle isEqualToString:kSegmentTitleIncome]) {
@@ -155,13 +214,86 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     }
 }
 
+//  更新切换年、月控件标题
+- (void)updateSwithDateControlTitle {
+    NSMutableString *title = [NSMutableString string];
+    
+    if (self.scrollView.currentIndex == 0) {
+        [title appendFormat:@"%d月",(int)self.calendarUtil.month];
+    } else if (self.scrollView.currentIndex == 1) {
+        [title appendFormat:@"%d年",(int)self.calendarUtil.year];
+    }
+    
+    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
+        [title appendString:@"支出明细图表"];
+    } else if ([selectedTitle isEqualToString:kSegmentTitleIncome]) {
+        [title appendString:@"收入明细图表"];
+    } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+        [title appendString:@"收支盈余明细图表"];
+    }
+    
+    self.switchYearControl.title = title;
+}
+
+- (void)updateSurplusViewTitle {
+    if (self.scrollView.currentIndex == 0) {
+        [self.surplusView setTitle:[NSString stringWithFormat:@"%d月盈余",(int)self.calendarUtil.month]];
+    } else if (self.scrollView.currentIndex == 1) {
+        [self.surplusView setTitle:[NSString stringWithFormat:@"%d年盈余",(int)self.calendarUtil.year]];
+    }
+}
+
+//  重新加载数据
+- (void)reloadDatas {
+    if (self.scrollView.currentIndex == 0) {
+        
+        [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:self.calendarUtil.year month:self.calendarUtil.month success:^(NSArray<SSJReportFormsItem *> *result) {
+            
+            self.datas = result;
+            [self.tableView reloadData];
+            [self.monthCircleView reloadData];
+            
+            NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+            if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+                
+                double income = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:0]).money;
+                double pay = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:1]).money;
+                [self.surplusView setIncome:income pay:pay];
+            }
+            
+        } failure:^(NSError *error) {
+            
+        }];
+        
+    } else if (self.scrollView.currentIndex == 1) {
+        
+        [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:self.calendarUtil.year month:0 success:^(NSArray<SSJReportFormsItem *> *result) {
+            self.datas = result;
+            [self.tableView reloadData];
+            [self.yearCircleView reloadData];
+            
+            NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+            if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+                
+                double income = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:0]).money;
+                double pay = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:1]).money;
+                [self.surplusView setIncome:income pay:pay];
+            }
+        } failure:^(NSError *error) {
+            
+        }];
+    }
+}
+
 #pragma mark - Getter
 - (UISegmentedControl *)segmentControl {
     if (!_segmentControl) {
         _segmentControl = [[UISegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
         _segmentControl.selectedSegmentIndex = 0;
         _segmentControl.center = CGPointMake(self.headerView.width * 0.5, kHeaderFirstPartHeight * 0.5);
-        _segmentControl.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+        _segmentControl.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
+        [_segmentControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]} forState:UIControlStateNormal];
         [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
     }
     return _segmentControl;
@@ -169,14 +301,26 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (SSJReportFormsSwitchYearControl *)switchYearControl {
     if (!_switchYearControl) {
+        __weak typeof(self) weakSelf = self;
         _switchYearControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight, self.headerView.width, kHeaderSecondPartHeight)];
-        _switchYearControl.title = @"2015年收入明细图表";
         _switchYearControl.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
         _switchYearControl.preAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
-            
+            if (weakSelf.scrollView.currentIndex == 0) {
+                [weakSelf.calendarUtil preMonth];
+            } else if (weakSelf.scrollView.currentIndex == 1) {
+                [weakSelf.calendarUtil preYear];
+            }
+            [weakSelf updateSwithDateControlTitle];
+            [weakSelf reloadDatas];
         };
         _switchYearControl.nextAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
-            
+            if (weakSelf.scrollView.currentIndex == 0) {
+                [weakSelf.calendarUtil nextMonth];
+            } else if (weakSelf.scrollView.currentIndex == 1) {
+                [weakSelf.calendarUtil nextYear];
+            }
+            [weakSelf updateSwithDateControlTitle];
+            [weakSelf reloadDatas];
         };
     }
     return _switchYearControl;
@@ -206,7 +350,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _yearCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
         _yearCircleView.circleInsets = UIEdgeInsetsMake(30, 80, 60, 80);
         _yearCircleView.circleWidth = 39;
-        _monthCircleView.dataSource = self;
+        _yearCircleView.dataSource = self;
     }
     return _yearCircleView;
 }
@@ -220,6 +364,14 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _pageControl.spaceBetweenPages = 10;
     }
     return _pageControl;
+}
+
+- (SSJReportFormsSurplusView *)surplusView {
+    if (!_surplusView) {
+        _surplusView = [[SSJReportFormsSurplusView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 185)];
+        _surplusView.backgroundColor = [UIColor ssj_colorWithHex:@"#f2f6f5"];
+    }
+    return _surplusView;
 }
 
 - (UIView *)headerView {
@@ -236,10 +388,14 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-        _tableView.tableHeaderView = self.headerView;
+        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.rowHeight = 55;
+        _tableView.sectionHeaderHeight = 0;
+        _tableView.sectionFooterHeight = 0;
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableView;
 }
