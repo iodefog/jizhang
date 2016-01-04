@@ -166,6 +166,11 @@
     [self.collectionView reloadData];
 }
 
+-(void)setPage:(int)page{
+    _page = page;
+    [self getDateFromDB];
+    [self.collectionView reloadData];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

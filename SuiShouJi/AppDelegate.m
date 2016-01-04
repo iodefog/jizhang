@@ -11,6 +11,7 @@
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
+#import "SSJNewFundingViewController.h"
 #import "MobClick.h"
 #import "FMDB.h"
 
@@ -75,7 +76,6 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@""];
-    
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#ea5559"];
@@ -87,20 +87,23 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     NSString *dbDocumentPath = SSJSQLitePath();
     if (![[NSFileManager defaultManager] fileExistsAtPath:dbDocumentPath]) {
         NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];
-        
         NSError *error = nil;
         if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
             SSJPRINT(@"move database error:%@",[error localizedDescription]);
         }
+        FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()] ;
+        if (![db open]) {
+            NSLog(@"Could not open db.");
+            return ;
+        }
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"现金账户" , @"" , @"1" , @"#fe8a65" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"储蓄卡余额" , @"" , @"2" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"信用卡透支" , @"" , @"2" , @"#8dc4fa" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"支付宝余额" , @"" , @"6" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
+        [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> ?",SSJUSERID(),[NSNumber numberWithDouble:0.00] , @"root"];
     }
-    
-//    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-//    NSLog(@"%@",SSJSQLitePath());
-//    if (![db open]) {
-//        return;
-//    }
-    
-//    //  用户表 CUSERID:用户唯一序列id CPWD:登录密码 CFPWD:资金密码 CNICKID:昵称 CMOBILENO:手机号 CREALNAME:用户真实姓名 CIDCARD:身份证号 CICONS:头像
+
+//  用户表 CUSERID:用户唯一序列id CPWD:登录密码 CFPWD:资金密码 CNICKID:昵称 CMOBILENO:手机号 CREALNAME:用户真实姓名 CIDCARD:身份证号 CICONS:头像
 //    [db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER (CUSERID text primary key, CPWD text, CFPWD text, CNICKID text, CMOBILENO text, CREALNAME text, CIDCARD text, CICONS text)"];
 //    
 //    //  用户收支类型中间表 CUSERID:用户ID CBILLID:收支类型ID ISTATE:是否启用 0启用  1 禁用

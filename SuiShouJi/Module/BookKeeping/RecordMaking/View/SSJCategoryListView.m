@@ -175,7 +175,7 @@
             _page = count / 8 + 1;
         }
     }else{
-        if (count % 8 == 0) {
+        if (count % 12 == 0) {
             _page = count / 12;
         }else{
             _page = count / 12 + 1;

@@ -53,6 +53,7 @@
     int _decimalCount;
     NSString *_categoryID;
     NSString *_defualtColor;
+    NSString *_defualtID;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -76,7 +77,7 @@
     if (_selectedDay == 0) {
         self.selectedDay = _currentDay;
     }
-    [self getDefualtColor];
+    [self getDefualtColorAndDefualtId];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryImage];
@@ -414,13 +415,13 @@
 -(void)settitleSegment{
     NSArray *segmentArray = @[@"支出",@"收入"];
     _titleSegment = [[UISegmentedControl alloc]initWithItems:segmentArray];
+    _titleSegment.selectedSegmentIndex = 0;
     _titleSegment.size = CGSizeMake(115, 30);
     _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
     NSDictionary *dictForNormal = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex:@"a7a7a7"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForNormal forState:UIControlStateNormal];
     NSDictionary *dictForSelected = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForSelected forState:UIControlStateSelected];
-    _titleSegment.selectedSegmentIndex = 0;
     [_titleSegment addTarget: self action: @selector(segmentPressed:)forControlEvents: UIControlEventValueChanged];
     self.navigationItem.titleView = _titleSegment;
 }
@@ -448,6 +449,9 @@
     if (![db open]) {
         NSLog(@"Could not open db");
         return ;
+    }
+    if (!_categoryID) {
+        _categoryID = _defualtID;
     }
     NSString *chargeID = SSJUUID();
     NSString *userID = SSJUSERID();
@@ -513,20 +517,21 @@
 -(void)segmentPressed:(id)sender{
     self.categoryListView.incomeOrExpence = !self.titleSegment.selectedSegmentIndex;
     self.categoryListView.scrollView.contentOffset = CGPointMake(0, 0);
-    [self getDefualtColor];
+    [self getDefualtColorAndDefualtId];
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     [self.categoryListView reloadData];
 }
 
--(void)getDefualtColor{
+-(void)getDefualtColorAndDefualtId{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT CCOLOR FROM BK_BILL_TYPE WHERE ITYPE = 0 AND ISTATE = ? LIMIT 1",[NSNumber numberWithDouble:self.titleSegment.selectedSegmentIndex]];
+    FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!self.titleSegment.selectedSegmentIndex]];
     while([rs next]) {
         _defualtColor = [rs stringForColumn:@"CCOLOR"];
+        _defualtID = [rs stringForColumn:@"ID"];
     }
     [db close];
 }

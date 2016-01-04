@@ -24,7 +24,9 @@
         [self.contentView addSubview:self.categoryImage];
         [self.contentView addSubview:self.categoryName];
         [self addSubview:self.editButton];
-        [self addLongPressGesture];
+        if (![self.item.categoryTitle isEqualToString:@"添加"]) {
+            [self addLongPressGesture];
+        }
     }
     return self;
 }
@@ -80,8 +82,8 @@
 
 -(void)addLongPressGesture{
     UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
-    longPressGr.minimumPressDuration = 1.0;
-    [self addGestureRecognizer:longPressGr];
+        longPressGr.minimumPressDuration = 1.0;
+        [self addGestureRecognizer:longPressGr];
 }
 
 -(void)longPressToDo:(UILongPressGestureRecognizer *)gesture{
@@ -90,7 +92,7 @@
 
 -(void)setEditeModel:(BOOL)EditeModel{
     _EditeModel = EditeModel;
-    if (_EditeModel == YES) {
+    if (_EditeModel == YES && ![self.item.categoryTitle isEqualToString:@"添加"]) {
         self.editButton.hidden = NO;
     }else{
         self.editButton.hidden = YES;
