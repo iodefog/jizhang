@@ -25,4 +25,7 @@
 // 颜色值
 @property (nonatomic, copy) NSString *colorValue;
 
+// 收支类型ID
+@property (nonatomic, copy) NSString *ID;
+
 @end

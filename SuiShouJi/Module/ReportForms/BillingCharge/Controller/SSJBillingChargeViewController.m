@@ -7,9 +7,12 @@
 //
 
 #import "SSJBillingChargeViewController.h"
+#import "SSJBillingChargeHeaderView.h"
 #import "SSJBillingChargeCell.h"
+#import "SSJBillingChargeHelper.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
+static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
 
 @interface SSJBillingChargeViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -35,6 +38,22 @@ static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
     
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellID];
+    [self.tableView registerClass:[SSJBillingChargeHeaderView class] forHeaderFooterViewReuseIdentifier:kBillingChargeHeaderViewID];
+    
+    [SSJBillingChargeHelper queryDataWithBillTypeID:self.billTypeID InYear:self.year month:self.month success:^(NSArray<NSDictionary *> *data) {
+        self.datas = data;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                      NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    self.navigationController.navigationBar.barTintColor = [UIColor ssj_colorWithHex:@"#eda032"];
 }
 
 #pragma mark - UITableViewDataSource
@@ -44,16 +63,28 @@ static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
-    return [sectionInfo count];
+    NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
+    return [datas count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:kBillingChargeCellID forIndexPath:indexPath];
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
+    NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
+    [cell setCellItem:[datas ssj_safeObjectAtIndex:indexPath.row]];
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
+    
+    SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kBillingChargeHeaderViewID];
+    headerView.textLabel.text = sectionInfo[SSJBillingChargeDateKey];
+    return headerView;
+}
 
+#pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
@@ -64,7 +95,7 @@ static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 40;
-//        [_tableView ssj_clearExtendSeparator];
+        [_tableView ssj_clearExtendSeparator];
         [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];
     }
     return _tableView;
