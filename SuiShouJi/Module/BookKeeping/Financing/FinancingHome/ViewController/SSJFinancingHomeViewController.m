@@ -45,6 +45,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getDateFromDateBase];
+    [self.collectionView reloadData];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -77,6 +79,10 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJFinancingHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FinancingHomeCollectionViewCell" forIndexPath:indexPath];
     cell.item = (SSJFinancingHomeitem*)[self.items objectAtIndex:indexPath.row];
+    if (indexPath.row == [collectionView numberOfItemsInSection:0])
+    {
+        cell.fundingBalanceLabel.hidden = YES;
+    }
     return cell;
 }
 
@@ -150,8 +156,7 @@
         _profitAmountLabel = [[UILabel alloc]init];
         _profitAmountLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _profitAmountLabel.font = [UIFont systemFontOfSize:24];
-        _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
-        [_profitAmountLabel sizeToFit];
+
     }
     return _profitAmountLabel;
 }
@@ -179,6 +184,8 @@
     item.fundingColor = @"cccccc";
     [self.items addObject:item];
     _profitAmount = [db doubleForQuery:@"SELECT SUM(IBALANCE) FROM BK_FUNS_ACCT"];
+    _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
+    [_profitAmountLabel sizeToFit];
 }
 
 - (void)didReceiveMemoryWarning {

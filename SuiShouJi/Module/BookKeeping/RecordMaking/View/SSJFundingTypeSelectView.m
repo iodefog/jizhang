@@ -8,20 +8,26 @@
 
 #import "SSJFundingTypeSelectView.h"
 #import "SSJFundingTypeTableViewCell.h"
+#import "SSJFundingItem.h"
+
+#import "FMDB.h"
 
 @interface SSJFundingTypeSelectView()
 @property (nonatomic,strong) UIView *titleView;
 @property (nonatomic,strong) UILabel *titleLabel;
 @property (nonatomic,strong) UIButton *closeButton;
 @property (nonatomic,strong) UITableView *tableView;
-@property (nonatomic,strong) UIButton *addNewTypeButton;
 @property (nonatomic,strong) UIView *addNewTypeButtonView;
 @end
-@implementation SSJFundingTypeSelectView
+@implementation SSJFundingTypeSelectView{
+    NSMutableArray *_items;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self getDateFromDb];
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
         [self addSubview:self.tableview];
 //        [self addSubview:self.addNewTypeButtonView];
@@ -32,8 +38,6 @@
 
 -(void)layoutSubviews{
     self.tableview.bottom = self.height;
-    self.addNewTypeButton.center = CGPointMake(self.addNewTypeButtonView.width / 2, self.addNewTypeButtonView.height / 2);
-    self.addNewTypeButtonView.bottom = self.height;
     self.titleView.bottom = self.tableview.top;
     self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
     self.closeButton.centerY = self.titleView.height / 2;
@@ -59,13 +63,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self reloadSelectedStatusexceptIndexPath:indexPath];
     if (_fundingTypeSelectBlock) {
-        self.fundingTypeSelectBlock(((SSJFundingTypeTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).fundingTitle.text);
+        self.fundingTypeSelectBlock(((SSJFundingTypeTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).item);
     }
 }
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 4;
+    return _items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -73,6 +77,10 @@
     SSJFundingTypeTableViewCell *FundingTypeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!FundingTypeCell) {
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        FundingTypeCell.item = [_items objectAtIndex:indexPath.row];
+    }
+    if (indexPath.row == 0) {
+        FundingTypeCell.selectedOrNot = YES;
     }
     return FundingTypeCell;
 }
@@ -110,22 +118,6 @@
     return _titleView;
 }
 
--(UIView*)addNewTypeButtonView{
-    if (_addNewTypeButtonView == nil) {
-        _addNewTypeButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 200)];
-        _addNewTypeButtonView.backgroundColor = [UIColor whiteColor];
-        _addNewTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 230, 75)];
-        [_addNewTypeButton setTitle:@"添加新的资金账户" forState:UIControlStateNormal];
-        [_addNewTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"a7a7a7"] forState:UIControlStateNormal];
-        _addNewTypeButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        _addNewTypeButton.backgroundColor = [UIColor whiteColor];
-        _addNewTypeButton.layer.cornerRadius = 3;
-        _addNewTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"a7a7a7"].CGColor;
-        _addNewTypeButton.layer.borderWidth = 1;
-        [_addNewTypeButtonView addSubview:_addNewTypeButton];
-    }
-    return _addNewTypeButtonView;
-}
 
 #pragma mark - private
 -(void)closeButtonClicked:(UIButton*)button{
@@ -141,6 +133,30 @@
             ((SSJFundingTypeTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath]).selectedOrNot = NO;
         }
     }
+}
+
+-(void)getDateFromDb{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID",@"root"];
+    _items = [[NSMutableArray alloc]init];
+    while ([rs next]) {
+        SSJFundingItem *item = [[SSJFundingItem alloc]init];
+        item.fundingColor = [rs stringForColumn:@"CCOLOR"];
+        item.fundingIcon = [rs stringForColumn:@"CICOIN"];
+        item.fundingID = [rs stringForColumn:@"CFUNDID"];
+        item.fundingName = [rs stringForColumn:@"CACCTNAME"];
+        item.fundingParent = [rs stringForColumn:@"CPARENT"];
+        item.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+        [_items addObject:item];
+    }
+    SSJFundingItem *item = [[SSJFundingItem alloc]init];
+    item.fundingName = @"添加资金新的账户";
+    item.fundingIcon = @"";
+    [_items addObject:item];
 }
 
 /*
