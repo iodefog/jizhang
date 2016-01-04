@@ -21,7 +21,7 @@ extern NSString *const SSJBillingChargeRecordKey;
  *
  *  @param inYear    查询的年份，必须大于0
  *  @param month     查询的月份，如果月份传0，则查询整年的数据，最大不能超过12
- *  @param success   查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型
+ *  @param success   查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
  *  @param failure   查询失败的回调
  */
 + (void)queryDataWithBillTypeID:(NSString *)ID

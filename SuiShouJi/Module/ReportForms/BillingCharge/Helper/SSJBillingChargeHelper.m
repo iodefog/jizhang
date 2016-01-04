@@ -36,6 +36,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE, b.CNAME, b.CCOIN from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? order by a.CBILLDATE desc", ID, dateStr];
+        
         if (!resultSet) {
             SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
