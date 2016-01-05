@@ -14,6 +14,10 @@ extern NSString *const SSJFundingDetailDateKey;
 //  对应记账流水模型的key
 extern NSString *const SSJFundingDetailRecordKey;
 
+//  对应总和的key
+extern NSString *const SSJFundingDetailSumKey;
+
+
 @interface SSJFundingDetailHelper : NSObject
 
 /**

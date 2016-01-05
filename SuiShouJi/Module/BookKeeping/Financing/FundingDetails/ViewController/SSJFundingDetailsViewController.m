@@ -10,7 +10,8 @@
 #import "SSJFundingDetailHeader.h"
 #import "SSJFundingDetailHelper.h"
 #import "SSJBillingChargeCell.h"
-#import "SSJBillingChargeHeaderView.h"
+#import "SSJFundingDetailDateHeader.h"
+#import "SSJReportFormsUtil.h"
 
 #import "FMDB.h"
 
@@ -28,7 +29,9 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
+    {
+        
     }
     return self;
 }
@@ -39,7 +42,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     self.tableView.rowHeight = 55;
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kFundingDetailCellID];
-    [self.tableView registerClass:[SSJBillingChargeHeaderView class] forHeaderFooterViewReuseIdentifier:kFundingDetailHeaderViewID];
+    [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:kFundingDetailHeaderViewID];
     self.tableView.tableHeaderView = self.header;
     [self getTotalIcomeAndExpence];
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
@@ -78,8 +81,11 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
-    SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingDetailHeaderViewID];
-    headerView.textLabel.text = sectionInfo[SSJFundingDetailDateKey];
+    SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingDetailHeaderViewID];
+    headerView.dateLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailDateKey]];
+    [headerView.dateLabel sizeToFit];
+    headerView.balanceLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailSumKey]];
+    [headerView.balanceLabel sizeToFit];
     return headerView;
 }
 
@@ -108,7 +114,6 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFID = ?",[NSNumber numberWithInt:1],self.item.fundingID];
     self.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
     [self.header.totalExpenceLabel sizeToFit];
-
 }
 
 - (void)didReceiveMemoryWarning {
