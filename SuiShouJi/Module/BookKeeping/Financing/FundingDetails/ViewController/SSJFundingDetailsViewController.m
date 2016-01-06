@@ -67,6 +67,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
         [self.tableView reloadData];
     } failure:^(NSError *error) {
     }];
+    [self getTotalIcomeAndExpence];
     [self.tableView reloadData];
 }
 
@@ -137,6 +138,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFID = ?",[NSNumber numberWithInt:1],self.item.fundingID];
     self.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
     [self.header.totalExpenceLabel sizeToFit];
+    self.title = [db stringForQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];
 }
 
 -(void)rightButtonClicked:(id)sender{

@@ -19,6 +19,8 @@
     UITextField *_amountTextField;
     UITextField *_memoTextField;
     UITextField *_nameTextField;
+    NSString *_selectParent;
+    NSString *_selectColor;
 }
 
 #pragma mark - Lifecycle
@@ -33,6 +35,8 @@
     [super viewDidLoad];
     self.title = self.item.fundingName;
     _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"编辑账户卡片"];
+    _selectColor = self.item.fundingColor;
+    _selectParent = self.item.fundingParent;
     // Do any additional setup after loading the view.
 }
 
@@ -94,13 +98,13 @@
         case 0:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = self.item.fundingName;
+            _nameTextField = NewFundingCell.cellDetail;
         }
             break;
         case 1:{
             _amountTextField = NewFundingCell.cellDetail;
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",self.item.fundingAmount];
-            
             NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeDecimalPad;
             NewFundingCell.cellDetail.delegate = self;
         }
@@ -108,6 +112,7 @@
         case 2:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = self.item.fundingMemo;
+            _memoTextField = NewFundingCell.cellDetail;
         }
             break;
         case 3:{
@@ -160,7 +165,8 @@
     }else if ([_amountTextField.text doubleValue] > self.item.fundingAmount) {
         [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSNumber numberWithDouble:[_amountTextField.text doubleValue] - self.item.fundingAmount] ,[NSNumber numberWithInt:2],self.item.fundingID,@"",[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],@"",@"0",[NSNumber numberWithInt:0],currentDateStr];
     }
-    [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ?  WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],self.item.fundingID,SSJUSERID()];
+    [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? AND CUSERID = ? ",[NSNumber numberWithDouble:[_amountTextField.text doubleValue]] , self.item.fundingID,SSJUSERID()];
+    [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , self.item.fundingID,SSJUSERID()];
 }
 
 -(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{
