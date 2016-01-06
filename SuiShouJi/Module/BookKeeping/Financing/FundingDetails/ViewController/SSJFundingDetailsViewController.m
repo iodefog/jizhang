@@ -12,6 +12,7 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJFundingDetailDateHeader.h"
 #import "SSJReportFormsUtil.h"
+#import "SSJNewFundingViewController.h"
 
 #import "FMDB.h"
 
@@ -21,6 +22,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 @interface SSJFundingDetailsViewController ()
 @property (nonatomic,strong) SSJFundingDetailHeader *header;
 @property (nonatomic, strong) NSArray *datas;
+@property (nonatomic,strong) UIBarButtonItem *rightButton;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -38,6 +40,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = self.rightButton;
     self.title = self.item.fundingName;
     self.tableView.rowHeight = 55;
     self.tableView.sectionHeaderHeight = 40;
@@ -52,11 +55,19 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     }];
 }
 
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getTotalIcomeAndExpence];
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
+        self.datas = data;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+    }];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -72,6 +83,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJFundingDetailRecordKey];
     [cell setCellItem:[datas ssj_safeObjectAtIndex:indexPath.row]];
@@ -84,7 +96,11 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingDetailHeaderViewID];
     headerView.dateLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailDateKey]];
     [headerView.dateLabel sizeToFit];
-    headerView.balanceLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailSumKey]];
+    if ([sectionInfo[SSJFundingDetailSumKey] doubleValue] > 0) {
+        headerView.balanceLabel.text = [NSString stringWithFormat:@"+%@",sectionInfo[SSJFundingDetailSumKey]];
+    }else{
+        headerView.balanceLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailSumKey]];
+    }
     [headerView.balanceLabel sizeToFit];
     return headerView;
 }
@@ -101,6 +117,13 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     return _header;
 }
 
+-(UIBarButtonItem *)rightButton{
+    if (!_rightButton) {
+        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
+    }
+    return _rightButton;
+}
+
 #pragma mark - Private
 -(void)getTotalIcomeAndExpence{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()] ;
@@ -115,6 +138,13 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     self.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
     [self.header.totalExpenceLabel sizeToFit];
 }
+
+-(void)rightButtonClicked:(id)sender{
+    SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+    newFundingVC.item = self.item;
+    [self.navigationController pushViewController:newFundingVC animated:YES];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

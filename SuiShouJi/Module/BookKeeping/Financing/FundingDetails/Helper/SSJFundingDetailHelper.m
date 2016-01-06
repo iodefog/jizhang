@@ -65,9 +65,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.imageName = [resultSet stringForColumn:@"CCOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.incomeOrExpence = [resultSet intForColumn:@"ITYPE"];
-            if (item.incomeOrExpence) {
+            item.money = [resultSet stringForColumn:@"IMONEY"];
+            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%@",[resultSet stringForColumn:@"IMONEY"]];
-            }else{
+            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%@",[resultSet stringForColumn:@"IMONEY"]];
             }
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];

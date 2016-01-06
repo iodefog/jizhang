@@ -60,25 +60,25 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
-    bookKeepingNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    bookKeepingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_accounte_nor"];
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
-    reportFormsNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    reportFormsNavi.tabBarItem.image = [UIImage imageNamed:@"tab_form_nor"];
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
-    financingNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    financingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_founds_nor"];
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
-    moreNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_mine_nor"];
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
-    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#ea5559"];
+    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     self.window.rootViewController = tabBarVC;
 }

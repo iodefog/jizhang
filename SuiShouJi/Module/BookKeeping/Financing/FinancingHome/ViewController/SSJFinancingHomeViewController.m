@@ -173,6 +173,7 @@
         item.fundingName = [rs stringForColumn:@"CACCTNAME"];
         item.fundingParent = [rs stringForColumn:@"CPARENT"];
         item.fundingAmount = [rs doubleForColumn:@"IBALANCE"];
+        item.fundingMemo = [rs stringForColumn:@"CMEMO"];
         item.isAddOrNot = NO;
         [self.items addObject:item];
     }

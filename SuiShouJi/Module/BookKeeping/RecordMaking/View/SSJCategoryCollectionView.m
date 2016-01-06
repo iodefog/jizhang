@@ -61,6 +61,7 @@
             weakSelf.removeFromCategoryListBlock();
         }
     };
+    cell.EditeModel = NO;
     return cell;
 }
 
