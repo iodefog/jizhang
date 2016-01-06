@@ -178,31 +178,6 @@
     return fundingName;
 }
 
--(void)amountChanged{
-    NSArray *arr = [_amountTextField.text componentsSeparatedByString:@"."];
-    
-    if ([_amountTextField.text isEqualToString:@"0."] || [_amountTextField.text isEqualToString:@"."]) {
-        _amountTextField.text = @"0.";
-    }else if (_amountTextField.text.length == 2) {
-        if ([_amountTextField.text floatValue] == 0) {
-            _amountTextField.text = @"0";
-        }else if(arr.count < 2){
-            _amountTextField.text = [NSString stringWithFormat:@"%d",[_amountTextField.text intValue]];
-        }
-    }
-    
-    if (arr.count > 2) {
-        _amountTextField.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
-    }
-    
-    if (arr.count == 2) {
-        NSString * lastStr = arr.lastObject;
-        if (lastStr.length > 2) {
-            _amountTextField.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:2]];
-        }
-    }
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
