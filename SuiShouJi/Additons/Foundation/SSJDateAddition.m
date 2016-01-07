@@ -17,4 +17,16 @@
     return dateString;
 }
 
+- (NSString *)ssj_systemCurrentDateWithFormat:(NSString *)format{
+    NSDate *now = [NSDate date];
+    if (!format || format.length == 0) {
+        format = @"yyyy-MM-dd HH:mm:ss";
+    }
+    NSDateFormatter *tempFormat = [[NSDateFormatter alloc] init];
+    [tempFormat setDateFormat:format];
+    tempFormat.timeZone = [NSTimeZone systemTimeZone];
+    NSString *systemTimeZoneStr =  [tempFormat stringFromDate:now];
+    return systemTimeZoneStr;
+}
+
 @end
