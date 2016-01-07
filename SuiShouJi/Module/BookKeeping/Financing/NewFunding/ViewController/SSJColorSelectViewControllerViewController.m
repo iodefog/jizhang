@@ -77,6 +77,10 @@
     _selectColor = cell.itemColor;
     self.headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
     [collectionView reloadData];
+    if (self.colorSelectedBlock) {
+        self.colorSelectedBlock(_selectColor);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout

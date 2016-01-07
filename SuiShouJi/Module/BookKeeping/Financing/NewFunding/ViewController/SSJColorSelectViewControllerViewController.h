@@ -19,4 +19,8 @@
 //资金账户颜色
 @property (nonatomic,strong) NSString *fundingColor;
 
+
+typedef void (^colorSelectedBlock)(NSString *selectColor);
+
+@property(nonatomic,copy) colorSelectedBlock colorSelectedBlock;
 @end

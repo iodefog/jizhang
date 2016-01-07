@@ -71,9 +71,14 @@
         [((SSJNewFundingTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).cellDetail resignFirstResponder];
     }else if (indexPath.section == 4) {
         SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
-        colorSelectVC.fundingColor = self.item.fundingColor;
+        colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = self.item.fundingAmount;
         colorSelectVC.fundingName = self.item.fundingName;
+        __weak typeof(self) weakSelf = self;
+        colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
+            _selectColor = selectColor;
+            [weakSelf.tableView reloadData];
+        };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }
 }
@@ -132,7 +137,7 @@
             break;
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+            NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
             NewFundingCell.cellDetail.userInteractionEnabled = NO;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
