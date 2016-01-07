@@ -12,6 +12,7 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
 #import "SSJBookKeepHomeItem.h"
+#import "SSJHomeBarButton.h"
 #import "FMDB.h"
 
 
@@ -19,6 +20,7 @@
 
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) UIButton *button;
 
 @end
 
@@ -27,14 +29,14 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = [self BarTitle];
+        self.title = @"个人账本";
     }
     return self;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:15]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getDateFromDatebase];
@@ -95,8 +97,10 @@
 #pragma mark - Getter
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
-        _rightBarButton = [[UIBarButtonItem alloc]initWithTitle:@"日历" style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked)];
-        _rightBarButton.tintColor = [UIColor whiteColor];
+        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
+        buttonView.currentDay = @"12";
+        [buttonView.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];
     }
     return _rightBarButton;
 }
@@ -105,13 +109,6 @@
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
-}
-
--(NSString*)BarTitle{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-    return currentDateStr;
 }
 
 -(void)getDateFromDatebase{

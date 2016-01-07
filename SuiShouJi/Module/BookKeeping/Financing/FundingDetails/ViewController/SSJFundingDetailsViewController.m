@@ -33,7 +33,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
     {
-        
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }

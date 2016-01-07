@@ -8,6 +8,8 @@
 
 #import "SSJNewFundingViewController.h"
 #import "SSJNewFundingTableViewCell.h"
+#import "SSJColorSelectViewControllerViewController.h"
+
 #import "FMDB.h"
 
 @interface SSJNewFundingViewController ()
@@ -67,6 +69,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section != 4 && indexPath.section != 3) {
         [((SSJNewFundingTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).cellDetail resignFirstResponder];
+    }else if (indexPath.section == 4) {
+        SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
+        colorSelectVC.fundingColor = self.item.fundingColor;
+        colorSelectVC.fundingAmount = self.item.fundingAmount;
+        colorSelectVC.fundingName = self.item.fundingName;
+        [self.navigationController pushViewController:colorSelectVC animated:YES];
     }
 }
 
@@ -135,6 +143,7 @@
     return NewFundingCell;
 }
 
+#pragma mark - Getter
 -(UIView *)footerView{
     if (!_footerView) {
         _footerView = [[UIView alloc]init];

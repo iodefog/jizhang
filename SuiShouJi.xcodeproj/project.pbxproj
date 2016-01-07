@@ -133,6 +133,12 @@
 		BDDC5B8E1C28F7B300FC2887 /* 食材采购@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDDC5B8D1C28F7B300FC2887 /* 食材采购@3x.png */; };
 		BDDC5B901C28F7BD00FC2887 /* 食材采购@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDDC5B8F1C28F7BD00FC2887 /* 食材采购@2x.png */; };
 		BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */; };
+		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
+		BDF3823C1C3E025F00955038 /* calender@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF3823B1C3E025F00955038 /* calender@2x.png */; };
+		BDF3823E1C3E0ACC00955038 /* home_calender@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF3823D1C3E0ACC00955038 /* home_calender@2x.png */; };
+		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
+		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
+		BDF382461C3E16A000955038 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF382451C3E16A000955038 /* checkmark@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -383,6 +389,15 @@
 		BDDC5B8F1C28F7BD00FC2887 /* 食材采购@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "食材采购@2x.png"; sourceTree = "<group>"; };
 		BDDC5B911C291ADF00FC2887 /* SSJDateSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDateSelectedView.h; sourceTree = "<group>"; };
 		BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDateSelectedView.m; sourceTree = "<group>"; };
+		BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarButton.h; sourceTree = "<group>"; };
+		BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarButton.m; sourceTree = "<group>"; };
+		BDF3823B1C3E025F00955038 /* calender@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calender@2x.png"; sourceTree = "<group>"; };
+		BDF3823D1C3E0ACC00955038 /* home_calender@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_calender@2x.png"; sourceTree = "<group>"; };
+		BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewControllerViewController.h; sourceTree = "<group>"; };
+		BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectViewControllerViewController.m; sourceTree = "<group>"; };
+		BDF382421C3E151100955038 /* SSJColorSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectCollectionViewCell.h; sourceTree = "<group>"; };
+		BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectCollectionViewCell.m; sourceTree = "<group>"; };
+		BDF382451C3E16A000955038 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
 		DA9C2C669BC49A563D49451D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D0B59F205FC504E005DB6B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -873,6 +888,8 @@
 				BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */,
 				BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */,
 				BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */,
+				BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */,
+				BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1032,8 +1049,11 @@
 			children = (
 				BD3724211C3CA8B70073AAE2 /* tabbarimage */,
 				9C434E301C2ABF5400A3D61E /* closebutton test.png */,
+				BDF382451C3E16A000955038 /* checkmark@2x.png */,
 				BD7676881C27DDB800CDD507 /* edit test.png */,
+				BDF3823D1C3E0ACC00955038 /* home_calender@2x.png */,
 				BD0E43ED1C2118E600F9179D /* homeSeperator test.png */,
+				BDF3823B1C3E025F00955038 /* calender@2x.png */,
 				BD0E43EE1C2118E600F9179D /* 进度条－点 测试.png */,
 				BDDC5B8D1C28F7B300FC2887 /* 食材采购@3x.png */,
 				BDDC5B8F1C28F7BD00FC2887 /* 食材采购@2x.png */,
@@ -1223,6 +1243,8 @@
 			children = (
 				BD7BC8551C3B6F6C001DE5D8 /* SSJNewFundingTableViewCell.h */,
 				BD7BC8561C3B6F6C001DE5D8 /* SSJNewFundingTableViewCell.m */,
+				BDF382421C3E151100955038 /* SSJColorSelectCollectionViewCell.h */,
+				BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1232,6 +1254,8 @@
 			children = (
 				BD7BC8311C3A1A0F001DE5D8 /* SSJNewFundingViewController.h */,
 				BD7BC8321C3A1A0F001DE5D8 /* SSJNewFundingViewController.m */,
+				BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */,
+				BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1476,9 +1500,12 @@
 				BD37242A1C3CA8B70073AAE2 /* tab_accounte_nor@2x.png in Resources */,
 				BD3724301C3CA8B70073AAE2 /* tab_mine_nor@2x.png in Resources */,
 				BD0E43F01C2118E600F9179D /* homeSeperator test.png in Resources */,
+				BDF3823C1C3E025F00955038 /* calender@2x.png in Resources */,
 				BD37242F1C3CA8B70073AAE2 /* tab_founds_sel@2x.png in Resources */,
 				BD7676891C27DDB800CDD507 /* edit test.png in Resources */,
+				BDF382461C3E16A000955038 /* checkmark@2x.png in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
+				BDF3823E1C3E0ACC00955038 /* home_calender@2x.png in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
 				BDDC5B901C28F7BD00FC2887 /* 食材采购@2x.png in Resources */,
 			);
@@ -1616,6 +1643,7 @@
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
 				7D6AAB8D1C340B200007C0A3 /* SSJReportFormsPercentCircleLayer.m in Sources */,
+				BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */,
 				BD7BC8361C3A1A0F001DE5D8 /* SSJNewFundingViewController.m in Sources */,
 				BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
@@ -1632,10 +1660,12 @@
 				7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
+				BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
+				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
 				BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */,
 				7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
