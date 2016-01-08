@@ -44,7 +44,7 @@
         _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
         _categoryImage.layer.cornerRadius = 25;
         _categoryImage.layer.masksToBounds = YES;
-        _categoryImage.contentMode = UIViewContentModeScaleAspectFit;
+        _categoryImage.contentMode = UIViewContentModeCenter;
     }
     return _categoryImage;
 }
