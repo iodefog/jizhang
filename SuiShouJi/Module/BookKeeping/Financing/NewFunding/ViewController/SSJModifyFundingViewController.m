@@ -6,18 +6,20 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJNewFundingViewController.h"
-#import "SSJNewFundingTableViewCell.h"
-#import "SSJColorSelectViewControllerViewController.h"
+#import "SSJModifyFundingViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJColorSelectViewControllerViewController.h"
+#import "SSJModifyFundingTableViewCell.h"
+
+
 
 #import "FMDB.h"
 
-@interface SSJNewFundingViewController ()
+@interface SSJModifyFundingViewController ()
 @property (nonatomic,strong) UIView *footerView;
 @end
 
-@implementation SSJNewFundingViewController{
+@implementation SSJModifyFundingViewController{
     NSArray *_cellTitleArray;
     UITextField *_amountTextField;
     UITextField *_memoTextField;
@@ -69,7 +71,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section != 4 && indexPath.section != 3) {
-        [((SSJNewFundingTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).cellDetail resignFirstResponder];
+        [((SSJModifyFundingTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).cellDetail resignFirstResponder];
     }else if (indexPath.section == 4) {
         SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
         colorSelectVC.fundingColor = _selectColor;
@@ -110,9 +112,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJNewFundingCell";
-    SSJNewFundingTableViewCell *NewFundingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJModifyFundingTableViewCell *NewFundingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!NewFundingCell) {
-        NewFundingCell = [[SSJNewFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        NewFundingCell = [[SSJModifyFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     NewFundingCell.cellTitle.text = _cellTitleArray[indexPath.section];
     [NewFundingCell.cellTitle sizeToFit];

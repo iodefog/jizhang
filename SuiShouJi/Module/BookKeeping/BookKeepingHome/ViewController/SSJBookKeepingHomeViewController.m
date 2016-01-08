@@ -48,7 +48,6 @@
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.height = self.view.height - 69;
     NSString *path = SSJSQLitePath();
     NSLog(@"%@",path);
 }

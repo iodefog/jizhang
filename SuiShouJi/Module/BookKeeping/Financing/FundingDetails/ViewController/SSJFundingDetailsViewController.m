@@ -12,7 +12,7 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJFundingDetailDateHeader.h"
 #import "SSJReportFormsUtil.h"
-#import "SSJNewFundingViewController.h"
+#import "SSJModifyFundingViewController.h"
 
 #import "FMDB.h"
 
@@ -144,7 +144,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 }
 
 -(void)rightButtonClicked:(id)sender{
-    SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+    SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     newFundingVC.item = self.item;
     [self.navigationController pushViewController:newFundingVC animated:YES];
 }

@@ -11,7 +11,6 @@
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
-#import "SSJNewFundingViewController.h"
 #import "MobClick.h"
 #import "FMDB.h"
 

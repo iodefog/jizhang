@@ -44,6 +44,7 @@
     self = [super init];
     if (self) {
         [self setUpInitWithTableViewStyle:tableViewStyle];
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }

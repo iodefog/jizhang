@@ -9,7 +9,7 @@
 #import "SSJNewBaseTableViewController.h"
 #import "SSJFinancingHomeitem.h"
 
-@interface SSJNewFundingViewController : SSJNewBaseTableViewController<UITextFieldDelegate>
+@interface SSJModifyFundingViewController : SSJNewBaseTableViewController<UITextFieldDelegate>
 @property (nonatomic,strong) SSJFinancingHomeitem *item;
 
 @end

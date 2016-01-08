@@ -6,12 +6,12 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJNewFundingTableViewCell.h"
+#import "SSJModifyFundingTableViewCell.h"
 
-@interface SSJNewFundingTableViewCell()
+@interface SSJModifyFundingTableViewCell()
 @end
 
-@implementation SSJNewFundingTableViewCell
+@implementation SSJModifyFundingTableViewCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.cellTitle];
