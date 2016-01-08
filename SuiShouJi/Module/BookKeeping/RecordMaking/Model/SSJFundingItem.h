@@ -28,4 +28,7 @@
 //账户余额
 @property (nonatomic) double fundingBalance;
 
+//账户备注
+@property (nonatomic,strong) NSString *fundingMemo;
+
 @end

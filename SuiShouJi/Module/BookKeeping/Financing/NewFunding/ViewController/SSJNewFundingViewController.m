@@ -9,6 +9,7 @@
 #import "SSJNewFundingViewController.h"
 #import "SSJNewFundingTableViewCell.h"
 #import "SSJColorSelectViewControllerViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 #import "FMDB.h"
 
@@ -80,6 +81,14 @@
             [weakSelf.tableView reloadData];
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
+    }else if (indexPath.section == 3) {
+        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent){
+            _selectParent = selectParent;
+            [weakSelf.tableView reloadData];
+        };
+        [self.navigationController pushViewController:fundingTypeVC animated:YES];
     }
 }
 
@@ -130,7 +139,7 @@
             break;
         case 3:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellDetail.text = [self getParentFundingNameWithParentfundingID:self.item.fundingParent];
+            NewFundingCell.cellDetail.text = [self getParentFundingNameWithParentfundingID:_selectParent];
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             NewFundingCell.cellDetail.userInteractionEnabled = NO;
         }
@@ -174,6 +183,10 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
+    if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ?",_nameTextField.text,self.item.fundingID] > 0){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+    }
     if ([_amountTextField.text doubleValue] < self.item.fundingAmount) {
         [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSNumber numberWithDouble:self.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:1],self.item.fundingID,@"",[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],@"",@"0",[NSNumber numberWithInt:0],currentDateStr];
     }else if ([_amountTextField.text doubleValue] > self.item.fundingAmount) {
@@ -181,6 +194,7 @@
     }
     [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? AND CUSERID = ? ",[NSNumber numberWithDouble:[_amountTextField.text doubleValue]] , self.item.fundingID,SSJUSERID()];
     [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , self.item.fundingID,SSJUSERID()];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{

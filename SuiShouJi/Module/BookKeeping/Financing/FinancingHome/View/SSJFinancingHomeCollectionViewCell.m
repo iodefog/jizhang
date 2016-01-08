@@ -31,6 +31,7 @@
 }
 
 -(void)layoutSubviews{
+    [super layoutSubviews];
     self.fundingIcon.size = CGSizeMake(36, self.height);
     self.fundingIcon.leftTop = CGPointMake(0, 0);
     self.fundingNameLabel.centerY = self.height / 2;
@@ -49,6 +50,7 @@
 -(UIImageView *)fundingIcon{
     if (!_fundingIcon) {
         _fundingIcon = [[UIImageView alloc]init];
+        _fundingIcon.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _fundingIcon;
 }
@@ -75,7 +77,8 @@
     _item = item;
     self.layer.borderColor = [UIColor ssj_colorWithHex:_item.fundingColor].CGColor;
     self.fundingIcon.backgroundColor = [UIColor ssj_colorWithHex:_item.fundingColor];
-    self.fundingIcon.image = [UIImage imageNamed:_item.fundingIcon];
+    self.fundingIcon.tintColor  = [UIColor whiteColor];
+    self.fundingIcon.image = [[UIImage imageNamed:self.item.fundingIcon]imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.fundingNameLabel.text = _item.fundingName;
     [self.fundingNameLabel sizeToFit];
     if (item.isAddOrNot == NO) {

@@ -25,6 +25,7 @@
 }
 
 -(void)layoutSubviews{
+    [super layoutSubviews];
     _checkMarkImage.size = CGSizeMake(22, 22);
     _checkMarkImage.center = CGPointMake(self.width / 2, self.height / 2);
 }
