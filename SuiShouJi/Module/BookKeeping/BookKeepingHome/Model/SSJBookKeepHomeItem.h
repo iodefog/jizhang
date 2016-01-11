@@ -24,4 +24,7 @@
 
 //记账类型
 @property (nonatomic,strong) NSString *billID;
+
+//账户类型
+@property (nonatomic,strong) NSString *fundID;
 @end

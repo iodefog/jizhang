@@ -79,9 +79,16 @@
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         FundingTypeCell.item = [_items objectAtIndex:indexPath.row];
     }
-    if (indexPath.row == 0) {
-        FundingTypeCell.selectedOrNot = YES;
+    if (!self.selectFundID || self.selectFundID.length == 0) {
+        if (indexPath.row == 0) {
+            FundingTypeCell.selectedOrNot = YES;
+        }
+    }else{
+        if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
+            FundingTypeCell.selectedOrNot = YES;
+        }
     }
+
     return FundingTypeCell;
 }
 

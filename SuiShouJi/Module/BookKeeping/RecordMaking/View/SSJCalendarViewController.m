@@ -214,12 +214,12 @@
     self.calendarView.month = self.selectedMonth;
     [self.calendarView.calendar reloadData];
 }
+
 -(void)recordMakingButtonClicked:(UIButton*)button{
     SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
     recordMakingVC.selectedDay = self.selectedDay;
     recordMakingVC.selectedMonth = self.selectedMonth;
     recordMakingVC.selectedYear = self.selectedYear;
-    recordMakingVC.recordMakingType = 1;
     [self.navigationController pushViewController:recordMakingVC animated:YES];
 }
 

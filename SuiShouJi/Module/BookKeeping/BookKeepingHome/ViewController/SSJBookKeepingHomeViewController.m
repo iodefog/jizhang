@@ -29,6 +29,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.extendedLayoutIncludesOpaqueBars = YES;
         self.title = @"个人账本";
     }
     return self;
@@ -45,7 +46,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
-    [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     NSString *path = SSJSQLitePath();
@@ -70,7 +70,6 @@
     bookKeepingHeader.BtnClickBlock = ^{
         SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
         [weakSelf.navigationController pushViewController:recordmaking animated:YES];
-        recordmaking.recordMakingType = 1;
     };
     return bookKeepingHeader;
 }
@@ -90,6 +89,16 @@
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
+    __weak typeof(self) weakSelf = self;
+    bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
+        cell.isEdite = YES;
+    };
+    bookKeepingCell.editeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell)
+    {
+        SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
+        recordMakingVc.item = cell.item;
+        [weakSelf.navigationController pushViewController:recordMakingVc animated:YES];
+    };
     return bookKeepingCell;
 }
 
@@ -117,7 +126,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND  IBILLID != '1' AND IBILLID != '2') UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND  IBILLID != '1' AND IBILLID != '2') UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
@@ -126,6 +135,7 @@
         item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
         item.chargeID = [rs stringForColumn:@"ICHARGEID"];
         item.billID = [rs stringForColumn:@"IBILLID"];
+        item.fundID = [rs stringForColumn:@"IFID"];
         [self.items addObject:item];
     }
     [db close];

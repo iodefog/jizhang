@@ -54,8 +54,12 @@
     NSString *_categoryID;
     NSString *_defualtColor;
     NSString *_defualtID;
+    NSString *_defualtImage;
     SSJFundingItem *_selectItem;
     SSJFundingItem *_defualtItem;
+    long _originaldMonth;
+    long _originaldYear;
+    long _originaldDay;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -70,17 +74,29 @@
     [super viewDidLoad];
     _numkeyHavePressed = NO;
     [self getCurrentDate];
-    if (_selectedYear == 0) {
-        self.selectedYear = _currentYear;
+    if (self.item == nil) {
+        if (_selectedYear == 0) {
+            self.selectedYear = _currentYear;
+        }
+        if (_selectedMonth == 0) {
+            self.selectedMonth = _currentMonth;
+        }
+        if (_selectedDay == 0) {
+            self.selectedDay = _currentDay;
+        }
+    }else{
+        [self getSelectedDateFromDate:self.item.billDate];
+        self.selectedYear = _originaldYear;
+        self.selectedMonth = _originaldMonth;
+        self.selectedDay = _originaldDay;
     }
-    if (_selectedMonth == 0) {
-        self.selectedMonth = _currentMonth;
-    }
-    if (_selectedDay == 0) {
-        self.selectedDay = _currentDay;
-    }
-    [self getDefualtItem];
+    [self getDefualtFudingItem];
     [self getDefualtColorAndDefualtId];
+    if (self.item != nil) {
+        [self getSelectedFundingType];
+    }else{
+        _selectItem = _defualtItem;
+    }
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryImage];
@@ -315,8 +331,13 @@
         _textInput = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
         _textInput.font = [UIFont systemFontOfSize:30];
         _textInput.textAlignment = NSTextAlignmentRight;
-        _textInput.text = @"0.00";
-        _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+        if (self.item != nil) {
+            _textInput.text = [NSString stringWithFormat:@"%.2f",self.item.chargeMoney];
+            _textInput.textColor = [UIColor whiteColor];
+        }else{
+            _textInput.text = @"0.00";
+            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+        }
     }
     return _textInput;
 }
@@ -324,10 +345,9 @@
 -(UIImageView*)categoryImage{
     if (!_categoryImage) {
         _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
-        _categoryImage.layer.cornerRadius = 13;
         _categoryImage.layer.masksToBounds = YES;
         _categoryImage.tintColor = [UIColor whiteColor];
-        [_categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return _categoryImage;
 }
@@ -346,7 +366,7 @@
         [_inputAccessoryView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e2e2e2"]];
         [_inputAccessoryView ssj_setBorderStyle:SSJBorderStyleTop];
         _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width / 2, 50)];
-        [_fundingTypeButton setTitle:_defualtItem.fundingName forState:UIControlStateNormal];
+        [_fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
         [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
         _fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
@@ -400,6 +420,9 @@
     if (!_FundingTypeSelectView) {
         __weak typeof(self) weakSelf = self;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        if (self.item != nil) {
+            _FundingTypeSelectView.selectFundID = self.item.fundID;
+        }
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
             _selectItem = fundingItem;
@@ -454,76 +477,81 @@
         NSLog(@"Could not open db");
         return ;
     }
-    if (!_categoryID) {
-        _categoryID = _defualtID;
-    }
-    NSString *chargeID = SSJUUID();
-    NSString *userID = SSJUSERID();
-    double chargeMoney = [self.textInput.text doubleValue];
-    SSJFundingItem *fundingType;
-    if (_selectItem == nil) {
-        fundingType = _defualtItem;
-    }else{
-        fundingType = _selectItem;
-    }
-    double fundingSum;
-    if (self.titleSegment.selectedSegmentIndex == 0) {
-        fundingSum = fundingType.fundingBalance - chargeMoney;
-    }else{
-        fundingSum = fundingType.fundingBalance + chargeMoney;
-    }
-    [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:fundingSum],fundingType.fundingID];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
-    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-    NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
-    NSString *selectDate;
-    if (self.selectedDay < 10) {
-        if (self.selectedMonth < 10) {
-            selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        }else{
-            selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    if (self.item == nil) {
+        if (!_categoryID) {
+            _categoryID = _defualtID;
         }
-    }else{
-        if (self.selectedMonth < 10) {
-            selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        NSString *chargeID = SSJUUID();
+        NSString *userID = SSJUSERID();
+        double chargeMoney = [self.textInput.text doubleValue];
+        SSJFundingItem *fundingType;
+        if (_selectItem == nil) {
+            fundingType = _defualtItem;
         }else{
-            selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+            fundingType = _selectItem;
         }
-    }
-    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithBool:self.recordMakingType],selectDate];
-    int count = 0;
-    FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
-    if ([s next]) {
-        count = [s intForColumn:@"COUNT"];
-    }
-    double incomeSum = 0.0;
-    double expenseSum = 0.0;
-    double sum = 0.0;
-    if (count == 0) {
+        double fundingSum;
         if (self.titleSegment.selectedSegmentIndex == 0) {
-            incomeSum = incomeSum - chargeMoney;
-            sum = sum - chargeMoney;
+            fundingSum = fundingType.fundingBalance - chargeMoney;
         }else{
-            expenseSum = expenseSum + chargeMoney;
-            sum = sum + chargeMoney;
+            fundingSum = fundingType.fundingBalance + chargeMoney;
         }
-        [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT  , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],@"0",@"-1",@"0"];
+        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:fundingSum],fundingType.fundingID];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
+        NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
+        NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
+        NSString *selectDate;
+        if (self.selectedDay < 10) {
+            if (self.selectedMonth < 10) {
+                selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+            }else{
+                selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+            }
+        }else{
+            if (self.selectedMonth < 10) {
+                selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+            }else{
+                selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];        }
+        }
+        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithInt:0],selectDate];
+        int count = 0;
+        FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
+        if ([s next]) {
+            count = [s intForColumn:@"COUNT"];
+        }
+        double incomeSum = 0.0;
+        double expenseSum = 0.0;
+        double sum = 0.0;
+        if (count == 0) {
+            if (self.titleSegment.selectedSegmentIndex == 0) {
+                incomeSum = incomeSum - chargeMoney;
+                sum = sum - chargeMoney;
+            }else{
+                expenseSum = expenseSum + chargeMoney;
+                sum = sum + chargeMoney;
+            }
+            [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT  , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],@"0",@"-1",@"0"];
+        }else{
+            FMResultSet *rs = [db executeQuery:@"SELECT EXPENCEAMOUNT, INCOMEAMOUNT , SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
+            while ([rs next]) {
+                incomeSum = [rs doubleForColumn:@"INCOMEAMOUNT"];
+                expenseSum = [rs doubleForColumn:@"EXPENCEAMOUNT"];
+                sum = [rs doubleForColumn:@"SUMAMOUNT"];
+            }
+            if (self.titleSegment.selectedSegmentIndex == 0) {
+                expenseSum = expenseSum + chargeMoney;
+                sum = sum - chargeMoney;
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:sum],selectDate];
+            }else{
+                incomeSum = incomeSum + chargeMoney;
+                sum = sum + chargeMoney;
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],selectDate];
+            }
+        }
     }else{
-        FMResultSet *rs = [db executeQuery:@"SELECT EXPENCEAMOUNT, INCOMEAMOUNT , SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
-        while ([rs next]) {
-            incomeSum = [rs doubleForColumn:@"INCOMEAMOUNT"];
-            expenseSum = [rs doubleForColumn:@"EXPENCEAMOUNT"];
-            sum = [rs doubleForColumn:@"SUMAMOUNT"];
-        }
-        if (self.titleSegment.selectedSegmentIndex == 0) {
-            expenseSum = expenseSum + chargeMoney;
-            sum = sum - chargeMoney;
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:sum],selectDate];
-        }else{
-            incomeSum = incomeSum + chargeMoney;
-            sum = sum + chargeMoney;
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],selectDate];
+        if (_selectItem.fundingID != self.item.fundID) {
+            
         }
     }
     [db close];
@@ -535,6 +563,8 @@
     self.categoryListView.scrollView.contentOffset = CGPointMake(0, 0);
     [self getDefualtColorAndDefualtId];
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
+    self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
     [self.categoryListView reloadData];
 }
 
@@ -544,15 +574,25 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!self.titleSegment.selectedSegmentIndex]];
-    while([rs next]) {
-        _defualtColor = [rs stringForColumn:@"CCOLOR"];
-        _defualtID = [rs stringForColumn:@"ID"];
+    if (self.item == nil) {
+        FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!self.titleSegment.selectedSegmentIndex]];
+        while([rs next]) {
+            _defualtColor = [rs stringForColumn:@"CCOLOR"];
+            _defualtID = [rs stringForColumn:@"ID"];
+            _defualtImage = [rs stringForColumn:@"CCOIN"];
+        }
+    }else{
+        FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID];
+        while([rs next]) {
+            _defualtColor = [rs stringForColumn:@"CCOLOR"];
+            _defualtID = [rs stringForColumn:@"ID"];
+            _defualtImage = [rs stringForColumn:@"CCOIN"];
+        }
     }
     [db close];
 }
 
--(void)getDefualtItem{
+-(void)getDefualtFudingItem{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
@@ -571,8 +611,39 @@
     [db close];
 }
 
+-(void)getSelectedFundingType{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundID];
+    _selectItem = [[SSJFundingItem alloc]init];
+    while ([rs next]) {
+        _selectItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+        _selectItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+        _selectItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+        _selectItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+        _selectItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+        _selectItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+    }
+    [db close];
+}
+
 -(void)addNewType{
     [self.categoryListView reloadData];
+}
+
+-(void)getSelectedDateFromDate:(NSString*)date{
+    NSDateFormatter *dateFormater = [[NSDateFormatter alloc]init];
+    [dateFormater setDateFormat:@"yyyy-MM-dd"];
+    NSDate *selectDate = [dateFormater dateFromString:date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:selectDate];
+    _originaldYear= [dateComponent year];
+    _originaldDay = [dateComponent day];
+    _originaldMonth = [dateComponent month];
 }
 
 - (void)didReceiveMemoryWarning {

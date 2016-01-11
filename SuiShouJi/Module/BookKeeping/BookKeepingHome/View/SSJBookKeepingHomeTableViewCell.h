@@ -11,4 +11,14 @@
 
 @interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
 @property (nonatomic,strong) SSJBookKeepHomeItem *item;
+
+typedef void(^beginEditeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
+@property (nonatomic, copy) beginEditeBtnClickBlock beginEditeBtnClickBlock;
+
+typedef void(^editeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
+@property (nonatomic, copy) editeBtnClickBlock editeBtnClickBlock;
+
+@property (nonatomic) BOOL isEdite;
 @end
