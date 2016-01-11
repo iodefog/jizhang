@@ -37,6 +37,12 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     [self setRootViewController];
     
+    NSLog(@"%@",@{@"a":[NSNull null]});
+    
+    FMDatabase *db = [FMDatabase databaseWithPath:@"/Users/oldlang/Desktop/testDb.db"];
+    [db open];
+    FMResultSet *result = [db executeQuery:@"select type from table1 where id = '1'"];
+    
     return YES;
 }
 

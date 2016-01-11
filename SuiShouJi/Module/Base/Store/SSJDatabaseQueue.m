@@ -8,6 +8,12 @@
 
 #import "SSJDatabaseQueue.h"
 
+@interface SSJDatabaseQueue ()
+
+@property (nonatomic, strong) dispatch_queue_t dataBaseQueue;
+
+@end
+
 @implementation SSJDatabaseQueue
 
 + (instancetype)sharedInstance {
@@ -21,20 +27,27 @@
     return queue;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.dataBaseQueue = dispatch_queue_create("com.ShuiShouJi.SSJDatabaseQueue", DISPATCH_QUEUE_SERIAL);
+    }
+    return self;
+}
+
 - (void)asyncInDatabase:(void (^)(FMDatabase *db))block {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(self.dataBaseQueue, ^{
         [self inDatabase:block];
     });
 }
 
 - (void)asyncInTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(self.dataBaseQueue, ^{
         [self inTransaction:block];
     });
 }
 
 - (void)asyncInDeferredTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(self.dataBaseQueue, ^{
         [self inDeferredTransaction:block];
     });
 }

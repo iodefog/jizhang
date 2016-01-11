@@ -8,3 +8,5 @@ pod 'MJExtension'
 pod 'UMengAnalytics-NO-IDFA'
 
 pod 'FMDB'
+
+pod 'SSZipArchive'
