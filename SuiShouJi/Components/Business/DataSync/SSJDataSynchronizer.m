@@ -10,6 +10,7 @@
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
+#import "SSJFundAccountTable.h"
 #import "SSJDatabaseQueue.h"
 #import "SSZipArchive.h"
 #import "AFNetworking.h"
@@ -53,7 +54,6 @@ static NSString *const kSyncZipFileName = @"sync_json.zip";
 
 - (void)startSyncData {
     dispatch_async(self.syncQueue, ^{
-        __block NSInteger lastSyncVersion;
         __block NSInteger currentSyncVersion;
         
         __block NSArray *userChargeRecords = nil;
@@ -63,7 +63,7 @@ static NSString *const kSyncZipFileName = @"sync_json.zip";
         [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
             
             //  获取上次同步成功的版本号
-            lastSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
+            [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
             if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
                 return;
             }
@@ -160,7 +160,6 @@ static NSString *const kSyncZipFileName = @"sync_json.zip";
                         || ![SSJFundInfoSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]
                         || ![SSJUserChargeSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
                         
-                        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                         *rollback = YES;
                         shouldInsertNewSyncVersion = NO;
                     }
@@ -172,64 +171,23 @@ static NSString *const kSyncZipFileName = @"sync_json.zip";
                         || ![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db]
                         || ![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db]) {
                         
-                        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                         *rollback = YES;
                         shouldInsertNewSyncVersion = NO;
                         return;
                     }
                     
                     //  根据流水表计算资金帐户余额
-                    FMResultSet *result = [db executeQuery:@"select A.IFID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? group by A.IFID, B.ITYPE order by A.IFID", @(lastSyncVersion), SSJUSERID()];
-                    if (!result) {
-                        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-                        *rollback = YES;
-                        shouldInsertNewSyncVersion = NO;
-                        return;
-                    }
-                    
-                    double sum = 0;
-                    NSString *tempFundId = nil;
-                    NSMutableDictionary *moneyInfo = [NSMutableDictionary dictionary];
-                    
-                    while ([result next]) {
-                        int type = [result intForColumn:@"ITYPE"];
-                        double money = [result doubleForColumn:@"IMONEY"];
-                        NSString *fundId = [result stringForColumn:@"IFID"];
-                        
-                        if (![tempFundId isEqualToString:fundId]) {
-                            sum = 0;
-                            tempFundId = fundId;
-                        }
-
-                        //  0收入 1支出
-                        if (type == 0) {
-                            sum += money;
-                        } else if (type == 1) {
-                            sum -= money;
-                        } else {
-                            continue;
-                        }
-                        
-                        [moneyInfo setObject:@(sum) forKey:fundId];
-                    }
-                    
-                    __block BOOL success = YES;
-                    [moneyInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                        if (![db executeUpdate:@"update BK_FUNS_ACCT set IBALANCE = (IBALANCE + ?) where CFUNDID = ?", obj, key]) {
-                            success = NO;
-                            *stop = YES;
-                        }
-                    }];
-                    if (!success) {
+                    if (![SSJFundAccountTable updateBalanceInDatabase:db]) {
                         *rollback = YES;
                         shouldInsertNewSyncVersion = NO;
                     }
-                    
                 }];
                 
                 if (shouldInsertNewSyncVersion) {
                     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-                        [db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(syncSuccessVersion), SSJUSERID()];
+                        if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(syncSuccessVersion), SSJUSERID()]) {
+                            SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+                        }
                     }];
                 }
             });

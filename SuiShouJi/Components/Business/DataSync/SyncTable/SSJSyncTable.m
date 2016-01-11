@@ -85,7 +85,12 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         [update appendFormat:@" and %@", additionalCondition];
     }
     
-    return [db executeUpdate:update];
+    BOOL success = [db executeUpdate:update];
+    if (!success) {
+        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+    }
+    
+    return success;
 }
 
 + (NSString *)updateSyncVersionAdditionalCondition {
@@ -176,7 +181,11 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
             update = [NSString stringWithFormat:@"update %@ set %@ where %@", [self tableName], keyValuesStr, conditionsStr];
         }
         
-        return [db executeUpdate:update];
+        BOOL success = [db executeUpdate:update];
+        if (!success) {
+            SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+        }
+        return success;
     }
     
     SSJPRINT(@">>>SSJ warning:array records has no element\n records:%@", records);

@@ -27,8 +27,8 @@
     return queue;
 }
 
-- (instancetype)init {
-    if (self = [super init]) {
+- (instancetype)initWithPath:(NSString*)aPath flags:(int)openFlags {
+    if (self = [super initWithPath:aPath flags:openFlags]) {
         self.dataBaseQueue = dispatch_queue_create("com.ShuiShouJi.SSJDatabaseQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;

@@ -12,7 +12,6 @@
 #import "SSJBillingChargeHelper.h"
 
 #warning test
-#import "SSJDataSync.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
@@ -57,7 +56,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 #warning test
 - (void)testSync {
-    [[SSJDataSync shareInstance] startSync];
+//    [[SSJDataSync shareInstance] startSync];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
