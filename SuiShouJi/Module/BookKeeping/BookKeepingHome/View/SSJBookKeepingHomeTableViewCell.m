@@ -124,7 +124,11 @@
     long month = [dateComponent month];
     long currentMonth = [currentdateComponent month];
     if ([item.billID isEqualToString:@"-1"]) {
-        [self.categoryImageButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        _categoryImageButton.userInteractionEnabled = NO;
+        [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
+        _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_categoryImageButton setTintColor:[UIColor whiteColor]];
+        _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         if (item.chargeMoney < 0) {
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
@@ -132,11 +136,7 @@
             self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
-            _categoryImageButton.userInteractionEnabled = NO;
-            [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
-            _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
-            [_categoryImageButton setTintColor:[UIColor whiteColor]];
-            _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+
             if (month == currentMonth) {
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
             }else{
@@ -185,7 +185,6 @@
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.hidden = YES;
         }
-        
         [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
         _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
         _categoryImageButton.layer.borderWidth = 1;
