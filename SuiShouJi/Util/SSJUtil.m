@@ -275,12 +275,11 @@ NSString *SSJUUID(){
 
 NSString *SSJUSERID(){
     NSString *strUSERID = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
-    NSString *userid = SSJUUID();
-    if (!strUSERID | [strUSERID isEqualToString:@""]) {
+    if (!strUSERID || [strUSERID isEqualToString:@""]) {
         NSDate *datenow = [NSDate date];
         NSTimeInterval timeSince1970 = [datenow timeIntervalSince1970]*1000;
         NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)timeSince1970];
-        strUSERID = [[[NSString stringWithFormat:@"%@%@",userid,timeSp] ssj_md5HexDigest] uppercaseString];
+        strUSERID = [[[NSString stringWithFormat:@"%@%@",SSJUUID(),timeSp] ssj_md5HexDigest] uppercaseString];
         [[NSUserDefaults standardUserDefaults]setObject:strUSERID forKey:@"USERID"];
     }
     return strUSERID;

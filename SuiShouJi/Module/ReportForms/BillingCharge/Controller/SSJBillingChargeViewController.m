@@ -11,6 +11,9 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
 
+#warning test
+#import "SSJDataSync.h"
+
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
 
@@ -46,6 +49,15 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     } failure:^(NSError *error) {
         
     }];
+
+    #warning test
+    UIBarButtonItem *test = [[UIBarButtonItem alloc] initWithTitle:@"sync" style:UIBarButtonItemStylePlain target:self action:@selector(testSync)];
+    self.navigationItem.rightBarButtonItem = test;
+}
+
+#warning test
+- (void)testSync {
+    [[SSJDataSync shareInstance] startSync];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

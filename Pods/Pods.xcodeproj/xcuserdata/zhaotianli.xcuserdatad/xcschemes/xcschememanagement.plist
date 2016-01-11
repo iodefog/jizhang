@@ -37,6 +37,11 @@
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
+		<key>SSZipArchive.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -45,7 +50,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>2FC827BDE9DF5B2DEDB7978A187E0895</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>31FC69BFB1C948F281475ED92832B0F4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>44D10418C8DAD2BA4AF56B1BA4F5477F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>83B7E97BA83789B3C5DD3EC84E5ED013</key>
 		<dict>
 			<key>primary</key>
 			<true/>

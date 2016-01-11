@@ -157,6 +157,13 @@ NSString *SSJSSLCertificatePath();
 BOOL SSJSaveSSLCertificate(NSData *certificate);
 
 /**
+ *  返回沙盒Document目录
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJDocumentPath();
+
+/**
  *  返回数据库文件目录
  *
  *  @return (NSString *)

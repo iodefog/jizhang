@@ -76,7 +76,7 @@
         
         if (!amountResultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
-            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -102,7 +102,7 @@
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
-            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -133,11 +133,11 @@
                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY) from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ?) group by ITYPE order by ITYPE desc",billDate];
+        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ?) group by ITYPE order by ITYPE desc",billDate];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
-            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -148,10 +148,13 @@
         
         NSMutableArray *result = [NSMutableArray arrayWithCapacity:2];
         while ([resultSet next]) {
+            //  0:收入 1:支出
+            int type = [resultSet intForColumn:@"ITYPE"];
+            
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
             item.money = [resultSet doubleForColumn:@"SUM(IMONEY)"];
-            item.colorValue = @"#64b3fe";
-            item.imageName = @"";
+            item.colorValue = type == 0 ? @"#64b3fe" : @"#fe7373";
+            item.imageName = type == 0 ? @"" : @"";
             [result addObject:item];
             amount += item.money;
         }

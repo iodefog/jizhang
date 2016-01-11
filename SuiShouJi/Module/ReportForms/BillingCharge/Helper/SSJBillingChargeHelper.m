@@ -22,7 +22,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                         failure:(void (^)(NSError *error))failure {
     
     if (year == 0 || month > 12) {
-        SSJPRINT(@"class:%@\n method:%@\n message:(year == 0 || month > 12)",NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+        SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:(year == 0 || month > 12)",NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         failure(nil);
         return;
     }
@@ -38,7 +38,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
         FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE, b.CNAME, b.CCOIN from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? order by a.CBILLDATE desc", ID, dateStr];
         
         if (!resultSet) {
-            SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
