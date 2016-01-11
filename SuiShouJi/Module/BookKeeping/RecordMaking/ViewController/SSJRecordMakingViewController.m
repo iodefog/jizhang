@@ -526,10 +526,10 @@
         double sum = 0.0;
         if (count == 0) {
             if (self.titleSegment.selectedSegmentIndex == 0) {
-                incomeSum = incomeSum - chargeMoney;
+                expenseSum = expenseSum + chargeMoney;
                 sum = sum - chargeMoney;
             }else{
-                expenseSum = expenseSum + chargeMoney;
+                incomeSum = incomeSum + chargeMoney;
                 sum = sum + chargeMoney;
             }
             [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT  , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],@"0",@"-1",@"0"];
@@ -553,12 +553,18 @@
     }else{
         if (self.titleSegment.selectedSegmentIndex == 0) {
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:chargeMoney],selectDate];
         }else{
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ?", [NSNumber numberWithDouble:chargeMoney] , fundingType.fundingID];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:chargeMoney],selectDate];
         }
-        if ([db intForQuery:@""]) {
-            
+        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID])
+        {
+            [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
+        }else{
+            [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
         }
     }
     [db close];
