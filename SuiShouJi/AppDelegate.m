@@ -11,7 +11,6 @@
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
-#import "SSJNewFundingViewController.h"
 #import "MobClick.h"
 #import "FMDB.h"
 
@@ -37,11 +36,17 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     [self setRootViewController];
     
-    NSLog(@"%@",@{@"a":[NSNull null]});
-    
-    FMDatabase *db = [FMDatabase databaseWithPath:@"/Users/oldlang/Desktop/testDb.db"];
-    [db open];
-    FMResultSet *result = [db executeQuery:@"select type from table1 where id = '1'"];
+//    NSLog(@"%@",@{@"a":[NSNull null]});
+//    
+//    FMDatabase *db = [FMDatabase databaseWithPath:@"/Users/oldlang/Desktop/testDb.db"];
+//    [db open];
+//    FMResultSet *result = [db executeQuery:@"select * from table3"];
+//    if (result) {
+//        while ([result next]) {
+//            NSLog(@"%@", [result stringForColumnIndex:0]);
+//            NSLog(@"%@", [result stringForColumn:@"name"]);
+//        }
+//    }
     
     return YES;
 }
@@ -66,25 +71,25 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
-    bookKeepingNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    bookKeepingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_accounte_nor"];
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
-    reportFormsNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    reportFormsNavi.tabBarItem.image = [UIImage imageNamed:@"tab_form_nor"];
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
-    financingNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    financingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_founds_nor"];
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
-    moreNavi.tabBarItem.image = [UIImage imageNamed:@""];
+    moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_mine_nor"];
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
-    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#ea5559"];
+    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     self.window.rootViewController = tabBarVC;
 }
@@ -102,11 +107,11 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
             NSLog(@"Could not open db.");
             return ;
         }
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"现金账户" , @"" , @"1" , @"#fe8a65" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"储蓄卡余额" , @"" , @"2" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"信用卡透支" , @"" , @"2" , @"#8dc4fa" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"支付宝余额" , @"" , @"6" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
-        [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> ?",SSJUSERID(),[NSNumber numberWithDouble:0.00] , @"root"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"现金账户" , @"" , @"1" , @"#fe8a65" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"",SSJUSERID()];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"储蓄卡余额" , @"" , @"2" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"" , SSJUSERID()];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"信用卡透支" , @"" , @"2" , @"#8dc4fa" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"支付宝余额" , @"" , @"6" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"" ,SSJUSERID() ];
+        [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> ?",SSJUSERID(),[NSNumber numberWithDouble:0.00] , @"root",SSJUSERID()];
     }
 
 //  用户表 CUSERID:用户唯一序列id CPWD:登录密码 CFPWD:资金密码 CNICKID:昵称 CMOBILENO:手机号 CREALNAME:用户真实姓名 CIDCARD:身份证号 CICONS:头像

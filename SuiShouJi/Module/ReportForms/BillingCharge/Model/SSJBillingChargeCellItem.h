@@ -22,4 +22,7 @@
 // 流水id
 @property (nonatomic, copy) NSString *ID;
 
+//流水类型(0是支出,1是收入)
+@property (nonatomic) BOOL incomeOrExpence;
+
 @end

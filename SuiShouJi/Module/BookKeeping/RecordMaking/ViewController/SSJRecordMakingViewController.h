@@ -8,14 +8,14 @@
 
 #import "SSJBaseViewController.h"
 #import "SSJCustomKeyboard.h"
+#import "SSJBookKeepHomeItem.h"
 
 @interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
 
-//区分新建还是修改 1为新建,0为修改(必传)
-@property (nonatomic) BOOL recordMakingType;
-
+//流水item,修改必传
+@property (nonatomic,strong) SSJBookKeepHomeItem *item;
 
 @end

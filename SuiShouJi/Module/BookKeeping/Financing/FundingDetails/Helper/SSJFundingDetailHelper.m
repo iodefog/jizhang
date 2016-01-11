@@ -8,11 +8,13 @@
 
 
 #import "SSJFundingDetailHelper.h"
-#import "SSJFundingDetailItem.h"
+#import "SSJBillingChargeCellItem.h"
 #import "SSJDatabaseQueue.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
+NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
+
 
 @implementation SSJFundingDetailHelper
 
@@ -36,7 +38,7 @@ NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE, b.* from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CFUNDID = ? and a.CBILLDATE like ? order by a.CBILLDATE desc", ID, dateStr];
+        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE , a.ICHARGEID , b.* , c.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b , BK_BILL_TYPE as c where a.IBILLID = b.ID and a.IFID = ? and a.CBILLDATE like ?  and a.IBILLID = c.ID order by a.CBILLDATE desc", ID, dateStr];
         if (!resultSet) {
             SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
@@ -56,29 +58,45 @@ NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
         originalFormatter.dateFormat = @"yyyy-MM-dd";
         
         NSCalendar *calendar = [NSCalendar currentCalendar];
-        
+        double Sum;
+        Sum = 0;
         while ([resultSet next]) {
-            SSJFundingDetailItem *item = [[SSJFundingDetailItem alloc] init];
-            item.fundingIcon = [resultSet stringForColumn:@"CCOIN"];
-            item.fundingName = [resultSet stringForColumn:@"CNAME"];
+            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.typeName = [resultSet stringForColumn:@"CNAME"];
+            item.incomeOrExpence = [resultSet intForColumn:@"ITYPE"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
+            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
+                item.money = [NSString stringWithFormat:@"-%@",[resultSet stringForColumn:@"IMONEY"]];
+            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
+                item.money = [NSString stringWithFormat:@"+%@",[resultSet stringForColumn:@"IMONEY"]];
+            }
+            item.ID = [resultSet stringForColumn:@"ICHARGEID"];
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             if ([tempDate isEqualToString:billDate]) {
                 NSMutableArray *items = subDic[SSJFundingDetailRecordKey];
+                Sum = Sum + [item.money doubleValue];
                 [items addObject:item];
             } else {
                 NSDate *transitDate = [originalFormatter dateFromString:billDate];
                 NSDateComponents *dateComponent = [calendar components:NSCalendarUnitWeekday fromDate:transitDate];
                 NSString *weekday = [self stringFromWeekday:[dateComponent weekday]];
                 NSString *destinyDate = [destinyFormatter stringFromDate:transitDate];
-                NSString *dateString = [NSString stringWithFormat:@"%@ %@", destinyDate, weekday];
-                
+                NSString *currentDate = [destinyFormatter stringFromDate:[NSDate date]];
+                NSString *dateString;
+                if ([destinyDate isEqualToString:currentDate]) {
+                    dateString = @"今天";
+                }else{
+                    dateString = [NSString stringWithFormat:@"%@ %@", destinyDate, weekday];
+                }
                 subDic = [NSMutableDictionary dictionary];
                 [subDic setObject:dateString forKey:SSJFundingDetailDateKey];
                 [subDic setObject:[@[item] mutableCopy] forKey:SSJFundingDetailRecordKey];
+                Sum = [item.money doubleValue];
                 [result addObject:subDic];
                 tempDate = billDate;
             }
+            [subDic setObject:[NSNumber numberWithDouble:Sum] forKey:SSJFundingDetailSumKey];
         }
         
         SSJDispatch_main_async_safe(^{

@@ -19,14 +19,13 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.fundingImage];
         [self.contentView addSubview:self.fundingTitle];
-        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e8e8e8"]];
-        [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self addSubview:self.checkMark];
     }
     return self;
 }
 
 -(void)layoutSubviews{
+    [super layoutSubviews];
     self.fundingImage.centerY = self.height / 2;
     self.fundingImage.left = 10;
     self.fundingTitle.centerY = self.fundingImage.centerY;
@@ -54,7 +53,7 @@
 -(UIImageView *)checkMark{
     if (!_checkMark) {
         _checkMark = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-        _checkMark.image = [UIImage ssj_imageWithColor:[UIColor blueColor] size:CGSizeMake(30, 30)];
+        _checkMark.image = [UIImage imageNamed:@"checkmark"];
         _checkMark.hidden = YES;
     }
     return _checkMark;

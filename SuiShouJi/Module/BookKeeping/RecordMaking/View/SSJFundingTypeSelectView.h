@@ -13,6 +13,8 @@
 
 typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
 
+@property (nonatomic,strong) NSString *selectFundID;
+
 //选择类型的回调
 @property (nonatomic, copy) fundingTypeSelectBlock fundingTypeSelectBlock;
 

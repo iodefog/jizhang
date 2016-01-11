@@ -11,8 +11,11 @@
 
 @interface SSJBookKeepingHomeTableViewCell()
 @property (nonatomic,strong) UIButton *categoryImageButton;
+@property (nonatomic,strong) UIButton *editeButton;
+@property (nonatomic,strong) UIButton *deleteButton;
 @property (nonatomic,strong) UILabel *incomeLabel;
 @property (nonatomic,strong) UILabel *expenditureLabel;
+
 @end
 
 @implementation SSJBookKeepingHomeTableViewCell
@@ -22,6 +25,8 @@
         [self addSubview:self.categoryImageButton];
         [self addSubview:self.expenditureLabel];
         [self addSubview:self.incomeLabel];
+        [self addSubview:self.editeButton];
+        [self addSubview:self.deleteButton];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
@@ -30,6 +35,8 @@
 -(void)layoutSubviews{
     self.categoryImageButton.bottom = self.height;
     self.categoryImageButton.centerX = self.centerX;
+    self.editeButton.frame = self.categoryImageButton.frame;
+    self.deleteButton.frame = self.categoryImageButton.frame;
     self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
     self.incomeLabel.centerY = self.categoryImageButton.centerY;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
@@ -59,15 +66,39 @@
 
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
-        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 32, 32)];
+        _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageButton.layer.cornerRadius = 15;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _categoryImageButton;
 }
 
+-(UIButton *)editeButton{
+    if (!_editeButton) {
+        _editeButton = [[UIButton alloc]init];
+        _editeButton.hidden = YES;
+        [_editeButton setImage:[UIImage imageNamed:@"home_edit"] forState:UIControlStateNormal];
+        _editeButton.layer.cornerRadius = 16;
+        [_editeButton addTarget:self action:@selector(editeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _editeButton;
+}
+
+-(UIButton *)deleteButton{
+    if (!_deleteButton) {
+        _deleteButton = [[UIButton alloc]init];
+        _deleteButton.hidden = YES;
+        [_deleteButton setImage:[UIImage imageNamed:@"home_delet"] forState:UIControlStateNormal];
+        _deleteButton.layer.cornerRadius = 16;
+    }
+    return _deleteButton;
+}
+
 -(void)buttonClicked{
-    NSLog(@"编辑");
+    if (self.beginEditeBtnClickBlock) {
+        self.beginEditeBtnClickBlock(self);
+    }
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -101,6 +132,11 @@
             self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
+            _categoryImageButton.userInteractionEnabled = NO;
+            [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
+            _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
+            [_categoryImageButton setTintColor:[UIColor whiteColor]];
+            _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
             if (month == currentMonth) {
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
             }else{
@@ -147,8 +183,32 @@
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.hidden = YES;
         }
+        
         [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
-        [db close];
+        _categoryImageButton.backgroundColor = [UIColor clearColor];
+        _categoryImageButton.userInteractionEnabled = YES;
     }
 }
+
+-(void)setIsEdite:(BOOL)isEdite{
+    _isEdite = isEdite;
+    if (_isEdite == YES) {
+        self.editeButton.hidden = NO;
+        self.deleteButton.hidden = NO;
+
+        [UIView animateKeyframesWithDuration:0.1 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
+            self.editeButton.center = CGPointMake(40, self.height - 15);
+            self.deleteButton.center = CGPointMake(self.width - 40, self.height - 15);
+        }completion:nil];
+    }else{
+    
+    }
+}
+
+-(void)editeButtonClicked{
+    if (self.editeBtnClickBlock) {
+        self.editeBtnClickBlock(self);
+    }
+}
+
 @end
