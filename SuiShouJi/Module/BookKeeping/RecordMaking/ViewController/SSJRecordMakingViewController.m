@@ -109,8 +109,8 @@
     [self.view addSubview:self.categoryListView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewType) name:@"addNewTypeNotification" object:nil];
     self.navigationItem.rightBarButtonItem = self.rightbutton;
-    _intPart = @"0";
-    _decimalPart = @"00";
+    _intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+    _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
 }
 
 
@@ -477,19 +477,37 @@
         NSLog(@"Could not open db");
         return ;
     }
+    double chargeMoney = [self.textInput.text doubleValue];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
+    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
+    NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
+    NSString *selectDate;
+    if (self.selectedDay < 10) {
+        if (self.selectedMonth < 10) {
+            selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }else{
+            selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }
+    }else{
+        if (self.selectedMonth < 10) {
+            selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }else{
+            selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+        }
+    }
+    SSJFundingItem *fundingType;
+    if (_selectItem == nil) {
+        fundingType = _defualtItem;
+    }else{
+        fundingType = _selectItem;
+    }
     if (self.item == nil) {
         if (!_categoryID) {
             _categoryID = _defualtID;
         }
         NSString *chargeID = SSJUUID();
         NSString *userID = SSJUSERID();
-        double chargeMoney = [self.textInput.text doubleValue];
-        SSJFundingItem *fundingType;
-        if (_selectItem == nil) {
-            fundingType = _defualtItem;
-        }else{
-            fundingType = _selectItem;
-        }
         double fundingSum;
         if (self.titleSegment.selectedSegmentIndex == 0) {
             fundingSum = fundingType.fundingBalance - chargeMoney;
@@ -497,23 +515,6 @@
             fundingSum = fundingType.fundingBalance + chargeMoney;
         }
         [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:fundingSum],fundingType.fundingID];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
-        NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-        NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
-        NSString *selectDate;
-        if (self.selectedDay < 10) {
-            if (self.selectedMonth < 10) {
-                selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-            }else{
-                selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-            }
-        }else{
-            if (self.selectedMonth < 10) {
-                selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-            }else{
-                selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];        }
-        }
         [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithInt:0],selectDate];
         int count = 0;
         FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
@@ -550,7 +551,13 @@
             }
         }
     }else{
-        if (_selectItem.fundingID != self.item.fundID) {
+        if (self.titleSegment.selectedSegmentIndex == 0) {
+            [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
+        }else{
+            [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ?", [NSNumber numberWithDouble:chargeMoney] , fundingType.fundingID];
+        }
+        if ([db intForQuery:@""]) {
             
         }
     }

@@ -66,9 +66,9 @@
 
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
-        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 32, 32)];
+        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 36, 36)];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
-        _categoryImageButton.layer.cornerRadius = 15;
+        _categoryImageButton.layer.cornerRadius = 18;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _categoryImageButton;
@@ -160,17 +160,19 @@
     }else{
         NSString *iconName;
         NSString *categoryName;
+        NSString *categoryColor;
         int categoryType = 0;
         FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
         if (![db open]) {
             NSLog(@"Could not open db");
             return ;
         }
-        FMResultSet *rs = [db executeQuery:@"SELECT CCOIN, CNAME , ITYPE FROM BK_BILL_TYPE WHERE ID = ?",item.billID];
+        FMResultSet *rs = [db executeQuery:@"SELECT CCOIN, CNAME , ITYPE , CCOLOR FROM BK_BILL_TYPE WHERE ID = ?",item.billID];
         while ([rs next]) {
             iconName = [rs stringForColumn:@"CCOIN"];
             categoryName = [rs stringForColumn:@"CNAME"];
             categoryType = [rs intForColumn:@"ITYPE"];
+            categoryColor =[rs stringForColumn:@"CCOLOR"];
         }
         if (!categoryType) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
@@ -185,6 +187,8 @@
         }
         
         [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
+        _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
+        _categoryImageButton.layer.borderWidth = 1;
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
     }
