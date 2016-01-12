@@ -20,5 +20,10 @@ typedef void(^editeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
 
 @property (nonatomic, copy) editeBtnClickBlock editeBtnClickBlock;
 
+
+typedef void(^deleteButtonClickBlock)();
+
+@property (nonatomic, copy) deleteButtonClickBlock deleteButtonClickBlock;
+
 @property (nonatomic) BOOL isEdite;
 @end

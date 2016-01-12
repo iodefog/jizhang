@@ -133,10 +133,10 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
         NSLog(@"Could not open db.");
         return ;
     }
-    _totalIncome = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFID = ?",[NSNumber numberWithInt:0],self.item.fundingID];
+    _totalIncome = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFID = ? AND A.OPERATORTYPE != 2",[NSNumber numberWithInt:0],self.item.fundingID];
     self.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",_totalIncome];
     [self.header.totalIncomeLabel sizeToFit];
-    _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFID = ?",[NSNumber numberWithInt:1],self.item.fundingID];
+    _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFID = ? AND A.OPERATORTYPE != 2",[NSNumber numberWithInt:1],self.item.fundingID];
     self.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
     [self.header.totalExpenceLabel sizeToFit];
     self.title = [db stringForQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];

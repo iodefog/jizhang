@@ -76,7 +76,7 @@
         [_titleLabel sizeToFit];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
-        [_closeButton setImage:[UIImage imageNamed:@"closebutton test"] forState:UIControlStateNormal];
+        [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_titleView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_titleView ssj_setBorderWidth:1];
@@ -98,14 +98,14 @@
         _dateLabel.font = [UIFont systemFontOfSize:18];
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
-        _plusButton.frame = CGRectMake(0, 0, 30, 30);
-        [_plusButton setTitle:@"+" forState:UIControlStateNormal];
+        _plusButton.frame = CGRectMake(0, 0, 10, 14);
+        [_plusButton setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _plusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
-        _minusButton.frame = CGRectMake(0, 0, 30, 30);
-        [_minusButton setTitle:@"-" forState:UIControlStateNormal];
+        _minusButton.frame = CGRectMake(0, 0, 10, 14);
+        [_minusButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

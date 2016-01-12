@@ -27,4 +27,5 @@
 
 //账户类型
 @property (nonatomic,strong) NSString *fundID;
+
 @end

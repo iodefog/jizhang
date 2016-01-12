@@ -33,15 +33,35 @@
 }
 
 -(void)layoutSubviews{
+    [super layoutSubviews];
+    if (_isEdite == YES) {
+        self.editeButton.frame = self.categoryImageButton.frame;
+        self.deleteButton.frame = self.categoryImageButton.frame;
+        self.editeButton.hidden = NO;
+        self.deleteButton.hidden = NO;
+        self.incomeLabel.hidden = YES;
+        self.expenditureLabel.hidden = YES;
+        [UIView animateWithDuration:0.2 animations:^{
+            self.editeButton.centerX = 40;
+            self.deleteButton.centerX = self.width - 40;
+        }completion:nil];
+    }else{
+        [UIView animateWithDuration:0.2 animations:^{
+            self.editeButton.centerX = self.width / 2;
+            self.deleteButton.centerX = self.width / 2;
+        }completion:^(BOOL success){
+            self.editeButton.hidden = YES;
+            self.deleteButton.hidden = YES;
+            self.expenditureLabel.hidden = NO;
+            self.incomeLabel.hidden = NO;
+        }];
+    }
     self.categoryImageButton.bottom = self.height;
-    self.categoryImageButton.centerX = self.centerX;
-    self.editeButton.frame = self.categoryImageButton.frame;
-    self.deleteButton.frame = self.categoryImageButton.frame;
+    self.categoryImageButton.centerX = self.width * 0.5;
     self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
     self.incomeLabel.centerY = self.categoryImageButton.centerY;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
     self.expenditureLabel.centerY = self.categoryImageButton.centerY;
-    
 }
 
 -(UILabel*)incomeLabel{
@@ -91,6 +111,7 @@
         _deleteButton.hidden = YES;
         [_deleteButton setImage:[UIImage imageNamed:@"home_delet"] forState:UIControlStateNormal];
         _deleteButton.layer.cornerRadius = 16;
+        [_deleteButton addTarget:self action:@selector(deleteButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteButton;
 }
@@ -124,7 +145,9 @@
     long month = [dateComponent month];
     long currentMonth = [currentdateComponent month];
     if ([item.billID isEqualToString:@"-1"]) {
+        _categoryImageButton.layer.borderWidth = 0;
         _categoryImageButton.userInteractionEnabled = NO;
+        [_categoryImageButton setImage:nil forState:UIControlStateNormal];
         [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
@@ -178,12 +201,12 @@
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
             [self.incomeLabel sizeToFit];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-            self.expenditureLabel.hidden = YES;
+            self.expenditureLabel.text = @"";
         }else{
             self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
-            self.incomeLabel.hidden = YES;
+            self.incomeLabel.text = @"";
         }
         [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
         _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
@@ -191,27 +214,43 @@
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
     }
+    [self setNeedsLayout];
 }
 
 -(void)setIsEdite:(BOOL)isEdite{
     _isEdite = isEdite;
-    if (_isEdite == YES) {
-        self.editeButton.hidden = NO;
-        self.deleteButton.hidden = NO;
-
-        [UIView animateKeyframesWithDuration:0.1 delay:0 options:UIViewKeyframeAnimationOptionLayoutSubviews animations:^{
-            self.editeButton.center = CGPointMake(40, self.height - 15);
-            self.deleteButton.center = CGPointMake(self.width - 40, self.height - 15);
-        }completion:nil];
-    }else{
     
-    }
 }
 
 -(void)editeButtonClicked{
     if (self.editeBtnClickBlock) {
         self.editeBtnClickBlock(self);
     }
+}
+
+-(void)deleteButtonClick{
+    [self deleteCharge];
+    if (self.deleteButtonClickBlock) {
+        self.deleteButtonClickBlock();
+    }
+}
+
+-(void)deleteCharge{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:nil],self.item.chargeID];
+    if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
+        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
+        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
+    }else{
+        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
+        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
+    }
+    [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
+    [db close];
 }
 
 @end

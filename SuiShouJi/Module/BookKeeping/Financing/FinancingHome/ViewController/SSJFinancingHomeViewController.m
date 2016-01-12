@@ -10,6 +10,7 @@
 #import "SSJFinancingHomeCollectionViewCell.h"
 #import "SSJFinancingHomeitem.h"
 #import "SSJFundingDetailsViewController.h"
+#import "SSJFundingTransferViewController.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -122,7 +123,6 @@
 -(UIView *)headerView{
     if (!_headerView) {
         _headerView = [[UIView alloc]init];
-
         _headerView.backgroundColor = [UIColor whiteColor];
         _profitLabel = [[UILabel alloc]init];
         _profitLabel.text = @"盈余";
@@ -137,6 +137,7 @@
     if (!_transferButton) {
         _transferButton = [[UIButton alloc]init];
         [_transferButton setTitle:@"转账" forState:UIControlStateNormal];
+        [_transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         _transferButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_transferButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         _transferButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
@@ -185,6 +186,11 @@
     _profitAmount = [db doubleForQuery:@"SELECT SUM(IBALANCE) FROM BK_FUNS_ACCT"];
     _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
     [_profitAmountLabel sizeToFit];
+}
+
+-(void)transferButtonClicked{
+    SSJFundingTransferViewController *fundingTransferVC = [[SSJFundingTransferViewController alloc]init];
+    [self.navigationController pushViewController:fundingTransferVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

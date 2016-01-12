@@ -57,6 +57,7 @@
     NSString *_defualtImage;
     SSJFundingItem *_selectItem;
     SSJFundingItem *_defualtItem;
+    BOOL _defualtType;
     long _originaldMonth;
     long _originaldYear;
     long _originaldDay;
@@ -65,7 +66,6 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
-        [self settitleSegment];
     }
     return self;
 }
@@ -89,6 +89,7 @@
         self.selectedYear = _originaldYear;
         self.selectedMonth = _originaldMonth;
         self.selectedDay = _originaldDay;
+        _categoryID = self.item.billID;
     }
     [self getDefualtFudingItem];
     [self getDefualtColorAndDefualtId];
@@ -97,6 +98,7 @@
     }else{
         _selectItem = _defualtItem;
     }
+    [self settitleSegment];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryImage];
@@ -306,7 +308,12 @@
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
-        _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
+        if (self.item == nil) {
+            _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
+        }else{
+            _categoryListView.incomeOrExpence = _defualtType;
+        }
+        [_categoryListView reloadData];
         __weak typeof(self) weakSelf = self;
         _categoryListView.CategorySelected = ^(NSString *categoryTitle , NSString *categoryImage,NSString *categoryID , NSString *categoryColor){
             _categoryID = categoryID;
@@ -434,7 +441,7 @@
 
 -(UIBarButtonItem *)rightbutton{
     if (!_rightbutton) {
-        _rightbutton = [[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStyleBordered target:self action:@selector(comfirmButtonClick:)];
+        _rightbutton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStyleBordered target:self action:@selector(comfirmButtonClick:)];
     }
     return _rightbutton;
 }
@@ -442,10 +449,14 @@
 -(void)settitleSegment{
     NSArray *segmentArray = @[@"支出",@"收入"];
     _titleSegment = [[UISegmentedControl alloc]initWithItems:segmentArray];
-    _titleSegment.selectedSegmentIndex = 0;
+    if (self.item == nil) {
+        _titleSegment.selectedSegmentIndex = 0;
+    }else{
+        _titleSegment.selectedSegmentIndex = !_defualtType;
+    }
     _titleSegment.size = CGSizeMake(115, 30);
     _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
-    NSDictionary *dictForNormal = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex:@"a7a7a7"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
+    NSDictionary *dictForNormal = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex: @"a7a7a7"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForNormal forState:UIControlStateNormal];
     NSDictionary *dictForSelected = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForSelected forState:UIControlStateSelected];
@@ -532,7 +543,7 @@
                 incomeSum = incomeSum + chargeMoney;
                 sum = sum + chargeMoney;
             }
-            [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT  , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],@"0",@"-1",@"0"];
+            [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT, ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],@"0",@"-1",@"0"];
         }else{
             FMResultSet *rs = [db executeQuery:@"SELECT EXPENCEAMOUNT, INCOMEAMOUNT , SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
             while ([rs next]) {
@@ -553,20 +564,30 @@
     }else{
         if (self.titleSegment.selectedSegmentIndex == 0) {
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:chargeMoney],selectDate];
+            if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate]){
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , EXPENCEAMOUNT = EXPENCEAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],selectDate];
+            }else{
+                [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:(-chargeMoney)],@"0",@"-1",@"0"];
+            }
         }else{
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ?", [NSNumber numberWithDouble:chargeMoney] , fundingType.fundingID];
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:chargeMoney],selectDate];
+            if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate]){
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , INCOMEAMOUNT = INCOMEAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],selectDate];
+            }else{
+                [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , ICHARGEID  , IBILLID , CWRITEDATE) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],@"0",@"-1",@"0"];
+            }
         }
         if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID])
         {
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
         }else{
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
+            [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
         }
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? WHERE ICHARGEID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],@"1",selectDate,self.item.chargeID];
     }
+    [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
     [db close];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -595,11 +616,12 @@
             _defualtImage = [rs stringForColumn:@"CCOIN"];
         }
     }else{
-        FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID];
+        FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN , ITYPE FROM BK_BILL_TYPE  WHERE ID = ?",self.item.billID];
         while([rs next]) {
             _defualtColor = [rs stringForColumn:@"CCOLOR"];
             _defualtID = [rs stringForColumn:@"ID"];
             _defualtImage = [rs stringForColumn:@"CCOIN"];
+            _defualtType = [rs intForColumn:@"ITYPE"];
         }
     }
     [db close];
