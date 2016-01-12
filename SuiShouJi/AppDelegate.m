@@ -40,13 +40,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
 //    
 //    FMDatabase *db = [FMDatabase databaseWithPath:@"/Users/oldlang/Desktop/testDb.db"];
 //    [db open];
-//    FMResultSet *result = [db executeQuery:@"select * from table3"];
-//    if (result) {
-//        while ([result next]) {
-//            NSLog(@"%@", [result stringForColumnIndex:0]);
-//            NSLog(@"%@", [result stringForColumn:@"name"]);
-//        }
-//    }
+//    NSLog(@"%d", [db executeUpdate:@"insert into table3 (id, name) values ('b', 'jack') where (select count(*) from table3 where id = 'b') = 0"]);
     
     return YES;
 }

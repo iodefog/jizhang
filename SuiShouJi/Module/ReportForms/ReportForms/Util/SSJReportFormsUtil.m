@@ -72,7 +72,7 @@
     
     //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *amountResultSet = [db executeQuery:@"select sum(IMONEY) from (select a.IMONEY from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and b.ITYPE = ?)",billDate,incomeOrPayType];
+        FMResultSet *amountResultSet = [db executeQuery:@"select sum(IMONEY) from (select a.IMONEY from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.CUSERID = ? and b.ITYPE = ?)", billDate, SSJUSERID(), incomeOrPayType];
         
         if (!amountResultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -98,7 +98,7 @@
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?",billDate,incomeOrPayType];
+        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and CUSERID = ? group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -133,7 +133,7 @@
                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ?) group by ITYPE order by ITYPE desc",billDate];
+        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.CUSERID = ?) group by ITYPE order by ITYPE desc", billDate, SSJUSERID()];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];

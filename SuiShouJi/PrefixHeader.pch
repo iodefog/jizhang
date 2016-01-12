@@ -16,6 +16,7 @@
 #import "SSJConstant.h"
 
 #import "SSJStringAddition.h"
+#import "SSJDataAddition.h"
 #import "SSJDateAddition.h"
 #import "SSJArrayAddition.h"
 

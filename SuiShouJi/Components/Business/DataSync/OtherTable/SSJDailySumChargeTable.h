@@ -13,7 +13,7 @@
 @interface SSJDailySumChargeTable : NSObject
 
 /**
- *  更新资金帐户金额表中当前用户的余额
+ *  更新每日流水统计表的数据
  *
  *  @param db FMDatabase实例
  *  @return 是否更新成功

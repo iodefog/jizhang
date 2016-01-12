@@ -93,4 +93,6 @@ extern int lastSyncVersion;
  */
 + (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db;
 
++ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record;
+
 @end
