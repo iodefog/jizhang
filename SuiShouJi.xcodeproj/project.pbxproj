@@ -91,6 +91,11 @@
 		BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */; };
 		BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433B81C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m */; };
 		BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433BB1C1AA3320051E7AB /* SSJReportFormsViewController.m */; };
+		BD06AF5F1C449D960028B571 /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF5E1C449D960028B571 /* close@2x.png */; };
+		BD06AF611C449DCE0028B571 /* left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF601C449DCE0028B571 /* left@2x.png */; };
+		BD06AF631C449DD50028B571 /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF621C449DD50028B571 /* right@2x.png */; };
+		BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */; };
+		BD06AF681C44C8B40028B571 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF671C44C8B40028B571 /* back@2x.png */; };
 		BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */; };
 		BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */; };
 		BD0E43F71C21365100F9179D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
@@ -383,6 +388,12 @@
 		BD0433B81C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeViewController.m; sourceTree = "<group>"; };
 		BD0433BA1C1AA3320051E7AB /* SSJReportFormsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsViewController.h; sourceTree = "<group>"; };
 		BD0433BB1C1AA3320051E7AB /* SSJReportFormsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsViewController.m; sourceTree = "<group>"; };
+		BD06AF5E1C449D960028B571 /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
+		BD06AF601C449DCE0028B571 /* left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left@2x.png"; sourceTree = "<group>"; };
+		BD06AF621C449DD50028B571 /* right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@2x.png"; sourceTree = "<group>"; };
+		BD06AF641C44B98C0028B571 /* SSJFundingTransferViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferViewController.h; sourceTree = "<group>"; };
+		BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferViewController.m; sourceTree = "<group>"; };
+		BD06AF671C44C8B40028B571 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
 		BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
 		BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
@@ -1241,6 +1252,8 @@
 				BD95733E1C3F640200126F6E /* BillTypeImage */,
 				BD3724211C3CA8B70073AAE2 /* Tabbarimage */,
 				BDF382451C3E16A000955038 /* checkmark@2x.png */,
+				BD06AF671C44C8B40028B571 /* back@2x.png */,
+				BD06AF5E1C449D960028B571 /* close@2x.png */,
 				BDF3823D1C3E0ACC00955038 /* home_calender@2x.png */,
 				BD9573A11C3F6C3700126F6E /* add@2x.png */,
 				BDF3823B1C3E025F00955038 /* calender@2x.png */,
@@ -1248,6 +1261,8 @@
 				BD9573A61C3FAFF000126F6E /* recording@2x.png */,
 				BD9573AA1C3FB5CE00126F6E /* home_delet@2x.png */,
 				BD9573AC1C3FB5DC00126F6E /* home_edit@2x.png */,
+				BD06AF601C449DCE0028B571 /* left@2x.png */,
+				BD06AF621C449DD50028B571 /* right@2x.png */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -1401,6 +1416,8 @@
 			children = (
 				BD7BC82A1C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.h */,
 				BD7BC82B1C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m */,
+				BD06AF641C44B98C0028B571 /* SSJFundingTransferViewController.h */,
+				BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1732,6 +1749,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD06AF5F1C449D960028B571 /* close@2x.png in Resources */,
 				BD3724311C3CA8B70073AAE2 /* tab_mine_sel@2x.png in Resources */,
 				BD95738D1C3F640200126F6E /* bt_others@2x.png in Resources */,
 				BD95739A1C3F640200126F6E /* bt_traffic@2x.png in Resources */,
@@ -1778,6 +1796,7 @@
 				BD9573751C3F640200126F6E /* bt_clean@2x.png in Resources */,
 				BD95738B1C3F640200126F6E /* bt_medicine@2x.png in Resources */,
 				BDF3823C1C3E025F00955038 /* calender@2x.png in Resources */,
+				BD06AF681C44C8B40028B571 /* back@2x.png in Resources */,
 				BD37242F1C3CA8B70073AAE2 /* tab_founds_sel@2x.png in Resources */,
 				BD9573811C3F640200126F6E /* bt_gift@2x.png in Resources */,
 				BD95737E1C3F640200126F6E /* bt_fruit@2x.png in Resources */,
@@ -1798,10 +1817,12 @@
 				BD9573951C3F640200126F6E /* bt_shouzhai@2x.png in Resources */,
 				BD9573931C3F640200126F6E /* bt_shebao@2x.png in Resources */,
 				BD9573911C3F640200126F6E /* bt_repair@2x.png in Resources */,
+				BD06AF611C449DCE0028B571 /* left@2x.png in Resources */,
 				BDF3823E1C3E0ACC00955038 /* home_calender@2x.png in Resources */,
 				BD95738C1C3F640200126F6E /* bt_meirong@2x.png in Resources */,
 				BD9573921C3F640200126F6E /* bt_service@2x.png in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
+				BD06AF631C449DD50028B571 /* right@2x.png in Resources */,
 				BD9573961C3F640200126F6E /* bt_snack@2x.png in Resources */,
 				BD9573871C3F640200126F6E /* bt_jianzhi@2x.png in Resources */,
 				BD9573841C3F640200126F6E /* bt_house@2x.png in Resources */,
@@ -1955,6 +1976,7 @@
 				BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */,
 				BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
+				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,

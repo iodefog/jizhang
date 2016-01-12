@@ -24,7 +24,9 @@
 
 @end
 
-@implementation SSJBookKeepingHomeViewController
+@implementation SSJBookKeepingHomeViewController{
+    NSIndexPath *_selectIndex;
+}
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -50,6 +52,13 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     NSString *path = SSJSQLitePath();
     NSLog(@"%@",path);
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    _selectIndex = nil;
+    [self getDateFromDatebase];
+    [self.tableView reloadData];
 }
 
 -(BOOL)prefersStatusBarHidden{
@@ -88,16 +97,29 @@
     if (!bookKeepingCell) {
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    bookKeepingCell.isEdite = ([indexPath compare:_selectIndex] == NSOrderedSame);
     bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
-        cell.isEdite = YES;
+        if (_selectIndex == nil) {
+            _selectIndex = [tableView indexPathForCell:cell];
+            [weakSelf.tableView reloadData];
+        }else{
+            _selectIndex = nil;
+            [weakSelf.tableView reloadData];
+        }
+//        cell.isEdite = YES;
     };
     bookKeepingCell.editeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell)
     {
         SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
         recordMakingVc.item = cell.item;
         [weakSelf.navigationController pushViewController:recordMakingVc animated:YES];
+    };
+    bookKeepingCell.deleteButtonClickBlock = ^{
+        _selectIndex = nil;
+        [weakSelf getDateFromDatebase];
+        [weakSelf.tableView reloadData];
     };
     return bookKeepingCell;
 }
@@ -126,7 +148,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND  IBILLID != '1' AND IBILLID != '2') UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND  IBILLID >= 1000 AND OPERATORTYPE != 2) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];

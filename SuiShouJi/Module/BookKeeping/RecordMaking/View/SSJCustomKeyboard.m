@@ -98,7 +98,7 @@
     if (!_BackspaceButton) {
         _BackspaceButton = [[SSJCustomKeyBoardButton alloc]init];
         _BackspaceButton.rightTop = CGPointMake(self.width,0);
-        [_BackspaceButton setTitle:@"return" forState:UIControlStateNormal];
+        [_BackspaceButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
         _BackspaceButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_BackspaceButton setTintColor:[UIColor whiteColor]];
         [_BackspaceButton addTarget:self action:@selector(BackspaceKeyClicked:) forControlEvents:UIControlEventTouchUpInside];
