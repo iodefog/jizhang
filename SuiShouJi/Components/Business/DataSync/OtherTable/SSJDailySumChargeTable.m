@@ -9,7 +9,7 @@
 #import "SSJDailySumChargeTable.h"
 #import "SSJSyncTable.h"
 
-@interface SSJDailySumChargeTableModel : NSObject
+@interface __SSJDailySumChargeTableModel : NSObject
 
 //  流水日期
 @property (nonatomic, copy) NSString *billDate;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation SSJDailySumChargeTableModel
+@implementation __SSJDailySumChargeTableModel
 
 @end
 
@@ -30,7 +30,7 @@
 
 + (BOOL)updateDailySumChargeInDatabase:(FMDatabase *)db {
     int lastSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
-    FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? group by A.CBILLDATE, B.ITYPE order by A.CBILLDATE", @(lastSyncVersion), SSJUSERID()];
+    FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.CBILLDATE, B.ITYPE order by A.CBILLDATE", @(lastSyncVersion), SSJUSERID()];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -43,9 +43,9 @@
             continue;
         }
         
-        SSJDailySumChargeTableModel *model = dailyChargeInfo[billDate];
+        __SSJDailySumChargeTableModel *model = dailyChargeInfo[billDate];
         if (!model) {
-            model = [[SSJDailySumChargeTableModel alloc] init];
+            model = [[__SSJDailySumChargeTableModel alloc] init];
         }
         model.billDate = billDate;
         
@@ -65,7 +65,7 @@
     
     __block BOOL success = YES;
     [dailyChargeInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        SSJDailySumChargeTableModel *model = obj;
+        __SSJDailySumChargeTableModel *model = obj;
         FMResultSet *result = [db executeQuery:@"select count(*) from BK_DAILYSUM_CHARGE where CBILLDATE = ?", model.billDate];
         if (!result) {
             SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
@@ -74,10 +74,21 @@
             return;
         }
         
-        
+        [result next];
+        if ([result intForColumnIndex:0] > 0) {
+            if (![db executeUpdate:@"update BK_DAILYSUM_CHARGE set EXPENCEAMOUNT = (EXPENCEAMOUNT + ?), INCOMEAMOUNT = (INCOMEAMOUNT + ?), SUMAMOUNT = (SUMAMOUNT + ?) where CBILLDATE = ?", model.expenceAmount, model.incomeAmount, (model.incomeAmount - model.expenceAmount), model.billDate]) {
+                success = NO;
+                *stop = YES;
+            }
+        } else {
+            if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE (CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT) values (?, ?, ?, ?)", model.billDate, model.expenceAmount, model.incomeAmount, (model.incomeAmount - model.expenceAmount)]) {
+                success = NO;
+                *stop = YES;
+            }
+        }
     }];
     
-    return YES;
+    return success;
 }
 
 @end

@@ -24,6 +24,7 @@
 		7D2B242D1C439854009A74A8 /* SSJModifyFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B242C1C439854009A74A8 /* SSJModifyFundingViewController.m */; };
 		7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
 		7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
+		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
 		7D6AAB561C310D330007C0A3 /* SSJReportFormsPercentCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB551C310D330007C0A3 /* SSJReportFormsPercentCircle.m */; };
 		7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */; };
@@ -255,6 +256,7 @@
 		7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundAccountTable.m; sourceTree = "<group>"; };
 		7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDailySumChargeTable.h; sourceTree = "<group>"; };
 		7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDailySumChargeTable.m; sourceTree = "<group>"; };
+		7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizerTests.m; sourceTree = "<group>"; };
 		7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchYearControl.h; sourceTree = "<group>"; };
 		7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchYearControl.m; sourceTree = "<group>"; };
 		7D6AAB541C310D330007C0A3 /* SSJReportFormsPercentCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircle.h; sourceTree = "<group>"; };
@@ -1335,6 +1337,7 @@
 			isa = PBXGroup;
 			children = (
 				BD543C591C1A6DBC00910D61 /* SuiShouJiTests.m */,
+				7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */,
 				BD543C5B1C1A6DBC00910D61 /* Info.plist */,
 			);
 			path = SuiShouJiTests;
@@ -1997,6 +2000,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */,
 				BD543C5A1C1A6DBC00910D61 /* SuiShouJiTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

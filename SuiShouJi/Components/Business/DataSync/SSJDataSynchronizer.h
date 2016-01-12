@@ -12,6 +12,6 @@
 
 + (instancetype)shareInstance;
 
-- (void)startSync;
+- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 @end

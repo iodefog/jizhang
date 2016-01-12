@@ -13,7 +13,7 @@
 
 + (BOOL)updateBalanceInDatabase:(FMDatabase *)db {
     int lastSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
-    FMResultSet *result = [db executeQuery:@"select A.IFID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? group by A.IFID, B.ITYPE order by A.IFID", @(lastSyncVersion), SSJUSERID()];
+    FMResultSet *result = [db executeQuery:@"select A.IFID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFID, B.ITYPE order by A.IFID", @(lastSyncVersion), SSJUSERID()];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
