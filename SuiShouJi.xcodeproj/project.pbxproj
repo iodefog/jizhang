@@ -96,6 +96,10 @@
 		BD06AF631C449DD50028B571 /* right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF621C449DD50028B571 /* right@2x.png */; };
 		BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */; };
 		BD06AF681C44C8B40028B571 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF671C44C8B40028B571 /* back@2x.png */; };
+		BD06AF6D1C451C3B0028B571 /* bt_pignzhangshouru@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF691C451C3B0028B571 /* bt_pignzhangshouru@2x.png */; };
+		BD06AF6E1C451C3B0028B571 /* bt_pingzhangzhichu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF6A1C451C3B0028B571 /* bt_pingzhangzhichu@2x.png */; };
+		BD06AF6F1C451C3B0028B571 /* bt_zhuanchu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF6B1C451C3B0028B571 /* bt_zhuanchu@2x.png */; };
+		BD06AF701C451C3B0028B571 /* bt_zhuanru@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD06AF6C1C451C3B0028B571 /* bt_zhuanru@2x.png */; };
 		BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */; };
 		BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */; };
 		BD0E43F71C21365100F9179D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
@@ -394,6 +398,10 @@
 		BD06AF641C44B98C0028B571 /* SSJFundingTransferViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferViewController.h; sourceTree = "<group>"; };
 		BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferViewController.m; sourceTree = "<group>"; };
 		BD06AF671C44C8B40028B571 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
+		BD06AF691C451C3B0028B571 /* bt_pignzhangshouru@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_pignzhangshouru@2x.png"; sourceTree = "<group>"; };
+		BD06AF6A1C451C3B0028B571 /* bt_pingzhangzhichu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_pingzhangzhichu@2x.png"; sourceTree = "<group>"; };
+		BD06AF6B1C451C3B0028B571 /* bt_zhuanchu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_zhuanchu@2x.png"; sourceTree = "<group>"; };
+		BD06AF6C1C451C3B0028B571 /* bt_zhuanru@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_zhuanru@2x.png"; sourceTree = "<group>"; };
 		BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
 		BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
@@ -1531,6 +1539,10 @@
 		BD95733E1C3F640200126F6E /* BillTypeImage */ = {
 			isa = PBXGroup;
 			children = (
+				BD06AF691C451C3B0028B571 /* bt_pignzhangshouru@2x.png */,
+				BD06AF6A1C451C3B0028B571 /* bt_pingzhangzhichu@2x.png */,
+				BD06AF6B1C451C3B0028B571 /* bt_zhuanchu@2x.png */,
+				BD06AF6C1C451C3B0028B571 /* bt_zhuanru@2x.png */,
 				BD95733F1C3F640200126F6E /* bt_alimoney@2x.png */,
 				BD9573401C3F640200126F6E /* bt_baby@2x.png */,
 				BD9573411C3F640200126F6E /* bt_baoxiao@2x.png */,
@@ -1761,6 +1773,7 @@
 				BD9573791C3F640200126F6E /* bt_deficit@2x.png in Resources */,
 				BD95737F1C3F640200126F6E /* bt_fuli@2x.png in Resources */,
 				BD37242B1C3CA8B70073AAE2 /* tab_accounte_sel@2x.png in Resources */,
+				BD06AF6E1C451C3B0028B571 /* bt_pingzhangzhichu@2x.png in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
 				BD9573721C3F640200126F6E /* bt_baoxiao@2x.png in Resources */,
@@ -1794,6 +1807,7 @@
 				BD9573851C3F640200126F6E /* bt_interest@2x.png in Resources */,
 				BD3724301C3CA8B70073AAE2 /* tab_mine_nor@2x.png in Resources */,
 				BD9573751C3F640200126F6E /* bt_clean@2x.png in Resources */,
+				BD06AF6F1C451C3B0028B571 /* bt_zhuanchu@2x.png in Resources */,
 				BD95738B1C3F640200126F6E /* bt_medicine@2x.png in Resources */,
 				BDF3823C1C3E025F00955038 /* calender@2x.png in Resources */,
 				BD06AF681C44C8B40028B571 /* back@2x.png in Resources */,
@@ -1801,6 +1815,7 @@
 				BD9573811C3F640200126F6E /* bt_gift@2x.png in Resources */,
 				BD95737E1C3F640200126F6E /* bt_fruit@2x.png in Resources */,
 				BD95739C1C3F640300126F6E /* bt_wage@2x.png in Resources */,
+				BD06AF701C451C3B0028B571 /* bt_zhuanru@2x.png in Resources */,
 				BD9573971C3F640200126F6E /* bt_sport@2x.png in Resources */,
 				BD9573891C3F640200126F6E /* bt_jiayong@2x.png in Resources */,
 				BDF382461C3E16A000955038 /* checkmark@2x.png in Resources */,
@@ -1810,6 +1825,7 @@
 				BD9573A71C3FAFF000126F6E /* recording@2x.png in Resources */,
 				BD95739E1C3F640300126F6E /* bt_yingye@2x.png in Resources */,
 				BD9573741C3F640200126F6E /* bt_car@2x.png in Resources */,
+				BD06AF6D1C451C3B0028B571 /* bt_pignzhangshouru@2x.png in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
 				BD95738E1C3F640200126F6E /* bt_pet@2x.png in Resources */,
 				BD95737D1C3F640200126F6E /* bt_food@2x.png in Resources */,
