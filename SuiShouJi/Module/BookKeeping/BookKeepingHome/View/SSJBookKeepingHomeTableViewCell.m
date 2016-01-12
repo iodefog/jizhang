@@ -34,15 +34,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.categoryImageButton.bottom = self.height;
-    self.categoryImageButton.centerX = self.width * 0.5;
-    self.editeButton.frame = self.categoryImageButton.frame;
-    self.deleteButton.frame = self.categoryImageButton.frame;
-    self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
-    self.incomeLabel.centerY = self.categoryImageButton.centerY;
-    self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
-    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
     if (_isEdite == YES) {
+        self.editeButton.frame = self.categoryImageButton.frame;
+        self.deleteButton.frame = self.categoryImageButton.frame;
         self.editeButton.hidden = NO;
         self.deleteButton.hidden = NO;
         self.incomeLabel.hidden = YES;
@@ -55,13 +49,19 @@
         [UIView animateWithDuration:0.2 animations:^{
             self.editeButton.centerX = self.width / 2;
             self.deleteButton.centerX = self.width / 2;
-        }completion:nil];
-        self.editeButton.hidden = YES;
-        self.deleteButton.hidden = YES;
-        self.expenditureLabel.hidden = NO;
-        self.incomeLabel.hidden = NO;
-
+        }completion:^(BOOL success){
+            self.editeButton.hidden = YES;
+            self.deleteButton.hidden = YES;
+            self.expenditureLabel.hidden = NO;
+            self.incomeLabel.hidden = NO;
+        }];
     }
+    self.categoryImageButton.bottom = self.height;
+    self.categoryImageButton.centerX = self.width * 0.5;
+    self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
+    self.incomeLabel.centerY = self.categoryImageButton.centerY;
+    self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
+    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
 }
 
 -(UILabel*)incomeLabel{
@@ -244,10 +244,10 @@
     [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:nil],self.item.chargeID];
     if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
         [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney]];
+        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
     }else{
         [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney]];
+        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],self.item.billDate];
     }
     [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
     [db close];
