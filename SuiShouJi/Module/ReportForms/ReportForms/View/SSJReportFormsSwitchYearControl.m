@@ -45,6 +45,7 @@
 - (UIButton *)preBtn {
     if (!_preBtn) {
         _preBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_preBtn setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
         [_preBtn addTarget:self action:@selector(preBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _preBtn;
@@ -53,6 +54,7 @@
 - (UIButton *)nextBtn {
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_nextBtn setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
         [_nextBtn addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nextBtn;
