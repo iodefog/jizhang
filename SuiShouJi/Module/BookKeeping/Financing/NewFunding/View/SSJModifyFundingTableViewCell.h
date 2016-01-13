@@ -8,8 +8,10 @@
 
 #import "SSJBaseTableViewCell.h"
 #import "SSJFundingDetailItem.h"
+
 @interface SSJModifyFundingTableViewCell : SSJBaseTableViewCell<UITextFieldDelegate>
 @property (nonatomic,strong) UILabel *cellTitle;
 @property (nonatomic,strong) UITextField *cellDetail;
 @property (nonatomic,strong) UIView *colorView;
+@property (nonatomic,strong) UILabel *typeTitle;
 @end

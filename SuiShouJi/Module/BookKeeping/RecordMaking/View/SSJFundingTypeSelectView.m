@@ -118,7 +118,7 @@
         [_titleLabel sizeToFit];
         [_titleView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
-        [_closeButton setImage:[UIImage imageNamed:@"closebutton test"] forState:UIControlStateNormal];
+        [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_titleView addSubview:_closeButton];
     }
@@ -162,7 +162,7 @@
     }
     SSJFundingItem *item = [[SSJFundingItem alloc]init];
     item.fundingName = @"添加资金新的账户";
-    item.fundingIcon = @"";
+    item.fundingIcon = @"add";
     [_items addObject:item];
 }
 

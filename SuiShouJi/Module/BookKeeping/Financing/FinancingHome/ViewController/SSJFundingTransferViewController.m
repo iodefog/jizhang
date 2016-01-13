@@ -7,24 +7,59 @@
 //
 
 #import "SSJFundingTransferViewController.h"
+#import "SSJFundingItem.h"
+#import "SSJFundingTypeSelectView.h"
 
 @interface SSJFundingTransferViewController ()
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
+@property (nonatomic,strong) UITextField *transferIntext;
+@property (nonatomic,strong) UITextField *transferOuttext;
+@property (nonatomic,strong) UIImageView *transferImage;
+@property (nonatomic,strong) UIButton *transferInButton;
+@property (nonatomic,strong) UIButton *transferOutButton;
+@property (nonatomic,strong) SSJFundingTypeSelectView *transferInFundingTypeSelect;
+@property (nonatomic,strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
+
 @end
 
-@implementation SSJFundingTransferViewController
+@implementation SSJFundingTransferViewController{
+    SSJFundingItem *_transferInItem;
+    SSJFundingItem *_transferOutItem;
+}
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"转账";
+        self.hideKeyboradWhenTouch = YES;
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = self.rightButton;
+    [self.view addSubview:self.transferIntext];
+    [self.view addSubview:self.transferOuttext];
+    [self.transferIntext addSubview:self.transferInButton];
+    [self.transferOuttext addSubview:self.transferOutButton];
+}
+
+-(void)viewDidLayoutSubviews{
+    self.transferIntext.size = CGSizeMake(self.view.width, 35);
+    self.transferIntext.leftTop = CGPointMake(0, 45);
+    [self.transferIntext ssj_relayoutBorder];
+    self.transferOuttext.size = CGSizeMake(self.view.width, 35);
+    self.transferOuttext.leftTop = CGPointMake(0, self.transferIntext.bottom + 45);
+    [self.transferOuttext ssj_relayoutBorder];
+    self.transferInButton.size = CGSizeMake(150, 20);
+    self.transferInButton.centerY = self.transferIntext.height / 2;
+    self.transferInButton.left = 20;
+    self.transferOutButton.size = CGSizeMake(150, 20);
+    self.transferOutButton.centerY = self.transferOuttext.height / 2;
+    self.transferOutButton.left = 20;
 }
 
 #pragma mark - Getter
@@ -35,9 +70,166 @@
     return _rightButton;
 }
 
+-(UITextField *)transferIntext{
+    if (_transferIntext == nil) {
+        _transferIntext = [[UITextField alloc]init];
+//        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
+        [_transferIntext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
+        [_transferIntext ssj_setBorderStyle:SSJBorderStyleBottom];
+        _transferIntext.keyboardType = UIKeyboardTypeDecimalPad;
+
+        _transferIntext.placeholder = @"¥0.00";
+        _transferIntext.textAlignment = NSTextAlignmentRight;
+        _transferIntext.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        UIView *rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 35)];
+        _transferIntext.rightView = rightView;
+        _transferIntext.rightViewMode = UITextFieldViewModeAlways;
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
+    }
+    return _transferIntext;
+}
+
+-(UITextField *)transferOuttext{
+    if (_transferOuttext == nil) {
+        _transferOuttext = [[UITextField alloc]init];
+        //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
+        [_transferOuttext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
+        [_transferOuttext ssj_setBorderStyle:SSJBorderStyleBottom];
+        _transferOuttext.keyboardType = UIKeyboardTypeDecimalPad;
+        _transferOuttext.placeholder = @"¥0.00";
+        _transferOuttext.textAlignment = NSTextAlignmentRight;
+        _transferOuttext.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        UIView *rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 35)];
+        _transferOuttext.rightView = rightView;
+        _transferOuttext.rightViewMode = UITextFieldViewModeAlways;
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
+        
+    }
+    return _transferOuttext;
+}
+
+-(UIButton *)transferInButton{
+    if (!_transferInButton) {
+        _transferInButton = [[UIButton alloc]init];
+        [_transferInButton setImage:[UIImage imageNamed:@"founds_zhuanru"] forState:UIControlStateNormal];
+        [_transferInButton setTitle:@"请选择转入账户" forState:UIControlStateNormal];
+        _transferInButton.titleLabel.textColor = [UIColor blackColor];
+        [_transferInButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        _transferInButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_transferInButton addTarget:self action:@selector(transferInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+    }
+    return _transferInButton;
+}
+
+-(UIButton *)transferOutButton{
+    if (!_transferOutButton) {
+        _transferOutButton = [[UIButton alloc]init];
+        [_transferOutButton setImage:[UIImage imageNamed:@"founds_zhuanchu"] forState:UIControlStateNormal];
+        [_transferOutButton setTitle:@"请选择转出账户" forState:UIControlStateNormal];
+        [_transferOutButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        _transferOutButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_transferOutButton addTarget:self action:@selector(transferOutButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+    }
+    return _transferOutButton;
+}
+
+-(SSJFundingTypeSelectView *)transferInFundingTypeSelect{
+    if (!_transferInFundingTypeSelect) {
+        __weak typeof(self) weakSelf = self;
+        _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
+            [weakSelf.transferInButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+            _transferInItem = fundingItem;
+            [weakSelf.transferInFundingTypeSelect removeFromSuperview];
+        };
+    }
+    return _transferInFundingTypeSelect;
+}
+
+-(SSJFundingTypeSelectView *)transferOutFundingTypeSelect{
+    if (!_transferOutFundingTypeSelect) {
+        __weak typeof(self) weakSelf = self;
+        _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
+            [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+            _transferOutItem = fundingItem;
+            [weakSelf.transferOutFundingTypeSelect removeFromSuperview];
+        };
+    }
+    return _transferOutFundingTypeSelect;
+
+}
+
 #pragma mark - Private
 -(void)rightButtonClicked{
     
+}
+
+-(void)transferTextDidChange{
+    [self setupTextFiledNum:self.transferIntext num:2];
+    [self setupTextFiledNum:self.transferOuttext num:2];
+    if ([self.transferIntext isFirstResponder]) {
+        if (![self.transferIntext.text hasPrefix:@"¥"]&&![self.transferIntext.text isEqualToString:@""]) {
+            self.transferIntext.text = [NSString stringWithFormat:@"¥%@",self.transferIntext.text];
+        }else if ([self.transferIntext.text isEqualToString:@"¥"]){
+            self.transferIntext.text = @"";
+        }
+        self.transferOuttext.text = self.transferIntext.text;
+    }else{
+        if (![self.transferOuttext.text hasPrefix:@"¥"]&&![self.transferIntext.text isEqualToString:@""]) {
+            self.transferOuttext.text = [NSString stringWithFormat:@"¥%@",self.transferOuttext.text];
+        }else if ([self.transferOuttext.text isEqualToString:@"¥"]){
+            self.transferOuttext.text = @"";
+        }
+        self.transferIntext.text = self.transferOuttext.text;
+    }
+}
+
+-(void)transferOutButtonClicked:(id)sender{
+    [self.transferIntext resignFirstResponder];
+    [self.transferOuttext resignFirstResponder];
+    [[UIApplication sharedApplication].keyWindow addSubview:self.transferOutFundingTypeSelect];
+}
+
+-(void)transferInButtonClicked:(id)sender{
+    [self.transferIntext resignFirstResponder];
+    [self.transferOuttext resignFirstResponder];
+    [[UIApplication sharedApplication].keyWindow addSubview:self.transferInFundingTypeSelect];
+}
+
+
+/**
+ *   限制输入框小数点(输入框只改变时候调用valueChange)
+ *
+ *  @param TF  输入框
+ *  @param num 小数点后限制位数
+ */
+-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+{
+    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
+        TF.text = @"0.";
+    }else if (str.length == 2) {
+        if ([str floatValue] == 0) {
+            TF.text = @"0";
+        }else if(arr.count < 2){
+            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
+        }
+    }
+    
+    if (arr.count > 2) {
+        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+    }
+    
+    if (arr.count == 2) {
+        NSString * lastStr = arr.lastObject;
+        if (lastStr.length > num) {
+            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

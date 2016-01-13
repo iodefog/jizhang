@@ -144,7 +144,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 }
 
 -(void)rightButtonClicked:(id)sender{
-    SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+    SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
     self.item.fundingAmount = _totalIncome - _totalExpence;
     newFundingVC.item = self.item;
     [self.navigationController pushViewController:newFundingVC animated:YES];

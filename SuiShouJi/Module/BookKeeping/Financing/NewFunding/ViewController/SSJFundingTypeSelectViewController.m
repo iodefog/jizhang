@@ -75,7 +75,7 @@
         NSLog(@"Could not open db");
         return;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_FUND_INFO WHERE CPARENT = 'root'"];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_FUND_INFO WHERE CPARENT = 'root' ORDER BY CFUNDID ASC"];
     while ([rs next]) {
         SSJFundingItem *item = [[SSJFundingItem alloc]init];
         item.fundingID = [rs stringForColumn:@"CFUNDID"];
