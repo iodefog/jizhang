@@ -10,6 +10,8 @@
 #import "SSJFundingItem.h"
 #import "SSJFundingTypeSelectView.h"
 
+#import "FMDB.h"
+
 @interface SSJFundingTransferViewController ()
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
 @property (nonatomic,strong) UITextField *transferIntext;
@@ -164,7 +166,28 @@
 
 #pragma mark - Private
 -(void)rightButtonClicked{
-    
+    NSString *str = [_transferIntext.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+    if ([_transferOutItem.fundingID isEqualToString:_transferInItem.fundingID]) {
+        [CDAutoHideMessageHUD showMessage:@"请选择不同账户"];
+        return;
+    }else if ([str doubleValue] == 0 || [self.transferIntext.text isEqualToString:@""]) {
+        [CDAutoHideMessageHUD showMessage:@"请输入金额"];
+        return;
+    }else if (_transferInItem == nil || _transferOutItem == nil) {
+        [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
+        return;
+    }
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()] ;
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        return ;
+    }
+    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),str,@"3",_transferInItem.fundingID,@"",@"",@"",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],@"",@"0",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+    [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),str,@"4",_transferOutItem.fundingID,@"",@"",@"",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],@"",@"0",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+    [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()];
+    [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()];
+    [db close];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)transferTextDidChange{
