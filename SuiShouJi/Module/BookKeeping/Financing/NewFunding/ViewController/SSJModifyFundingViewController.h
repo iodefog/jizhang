@@ -6,10 +6,12 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJNewBaseTableViewController.h"
+#import "SSJBaseViewController.h"
 #import "SSJFinancingHomeitem.h"
+#import "TPKeyboardAvoidingTableView.h"
 
-@interface SSJModifyFundingViewController : SSJNewBaseTableViewController<UITextFieldDelegate>
+@interface SSJModifyFundingViewController : SSJBaseViewController<UITableViewDelegate,UITableViewDataSource>
+
 @property (nonatomic,strong) SSJFinancingHomeitem *item;
 
 @end

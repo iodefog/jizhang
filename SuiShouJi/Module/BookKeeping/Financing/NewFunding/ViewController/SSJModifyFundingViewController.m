@@ -10,13 +10,13 @@
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJColorSelectViewControllerViewController.h"
 #import "SSJModifyFundingTableViewCell.h"
-
-
+#import "TPKeyboardAvoidingTableView.h"
 
 #import "FMDB.h"
 
 @interface SSJModifyFundingViewController ()
 @property (nonatomic,strong) UIView *footerView;
+@property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
 @end
 
 @implementation SSJModifyFundingViewController{
@@ -31,7 +31,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.hideKeyboradWhenTouch = YES;
+//        self.hideKeyboradWhenTouch = YES;
     }
     return self;
 }
@@ -42,6 +42,7 @@
     _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"编辑账户卡片"];
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
+    [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
 }
 
@@ -130,7 +131,6 @@
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",self.item.fundingAmount];
             NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeDecimalPad;
-            NewFundingCell.cellDetail.delegate = self;
         }
             break;
         case 2:{
@@ -142,14 +142,14 @@
         case 3:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [self getParentFundingNameWithParentfundingID:_selectParent];
+            NewFundingCell.cellDetail.enabled = NO;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            NewFundingCell.cellDetail.userInteractionEnabled = NO;
         }
             break;
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
-            NewFundingCell.cellDetail.userInteractionEnabled = NO;
+            NewFundingCell.cellDetail.hidden = YES;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
@@ -173,6 +173,15 @@
         [_footerView addSubview:comfirmButton];
     }
     return _footerView;
+}
+
+-(TPKeyboardAvoidingTableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+    }
+    return _tableView;
 }
 
 #pragma mark - Private

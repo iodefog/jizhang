@@ -102,9 +102,13 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
             return ;
         }
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"现金账户" , @"" , @"1" , @"#fe8a65" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"",SSJUSERID()];
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1') WHERE CACCTNAME = '现金账户'"];
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"储蓄卡余额" , @"" , @"2" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"" , SSJUSERID()];
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"信用卡透支" , @"" , @"2" , @"#8dc4fa" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"支付宝余额" , @"" , @"6" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"" ,SSJUSERID() ];
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2') WHERE CACCTNAME = '储蓄卡余额'"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"信用卡透支" , @"" , @"3" , @"#8dc4fa" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @""];
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3') WHERE CACCTNAME = '信用卡透支'"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME, CICOIN , CPARENT , CCOLOR , CADDDATE , CWRITEDATE , OPERATORTYPE , IVERSION , CMEMO , CUSERID) VALUES (?,?,?,?,?,?,?,?,?,?,?)", SSJUUID() , @"支付宝余额" , @"" , @"7" , @"#ffb944" , [NSString stringWithFormat:@"%@",[NSDate date]] , @"", [NSNumber numberWithInt:0] , @"" , @"" ,SSJUSERID()];
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7') WHERE CACCTNAME = '支付宝余额'"];
         [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> ?",SSJUSERID(),[NSNumber numberWithDouble:0.00] , @"root",SSJUSERID()];
     }
 

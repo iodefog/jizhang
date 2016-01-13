@@ -64,7 +64,7 @@
     self.transferButton.size = CGSizeMake(65, 30);
     self.transferButton.right = self.view.width - 15;
     self.transferButton.centerY = self.headerView.height / 2;
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 76);
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 120);
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 
