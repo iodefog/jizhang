@@ -8,7 +8,6 @@
 
 #import "SSJReportFormsPercentCircle.h"
 #import "SSJReportFormsPercentCircleComponent.h"
-#import "SSJReportFormsPercentCircleLayer.h"
 
 static NSString *const kAnimationKey = @"kAnimationKey";
 
@@ -65,7 +64,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 - (void)reloadData {
-    
+
     if (!self.dataSource
         || ![self.dataSource respondsToSelector:@selector(numberOfComponentsInPercentCircle:)]
         || ![self.dataSource respondsToSelector:@selector(percentCircle:itemForComponentAtIndex:)]
@@ -186,12 +185,19 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         circleComponent.lineLayer = lineLayer;
         
         //  添加图片
+        CGFloat imageDiam = MAX(item.image.size.width, item.image.size.height) + 10;
+        
         UIImageView *imageView = [[UIImageView alloc] initWithImage:item.image];
+        imageView.size = CGSizeMake(imageDiam, imageDiam);
+        imageView.contentMode = UIViewContentModeCenter;
+        imageView.layer.borderColor = item.color.CGColor;
+        imageView.layer.borderWidth = 0.5;
+        imageView.layer.cornerRadius = imageView.width * 0.5;
         imageView.layer.transform = CATransform3DMakeScale(0, 0, 0);
         if (angle >= 0 && angle < M_PI) {
-            imageView.center = CGPointMake(linePath.currentPoint.x + item.image.size.width * 0.5, linePath.currentPoint.y);
+            imageView.center = CGPointMake(linePath.currentPoint.x + imageDiam * 0.5, linePath.currentPoint.y);
         } else if (angle >= M_PI) {
-            imageView.center = CGPointMake(linePath.currentPoint.x - item.image.size.width * 0.5, linePath.currentPoint.y);
+            imageView.center = CGPointMake(linePath.currentPoint.x - imageDiam * 0.5, linePath.currentPoint.y);
         }
         
         [self addSubview:imageView];
@@ -203,9 +209,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         scaleLab.backgroundColor = [UIColor whiteColor];
         scaleLab.font = [UIFont systemFontOfSize:12];
         scaleLab.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        scaleLab.text = [NSString stringWithFormat:@"%.0f％",item.scale];
+        scaleLab.text = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
         [scaleLab sizeToFit];
-        scaleLab.top = imageView.bottom + 5;
+        scaleLab.top = imageView.top + imageDiam * 0.5 + 5;
         scaleLab.centerX =  imageView.centerX;
         
         [self addSubview:scaleLab];
@@ -224,7 +230,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             component.circleLayer.strokeEnd = [circleAnimation.toValue floatValue];
             
             CABasicAnimation *lineAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-            lineAnimation.duration = 0.5;
+            lineAnimation.duration = 0.35;
             lineAnimation.toValue = @(1);
             lineAnimation.delegate = self;
             lineAnimation.removedOnCompletion = NO;
@@ -245,13 +251,16 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             imageAnimation.duration = 0.35;
             imageAnimation.delegate = self;
             imageAnimation.values = @[@0.7,@0.9,@1.1,@1];
+            imageAnimation.removedOnCompletion = NO;
             [component.imageView.layer addAnimation:imageAnimation forKey:kAnimationKey];
+            
+            component.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
             
             return;
         }
         
         if ([component.imageView.layer animationForKey:kAnimationKey] == anim) {
-            
+            [component.imageView.layer removeAnimationForKey:kAnimationKey];
             [UIView transitionWithView:component.scaleLab duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
                 component.scaleLab.hidden = NO;
             } completion:NULL];

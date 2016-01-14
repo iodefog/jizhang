@@ -11,6 +11,7 @@
 #import "SSJReportFormsPercentCircle.h"
 #import "SSJReportFormsSwitchYearControl.h"
 #import "SCYPageControl.h"
+#import "SSJSegmentedControl.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 
@@ -30,7 +31,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 @interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, SCYUnlimitedScrollViewDataSource, SCYUnlimitedScrollViewDelegate, SSJReportFormsPercentCircleDataSource>
 
 //  收入、支出、盈余切换控件
-@property (nonatomic, strong) UISegmentedControl *segmentControl;
+@property (nonatomic, strong) SSJSegmentedControl *segmentControl;
 
 //  切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsSwitchYearControl *switchYearControl;
@@ -70,6 +71,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
+        self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     return self;
 }
@@ -77,8 +79,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view addSubview:self.headerView];
     [self.view addSubview:self.tableView];
-    self.tableView.tableHeaderView = self.headerView;
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
@@ -95,10 +97,6 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-}
-
-- (void)viewDidLayoutSubviews {
-    self.tableView.frame = self.view.bounds;
 }
 
 #pragma mark - UITableViewDataSource
@@ -265,10 +263,16 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
             self.datas = result;
             [self.tableView reloadData];
             [self.monthCircleView reloadData];
+            if (!self.datas.count) {
+                [self.headerView ssj_setBorderStyle:SSJBorderStyleleNone];
+                [self.view showWatermark:@"reportForm_empty" animated:YES Target:nil Action:nil];
+            } else {
+                [self.headerView ssj_setBorderStyle:SSJBorderStyleBottom];
+                [self.view hideWatermark:YES];
+            }
             
             NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
             if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-                
                 double pay = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:0]).money;
                 double income = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:1]).money;
                 [self.surplusView setIncome:income pay:pay];
@@ -284,10 +288,16 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
             self.datas = result;
             [self.tableView reloadData];
             [self.yearCircleView reloadData];
+            if (!self.datas.count) {
+                [self.headerView ssj_setBorderStyle:SSJBorderStyleleNone];
+                [self.view showWatermark:@"reportForm_empty" animated:YES Target:nil Action:nil];
+            } else {
+                [self.headerView ssj_setBorderStyle:SSJBorderStyleBottom];
+                [self.view hideWatermark:YES];
+            }
             
             NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
             if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-                
                 double pay = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:0]).money;
                 double income = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:1]).money;
                 [self.surplusView setIncome:income pay:pay];
@@ -299,14 +309,14 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 }
 
 #pragma mark - Getter
-- (UISegmentedControl *)segmentControl {
+- (SSJSegmentedControl *)segmentControl {
     if (!_segmentControl) {
-        _segmentControl = [[UISegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
-        _segmentControl.selectedSegmentIndex = 0;
-        _segmentControl.center = CGPointMake(self.headerView.width * 0.5, kHeaderFirstPartHeight * 0.5);
+        _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
+        _segmentControl.font = [UIFont systemFontOfSize:18];
         _segmentControl.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
-        [_segmentControl setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]} forState:UIControlStateNormal];
+        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#47cfbe"]} forState:UIControlStateSelected];
         [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
+        _segmentControl.center = CGPointMake(self.headerView.width * 0.5, kHeaderFirstPartHeight * 0.5);
     }
     return _segmentControl;
 }
@@ -390,6 +400,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     if (!_headerView) {
         _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kHeaderFirstPartHeight + kHeaderSecondPartHeight + kHeaderThirdPartHeight)];
         _headerView.backgroundColor = [UIColor whiteColor];
+        [_headerView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_headerView ssj_setBorderWidth:1];
         [_headerView addSubview:self.segmentControl];
         [_headerView addSubview:self.switchYearControl];
         [_headerView addSubview:self.scrollView];
@@ -399,7 +411,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.headerView.height, self.view.width, self.view.height - self.headerView.height) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
@@ -407,7 +419,9 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
-        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        _tableView.separatorInset = UIEdgeInsetsZero;
+        _tableView.contentInset = UIEdgeInsetsMake(0, 0, self.tabBarController.tabBar.height, 0);
+        [_tableView ssj_clearExtendSeparator];
     }
     return _tableView;
 }

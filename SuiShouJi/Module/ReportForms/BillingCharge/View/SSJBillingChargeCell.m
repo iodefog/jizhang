@@ -21,6 +21,7 @@
         self.textLabel.font = [UIFont systemFontOfSize:15];
         self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
         [self.contentView addSubview:self.moneyLab];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
