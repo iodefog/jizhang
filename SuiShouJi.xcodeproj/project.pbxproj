@@ -140,6 +140,9 @@
 		BD70DECB1C45F064000E6CC9 /* ft_shiwuka@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD70DEC21C45F064000E6CC9 /* ft_shiwuka@2x.png */; };
 		BD70DECC1C45F064000E6CC9 /* ft_shouqian@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD70DEC31C45F064000E6CC9 /* ft_shouqian@2x.png */; };
 		BD70DECE1C462560000E6CC9 /* founds_exchange@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD70DECD1C462560000E6CC9 /* founds_exchange@2x.png */; };
+		BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */; };
+		BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DED31C46496E000E6CC9 /* SSJNewFundingTypeCell.m */; };
+		BD70DED61C473D84000E6CC9 /* edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD70DED51C473D84000E6CC9 /* edit@2x.png */; };
 		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
 		BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8241C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m */; };
 		BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8281C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m */; };
@@ -472,6 +475,11 @@
 		BD70DEC21C45F064000E6CC9 /* ft_shiwuka@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shiwuka@2x.png"; sourceTree = "<group>"; };
 		BD70DEC31C45F064000E6CC9 /* ft_shouqian@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shouqian@2x.png"; sourceTree = "<group>"; };
 		BD70DECD1C462560000E6CC9 /* founds_exchange@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_exchange@2x.png"; sourceTree = "<group>"; };
+		BD70DECF1C46321B000E6CC9 /* SSJNewFundingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewFundingViewController.h; sourceTree = "<group>"; };
+		BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewFundingViewController.m; sourceTree = "<group>"; };
+		BD70DED21C46496E000E6CC9 /* SSJNewFundingTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewFundingTypeCell.h; sourceTree = "<group>"; };
+		BD70DED31C46496E000E6CC9 /* SSJNewFundingTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewFundingTypeCell.m; sourceTree = "<group>"; };
+		BD70DED51C473D84000E6CC9 /* edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit@2x.png"; sourceTree = "<group>"; };
 		BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryListView.h; sourceTree = "<group>"; };
 		BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryListView.m; sourceTree = "<group>"; };
 		BD7BC8231C3A1A0F001DE5D8 /* SSJFinancingHomeitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeitem.h; sourceTree = "<group>"; };
@@ -1287,6 +1295,7 @@
 				BD95733E1C3F640200126F6E /* BillTypeImage */,
 				BD3724211C3CA8B70073AAE2 /* Tabbarimage */,
 				BDF382451C3E16A000955038 /* checkmark@2x.png */,
+				BD70DED51C473D84000E6CC9 /* edit@2x.png */,
 				BD70DECD1C462560000E6CC9 /* founds_exchange@2x.png */,
 				BD06AF731C45394C0028B571 /* founds_zhuanru@2x.png */,
 				BD06AF711C4539400028B571 /* founds_zhuanchu@2x.png */,
@@ -1509,6 +1518,8 @@
 				BD7BC8561C3B6F6C001DE5D8 /* SSJModifyFundingTableViewCell.m */,
 				BDF382421C3E151100955038 /* SSJColorSelectCollectionViewCell.h */,
 				BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */,
+				BD70DED21C46496E000E6CC9 /* SSJNewFundingTypeCell.h */,
+				BD70DED31C46496E000E6CC9 /* SSJNewFundingTypeCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1522,6 +1533,8 @@
 				BD0214471C3E87AE000E944E /* SSJFundingTypeSelectViewController.m */,
 				BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */,
 				BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */,
+				BD70DECF1C46321B000E6CC9 /* SSJNewFundingViewController.h */,
+				BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1876,6 +1889,7 @@
 				BD9573971C3F640200126F6E /* bt_sport@2x.png in Resources */,
 				BD70DECC1C45F064000E6CC9 /* ft_shouqian@2x.png in Resources */,
 				BD9573891C3F640200126F6E /* bt_jiayong@2x.png in Resources */,
+				BD70DED61C473D84000E6CC9 /* edit@2x.png in Resources */,
 				BDF382461C3E16A000955038 /* checkmark@2x.png in Resources */,
 				BD95737B1C3F640200126F6E /* bt_education@2x.png in Resources */,
 				BD95739F1C3F640300126F6E /* bt_yiwai@2x.png in Resources */,
@@ -1978,6 +1992,7 @@
 				7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */,
 				7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */,
 				BD0214481C3E87AE000E944E /* SSJFundingTypeSelectViewController.m in Sources */,
+				BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */,
 				7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */,
 				BD9573A51C3F809000126F6E /* SSJCategorySelectPageItem.m in Sources */,
 				BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */,
@@ -2054,6 +2069,7 @@
 				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
+				BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				7D2B24101C3AAB4D009A74A8 /* SSJBillTypeModel.m in Sources */,
