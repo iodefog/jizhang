@@ -361,11 +361,11 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         if (!self.datas.count) {
             self.tableView.hidden = YES;
 //            [self.headerView ssj_setBorderStyle:SSJBorderStyleleNone];
-            [self.view showWatermark:@"reportForm_empty" animated:YES Target:nil Action:nil];
+            [self.view ssj_showWatermarkWithImageName:@"reportForm_empty" animated:YES target:nil action:nil];
         } else {
             self.tableView.hidden = NO;
 //            [self.headerView ssj_setBorderStyle:SSJBorderStyleBottom];
-            [self.view hideWatermark:YES];
+            [self.view ssj_hideWatermark:YES];
         }
         
         NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];

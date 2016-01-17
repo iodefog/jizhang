@@ -21,13 +21,18 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure {
     
-    if (year == 0 || month > 12) {
-        SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:(year == 0 || month > 12)",NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+    if (year < 0 || month > 12 || month < 0) {
+        SSJPRINT(@">>>SSJ warning: query data with wrong year or month (year < 0 || month > 12 || month < 0)");
         failure(nil);
         return;
     }
     
-    NSMutableString *dateStr = [NSMutableString stringWithFormat:@"%04d",(int)year];
+    NSMutableString *dateStr = nil;
+    if (year == 0) {
+        dateStr = [NSMutableString stringWithString:@"____"];
+    } else {
+        dateStr = [NSMutableString stringWithFormat:@"%04d",(int)year];
+    }
     if (month == 0) {
         [dateStr appendFormat:@"-__-__"];
     } else {
@@ -35,7 +40,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE, b.CNAME, b.CCOIN from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, dateStr, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, dateStr, SSJUSERID()];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -62,6 +67,8 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.imageName = [resultSet stringForColumn:@"CCOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
+            item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
+            item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             
             if ([tempDate isEqualToString:billDate]) {

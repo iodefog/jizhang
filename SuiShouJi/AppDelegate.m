@@ -75,6 +75,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_mine_nor"];
+    
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];

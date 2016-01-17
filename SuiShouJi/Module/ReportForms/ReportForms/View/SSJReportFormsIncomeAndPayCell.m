@@ -22,10 +22,13 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 0.5;
+        
         self.textLabel.font = [UIFont systemFontOfSize:18];
         self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        
         [self.contentView addSubview:self.percentLabel];
         [self.contentView addSubview:self.moneyLabel];
     }
