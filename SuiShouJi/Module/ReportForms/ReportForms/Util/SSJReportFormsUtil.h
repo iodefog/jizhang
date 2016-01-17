@@ -51,10 +51,10 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsIncomeOrPayType) {
 // 更改后的年份
 @property (nonatomic) NSInteger month;
 
-// 当前年份
+// 当前时间年份
 - (NSInteger)currentYear;
 
-// 当前月份
+// 当前时间月份
 - (NSInteger)currentMonth;
 
 // 下一年

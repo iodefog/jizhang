@@ -218,6 +218,28 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     }
 }
 
+- (void)switchYearControlPreAction {
+    if (self.scrollView.currentIndex == 0) {
+        [self.calendarUtil preMonth];
+    } else if (self.scrollView.currentIndex == 1) {
+        [self.calendarUtil preYear];
+    }
+    [self updateSwithDateControlTitle];
+    [self reloadDatas];
+    [self updateSwitchDateControlNextBtnState];
+}
+
+- (void)switchYearControlNextAction {
+    if (self.scrollView.currentIndex == 0) {
+        [self.calendarUtil nextMonth];
+    } else if (self.scrollView.currentIndex == 1) {
+        [self.calendarUtil nextYear];
+    }
+    [self updateSwithDateControlTitle];
+    [self reloadDatas];
+    [self updateSwitchDateControlNextBtnState];
+}
+
 #pragma mark - Private
 //  返回当前收支类型
 - (SSJReportFormsIncomeOrPayType)currentType {
@@ -265,6 +287,16 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     }
 }
 
+//  更新切换日期空间按钮状态
+- (void)updateSwitchDateControlNextBtnState {
+    if (self.calendarUtil.year == self.calendarUtil.currentYear
+        && self.calendarUtil.month == self.calendarUtil.currentMonth) {
+        self.switchYearControl.nextBtn.enabled = NO;
+    } else {
+        self.switchYearControl.nextBtn.enabled = YES;
+    }
+}
+
 //  重新加载数据
 - (void)reloadDatas {
     NSInteger month = 0;
@@ -307,7 +339,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
                 circleItem.scale = item.scale / scaleAmount;
                 circleItem.imageName = item.imageName;
                 circleItem.colorValue = item.colorValue;
-                circleItem.identifier = item.incomeOrPayName;
+                circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
                 [self.circleItems addObject:circleItem];
                 
             } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
@@ -318,7 +350,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
                     circleItem.scale = item.scale / scaleAmount;
                     circleItem.imageName = item.imageName;
                     circleItem.colorValue = item.colorValue;
-                    circleItem.identifier = index == 0 ? @"支出" : @"收入";
+                    circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
                     [self.circleItems addObject:circleItem];
                 }
             }
@@ -356,34 +388,18 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _segmentControl.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#47cfbe"]} forState:UIControlStateSelected];
         [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
-        _segmentControl.center = CGPointMake(self.headerView.width * 0.5, kHeaderFirstPartHeight * 0.5);
+        _segmentControl.center = CGPointMake(self.headerView.width * 0.5, kHeaderFirstPartHeight * 0.5 + [UIApplication sharedApplication].statusBarFrame.size.height);
     }
     return _segmentControl;
 }
 
 - (SSJReportFormsSwitchYearControl *)switchYearControl {
     if (!_switchYearControl) {
-        __weak typeof(self) weakSelf = self;
-        _switchYearControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight, self.headerView.width, kHeaderSecondPartHeight)];
+        _switchYearControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight + [UIApplication sharedApplication].statusBarFrame.size.height, self.headerView.width, kHeaderSecondPartHeight)];
         _switchYearControl.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
-        _switchYearControl.preAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
-            if (weakSelf.scrollView.currentIndex == 0) {
-                [weakSelf.calendarUtil preMonth];
-            } else if (weakSelf.scrollView.currentIndex == 1) {
-                [weakSelf.calendarUtil preYear];
-            }
-            [weakSelf updateSwithDateControlTitle];
-            [weakSelf reloadDatas];
-        };
-        _switchYearControl.nextAction = ^(SSJReportFormsSwitchYearControl *switchYearControl) {
-            if (weakSelf.scrollView.currentIndex == 0) {
-                [weakSelf.calendarUtil nextMonth];
-            } else if (weakSelf.scrollView.currentIndex == 1) {
-                [weakSelf.calendarUtil nextYear];
-            }
-            [weakSelf updateSwithDateControlTitle];
-            [weakSelf reloadDatas];
-        };
+        [_switchYearControl.preBtn addTarget:self action:@selector(switchYearControlPreAction) forControlEvents:UIControlEventTouchUpInside];
+        [_switchYearControl.nextBtn addTarget:self action:@selector(switchYearControlNextAction) forControlEvents:UIControlEventTouchUpInside];
+        [self updateSwitchDateControlNextBtnState];
     }
     return _switchYearControl;
 }
@@ -402,9 +418,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (SSJReportFormsPercentCircle *)monthCircleView {
     if (!_monthCircleView) {
-        _monthCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
-        _monthCircleView.circleInsets = UIEdgeInsetsMake(30, 80, 60, 80);
-        _monthCircleView.circleWidth = 39;
+        _monthCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(30, 80, 60, 80) thickness:39];
         _monthCircleView.dataSource = self;
     }
     return _monthCircleView;
@@ -412,9 +426,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (SSJReportFormsPercentCircle *)yearCircleView {
     if (!_yearCircleView) {
-        _yearCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero];
-        _yearCircleView.circleInsets = UIEdgeInsetsMake(30, 80, 60, 80);
-        _yearCircleView.circleWidth = 39;
+        _yearCircleView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(30, 80, 60, 80) thickness:39];
         _yearCircleView.dataSource = self;
     }
     return _yearCircleView;
@@ -441,7 +453,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (UIView *)headerView {
     if (!_headerView) {
-        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kHeaderFirstPartHeight + kHeaderSecondPartHeight/* + kHeaderThirdPartHeight*/)];
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kHeaderFirstPartHeight + kHeaderSecondPartHeight + [UIApplication sharedApplication].statusBarFrame.size.height/* + kHeaderThirdPartHeight*/)];
         _headerView.backgroundColor = [UIColor whiteColor];
         [_headerView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_headerView ssj_setBorderWidth:1];

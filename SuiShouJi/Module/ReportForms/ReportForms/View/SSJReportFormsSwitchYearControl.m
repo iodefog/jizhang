@@ -46,7 +46,6 @@
     if (!_preBtn) {
         _preBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_preBtn setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
-        [_preBtn addTarget:self action:@selector(preBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _preBtn;
 }
@@ -55,7 +54,6 @@
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_nextBtn setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
-        [_nextBtn addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nextBtn;
 }
@@ -67,18 +65,6 @@
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
     }
     return _titleLabel;
-}
-
-- (void)preBtnAction {
-    if (self.preAction) {
-        self.preAction(self);
-    }
-}
-
-- (void)nextBtnAction {
-    if (self.nextAction) {
-        self.nextAction(self);
-    }
 }
 
 @end
