@@ -1,20 +1,20 @@
 //
-//  SCYPageControl.m
+//  SSJPageControl.m
 //  MoneyMore
 //
 //  Created by old lang on 15-5-7.
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import "SCYPageControl.h"
+#import "SSJPageControl.h"
 
-@interface SCYPageControl ()
+@interface SSJPageControl ()
 
 @property (nonatomic, strong) NSMutableArray *buttons;
 
 @end
 
-@implementation SCYPageControl
+@implementation SSJPageControl
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {

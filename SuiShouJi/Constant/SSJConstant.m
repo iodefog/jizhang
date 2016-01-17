@@ -12,8 +12,8 @@
 #ifdef DEBUG
 //NSString *const SSJBaseURLString = @"http://192.168.2.47:8080";  // 东亚
 //NSString *const SSJBaseURLString = @"http://192.168.1.155:8091";
-//NSString *const SSJBaseURLString = @"http://duobao.gs.9188.com";   // 测试环境
-NSString *const SSJBaseURLString = @"http://1.9188.com";
+NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
+//NSString *const SSJBaseURLString = @"http://1.9188.com";
 #else
 NSString *const SSJBaseURLString = @"http://1.9188.com";
 #endif

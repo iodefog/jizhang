@@ -1,0 +1,250 @@
+//
+//  SSJLoginViewController.m
+//  YYDB
+//
+//  Created by old lang on 15/10/27.
+//  Copyright (c) 2015年 ___9188___. All rights reserved.
+//
+
+#import "SSJLoginViewController.h"
+#import "SSJLoginService.h"
+#import "TPKeyboardAvoidingScrollView.h"
+#import "SSJRegistGetVerViewController.h"
+
+@interface SSJLoginViewController () <UITextFieldDelegate>
+
+@property (nonatomic, strong) SSJLoginService *loginService;
+
+@property (nonatomic,strong)UITextField *tfPhoneNum;
+@property (nonatomic,strong)UITextField *tfPassword;
+@property (nonatomic,copy)NSString *strUserAccount;
+@property (nonatomic,copy)NSString *strUserPassword;
+@property (nonatomic,strong)UIView *loginView;
+@property (nonatomic,strong)UIButton *loginButton;
+@property (nonatomic,strong)UIButton *registerButton;
+@property (nonatomic,strong)UIButton *forgetButton;
+
+@end
+
+@implementation SSJLoginViewController
+
+#pragma mark - Lifecycle
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.title = @"登录";
+        self.hideKeyboradWhenTouch = YES;
+        self.hidesBottomBarWhenPushed = YES;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatetextfield:) name:UITextFieldTextDidChangeNotification object:nil];
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+    [scrollView addSubview:self.loginView];
+    [self.loginView addSubview:self.tfPhoneNum];
+    [self.loginView addSubview:self.tfPassword];
+    [scrollView addSubview:self.loginButton];
+    [scrollView addSubview:self.forgetButton];
+    [scrollView addSubview:self.registerButton];
+    [self.view addSubview:scrollView];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self.loginService cancel];
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if(textField == self.tfPassword){
+        [self.tfPassword resignFirstResponder];
+        [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
+    }
+    return true;
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+-(void)serverDidFinished:(SSJBaseNetworkService *)service{
+    [super serverDidFinished:service];
+    
+    if ([self.loginService.returnCode isEqualToString: @"1"]) {
+        [CDAutoHideMessageHUD showMessage:@"登录成功"];
+        //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+        if (self.finishHandle) {
+            self.finishHandle(self);
+        } else {
+            [self ssj_backOffAction];
+        }
+    }else{
+//        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
+    }
+}
+
+#pragma mark - Notification
+-(void)updatetextfield:(id)sender{
+    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
+        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
+            self.loginButton.enabled = YES;
+        }else{
+        self.loginButton.enabled = NO;
+        }
+    }
+}
+
+#pragma mark - Event
+-(void)loginButtonClicked:(id)sender{
+    [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
+    [self.tfPassword resignFirstResponder];
+}
+
+-(void)forgetButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    SSJRegistGetVerViewController *forgetPsVc = [[SSJRegistGetVerViewController alloc]initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeForgetPassword];
+    forgetPsVc.finishHandle = ^(UIViewController *controller){
+        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+    };
+    [self.navigationController pushViewController:forgetPsVc animated:YES];
+}
+
+-(void)registerButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc]initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeRegist];
+    registerVc.finishHandle = ^(UIViewController *controller){
+        [weakSelf ssj_backOffAction];
+    };
+    [self.navigationController pushViewController:registerVc animated:YES];
+}
+
+- (void)backOffAction {
+    if (self.cancelHandle) {
+        self.cancelHandle(self);
+    } else {
+       [super ssj_backOffAction];
+    }
+}
+
+#pragma mark - Getter
+- (SSJLoginService *)loginService{
+    if (_loginService==nil) {
+        _loginService=[[SSJLoginService alloc]initWithDelegate:self];
+        _loginService.showLodingIndicator = YES;
+    }
+    return _loginService;
+}
+
+-(UIView*)loginView{
+    if (!_loginView) {
+        _loginView = [[UIView alloc]initWithFrame:CGRectMake(11, 24, self.view.width - 22, 94)];
+        _loginView.backgroundColor = [UIColor whiteColor];
+        _loginView.layer.borderWidth = 1;
+        _loginView.layer.borderColor = [UIColor ssj_colorWithHex:@"#d4d4d4"].CGColor;
+        _loginView.layer.cornerRadius = 5;
+        _loginView.layer.masksToBounds = YES;
+    }
+    return _loginView;
+}
+
+-(UITextField*)tfPhoneNum{
+    if (!_tfPhoneNum) {
+        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_phone"]];
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
+        [leftView addSubview:image];
+        image.center = CGPointMake(20, 23);
+        
+        _tfPhoneNum = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 47)];
+        _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfPhoneNum.placeholder = @"手机号/9188用户名";
+        _tfPhoneNum.font = [UIFont systemFontOfSize:16];
+//        [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:@"#d4d4d4"] forKeyPath:@"_placeholderLabel.textColor"];
+//        [_tfPhoneNum setValue:[UIFont systemFontOfSize:18] forKeyPath:@"_placeholderLabel.font"];
+        [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_tfPhoneNum ssj_setBorderWidth:1.0];
+        [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#d4d4d4"]];
+        [_tfPhoneNum ssj_setBorderInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
+        _tfPhoneNum.delegate = self;
+//        _tfPhoneNum.keyboardType = UIKeyboardTypeASCIICapable;
+        _tfPhoneNum.leftView = leftView;
+        _tfPhoneNum.leftViewMode = UITextFieldViewModeAlways;
+    }
+    return _tfPhoneNum;
+}
+
+-(UITextField*)tfPassword{
+    if (!_tfPassword) {
+        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_lock"]];
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
+        [leftView addSubview:image];
+        image.center = CGPointMake(20, 23);
+        
+        _tfPassword = [[UITextField alloc]initWithFrame:CGRectMake(0, 47, self.view.width - 22, 47)];
+        _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfPassword.placeholder = @"请输入密码";
+        _tfPassword.font = [UIFont systemFontOfSize:16];
+//        [_tfPassword setValue:[UIColor ssj_colorWithHex:@"#d4d4d4"] forKeyPath:@"_placeholderLabel.textColor"];
+//        [_tfPassword setValue:[UIFont systemFontOfSize:18] forKeyPath:@"_placeholderLabel.font"];
+        _tfPassword.secureTextEntry = YES;
+        _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
+        _tfPassword.delegate = self;
+        _tfPassword.leftView = leftView;
+        _tfPassword.leftViewMode = UITextFieldViewModeAlways;
+    }
+    return _tfPassword;
+}
+
+-(UIButton*)loginButton{
+    if (!_loginButton) {
+        _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _loginButton.frame = CGRectMake(11, self.loginView.bottom + 26, self.view.width - 22, 47);
+        _loginButton.enabled = NO;
+        _loginButton.clipsToBounds = YES;
+        _loginButton.layer.cornerRadius = 3;
+        _loginButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
+        [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cfd2d4"] forState:UIControlStateDisabled];
+        [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _loginButton;
+}
+
+-(UIButton*)registerButton{
+    if (!_registerButton) {
+        _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _registerButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_registerButton setLeft:self.loginButton.left];
+        [_registerButton setTitle:@"手机号快速注册" forState:UIControlStateNormal];
+        _registerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+
+        [_registerButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_registerButton sizeToFit];
+        _registerButton.leftTop = CGPointMake(14, self.loginButton.bottom + 15);
+    }
+    return _registerButton;
+}
+
+-(UIButton*)forgetButton{
+    if (!_forgetButton) {
+        _forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_forgetButton setRight:self.loginButton.right];
+        [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
+        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_forgetButton sizeToFit];
+        _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
+    }
+    return _forgetButton;
+}
+
+@end

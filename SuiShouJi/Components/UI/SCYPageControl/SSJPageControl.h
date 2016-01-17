@@ -1,5 +1,5 @@
 //
-//  SCYPageControl.h
+//  SSJPageControl.h
 //  MoneyMore
 //
 //  Created by old lang on 15-5-7.
@@ -10,7 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SCYPageControl : UIControl
+@interface SSJPageControl : UIControl
 
 // 页标总数 default is 0
 @property (nonatomic) NSUInteger numberOfPages;

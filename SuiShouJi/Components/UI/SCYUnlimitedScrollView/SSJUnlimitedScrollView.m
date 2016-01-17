@@ -1,16 +1,16 @@
 //
-//  SCYUnlimitedScrollView.m
+//  SSJUnlimitedScrollView.m
 //  MoneyMore
 //
 //  Created by old lang on 15/7/14.
 //  Copyright (c) 2015年 ___9188___. All rights reserved.
 //
 
-#import "SCYUnlimitedScrollView.h"
+#import "SSJUnlimitedScrollView.h"
 
 static const NSUInteger kContentCount = 3;
 
-@interface SCYUnlimitedScrollView () <UIScrollViewDelegate> {
+@interface SSJUnlimitedScrollView () <UIScrollViewDelegate> {
     struct {
         unsigned int numberOfPagesFlag : 1;
         unsigned int subViewAtPageIndexFlag : 1;
@@ -24,7 +24,7 @@ static const NSUInteger kContentCount = 3;
 
 @end
 
-@implementation SCYUnlimitedScrollView
+@implementation SSJUnlimitedScrollView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -61,7 +61,7 @@ static const NSUInteger kContentCount = 3;
     }
 }
 
-- (void)setDataSource:(id<SCYUnlimitedScrollViewDataSource>)dataSource {
+- (void)setDataSource:(id<SSJUnlimitedScrollViewDataSource>)dataSource {
     if (_dataSource != dataSource) {
         _dataSource = dataSource;
         _protocolFlags.numberOfPagesFlag = (_dataSource && [_dataSource respondsToSelector:@selector(numberOfPagesInScrollView:)]);
@@ -70,7 +70,7 @@ static const NSUInteger kContentCount = 3;
     }
 }
 
-- (void)setDelegate:(id<SCYUnlimitedScrollViewDelegate>)delegate {
+- (void)setDelegate:(id<SSJUnlimitedScrollViewDelegate>)delegate {
     if (_delegate != delegate) {
         _delegate = delegate;
         _protocolFlags.didScrollFlag = (_delegate && [_delegate respondsToSelector:@selector(scrollView:didScrollAtPageIndex:)]);
