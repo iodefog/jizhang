@@ -10,6 +10,9 @@
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJMineHomeTabelviewCell.h"
 #import "SSJSyncSettingViewController.h"
+#import "SSJNormalWebViewController.h"
+#import "SSJLoginViewController.h"
+
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @end
@@ -36,6 +39,11 @@
     if (!_header) {
         _header = [SSJMineHomeTableViewHeader MineHomeHeader];
         _header.frame = CGRectMake(0, 0, self.view.width, 125);
+        __weak typeof(self) weakSelf = self;
+        _header.HeaderButtonClickedBlock = ^(){
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+            [weakSelf.navigationController pushViewController:loginVC animated:YES];
+        };
     }
     return _header;
 }
@@ -59,6 +67,16 @@
     if (indexPath.row == 0 && indexPath.section == 1) {
         SSJSyncSettingViewController *syncSettingVc = [[SSJSyncSettingViewController alloc]init];
         [self.navigationController pushViewController:syncSettingVc animated:YES];
+    }else if (indexPath.section == 1 && indexPath.row == 1){
+        NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/about.html"];
+        SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
+        webVC.title = @"关于我们";
+        [self.navigationController pushViewController:webVC animated:YES];
+    }else if (indexPath.section == 1 && indexPath.row == 2){
+        NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/protocol.html"];
+        SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
+        webVC.title = @"用户协议";
+        [self.navigationController pushViewController:webVC animated:YES];
     }
 }
 #pragma mark - UITableViewDataSource

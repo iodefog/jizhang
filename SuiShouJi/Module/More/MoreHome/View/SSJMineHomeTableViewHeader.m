@@ -21,7 +21,11 @@
 
 -(void)awakeFromNib{
     self.portraitButton.layer.cornerRadius = 33;
-    self.portraitButton.backgroundColor = [UIColor grayColor];
+}
+- (IBAction)loginButtonClicked:(id)sender {
+    if (self.HeaderButtonClickedBlock) {
+        self.HeaderButtonClickedBlock();
+    }
 }
 
 /*

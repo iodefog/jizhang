@@ -34,7 +34,7 @@
 #import "SSJUtil.h"
 #import "CDAutoHideMessageHUD.h"
 #import "MJExtension.h"
-//#import "SSJAlertViewAdapter.h"
+#import "SSJAlertViewAdapter.h"
 #import "UIImageView+WebCache.h"
 
 #endif

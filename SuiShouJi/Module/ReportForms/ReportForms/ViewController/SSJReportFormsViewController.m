@@ -7,10 +7,10 @@
 //
 
 #import "SSJReportFormsViewController.h"
-#import "SCYUnlimitedScrollView.h"
+#import "SSJUnlimitedScrollView.h"
 #import "SSJReportFormsPercentCircle.h"
 #import "SSJReportFormsSwitchYearControl.h"
-#import "SCYPageControl.h"
+#import "SSJPageControl.h"
 #import "SSJSegmentedControl.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
@@ -28,7 +28,7 @@ static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
 static NSString *const kSegmentTitleSurplus = @"盈余";
 
-@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, SCYUnlimitedScrollViewDataSource, SCYUnlimitedScrollViewDelegate, SSJReportFormsPercentCircleDataSource>
+@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, SSJUnlimitedScrollViewDataSource, SSJUnlimitedScrollViewDelegate, SSJReportFormsPercentCircleDataSource>
 
 //  收入、支出、盈余切换控件
 @property (nonatomic, strong) SSJSegmentedControl *segmentControl;
@@ -37,7 +37,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 @property (nonatomic, strong) SSJReportFormsSwitchYearControl *switchYearControl;
 
 //  装载年份、月份收支图表的滚动视图
-@property (nonatomic, strong) SCYUnlimitedScrollView *scrollView;
+@property (nonatomic, strong) SSJUnlimitedScrollView *scrollView;
 
 //  月份收支图表
 @property (nonatomic, strong) SSJReportFormsPercentCircle *monthCircleView;
@@ -46,7 +46,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 @property (nonatomic, strong) SSJReportFormsPercentCircle *yearCircleView;
 
 //
-@property (nonatomic, strong) SCYPageControl *pageControl;
+@property (nonatomic, strong) SSJPageControl *pageControl;
 
 //  盈余金额视图
 @property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
@@ -133,12 +133,12 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     }
 }
 
-#pragma mark - SCYUnlimitedScrollViewDataSource
-- (NSUInteger)numberOfPagesInScrollView:(SCYUnlimitedScrollView *)scrollView {
+#pragma mark - SSJUnlimitedScrollViewDataSource
+- (NSUInteger)numberOfPagesInScrollView:(SSJUnlimitedScrollView *)scrollView {
     return 2;
 }
 
-- (UIView *)scrollView:(SCYUnlimitedScrollView *)scrollView subViewAtPageIndex:(NSUInteger)index {
+- (UIView *)scrollView:(SSJUnlimitedScrollView *)scrollView subViewAtPageIndex:(NSUInteger)index {
     if (index == 0) {
         return self.monthCircleView;
     } else if (index == 1) {
@@ -148,8 +148,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     }
 }
 
-#pragma mark - SCYUnlimitedScrollViewDelegate
-- (void)scrollView:(SCYUnlimitedScrollView *)scrollView didScrollAtPageIndex:(NSUInteger)index {
+#pragma mark - SSJUnlimitedScrollViewDelegate
+- (void)scrollView:(SSJUnlimitedScrollView *)scrollView didScrollAtPageIndex:(NSUInteger)index {
     [self reloadDatas];
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
@@ -348,9 +348,9 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     return _switchYearControl;
 }
 
-- (SCYUnlimitedScrollView *)scrollView {
+- (SSJUnlimitedScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[SCYUnlimitedScrollView alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight + kHeaderSecondPartHeight, self.headerView.width, kHeaderThirdPartHeight)];
+        _scrollView = [[SSJUnlimitedScrollView alloc] initWithFrame:CGRectMake(0, kHeaderFirstPartHeight + kHeaderSecondPartHeight, self.headerView.width, kHeaderThirdPartHeight)];
         _scrollView.dataSource = self;
         _scrollView.delegate = self;
     }
@@ -377,9 +377,9 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     return _yearCircleView;
 }
 
-- (SCYPageControl *)pageControl {
+- (SSJPageControl *)pageControl {
     if (!_pageControl) {
-        _pageControl = [[SCYPageControl alloc] init];
+        _pageControl = [[SSJPageControl alloc] init];
         _pageControl.centerX = self.headerView.width * 0.5;
         _pageControl.bottom = 25;
         _pageControl.numberOfPages = 2;

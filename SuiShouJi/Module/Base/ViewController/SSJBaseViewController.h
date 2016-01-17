@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIViewController+SSJPageFlow.h"
 #import "SSJBaseNetworkService.h"
 
 @interface SSJBaseViewController : UIViewController <SSJBaseNetworkServiceDelegate>

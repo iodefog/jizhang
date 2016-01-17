@@ -17,12 +17,16 @@
                     <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXk-ez-d34">
-                    <rect key="frame" x="106" y="10" width="66" height="66"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXk-ez-d34">
+                    <rect key="frame" x="106.5" y="10" width="66" height="66"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="66" id="9Yc-5g-dvq"/>
                         <constraint firstAttribute="height" constant="66" id="uH5-rO-pXY"/>
                     </constraints>
+                    <state key="normal" image="defualtPortrait.png"/>
+                    <connections>
+                        <action selector="loginButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="xYz-ND-bkT"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -40,4 +44,7 @@
             <point key="canvasLocation" x="105.5" y="-131.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="defualtPortrait.png" width="69" height="67"/>
+    </resources>
 </document>
