@@ -112,7 +112,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJNewFundingCell";
+    static NSString *cellId = @"SSJModifyFundingCell";
     SSJModifyFundingTableViewCell *NewFundingCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!NewFundingCell) {
         NewFundingCell = [[SSJModifyFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
@@ -178,6 +178,7 @@
 -(TPKeyboardAvoidingTableView *)tableView{
     if (!_tableView) {
         _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }

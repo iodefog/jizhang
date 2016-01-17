@@ -11,6 +11,7 @@
 #import "SSJFinancingHomeitem.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
+#import "SSJNewFundingViewController.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -102,6 +103,9 @@
         SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
         fundingDetailVC.item = cell.item;
         [self.navigationController pushViewController:fundingDetailVC animated:YES];
+    }else{
+        SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
+        [self.navigationController pushViewController:newFundingVC animated:YES];
     }
 }
 
