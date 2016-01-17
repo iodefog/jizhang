@@ -102,7 +102,7 @@
             if (_year > _currentYear) {
                 cell.selectable = NO;
                 cell.isSelected = NO;
-            }else if (_month > _currentMonth){
+            }else if (_year == _currentYear && _month > _currentMonth){
                 cell.selectable = NO;
                 cell.isSelected = NO;
             }else if ([cell.currentDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
