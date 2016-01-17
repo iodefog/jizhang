@@ -16,6 +16,7 @@
     item.typeName = self.typeName;
     item.money = self.money;
     item.ID = self.ID;
+    item.incomeOrExpence = self.incomeOrExpence;
     return item;
 }
 

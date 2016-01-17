@@ -279,7 +279,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 @implementation UIView (SSJWatermark)
 
-- (void)showWatermark:(NSString *)imageName animated:(BOOL)animated Target:(id)target Action:(SEL)action {
+- (void)ssj_showWatermarkWithImageName:(NSString *)imageName animated:(BOOL)animated target:(id)target action:(SEL)action {
     UIImageView *watermark = [self watermark:imageName];
     if (!watermark.superview) {
         if (action) {
@@ -295,11 +295,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     }
 }
 
-- (void)showDefaultWatermark:(BOOL)animated Target:(id)target Action:(SEL)action {
-    [self showWatermark:@"nonedata" animated:animated Target:(id)target Action:(SEL)action];
-}
-
-- (void)hideWatermark:(BOOL)animated {
+- (void)ssj_hideWatermark:(BOOL)animated {
     UIImageView *watermark = [self watermark:nil];
     if (watermark && watermark.superview) {
         [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{

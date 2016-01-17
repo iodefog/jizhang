@@ -129,11 +129,9 @@
 
 @interface UIView (SSJWatermark)
 
-- (void)showWatermark:(NSString *)imageName animated:(BOOL)animated Target:(id)target Action:(SEL)action;
+- (void)ssj_showWatermarkWithImageName:(NSString *)imageName animated:(BOOL)animated target:(id)target action:(SEL)action;
 
-- (void)showDefaultWatermark:(BOOL)animated Target:(id)target Action:(SEL)action;
-
-- (void)hideWatermark:(BOOL)animated;
+- (void)ssj_hideWatermark:(BOOL)animated;
 
 @end
 

@@ -19,10 +19,13 @@
 // 收支金额
 @property (nonatomic, copy) NSString *money;
 
+// 颜色值
+@property (nonatomic, copy) NSString *colorValue;
+
 // 流水id
 @property (nonatomic, copy) NSString *ID;
 
-//流水类型(0是支出,1是收入)
+// 流水类型(1是支出,0是收入)
 @property (nonatomic) BOOL incomeOrExpence;
 
 @end

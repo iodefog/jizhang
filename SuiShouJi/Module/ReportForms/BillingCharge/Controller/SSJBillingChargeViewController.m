@@ -48,15 +48,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     } failure:^(NSError *error) {
         
     }];
-
-    #warning test
-    UIBarButtonItem *test = [[UIBarButtonItem alloc] initWithTitle:@"sync" style:UIBarButtonItemStylePlain target:self action:@selector(testSync)];
-    self.navigationItem.rightBarButtonItem = test;
-}
-
-#warning test
-- (void)testSync {
-//    [[SSJDataSync shareInstance] startSync];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
