@@ -250,24 +250,24 @@ static NSString *const kAnimationKey = @"kAnimationKey";
                 break;
         }
     } else {
-        SSJReportFormsPercentCircleAdditionViewItem *item1 = nil;
-        SSJReportFormsPercentCircleAdditionViewItem *item2 = nil;
-        if (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopRight
-            && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomRight) {
-            item1 = self.item;
-            item2 = anotherItem;
-        } else if (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomRight
-                   && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopRight) {
-            item1 = anotherItem;
-            item2 = self.item;
-        } else if (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopLeft
-                   && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft) {
-            item1 = self.item;
-            item2 = anotherItem;
-        } else if (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft
-                   && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopLeft) {
-            item1 = anotherItem;
-            item2 = self.item;
+        if ((self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopRight
+             && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomRight)
+            || (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopLeft
+                && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft)) {
+                
+                if (anotherItem.endPoint.y - anotherItem.imageRadius <= self.item.endPoint.y + self.item.imageRadius + self.item.gapBetweenImageAndText + self.item.textSize) {
+                    return NO;
+                }
+            }
+        
+        if ((self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomRight
+             && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopRight)
+            || (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft
+                && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopLeft)) {
+                
+                if (self.item.endPoint.y - self.item.imageRadius <= anotherItem.endPoint.y + anotherItem.imageRadius + anotherItem.gapBetweenImageAndText + anotherItem.textSize) {
+                    return NO;
+                }
         }
     }
     
@@ -351,8 +351,12 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 - (UIImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.item.imageName]];
+        UIImage *image = [UIImage imageNamed:self.item.imageName];
+        CGFloat scale = image.size.width / (self.item.imageRadius * 0.75 * 2);
+        
+        _imageView = [[UIImageView alloc] initWithImage:image];
         _imageView.size = CGSizeMake(self.item.imageRadius * 2, self.item.imageRadius * 2);
+        _imageView.contentScaleFactor = _imageView.contentScaleFactor * scale;
         _imageView.contentMode = UIViewContentModeCenter;
         _imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
         _imageView.layer.borderWidth = 0.5;
@@ -368,7 +372,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         _textLabel.hidden = YES;
         _textLabel.backgroundColor = [UIColor whiteColor];
         _textLabel.font = [UIFont systemFontOfSize:self.item.textSize];
-        _textLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        _textLabel.textColor = [UIColor ssj_colorWithHex:self.item.textColorValue];
         _textLabel.text = self.item.text;
         [_textLabel sizeToFit];
     }

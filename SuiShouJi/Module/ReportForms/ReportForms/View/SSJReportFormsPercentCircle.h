@@ -21,9 +21,11 @@
 
 @interface SSJReportFormsPercentCircle : UIView
 
-@property (nonatomic) UIEdgeInsets circleInsets;
+- (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets thickness:(CGFloat)thickness;
 
-@property (nonatomic) CGFloat circleWidth;
+@property (nonatomic, readonly) UIEdgeInsets circleInsets;
+
+@property (nonatomic, readonly) CGFloat circleThickness;
 
 @property (nonatomic, weak) id <SSJReportFormsPercentCircleDataSource> dataSource;
 

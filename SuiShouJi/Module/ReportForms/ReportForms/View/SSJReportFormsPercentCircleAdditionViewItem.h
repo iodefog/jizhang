@@ -37,6 +37,8 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsPercentCircleAdditionViewOrientation) 
 
 @property (nonatomic) CGFloat textSize;
 
+@property (nonatomic, copy) NSString *textColorValue;
+
 @property (nonatomic) SSJReportFormsPercentCircleAdditionViewOrientation orientation;
 
 @end

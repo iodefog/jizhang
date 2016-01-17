@@ -10,14 +10,12 @@
 
 @class SSJReportFormsSwitchYearControl;
 
-typedef void(^SSJReportFormsSwitchYearControlAction)(SSJReportFormsSwitchYearControl *switchYearControl);
-
 @interface SSJReportFormsSwitchYearControl : UIView
 
 @property (nonatomic, copy) NSString *title;
 
-@property (nonatomic, copy) SSJReportFormsSwitchYearControlAction preAction;
+@property (nonatomic, readonly, strong) UIButton *preBtn;
 
-@property (nonatomic, copy) SSJReportFormsSwitchYearControlAction nextAction;
+@property (nonatomic, readonly, strong) UIButton *nextBtn;
 
 @end

@@ -35,11 +35,11 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat imageDiam = MAX(self.imageView.image.size.width, self.imageView.image.size.height) + 10;
-    
+    CGFloat imageDiam = 26;
     self.imageView.size = CGSizeMake(imageDiam, imageDiam);
     self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
     self.imageView.layer.cornerRadius = imageDiam * 0.5;
+    self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
     
     self.textLabel.left = self.imageView.right + 10;
     
