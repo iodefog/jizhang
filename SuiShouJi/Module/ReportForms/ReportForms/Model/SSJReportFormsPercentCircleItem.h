@@ -11,19 +11,19 @@
 @interface SSJReportFormsPercentCircleItem : NSObject
 
 //  圆环组件比例值，在0～1之间
-@property (nonatomic) CGFloat scale;
+@property (nonatomic) double scale;
 
 //  圆环组件颜色
-@property (nonatomic, strong) UIColor *color;
+@property (nonatomic, copy) NSString *colorValue;
 
 //  圆环组件图片
-@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, copy) NSString *imageName;
 
 //  唯一的标识
 @property (nonatomic, copy) NSString *identifier;
 
-//  之前所有圆环组件的比例值总和，用于SSJReportFormsPercentCircle内部使用
+//  之前所有圆环组件的比例值总和，用于SSJReportFormsPercentCircle内部计算角度使用
 //  不需要在函数percentCircle:itemForComponentAtIndex:中返回
-@property (nonatomic) CGFloat previousScale;
+@property (nonatomic) double previousScale;
 
 @end

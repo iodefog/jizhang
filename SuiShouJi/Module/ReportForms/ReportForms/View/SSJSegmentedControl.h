@@ -15,14 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 //  选中的下标
 @property (nonatomic) NSUInteger selectedSegmentIndex;
 
-//
+//  标题字体
 @property (nonatomic, strong) UIFont *font;
 
-//
+//  边框颜色、标题默认颜色
 @property (null_resettable, nonatomic, strong) UIColor *tintColor;
 
 /**
- *  初始化化方法
+ *  指定初始化化方法
  *
  *  @param items 标题数组
  *  @return (instancetype) 返回实例对象
@@ -30,18 +30,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithItems:(nullable NSArray<NSString *> *)items;
 
 /**
- *  根据错误返回相应的提示，如果没有对应的错误提示，就返回nil
+ *  返回下标对应的标题
  *
- *  @param error 错误
- *  @return (NSString *) 错误提示
+ *  @param segment 下表
+ *  @return (NSString *) 标题
  */
 - (nullable NSString *)titleForSegmentAtIndex:(NSUInteger)segment;
 
 /**
- *  根据错误返回相应的提示，如果没有对应的错误提示，就返回nil
+ *  设置对应状态下的文本属性，attributes中存储相应的属性，目前只有文本颜色NSForegroundColorAttributeName有效
  *
- *  @param error 错误
- *  @return (NSString *) 错误提示
+ *  @param attributes 存储文本属性的字典
+ *  @param state 相应的状态
  */
 - (void)setTitleTextAttributes:(nullable NSDictionary *)attributes forState:(UIControlState)state;
 
