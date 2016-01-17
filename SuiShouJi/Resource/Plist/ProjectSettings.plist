@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DefaultSource</key>
+	<string>8002</string>
+	<key>AppStoreSources</key>
+	<array>
+		<string>8000</string>
+	</array>
+	<key>RemoteNotificationInfo</key>
+	<dict>
+		<key>8000</key>
+		<dict>
+			<key>AppID</key>
+			<string>cgg40h1a9epe7gbtxfv8g2rybmofcthams28kf1mn3a7t4lr</string>
+			<key>AppKey</key>
+			<string>eu6fm7uk7xcz6ubsv75sgl32kkk4ed5rt0oym2puhpb71sf4</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

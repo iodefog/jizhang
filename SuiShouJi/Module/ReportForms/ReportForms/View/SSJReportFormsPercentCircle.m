@@ -8,14 +8,18 @@
 
 #import "SSJReportFormsPercentCircle.h"
 #import "SSJReportFormsPercentCircleComponent.h"
+#import "SSJReportFormsPercentCircleAdditionView.h"
 
 static NSString *const kAnimationKey = @"kAnimationKey";
 
 @interface SSJReportFormsPercentCircle ()
 
 @property (nonatomic) CGRect circleFrame;
-@property (nonatomic, strong) NSMutableDictionary *componentDic;
 @property (nonatomic, strong) CAShapeLayer *maskLayer;
+@property (nonatomic, strong) NSMutableArray *circleLayers;
+@property (nonatomic, strong) NSMutableArray *additionViews;
+
+@property (nonatomic) NSUInteger circleAnimationCounter;
 
 @end
 
@@ -23,7 +27,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.componentDic = [NSMutableDictionary dictionary];
+//        self.componentDic = [NSMutableDictionary dictionary];
+        self.circleLayers = [NSMutableArray array];
+        self.additionViews = [NSMutableArray array];
         [self.layer addSublayer:self.maskLayer];
     }
     return self;
@@ -75,23 +81,22 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     }
     
     //  移除之前的子视图、图层
-    for (SSJReportFormsPercentCircleComponent *component in [self.componentDic allValues]) {
-        [component.circleLayer removeFromSuperlayer];
-        [component.lineLayer removeFromSuperlayer];
-        [component.imageView removeFromSuperview];
-        [component.scaleLab removeFromSuperview];
-    }
-    [self.componentDic removeAllObjects];
+    [self.circleLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.circleLayers removeAllObjects];
+    
+    [self.additionViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.additionViews removeAllObjects];
     
     NSUInteger numberOfComponents = [self.dataSource numberOfComponentsInPercentCircle:self];
     
     CGFloat overlapScale = 0;
-    NSMutableArray *circleItemArr = [NSMutableArray array];
+//    NSMutableArray *circleItemArr = [NSMutableArray array];
     
     //  添加圆环图层
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame)) radius:(CGRectGetWidth(self.circleFrame) * 0.5 - self.circleWidth) startAngle:-M_PI_2 endAngle:M_PI * 1.5 clockwise:YES];
     
     self.maskLayer.path = circlePath.CGPath;
+    self.circleAnimationCounter = 0;
     
     for (NSUInteger idx = 0; idx < numberOfComponents; idx ++) {
         
@@ -100,22 +105,23 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             if (!item) {
                 return;
             }
+            
             item.previousScale = overlapScale;
             
+            //  添加圆环
             CAShapeLayer *layer = [CAShapeLayer layer];
             layer.contentsScale = [[UIScreen mainScreen] scale];
             layer.path = circlePath.CGPath;
             layer.fillColor = [UIColor whiteColor].CGColor;
             layer.lineWidth = self.circleWidth * 2;
-            layer.strokeColor = item.color.CGColor;
+            layer.strokeColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
             layer.strokeEnd = 0;
             layer.zPosition = numberOfComponents - idx;
             [self.layer addSublayer:layer];
             
-            SSJReportFormsPercentCircleComponent *circleComponent = [[SSJReportFormsPercentCircleComponent alloc] init];
-            circleComponent.circleLayer = layer;
-            [self.componentDic setObject:circleComponent forKey:item.identifier];
+            [self.circleLayers addObject:layer];
             
+            //  给圆环添加动画
             CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
             animation.toValue = @(overlapScale + item.scale);
             animation.duration = 0.7;
@@ -126,144 +132,152 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             [layer addAnimation:animation forKey:kAnimationKey];
             
             overlapScale += item.scale;
-            [circleItemArr addObject:item];
+//            [circleItemArr addObject:item];
+            
+            //  添加附加视图(折线、图片、比例)
+            SSJReportFormsPercentCircleAdditionViewItem *additionViewItem = [[SSJReportFormsPercentCircleAdditionViewItem alloc] init];
+            
+            CGPoint startPoint = CGPointZero;
+            CGPoint turnPoint = CGPointZero;
+            CGPoint endPoint = CGPointZero;
+            
+            SSJReportFormsPercentCircleAdditionViewOrientation orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopRight;
+            
+            //  根据比例计算出角度，再根据角度计算出折现的起点
+            CGFloat angle = (0.5 * item.scale + item.previousScale) * M_PI * 2;
+            CGFloat axisY = -cos(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidY(self.circleFrame);
+            CGFloat axisX = sin(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidX(self.circleFrame);
+            startPoint = CGPointMake(axisX, axisY);
+            
+            if (angle >= 0 && angle < M_PI_2) {
+                turnPoint = CGPointMake(axisX + 5, axisY - 10);
+                endPoint = CGPointMake(axisX + 5 + 35, axisY - 10);
+                orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopRight;
+            } else if (angle >= M_PI_2 && angle < M_PI) {
+                turnPoint = CGPointMake(axisX + 5, axisY + 10);
+                endPoint = CGPointMake(axisX + 5 + 35, axisY + 10);
+                orientation = SSJReportFormsPercentCircleAdditionViewOrientationBottomRight;
+            } else if (angle >= M_PI && angle < M_PI + M_PI_2) {
+                turnPoint = CGPointMake(axisX - 5, axisY + 10);
+                endPoint = CGPointMake(axisX - 5 - 35, axisY + 10);
+                orientation = SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft;
+            } else if (angle >= M_PI + M_PI_2) {
+                turnPoint = CGPointMake(axisX - 5, axisY - 10);
+                endPoint = CGPointMake(axisX - 5 - 35, axisY - 10);
+                orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopLeft;
+            }
+            
+            additionViewItem.startPoint = startPoint;
+            additionViewItem.turnPoint = turnPoint;
+            additionViewItem.endPoint = endPoint;
+            additionViewItem.orientation = orientation;
+            additionViewItem.imageName = item.imageName;
+            additionViewItem.imageRadius = 20;
+            additionViewItem.borderColorValue = item.colorValue;
+            additionViewItem.gapBetweenImageAndText = 5;
+            additionViewItem.text = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+            additionViewItem.textSize = 12;
+            
+            SSJReportFormsPercentCircleAdditionView *additionView = [[SSJReportFormsPercentCircleAdditionView alloc] initWithItem:additionViewItem];
+            SSJReportFormsPercentCircleAdditionView *lastAdditionView = [self.additionViews lastObject];
+            if (lastAdditionView) {
+                if ([additionView testOverlap:lastAdditionView]) {
+                    [self addSubview:additionView];
+                    [self.additionViews addObject:additionView];
+                }
+            } else {
+                [self addSubview:additionView];
+                [self.additionViews addObject:additionView];
+            }
         }
     }
     
     //  根据元素的scale对数组进行降序排序
-    [circleItemArr sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        SSJReportFormsPercentCircleItem *item1 = obj1;
-        SSJReportFormsPercentCircleItem *item2 = obj2;
-        if (item1.scale > item2.scale) {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-        
-        if (item1.scale < item2.scale) {
-            return (NSComparisonResult)NSOrderedDescending;
-        }
-        return (NSComparisonResult)NSOrderedSame;
-    }];
+//    [circleItemArr sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//        SSJReportFormsPercentCircleItem *item1 = obj1;
+//        SSJReportFormsPercentCircleItem *item2 = obj2;
+//        if (item1.scale > item2.scale) {
+//            return (NSComparisonResult)NSOrderedAscending;
+//        }
+//        
+//        if (item1.scale < item2.scale) {
+//            return (NSComparisonResult)NSOrderedDescending;
+//        }
+//        return (NSComparisonResult)NSOrderedSame;
+//    }];
     
     //  遍历前5个比例最大的收支类型，只有这5个显示图片和比例值
-    for (int i = 0; i < MIN(circleItemArr.count, 5); i ++) {
-        
-        SSJReportFormsPercentCircleItem *item = circleItemArr[i];
-        SSJReportFormsPercentCircleComponent *circleComponent = [self.componentDic objectForKey:item.identifier];
-        
-        //  根据比例计算出角度，再根据角度计算出折现的起点
-        CGFloat angle = (0.5 * item.scale + item.previousScale) * M_PI * 2;
-        CGFloat axisY = -cos(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidY(self.circleFrame);
-        CGFloat axisX = sin(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidX(self.circleFrame);
-        
-        //  添加折线图层
-        UIBezierPath *linePath = [UIBezierPath bezierPath];
-        [linePath moveToPoint:CGPointMake(axisX, axisY)];
-        
-        if (angle >= 0 && angle < M_PI_2) {
-            [linePath addLineToPoint:CGPointMake(axisX + 5, axisY - 10)];
-            [linePath addLineToPoint:CGPointMake(axisX + 5 + 35, axisY - 10)];
-        } else if (angle >= M_PI_2 && angle < M_PI) {
-            [linePath addLineToPoint:CGPointMake(axisX + 5, axisY + 10)];
-            [linePath addLineToPoint:CGPointMake(axisX + 5 + 35, axisY + 10)];
-        } else if (angle >= M_PI && angle < M_PI + M_PI_2) {
-            [linePath addLineToPoint:CGPointMake(axisX - 5, axisY + 10)];
-            [linePath addLineToPoint:CGPointMake(axisX - 5 - 35, axisY + 10)];
-        } else if (angle >= M_PI + M_PI_2) {
-            [linePath addLineToPoint:CGPointMake(axisX - 5, axisY - 10)];
-            [linePath addLineToPoint:CGPointMake(axisX - 5 - 35, axisY - 10)];
-        }
-        
-        CAShapeLayer *lineLayer = [CAShapeLayer layer];
-        lineLayer.contentsScale = [[UIScreen mainScreen] scale];
-        lineLayer.lineWidth = 1;
-        lineLayer.strokeColor = [UIColor ssj_colorWithHex:@"#e8e8e8"].CGColor;
-        lineLayer.fillColor = [UIColor whiteColor].CGColor;
-        lineLayer.path = linePath.CGPath;
-        lineLayer.strokeEnd = 0;
-        
-        [self.layer addSublayer:lineLayer];
-        circleComponent.lineLayer = lineLayer;
-        
-        //  添加图片
-        CGFloat imageDiam = MAX(item.image.size.width, item.image.size.height) + 10;
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:item.image];
-        imageView.size = CGSizeMake(imageDiam, imageDiam);
-        imageView.contentMode = UIViewContentModeCenter;
-        imageView.layer.borderColor = item.color.CGColor;
-        imageView.layer.borderWidth = 0.5;
-        imageView.layer.cornerRadius = imageView.width * 0.5;
-        imageView.layer.transform = CATransform3DMakeScale(0, 0, 0);
-        if (angle >= 0 && angle < M_PI) {
-            imageView.center = CGPointMake(linePath.currentPoint.x + imageDiam * 0.5, linePath.currentPoint.y);
-        } else if (angle >= M_PI) {
-            imageView.center = CGPointMake(linePath.currentPoint.x - imageDiam * 0.5, linePath.currentPoint.y);
-        }
-        
-        [self addSubview:imageView];
-        circleComponent.imageView = imageView;
-        
-        //  添加比例值文本
-        UILabel *scaleLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        scaleLab.hidden = YES;
-        scaleLab.backgroundColor = [UIColor whiteColor];
-        scaleLab.font = [UIFont systemFontOfSize:12];
-        scaleLab.textColor = [UIColor ssj_colorWithHex:@"#393939"];
-        scaleLab.text = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
-        [scaleLab sizeToFit];
-        scaleLab.top = imageView.top + imageDiam * 0.5 + 5;
-        scaleLab.centerX =  imageView.centerX;
-        
-        [self addSubview:scaleLab];
-        circleComponent.scaleLab = scaleLab;
-    }
+//    for (int i = 0; i < MIN(circleItemArr.count, 5); i ++) {
+//        
+//        SSJReportFormsPercentCircleItem *item = circleItemArr[i];
+//        SSJReportFormsPercentCircleAdditionViewItem *additionViewItem = [[SSJReportFormsPercentCircleAdditionViewItem alloc] init];
+//        
+//        CGPoint startPoint = CGPointZero;
+//        CGPoint turnPoint = CGPointZero;
+//        CGPoint endPoint = CGPointZero;
+//        
+//        SSJReportFormsPercentCircleAdditionViewOrientation orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopRight;
+//        
+//        //  根据比例计算出角度，再根据角度计算出折现的起点
+//        CGFloat angle = (0.5 * item.scale + item.previousScale) * M_PI * 2;
+//        CGFloat axisY = -cos(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidY(self.circleFrame);
+//        CGFloat axisX = sin(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidX(self.circleFrame);
+//        startPoint = CGPointMake(axisX, axisY);
+//        
+//        if (angle >= 0 && angle < M_PI_2) {
+//            turnPoint = CGPointMake(axisX + 5, axisY - 10);
+//            endPoint = CGPointMake(axisX + 5 + 35, axisY - 10);
+//            orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopRight;
+//        } else if (angle >= M_PI_2 && angle < M_PI) {
+//            turnPoint = CGPointMake(axisX + 5, axisY + 10);
+//            endPoint = CGPointMake(axisX + 5 + 35, axisY + 10);
+//            orientation = SSJReportFormsPercentCircleAdditionViewOrientationBottomRight;
+//        } else if (angle >= M_PI && angle < M_PI + M_PI_2) {
+//            turnPoint = CGPointMake(axisX - 5, axisY + 10);
+//            endPoint = CGPointMake(axisX - 5 - 35, axisY + 10);
+//            orientation = SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft;
+//        } else if (angle >= M_PI + M_PI_2) {
+//            turnPoint = CGPointMake(axisX - 5, axisY - 10);
+//            endPoint = CGPointMake(axisX - 5 - 35, axisY - 10);
+//            orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopLeft;
+//        }
+//        
+//        additionViewItem.startPoint = startPoint;
+//        additionViewItem.turnPoint = turnPoint;
+//        additionViewItem.endPoint = endPoint;
+//        additionViewItem.orientation = orientation;
+//        additionViewItem.imageName = item.imageName;
+//        additionViewItem.imageRadius = 20;
+//        additionViewItem.borderColorValue = item.colorValue;
+//        additionViewItem.gapBetweenImageAndText = 5;
+//        additionViewItem.text = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+//        additionViewItem.textSize = 12;
+//        
+//        SSJReportFormsPercentCircleAdditionView *additionView = [[SSJReportFormsPercentCircleAdditionView alloc] initWithItem:additionViewItem];
+//        SSJReportFormsPercentCircleAdditionView *lastAdditionView = [self.additionViews lastObject];
+//        if (lastAdditionView) {
+//            if ([additionView testOverlap:lastAdditionView]) {
+//                [self addSubview:additionView];
+//                [self.additionViews addObject:additionView];
+//            }
+//        } else {
+//            [self addSubview:additionView];
+//            [self.additionViews addObject:additionView];
+//        }
+//    }
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    
-    for (SSJReportFormsPercentCircleComponent *component in self.componentDic.allValues) {
-        
-        if ([component.circleLayer animationForKey:kAnimationKey] == anim) {
-            
+    for (CAShapeLayer *circleLayer in self.circleLayers) {
+        if ([circleLayer animationForKey:kAnimationKey] == anim) {
             CABasicAnimation *circleAnimation = (CABasicAnimation *)anim;
-            [component.circleLayer removeAnimationForKey:kAnimationKey];
-            component.circleLayer.strokeEnd = [circleAnimation.toValue floatValue];
+            [circleLayer removeAnimationForKey:kAnimationKey];
+            circleLayer.strokeEnd = [circleAnimation.toValue floatValue];
             
-            CABasicAnimation *lineAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-            lineAnimation.duration = 0.35;
-            lineAnimation.toValue = @(1);
-            lineAnimation.delegate = self;
-            lineAnimation.removedOnCompletion = NO;
-            lineAnimation.fillMode = kCAFillModeForwards;
-            lineAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            [component.lineLayer addAnimation:lineAnimation forKey:kAnimationKey];
-            
-            return;
-        }
-        
-        if ([component.lineLayer animationForKey:kAnimationKey] == anim) {
-            
-            CABasicAnimation *lineAnimation = (CABasicAnimation *)anim;
-            [component.lineLayer removeAnimationForKey:kAnimationKey];
-            component.lineLayer.strokeEnd = [lineAnimation.toValue floatValue];
-            
-            CAKeyframeAnimation *imageAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-            imageAnimation.duration = 0.35;
-            imageAnimation.delegate = self;
-            imageAnimation.values = @[@0.7,@0.9,@1.1,@1];
-            imageAnimation.removedOnCompletion = NO;
-            [component.imageView.layer addAnimation:imageAnimation forKey:kAnimationKey];
-            
-            component.imageView.layer.transform = CATransform3DMakeScale(1, 1, 1);
-            
-            return;
-        }
-        
-        if ([component.imageView.layer animationForKey:kAnimationKey] == anim) {
-            [component.imageView.layer removeAnimationForKey:kAnimationKey];
-            [UIView transitionWithView:component.scaleLab duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                component.scaleLab.hidden = NO;
-            } completion:NULL];
+            self.circleAnimationCounter ++;
+            if (self.circleAnimationCounter == self.circleLayers.count) {
+                [self.additionViews makeObjectsPerformSelector:@selector(beginDraw)];
+            }
             
             return;
         }

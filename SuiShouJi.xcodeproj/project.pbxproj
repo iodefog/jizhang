@@ -27,6 +27,9 @@
 		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
 		7D4EF8891C45307C003C4B20 /* reportForm_empty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8881C45307C003C4B20 /* reportForm_empty@2x.png */; };
 		7D4EF88B1C453082003C4B20 /* reportForm_empty@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF88A1C453082003C4B20 /* reportForm_empty@3x.png */; };
+		7D4EF88E1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF88D1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m */; };
+		7D4EF8911C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8901C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m */; };
+		7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
 		7D6AAB561C310D330007C0A3 /* SSJReportFormsPercentCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB551C310D330007C0A3 /* SSJReportFormsPercentCircle.m */; };
 		7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */; };
@@ -304,6 +307,11 @@
 		7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizerTests.m; sourceTree = "<group>"; };
 		7D4EF8881C45307C003C4B20 /* reportForm_empty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForm_empty@2x.png"; sourceTree = "<group>"; };
 		7D4EF88A1C453082003C4B20 /* reportForm_empty@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForm_empty@3x.png"; sourceTree = "<group>"; };
+		7D4EF88C1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircleAdditionView.h; sourceTree = "<group>"; };
+		7D4EF88D1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPercentCircleAdditionView.m; sourceTree = "<group>"; };
+		7D4EF88F1C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircleAdditionViewItem.h; sourceTree = "<group>"; };
+		7D4EF8901C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPercentCircleAdditionViewItem.m; sourceTree = "<group>"; };
+		7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ProjectSettings.plist; sourceTree = "<group>"; };
 		7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchYearControl.h; sourceTree = "<group>"; };
 		7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchYearControl.m; sourceTree = "<group>"; };
 		7D6AAB541C310D330007C0A3 /* SSJReportFormsPercentCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircle.h; sourceTree = "<group>"; };
@@ -790,6 +798,14 @@
 			path = OtherTable;
 			sourceTree = "<group>";
 		};
+		7D4EF8921C4B5625003C4B20 /* Plist */ = {
+			isa = PBXGroup;
+			children = (
+				7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */,
+			);
+			path = Plist;
+			sourceTree = "<group>";
+		};
 		7D6AAB4E1C30EC1F0007C0A3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -810,6 +826,10 @@
 				7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */,
 				7D6AAB541C310D330007C0A3 /* SSJReportFormsPercentCircle.h */,
 				7D6AAB551C310D330007C0A3 /* SSJReportFormsPercentCircle.m */,
+				7D4EF88C1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.h */,
+				7D4EF88D1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m */,
+				7D4EF88F1C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.h */,
+				7D4EF8901C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m */,
 				7D6AAB681C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.h */,
 				7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */,
 				7D99D4601C355130006EB113 /* SSJReportFormsSurplusView.h */,
@@ -1342,6 +1362,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				7D4EF8921C4B5625003C4B20 /* Plist */,
 				7D6AAB721C322E020007C0A3 /* database */,
 				BD0E43EC1C2118E600F9179D /* Image */,
 			);
@@ -2112,6 +2133,7 @@
 				7D4EF88B1C453082003C4B20 /* reportForm_empty@3x.png in Resources */,
 				BD70DECA1C45F064000E6CC9 /* ft_jijin@2x.png in Resources */,
 				BD9573931C3F640200126F6E /* bt_shebao@2x.png in Resources */,
+				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
 				BD9573911C3F640200126F6E /* bt_repair@2x.png in Resources */,
 				BD06AF611C449DCE0028B571 /* left@2x.png in Resources */,
 				BDF3823E1C3E0ACC00955038 /* home_calender@2x.png in Resources */,
@@ -2214,6 +2236,7 @@
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
 				7D2B240A1C3AAAF2009A74A8 /* SSJUserChargeModel.m in Sources */,
+				7D4EF88E1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m in Sources */,
 				BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */,
 				BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
@@ -2312,6 +2335,7 @@
 				BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */,
 				7D2B242D1C439854009A74A8 /* SSJModifyFundingViewController.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
+				7D4EF8911C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
