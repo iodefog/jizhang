@@ -114,6 +114,8 @@
 		BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */; };
 		BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2C1C4B2E4C006A6942 /* SSJAlertViewDelegator.m */; };
+		BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD361C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m */; };
+		BD33FD3B1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD33FD3A1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib */; };
 		BD37242A1C3CA8B70073AAE2 /* tab_accounte_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD3724221C3CA8B70073AAE2 /* tab_accounte_nor@2x.png */; };
 		BD37242B1C3CA8B70073AAE2 /* tab_accounte_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD3724231C3CA8B70073AAE2 /* tab_accounte_sel@2x.png */; };
 		BD37242C1C3CA8B70073AAE2 /* tab_form_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD3724241C3CA8B70073AAE2 /* tab_form_nor@2x.png */; };
@@ -462,6 +464,9 @@
 		BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAlertViewAdapter.m; sourceTree = "<group>"; };
 		BD33FD2B1C4B2E4C006A6942 /* SSJAlertViewDelegator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewDelegator.h; sourceTree = "<group>"; };
 		BD33FD2C1C4B2E4C006A6942 /* SSJAlertViewDelegator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAlertViewDelegator.m; sourceTree = "<group>"; };
+		BD33FD351C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderTableViewNoDataHeader.h; sourceTree = "<group>"; };
+		BD33FD361C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderTableViewNoDataHeader.m; sourceTree = "<group>"; };
+		BD33FD3A1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJCalenderTableViewNoDataHeader.xib; sourceTree = "<group>"; };
 		BD3724221C3CA8B70073AAE2 /* tab_accounte_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_accounte_nor@2x.png"; sourceTree = "<group>"; };
 		BD3724231C3CA8B70073AAE2 /* tab_accounte_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_accounte_sel@2x.png"; sourceTree = "<group>"; };
 		BD3724241C3CA8B70073AAE2 /* tab_form_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_form_nor@2x.png"; sourceTree = "<group>"; };
@@ -1918,6 +1923,9 @@
 				BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */,
 				BDD78AFE1C1FA4E100C7EE0E /* SSJCalendarView.h */,
 				BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */,
+				BD33FD351C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.h */,
+				BD33FD361C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m */,
+				BD33FD3A1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2086,6 +2094,7 @@
 				BD9573781C3F640200126F6E /* bt_daikuan@2x.png in Resources */,
 				BD9573831C3F640200126F6E /* bt_hongbao@2x.png in Resources */,
 				BD9573731C3F640200126F6E /* bt_bouns@2x.png in Resources */,
+				BD33FD3B1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				BD95738F1C3F640200126F6E /* bt_purchase@2x.png in Resources */,
 				BD37242E1C3CA8B70073AAE2 /* tab_founds_nor@2x.png in Resources */,
 				BD37242A1C3CA8B70073AAE2 /* tab_accounte_nor@2x.png in Resources */,
@@ -2236,6 +2245,7 @@
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
 				BD70DF581C4751EA000E6CC9 /* SSJForgotPSWResetVC.m in Sources */,
 				BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */,
+				BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
 				7D6AAB6E1C3146500007C0A3 /* SSJReportFormsUtil.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
