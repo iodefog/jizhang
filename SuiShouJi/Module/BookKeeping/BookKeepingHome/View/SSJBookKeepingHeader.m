@@ -30,9 +30,7 @@
 
 - (void)awakeFromNib{
     [self.bookKeepingButton setBackgroundColor:[UIColor whiteColor]];
-    self.bookKeepingButton.layer.cornerRadius = 48.0f;
-    self.bookKeepingButton.contentMode = UIViewContentModeCenter;
-    self.backgroundColor = [UIColor clearColor];
+    self.bookKeepingButton.layer.cornerRadius = 49.0f;
 }
 
 -(void)setIncome:(NSString *)income{

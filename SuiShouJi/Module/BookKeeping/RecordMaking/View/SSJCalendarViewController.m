@@ -238,6 +238,7 @@
         item.typeName = [rs stringForColumn:@"CNAME"];
         item.ID = [rs stringForColumn:@"ICHARGEID"];
         item.money = [rs stringForColumn:@"IMONEY"];
+        item.colorValue = [rs stringForColumn:@"CCOLOR"];
         [self.items addObject:item];
     }
     [db close];

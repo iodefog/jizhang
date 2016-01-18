@@ -66,11 +66,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.incomeOrExpence = [resultSet intForColumn:@"ITYPE"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
-            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
-                item.money = [NSString stringWithFormat:@"-%@",[resultSet stringForColumn:@"IMONEY"]];
-            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
-                item.money = [NSString stringWithFormat:@"+%@",[resultSet stringForColumn:@"IMONEY"]];
-            }
+            item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
+//            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
+//                item.money = [NSString stringWithFormat:@"-%@",[resultSet stringForColumn:@"IMONEY"]];
+//            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
+//                item.money = [NSString stringWithFormat:@"+%@",[resultSet stringForColumn:@"IMONEY"]];
+//            }
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             if ([tempDate isEqualToString:billDate]) {
