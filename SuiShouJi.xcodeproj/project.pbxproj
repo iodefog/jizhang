@@ -204,6 +204,11 @@
 		7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
 		7D99D4621C355130006EB113 /* SSJReportFormsSurplusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */; };
 		7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
+		7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */; };
+		7DD7D5D11C4BBC4500ACE71A /* reportForms_filter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CD1C4BBC4500ACE71A /* reportForms_filter@2x.png */; };
+		7DD7D5D21C4BBC4500ACE71A /* reportForms_filter@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CE1C4BBC4500ACE71A /* reportForms_filter@3x.png */; };
+		7DD7D5D31C4BBC4500ACE71A /* reportForms_period@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CF1C4BBC4500ACE71A /* reportForms_period@2x.png */; };
+		7DD7D5D41C4BBC4500ACE71A /* reportForms_period@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D01C4BBC4500ACE71A /* reportForms_period@3x.png */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
@@ -570,6 +575,12 @@
 		7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSurplusView.m; sourceTree = "<group>"; };
 		7D99D4631C357703006EB113 /* SSJSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSegmentedControl.h; sourceTree = "<group>"; };
 		7D99D4641C357703006EB113 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
+		7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodSelectionView.h; sourceTree = "<group>"; };
+		7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodSelectionView.m; sourceTree = "<group>"; };
+		7DD7D5CD1C4BBC4500ACE71A /* reportForms_filter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_filter@2x.png"; sourceTree = "<group>"; };
+		7DD7D5CE1C4BBC4500ACE71A /* reportForms_filter@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_filter@3x.png"; sourceTree = "<group>"; };
+		7DD7D5CF1C4BBC4500ACE71A /* reportForms_period@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_period@2x.png"; sourceTree = "<group>"; };
+		7DD7D5D01C4BBC4500ACE71A /* reportForms_period@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_period@3x.png"; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
 		9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectView.m; sourceTree = "<group>"; };
 		9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeTableViewCell.h; sourceTree = "<group>"; };
@@ -954,6 +965,7 @@
 		7D4EF8B71C4BA135003C4B20 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				7DD7D5CC1C4BBC4500ACE71A /* ReportForms */,
 				7D4EF9561C4BA135003C4B20 /* tabbarimage */,
 				7D4EF9371C4BA135003C4B20 /* fundTypeImage */,
 				7D4EF8BC1C4BA135003C4B20 /* BillTypeImage */,
@@ -1174,6 +1186,8 @@
 				7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */,
 				7D99D4631C357703006EB113 /* SSJSegmentedControl.h */,
 				7D99D4641C357703006EB113 /* SSJSegmentedControl.m */,
+				7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */,
+				7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1250,6 +1264,17 @@
 				7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		7DD7D5CC1C4BBC4500ACE71A /* ReportForms */ = {
+			isa = PBXGroup;
+			children = (
+				7DD7D5CD1C4BBC4500ACE71A /* reportForms_filter@2x.png */,
+				7DD7D5CE1C4BBC4500ACE71A /* reportForms_filter@3x.png */,
+				7DD7D5CF1C4BBC4500ACE71A /* reportForms_period@2x.png */,
+				7DD7D5D01C4BBC4500ACE71A /* reportForms_period@3x.png */,
+			);
+			path = ReportForms;
 			sourceTree = "<group>";
 		};
 		99CD078B93C18A78568849F8 /* Pods */ = {
@@ -2263,6 +2288,7 @@
 			files = (
 				7D4EF9D11C4BA135003C4B20 /* close@2x.png in Resources */,
 				7D4EF9691C4BA135003C4B20 /* bt_bouns@2x.png in Resources */,
+				7DD7D5D41C4BBC4500ACE71A /* reportForms_period@3x.png in Resources */,
 				7D4EF9941C4BA135003C4B20 /* bt_jiaoshui@3x.png in Resources */,
 				7D4EF98E1C4BA135003C4B20 /* bt_interest@3x.png in Resources */,
 				7D4EF9DB1C4BA135003C4B20 /* founds_zhuanru@2x.png in Resources */,
@@ -2272,6 +2298,7 @@
 				7D4EF9731C4BA135003C4B20 /* bt_daikuan@2x.png in Resources */,
 				7D4EF9851C4BA135003C4B20 /* bt_gift@2x.png in Resources */,
 				7D4EF9AE1C4BA135003C4B20 /* bt_shebao@3x.png in Resources */,
+				7DD7D5D11C4BBC4500ACE71A /* reportForms_filter@2x.png in Resources */,
 				7D4EF9C41C4BA135003C4B20 /* bt_yingye@3x.png in Resources */,
 				7D4EF96A1C4BA135003C4B20 /* bt_bouns@3x.png in Resources */,
 				7D4EF9831C4BA135003C4B20 /* bt_furniture@2x.png in Resources */,
@@ -2279,6 +2306,7 @@
 				7D4EF9ED1C4BA135003C4B20 /* ft_shouqian@2x.png in Resources */,
 				7D4EF9D91C4BA135003C4B20 /* founds_zhuanchu@2x.png in Resources */,
 				7D4EF9DC1C4BA135003C4B20 /* founds_zhuanru@3x.png in Resources */,
+				7DD7D5D31C4BBC4500ACE71A /* reportForms_period@2x.png in Resources */,
 				7D4EF9EE1C4BA135003C4B20 /* ft_shouqian@3x.png in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				7D4EF9821C4BA135003C4B20 /* bt_fuli@3x.png in Resources */,
@@ -2307,6 +2335,7 @@
 				7D4EF9711C4BA135003C4B20 /* bt_credit@2x.png in Resources */,
 				7D4EF9E21C4BA135003C4B20 /* ft_creditcard@3x.png in Resources */,
 				7D4EF9D81C4BA135003C4B20 /* founds_exchange@3x.png in Resources */,
+				7DD7D5D21C4BBC4500ACE71A /* reportForms_filter@3x.png in Resources */,
 				7D4EF9CB1C4BA135003C4B20 /* bt_zhuanru@2x.png in Resources */,
 				7D4EF9DF1C4BA135003C4B20 /* ft_chongzhika@2x.png in Resources */,
 				7D4EF9D51C4BA135003C4B20 /* edit@2x.png in Resources */,
@@ -2628,6 +2657,7 @@
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
+				7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */,
 				BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */,
 				7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
