@@ -62,7 +62,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.circleItems = [NSMutableArray array];
         self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
-        self.edgesForExtendedLayout = UIRectEdgeNone;
+//        self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     return self;
 }
@@ -141,9 +141,9 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 #pragma mark - Event
 - (void)filterAction {
     if ([self.periodSelectionView isShowed]) {
-        [self.periodSelectionView hide:YES];
+        [self.periodSelectionView dismiss:YES];
     } else {
-       [self.periodSelectionView showInView:self.view animated:YES];
+       [self.periodSelectionView showInView:self.view fromTop:self.navigationController.navigationBar.bottom animated:YES];
     }
 }
 
@@ -334,7 +334,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         __weak typeof(self) weakSelf = self;
         _periodSelectionView = [[SSJReportFormsPeriodSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 110)];
         _periodSelectionView.selectionHandler = ^(SSJReportFormsPeriodSelectionView *view, SSJReportFormsPeriodType periodType) {
-            [view hide:YES];
+            [view dismiss:YES];
             [weakSelf reloadDatas];
         };
     }
@@ -354,7 +354,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (SSJReportFormsSwitchYearControl *)switchDateControl {
     if (!_switchDateControl) {
-        _switchDateControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
+        _switchDateControl = [[SSJReportFormsSwitchYearControl alloc] initWithFrame:CGRectMake(0, self.navigationController.navigationBar.bottom, self.view.width, 40)];
         _switchDateControl.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
         [_switchDateControl.preBtn addTarget:self action:@selector(switchDateControlPreAction) forControlEvents:UIControlEventTouchUpInside];
         [_switchDateControl.nextBtn addTarget:self action:@selector(switchDateControlNextAction) forControlEvents:UIControlEventTouchUpInside];
@@ -365,7 +365,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (SSJReportFormsPercentCircle *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectMake(0, self.switchDateControl.bottom, self.view.width, 247) insets:UIEdgeInsetsMake(30, 80, 60, 80) thickness:39];
+        _chartView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 247) insets:UIEdgeInsetsMake(30, 80, 60, 80) thickness:39];
         _chartView.dataSource = self;
         [_chartView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -384,7 +384,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.switchDateControl.height, self.view.width, self.view.height - self.switchDateControl.height) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.switchDateControl.bottom, self.view.width, self.view.height - self.switchDateControl.bottom) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;

@@ -27,6 +27,8 @@ static NSString *kCellID = @"cellID";
 
 @property (nonatomic, strong) NSIndexPath *selectedIndex;
 
+@property (nonatomic) CGFloat fromTop;
+
 @end
 
 @implementation SSJReportFormsPeriodSelectionView
@@ -91,25 +93,26 @@ static NSString *kCellID = @"cellID";
     [self.tableView reloadData];
 }
 
-- (void)showInView:(UIView *)view animated:(BOOL)animated {
+- (void)showInView:(UIView *)view fromTop:(CGFloat)top animated:(BOOL)animated {
     if (!view) {
         return;
     }
     
-    self.bottom = 0;
+    self.bottom = top;
     [view addSubview:self];
     [UIView animateWithDuration:(animated ? 0.25 : 0) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.top = 0;
+        self.top = top;
     } completion:NULL];
+    self.fromTop = top;
 }
 
-- (void)hide:(BOOL)animated {
+- (void)dismiss:(BOOL)animated {
     if (!self.superview) {
         return;
     }
     
     [UIView animateWithDuration:(animated ? 0.25 : 0) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.bottom = 0;
+        self.bottom = self.fromTop;
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];

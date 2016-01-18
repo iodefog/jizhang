@@ -25,9 +25,9 @@ typedef void(^SSJReportFormsPeriodSelectionViewBlock)(SSJReportFormsPeriodSelect
 
 @property (nonatomic, readonly) SSJReportFormsPeriodType periodType;
 
-- (void)showInView:(UIView *)view animated:(BOOL)animated;
+- (void)showInView:(UIView *)view fromTop:(CGFloat)top animated:(BOOL)animated;
 
-- (void)hide:(BOOL)animated;
+- (void)dismiss:(BOOL)animated;
 
 - (BOOL)isShowed;
 

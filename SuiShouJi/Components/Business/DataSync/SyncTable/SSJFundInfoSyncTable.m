@@ -35,21 +35,6 @@
     return @"cparent <> 'root'";
 }
 
-//+ (BOOL)shouMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
-//    FMResultSet *result = [db executeQuery:@"select count(*) from BK_FUND_INFO where CFUNDID = ?", record[@"CPARENT"]];
-//    if (!result) {
-//        SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-//        return NO;
-//    }
-//    
-//    [result next];
-//    if ([result intForColumnIndex:0] <= 0) {
-//        return NO;
-//    }
-//    
-//    return YES;
-//}
-
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
     return [NSString stringWithFormat:@"(select count(*) from BK_FUND_INFO where CFUNDID = '%@') > 0", record[@"CPARENT"]];
 }

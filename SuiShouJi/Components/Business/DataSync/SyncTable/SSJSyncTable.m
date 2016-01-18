@@ -105,11 +105,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
             return NO;
         }
         
-        //  判断是否满足合并条件
-        if (![self shouldMergeRecord:recordInfo inDatabase:db]) {
-            continue;
-        }
-        
         //  根据记录的操作类型，对记录进行相应的操作
         NSString *opertoryType = recordInfo[@"OPERATORTYPE"];
         if (opertoryType.length == 0) {
@@ -237,15 +232,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
     
     return [NSString stringWithFormat:@"update %@ set %@ where %@ and cwritedate < %@", [self tableName], keyValuesStr, condition, recordInfo[@"cwritedate"]];
-}
-
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
-    //  判断合并记录的 userid 和 当前用户的 userid 是否匹配
-    if (![record[@"CUSERID"] isEqualToString:SSJUSERID()]) {
-        SSJPRINT(@">>>SSJ warning: merge record column CUSERID is not equal to current user id\n record user id:%@\n current user id:%@", record[@"CUSERID"], SSJUSERID());
-        return NO;
-    }
-    return YES;
 }
 
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {

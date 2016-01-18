@@ -84,15 +84,6 @@ extern int lastSyncVersion;
  */
 + (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db;
 
-/**
- *  返回记录record是否应该被合并
- *
- *  @param record 合并的记录信息
- *  @param db FMDatabase实例
- *  @return 是否合并
- */
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db;
-
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record;
 
 @end
