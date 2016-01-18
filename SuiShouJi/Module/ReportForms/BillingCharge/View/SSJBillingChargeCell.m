@@ -22,7 +22,7 @@
         self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
         
         self.imageView.contentMode = UIViewContentModeCenter;
-        self.imageView.layer.borderWidth = 0.5;
+        self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         
         [self.contentView addSubview:self.moneyLab];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
