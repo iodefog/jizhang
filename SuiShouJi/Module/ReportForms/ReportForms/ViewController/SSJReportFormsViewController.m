@@ -148,6 +148,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 }
 
 - (void)segmentControlValueDidChange {
+    [self.periodSelectionView dismiss:YES];
     [self reloadDatas];
     [self updateSwithDateControlTitle];
     
