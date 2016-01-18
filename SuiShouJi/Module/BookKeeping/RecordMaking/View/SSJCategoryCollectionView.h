@@ -22,6 +22,8 @@ typedef void (^removeFromCategoryListBlock)();
 
 @property (nonatomic) int page;
 
+@property (nonatomic) long totalPage;
+
 @property (nonatomic) BOOL incomeOrExpence;
 
 @property (nonatomic,strong) NSIndexPath *selectedIndex;

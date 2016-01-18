@@ -138,23 +138,50 @@
         return ;
     }
     FMResultSet *rs;
-    if (_screenWidth == 320) {
-        if (_screenHeight == 568) {
+    if (self.page != self.totalPage - 1) {
+        if (_screenWidth == 320) {
+            if (_screenHeight == 568) {
+                rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+            }else{
+                rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+            }
+        }else if(_screenWidth == 375){
             rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
         }else{
-            rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+            rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 12]];
         }
-    }else if(_screenWidth == 375){
-        rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+        while ([rs next]) {
+            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+            item.categoryTitle = [rs stringForColumn:@"CNAME"];
+            item.categoryImage = [rs stringForColumn:@"CCOIN"];
+            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+            item.categoryID = [rs stringForColumn:@"ID"];
+            [self.Items addObject:item];
+        }
+
     }else{
-        rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 12]];
-    }
-    while ([rs next]) {
+        if (_screenWidth == 320) {
+            if (_screenHeight == 568) {
+                rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+            }else{
+                rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 3 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+            }
+        }else if(_screenWidth == 375){
+            rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+        }else{
+            rs = [db executeQuery:@"SELECT CNAME , CCOLOR , CCOIN , ID FROM BK_BILL_TYPE WHERE ISTATE = 1 AND ITYPE = ? LIMIT 11 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 12]];
+        }
+        while ([rs next]) {
+            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+            item.categoryTitle = [rs stringForColumn:@"CNAME"];
+            item.categoryImage = [rs stringForColumn:@"CCOIN"];
+            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+            item.categoryID = [rs stringForColumn:@"ID"];
+            [self.Items addObject:item];
+        }
         SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-        item.categoryTitle = [rs stringForColumn:@"CNAME"];
-        item.categoryImage = [rs stringForColumn:@"CCOIN"];
-        item.categoryColor = [rs stringForColumn:@"CCOLOR"];
-        item.categoryID = [rs stringForColumn:@"ID"];
+        item.categoryTitle = @"添加";
+        item.categoryImage = @"add";
         [self.Items addObject:item];
     }
     [db close];
@@ -169,6 +196,7 @@
 
 -(void)setPage:(int)page{
     _page = page;
+    [self.Items removeAllObjects];
     [self getDateFromDB];
     [self.collectionView reloadData];
 }

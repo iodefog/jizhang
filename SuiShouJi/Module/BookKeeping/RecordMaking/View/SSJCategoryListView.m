@@ -142,6 +142,7 @@
     for (int i = 0; i < _totalPage; i ++) {                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
         [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
     }
@@ -153,7 +154,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 20",[NSNumber numberWithBool:self.incomeOrExpence]];
+    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 20",[NSNumber numberWithBool:self.incomeOrExpence]] + 1;
     if (_screenWidth == 320) {
         if (_screenHeight == 568) {
             if (count % 8 == 0) {
