@@ -185,6 +185,7 @@
     SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
     item.fundingName = @"添加资金账户";
     item.fundingColor = @"cccccc";
+    item.fundingIcon = @"add";
     item.isAddOrNot = YES;
     [self.items addObject:item];
     _profitAmount = [db doubleForQuery:@"SELECT SUM(IBALANCE) FROM BK_FUNS_ACCT"];

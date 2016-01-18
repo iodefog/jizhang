@@ -80,7 +80,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
-    
     SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kBillingChargeHeaderViewID];
     headerView.textLabel.text = sectionInfo[SSJBillingChargeDateKey];
     return headerView;
