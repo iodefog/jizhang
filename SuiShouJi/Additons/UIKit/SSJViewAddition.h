@@ -64,35 +64,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface UIView (SSJBackView)
-
-@property (nonatomic,readonly)UIView* backView;
-
-- (void)showViewWithBackView:(UIView *)view
-                       alpha:(CGFloat)a
-                      target:(id)target
-                 touchAction:(SEL)selector;
-
-- (void)showViewWithBackView:(UIView *)view
-                       alpha:(CGFloat)a
-                      target:(id)target
-                 touchAction:(SEL)selector
-                   animation:(void(^)(void))animation
-                timeInterval:(NSTimeInterval)interval
-                   fininshed:(void(^)(BOOL finished))fininshed;
-
-- (void)hideBackViewForView:(UIView *)view
-                  animation:(void(^)(void))animation
-               timeInterval:(NSTimeInterval)interval
-                  fininshed:(void(^)(BOOL complation))fininshed;
-
-- (void)hideBackViewForView:(UIView *)view;
-
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-
 @interface UIView (SSJBorder)
 
 //  设置边框线类型
@@ -132,6 +103,46 @@
 - (void)ssj_showWatermarkWithImageName:(NSString *)imageName animated:(BOOL)animated target:(id)target action:(SEL)action;
 
 - (void)ssj_hideWatermark:(BOOL)animated;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface UIView (SSJLoadingIndicator)
+
+- (void)ssj_showLoadingIndicator;
+
+- (void)ssj_hideLoadingIndicator;
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+@interface UIView (SSJBackView)
+
+@property (nonatomic,readonly)UIView* backView;
+
+- (void)showViewWithBackView:(UIView *)view
+                       alpha:(CGFloat)a
+                      target:(id)target
+                 touchAction:(SEL)selector;
+
+- (void)showViewWithBackView:(UIView *)view
+                       alpha:(CGFloat)a
+                      target:(id)target
+                 touchAction:(SEL)selector
+                   animation:(void(^)(void))animation
+                timeInterval:(NSTimeInterval)interval
+                   fininshed:(void(^)(BOOL finished))fininshed;
+
+- (void)hideBackViewForView:(UIView *)view
+                  animation:(void(^)(void))animation
+               timeInterval:(NSTimeInterval)interval
+                  fininshed:(void(^)(BOOL complation))fininshed;
+
+- (void)hideBackViewForView:(UIView *)view;
 
 @end
 

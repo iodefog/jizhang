@@ -46,6 +46,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.income = DBL_MIN;
+        self.pay = DBL_MIN;
         [self addSubview:self.sumTitleLab];
         [self addSubview:self.sumValueLab];
         [self addSubview:self.incomeTitleLab];

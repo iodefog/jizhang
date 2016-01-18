@@ -42,11 +42,14 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellID];
     [self.tableView registerClass:[SSJBillingChargeHeaderView class] forHeaderFooterViewReuseIdentifier:kBillingChargeHeaderViewID];
     
+    [self.view ssj_showLoadingIndicator];
+    
     [SSJBillingChargeHelper queryDataWithBillTypeID:self.billTypeID InYear:self.year month:self.month success:^(NSArray<NSDictionary *> *data) {
+        [self.view ssj_hideLoadingIndicator];
         self.datas = data;
         [self.tableView reloadData];
     } failure:^(NSError *error) {
-        
+        [self.view ssj_hideLoadingIndicator];
     }];
 }
 

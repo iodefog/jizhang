@@ -24,7 +24,7 @@
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         self.imageView.contentMode = UIViewContentModeCenter;
-        self.imageView.layer.borderWidth = 0.5;
+        self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
         self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];

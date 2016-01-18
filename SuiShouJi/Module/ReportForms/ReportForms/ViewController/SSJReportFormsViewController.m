@@ -62,7 +62,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.circleItems = [NSMutableArray array];
         self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
-//        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
@@ -77,8 +77,8 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     self.navigationItem.rightBarButtonItem = rightItem;
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     
-    [self.view addSubview:self.switchDateControl];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.switchDateControl];
     
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     
@@ -257,12 +257,16 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 //  重新加载数据
 - (void)reloadDatas {
+    [self.view ssj_showLoadingIndicator];
+    
     NSInteger month = 0;
     if (self.periodSelectionView.periodType == SSJReportFormsPeriodTypeMonth) {
         month = self.calendarUtil.month;
     }
     
     [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] inYear:self.calendarUtil.year month:month success:^(NSArray<SSJReportFormsItem *> *result) {
+        
+        [self.view ssj_hideLoadingIndicator];
         
         self.datas = result;
         [self.tableView reloadData];
@@ -324,7 +328,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         }
         
     } failure:^(NSError *error) {
-        
+        [self.view ssj_hideLoadingIndicator];
     }];
 }
 
@@ -336,6 +340,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _periodSelectionView.selectionHandler = ^(SSJReportFormsPeriodSelectionView *view, SSJReportFormsPeriodType periodType) {
             [view dismiss:YES];
             [weakSelf reloadDatas];
+            [weakSelf updateSwithDateControlTitle];
         };
     }
     return _periodSelectionView;
@@ -384,7 +389,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.switchDateControl.bottom, self.view.width, self.view.height - self.switchDateControl.bottom) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
@@ -393,7 +398,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         _tableView.delegate = self;
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
         _tableView.separatorInset = UIEdgeInsetsZero;
-        _tableView.contentInset = UIEdgeInsetsMake(0, 0, self.tabBarController.tabBar.height, 0);
+        _tableView.contentInset = UIEdgeInsetsMake(self.switchDateControl.bottom, 0, self.tabBarController.tabBar.height, 0);
         _tableView.tableHeaderView = self.chartView;
     }
     return _tableView;
