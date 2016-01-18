@@ -200,3 +200,10 @@ NSString *SSJUUID();
  *  @return (NSString *)
  */
 NSString *SSJUSERID();
+
+/**
+ *  获取当前版本号
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJIVERSION();
