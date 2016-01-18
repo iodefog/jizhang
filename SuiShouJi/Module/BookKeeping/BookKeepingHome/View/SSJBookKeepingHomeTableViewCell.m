@@ -89,9 +89,9 @@
 
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
-        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 36, 36)];
+        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 38, 38)];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
-        _categoryImageButton.layer.cornerRadius = 18;
+        _categoryImageButton.layer.cornerRadius = 19;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _categoryImageButton;
@@ -221,7 +221,10 @@
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.text = @"";
         }
-        [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
+        
+        UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:iconName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        _categoryImageButton.contentMode = UIViewContentModeCenter;
+        [_categoryImageButton setImage:image forState:UIControlStateNormal];
         _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
         _categoryImageButton.layer.borderWidth = 1;
         _categoryImageButton.backgroundColor = [UIColor clearColor];

@@ -141,8 +141,8 @@
     _selectedPage = 0;
     for (int i = 0; i < _totalPage; i ++) {                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
         [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
     }
