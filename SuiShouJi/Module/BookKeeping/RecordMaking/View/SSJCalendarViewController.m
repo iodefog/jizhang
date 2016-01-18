@@ -12,6 +12,7 @@
 #import "SSJBillingChargeCellItem.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
+#import "SSJFundingDetailDateHeader.h"
 
 #import "FMDB.h"
 
@@ -44,7 +45,6 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
-        self.navigationItem.rightBarButtonItem = self.rightBarButton;
     }
     return self;
 }
@@ -60,6 +60,8 @@
     [self getDataFromDateBase];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
+    [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -97,7 +99,7 @@
     if (self.items.count == 0) {
         return self.view.height - 270;
     }
-    return 0;
+    return 44;
 }
 
 #pragma mark - UITableViewDataSource
@@ -107,10 +109,24 @@
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (self.items.count == 0) {
+        __weak typeof(self) weakSelf = self;
         SSJCalenderTableViewNoDataHeader *noDateHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
+        noDateHeader.RecordMakingButtonBlock = ^(){
+            SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
+            recordMakingVC.selectedDay = self.selectedDay;
+            recordMakingVC.selectedMonth = self.selectedMonth;
+            recordMakingVC.selectedYear = self.selectedYear;
+            [weakSelf.navigationController pushViewController:recordMakingVC animated:YES];
+        };
         return noDateHeader;
+    }else{
+        SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
+        headerView.dateLabel.text = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",self.selectedYear,self.selectedMonth,self.selectedDay];
+        [headerView.dateLabel sizeToFit];
+        headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",[self getBalance]];
+        [headerView.balanceLabel sizeToFit];
+        return headerView;
     }
-    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -121,14 +137,6 @@
 }
 
 #pragma mark - Getter
--(UIBarButtonItem*)rightBarButton{
-    if (!_rightBarButton) {
-        _rightBarButton = [[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked)];
-        _rightBarButton.tintColor = [UIColor blackColor];
-    }
-    return _rightBarButton;
-}
-
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
@@ -216,14 +224,6 @@
     [self.calendarView.calendar reloadData];
 }
 
--(void)recordMakingButtonClicked:(UIButton*)button{
-    SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
-    recordMakingVC.selectedDay = self.selectedDay;
-    recordMakingVC.selectedMonth = self.selectedMonth;
-    recordMakingVC.selectedYear = self.selectedYear;
-    [self.navigationController pushViewController:recordMakingVC animated:YES];
-}
-
 -(void)getDataFromDateBase{
     NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
@@ -239,9 +239,21 @@
         item.ID = [rs stringForColumn:@"ICHARGEID"];
         item.money = [rs stringForColumn:@"IMONEY"];
         item.colorValue = [rs stringForColumn:@"CCOLOR"];
+        item.incomeOrExpence = [rs stringForColumn:@"ITYPE"];
         [self.items addObject:item];
     }
     [db close];
+}
+
+-(double)getBalance{
+    NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return 0;
+    }
+    double balance = [db doubleForQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
+    return balance;
 }
 
 /*

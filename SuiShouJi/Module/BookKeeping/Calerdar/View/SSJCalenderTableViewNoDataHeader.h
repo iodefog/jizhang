@@ -11,5 +11,8 @@
 @interface SSJCalenderTableViewNoDataHeader : UIView
 
 + (id)CalenderTableViewNoDataHeader;
+//点击记录按钮的回调
+typedef void (^RecordMakingButtonBlock)();
 
+@property (nonatomic, copy) RecordMakingButtonBlock RecordMakingButtonBlock;
 @end
