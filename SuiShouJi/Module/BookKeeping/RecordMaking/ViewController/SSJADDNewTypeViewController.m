@@ -58,7 +58,7 @@
     cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
     if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
         cell.categoryImage.tintColor = [UIColor whiteColor];
-        [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.categoryImage.image = [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
     }else{
         cell.categoryImage.backgroundColor = [UIColor clearColor];

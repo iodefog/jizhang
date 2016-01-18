@@ -284,3 +284,9 @@ NSString *SSJUSERID(){
     }
     return strUSERID;
 }
+
+NSString *SSJIVERSION(){
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"IVERSION"] == nil) {
+        <#statements#>
+    }
+};
