@@ -7,8 +7,9 @@
 //
 
 #import "SSJBaseViewController.h"
-//#import "UIViewController+SSJPageFlow.h"
+#import "UIViewController+SSJPageFlow.h"
 #import "MobClick.h"
+#import "SSJLoginViewController.h"
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -81,54 +82,54 @@
  9007 token验证不通过
  9009 未登录
  */
-//- (void)serverDidFinished:(SSJBaseNetworkService *)service {
-//    NSInteger codeint = [service.returnCode integerValue];
-//    
-//    if (codeint == 1) {
-//        return;
-//    }
-//    
-//    NSString *message = service.desc.length > 0 ? service.desc : SSJ_ERROR_MESSAGE;
-//    
-//    if (codeint == 9001
-//        || codeint == 9002
-//        || codeint == 9003
-//        || codeint == 9005
-//        || codeint == 9006
-//        || codeint == 9007
-//        || codeint == 9009) {
-//        
-//        SSJClearLoginInfo();
-//        
-//        if (service.showLoginControllerIfTokenInvalid
-//            && ![SSJVisibalController() isKindOfClass:[SSJLoginViewController class]]) {
-//            
-//            if (service.showMessageIfErrorOccured) {
-//                [CDAutoHideMessageHUD showMessage:message];
-//            }
-//            
-//            __weak typeof(self) weakSelf = self;
-//            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] initWithNibName:nil bundle:nil];
-//            loginVC.finishHandle = ^(UIViewController *controller) {
-//                controller.backController = weakSelf;
-//                [controller ssj_backOffAction];
-//            };
-//            loginVC.cancelHandle = ^(UIViewController *controller) {
-//                controller.backController = [weakSelf ssj_previousViewController];
-//                [controller ssj_backOffAction];
-//            };
-//            
-//            [loginVC ssj_showBackButtonWithTarget:loginVC selector:@selector(backOffAction)];
-//            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
-//            [self presentViewController:naviVC animated:YES completion:NULL];
-//        }
-//        
-//    } else {
-//        if (service.showMessageIfErrorOccured) {
-//            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-//        }
-//    }
-//}
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    NSInteger codeint = [service.returnCode integerValue];
+    
+    if (codeint == 1) {
+        return;
+    }
+    
+    NSString *message = service.desc.length > 0 ? service.desc : SSJ_ERROR_MESSAGE;
+    
+    if (codeint == 9001
+        || codeint == 9002
+        || codeint == 9003
+        || codeint == 9005
+        || codeint == 9006
+        || codeint == 9007
+        || codeint == 9009) {
+        
+        SSJClearLoginInfo();
+        
+        if (service.showLoginControllerIfTokenInvalid
+            && ![SSJVisibalController() isKindOfClass:[SSJLoginViewController class]]) {
+            
+            if (service.showMessageIfErrorOccured) {
+                [CDAutoHideMessageHUD showMessage:message];
+            }
+            
+            __weak typeof(self) weakSelf = self;
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] initWithNibName:nil bundle:nil];
+            loginVC.finishHandle = ^(UIViewController *controller) {
+                controller.backController = weakSelf;
+                [controller ssj_backOffAction];
+            };
+            loginVC.cancelHandle = ^(UIViewController *controller) {
+                controller.backController = [weakSelf ssj_previousViewController];
+                [controller ssj_backOffAction];
+            };
+            
+            [loginVC ssj_showBackButtonWithTarget:loginVC selector:@selector(backOffAction)];
+            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
+            [self presentViewController:naviVC animated:YES completion:NULL];
+        }
+        
+    } else {
+        if (service.showMessageIfErrorOccured) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        }
+    }
+}
 
 - (void)serverDidCancel:(SSJBaseNetworkService *)service {
     

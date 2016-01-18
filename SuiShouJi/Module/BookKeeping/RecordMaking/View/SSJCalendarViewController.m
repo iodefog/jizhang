@@ -9,6 +9,12 @@
 #import "SSJCalendarViewController.h"
 #import "SSJCalendarView.h"
 #import "SSJRecordMakingViewController.h"
+#import "SSJBillingChargeCellItem.h"
+#import "SSJBillingChargeCell.h"
+#import "SSJCalenderTableViewNoDataHeader.h"
+
+#import "FMDB.h"
+
 
 @interface SSJCalendarViewController ()
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
@@ -21,6 +27,7 @@
 @property (nonatomic,strong) UILabel *firstLineLabel;
 @property (nonatomic,strong) UILabel *secondLineLabel;
 @property (nonatomic,strong) UIButton *recordMakingButton;
+@property (nonatomic,strong) NSMutableArray *items;
 
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
@@ -44,9 +51,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
     self.selectedMonth = _currentMonth ;
+    self.selectedDay = _currentDay;
+    self.items = [[NSMutableArray alloc]init];
+    [self getDataFromDateBase];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
 }
@@ -83,20 +94,30 @@
 }   
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return self.view.height - 270;
+    if (self.items.count == 0) {
+        return self.view.height - 270;
+    }
+    return 0;
 }
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 0;
+    return self.items.count;
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    return self.noDateView;
+    if (self.items.count == 0) {
+        SSJCalenderTableViewNoDataHeader *noDateHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
+        return noDateHeader;
+    }
+    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;
+    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setCellItem:[self.items ssj_safeObjectAtIndex:indexPath.row]];
+    return cell;
 }
 
 #pragma mark - Getter
@@ -118,7 +139,10 @@
             weakSelf.selectedYear = year;
             weakSelf.selectedMonth = month ;
             weakSelf.selectedDay = day;
+            [weakSelf.items removeAllObjects];
+            [weakSelf getDataFromDateBase];
             [weakSelf.tableView reloadData];
+            [weakSelf.view setNeedsLayout];
         };
     }
     return _calendarView;
@@ -136,13 +160,13 @@
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
         _plusButton.frame = CGRectMake(0, 0, 30, 30);
-        [_plusButton setTitle:@"+" forState:UIControlStateNormal];
+        [_plusButton setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _plusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
         _minusButton.frame = CGRectMake(0, 0, 30, 30);
-        [_minusButton setTitle:@"-" forState:UIControlStateNormal];
+        [_minusButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -153,31 +177,6 @@
     return _dateChangeView;
 }
 
--(UIView *)noDateView{
-    if (!_noDateView) {
-        _noDateView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 270)];
-        _firstLineLabel = [[UILabel alloc]init];
-
-        _firstLineLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _firstLineLabel.text = @"还没有任何记账记录哦";
-        [_firstLineLabel sizeToFit];
-        [_noDateView addSubview:_firstLineLabel];
-        _secondLineLabel = [[UILabel alloc]init];
-
-        _secondLineLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _secondLineLabel.text = @"赶紧来记一笔吧";
-        [_secondLineLabel sizeToFit];
-        [_noDateView addSubview:_secondLineLabel];
-        _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
-        [_recordMakingButton setTitle:@"记一笔" forState:UIControlStateNormal];
-        [_recordMakingButton addTarget:self action:@selector(recordMakingButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        _recordMakingButton.backgroundColor = [UIColor redColor];
-        _recordMakingButton.layer.cornerRadius = 30;
-        _recordMakingButton.layer.borderColor = [UIColor redColor].CGColor;
-        [_noDateView addSubview:_recordMakingButton];
-    }
-    return _noDateView;
-}
 #pragma mark - private
 -(void)getCurrentDate{
     NSDate *now = [NSDate date];
@@ -196,9 +195,10 @@
         self.selectedYear = self.selectedYear + 1;
     }
     self.dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
-    [self.dateLabel  sizeToFit];
+    [self.dateLabel sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
+    self.calendarView.day = 0;
     [self.calendarView.calendar reloadData];
 }
 
@@ -212,6 +212,7 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
+    self.calendarView.day = 0;
     [self.calendarView.calendar reloadData];
 }
 
@@ -221,6 +222,26 @@
     recordMakingVC.selectedMonth = self.selectedMonth;
     recordMakingVC.selectedYear = self.selectedYear;
     [self.navigationController pushViewController:recordMakingVC animated:YES];
+}
+
+-(void)getDataFromDateBase{
+    NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID LIKE '1___' OR A.IBILLID LIKE '2___'",SSJUSERID(),selectDate];
+    while ([rs next]) {
+        SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
+        item.imageName = [rs stringForColumn:@"CCOIN"];
+        item.typeName = [rs stringForColumn:@"CNAME"];
+        item.ID = [rs stringForColumn:@"ICHARGEID"];
+        item.money = [rs stringForColumn:@"IMONEY"];
+        item.colorValue = [rs stringForColumn:@"CCOLOR"];
+        [self.items addObject:item];
+    }
+    [db close];
 }
 
 /*
