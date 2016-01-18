@@ -59,7 +59,7 @@
 
 - (void)setUpInitWithTableViewStyle:(UITableViewStyle)tableViewStyle{
     _tableViewStyle= tableViewStyle;
-    self.showDragView = YES;
+    self.showDragView = NO;
 }
 
 - (void)viewDidLoad{

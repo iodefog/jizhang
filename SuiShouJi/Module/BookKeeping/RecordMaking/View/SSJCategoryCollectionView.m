@@ -196,7 +196,7 @@
 
 -(void)setPage:(int)page{
     _page = page;
-    [self.Items removeAllObjects];
+//    [self.Items removeAllObjects];
     [self getDateFromDB];
     [self.collectionView reloadData];
 }
