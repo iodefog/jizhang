@@ -29,7 +29,7 @@
 -(void)layoutSubviews{
     _calenderImage.frame = CGRectMake(0, 0, self.width, self.height);
     _dateLabel.bottom = self.height;
-    _dateLabel.centerX = self.width / 2;
+    _dateLabel.center = CGPointMake(self.width / 2, self.height / 2);
     _btn.frame = CGRectMake(0, 0, self.width, self.height);
 }
 
@@ -47,7 +47,7 @@
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor whiteColor];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.font = [UIFont systemFontOfSize:12];
+        _dateLabel.font = [UIFont systemFontOfSize:17];
     }
     return _dateLabel;
 }

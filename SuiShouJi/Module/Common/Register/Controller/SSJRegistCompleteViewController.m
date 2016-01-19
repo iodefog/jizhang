@@ -105,7 +105,11 @@
                 weakSelf.finishHandle(weakSelf);
             }
         }];
-        
+        if (self.type == 0) {
+            if (self.RegistCompleteBlock) {
+                self.RegistCompleteBlock(self.mobileNo);
+            }
+        }
         NSString *message = self.type == SSJRegistAndForgetPasswordTypeRegist ? @"注册成功" : @"设置密码成功";
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
         
