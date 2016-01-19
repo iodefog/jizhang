@@ -18,6 +18,9 @@
 #import "SSJBillingChargeViewController.h"
 #import "SSJReportFormsUtil.h"
 
+#warning test
+#import "SSJDataSynchronizer.h"
+
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 static NSString *const kSegmentTitlePay = @"支出";
@@ -84,6 +87,26 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
+    
+    [self setTestItem];
+}
+
+#warning test
+- (void)setTestItem {
+    UIBarButtonItem *testItem = [[UIBarButtonItem alloc] initWithTitle:@"test" style:UIBarButtonItemStylePlain target:self action:@selector(testAction)];
+    self.navigationItem.leftBarButtonItem = testItem;
+}
+
+- (void)testAction {
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+        NSLog(@"success");
+    } failure:^(NSError *error) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [aler show];
+        });
+        NSLog(@"%@", error);
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -214,7 +237,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
-            [title appendFormat:@"%d月",(int)self.calendarUtil.month];
+//            [title appendFormat:@"%d月",(int)self.calendarUtil.month];
+            [title appendFormat:@"%d年%d月", (int)self.calendarUtil.year, (int)self.calendarUtil.month];
             break;
             
         case SSJReportFormsPeriodTypeYear:

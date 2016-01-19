@@ -70,19 +70,20 @@ static NSString *const kSignKey = @"accountbook";
             //  获取上次同步成功的版本号
             [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
             if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
-                databaseSuccess = NO;
-                return;
+                lastSyncVersion = SSJDefaultSyncVersion;
             }
             
             //  设置当前同步的版本号
             currentSyncVersion = lastSyncVersion + 1;
             
             //  把当前同步的版本号插入到BK_SYNC表中
-            if (![db executeUpdate:@"insert into BK_SYNC values (?, 1)", @(currentSyncVersion)]) {
+            if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 0, ?)", @(currentSyncVersion), SSJUSERID()]) {
                 SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                 databaseSuccess = NO;
                 return;
             }
+            
+            SSJUpdateSyncVersion(currentSyncVersion + 1);
             
             //  查询需要同步的表中 版本号（IVERSION）大于上次同步成功版本号（lastSyncVersion）的记录，
             userBillRecords = [SSJUserBillSyncTable queryRecordsForSyncInDatabase:db];
@@ -117,6 +118,7 @@ static NSString *const kSignKey = @"accountbook";
         NSString *filePath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncFileName];
         NSString *zipPath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncZipFileName];
         
+        [syncData writeToFile:@"/Users/oldlang/Desktop/sync_json.text" atomically:YES];
         if (![syncData writeToFile:filePath atomically:YES]) {
             failure(nil);
             return;
@@ -166,8 +168,15 @@ static NSString *const kSignKey = @"accountbook";
             dispatch_async(self.syncQueue, ^{
                 //  上传成功后，将数据解压，并解析json数据
                 if (![responseObject isKindOfClass:[NSData class]]) {
+                    if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                        NSInteger code = [responseObject[@"code"] integerValue];
+                        NSString *desc = responseObject[@"desc"];
+                        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
+                        failure(error);
+                    } else {
+                        failure(nil);
+                    }
                     SSJPRINT(@">>>SSJ warning:responseObject is not NSData type");
-                    failure(nil);
                     return;
                 }
                 

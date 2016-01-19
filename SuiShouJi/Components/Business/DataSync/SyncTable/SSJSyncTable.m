@@ -33,7 +33,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
             return lastSyncVersion;
         }
         
-        lastSyncVersion = 0;
         [lastSyncResultSet next];
         lastSyncVersion = [lastSyncResultSet intForColumnIndex:0];
     }

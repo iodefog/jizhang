@@ -49,8 +49,9 @@
     self.percentLabel.centerX = self.width * 0.5;
     self.percentLabel.centerY = self.contentView.height * 0.5;
     
+    self.moneyLabel.size = CGSizeMake(self.contentView.width * 0.3, self.contentView.height);
     self.moneyLabel.right = self.contentView.width;
-    self.moneyLabel.centerY = self.contentView.height * 0.5;
+//    self.moneyLabel.centerY = self.contentView.height * 0.5;
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
@@ -65,7 +66,7 @@
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
         
         [self.percentLabel sizeToFit];
-        [self.moneyLabel sizeToFit];
+//        [self.moneyLabel sizeToFit];
         
         [self setNeedsLayout];
     }
@@ -87,6 +88,7 @@
         _moneyLabel.backgroundColor = [UIColor whiteColor];
         _moneyLabel.font = [UIFont systemFontOfSize:18];
         _moneyLabel.textColor = [UIColor blackColor];
+        _moneyLabel.textAlignment = NSTextAlignmentRight;
     }
     return _moneyLabel;
 }

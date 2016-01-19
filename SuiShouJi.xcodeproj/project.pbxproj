@@ -209,7 +209,6 @@
 		7DD7D7351C4CA8BD00ACE71A /* reportForms_income@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D7311C4CA8BD00ACE71A /* reportForms_income@2x.png */; };
 		7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D7321C4CA8BD00ACE71A /* reportForms_income@3x.png */; };
 		7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */; };
-		7DD7D7431C4CE8A200ACE71A /* SSJFundInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D7421C4CE8A200ACE71A /* SSJFundInfoModel.m */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
@@ -585,8 +584,6 @@
 		7DD7D7321C4CA8BD00ACE71A /* reportForms_income@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_income@3x.png"; sourceTree = "<group>"; };
 		7DD7D73E1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserDefaultDataCreater.h; sourceTree = "<group>"; };
 		7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserDefaultDataCreater.m; sourceTree = "<group>"; };
-		7DD7D7411C4CE8A200ACE71A /* SSJFundInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundInfoModel.h; sourceTree = "<group>"; };
-		7DD7D7421C4CE8A200ACE71A /* SSJFundInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundInfoModel.m; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
 		9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectView.m; sourceTree = "<group>"; };
 		9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeTableViewCell.h; sourceTree = "<group>"; };
@@ -1294,8 +1291,6 @@
 			children = (
 				7DD7D73E1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.h */,
 				7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */,
-				7DD7D7411C4CE8A200ACE71A /* SSJFundInfoModel.h */,
-				7DD7D7421C4CE8A200ACE71A /* SSJFundInfoModel.m */,
 			);
 			path = UserDefaultData;
 			sourceTree = "<group>";
@@ -2575,7 +2570,6 @@
 				7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */,
 				BD0214481C3E87AE000E944E /* SSJFundingTypeSelectViewController.m in Sources */,
 				BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */,
-				7DD7D7431C4CE8A200ACE71A /* SSJFundInfoModel.m in Sources */,
 				7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */,
 				BD9573A51C3F809000126F6E /* SSJCategorySelectPageItem.m in Sources */,
 				BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */,
