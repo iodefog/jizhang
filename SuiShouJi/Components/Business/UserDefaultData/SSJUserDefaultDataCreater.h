@@ -10,8 +10,6 @@
 
 @interface SSJUserDefaultDataCreater : NSObject
 
-+ (void)createDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
-
-+ (void)createDefaultBillTypesWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
++ (void)createFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 @end

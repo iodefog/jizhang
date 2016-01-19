@@ -34,20 +34,20 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     [self umengTrack];
     
     //  创建数据表
-//    [self createTables];
+    [self createTables];
     
     [self setRootViewController];
     
-    FMDatabase *db = [[FMDatabase alloc] initWithPath:@"/Users/oldlang/Desktop/testDb.db"];
-    [db open];
-    [db executeUpdate:@"insert into t2 (id, age) values (1, '18')"];
-    
-//    FMResultSet *result = [db executeQuery:@"select age from t2 where age > 17"];
-//    if (result) {
-//        while ([result next]) {
-//            NSLog(@"%d", [result intForColumnIndex:0]);
-//        }
-//    }
+//    FMDatabase *db = [[FMDatabase alloc] initWithPath:@"/Users/oldlang/Desktop/testDb.db"];
+//    [db open];
+//    [db executeUpdate:@"insert into t1 (id, age) select 1, name, age from t2 where not exists(select * from t1 where name <> name)"];
+//    
+////    FMResultSet *result = [db executeQuery:@"select age from t2 where age > 17"];
+////    if (result) {
+////        while ([result next]) {
+////            NSLog(@"%d", [result intForColumnIndex:0]);
+////        }
+////    }
     
     
     return YES;
@@ -110,11 +110,12 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
                 SSJPRINT(@"move database error:%@",[error localizedDescription]);
             }
         }
-//        [SSJUserDefaultDataCreater createDefaultDataForCurrentUserWithSuccess:^{
-//            
-//        } failure:^(NSError *error) {
-//            
-//        }];
+
+        [SSJUserDefaultDataCreater createFundAccountsWithSuccess:^{
+            
+        } failure:^(NSError *error) {
+            
+        }];
     });
 }
 
