@@ -229,7 +229,7 @@
         _categoryImageButton.layer.borderWidth = 1;
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
-        _categoryImageButton.titleLabel.hidden = YES;
+        [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
     }
     [self setNeedsLayout];
 }
