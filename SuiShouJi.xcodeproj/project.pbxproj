@@ -324,6 +324,7 @@
 		BD976FA61C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD976FA51C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m */; };
 		BD976FA81C4E49D900B0E26D /* home_bear.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976FA71C4E49D900B0E26D /* home_bear.png */; };
 		BD976FAA1C4E4A4600B0E26D /* home_jiantou.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976FA91C4E4A4600B0E26D /* home_jiantou.png */; };
+		BD976FAD1C4E582400B0E26D /* SSJCalenderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD976FAC1C4E582400B0E26D /* SSJCalenderDetailViewController.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
@@ -805,6 +806,8 @@
 		BD976FA51C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeNodateFooter.m; sourceTree = "<group>"; };
 		BD976FA71C4E49D900B0E26D /* home_bear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_bear.png; sourceTree = "<group>"; };
 		BD976FA91C4E4A4600B0E26D /* home_jiantou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_jiantou.png; sourceTree = "<group>"; };
+		BD976FAB1C4E582400B0E26D /* SSJCalenderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderDetailViewController.h; sourceTree = "<group>"; };
+		BD976FAC1C4E582400B0E26D /* SSJCalenderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderDetailViewController.m; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepHomeItem.h; sourceTree = "<group>"; };
@@ -2207,6 +2210,8 @@
 			children = (
 				9C434E321C2AD4DF00A3D61E /* SSJCalendarViewController.h */,
 				9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */,
+				BD976FAB1C4E582400B0E26D /* SSJCalenderDetailViewController.h */,
+				BD976FAC1C4E582400B0E26D /* SSJCalenderDetailViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2605,6 +2610,7 @@
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */,
+				BD976FAD1C4E582400B0E26D /* SSJCalenderDetailViewController.m in Sources */,
 				BD70DF5A1C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				7D2B24211C3E095C009A74A8 /* SSJSyncTable.m in Sources */,
 				BD70DF5C1C4751EA000E6CC9 /* SSJForgotPSWResetService.m in Sources */,
