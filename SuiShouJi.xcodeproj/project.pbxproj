@@ -321,6 +321,9 @@
 		BD976F9E1C4E044500B0E26D /* tab_mine_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976F9D1C4E044500B0E26D /* tab_mine_nor@2x.png */; };
 		BD976FA01C4E05A300B0E26D /* tab_mine_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976F9F1C4E05A300B0E26D /* tab_mine_nor@3x.png */; };
 		BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD976FA21C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m */; };
+		BD976FA61C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD976FA51C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m */; };
+		BD976FA81C4E49D900B0E26D /* home_bear.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976FA71C4E49D900B0E26D /* home_bear.png */; };
+		BD976FAA1C4E4A4600B0E26D /* home_jiantou.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976FA91C4E4A4600B0E26D /* home_jiantou.png */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
@@ -798,6 +801,10 @@
 		BD976F9F1C4E05A300B0E26D /* tab_mine_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_mine_nor@3x.png"; sourceTree = "<group>"; };
 		BD976FA11C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPortraitUploadNetworkService.h; sourceTree = "<group>"; };
 		BD976FA21C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPortraitUploadNetworkService.m; sourceTree = "<group>"; };
+		BD976FA41C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeNodateFooter.h; sourceTree = "<group>"; };
+		BD976FA51C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeNodateFooter.m; sourceTree = "<group>"; };
+		BD976FA71C4E49D900B0E26D /* home_bear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_bear.png; sourceTree = "<group>"; };
+		BD976FA91C4E4A4600B0E26D /* home_jiantou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_jiantou.png; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepHomeItem.h; sourceTree = "<group>"; };
@@ -1104,6 +1111,8 @@
 				7DD7D6691C4C8E6A00ACE71A /* home_delet@2x.png */,
 				7DD7D66A1C4C8E6A00ACE71A /* home_edit@2x.png */,
 				7DD7D66B1C4C8E6A00ACE71A /* homesaperater@2x.png */,
+				BD976FA91C4E4A4600B0E26D /* home_jiantou.png */,
+				BD976FA71C4E49D900B0E26D /* home_bear.png */,
 				7DD7D66C1C4C8E6A00ACE71A /* left@2x.png */,
 				7DD7D6781C4C8E6A00ACE71A /* right@2x.png */,
 				7DD7D66D1C4C8E6A00ACE71A /* navigation_backOff@2x.png */,
@@ -1593,6 +1602,8 @@
 				BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */,
 				BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */,
 				BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */,
+				BD976FA41C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.h */,
+				BD976FA51C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2331,11 +2342,13 @@
 				7DD7D6FC1C4C8E6A00ACE71A /* founds_zhuanchu@2x.png in Resources */,
 				7DD7D69A1C4C8E6A00ACE71A /* bt_digital@2x.png in Resources */,
 				7DD7D6CB1C4C8E6A00ACE71A /* bt_recharge@3x.png in Resources */,
+				BD976FAA1C4E4A4600B0E26D /* home_jiantou.png in Resources */,
 				7DD7D6891C4C8E6A00ACE71A /* bt_baby@3x.png in Resources */,
 				7DD7D6A51C4C8E6A00ACE71A /* bt_fuli@3x.png in Resources */,
 				7DD7D6B51C4C8E6A00ACE71A /* bt_jianzhi@3x.png in Resources */,
 				7DD7D69C1C4C8E6A00ACE71A /* bt_education@2x.png in Resources */,
 				7DD7D6831C4C8E6A00ACE71A /* add@3x.png in Resources */,
+				BD976FA81C4E49D900B0E26D /* home_bear.png in Resources */,
 				7DD7D6A31C4C8E6A00ACE71A /* bt_fruit@3x.png in Resources */,
 				7DD7D6CE1C4C8E6A00ACE71A /* bt_service@2x.png in Resources */,
 				7DD7D6B41C4C8E6A00ACE71A /* bt_jianzhi@2x.png in Resources */,
@@ -2613,6 +2626,7 @@
 				BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */,
 				BD0432F41C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */,
+				BD976FA61C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m in Sources */,
 				BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				BD04339B1C1A8DA50051E7AB /* SSJNormalWebViewController.m in Sources */,
 				BD7BC83E1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m in Sources */,
