@@ -14,7 +14,7 @@
 
 static const void *kBackControllerKey = &kBackControllerKey;
 
-@implementation UIViewController (SSJNavigation)
+@implementation UIViewController (SSJNavigationStack)
 
 - (void)setBackController:(UIViewController *)backController {
     objc_setAssociatedObject(self, kBackControllerKey, backController, OBJC_ASSOCIATION_ASSIGN);
@@ -122,17 +122,6 @@ static const void *kBackControllerKey = &kBackControllerKey;
         }
     }
     return nil;
-}
-
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-@implementation UIViewController (SSJKeyboard)
-
-- (void)ssj_hideKeyboard {
-    [self.view.window endEditing:YES];
 }
 
 @end

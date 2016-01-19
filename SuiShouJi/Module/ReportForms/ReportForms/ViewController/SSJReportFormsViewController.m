@@ -22,14 +22,14 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
-static NSString *const kSegmentTitleSurplus = @"盈余";
+static NSString *const kSegmentTitleSurplus = @"结余";
 
 @interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, SSJReportFormsPercentCircleDataSource>
 
 //  周期选择控件（月、年）
 @property (nonatomic, strong) SSJReportFormsPeriodSelectionView *periodSelectionView;
 
-//  收入、支出、盈余切换控件
+//  收入、支出、结余切换控件
 @property (nonatomic, strong) SSJSegmentedControl *segmentControl;
 
 //  切换年份、月份控件
@@ -38,7 +38,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
 //  月份收支图表
 @property (nonatomic, strong) SSJReportFormsPercentCircle *chartView;
 
-//  盈余金额视图
+//  结余金额视图
 @property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
 
 //
@@ -119,6 +119,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.billTypeID = item.ID;
         billingChargeVC.year = self.calendarUtil.year;
+        billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
         if (self.periodSelectionView.periodType == SSJReportFormsPeriodTypeMonth) {
             billingChargeVC.month = self.calendarUtil.month;
         }
@@ -227,21 +228,21 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
     } else if ([selectedTitle isEqualToString:kSegmentTitleIncome]) {
         [title appendString:@"收入明细图表"];
     } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-        [title appendString:@"收支盈余明细图表"];
+        [title appendString:@"收支结余明细图表"];
     }
     
     self.switchDateControl.title = title;
 }
 
-//  更新盈余标题
+//  更新结余标题
 - (void)updateSurplusViewTitle {
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
-            [self.surplusView setTitle:[NSString stringWithFormat:@"%d月盈余",(int)self.calendarUtil.month]];
+            [self.surplusView setTitle:[NSString stringWithFormat:@"%d月结余",(int)self.calendarUtil.month]];
             break;
             
         case SSJReportFormsPeriodTypeYear:
-            [self.surplusView setTitle:[NSString stringWithFormat:@"%d年盈余",(int)self.calendarUtil.year]];
+            [self.surplusView setTitle:[NSString stringWithFormat:@"%d年结余",(int)self.calendarUtil.year]];
             break;
     }
 }
@@ -298,7 +299,7 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
                 [self.circleItems addObject:circleItem];
                 
             } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-                //  盈余，盈余最多只有收入、支出两种类型
+                //  结余，结余最多只有收入、支出两种类型
                 NSUInteger index = [result indexOfObject:item];
                 if (index <= 1) {
                     SSJReportFormsPercentCircleItem *circleItem = [[SSJReportFormsPercentCircleItem alloc] init];
@@ -330,6 +331,9 @@ static NSString *const kSegmentTitleSurplus = @"盈余";
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
+        
+        NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
     }];
 }
 

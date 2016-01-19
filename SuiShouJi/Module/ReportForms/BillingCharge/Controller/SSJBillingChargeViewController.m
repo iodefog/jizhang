@@ -50,6 +50,9 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         [self.tableView reloadData];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
+        
+        NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
     }];
 }
 
@@ -58,7 +61,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    self.navigationController.navigationBar.barTintColor = [UIColor ssj_colorWithHex:@"#eda032"];
+    self.navigationController.navigationBar.barTintColor = self.color;
 }
 
 #pragma mark - UITableViewDataSource

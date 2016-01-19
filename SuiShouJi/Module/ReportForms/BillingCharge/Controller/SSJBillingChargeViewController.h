@@ -7,8 +7,9 @@
 //
 
 //  记账流水
-
 #import "SSJBaseViewController.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJBillingChargeViewController : SSJBaseViewController
 
@@ -21,4 +22,8 @@
 // 查询哪个月的流水记录，如果不传就查询整年的记录
 @property (nonatomic) NSInteger month;
 
+@property (nonatomic, strong) UIColor *color;
+
 @end
+
+NS_ASSUME_NONNULL_END

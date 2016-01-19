@@ -42,6 +42,7 @@
         __weak typeof(self) weakSelf = self;
         _header.HeaderButtonClickedBlock = ^(){
             SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+            loginVC.backController = weakSelf;
             [weakSelf.navigationController pushViewController:loginVC animated:YES];
         };
     }
