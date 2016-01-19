@@ -127,7 +127,7 @@
     }];
 }
 
-//  查询盈余数据
+//  查询结余数据
 + (void)queryForSurplusWithBillDate:(NSString *)billDate
                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
                             failure:(void (^)(NSError *error))failure {

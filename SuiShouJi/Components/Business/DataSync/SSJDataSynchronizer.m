@@ -95,9 +95,18 @@ static NSString *const kSignKey = @"accountbook";
             return;
         }
         
+        NSArray *userRecords = @[@{@"cuserid":SSJUSERID(),
+                                   @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                   @"source":SSJDefaultSource()}];
+        
         //  将查询得到的结果放入字典中，转换成json数据
         NSError *error = nil;
-        NSData *syncData = [NSJSONSerialization dataWithJSONObject:@{@"BK_USER_BILL":userBillRecords, @"BK_FUND_INFO":fundInfoRecords, @"BK_USER_CHARGE":userChargeRecords} options:NSJSONWritingPrettyPrinted error:&error];
+        NSData *syncData = [NSJSONSerialization dataWithJSONObject:@{@"bk_user_bill":userBillRecords,
+                                                                     @"bk_fund_info":fundInfoRecords,
+                                                                     @"bk_user_charge":userChargeRecords,
+                                                                     @"bk_user":userRecords}
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
         if (error) {
             SSJPRINT(@">>>SSJ warning\n error:%@", error);
             failure(error);
@@ -146,8 +155,8 @@ static NSString *const kSignKey = @"accountbook";
         
 //        [formData appendPartWithHeaders:mutableHeaders body:zipData];
         
-        AFHTTPSessionManager *session = [[AFHTTPSessionManager alloc] init];
-        self.task = [session POST:@"" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        AFHTTPSessionManager *session = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:SSJBaseURLString]];
+        self.task = [session POST:@"/sync/syncdata.go" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
             [formData appendPartWithFileData:zipData name:@"zip" fileName:kSyncZipFileName mimeType:@"application/zip"];
             
