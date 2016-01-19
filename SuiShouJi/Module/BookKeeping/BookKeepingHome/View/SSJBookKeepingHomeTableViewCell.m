@@ -15,7 +15,7 @@
 @property (nonatomic,strong) UIButton *deleteButton;
 @property (nonatomic,strong) UILabel *incomeLabel;
 @property (nonatomic,strong) UILabel *expenditureLabel;
-
+@property (nonatomic,strong) UIView *lineView;
 @end
 
 @implementation SSJBookKeepingHomeTableViewCell
@@ -27,6 +27,7 @@
         [self addSubview:self.incomeLabel];
         [self addSubview:self.editeButton];
         [self addSubview:self.deleteButton];
+        [self addSubview:self.lineView];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
@@ -62,6 +63,8 @@
     self.incomeLabel.centerY = self.categoryImageButton.centerY;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
     self.expenditureLabel.centerY = self.categoryImageButton.centerY;
+    self.lineView.size = CGSizeMake(1, self.height - self.categoryImageButton.height);
+    self.lineView.centerX = self.centerX;
 }
 
 -(UILabel*)incomeLabel{
@@ -86,9 +89,9 @@
 
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
-        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 36, 36)];
+        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 38, 38)];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
-        _categoryImageButton.layer.cornerRadius = 18;
+        _categoryImageButton.layer.cornerRadius = 19;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _categoryImageButton;
@@ -116,6 +119,14 @@
     return _deleteButton;
 }
 
+-(UIView *)lineView{
+    if (!_lineView) {
+        _lineView = [[UIView alloc]init];
+        _lineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _lineView;
+}
+
 -(void)buttonClicked{
     if (self.beginEditeBtnClickBlock) {
         self.beginEditeBtnClickBlock(self);
@@ -123,13 +134,15 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextMoveToPoint(ctx, self.centerX, 0);
     CGContextAddLineToPoint(ctx, self.centerX, self.categoryImageButton.top);
     CGContextSetRGBStrokeColor(ctx, 204.0/225, 204.0/255, 204.0/255, 1.0);
-    CGContextSetLineWidth(ctx, 1 / [UIScreen mainScreen].scale);
+    CGContextSetLineWidth(ctx, 1);
     CGContextSetLineCap(ctx, kCGLineCapRound);
     CGContextStrokePath(ctx);
+    [self setNeedsDisplay];
 }
 
 -(void)setItem:(SSJBookKeepHomeItem *)item{
@@ -208,7 +221,10 @@
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.text = @"";
         }
-        [_categoryImageButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
+        
+        UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:iconName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        _categoryImageButton.contentMode = UIViewContentModeCenter;
+        [_categoryImageButton setImage:image forState:UIControlStateNormal];
         _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
         _categoryImageButton.layer.borderWidth = 1;
         _categoryImageButton.backgroundColor = [UIColor clearColor];

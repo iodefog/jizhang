@@ -68,6 +68,8 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getDataFromDateBase];
+    [self.tableView reloadData];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -225,6 +227,7 @@
 }
 
 -(void)getDataFromDateBase{
+    [self.items removeAllObjects];
     NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
@@ -239,7 +242,7 @@
         item.ID = [rs stringForColumn:@"ICHARGEID"];
         item.money = [rs stringForColumn:@"IMONEY"];
         item.colorValue = [rs stringForColumn:@"CCOLOR"];
-        item.incomeOrExpence = [rs stringForColumn:@"ITYPE"];
+        item.incomeOrExpence = [rs intForColumn:@"ITYPE"];
         [self.items addObject:item];
     }
     [db close];

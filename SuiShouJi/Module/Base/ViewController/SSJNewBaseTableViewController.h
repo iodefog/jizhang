@@ -15,7 +15,7 @@
 @property (nonatomic, strong, readonly) UITableView *tableView;
 @property (readonly, nonatomic, strong) SRRefreshView  *slimeView;
 
-@property (nonatomic, assign) BOOL showDragView;  //是否显示下拉加载(默认YES)
+@property (nonatomic, assign) BOOL showDragView;  //是否显示下拉加载(默认NO)
 
 - (void)updateRefreshViewTopInset:(CGFloat)topInset;
 
