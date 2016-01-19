@@ -41,7 +41,7 @@
     long _currentMonth;
     long _currentDay;
 }
-
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -57,6 +57,7 @@
     self.selectedMonth = _currentMonth ;
     self.selectedDay = _currentDay;
     self.items = [[NSMutableArray alloc]init];
+    [self.items removeAllObjects];
     [self getDataFromDateBase];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
@@ -68,6 +69,7 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.items removeAllObjects];
     [self getDataFromDateBase];
     [self.tableView reloadData];
 }
@@ -227,14 +229,13 @@
 }
 
 -(void)getDataFromDateBase{
-    [self.items removeAllObjects];
     NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID LIKE '1___' OR A.IBILLID LIKE '2___'",SSJUSERID(),selectDate];
+    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID <> '2'",SSJUSERID(),selectDate];
     while ([rs next]) {
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.imageName = [rs stringForColumn:@"CCOIN"];
