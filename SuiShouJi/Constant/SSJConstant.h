@@ -23,13 +23,16 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
     SSJRegistAndForgetPasswordTypeForgetPassword    //  忘记密码
 };
 
-static const NSInteger SSJDefaultSyncVersion = -1;
+extern const NSInteger SSJDefaultSyncVersion;
 
 //___________________________________________________________________
 //** 字符串常量 **//
 
 //  接口地址
 extern NSString *const SSJBaseURLString;
+
+//
+extern NSString *const SSJErrorDomain;
 
 
 

@@ -99,11 +99,11 @@ static NSString *kCellID = @"cellID";
     }
     
     self.bottom = top;
-    [view addSubview:self];
-    [UIView animateWithDuration:(animated ? 0.25 : 0) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.top = top;
-    } completion:NULL];
     self.fromTop = top;
+    
+    [view ssj_showViewWithBackView:self backColor:[UIColor clearColor] alpha:1 target:self touchAction:@selector(dismiss:) animation:^{
+        self.top = top;
+    } timeInterval:(animated ? 0.25 : 0) fininshed:NULL];
 }
 
 - (void)dismiss:(BOOL)animated {
@@ -111,11 +111,9 @@ static NSString *kCellID = @"cellID";
         return;
     }
     
-    [UIView animateWithDuration:(animated ? 0.25 : 0) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [self.superview ssj_hideBackViewForView:self animation:^{
         self.bottom = self.fromTop;
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-    }];
+    } timeInterval:(animated ? 0.25 : 0) fininshed:NULL];
 }
 
 - (BOOL)isShowed {

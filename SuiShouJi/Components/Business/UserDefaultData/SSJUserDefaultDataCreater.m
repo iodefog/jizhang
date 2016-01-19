@@ -7,7 +7,6 @@
 //
 
 #import "SSJUserDefaultDataCreater.h"
-#import "SSJFundInfoModel.h"
 #import "SSJDatabaseQueue.h"
 
 @implementation SSJUserDefaultDataCreater
@@ -65,15 +64,22 @@
         FMResultSet *result1 = [db executeQuery:@"select count(*) from BK_BILL_TYPE"];
         FMResultSet *result2 = [db executeQuery:@"select count(*) from BK_USER_BILL where CUSERID = ?", SSJUSERID()];
         
-        if (result1 && result2) {
-            [result1 next];
-            [result2 next];
-            
-            if ([result1 intForColumnIndex:0] <= [result2 intForColumnIndex:0]) {
-                success();
-                return;
-            }
+        if (!result1 || !result2) {
+            failure([db lastError]);
+            [result1 close];
+            [result2 close];
+            return;
         }
+        
+        if ([result1 intForColumnIndex:0] <= [result2 intForColumnIndex:0]) {
+            success();
+            [result1 close];
+            [result2 close];
+            return;
+        }
+        
+        [result1 close];
+        [result2 close];
         
         FMResultSet *billTypeResult = [db executeQuery:@"select id, istate from BK_BILL_TYPE"];
         if (!billTypeResult) {

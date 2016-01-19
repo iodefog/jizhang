@@ -312,29 +312,14 @@ static const void *kBackViewIdentifier = &kBackViewIdentifier;
 
 @implementation UIView (SSJBackView)
 
-- (void)showViewWithBackView:(UIView *)view
-                       alpha:(CGFloat)a
-                      target:(id)target
-                 touchAction:(SEL)selector
-                   animation:(void(^)(void))animation
-                timeInterval:(NSTimeInterval)interval
-                   fininshed:(void(^)(BOOL finished))fininshed{
-    [self showViewWithBackView:view
-                         alpha:a
-                        target:target
-                   touchAction:selector];
-    [UIView animateWithDuration:interval
-                     animations:animation
-                     completion:fininshed];
-}
-
-- (void)showViewWithBackView:(UIView *)view
-                       alpha:(CGFloat)a
-                      target:(id)target
-                 touchAction:(SEL)selector
-{
+- (void)ssj_showViewWithBackView:(UIView *)view
+                       backColor:(UIColor *)backColor
+                           alpha:(CGFloat)a
+                          target:(id)target
+                     touchAction:(SEL)selector {
+    
     UIView* backView = [[UIView alloc] initWithFrame:self.bounds];
-    backView.backgroundColor = [UIColor blackColor];
+    backView.backgroundColor = backColor;
     backView.alpha = a;
     UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:selector];
     [backView addGestureRecognizer:gesture];
@@ -345,21 +330,38 @@ static const void *kBackViewIdentifier = &kBackViewIdentifier;
     
 }
 
-- (void)hideBackViewForView:(UIView *)view
-                  animation:(void(^)(void))animation
-               timeInterval:(NSTimeInterval)interval
-                  fininshed:(void(^)(BOOL complation))fininshed{
+- (void)ssj_showViewWithBackView:(UIView *)view
+                       backColor:(UIColor *)backColor
+                           alpha:(CGFloat)a
+                          target:(id)target
+                     touchAction:(SEL)selector
+                       animation:(void(^)(void))animation
+                    timeInterval:(NSTimeInterval)interval
+                       fininshed:(void(^)(BOOL finished))fininshed {
+    
+    [self ssj_showViewWithBackView:view backColor:backColor alpha:a target:target touchAction:selector];
+    [UIView animateWithDuration:interval
+                     animations:animation
+                     completion:fininshed];
+}
+
+- (void)ssj_hideBackViewForView:(UIView *)view
+                      animation:(void(^)(void))animation
+                   timeInterval:(NSTimeInterval)interval
+                      fininshed:(void(^)(BOOL complation))fininshed {
+    
     [UIView animateWithDuration:interval
                      animations:animation
                      completion:^(BOOL finish){
-                         [self hideBackViewForView:view];
+                         [self ssj_hideBackViewForView:view];
                          if (fininshed) {
                              fininshed(finish);
                          }
                      }];
+    
 }
 
-- (void)hideBackViewForView:(UIView *)view{
+- (void)ssj_hideBackViewForView:(UIView *)view {
     UIView* backView = objc_getAssociatedObject(self, kBackViewIdentifier);
     [view removeFromSuperview];
     [backView removeFromSuperview];

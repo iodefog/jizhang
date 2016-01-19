@@ -124,25 +124,27 @@
 
 @property (nonatomic,readonly)UIView* backView;
 
-- (void)showViewWithBackView:(UIView *)view
-                       alpha:(CGFloat)a
-                      target:(id)target
-                 touchAction:(SEL)selector;
+- (void)ssj_showViewWithBackView:(UIView *)view
+                       backColor:(UIColor *)backColor
+                           alpha:(CGFloat)a
+                          target:(id)target
+                     touchAction:(SEL)selector;
 
-- (void)showViewWithBackView:(UIView *)view
-                       alpha:(CGFloat)a
-                      target:(id)target
-                 touchAction:(SEL)selector
-                   animation:(void(^)(void))animation
-                timeInterval:(NSTimeInterval)interval
-                   fininshed:(void(^)(BOOL finished))fininshed;
+- (void)ssj_showViewWithBackView:(UIView *)view
+                       backColor:(UIColor *)backColor
+                           alpha:(CGFloat)a
+                          target:(id)target
+                     touchAction:(SEL)selector
+                       animation:(void(^)(void))animation
+                    timeInterval:(NSTimeInterval)interval
+                       fininshed:(void(^)(BOOL finished))fininshed;
 
-- (void)hideBackViewForView:(UIView *)view
-                  animation:(void(^)(void))animation
-               timeInterval:(NSTimeInterval)interval
-                  fininshed:(void(^)(BOOL complation))fininshed;
+- (void)ssj_hideBackViewForView:(UIView *)view
+                      animation:(void(^)(void))animation
+                   timeInterval:(NSTimeInterval)interval
+                      fininshed:(void(^)(BOOL complation))fininshed;
 
-- (void)hideBackViewForView:(UIView *)view;
+- (void)ssj_hideBackViewForView:(UIView *)view;
 
 @end
 
