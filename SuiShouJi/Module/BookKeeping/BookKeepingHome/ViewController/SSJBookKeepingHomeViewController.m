@@ -38,6 +38,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.title = @"个人账本";
+        self.automaticallyAdjustsScrollViewInsets = NO;
         [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
@@ -59,6 +60,7 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     NSString *path = SSJSQLitePath();
+    self.view.backgroundColor = [UIColor whiteColor];
     NSLog(@"%@",path);
 }
 
@@ -73,8 +75,8 @@
 -(void)viewDidLayoutSubviews{
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 187);
     self.bookKeepingHeader.top = 64;
-    self.tableView.top = 187;
-    self.tableView.height = self.view.height - 187;
+    self.tableView.top = self.bookKeepingHeader.bottom;
+    self.tableView.height = self.view.height - self.bookKeepingHeader.bottom;
 }
 
 #pragma mark - UITableViewDelegate
@@ -88,8 +90,8 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (self.items == 0) {
-        return 200;
+    if (self.items.count == 0) {
+        return 300;
     }
     return 0.1;
 }
@@ -97,7 +99,7 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     if (self.items.count == 0) {
-        SSJBookKeepingHomeNodateFooter *nodateFooter = [[SSJBookKeepingHomeNodateFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
+        SSJBookKeepingHomeNodateFooter *nodateFooter = [[SSJBookKeepingHomeNodateFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
         return nodateFooter;
     }
     return nil;
