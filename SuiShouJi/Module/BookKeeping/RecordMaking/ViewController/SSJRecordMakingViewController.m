@@ -494,19 +494,7 @@
     NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
     NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
     NSString *selectDate;
-    if (self.selectedDay < 10) {
-        if (self.selectedMonth < 10) {
-            selectDate = [NSString stringWithFormat:@"%ld-0%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        }else{
-            selectDate = [NSString stringWithFormat:@"%ld-%ld-0%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        }
-    }else{
-        if (self.selectedMonth < 10) {
-            selectDate = [NSString stringWithFormat:@"%ld-0%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        }else{
-            selectDate = [NSString stringWithFormat:@"%ld-%ld-%ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        }
-    }
+    selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
     SSJFundingItem *fundingType;
     if (_selectItem == nil) {
         fundingType = _defualtItem;

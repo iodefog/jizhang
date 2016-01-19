@@ -21,6 +21,10 @@
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
+@property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
+@property (nonatomic) long currentYear;
+@property (nonatomic) long currentMonth;
+@property (nonatomic) long currentDay;
 
 @end
 
@@ -33,6 +37,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.title = @"个人账本";
+        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
 }
@@ -42,12 +47,14 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:15]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getCurrentDate];
     [self getDateFromDatebase];
+    self.navigationItem.rightBarButtonItem = self.rightBarButton;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = self.rightBarButton;
+    [self.view addSubview:self.bookKeepingHeader];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     NSString *path = SSJSQLitePath();
@@ -57,12 +64,16 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     _selectIndex = nil;
+    [self getCurrentDate];
     [self getDateFromDatebase];
     [self.tableView reloadData];
 }
 
--(BOOL)prefersStatusBarHidden{
-    return YES;
+-(void)viewDidLayoutSubviews{
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 187);
+    self.bookKeepingHeader.top = 64;
+    self.tableView.top = 187;
+    self.tableView.height = self.view.height - 187;
 }
 
 #pragma mark - UITableViewDelegate
@@ -70,21 +81,9 @@
     return 70;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    SSJBookKeepingHeader *bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
-    bookKeepingHeader.income = @"4000.04";
-    bookKeepingHeader.expenditure = @"5000.08";
-    bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 187);
-    __weak typeof(self) weakSelf = self;
-    bookKeepingHeader.BtnClickBlock = ^{
-        SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
-        [weakSelf.navigationController pushViewController:recordmaking animated:YES];
-    };
-    return bookKeepingHeader;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 187;
+    return 0.1;
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -128,11 +127,26 @@
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
         SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
-        buttonView.currentDay = @"12";
+        buttonView.currentDay = [NSString stringWithFormat:@"%ld",_currentDay];
         [buttonView.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];
     }
     return _rightBarButton;
+}
+
+-(SSJBookKeepingHeader *)bookKeepingHeader{
+    if (!_bookKeepingHeader) {
+        _bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
+        _bookKeepingHeader.income = @"4000.04";
+        _bookKeepingHeader.expenditure = @"5000.08";
+        _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 187);
+        __weak typeof(self) weakSelf = self;
+        _bookKeepingHeader.BtnClickBlock = ^{
+            SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
+            [weakSelf.navigationController pushViewController:recordmaking animated:YES];
+        };
+    }
+    return _bookKeepingHeader;
 }
 
 #pragma mark - Private
@@ -148,7 +162,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND IBILLID LIKE '1___' OR IBILLID LIKE '2___' AND OPERATORTYPE != 2) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND IBILLID != '2' AND OPERATORTYPE != 2) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
@@ -160,9 +174,24 @@
         item.fundID = [rs stringForColumn:@"IFID"];
         [self.items addObject:item];
     }
+    double income = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__'", _currentYear,_currentMonth]];
+    double expence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__'", _currentYear,_currentMonth]];
+    self.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",income];
+    self.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",expence];
     [db close];
     [self.tableView reloadData];
 }
+
+-(void)getCurrentDate{
+    NSDate *now = [NSDate date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
+    _currentYear= [dateComponent year];
+    _currentDay = [dateComponent day];
+    _currentMonth = [dateComponent month];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

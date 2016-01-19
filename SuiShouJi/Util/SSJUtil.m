@@ -279,7 +279,7 @@ NSString *SSJUSERID(){
         NSDate *datenow = [NSDate date];
         NSTimeInterval timeSince1970 = [datenow timeIntervalSince1970]*1000;
         NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)timeSince1970];
-        strUSERID = [[[NSString stringWithFormat:@"%@%@",SSJUUID(),timeSp] ssj_md5HexDigest] uppercaseString];
+        strUSERID = [[[NSString stringWithFormat:@"%@%@",SSJUUID(),timeSp] ssj_md5HexDigest] lowercaseString];
         [[NSUserDefaults standardUserDefaults]setObject:strUSERID forKey:@"USERID"];
     }
     return strUSERID;
