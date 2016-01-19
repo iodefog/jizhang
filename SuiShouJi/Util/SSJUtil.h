@@ -193,7 +193,6 @@ BOOL SSJSaveQQList(NSArray *qqList);
  */
 NSString *SSJUUID();
 
-
 /**
  *  获取USERID
  *
@@ -206,4 +205,6 @@ NSString *SSJUSERID();
  *
  *  @return (NSString *)
  */
-NSString *SSJIVERSION();
+NSInteger SSJSyncVersion();
+
+BOOL SSJUpdateSyncVersion(NSInteger version);

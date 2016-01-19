@@ -40,14 +40,14 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
 //    FMDatabase *db = [[FMDatabase alloc] initWithPath:@"/Users/oldlang/Desktop/testDb.db"];
 //    [db open];
-//    [db executeUpdate:@"insert into t1 (id, age) select 1, name, age from t2 where not exists(select * from t1 where name <> name)"];
-//    
-////    FMResultSet *result = [db executeQuery:@"select age from t2 where age > 17"];
-////    if (result) {
-////        while ([result next]) {
-////            NSLog(@"%d", [result intForColumnIndex:0]);
-////        }
-////    }
+//    [db executeUpdate:@"insert into t1 (id, name, age) select 1, 'jack', 16 where not exists (select * from t1 where name = 'jack')"];
+    
+//    FMResultSet *result = [db executeQuery:@"select age from t2 where age > 17"];
+//    if (result) {
+//        while ([result next]) {
+//            NSLog(@"%d", [result intForColumnIndex:0]);
+//        }
+//    }
     
     
     return YES;
@@ -102,16 +102,31 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
         NSString *dbDocumentPath = SSJSQLitePath();
         
         if (![[NSFileManager defaultManager] fileExistsAtPath:dbDocumentPath]) {
-            
+            //  迁移数据库到document中
             NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];
             NSError *error = nil;
             
             if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
                 SSJPRINT(@"move database error:%@",[error localizedDescription]);
             }
+            
+            //  创建默认的同步表记录
+            [SSJUserDefaultDataCreater createDefaultSyncRecordWithSuccess:^{
+                
+            } failure:^(NSError *error) {
+                
+            }];
+            
+            //  创建默认的资金帐户
+            [SSJUserDefaultDataCreater createDefaultFundAccountsWithSuccess:^{
+                
+            } failure:^(NSError *error) {
+                
+            }];
         }
 
-        [SSJUserDefaultDataCreater createFundAccountsWithSuccess:^{
+        //  创建默认的收支类型
+        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:^{
             
         } failure:^(NSError *error) {
             

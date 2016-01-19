@@ -285,8 +285,18 @@ NSString *SSJUSERID(){
     return strUSERID;
 }
 
-//NSString *SSJIVERSION(){
-//    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"IVERSION"] == nil) {
-//        <#statements#>
-//    }
-//};
+static NSString *const kSSJSycnVersion = @"kSSJSycnVersion";
+
+NSInteger SSJSyncVersion() {
+    NSNumber *version = [[NSUserDefaults standardUserDefaults] objectForKey:kSSJSycnVersion];
+    if (version) {
+        return [version integerValue];
+    }
+    return SSJDefaultSyncVersion + 1;
+};
+
+BOOL SSJUpdateSyncVersion(NSInteger version) {
+    [[NSUserDefaults standardUserDefaults] setObject:@(version) forKey:kSSJSycnVersion];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
