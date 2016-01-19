@@ -127,7 +127,7 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         //  0添加  1修改  2删除
         NSMutableString *update = [NSMutableString string];
         int opertoryValue = [opertoryType intValue];
-        if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 3) {
+        if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
             return NO;
         }
         
@@ -211,6 +211,7 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
 + (NSString *)updateStatementForMergeRecord:(NSDictionary *)recordInfo condition:(NSString *)condition {
     if (!((NSString *)recordInfo[@"cwritedate"]).length
         || !condition.length) {
+        SSJPRINT(@">>>SSJ warning: merge record lack of column 'cwritedate'\n record:%@", recordInfo);
         return nil;
     }
     
