@@ -43,13 +43,13 @@
         self.incomeLabel.hidden = YES;
         self.expenditureLabel.hidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
-            self.editeButton.centerX = 40;
-            self.deleteButton.centerX = self.width - 40;
+            self.deleteButton.centerX = 40;
+            self.editeButton.centerX = self.width - 40;
         }completion:nil];
     }else{
         [UIView animateWithDuration:0.2 animations:^{
-            self.editeButton.centerX = self.width / 2;
             self.deleteButton.centerX = self.width / 2;
+            self.editeButton.centerX = self.width / 2;
         }completion:^(BOOL success){
             self.editeButton.hidden = YES;
             self.deleteButton.hidden = YES;
@@ -229,6 +229,7 @@
         _categoryImageButton.layer.borderWidth = 1;
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
+        _categoryImageButton.titleLabel.hidden = YES;
     }
     [self setNeedsLayout];
 }

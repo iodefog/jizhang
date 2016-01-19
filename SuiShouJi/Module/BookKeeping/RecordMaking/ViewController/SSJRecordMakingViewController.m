@@ -16,6 +16,8 @@
 #import "SSJFundingTypeSelectView.h"
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJADDNewTypeViewController.h"
+#import "SSJSegmentedControl.h"
+
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
 
@@ -25,7 +27,7 @@
 @property (nonatomic,strong) UIView* selectedCategoryView;
 @property (nonatomic,strong) UIView* inputView;
 @property (nonatomic,strong) UIView* inputAccessoryView;
-@property (nonatomic,strong) UISegmentedControl *titleSegment;
+@property (nonatomic,strong) SSJSegmentedControl *titleSegment;
 @property (nonatomic,strong) UILabel* textInput;
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
@@ -447,18 +449,17 @@
 }
 #pragma mark - private
 -(void)settitleSegment{
-    NSArray *segmentArray = @[@"支出",@"收入"];
-    _titleSegment = [[UISegmentedControl alloc]initWithItems:segmentArray];
+    _titleSegment = [[SSJSegmentedControl alloc]initWithItems:@[@"支出",@"收入"]];
     if (self.item == nil) {
         _titleSegment.selectedSegmentIndex = 0;
     }else{
         _titleSegment.selectedSegmentIndex = !_defualtType;
     }
     _titleSegment.size = CGSizeMake(115, 30);
-    _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
     NSDictionary *dictForNormal = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex: @"a7a7a7"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForNormal forState:UIControlStateNormal];
-    NSDictionary *dictForSelected = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
+    NSDictionary *dictForSelected = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex:@"47cfbe"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
     [_titleSegment setTitleTextAttributes:dictForSelected forState:UIControlStateSelected];
     [_titleSegment addTarget: self action: @selector(segmentPressed:)forControlEvents: UIControlEventValueChanged];
     self.navigationItem.titleView = _titleSegment;
@@ -489,10 +490,7 @@
         return ;
     }
     double chargeMoney = [self.textInput.text doubleValue];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss.SSS"];
-    NSString *currentDateStr = [dateFormatter stringFromDate:[NSDate date]];
-    NSString *operationTime = [NSString stringWithFormat:@"%@",currentDateStr];
+    NSString *operationTime = [[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSString *selectDate;
     selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
     SSJFundingItem *fundingType;
@@ -514,7 +512,7 @@
             fundingSum = fundingType.fundingBalance + chargeMoney;
         }
         [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:fundingSum],fundingType.fundingID];
-        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , CADDDATE , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,@"111",[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,[NSNumber numberWithInt:100],[NSNumber numberWithInt:0],selectDate];
+        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@"",[NSNumber numberWithInt:0],selectDate];
         int count = 0;
         FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate];
         if ([s next]) {

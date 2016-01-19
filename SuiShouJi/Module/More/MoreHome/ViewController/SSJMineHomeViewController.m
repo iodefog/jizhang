@@ -12,9 +12,11 @@
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "SSJLoginViewController.h"
+#import "SSJPortraitUploadNetworkService.h"
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
+@property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @end
 
 @implementation SSJMineHomeViewController{
@@ -32,6 +34,38 @@
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     _titleForSectionTwoArray = [[NSArray alloc]initWithObjects:@"同步设置",@"关于我们",@"用户协议与隐私说明", nil];
+    __weak typeof(self) weakSelf = self;
+    if (SSJIsUserLogined()) {
+        _header.HeaderButtonClickedBlock = ^(){
+            UIActionSheet *sheet;
+            sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
+            [sheet showInView:weakSelf.view];
+        };
+    }else{
+        _header.HeaderButtonClickedBlock = ^(){
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+            loginVC.backController = weakSelf;
+            [weakSelf.navigationController pushViewController:loginVC animated:YES];
+        };
+    }
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    self.tableView.tableHeaderView = self.header;
+    __weak typeof(self) weakSelf = self;
+    if (SSJIsUserLogined()) {
+        _header.HeaderButtonClickedBlock = ^(){
+            UIActionSheet *sheet;
+            sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
+            [sheet showInView:weakSelf.view];
+        };
+    }else{
+        _header.HeaderButtonClickedBlock = ^(){
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+            loginVC.backController = weakSelf;
+            [weakSelf.navigationController pushViewController:loginVC animated:YES];
+        };
+    }
 }
 
 #pragma mark - Getter
@@ -39,12 +73,7 @@
     if (!_header) {
         _header = [SSJMineHomeTableViewHeader MineHomeHeader];
         _header.frame = CGRectMake(0, 0, self.view.width, 125);
-        __weak typeof(self) weakSelf = self;
-        _header.HeaderButtonClickedBlock = ^(){
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-            loginVC.backController = weakSelf;
-            [weakSelf.navigationController pushViewController:loginVC animated:YES];
-        };
+
     }
     return _header;
 }
@@ -104,6 +133,62 @@
         mineHomeCell.cellTitle = [_titleForSectionTwoArray objectAtIndex:indexPath.row];
     }
     return mineHomeCell;
+}
+
+
+#pragma mark - UIActionSheetDelegate
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex)
+    {
+        case 0:  //打开照相机拍照
+            [self takePhoto];
+            break;
+            
+        case 1:  //打开本地相册
+            [self localPhoto];
+            break;
+    }
+}
+
+#pragma mark - Event
+-(void)takePhoto{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = sourceType;
+        [self presentViewController:picker animated:YES completion:^{}];
+    }else
+    {
+        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+    }
+}
+
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
+}
+
+
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+    self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
+    [self.portraitUploadService uploadimgWithIMG:image finishBlock:^{
+//        [self loadUserBaseServiceShowIndicator:YES];
+//        [weakSelf.tableView reloadData];
+    }];
 }
 
 

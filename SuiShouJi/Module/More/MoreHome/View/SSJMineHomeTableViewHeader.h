@@ -10,8 +10,10 @@
 
 @interface SSJMineHomeTableViewHeader : UIView
 + (id)MineHomeHeader;
+
 @property (weak, nonatomic) IBOutlet UIButton *portraitButton;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;
+
 //点击头像回调
 typedef void (^HeaderButtonClickedBlock)();
 
