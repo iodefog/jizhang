@@ -44,7 +44,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:15]};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
@@ -162,7 +162,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE ASC LIMIT 7) AND IBILLID != '2' AND OPERATORTYPE != 2) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC , CWRITEDATE ASC";
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) AND IBILLID != '2' AND OPERATORTYPE != 2  ORDER BY DATETIME(CWRITEDATE) ASC) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC";
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];

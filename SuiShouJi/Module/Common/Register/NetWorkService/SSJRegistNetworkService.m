@@ -39,6 +39,7 @@
         NSString *signMsg = [NSString stringWithFormat:@"mobileNo=%@&timestamp=%f&key=%@",mobileNo,timestamp,key];
         signMsg = [[signMsg ssj_md5HexDigest] uppercaseString];
         
+        
         [paramsDic setObject:mobileNo forKey:@"mobileNo"];
         [paramsDic setObject:@(timestamp) forKey:@"timestamp"];
         [paramsDic setObject:key forKey:@"key"];
@@ -62,7 +63,7 @@
     self.interfaceType = SSJRegistNetworkServiceTypeCheckAuthCode;
     switch (self.type) {
         case SSJRegistAndForgetPasswordTypeRegist:
-            [self request:@"/user/mobyzmchk.go" params:@{@"mobileNo":mobileNo ?: @"",@"cuserid":SSJUSERID(),
+            [self request:@"/user/mobyzmchk.go" params:@{@"mobileNo":mobileNo ?: @"",
                                                                           @"yzm":authCode ?: @""}];
             break;
             
@@ -80,7 +81,7 @@
     self.interfaceType = SSJRegistNetworkServiceTypeSetPassword;
     switch (self.type) {
         case SSJRegistAndForgetPasswordTypeRegist:
-            [self request:@"/user/mobregister.go" params:@{@"mobileNo":mobileNo ?: @"",
+            [self request:@"/user/mobregister.go" params:@{@"mobileNo":mobileNo ?: @"",@"cuserid":SSJUSERID(),
                                                                           @"yzm":authCode ?: @"",
                                                                           @"pwd":password ?: @""}];
             break;

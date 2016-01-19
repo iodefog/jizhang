@@ -200,8 +200,6 @@
 		7DD7D7251C4C8E6A00ACE71A /* tab_form_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D67D1C4C8E6A00ACE71A /* tab_form_nor@3x.png */; };
 		7DD7D7261C4C8E6A00ACE71A /* tab_founds_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D67E1C4C8E6A00ACE71A /* tab_founds_nor@2x.png */; };
 		7DD7D7271C4C8E6A00ACE71A /* tab_founds_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D67F1C4C8E6A00ACE71A /* tab_founds_nor@3x.png */; };
-		7DD7D7281C4C8E6A00ACE71A /* tab_mine_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6801C4C8E6A00ACE71A /* tab_mine_nor@2x.png */; };
-		7DD7D7291C4C8E6A00ACE71A /* tab_mine_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6811C4C8E6A00ACE71A /* tab_mine_nor@3x.png */; };
 		7DD7D72B1C4C8F7F00ACE71A /* reportForms_filter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6741C4C8E6A00ACE71A /* reportForms_filter@2x.png */; };
 		7DD7D72C1C4C8FA300ACE71A /* reportForms_period@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6771C4C8E6A00ACE71A /* reportForms_period@3x.png */; };
 		7DD7D72D1C4C8FCF00ACE71A /* reportForms_period@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6761C4C8E6A00ACE71A /* reportForms_period@2x.png */; };
@@ -321,6 +319,9 @@
 		BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */; };
 		BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */; };
 		BD9573A51C3F809000126F6E /* SSJCategorySelectPageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD9573A41C3F809000126F6E /* SSJCategorySelectPageItem.m */; };
+		BD976F9E1C4E044500B0E26D /* tab_mine_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976F9D1C4E044500B0E26D /* tab_mine_nor@2x.png */; };
+		BD976FA01C4E05A300B0E26D /* tab_mine_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976F9F1C4E05A300B0E26D /* tab_mine_nor@3x.png */; };
+		BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD976FA21C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
 		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
@@ -578,8 +579,6 @@
 		7DD7D67D1C4C8E6A00ACE71A /* tab_form_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_form_nor@3x.png"; sourceTree = "<group>"; };
 		7DD7D67E1C4C8E6A00ACE71A /* tab_founds_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_founds_nor@2x.png"; sourceTree = "<group>"; };
 		7DD7D67F1C4C8E6A00ACE71A /* tab_founds_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_founds_nor@3x.png"; sourceTree = "<group>"; };
-		7DD7D6801C4C8E6A00ACE71A /* tab_mine_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_mine_nor@2x.png"; sourceTree = "<group>"; };
-		7DD7D6811C4C8E6A00ACE71A /* tab_mine_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_mine_nor@3x.png"; sourceTree = "<group>"; };
 		7DD7D72F1C4CA8BD00ACE71A /* reportForms_expenses@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_expenses@2x.png"; sourceTree = "<group>"; };
 		7DD7D7301C4CA8BD00ACE71A /* reportForms_expenses@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_expenses@3x.png"; sourceTree = "<group>"; };
 		7DD7D7311C4CA8BD00ACE71A /* reportForms_income@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_income@2x.png"; sourceTree = "<group>"; };
@@ -798,6 +797,10 @@
 		BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJADDNewTypeViewController.m; sourceTree = "<group>"; };
 		BD9573A31C3F809000126F6E /* SSJCategorySelectPageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategorySelectPageItem.h; sourceTree = "<group>"; };
 		BD9573A41C3F809000126F6E /* SSJCategorySelectPageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategorySelectPageItem.m; sourceTree = "<group>"; };
+		BD976F9D1C4E044500B0E26D /* tab_mine_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_mine_nor@2x.png"; sourceTree = "<group>"; };
+		BD976F9F1C4E05A300B0E26D /* tab_mine_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_mine_nor@3x.png"; sourceTree = "<group>"; };
+		BD976FA11C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPortraitUploadNetworkService.h; sourceTree = "<group>"; };
+		BD976FA21C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPortraitUploadNetworkService.m; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDC01FF41C313C17008B1F75 /* SSJBookKeepHomeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepHomeItem.h; sourceTree = "<group>"; };
@@ -1274,14 +1277,14 @@
 		7DD7D6791C4C8E6A00ACE71A /* tabbarimage */ = {
 			isa = PBXGroup;
 			children = (
+				BD976F9D1C4E044500B0E26D /* tab_mine_nor@2x.png */,
+				BD976F9F1C4E05A300B0E26D /* tab_mine_nor@3x.png */,
 				7DD7D67A1C4C8E6A00ACE71A /* tab_accounte_nor@2x.png */,
 				7DD7D67B1C4C8E6A00ACE71A /* tab_accounte_nor@3x.png */,
 				7DD7D67C1C4C8E6A00ACE71A /* tab_form_nor@2x.png */,
 				7DD7D67D1C4C8E6A00ACE71A /* tab_form_nor@3x.png */,
 				7DD7D67E1C4C8E6A00ACE71A /* tab_founds_nor@2x.png */,
 				7DD7D67F1C4C8E6A00ACE71A /* tab_founds_nor@3x.png */,
-				7DD7D6801C4C8E6A00ACE71A /* tab_mine_nor@2x.png */,
-				7DD7D6811C4C8E6A00ACE71A /* tab_mine_nor@3x.png */,
 			);
 			path = tabbarimage;
 			sourceTree = "<group>";
@@ -1650,6 +1653,8 @@
 		BD0433B41C1AA2A40051E7AB /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				BD976FA11C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.h */,
+				BD976FA21C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -2353,10 +2358,10 @@
 				7DD7D6DF1C4C8E6A00ACE71A /* bt_traffic@3x.png in Resources */,
 				7DD7D7171C4C8E6A00ACE71A /* navigation_backOff@2x.png in Resources */,
 				7DD7D6E51C4C8E6A00ACE71A /* bt_water@3x.png in Resources */,
-				7DD7D7291C4C8E6A00ACE71A /* tab_mine_nor@3x.png in Resources */,
 				7DD7D6ED1C4C8E6A00ACE71A /* bt_zhuanchu@3x.png in Resources */,
 				7DD7D69E1C4C8E6A00ACE71A /* bt_entertainment@2x.png in Resources */,
 				7DD7D6CD1C4C8E6A00ACE71A /* bt_repair@3x.png in Resources */,
+				BD976FA01C4E05A300B0E26D /* tab_mine_nor@3x.png in Resources */,
 				7DD7D6D71C4C8E6A00ACE71A /* bt_snack@3x.png in Resources */,
 				7DD7D6F41C4C8E6A00ACE71A /* close@2x.png in Resources */,
 				7DD7D6AE1C4C8E6A00ACE71A /* bt_house@2x.png in Resources */,
@@ -2469,7 +2474,7 @@
 				7DD7D6DC1C4C8E6A00ACE71A /* bt_tourism@2x.png in Resources */,
 				7DD7D6931C4C8E6A00ACE71A /* bt_clothes@3x.png in Resources */,
 				7DD7D6C21C4C8E6A00ACE71A /* bt_pet@2x.png in Resources */,
-				7DD7D7281C4C8E6A00ACE71A /* tab_mine_nor@2x.png in Resources */,
+				BD976F9E1C4E044500B0E26D /* tab_mine_nor@2x.png in Resources */,
 				7DD7D6941C4C8E6A00ACE71A /* bt_credit@2x.png in Resources */,
 				7DD7D6B71C4C8E6A00ACE71A /* bt_jiaoshui@3x.png in Resources */,
 				7DD7D6E21C4C8E6A00ACE71A /* bt_wage@2x.png in Resources */,
@@ -2602,6 +2607,7 @@
 				BD04331C1C1A78B40051E7AB /* SSJArrayAddition.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
+				BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */,
 				BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */,
 				BD0433291C1A78B40051E7AB /* SSJViewControllerAddition.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,

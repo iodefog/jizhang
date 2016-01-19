@@ -21,6 +21,7 @@
 
 -(void)awakeFromNib{
     self.portraitButton.layer.cornerRadius = 33;
+    self.portraitButton.layer.masksToBounds = YES;
 }
 - (IBAction)loginButtonClicked:(id)sender {
     if (self.HeaderButtonClickedBlock) {
