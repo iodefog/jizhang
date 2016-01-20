@@ -51,6 +51,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     self.tableView.tableHeaderView = self.header;
     __weak typeof(self) weakSelf = self;
     if (SSJIsUserLogined()) {

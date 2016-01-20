@@ -23,6 +23,7 @@
     [paraDic setObject:SSJAppVersion() forKey:@"releaseVersion"];
     [paraDic setObject:SSJDefaultSource() forKey:@"source"];
     [paraDic setObject:@"2" forKey:@"mtype"];
+    [paraDic setObject:SSJUSERID() forKey:@"cuserid"];
     [paraDic setObject:(SSJAccessToken() ? SSJAccessToken() : @"") forKey:@"accessToken"];
     [paraDic setObject:(SSJAppId() ? SSJAppId() : @"") forKey:@"appId"];
     

@@ -68,6 +68,11 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.money = [resultSet stringForColumn:@"IMONEY"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];
+            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
+                item.money = [NSString stringWithFormat:@"-%@",[resultSet stringForColumn:@"IMONEY"]];
+            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
+                item.money = [NSString stringWithFormat:@"+%@",[resultSet stringForColumn:@"IMONEY"]];
+            }
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             if ([tempDate isEqualToString:billDate]) {
                 NSMutableArray *items = subDic[SSJFundingDetailRecordKey];

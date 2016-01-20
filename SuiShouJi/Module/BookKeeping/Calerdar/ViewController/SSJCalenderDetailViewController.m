@@ -18,7 +18,7 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
+        self.title = @"详情";
     }
     return self;
 }
@@ -56,11 +56,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
-        SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"" forIndexPath:indexPath];
+        SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setCellItem:self.item];
         return cell;
     }
+    
     return nil;
 }
 

@@ -28,4 +28,7 @@
 // 流水类型(1是支出,0是收入)
 @property (nonatomic) BOOL incomeOrExpence;
 
+//流水时间
+@property (nonatomic,strong) NSString *billDate;
+
 @end

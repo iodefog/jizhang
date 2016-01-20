@@ -31,7 +31,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" red="0.27843137254901962" green="0.81176470588235294" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="xRx-yx-8x1" firstAttribute="centerX" secondItem="lob-Mk-vQ0" secondAttribute="centerX" id="LKm-oj-SJu"/>
                                 <constraint firstItem="xRx-yx-8x1" firstAttribute="top" secondItem="TaH-Kw-UoO" secondAttribute="bottom" constant="14" id="R1A-jn-SFT"/>
@@ -62,7 +62,7 @@
                                     </constraints>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" red="0.27843137254901962" green="0.81176470588235294" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="qoB-04-fHd" firstAttribute="centerX" secondItem="ALN-pm-jUE" secondAttribute="centerX" id="ZEB-hV-TL5"/>
                                 <constraint firstItem="GP4-fJ-L5y" firstAttribute="top" secondItem="qoB-04-fHd" secondAttribute="bottom" constant="14" id="kWa-zJ-hOq"/>
@@ -95,7 +95,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" red="0.27843137254901962" green="0.81176470588235294" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstItem="vsL-w9-uFM" firstAttribute="centerX" secondItem="3TJ-sV-M3Z" secondAttribute="centerX" id="1Iu-iZ-Lr9"/>
                                 <constraint firstAttribute="trailing" secondItem="2Nn-hB-DDQ" secondAttribute="trailing" id="8V0-ML-S8J"/>
@@ -106,7 +106,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.27843137254901962" green="0.81176470588235294" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="lob-Mk-vQ0" firstAttribute="width" secondItem="5tG-JH-8GJ" secondAttribute="width" multiplier="1:3" id="4vy-1J-RoV"/>
                         <constraint firstItem="lob-Mk-vQ0" firstAttribute="top" secondItem="5tG-JH-8GJ" secondAttribute="top" id="CHF-9H-2vZ"/>
@@ -145,6 +145,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="backgroudview" destination="5tG-JH-8GJ" id="gdN-6j-0He"/>
                 <outlet property="bookKeepingButton" destination="vhJ-Pb-BeF" id="T5i-nY-aKm"/>
                 <outlet property="expenditureLabel" destination="GP4-fJ-L5y" id="haR-bg-pe1"/>
                 <outlet property="incomeLabel" destination="vsL-w9-uFM" id="Thn-ej-Cle"/>
