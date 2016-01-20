@@ -64,11 +64,30 @@
 }
 
 - (void)testMergeUserBillRecords {
-//    NSString *userID = SSJUUID();
-//    NSString *billID = @"1000";
-//    int state = 0;
-//    
-//    NSArray *userBillRecords = @[];
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    format.dateFormat = @"yyyy-MM-dd";
+    
+    NSString *userID = SSJUUID();
+    NSString *billID = @"1000";
+    int state = 0;
+    NSString *writeDate = [format stringFromDate:[NSDate date]];
+    int version = [NSDate date].timeIntervalSince1970;
+    int operatortype = 0;
+    
+    NSArray *userBillRecords = @[@{@"CUSERID":userID,
+                                   @"CBILLID":billID,
+                                   @"ISTATE":@(state),
+                                   @"CWRITEDATE":writeDate,
+                                   @"IVERSION":@(version),
+                                   @"OPERATORTYPE":@(operatortype)}];
+    NSString *primaryKeyValueStr = [SSJUserBillSyncTable spliceKeyAndValueForKeys:[SSJUserBillSyncTable primaryKeys] record:userBillRecords[0] joinString:@" and "];
+    
+    XCTAssertEqualObjects(primaryKeyValueStr, userBillRecords);
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        NSString *sql = [SSJUserBillSyncTable sqlStatementForMergeRecord:userBillRecords[0] inDatabase:db];
+        XCTAssert([SSJUserBillSyncTable mergeRecords:userBillRecords inDatabase:db]);
+    }];
 }
 
 - (void)testPerformanceExample {

@@ -16,8 +16,11 @@
 #import "SSZipArchive.h"
 #import "AFNetworking.h"
 
-static NSString *const kSyncFileName = @"sync_json.text";
-static NSString *const kSyncZipFileName = @"sync_json.zip";
+//  同步文件名称
+static NSString *const kSyncFileName = @"sync_data.json";
+
+//  压缩文件名称
+static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 //  加密密钥字符串
 static NSString *const kSignKey = @"accountbook";
@@ -49,14 +52,14 @@ static NSString *const kSignKey = @"accountbook";
     return self;
 }
 
-- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure; {
+- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
         lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         [self startSyncDataWithSuccess:success failure:failure];
     }
 }
 
-- (void)startSyncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure; {
+- (void)startSyncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     dispatch_async(self.syncQueue, ^{
         __block NSInteger currentSyncVersion;
         
@@ -77,7 +80,7 @@ static NSString *const kSignKey = @"accountbook";
             currentSyncVersion = lastSyncVersion + 1;
             
             //  把当前同步的版本号插入到BK_SYNC表中
-            if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 0, ?)", @(currentSyncVersion), SSJUSERID()]) {
+            if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(currentSyncVersion), SSJUSERID()]) {
                 SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                 databaseSuccess = NO;
                 return;

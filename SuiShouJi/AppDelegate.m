@@ -38,18 +38,6 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     [self setRootViewController];
     
-//    FMDatabase *db = [[FMDatabase alloc] initWithPath:@"/Users/oldlang/Desktop/testDb.db"];
-//    [db open];
-//    [db executeUpdate:@"insert into t1 (id, name, age) select 1, 'jack', 16 where not exists (select * from t1 where name = 'jack')"];
-    
-//    FMResultSet *result = [db executeQuery:@"select age from t2 where age > 17"];
-//    if (result) {
-//        while ([result next]) {
-//            NSLog(@"%d", [result intForColumnIndex:0]);
-//        }
-//    }
-    
-    
     return YES;
 }
 
