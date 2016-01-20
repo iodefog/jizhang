@@ -8,7 +8,7 @@
 
 #import "SSJDatabaseQueue.h"
 
-static const void * kSSJDispatchQueueSpecificKey = &kSSJDispatchQueueSpecificKey;
+static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey;
 
 @interface SSJDatabaseQueue ()
 
@@ -32,14 +32,14 @@ static const void * kSSJDispatchQueueSpecificKey = &kSSJDispatchQueueSpecificKey
 - (instancetype)initWithPath:(NSString*)aPath flags:(int)openFlags {
     if (self = [super initWithPath:aPath flags:openFlags]) {
         self.dataBaseQueue = dispatch_queue_create("com.ShuiShouJi.SSJDatabaseQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_queue_set_specific(self.dataBaseQueue, kSSJDispatchQueueSpecificKey, (__bridge void *)self, NULL);
+        dispatch_queue_set_specific(self.dataBaseQueue, kSSJDatabaseQueueSpecificKey, (__bridge void *)self, NULL);
     }
     return self;
 }
 
 - (void)asyncInDatabase:(void (^)(FMDatabase *db))block {
-    SSJDatabaseQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kSSJDispatchQueueSpecificKey);
-    if (currentSyncQueue == self) {
+    SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
+    if (currentDatabaseQueue == self) {
         [self inDatabase:block];
     } else {
         dispatch_async(self.dataBaseQueue, ^{
@@ -49,8 +49,8 @@ static const void * kSSJDispatchQueueSpecificKey = &kSSJDispatchQueueSpecificKey
 }
 
 - (void)asyncInTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
-    SSJDatabaseQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kSSJDispatchQueueSpecificKey);
-    if (currentSyncQueue == self) {
+    SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
+    if (currentDatabaseQueue == self) {
         [self inTransaction:block];
     } else {
         dispatch_async(self.dataBaseQueue, ^{
@@ -60,8 +60,8 @@ static const void * kSSJDispatchQueueSpecificKey = &kSSJDispatchQueueSpecificKey
 }
 
 - (void)asyncInDeferredTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
-    SSJDatabaseQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kSSJDispatchQueueSpecificKey);
-    if (currentSyncQueue == self) {
+    SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
+    if (currentDatabaseQueue == self) {
         [self inDeferredTransaction:block];
     } else {
         dispatch_async(self.dataBaseQueue, ^{

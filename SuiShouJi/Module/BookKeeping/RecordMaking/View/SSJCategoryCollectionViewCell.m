@@ -7,6 +7,7 @@
 //
 
 #import "SSJCategoryCollectionViewCell.h"
+
 #import "FMDB.h"
 
 @interface SSJCategoryCollectionViewCell()

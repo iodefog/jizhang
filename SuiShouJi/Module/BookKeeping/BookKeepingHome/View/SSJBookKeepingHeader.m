@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *incomeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *profitLabel;
 @property (weak, nonatomic) IBOutlet UIButton *bookKeepingButton;
+@property (weak, nonatomic) IBOutlet UIView *backgroudview;
 
 - (IBAction)bookKeeping:(id)sender;
 @end
@@ -31,6 +32,7 @@
 - (void)awakeFromNib{
     [self.bookKeepingButton setBackgroundColor:[UIColor whiteColor]];
     self.bookKeepingButton.layer.cornerRadius = 49.0f;
+    [self.backgroudview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg"]]];
 }
 
 -(void)setIncome:(NSString *)income{

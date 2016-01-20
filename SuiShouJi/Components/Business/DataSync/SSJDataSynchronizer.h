@@ -10,8 +10,17 @@
 
 @interface SSJDataSynchronizer : NSObject
 
+/**
+ *  返回唯一实例对象
+ */
 + (instancetype)shareInstance;
 
+/**
+ *  开始数据同步
+ *
+ *  @param success  同步成功回调
+ *  @param failure  同步失败回调
+ */
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 @end

@@ -34,9 +34,21 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     [self umengTrack];
     
     //  创建数据表
-    [self createTables];
+//    [self createTables];
     
     [self setRootViewController];
+    
+    [[NSOperationQueue currentQueue] addOperationWithBlock:^{
+        NSLog(@"1");
+        NSLog(@"2");
+        NSLog(@"3");
+        NSLog(@"4");
+        NSLog(@"5");
+        NSLog(@"6");
+        NSLog(@"7");
+        NSLog(@"8");
+        NSLog(@"9");
+    }];
     
     return YES;
 }
@@ -86,6 +98,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
 }
 
 - (void)createTables {
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *dbDocumentPath = SSJSQLitePath();
         

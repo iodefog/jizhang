@@ -34,7 +34,7 @@
     
     //  创建默认的资金帐户
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *writeDate = [[NSDate date] ssj_dateStringWithFormat:nil];
+        NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
         
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME , CPARENT , CCOLOR , CWRITEDATE , OPERATORTYPE , IVERSION , CUSERID) VALUES (?, '现金账户', '1', '#fe8a65', ?, 0, ?, ?)", SSJUUID(), writeDate , SSJSyncVersion(), SSJUSERID()];
         [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1') WHERE CACCTNAME = '现金账户'"];
@@ -91,7 +91,7 @@
         while ([billTypeResult next]) {
             NSString *billId = [billTypeResult stringForColumn:@"id"];
             int state = [billTypeResult intForColumn:@"istate"];
-            NSString *date = [[NSDate date] ssj_dateStringWithFormat:nil];
+            NSString *date = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
             
             BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ?)", SSJUSERID(), billId, @(state), date, SSJSyncVersion(), billId];
             successfull = successfull && executeSuccessfull;

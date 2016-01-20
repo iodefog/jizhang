@@ -9,7 +9,7 @@
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingDetailHeader.h"
 #import "SSJFundingDetailHelper.h"
-#import "SSJBillingChargeCell.h"
+#import "SSJFundingDetailCell.h"
 #import "SSJFundingDetailDateHeader.h"
 #import "SSJReportFormsUtil.h"
 #import "SSJModifyFundingViewController.h"
@@ -44,7 +44,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     self.title = self.item.fundingName;
     self.tableView.rowHeight = 55;
     self.tableView.sectionHeaderHeight = 40;
-    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kFundingDetailCellID];
+    [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:kFundingDetailHeaderViewID];
     self.tableView.tableHeaderView = self.header;
     [self getTotalIcomeAndExpence];
@@ -84,7 +84,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
+    SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJFundingDetailRecordKey];
@@ -100,8 +100,6 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     [headerView.dateLabel sizeToFit];
     if ([sectionInfo[SSJFundingDetailSumKey] doubleValue] > 0) {
         headerView.balanceLabel.text = [NSString stringWithFormat:@"+%@",sectionInfo[SSJFundingDetailSumKey]];
-    }else{
-        headerView.balanceLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailSumKey]];
     }
     [headerView.balanceLabel sizeToFit];
     return headerView;
