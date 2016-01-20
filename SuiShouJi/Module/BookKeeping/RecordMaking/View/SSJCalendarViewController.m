@@ -52,6 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
@@ -272,6 +273,11 @@
     double balance = [db doubleForQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
     return balance;
 }
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
 
 /*
 #pragma mark - Navigation

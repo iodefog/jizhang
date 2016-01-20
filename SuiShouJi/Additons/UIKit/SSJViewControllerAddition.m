@@ -32,7 +32,7 @@ static const void *kBackControllerKey = &kBackControllerKey;
     UIButton *backoffButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backoffButton setFrame:CGRectMake(0, 0, 30, 30)];
     [backoffButton setImage:image forState:UIControlStateNormal];
-    [backoffButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, backoffButton.width - image.size.width)];
+    [backoffButton setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, backoffButton.width - image.size.width)];
     if ([self respondsToSelector:selector]) {
         [backoffButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     }

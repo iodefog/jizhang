@@ -74,6 +74,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     _numkeyHavePressed = NO;
     [self getCurrentDate];
     if (self.item == nil) {
@@ -666,6 +667,10 @@
     _originaldYear= [dateComponent year];
     _originaldDay = [dateComponent day];
     _originaldMonth = [dateComponent month];
+}
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
 }
 
 - (void)didReceiveMemoryWarning {

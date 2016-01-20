@@ -1134,8 +1134,6 @@
 				BD976FA91C4E4A4600B0E26D /* home_jiantou.png */,
 				BD976FA71C4E49D900B0E26D /* home_bear.png */,
 				BD976FB51C4F2D0000B0E26D /* home_bg.png */,
-				7DD7D66C1C4C8E6A00ACE71A /* left@2x.png */,
-				7DD7D6781C4C8E6A00ACE71A /* right@2x.png */,
 				BD976FBA1C4F4CA200B0E26D /* circle@2x.png */,
 				BD976FBF1C4F57F200B0E26D /* circle@3x.png */,
 				BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */,

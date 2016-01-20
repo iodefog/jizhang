@@ -36,6 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     _selectParent = @"1";
     _selectColor = @"fe8a65";
     [self.view addSubview:self.tableview];
@@ -126,7 +127,7 @@
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
-            NewFundingCell.cellText.text = @"编辑账户卡片";
+            NewFundingCell.cellText.text = @"选择账户颜色";
             NewFundingCell.cellText.enabled = NO;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -195,6 +196,10 @@
     }
     [db close];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
 }
 
 - (void)didReceiveMemoryWarning {

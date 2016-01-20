@@ -48,6 +48,7 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.typeSelectedBlock) {
         self.typeSelectedBlock(((SSJFundingItem*)[_items objectAtIndex:indexPath.section]).fundingID);
     };
@@ -71,6 +72,20 @@
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     FundingTypeCell.item = [_items objectAtIndex:indexPath.section];
+    if (!self.selectFundID || self.selectFundID.length == 0) {
+        if (indexPath.section == 0) {
+            FundingTypeCell.selectedOrNot = YES;
+        }else{
+            FundingTypeCell.selectedOrNot = NO;
+            
+        }
+    }else{
+        if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
+            FundingTypeCell.selectedOrNot = YES;
+        }else{
+            FundingTypeCell.selectedOrNot = NO;
+        }
+    }
     FundingTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return FundingTypeCell;
 }
@@ -92,6 +107,17 @@
         [_items addObject:item];
     }
     [db close];
+}
+
+-(void)reloadSelectedStatusexceptIndexPath:(NSIndexPath*)selectedIndexpath{
+    for (int i = 0; i < [self.tableView numberOfSections]; i ++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        if ([indexPath compare:selectedIndexpath] == NSOrderedSame) {
+            ((SSJFundingTypeTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath]).selectedOrNot = YES;
+        }else{
+            ((SSJFundingTypeTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath]).selectedOrNot = NO;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

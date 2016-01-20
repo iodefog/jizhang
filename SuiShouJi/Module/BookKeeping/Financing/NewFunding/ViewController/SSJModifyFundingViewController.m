@@ -38,8 +38,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.title = self.item.fundingName;
-    _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"编辑账户卡片"];
+    _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择账户颜色"];
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
     [self.view addSubview:self.tableView];
@@ -86,6 +87,7 @@
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
+        fundingTypeVC.selectFundID = _selectParent;
         __weak typeof(self) weakSelf = self;
         fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent){
             _selectParent = selectParent;
@@ -222,6 +224,10 @@
     }
     [db close];
     return fundingName;
+}
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
 }
 
 - (void)didReceiveMemoryWarning {
