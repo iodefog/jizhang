@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 
 #import "SSJUtil.h"
-#import "SSJDataSyncHelper.h"
 
 #import "SSJDatabaseQueue.h"
 #import "SSJUserBillSyncTable.h"
@@ -75,8 +74,20 @@
     int version = [NSDate date].timeIntervalSince1970;
     int operatortype = 0;
     
-
-    NSArray *userBillRecords = @[];
+    NSArray *userBillRecords = @[@{@"CUSERID":userID,
+                                   @"CBILLID":billID,
+                                   @"ISTATE":@(state),
+                                   @"CWRITEDATE":writeDate,
+                                   @"IVERSION":@(version),
+                                   @"OPERATORTYPE":@(operatortype)}];
+    NSString *primaryKeyValueStr = [SSJUserBillSyncTable spliceKeyAndValueForKeys:[SSJUserBillSyncTable primaryKeys] record:userBillRecords[0] joinString:@" and "];
+    
+    XCTAssertEqualObjects(primaryKeyValueStr, userBillRecords);
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        NSString *sql = [SSJUserBillSyncTable sqlStatementForMergeRecord:userBillRecords[0] inDatabase:db];
+        XCTAssert([SSJUserBillSyncTable mergeRecords:userBillRecords inDatabase:db]);
+    }];
 }
 
 - (void)testPerformanceExample {
