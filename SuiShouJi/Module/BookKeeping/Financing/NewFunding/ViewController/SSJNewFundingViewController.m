@@ -184,6 +184,7 @@
     double fundAmount = [_amountTextField.text doubleValue];
     NSString *fundMemo = _memoTextField.text;
     BOOL success = [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID,CACCTNAME,CPARENT,CCOLOR,CWRITEDATE,OPERATORTYPE,IVERSION,CMEMO,CUSERID) VALUES (?,?,?,?,?,?,?,?,?)",fundId,fundName,_selectParent,_selectColor,[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithLong:SSJSyncVersion()],fundMemo,SSJUSERID()];
+    [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) WHERE CFUNDID = ?",_selectParent,fundId];
     if (success) {
         [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CUSERID,CFUNDID,IBALANCE) VALUES (?,?,?)",SSJUSERID(),fundId,[NSNumber numberWithDouble:fundAmount]];
         if ([_amountTextField.text doubleValue] > 0) {

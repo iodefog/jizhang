@@ -46,7 +46,7 @@
         _detailLabel.textAlignment = NSTextAlignmentRight;
         _detailLabel.font = [UIFont systemFontOfSize:15];
     }
-    return _detailLabel;
+    return _detailLabel ;
 }
 /*
 // Only override drawRect: if you perform custom drawing.
