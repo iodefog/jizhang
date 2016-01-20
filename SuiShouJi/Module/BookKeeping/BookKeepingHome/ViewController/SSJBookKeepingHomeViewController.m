@@ -12,6 +12,7 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
 #import "SSJBookKeepHomeItem.h"
+#import "SSJBookKeepingHomeNodateFooter.h"
 #import "SSJHomeBarButton.h"
 #import "FMDB.h"
 
@@ -37,6 +38,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.title = @"个人账本";
+        self.automaticallyAdjustsScrollViewInsets = NO;
         [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
@@ -58,6 +60,7 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     NSString *path = SSJSQLitePath();
+    self.view.backgroundColor = [UIColor whiteColor];
     NSLog(@"%@",path);
 }
 
@@ -72,8 +75,8 @@
 -(void)viewDidLayoutSubviews{
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 187);
     self.bookKeepingHeader.top = 64;
-    self.tableView.top = 187;
-    self.tableView.height = self.view.height - 187;
+    self.tableView.top = self.bookKeepingHeader.bottom;
+    self.tableView.height = self.view.height - self.bookKeepingHeader.bottom - 49;
 }
 
 #pragma mark - UITableViewDelegate
@@ -85,10 +88,27 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 0.1;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (self.items.count == 0) {
+        return 300;
+    }
+    return 0.1;
+}
+
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (self.items.count == 0) {
+        SSJBookKeepingHomeNodateFooter *nodateFooter = [[SSJBookKeepingHomeNodateFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        return nodateFooter;
+    }
+    return nil;
+}
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJBookKeepingCell";
@@ -162,7 +182,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) AND IBILLID != '2' AND OPERATORTYPE != 2  ORDER BY DATETIME(CWRITEDATE) ASC) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC";
+    NSString *sql =@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) AND IBILLID != '2' AND OPERATORTYPE != 2 ) UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC ,CWRITEDATE DESC";
     FMResultSet *rs = [db executeQuery:sql];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];

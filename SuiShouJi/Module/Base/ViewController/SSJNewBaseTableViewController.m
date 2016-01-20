@@ -116,41 +116,41 @@
         [self.slimeView scrollViewDidScroll];
         
         /** 解决在有sectionHeaderView的情况下，下拉刷新控件没有使sectionHeaderView置于最顶部的问题 **/
-        if (self.isRefreshing) {
-            
-            CGRect insetRect = UIEdgeInsetsInsetRect(self.tableView.bounds, self.tableView.contentInset);
-            if (self.tableView.contentSize.height < CGRectGetHeight(insetRect)) {
-                return;
-            }
-            
-            if (self.tableView.contentOffset.y >= -(32 + self.originalContentInset.top)
-                && self.tableView.contentOffset.y < 0) {
-                // 在下拉刷新后的内凹范围内滚动
-                // 注意:修改scrollView.contentInset时，若使当前界面显示位置发生变化，会触发scrollViewDidScroll:，从而导致死循环
-                // 因此此处scrollView.contentInset.top必须为-scrollView.contentOffset.y
-                UIEdgeInsets newContentInset = self.originalContentInset;
-                newContentInset.top = -self.tableView.contentOffset.y;
-                self.tableView.contentInset = newContentInset;
-                return;
-            }
-            
-            
-            if (self.tableView.contentOffset.y >= -self.originalContentInset.top) {
-                // headerView已经在tableView最上方，把顶部内凹设置回原始值
-                self.tableView.contentInset = self.originalContentInset;
-                return;
-            }
-            
-        } else {
-            if (self.tableView.tracking
-                || self.tableView.dragging
-                || self.tableView.decelerating) {
-                
-                if (self.tableView.contentOffset.y >= -self.originalContentInset.top) {
-                    self.tableView.contentInset = self.originalContentInset;
-                }
-            }
-        }
+//        if (self.isRefreshing) {
+//            
+//            CGRect insetRect = UIEdgeInsetsInsetRect(self.tableView.bounds, self.tableView.contentInset);
+//            if (self.tableView.contentSize.height < CGRectGetHeight(insetRect)) {
+//                return;
+//            }
+//            
+//            if (self.tableView.contentOffset.y >= -(32 + self.originalContentInset.top)
+//                && self.tableView.contentOffset.y < 0) {
+//                // 在下拉刷新后的内凹范围内滚动
+//                // 注意:修改scrollView.contentInset时，若使当前界面显示位置发生变化，会触发scrollViewDidScroll:，从而导致死循环
+//                // 因此此处scrollView.contentInset.top必须为-scrollView.contentOffset.y
+//                UIEdgeInsets newContentInset = self.originalContentInset;
+//                newContentInset.top = -self.tableView.contentOffset.y;
+//                self.tableView.contentInset = newContentInset;
+//                return;
+//            }
+//            
+//            
+//            if (self.tableView.contentOffset.y >= -self.originalContentInset.top) {
+//                // headerView已经在tableView最上方，把顶部内凹设置回原始值
+//                self.tableView.contentInset = self.originalContentInset;
+//                return;
+//            }
+//            
+//        } else {
+//            if (self.tableView.tracking
+//                || self.tableView.dragging
+//                || self.tableView.decelerating) {
+//                
+//                if (self.tableView.contentOffset.y >= -self.originalContentInset.top) {
+//                    self.tableView.contentInset = self.originalContentInset;
+//                }
+//            }
+//        }
         
     }
 }
