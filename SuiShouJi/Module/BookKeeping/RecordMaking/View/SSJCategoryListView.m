@@ -85,10 +85,12 @@
                 _selectedPage = page;
                 _selectedIndex = index;
                 for (int i = 0; i < _page; i++) {
+                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
+                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
+                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
                     ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
                     ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
-                    [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
-                    
+//                    [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
                 }
             }
             if (weakSelf.CategorySelected) {
@@ -146,6 +148,7 @@
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
         [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
     }
+    [self setNeedsLayout];
 }
 
 -(void)getPage{

@@ -76,7 +76,7 @@
     self.bookKeepingHeader.size = CGSizeMake(self.view.width, 187);
     self.bookKeepingHeader.top = 64;
     self.tableView.top = self.bookKeepingHeader.bottom;
-    self.tableView.height = self.view.height - self.bookKeepingHeader.bottom;
+    self.tableView.height = self.view.height - self.bookKeepingHeader.bottom - 49;
 }
 
 #pragma mark - UITableViewDelegate
