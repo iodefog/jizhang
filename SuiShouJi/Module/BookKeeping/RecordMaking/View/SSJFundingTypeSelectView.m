@@ -51,13 +51,6 @@
     return 50;
 }
 
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//    return nil;
-//}
-
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-//    return 187;
-//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -77,18 +70,22 @@
     SSJFundingTypeTableViewCell *FundingTypeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!FundingTypeCell) {
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        FundingTypeCell.item = [_items objectAtIndex:indexPath.row];
     }
     if (!self.selectFundID || self.selectFundID.length == 0) {
         if (indexPath.row == 0) {
             FundingTypeCell.selectedOrNot = YES;
+        }else{
+            FundingTypeCell.selectedOrNot = NO;
+
         }
     }else{
         if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
             FundingTypeCell.selectedOrNot = YES;
+        }else{
+            FundingTypeCell.selectedOrNot = NO; 
         }
     }
-
+    FundingTypeCell.item = [_items objectAtIndex:indexPath.row];
     return FundingTypeCell;
 }
 
@@ -143,12 +140,13 @@
 }
 
 -(void)getDateFromDb{
+    [_items removeAllObjects];
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID",@"root"];
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != 'root' AND A.CFUNDID = B.CFUNDID ORDER BY CWRITEDATE ASC"];
     _items = [[NSMutableArray alloc]init];
     while ([rs next]) {
         SSJFundingItem *item = [[SSJFundingItem alloc]init];
@@ -164,6 +162,7 @@
     item.fundingName = @"添加资金新的账户";
     item.fundingIcon = @"add";
     [_items addObject:item];
+    [self.tableView reloadData];
 }
 
 /*

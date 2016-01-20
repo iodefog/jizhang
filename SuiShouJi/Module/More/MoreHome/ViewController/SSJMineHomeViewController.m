@@ -98,12 +98,12 @@
     if (indexPath.row == 0 && indexPath.section == 1) {
         SSJSyncSettingViewController *syncSettingVc = [[SSJSyncSettingViewController alloc]init];
         [self.navigationController pushViewController:syncSettingVc animated:YES];
-    }else if (indexPath.section == 1 && indexPath.row == 1){
+    }else if (indexPath.section == 2 && indexPath.row == 0){
         NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/about.html"];
         SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
         webVC.title = @"关于我们";
         [self.navigationController pushViewController:webVC animated:YES];
-    }else if (indexPath.section == 1 && indexPath.row == 2){
+    }else if (indexPath.section == 2 && indexPath.row == 1){
         NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/protocol.html"];
         SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
         webVC.title = @"用户协议";
@@ -112,14 +112,14 @@
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0) {
+    if (section == 0 || section == 1) {
         return 1;
     }
-    return 3;
+    return 2;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -130,8 +130,11 @@
     }
     if (indexPath.section == 0) {
         mineHomeCell.cellTitle = @"给个好评";
-    }else{
-        mineHomeCell.cellTitle = [_titleForSectionTwoArray objectAtIndex:indexPath.row];
+    }else if(indexPath.section == 1){
+        mineHomeCell.cellTitle = @"同步设置";
+    }else if (indexPath.section == 2){
+        NSArray *titleForcell = @[@"关于我们",@"用户协议与隐私说明"];
+        mineHomeCell.cellTitle = [titleForcell objectAtIndex:indexPath.row];
     }
     return mineHomeCell;
 }
