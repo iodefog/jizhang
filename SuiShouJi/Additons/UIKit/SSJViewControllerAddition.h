@@ -26,6 +26,8 @@
  */
 - (void)ssj_showBackButtonWithTarget:(id)target selector:(SEL)selector;
 
+- (void)ssj_showBackButtonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector;
+
 /**
  *  返回到指定的控制器，即backController
  */

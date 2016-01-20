@@ -25,11 +25,14 @@ static const void *kBackControllerKey = &kBackControllerKey;
 }
 
 - (void)ssj_showBackButtonWithTarget:(id)target selector:(SEL)selector {
-    UIImage *backOffImage = [UIImage imageNamed:@"navigation_backOff"];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"navigation_backOff"] target:target selector:selector];
+}
+
+- (void)ssj_showBackButtonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector {
     UIButton *backoffButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [backoffButton setFrame:CGRectMake(0, 0, 30, 30)];
-    [backoffButton setImage:backOffImage forState:UIControlStateNormal];
-    [backoffButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, backoffButton.width - backOffImage.size.width)];
+    [backoffButton setImage:image forState:UIControlStateNormal];
+    [backoffButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, backoffButton.width - image.size.width)];
     if ([self respondsToSelector:selector]) {
         [backoffButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     }

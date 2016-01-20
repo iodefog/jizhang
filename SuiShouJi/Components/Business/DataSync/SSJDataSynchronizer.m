@@ -131,7 +131,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     NSString *filePath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncFileName];
     NSString *zipPath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncZipFileName];
     
-    [syncData writeToFile:@"/Users/oldlang/Desktop/sync_data.json" atomically:YES];
     if (![syncData writeToFile:filePath atomically:YES]) {
         failure(nil);
         return;
@@ -141,6 +140,14 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         failure(nil);
         return;
     }
+    
+//#warning test
+//    [syncData writeToFile:@"/Users/oldlang/Desktop/sync_data.txt" atomically:YES];
+//    [SSZipArchive createZipFileAtPath:@"/Users/oldlang/Desktop/sync_data.zip" withContentsOfDirectory:@"/Users/oldlang/Desktop/sync_data.json"];
+//    
+//    NSError *err1 = nil;
+//    BOOL sss = [SSZipArchive unzipFileAtPath:@"/Users/oldlang/Desktop/sync_data.zip" toDestination:@"/Users/oldlang/Desktop/unzip.txt" overwrite:YES password:nil error:&err1];
+    
     
     //  读取压缩好的文件，上传到服务端
     NSData *zipData = [NSData dataWithContentsOfFile:zipPath options:NSDataReadingMappedIfSafe error:&error];

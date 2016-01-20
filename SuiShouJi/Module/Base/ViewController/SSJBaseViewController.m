@@ -148,10 +148,14 @@
 #pragma mark - Private
 - (void)addTapGestureRecognizerIfNeeded {
     if (_hideKeyboradWhenTouch) {
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ssj_hideKeyboard)];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
         tapGesture.delegate = self;
         [self.view addGestureRecognizer:tapGesture];
     }
+}
+
+- (void)hideKeyboard {
+    [self.view endEditing:YES];
 }
 
 @end
