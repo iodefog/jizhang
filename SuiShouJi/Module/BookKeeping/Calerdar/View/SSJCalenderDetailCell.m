@@ -9,8 +9,7 @@
 #import "SSJCalenderDetailCell.h"
 
 @interface SSJCalenderDetailCell()
-@property (nonatomic,strong) UILabel *cellLabel;
-@property (nonatomic,strong) UILabel *detailLabel;
+
 @end
 
 @implementation SSJCalenderDetailCell

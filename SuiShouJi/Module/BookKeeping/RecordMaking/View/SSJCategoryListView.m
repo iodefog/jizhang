@@ -9,10 +9,11 @@
 #import "SSJCategoryListView.h"
 #import "SSJCategoryCollectionView.h"
 #import "SSJCategoryCollectionViewCell.h"
+#import "SSJPageControl.h"
 #import "FMDB.h"
 
 @interface SSJCategoryListView()
-@property(nonatomic,strong) UIPageControl *pageControl;
+@property(nonatomic,strong) SSJPageControl *pageControl;
 @property (nonatomic,strong) NSMutableArray *Items;
 @end
 @implementation SSJCategoryListView{
@@ -106,12 +107,13 @@
     }
 }
 
--(UIPageControl*)pageControl{
+-(SSJPageControl*)pageControl{
     if (_pageControl == nil) {
-        _pageControl = [[UIPageControl alloc]init];
-        _pageControl.frame = CGRectMake(0, 0, 70, 10);
+        _pageControl = [[SSJPageControl alloc]init];
         _pageControl.numberOfPages = _page;
-        _pageControl.currentPageIndicatorTintColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        _pageControl.spaceBetweenPages = 10;
+        _pageControl.pageImage = [UIImage imageNamed:@"circle"];
+        _pageControl.currentPageImage = [UIImage imageNamed:@"solid_circle"];
         _pageControl.userInteractionEnabled = NO;
     }
     return _pageControl;

@@ -36,7 +36,7 @@
 
 -(UIImageView *)fundingImage{
     if (!_fundingImage) {
-        _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 25, 25)];
+        _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
     }
     return _fundingImage;
 }
@@ -44,7 +44,7 @@
 -(UILabel *)fundingTitle{
     if (!_fundingTitle) {
         _fundingTitle = [[UILabel alloc]initWithFrame:CGRectZero];
-        _fundingTitle.font = [UIFont systemFontOfSize:18];
+        _fundingTitle.font = [UIFont systemFontOfSize:15];
         _fundingTitle.textColor = [UIColor ssj_colorWithHex:@"393939"];
     }
     return _fundingTitle;

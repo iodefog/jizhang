@@ -31,4 +31,7 @@
 //流水时间
 @property (nonatomic,strong) NSString *billDate;
 
+//流水的父类
+@property (nonatomic,strong) NSString *parent;
+
 @end

@@ -235,7 +235,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID <> '2'",SSJUSERID(),selectDate];
+    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID <> '2' AND A.IFUNDID = C.CFUNDID",SSJUSERID(),selectDate];
     while ([rs next]) {
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.imageName = [rs stringForColumn:@"CCOIN"];
@@ -244,6 +244,8 @@
         item.money = [rs stringForColumn:@"IMONEY"];
         item.colorValue = [rs stringForColumn:@"CCOLOR"];
         item.incomeOrExpence = [rs intForColumn:@"ITYPE"];
+        item.billDate = [rs stringForColumn:@"CBILLDATE"];
+        item.parent = [rs stringForColumn:@"CPARENT"];
         [self.items addObject:item];
     }
     [db close];

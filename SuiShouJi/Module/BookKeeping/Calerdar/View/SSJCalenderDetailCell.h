@@ -9,5 +9,6 @@
 #import "SSJBaseTableViewCell.h"
 
 @interface SSJCalenderDetailCell : SSJBaseTableViewCell
-
+@property (nonatomic,strong) UILabel *cellLabel;
+@property (nonatomic,strong) UILabel *detailLabel;
 @end
