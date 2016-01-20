@@ -84,6 +84,12 @@ extern int lastSyncVersion;
  */
 + (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db;
 
+/**
+ *  返回合并记录的其它条件，根据需要子类可以覆写
+ *
+ *  @param record 要合并的记录数据
+ *  @return (NSString *) 合并记录的其它条件
+ */
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record;
 
 @end

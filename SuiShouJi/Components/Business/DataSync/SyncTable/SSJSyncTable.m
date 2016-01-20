@@ -7,6 +7,7 @@
 //
 
 #import "SSJSyncTable.h"
+#import "SSJDataSyncHelper.h"
 
 int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
 
@@ -111,12 +112,14 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
             return NO;
         }
         
+        
         //  根据表中的主键拼接合并条件
-        NSString *necessaryCondition = [self primaryKeyValueConditionWithRecord:recordInfo];
+        NSString *necessaryCondition = SSJSplicePrimaryKeyAndValue([self primaryKeys], recordInfo);
         if (!necessaryCondition.length) {
             return NO;
         }
         
+        //  检测表中是否存在将要合并的记录
         FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"select count(*) from %@ where %@", [self tableName], necessaryCondition]];
         if (!result) {
             SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
@@ -128,12 +131,15 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         NSMutableString *update = [NSMutableString string];
         int opertoryValue = [opertoryType intValue];
         if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
+            SSJPRINT(@">>>SSJ warning:unknown OPERATORTYPE value %d", opertoryValue);
             return NO;
         }
         
+        //  如果记录已存在，并且操作类型是修改（1）、删除（2），就更新记录；反之就插入记录
         if (isRecordExist) {
             if (opertoryValue == 1 || opertoryValue == 2) {
-                NSString *updateStatement = [self updateStatementForMergeRecord:recordInfo condition:necessaryCondition];
+                BOOL needToCompareWriteDate = (opertoryValue == 1);
+                NSString *updateStatement = [self updateStatementForMergeRecord:recordInfo compareWriteDate:needToCompareWriteDate condition:necessaryCondition];
                 if (!updateStatement.length) {
                     return NO;
                 }
@@ -147,6 +153,7 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
             [update appendString:insertStatement];
         }
         
+        //  添加附加条件
         NSString *additionalCondition = [self additionalConditionForMergeRecord:recordInfo];
         if (additionalCondition.length) {
             [update appendFormat:@" and %@", additionalCondition];
@@ -161,25 +168,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     
     SSJPRINT(@">>>SSJ warning:array records has no element\n records:%@", records);
     return YES;
-}
-
-//  根据表中的主键拼接合并条件
-+ (NSString *)primaryKeyValueConditionWithRecord:(NSDictionary *)recordInfo {
-    NSMutableArray *conditions = [NSMutableArray arrayWithCapacity:[self primaryKeys].count];
-    for (NSString *primaryKey in [self primaryKeys]) {
-        id value = recordInfo[primaryKey];
-        if (!value) {
-            SSJPRINT(@">>>SSJ warning: merge record lack of primary key '%@'\n record:%@", primaryKey, recordInfo);
-            return nil;
-        }
-        
-        if ([value isKindOfClass:[NSString class]]) {
-            [conditions addObject:[NSString stringWithFormat:@"%@ = '%@'", primaryKey, value]];
-        } else {
-            [conditions addObject:[NSString stringWithFormat:@"%@ = %@", primaryKey, value]];
-        }
-    }
-    return [conditions componentsJoinedByString:@" and "];
 }
 
 //  返回插入新纪录的sql语句
@@ -207,8 +195,8 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     return [NSString stringWithFormat:@"insert into %@ (%@) values (%@)", [self tableName], columnsStr, valuesStr];
 }
 
-//  返回修改的sql语句
-+ (NSString *)updateStatementForMergeRecord:(NSDictionary *)recordInfo condition:(NSString *)condition {
+//  返回更新的sql语句
++ (NSString *)updateStatementForMergeRecord:(NSDictionary *)recordInfo compareWriteDate:(BOOL)compareWriteDate condition:(NSString *)condition {
     if (!((NSString *)recordInfo[@"cwritedate"]).length
         || !condition.length) {
         SSJPRINT(@">>>SSJ warning: merge record lack of column 'cwritedate'\n record:%@", recordInfo);
@@ -231,7 +219,13 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     }
     NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
     
-    return [NSString stringWithFormat:@"update %@ set %@ where %@ and cwritedate < %@", [self tableName], keyValuesStr, condition, recordInfo[@"cwritedate"]];
+    NSMutableString *updateSql = [NSMutableString stringWithFormat:@"update %@ set %@ where %@", [self tableName], keyValuesStr, condition];
+    
+    if (compareWriteDate) {
+        [updateSql appendFormat:@" and cwritedate < %@", recordInfo[@"cwritedate"]];
+    }
+    
+    return updateSql;
 }
 
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {

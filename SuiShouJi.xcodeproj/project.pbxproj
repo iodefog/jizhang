@@ -37,6 +37,7 @@
 		7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
 		7D99D4621C355130006EB113 /* SSJReportFormsSurplusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */; };
 		7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
+		7DAD4A591C4F1E19004B7FF0 /* SSJDataSyncHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAD4A581C4F1E19004B7FF0 /* SSJDataSyncHelper.m */; };
 		7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */; };
 		7DD7D6821C4C8E6A00ACE71A /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D61C4C8E6A00ACE71A /* add@2x.png */; };
 		7DD7D6831C4C8E6A00ACE71A /* add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D71C4C8E6A00ACE71A /* add@3x.png */; };
@@ -410,6 +411,8 @@
 		7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSurplusView.m; sourceTree = "<group>"; };
 		7D99D4631C357703006EB113 /* SSJSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSegmentedControl.h; sourceTree = "<group>"; };
 		7D99D4641C357703006EB113 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
+		7DAD4A571C4F1E19004B7FF0 /* SSJDataSyncHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSyncHelper.h; sourceTree = "<group>"; };
+		7DAD4A581C4F1E19004B7FF0 /* SSJDataSyncHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSyncHelper.m; sourceTree = "<group>"; };
 		7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodSelectionView.h; sourceTree = "<group>"; };
 		7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodSelectionView.m; sourceTree = "<group>"; };
 		7DD7D5D61C4C8E6A00ACE71A /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
@@ -914,6 +917,7 @@
 		7D2B24011C3AA3AD009A74A8 /* DataSync */ = {
 			isa = PBXGroup;
 			children = (
+				7DAD4A561C4F1E00004B7FF0 /* Helper */,
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
 				7D2B24031C3AAA4A009A74A8 /* Model */,
@@ -1073,6 +1077,15 @@
 				7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		7DAD4A561C4F1E00004B7FF0 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				7DAD4A571C4F1E19004B7FF0 /* SSJDataSyncHelper.h */,
+				7DAD4A581C4F1E19004B7FF0 /* SSJDataSyncHelper.m */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		7DD7D5D51C4C8E6A00ACE71A /* Image */ = {
@@ -2623,6 +2636,7 @@
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
 				BD70DF621C4751EA000E6CC9 /* SSJLoginViewController.m in Sources */,
 				7D2B24001C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m in Sources */,
+				7DAD4A591C4F1E19004B7FF0 /* SSJDataSyncHelper.m in Sources */,
 				BD70DF601C4751EA000E6CC9 /* SSJGuideView.m in Sources */,
 				BD04331D1C1A78B40051E7AB /* SSJDataAddition.m in Sources */,
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,

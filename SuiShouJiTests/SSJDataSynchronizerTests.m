@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "SSJUtil.h"
+#import "SSJDataSyncHelper.h"
 
 #import "SSJDatabaseQueue.h"
 #import "SSJUserBillSyncTable.h"
@@ -64,11 +65,18 @@
 }
 
 - (void)testMergeUserBillRecords {
-//    NSString *userID = SSJUUID();
-//    NSString *billID = @"1000";
-//    int state = 0;
-//    
-//    NSArray *userBillRecords = @[];
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    format.dateFormat = @"yyyy-MM-dd";
+    
+    NSString *userID = SSJUUID();
+    NSString *billID = @"1000";
+    int state = 0;
+    NSString *writeDate = [format stringFromDate:[NSDate date]];
+    int version = [NSDate date].timeIntervalSince1970;
+    int operatortype = 0;
+    
+
+    NSArray *userBillRecords = @[];
 }
 
 - (void)testPerformanceExample {
