@@ -13,6 +13,7 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJFundingDetailDateHeader.h"
+#import "SSJCalenderDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -106,6 +107,15 @@
     return 44;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SSJBillingChargeCell *cell = (SSJBillingChargeCell*)[tableView cellForRowAtIndexPath:indexPath];
+    SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
+    SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
+    CalenderDetailVC.item = item;
+    [self.navigationController pushViewController:CalenderDetailVC animated:YES];
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
@@ -139,6 +149,7 @@
     [cell setCellItem:[self.items ssj_safeObjectAtIndex:indexPath.row]];
     return cell;
 }
+
 
 #pragma mark - Getter
 -(SSJCalendarView *)calendarView{
@@ -235,7 +246,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID <> '2' AND A.IFUNDID = C.CFUNDID",SSJUSERID(),selectDate];
+    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFID = C.CFUNDID",SSJUSERID(),selectDate];
     while ([rs next]) {
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.imageName = [rs stringForColumn:@"CCOIN"];

@@ -20,6 +20,13 @@
     NSMutableArray *_items;
 }
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.title = @"请选择账户类型";
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _items = [[NSMutableArray alloc]init];
