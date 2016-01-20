@@ -11,17 +11,14 @@
 @implementation SSJUserBillSyncTable
 
 + (NSString *)tableName {
-//    return @"BK_USER_BILL";
     return @"bk_user_bill";
 }
 
 + (NSArray *)columns {
-//    return @[@"CBILLID", @"CUSERID", @"CWRITEDATE", @"IVERSION", @"OPERATORTYPE"];
     return @[@"cbillid", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
-//    return @[@"CBILLID", @"CUSERID"];
     return @[@"cbillid", @"cuserid"];
 }
 

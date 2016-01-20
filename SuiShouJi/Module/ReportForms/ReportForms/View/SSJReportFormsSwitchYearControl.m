@@ -45,7 +45,7 @@
 - (UIButton *)preBtn {
     if (!_preBtn) {
         _preBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_preBtn setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
+        [_preBtn setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
     }
     return _preBtn;
 }
@@ -53,7 +53,7 @@
 - (UIButton *)nextBtn {
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_nextBtn setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
+        [_nextBtn setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
     }
     return _nextBtn;
 }

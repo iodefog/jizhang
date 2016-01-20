@@ -8,6 +8,8 @@
 
 #import "SSJDatabaseQueue.h"
 
+static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey;
+
 @interface SSJDatabaseQueue ()
 
 @property (nonatomic, strong) dispatch_queue_t dataBaseQueue;
@@ -30,26 +32,42 @@
 - (instancetype)initWithPath:(NSString*)aPath flags:(int)openFlags {
     if (self = [super initWithPath:aPath flags:openFlags]) {
         self.dataBaseQueue = dispatch_queue_create("com.ShuiShouJi.SSJDatabaseQueue", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_set_specific(self.dataBaseQueue, kSSJDatabaseQueueSpecificKey, (__bridge void *)self, NULL);
     }
     return self;
 }
 
 - (void)asyncInDatabase:(void (^)(FMDatabase *db))block {
-    dispatch_async(self.dataBaseQueue, ^{
+    SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
+    if (currentDatabaseQueue == self) {
         [self inDatabase:block];
-    });
+    } else {
+        dispatch_async(self.dataBaseQueue, ^{
+            [self inDatabase:block];
+        });
+    }
 }
 
 - (void)asyncInTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
-    dispatch_async(self.dataBaseQueue, ^{
+    SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
+    if (currentDatabaseQueue == self) {
         [self inTransaction:block];
-    });
+    } else {
+        dispatch_async(self.dataBaseQueue, ^{
+            [self inTransaction:block];
+        });
+    }
 }
 
 - (void)asyncInDeferredTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
-    dispatch_async(self.dataBaseQueue, ^{
+    SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
+    if (currentDatabaseQueue == self) {
         [self inDeferredTransaction:block];
-    });
+    } else {
+        dispatch_async(self.dataBaseQueue, ^{
+            [self inDeferredTransaction:block];
+        });
+    }
 }
 
 @end
