@@ -86,14 +86,15 @@
     }
     if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
         SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-        cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",[self getDaysOfMonth:self.year withMonth:self.month - 1] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + indexPath.row - 5] ;
+        cell.currentDay = @"";
         cell.selectable = NO;
         cell.isSelected = NO;
         return cell;
     }else{
         if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
             SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-            cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getDaysOfMonth:self.year withMonth:self.month] - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5] ;
+            cell.currentDay = @"";
+            cell.isSelected = NO;
             cell.selectable = NO;
             return cell;
         }else{
