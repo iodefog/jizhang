@@ -11,27 +11,22 @@
 @implementation SSJFundInfoSyncTable
 
 + (NSString *)tableName {
-//    return @"BK_FUND_INFO";
     return @"bk_fund_info";
 }
 
 + (NSArray *)columns {
-//    return @[@"CFUNDID", @"CACCTNAME", @"CICOIN", @"CPARENT", @"CCOLOR", @"CADDDATE", @"CMEMO", @"CUSERID", @"CWRITEDATE", @"IVERSION", @"OPERATORTYPE"];
     return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
-//    return @[@"CFUNDID"];
     return @[@"cfundid"];
 }
 
 + (NSString *)queryRecordsForSyncAdditionalCondition {
-//    return @"CPARENT <> 'root'";
     return @"cparent <> 'root'";
 }
 
 + (NSString *)updateSyncVersionAdditionalCondition {
-//    return @"CPARENT <> 'root'";
     return @"cparent <> 'root'";
 }
 

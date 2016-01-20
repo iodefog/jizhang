@@ -11,7 +11,6 @@
 @implementation SSJUserChargeSyncTable
 
 + (NSString *)tableName {
-//    return @"BK_USER_CHARGE";
     return @"bk_user_charge";
 }
 
@@ -20,7 +19,6 @@
 }
 
 + (NSArray *)primaryKeys {
-//    return @[@"ICHARGEID"];
     return @[@"ichargeid"];
 }
 

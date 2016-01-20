@@ -140,35 +140,51 @@ static NSString *const kSignKey = @"accountbook";
             return;
         }
         
+        //  创建请求
+        NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+
+        NSError *serializationError = nil;
+        NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:zipData name:@"zip" fileName:kSyncZipFileName mimeType:@"application/zip"];
+        } error:&serializationError];
+        
+        //  封装参数，传入请求头
         NSString *userId = SSJUSERID();
         NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
-        NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
+        NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
         NSString *source = SSJDefaultSource();
-        int iversion = lastSyncVersion;
-        
-        NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, @(timestamp), source, @(iversion), kSignKey] ssj_md5HexDigest];
+        NSString *iversion = [NSString stringWithFormat:@"%d", lastSyncVersion];
+        NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, timestamp, source, iversion, kSignKey] ssj_md5HexDigest];
         
         NSDictionary *parameters = @{@"cuserId":userId,
                                      @"imei":imei,
-                                     @"timestamp":@(timestamp),
+                                     @"timestamp":timestamp,
                                      @"source":source,
-                                     @"iversion":@(iversion),
+                                     @"iversion":iversion,
                                      @"md5Code":zipData.md5Hash,
                                      @"sign":signStr};
-//        [mutableHeaders setValue:[NSString stringWithFormat:@"form-data; name=\"zip\"; filename=\"%@\"", kSyncZipFileName] forKey:@"Content-Disposition"];
-//        [mutableHeaders setValue:@"application/zip" forKey:@"Content-Type"];
         
-//        [formData appendPartWithHeaders:mutableHeaders body:zipData];
+        [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [request setValue:obj forHTTPHeaderField:key];
+        }];
         
-        AFHTTPSessionManager *session = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:SSJBaseURLString]];
-        self.task = [session POST:@"/sync/syncdata.go" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            
-            [formData appendPartWithFileData:zipData name:@"zip" fileName:kSyncZipFileName mimeType:@"application/zip"];
-            
-        } success:^(NSURLSessionDataTask *task, id responseObject) {
+        if (serializationError) {
+            failure(serializationError);
+            return;
+        }
+        
+        //  开始上传
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        self.task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
             
             //  因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
             dispatch_async(self.syncQueue, ^{
+                
+                if (error) {
+                    failure(error);
+                    return;
+                }
+                
                 //  上传成功后，将数据解压，并解析json数据
                 if (![responseObject isKindOfClass:[NSData class]]) {
                     if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -177,9 +193,9 @@ static NSString *const kSignKey = @"accountbook";
                         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                         failure(error);
                     } else {
+                        SSJPRINT(@">>>SSJ warning:responseObject is not NSData or NSDictionary type");
                         failure(nil);
                     }
-                    SSJPRINT(@">>>SSJ warning:responseObject is not NSData type");
                     return;
                 }
                 
@@ -274,10 +290,9 @@ static NSString *const kSignKey = @"accountbook";
                 
                 success();
             });
-            
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            failure(error);
         }];
+        
+        [self.task resume];
     });
 }
 
