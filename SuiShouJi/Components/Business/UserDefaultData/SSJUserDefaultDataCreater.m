@@ -93,7 +93,7 @@
             int state = [billTypeResult intForColumn:@"istate"];
             NSString *date = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
             
-            BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ?)", SSJUSERID(), billId, @(state), date, SSJSyncVersion(), billId];
+            BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ?)", SSJUSERID(), billId, @(state), date, @(SSJSyncVersion()), billId];
             successfull = successfull && executeSuccessfull;
         }
         

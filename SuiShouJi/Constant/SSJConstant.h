@@ -23,6 +23,10 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
     SSJRegistAndForgetPasswordTypeForgetPassword    //  忘记密码
 };
 
+typedef NS_ENUM(NSInteger, SSJErrorCode) {
+    SSJErrorCodeUndefined = -1
+};
+
 //___________________________________________________________________
 
 extern const int64_t SSJDefaultSyncVersion;
