@@ -56,7 +56,7 @@
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
-    self.selectedMonth = _currentMonth ;
+    self.selectedMonth = _currentMonth;
     self.selectedDay = _currentDay;
     self.items = [[NSMutableArray alloc]init];
     [self.items removeAllObjects];

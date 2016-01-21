@@ -36,7 +36,7 @@
 @property (nonatomic,strong) UIButton *datePickerButton;
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 @property (nonatomic,strong) UIButton *fundingTypeButton;
-@property (nonatomic,strong) UIBarButtonItem *rightbutton;
+@property (nonatomic,strong) UIView *rightbuttonView;
 
 
 @property (nonatomic) long currentYear;
@@ -75,6 +75,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
     _numkeyHavePressed = NO;
     [self getCurrentDate];
     if (self.item == nil) {
@@ -113,8 +115,7 @@
 //    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.categoryListView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewType) name:@"addNewTypeNotification" object:nil];
-    self.navigationItem.rightBarButtonItem = self.rightbutton;
-    _intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+     _intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
     _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
 }
 
@@ -442,11 +443,15 @@
     return _FundingTypeSelectView;
 }
 
--(UIBarButtonItem *)rightbutton{
-    if (!_rightbutton) {
-        _rightbutton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStyleBordered target:self action:@selector(comfirmButtonClick:)];
+-(UIView *)rightbuttonView{
+    if (!_rightbuttonView) {
+        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+        UIButton *comfirmButton = [[UIButton alloc]init];
+        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
+        [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [_rightbuttonView addSubview:comfirmButton];
     }
-    return _rightbutton;
+    return _rightbuttonView;
 }
 #pragma mark - private
 -(void)settitleSegment{
