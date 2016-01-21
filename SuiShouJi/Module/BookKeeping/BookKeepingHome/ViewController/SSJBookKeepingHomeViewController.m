@@ -146,7 +146,7 @@
 #pragma mark - Getter
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
-        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
+        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
         buttonView.currentDay = [NSString stringWithFormat:@"%ld",_currentDay];
         [buttonView.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];
