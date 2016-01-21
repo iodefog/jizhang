@@ -41,6 +41,15 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     [self setRootViewController];
     
+//    FMDatabase *db = [[FMDatabase alloc] initWithPath:SSJSQLitePath()];
+//    [db open];
+//    FMResultSet *lastSyncResultSet = [db executeQuery:@"select max(VERSION) from BK_SYNC where TYPE = 0 and CUSERID = ?", SSJUSERID()];
+//    
+//    if (lastSyncResultSet) {
+//        [lastSyncResultSet next];
+//        [lastSyncResultSet longLongIntForColumnIndex:0];
+//    }
+    
     return YES;
 }
 

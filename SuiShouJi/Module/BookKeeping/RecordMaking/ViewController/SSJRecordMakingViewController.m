@@ -567,7 +567,7 @@
             }
         }
     }else{
-        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,[NSNumber numberWithLong:SSJSyncVersion()],self.item.chargeID];
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.item.chargeID];
         if (self.titleSegment.selectedSegmentIndex == 0) {
             [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
             if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ?",selectDate]){

@@ -10,8 +10,10 @@
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
+#import "SSJSyncTable.h"
 #import "SSJFundAccountTable.h"
 #import "SSJDailySumChargeTable.h"
+
 #import "SSJDatabaseQueue.h"
 #import "SSZipArchive.h"
 #import "AFNetworking.h"
@@ -59,8 +61,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
-        lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
-        
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
             [self syncDataWithSuccess:success failure:failure];
@@ -72,7 +72,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
 }
 
+//- (void)getSyncDataWithSuccess:(void (^)(NSData *data))success failure:(void (^)(NSError *error))failure {
+//    
+//}
+//
+//- (void)uploadDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+//    
+//}
+
 - (void)syncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    __block int64_t lastSyncVersion;
     __block int64_t currentSyncVersion;
     
     __block NSArray *userChargeRecords = nil;
@@ -83,17 +92,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
         //  获取上次同步成功的版本号
-        [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
+        lastSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
         if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
-            lastSyncVersion = SSJDefaultSyncVersion;
+            return;
         }
         
         //  设置当前同步的版本号
         currentSyncVersion = lastSyncVersion + 1;
         
         //  把当前同步的版本号插入到BK_SYNC表中
-        if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(currentSyncVersion), SSJUSERID()]) {
-            SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+        if (![SSJSyncTable insertUnderwaySyncVersion:currentSyncVersion inDatabase:db]) {
             databaseSuccess = NO;
             return;
         }
@@ -101,9 +109,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJUpdateSyncVersion(currentSyncVersion + 1);
         
         //  查询需要同步的表中 版本号（IVERSION）大于上次同步成功版本号（lastSyncVersion）的记录，
-        userBillRecords = [SSJUserBillSyncTable queryRecordsForSyncInDatabase:db];
-        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsForSyncInDatabase:db];
-        userChargeRecords = [SSJUserChargeSyncTable queryRecordsForSyncInDatabase:db];
+        userBillRecords = [SSJUserBillSyncTable queryRecordsNeedToSyncInDatabase:db];
+        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsNeedToSyncInDatabase:db];
+        userChargeRecords = [SSJUserChargeSyncTable queryRecordsNeedToSyncInDatabase:db];
     }];
     
     if (!databaseSuccess) {
@@ -244,7 +252,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
                 NSLog(@"1");
                 if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"BK_USER_BILL"] inDatabase:db]
-                    || ![SSJUserBillSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
+                    || ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:syncSuccessVersion inDatabase:db]) {
                     *rollback = YES;
                     shouldGoNext = NO;
                 }
@@ -258,7 +266,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
                 NSLog(@"2");
                 if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db]
-                    || ![SSJFundInfoSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
+                    || ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:syncSuccessVersion inDatabase:db]) {
                     *rollback = YES;
                     shouldGoNext = NO;
                 }
@@ -272,7 +280,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
                 NSLog(@"3");
                 if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db]
-                    || ![SSJUserChargeSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
+                    || ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:syncSuccessVersion inDatabase:db]) {
                     *rollback = YES;
                     shouldGoNext = NO;
                     return;
@@ -294,9 +302,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             //  所有数据合并、更新成功后，插入一个新的记录到BK_SYNC中
             if (shouldGoNext) {
                 [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-                    if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(syncSuccessVersion), SSJUSERID()]) {
-                        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+                    if (![SSJSyncTable insertSuccessSyncVersion:syncSuccessVersion inDatabase:db]) {
                         failure(nil);
+                        return;
                     }
                 }];
             }
