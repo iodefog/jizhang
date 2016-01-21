@@ -341,6 +341,7 @@
 		BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */; };
 		BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */; };
 		BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */; };
+		BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */; };
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
@@ -840,6 +841,8 @@
 		BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionViewCell.m; sourceTree = "<group>"; };
 		BDDC5B911C291ADF00FC2887 /* SSJDateSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDateSelectedView.h; sourceTree = "<group>"; };
 		BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDateSelectedView.m; sourceTree = "<group>"; };
+		BDEA872E1C509E80002681BD /* SSJSmallCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSmallCalendarView.h; sourceTree = "<group>"; };
+		BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSmallCalendarView.m; sourceTree = "<group>"; };
 		BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarButton.h; sourceTree = "<group>"; };
 		BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarButton.m; sourceTree = "<group>"; };
 		BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewControllerViewController.h; sourceTree = "<group>"; };
@@ -1765,6 +1768,8 @@
 				9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */,
 				9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */,
 				9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */,
+				BDEA872E1C509E80002681BD /* SSJSmallCalendarView.h */,
+				BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2734,6 +2739,7 @@
 				BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */,
 				7D2B242D1C439854009A74A8 /* SSJModifyFundingViewController.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
+				BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */,
 				7D4EF8911C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,

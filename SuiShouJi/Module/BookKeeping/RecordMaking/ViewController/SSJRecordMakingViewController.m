@@ -17,6 +17,7 @@
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
+#import "SSJSmallCalendarView.h"
 
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
@@ -37,7 +38,7 @@
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 @property (nonatomic,strong) UIButton *fundingTypeButton;
 @property (nonatomic,strong) UIView *rightbuttonView;
-
+@property (nonatomic,strong) SSJSmallCalendarView *calendarView;
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -376,23 +377,25 @@
         _inputAccessoryView.backgroundColor = [UIColor whiteColor];
         [_inputAccessoryView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e2e2e2"]];
         [_inputAccessoryView ssj_setBorderStyle:SSJBorderStyleTop];
-        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width / 2, 50)];
+        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 50)];
         [_fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
+        _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_fundingTypeButton setImage:[UIImage imageNamed:_selectItem.fundingIcon] forState:UIControlStateNormal];
         [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        _fundingTypeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
-        _fundingTypeButton.layer.borderWidth = 1.0f / 2;
         [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:_fundingTypeButton];
-        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2, 0, self.view.width / 2, 50)];
-        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",self.selectedMonth,self.selectedDay] forState:UIControlStateNormal];
+        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 52, 50)];
+        _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
         [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        self.datePickerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
-        self.datePickerButton.layer.borderWidth = 1.0f / 2;
         [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:self.datePickerButton];
-
+        self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
+        self.calendarView.frame = CGRectMake(self.view.width - 32, 0, 22, 22);
+        self.calendarView.centerY = _inputAccessoryView.height / 2;
+        [_inputAccessoryView addSubview:self.calendarView];
     }
     return _inputAccessoryView;
 }
@@ -436,6 +439,7 @@
         }
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+            [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
             _selectItem = fundingItem;
             [weakSelf.FundingTypeSelectView removeFromSuperview];
         };
@@ -449,10 +453,19 @@
         UIButton *comfirmButton = [[UIButton alloc]init];
         comfirmButton.frame = CGRectMake(0, 0, 44, 44);
         [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_rightbuttonView addSubview:comfirmButton];
     }
     return _rightbuttonView;
 }
+
+-(SSJSmallCalendarView *)calendarView{
+    if (!_calendarView) {
+        _calendarView = [[SSJSmallCalendarView alloc]init];
+    }
+    return _calendarView;
+}
+
 #pragma mark - private
 -(void)settitleSegment{
     _titleSegment = [[SSJSegmentedControl alloc]initWithItems:@[@"支出",@"收入"]];
