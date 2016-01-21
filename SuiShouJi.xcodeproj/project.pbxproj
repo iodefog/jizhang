@@ -342,6 +342,8 @@
 		BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */; };
 		BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */; };
 		BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */; };
+		BDEA87321C50C415002681BD /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDEA87311C50C415002681BD /* delete@2x.png */; };
+		BDEA87361C50D0D7002681BD /* delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDEA87351C50D0D7002681BD /* delete@3x.png */; };
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
@@ -843,6 +845,8 @@
 		BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDateSelectedView.m; sourceTree = "<group>"; };
 		BDEA872E1C509E80002681BD /* SSJSmallCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSmallCalendarView.h; sourceTree = "<group>"; };
 		BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSmallCalendarView.m; sourceTree = "<group>"; };
+		BDEA87311C50C415002681BD /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete@2x.png"; sourceTree = "<group>"; };
+		BDEA87351C50D0D7002681BD /* delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete@3x.png"; sourceTree = "<group>"; };
 		BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarButton.h; sourceTree = "<group>"; };
 		BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarButton.m; sourceTree = "<group>"; };
 		BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewControllerViewController.h; sourceTree = "<group>"; };
@@ -1112,6 +1116,8 @@
 				BD976FAF1C4F1AC200B0E26D /* add@3x.png */,
 				7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */,
 				7DD7D5D91C4C8E6A00ACE71A /* back@3x.png */,
+				BDEA87311C50C415002681BD /* delete@2x.png */,
+				BDEA87351C50D0D7002681BD /* delete@3x.png */,
 				7DD7D5DA1C4C8E6A00ACE71A /* BillTypeImage */,
 				7DD7D6451C4C8E6A00ACE71A /* calender@2x.png */,
 				7DD7D6461C4C8E6A00ACE71A /* calender@3x.png */,
@@ -2478,6 +2484,7 @@
 				7DD7D6BE1C4C8E6A00ACE71A /* bt_meirong@2x.png in Resources */,
 				7DD7D6C51C4C8E6A00ACE71A /* bt_pignzhangshouru@3x.png in Resources */,
 				7DD7D6F01C4C8E6A00ACE71A /* calender@2x.png in Resources */,
+				BDEA87361C50D0D7002681BD /* delete@3x.png in Resources */,
 				7DD7D6B01C4C8E6A00ACE71A /* bt_interest@2x.png in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				7DD7D6A81C4C8E6A00ACE71A /* bt_gift@2x.png in Resources */,
@@ -2532,6 +2539,7 @@
 				7DD7D6E71C4C8E6A00ACE71A /* bt_yingye@3x.png in Resources */,
 				7DD7D6D11C4C8E6A00ACE71A /* bt_shebao@3x.png in Resources */,
 				7DD7D6AA1C4C8E6A00ACE71A /* bt_gongjijin@2x.png in Resources */,
+				BDEA87321C50C415002681BD /* delete@2x.png in Resources */,
 				7DD7D6D41C4C8E6A00ACE71A /* bt_shouzhai@2x.png in Resources */,
 				7DD7D6D01C4C8E6A00ACE71A /* bt_shebao@2x.png in Resources */,
 				7DD7D6FF1C4C8E6A00ACE71A /* founds_zhuanru@3x.png in Resources */,

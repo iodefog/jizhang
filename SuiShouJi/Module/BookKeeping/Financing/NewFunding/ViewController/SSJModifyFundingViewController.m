@@ -17,6 +17,7 @@
 @interface SSJModifyFundingViewController ()
 @property (nonatomic,strong) UIView *footerView;
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
+@property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @end
 
 @implementation SSJModifyFundingViewController{
@@ -44,6 +45,7 @@
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
     [self.view addSubview:self.tableView];
+    self.navigationItem.rightBarButtonItem = self.rightBarButton;
     // Do any additional setup after loading the view.
 }
 
@@ -191,6 +193,14 @@
     return _tableView;
 }
 
+-(UIBarButtonItem*)rightBarButton{
+    if (!_rightBarButton) {
+        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
+        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _rightBarButton;
+}
+
 #pragma mark - Private
 -(void)saveButtonClicked:(id)sender{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
@@ -232,6 +242,17 @@
 
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];
+}
+
+-(void)rightBarButtonClicked:(id)sender{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 WHERE CFUNDID = ? AND CUSERID = ?",self.item.fundingID,SSJUSERID()];
+    [db class];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
