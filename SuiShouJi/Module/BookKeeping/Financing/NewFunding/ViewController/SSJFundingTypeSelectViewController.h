@@ -14,4 +14,6 @@ typedef void (^typeSelectedBlock)(NSString *selectParent);
 
 @property(nonatomic,copy) typeSelectedBlock typeSelectedBlock;
 
+@property (nonatomic,strong) NSString *selectFundID;
+
 @end

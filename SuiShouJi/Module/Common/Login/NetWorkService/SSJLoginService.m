@@ -35,7 +35,7 @@
     [dict setObject:strSignType forKey:@"signType"];
     [dict setObject:encryptPassword forKey:@"pwd"];
     [dict setObject:strmd5Sign forKey:@"signMsg"];
-    [dict setObject:SSJUSERID() forKey:@"userid"];
+    [dict setObject:SSJUSERID() forKey:@"cuserid"];
     [self request:SSJURLWithAPI(@"/user/login.go") params:dict];
 }
 

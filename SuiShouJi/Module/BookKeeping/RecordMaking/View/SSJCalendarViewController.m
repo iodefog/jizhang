@@ -13,6 +13,7 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJFundingDetailDateHeader.h"
+#import "SSJCalenderDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -45,16 +46,18 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
-    self.selectedMonth = _currentMonth ;
+    self.selectedMonth = _currentMonth;
     self.selectedDay = _currentDay;
     self.items = [[NSMutableArray alloc]init];
     [self.items removeAllObjects];
@@ -106,6 +109,15 @@
     return 44;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SSJBillingChargeCell *cell = (SSJBillingChargeCell*)[tableView cellForRowAtIndexPath:indexPath];
+    SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
+    SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
+    CalenderDetailVC.item = item;
+    [self.navigationController pushViewController:CalenderDetailVC animated:YES];
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
@@ -140,6 +152,7 @@
     return cell;
 }
 
+
 #pragma mark - Getter
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
@@ -171,14 +184,14 @@
         _dateLabel.font = [UIFont systemFontOfSize:18];
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
-        _plusButton.frame = CGRectMake(0, 0, 30, 30);
-        [_plusButton setImage:[UIImage imageNamed:@"right"] forState:UIControlStateNormal];
+        _plusButton.frame = CGRectMake(0, 0, 20, 28);
+        [_plusButton setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _plusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
-        _minusButton.frame = CGRectMake(0, 0, 30, 30);
-        [_minusButton setImage:[UIImage imageNamed:@"left"] forState:UIControlStateNormal];
+        _minusButton.frame = CGRectMake(0, 0, 20, 28);
+        [_minusButton setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -235,7 +248,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.* FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND OPERATORTYPE <> 2 AND A.IBILLID <> '2' AND A.IFUNDID = C.CFUNDID",SSJUSERID(),selectDate];
+    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFID = C.CFUNDID",SSJUSERID(),selectDate];
     while ([rs next]) {
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.imageName = [rs stringForColumn:@"CCOIN"];
@@ -261,6 +274,11 @@
     double balance = [db doubleForQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
     return balance;
 }
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
 
 /*
 #pragma mark - Navigation

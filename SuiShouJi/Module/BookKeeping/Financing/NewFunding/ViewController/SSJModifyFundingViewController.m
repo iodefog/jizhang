@@ -17,6 +17,7 @@
 @interface SSJModifyFundingViewController ()
 @property (nonatomic,strong) UIView *footerView;
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
+@property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @end
 
 @implementation SSJModifyFundingViewController{
@@ -38,11 +39,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.title = self.item.fundingName;
-    _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"编辑账户卡片"];
+    _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择账户颜色"];
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
     [self.view addSubview:self.tableView];
+    self.navigationItem.rightBarButtonItem = self.rightBarButton;
     // Do any additional setup after loading the view.
 }
 
@@ -86,6 +89,7 @@
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
+        fundingTypeVC.selectFundID = _selectParent;
         __weak typeof(self) weakSelf = self;
         fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent){
             _selectParent = selectParent;
@@ -124,6 +128,7 @@
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = self.item.fundingName;
             _nameTextField = NewFundingCell.cellDetail;
+            _nameTextField.delegate = self;
         }
             break;
         case 1:{
@@ -131,12 +136,15 @@
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",self.item.fundingAmount];
             NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeDecimalPad;
+            _amountTextField.delegate = self;
+
         }
             break;
         case 2:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = self.item.fundingMemo;
             _memoTextField = NewFundingCell.cellDetail;
+            _memoTextField.delegate = self;
         }
             break;
         case 3:{
@@ -185,6 +193,14 @@
     return _tableView;
 }
 
+-(UIBarButtonItem*)rightBarButton{
+    if (!_rightBarButton) {
+        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
+        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _rightBarButton;
+}
+
 #pragma mark - Private
 -(void)saveButtonClicked:(id)sender{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
@@ -200,9 +216,9 @@
         [alert show];
     }
     if ([_amountTextField.text doubleValue] < self.item.fundingAmount) {
-        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSNumber numberWithDouble:self.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:2],self.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr];
+        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",self.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:2],self.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr];
     }else if ([_amountTextField.text doubleValue] > self.item.fundingAmount) {
-        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSNumber numberWithDouble:[_amountTextField.text doubleValue] - self.item.fundingAmount] ,@"1",self.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr];
+        [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue] - self.item.fundingAmount],@"1",self.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr];
     }
     [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? AND CUSERID = ? ",[NSNumber numberWithDouble:[_amountTextField.text doubleValue]] , self.item.fundingID,SSJUSERID()];
     [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) , IVERSION = ? , CWRITEDATE = ? , OPERATORTYPE = ? WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , @(SSJSyncVersion()), [[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] , [NSNumber numberWithInt:1] ,self.item.fundingID,SSJUSERID()];
@@ -223,6 +239,29 @@
     [db close];
     return fundingName;
 }
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
+-(void)rightBarButtonClicked:(id)sender{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 WHERE CFUNDID = ? AND CUSERID = ?",self.item.fundingID,SSJUSERID()];
+    [db class];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField == _nameTextField || textField == _memoTextField) {
+        
+    }
+    return YES;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

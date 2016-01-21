@@ -36,7 +36,7 @@
 -(UILabel *)cellTitle{
     if (!_cellTitle) {
         _cellTitle = [[UILabel alloc]init];
-        _cellTitle.textColor = [UIColor ssj_colorWithHex:@"363636"];
+        _cellTitle.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _cellTitle.font = [UIFont systemFontOfSize:18];
     }
     return _cellTitle;
@@ -46,7 +46,7 @@
     if (!_cellDetail) {
         _cellDetail = [[UITextField alloc]init];
         _cellDetail.textAlignment = NSTextAlignmentRight;
-        _cellDetail.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _cellDetail.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _cellDetail.font = [UIFont systemFontOfSize:15];
         _cellDetail.delegate = self;
     }

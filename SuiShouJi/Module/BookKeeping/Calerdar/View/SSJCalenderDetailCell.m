@@ -22,8 +22,11 @@
 }
 
 -(void)layoutSubviews{
+    [super layoutSubviews];
     self.cellLabel.left = 10;
+    self.cellLabel.centerY = self.height / 2;
     self.detailLabel.right = self.width - 10;
+    self.detailLabel.centerY = self.height / 2;
 }
 
 -(UILabel *)cellLabel{
@@ -43,7 +46,7 @@
         _detailLabel.textAlignment = NSTextAlignmentRight;
         _detailLabel.font = [UIFont systemFontOfSize:15];
     }
-    return _cellLabel;
+    return _detailLabel ;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

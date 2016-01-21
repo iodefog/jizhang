@@ -31,6 +31,8 @@
 
 - (void)awakeFromNib{
     [self.bookKeepingButton setBackgroundColor:[UIColor whiteColor]];
+    [self.bookKeepingButton setImage:[UIImage imageNamed:@"recording"] forState:UIControlStateNormal];
+    [self.bookKeepingButton setImage:[UIImage imageNamed:@"recording"] forState:UIControlStateHighlighted];
     self.bookKeepingButton.layer.cornerRadius = 49.0f;
     [self.backgroudview setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"home_bg"]]];
 }

@@ -10,7 +10,7 @@
 #import "SSJFinancingHomeitem.h"
 #import "TPKeyboardAvoidingTableView.h"
 
-@interface SSJModifyFundingViewController : SSJBaseViewController<UITableViewDelegate,UITableViewDataSource>
+@interface SSJModifyFundingViewController : SSJBaseViewController<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @property (nonatomic,strong) SSJFinancingHomeitem *item;
 

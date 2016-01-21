@@ -10,6 +10,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderDetailCell.h"
+#import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
 
@@ -65,21 +66,35 @@
         return cell;
     }else if (indexPath.row == 1){
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.cellLabel.text = @"时间";
-        [detailcell.cellLabel sizeToFit];
         detailcell.detailLabel.text = self.item.billDate;
         [detailcell.detailLabel sizeToFit];
+        detailcell.cellLabel.text = @"时间";
+        [detailcell.cellLabel sizeToFit];
+        return detailcell;
+    }else{
+        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
+        detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.parent];
+        [detailcell.detailLabel sizeToFit];
+        detailcell.cellLabel.text = @"资金类型";
+        [detailcell.cellLabel sizeToFit];
         return detailcell;
     }
-    SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-    detailcell.cellLabel.text = @"资金类型";
-    [detailcell.cellLabel sizeToFit];
-    detailcell.detailLabel.text = self.item.parent;
-    [detailcell.detailLabel sizeToFit];
-    return detailcell;
 }
 
-
+-(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{
+    NSString *fundingName;
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return nil;
+    }
+    FMResultSet *rs = [db executeQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",fundingID];
+    while ([rs next]) {
+        fundingName = [rs stringForColumn:@"CACCTNAME"];
+    }
+    [db close];
+    return fundingName;
+}
 
 
 - (void)didReceiveMemoryWarning {
