@@ -25,6 +25,7 @@
 		7D4EF88E1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF88D1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m */; };
 		7D4EF8911C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8901C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m */; };
 		7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
+		7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB11C50B7DE00E202A2 /* SSJUserUtil.m */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
 		7D6AAB561C310D330007C0A3 /* SSJReportFormsPercentCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB551C310D330007C0A3 /* SSJReportFormsPercentCircle.m */; };
 		7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */; };
@@ -41,6 +42,7 @@
 		7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */; };
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
 		7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */; };
+		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */; };
 		7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */; };
 		7DD7D6851C4C8E6A00ACE71A /* back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D91C4C8E6A00ACE71A /* back@3x.png */; };
@@ -399,6 +401,8 @@
 		7D4EF88F1C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircleAdditionViewItem.h; sourceTree = "<group>"; };
 		7D4EF8901C4673B8003C4B20 /* SSJReportFormsPercentCircleAdditionViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPercentCircleAdditionViewItem.m; sourceTree = "<group>"; };
 		7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ProjectSettings.plist; sourceTree = "<group>"; };
+		7D581EB01C50B7DE00E202A2 /* SSJUserUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserUtil.h; sourceTree = "<group>"; };
+		7D581EB11C50B7DE00E202A2 /* SSJUserUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserUtil.m; sourceTree = "<group>"; };
 		7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchYearControl.h; sourceTree = "<group>"; };
 		7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchYearControl.m; sourceTree = "<group>"; };
 		7D6AAB541C310D330007C0A3 /* SSJReportFormsPercentCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircle.h; sourceTree = "<group>"; };
@@ -426,6 +430,8 @@
 		7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@2x.png"; sourceTree = "<group>"; };
+		7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZipZap.a; path = "ZipZap/build/Debug-iphoneos/libZipZap.a"; sourceTree = "<group>"; };
+		7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodSelectionView.h; sourceTree = "<group>"; };
 		7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodSelectionView.m; sourceTree = "<group>"; };
 		7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
@@ -855,6 +861,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */,
 				BD0E43F71C21365100F9179D /* Security.framework in Frameworks */,
 				BD0432ED1C1A77BB0051E7AB /* libssl.a in Frameworks */,
 				B10901D63166F7C1976D8083 /* libPods.a in Frameworks */,
@@ -883,6 +890,8 @@
 		72D2CCC3D3120C3CD45EDEB9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */,
+				7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */,
 				BD0E43F61C21365100F9179D /* Security.framework */,
 				DA9C2C669BC49A563D49451D /* libPods.a */,
 			);
@@ -1134,8 +1143,6 @@
 				BD976FA91C4E4A4600B0E26D /* home_jiantou.png */,
 				BD976FA71C4E49D900B0E26D /* home_bear.png */,
 				BD976FB51C4F2D0000B0E26D /* home_bg.png */,
-				7DD7D66C1C4C8E6A00ACE71A /* left@2x.png */,
-				7DD7D6781C4C8E6A00ACE71A /* right@2x.png */,
 				BD976FBA1C4F4CA200B0E26D /* circle@2x.png */,
 				BD976FBF1C4F57F200B0E26D /* circle@3x.png */,
 				BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */,
@@ -1485,6 +1492,8 @@
 				BD04333D1C1A82730051E7AB /* SSJDebugUtil.m */,
 				BD04333E1C1A82730051E7AB /* SSJUtil.h */,
 				BD04333F1C1A82730051E7AB /* SSJUtil.m */,
+				7D581EB01C50B7DE00E202A2 /* SSJUserUtil.h */,
+				7D581EB11C50B7DE00E202A2 /* SSJUserUtil.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -2618,6 +2627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */,
+				7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */,
 				BD0432F31C1A77BB0051E7AB /* SRSlimeView.m in Sources */,
 				7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */,
 				7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */,
@@ -2909,6 +2919,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.caiyi.aiduobao;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2935,6 +2946,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
+					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.caiyi.aiduobao;
 				PRODUCT_NAME = "$(TARGET_NAME)";

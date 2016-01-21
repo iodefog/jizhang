@@ -8,7 +8,7 @@
 
 #import "SSJSyncTable.h"
 
-int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
+int64_t lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
 
 @implementation SSJSyncTable
 
@@ -24,7 +24,7 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     return nil;
 }
 
-+ (int)lastSuccessSyncVersionInDatabase:(FMDatabase *)db {
++ (int64_t)lastSuccessSyncVersionInDatabase:(FMDatabase *)db {
     if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
         FMResultSet *lastSyncResultSet = [db executeQuery:@"select VERSION from BK_SYNC where TYPE = 1 and CUSERID =? limit 1 offset (select count(*) from BK_SYNC where TYPE = 1 and CUSERID =?)", SSJUSERID(), SSJUSERID()];
         
@@ -40,7 +40,7 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
 }
 
 + (NSArray *)queryRecordsForSyncInDatabase:(FMDatabase *)db {
-    int lastSyncVersion = [self lastSuccessSyncVersionInDatabase:db];
+    int64_t lastSyncVersion = [self lastSuccessSyncVersionInDatabase:db];
     if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
         return nil;
     }
@@ -72,13 +72,18 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     return nil;
 }
 
-+ (BOOL)updateSyncVersionToServerSyncVersion:(int)version inDatabase:(FMDatabase *)db {
-    int lastSyncVersion = [self lastSuccessSyncVersionInDatabase:db];
++ (BOOL)updateSyncVersionToServerSyncVersion:(int64_t)version inDatabase:(FMDatabase *)db {
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    int64_t lastSyncVersion = [self lastSuccessSyncVersionInDatabase:db];
     if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
         return NO;
     }
     
-    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %d where IVERSION > %d and CUSERID = '%@'", [self tableName], version, lastSyncVersion + 1, SSJUSERID()];
+    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, lastSyncVersion + 1, SSJUSERID()];
     NSString *additionalCondition = [self updateSyncVersionAdditionalCondition];
     if (additionalCondition.length) {
         [update appendFormat:@" and %@", additionalCondition];
@@ -120,7 +125,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         return success;
     }
     
-    SSJPRINT(@">>>SSJ warning:array records has no element\n records:%@", records);
     return YES;
 }
 

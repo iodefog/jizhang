@@ -9,10 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
 
-//  无效的版本号，int类型
-#define SSJ_INVALID_SYNC_VERSION INT_MIN
 
-extern int lastSyncVersion;
+
+extern int64_t lastSyncVersion;
 
 @interface SSJSyncTable : NSObject
 
@@ -43,7 +42,7 @@ extern int lastSyncVersion;
  *  @param db FMDatabase实例
  *  @return 上次同步成功的版本号
  */
-+ (int)lastSuccessSyncVersionInDatabase:(FMDatabase *)db;
++ (int64_t)lastSuccessSyncVersionInDatabase:(FMDatabase *)db;
 
 /**
  *  查询需要同步的记录，即属于当前用户并且版本号大于上次同步成功版本号的记录
@@ -67,7 +66,7 @@ extern int lastSyncVersion;
  *  @param db FMDatabase实例
  *  @return 是否更新成功
  */
-+ (BOOL)updateSyncVersionToServerSyncVersion:(int)version inDatabase:(FMDatabase *)db;
++ (BOOL)updateSyncVersionToServerSyncVersion:(int64_t)version inDatabase:(FMDatabase *)db;
 
 /**
  *  返回更新版本号需要的额外条件，根据需要子类可以覆写

@@ -41,33 +41,6 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     [self setRootViewController];
     
-//    [[NSOperationQueue currentQueue] addOperationWithBlock:^{
-//        NSLog(@"1");
-//        NSLog(@"2");
-//        NSLog(@"3");
-//        NSLog(@"4");
-//        NSLog(@"5");
-//        NSLog(@"6");
-//        NSLog(@"7");
-//        NSLog(@"8");
-//        NSLog(@"9");
-//    }];
-    
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        
-//        for (int i = 0; i < 50; i ++) {
-//            NSLog(@"aaaaa%d", i);
-//        }
-//        
-//        for (int i = 0; i < 50; i ++) {
-//            NSLog(@"AAAAA%d", i);
-//        }
-//        
-//        NSLog(@"end");
-//    });
-    
-//    [SSZipArchive createZipFileAtPath:@"/Users/oldlang/Desktop/test.zip" withContentsOfDirectory:@"/Users/oldlang/Desktop/test/test.doc" keepParentDirectory:YES];
-    
     return YES;
 }
 
