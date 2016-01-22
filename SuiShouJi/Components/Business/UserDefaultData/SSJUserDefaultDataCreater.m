@@ -109,6 +109,8 @@
             successfull = successfull && executeSuccessfull;
         }
         
+        [billTypeResult close];
+        
         if (successfull) {
             success();
         } else {
