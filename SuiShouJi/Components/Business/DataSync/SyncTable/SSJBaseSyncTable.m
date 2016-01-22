@@ -35,9 +35,10 @@
     return nil;
 }
 
-+ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db {
++ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
+        *error = [db lastError];
         return nil;
     }
     
@@ -49,6 +50,7 @@
     
     FMResultSet *result = [db executeQuery:query];
     if (!result) {
+        *error = [db lastError];
         SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return nil;
     }
@@ -68,9 +70,10 @@
     return syncRecords;
 }
 
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db {
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
+        *error = [db lastError];
         SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }
@@ -88,16 +91,18 @@
     
     BOOL success = [db executeUpdate:update];
     if (!success) {
-        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+        *error = [db lastError];
+        SSJPRINT(@">>>SSJ warning:an error occured when update sync version of record that is modified during synchronization to the newest version\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
     }
     
     return success;
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db {
++ (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         
         if (![recordInfo isKindOfClass:[NSDictionary class]]) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
             SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", recordInfo);
             return NO;
         }
@@ -113,6 +118,7 @@
         
         BOOL success = [db executeUpdate:sql];
         if (!success) {
+            *error = [db lastError];
             SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         }
         return success;

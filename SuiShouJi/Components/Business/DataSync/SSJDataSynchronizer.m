@@ -109,7 +109,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     NSData *zipData = [self zipData:data error:&tError];
     
     if (tError) {
-        SSJPRINT(@">>>SSJ warning:an error occured when zip json data \n error:%@", tError);
+        SSJPRINT(@">>> SSJ warning:an error occured when zip json data \n error:%@", tError);
         failure(tError);
         return;
     }
@@ -131,8 +131,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                     NSString *desc = responseObject[@"desc"];
                     tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                     failure(tError);
+                    SSJPRINT(@">>> sync response data:%@", responseObject);
                 } else {
-                    SSJPRINT(@">>>SSJ warning:responseObject is not NSData or NSDictionary type");
+                    SSJPRINT(@">>> SSJ warning:responseObject is not NSData or NSDictionary type");
                     tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"responseObject is not NSData or NSDictionary type"}];
                     failure(tError);
                 }
@@ -144,7 +145,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             NSData *jsonData = [self unzipData:responseObject error:&tError];
             
             if (tError) {
-                SSJPRINT(@">>>SSJ warning:an error occured when unzip response data\n error:%@", tError);
+                SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
                 failure(tError);
                 return;
             }
@@ -177,20 +178,15 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
         //  查询需要同步的表中 版本号（IVERSION）大于上次同步成功版本号（lastSyncVersion）的记录，
-        userBillRecords = [SSJUserBillSyncTable queryRecordsNeedToSyncInDatabase:db];
-        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsNeedToSyncInDatabase:db];
-        userChargeRecords = [SSJUserChargeSyncTable queryRecordsNeedToSyncInDatabase:db];
-        
+        userBillRecords = [SSJUserBillSyncTable queryRecordsNeedToSyncInDatabase:db error:error];
+        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsNeedToSyncInDatabase:db error:error];
+        userChargeRecords = [SSJUserChargeSyncTable queryRecordsNeedToSyncInDatabase:db error:error];
         userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
     }];
     
     if (*error) {
         return nil;
     }
-    
-    NSArray *userRecords = @[@{@"cuserid":userId,
-                               @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                               @"source":SSJDefaultSource()}];
     
     NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
     if (userBillRecords.count) {
@@ -202,16 +198,20 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     if (userChargeRecords.count) {
         [jsonObject setObject:userChargeRecords forKey:@"bk_user_charge"];
     }
-    if (userRecords.count) {
-        [jsonObject setObject:userRecords forKey:@"bk_user"];
+    if (userId.length) {
+        [jsonObject setObject:@{@"cuserid":userId,
+                                @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                @"source":SSJDefaultSource()} forKey:@"bk_user"];
     }
+    
+    SSJPRINT(@">>> sync upload data:%@", jsonObject);
     
     //  将查询得到的结果放入字典中，转换成json数据
     NSData *syncData = [NSJSONSerialization dataWithJSONObject:jsonObject
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:error];
     if (*error) {
-        SSJPRINT(@">>>SSJ warning:an error occured when parse json data \n error:%@", *error);
+        SSJPRINT(@">>> SSJ warning:an error occured when parse json data \n error:%@", *error);
         return nil;
     }
     
@@ -269,14 +269,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     //  解析json数据
     NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:error];
     if (*error) {
-        SSJPRINT(@">>>SSJ warning:an error occured when parse json data\n error:%@", *error);
+        SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", *error);
         return NO;
     }
+    
+    SSJPRINT(@">>> sync response data:%@", tableInfo);
     
     NSInteger errorCode = [tableInfo[@"code"] integerValue];
     if (errorCode != 1) {
         *error = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
-        SSJPRINT(@">>>SSJ warning:server response an error:%@", *error);
+        SSJPRINT(@">>> SSJ warning:server response an error:%@", *error);
         return NO;
     }
     
@@ -286,15 +288,13 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"BK_USER_BILL"] inDatabase:db]) {
+        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"BK_USER_BILL"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
-            *error = [db lastError];
         }
         
-        if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
+        if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
             success = NO;
-            *error = [db lastError];
         }
     }];
     
@@ -303,15 +303,13 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db]) {
+        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db  error:error]) {
             *rollback = YES;
             success = NO;
-            *error = [db lastError];
         }
         
-        if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
+        if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
             success = NO;
-            *error = [db lastError];
         }
     }];
     
@@ -320,16 +318,14 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db]) {
+        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
-            *error = [db lastError];
             return;
         }
         
-        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
+        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
             success = NO;
-            *error = [db lastError];
         }
         
         //  根据流水表计算资金帐户余额表和每日流水统计表

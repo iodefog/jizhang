@@ -71,7 +71,7 @@
 }
 
 + (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    if (SSJUSERID().length) {
+    if (!SSJUSERID().length) {
         SSJPRINT(@">>>SSJ warning:invalid user id");
         return;
     }

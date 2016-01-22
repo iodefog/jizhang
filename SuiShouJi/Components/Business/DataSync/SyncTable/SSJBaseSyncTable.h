@@ -72,7 +72,7 @@
  *  @param db FMDatabase实例
  *  @return 需要同步的记录
  */
-+ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db;
++ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  *  更新表中版本号大于当前同步版本号的记录的版本号
@@ -82,7 +82,7 @@
  *  @param db FMDatabase实例
  *  @return 是否更新成功
  */
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db;
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  *  合并记录到相应的表中
@@ -90,7 +90,7 @@
  *  @param db FMDatabase实例
  *  @return 是否合并成功
  */
-+ (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db;
++ (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 
 ///----------------------------------

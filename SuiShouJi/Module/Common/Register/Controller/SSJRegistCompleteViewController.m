@@ -94,25 +94,29 @@
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    [super serverDidFinished:service];
+//    [super serverDidFinished:service];
     
     if ([self.registCompleteService.returnCode isEqualToString:@"1"]) {
         
         //  更新当前用户的注册状态，只有成功才按照注册成功处理，反之败则按照注册失败处理
         [SSJUserTableManager registerUserIdWithSuccess:^{
-            [self.passwordField resignFirstResponder];
-            [self showSuccessMessage];
-            
-            NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
-            if (resultInfo) {
-                SSJSaveAppId(resultInfo[@"appId"] ?: @"");
-                SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
-                SSJSaveUserLogined(YES);
-            }
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
+                if (resultInfo) {
+                    SSJSaveAppId(resultInfo[@"appId"] ?: @"");
+                    SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
+                    SSJSaveUserLogined(YES);
+                }
+                
+                [self.passwordField resignFirstResponder];
+                [self showSuccessMessage];
+            });
             
         } failure:^(NSError *error) {
-            [self.passwordField becomeFirstResponder];
-            [self showErrorMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.passwordField becomeFirstResponder];
+                [self showErrorMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
+            });
         }];
         
     } else {
