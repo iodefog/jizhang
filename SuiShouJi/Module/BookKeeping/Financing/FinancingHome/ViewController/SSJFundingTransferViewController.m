@@ -59,12 +59,12 @@
     self.transferIntext.leftTop = CGPointMake(0, 45);
     [self.transferIntext ssj_relayoutBorder];
     self.transferOuttext.size = CGSizeMake(self.view.width, 35);
-    self.transferOuttext.leftTop = CGPointMake(0, self.transferIntext.bottom + 45);
+    self.transferOuttext.leftTop = CGPointMake(0, self.transferIntext.bottom + 60);
     [self.transferOuttext ssj_relayoutBorder];
     _transferImage.size = CGSizeMake(14, 24);
     _transferImage.centerX = self.view.width / 2 - 14;
     _transferImage.centerY = self.view.height / 2;
-    _transferImage.top = self.transferIntext.bottom + 10;
+    _transferImage.top = self.transferIntext.bottom + 20;
     _transferLabel.left = _transferImage.right;
     _transferLabel.centerY = _transferImage.centerY;
 }
@@ -73,6 +73,7 @@
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked)];
+        _rightButton.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
     }
     return _rightButton;
 }
@@ -122,8 +123,9 @@
 
 -(UIView *)transferInButtonView{
     if (!_transferInButtonView) {
-        _transferInButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 20)];
-        _transferInButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 20)];
+        _transferInButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 30)];
+        _transferInButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 30)];
+        _transferInButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_transferInButton setImage:[UIImage imageNamed:@"founds_zhuanru"] forState:UIControlStateNormal];
         [_transferInButton setTitle:@"请选择转入账户" forState:UIControlStateNormal];
         _transferInButton.titleLabel.textColor = [UIColor blackColor];
@@ -137,8 +139,10 @@
 
 -(UIView *)transferOutButtonView{
     if (!_transferOutButtonView) {
-        _transferOutButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 20)];
-        _transferOutButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 20)];
+        _transferOutButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 30)];
+        _transferOutButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 30)];
+        _transferOutButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+
         [_transferOutButton setImage:[UIImage imageNamed:@"founds_zhuanchu"] forState:UIControlStateNormal];
         [_transferOutButton setTitle:@"请选择转出账户" forState:UIControlStateNormal];
         [_transferOutButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -156,6 +160,7 @@
         _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             [weakSelf.transferInButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+            [weakSelf.transferInButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
             _transferInItem = fundingItem;
             [weakSelf.transferInFundingTypeSelect removeFromSuperview];
         };
@@ -169,6 +174,7 @@
         _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+            [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
             _transferOutItem = fundingItem;
             [weakSelf.transferOutFundingTypeSelect removeFromSuperview];
         };

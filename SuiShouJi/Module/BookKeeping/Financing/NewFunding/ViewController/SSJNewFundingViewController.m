@@ -14,6 +14,9 @@
 
 #import "FMDB.h"
 
+#define NUM @"+-.0123456789"
+
+
 @interface SSJNewFundingViewController ()
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableview;
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
@@ -135,7 +138,29 @@
         default:
             break;
     }
-    return NewFundingCell;}
+    return NewFundingCell;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField == _nameTextField || textField == _memoTextField) {
+        if (string.length == 0) return YES;
+        
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 13) {
+            return NO;
+        }
+    }else if (textField == _amountTextField){
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        return [string isEqualToString:filtered];
+    }
+    return YES;
+}
+
+
 
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableview{
@@ -172,6 +197,12 @@
 }
 
 -(void)rightButtonClicked{
+    NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
+    NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
+    if (![numberPre evaluateWithObject:_amountTextField.text]) {
+        [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
+        return;
+    }
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
