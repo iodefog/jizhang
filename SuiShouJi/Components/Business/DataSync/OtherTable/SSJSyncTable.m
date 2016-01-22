@@ -38,6 +38,7 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     }
     
     if ([result intForColumnIndex:0] == 0) {
+        [result close];
         [[self memoryCache] setObject:@(SSJDefaultSyncVersion) forKey:kSSJSuccessSyncVersionKey];
         return SSJDefaultSyncVersion;
     }
@@ -52,6 +53,8 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     [result next];
     int64_t version = [result longLongIntForColumnIndex:0];
     [[self memoryCache] setObject:@(version) forKey:kSSJSuccessSyncVersionKey];
+    
+    [result close];
     
     return version;
 }

@@ -74,14 +74,6 @@ BOOL SSJSetUserId(NSString *userId);
 NSString *SSJUSERID();
 
 /**
- *  更新userid的注册状态
- *
- *  @param userId 用户唯一编号
- *  @return (BOOL) 是否更新成功
- */
-BOOL SSJRegisterUserId(NSString *userId);
-
-/**
  *  获取当前同步记录版本号
  *
  *  @return (int64_t) 当前同步记录版本号
