@@ -408,7 +408,8 @@
             _selectedDay = day;
             _selectedMonth = month;
             _selectedYear = year;
-            [weakSelf.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月%ld日",weakSelf.selectedMonth,weakSelf.selectedDay] forState:UIControlStateNormal];
+            [weakSelf.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
+            weakSelf.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",weakSelf.selectedDay];
             for (int i = 0; i < [self.DateSelectedView.calendarView.calendar.visibleCells count]; i ++) {
                 if ([((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == day && ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES) {
                     ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;

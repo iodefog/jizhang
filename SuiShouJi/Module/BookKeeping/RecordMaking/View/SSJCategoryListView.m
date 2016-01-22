@@ -164,7 +164,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 20",[NSNumber numberWithBool:self.incomeOrExpence]] + 1;
+    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_USER_BILL WHERE ITYPE = ? AND ISTATE = 1 AND CUSERID = ? LIMIT 20",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()] + 1;
     if (_screenWidth == 320) {
         if (_screenHeight == 568) {
             if (count % 8 == 0) {

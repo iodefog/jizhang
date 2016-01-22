@@ -7,11 +7,15 @@
 //
 
 #import "SSJColorSelectCollectionViewCell.h"
+
+
 @interface SSJColorSelectCollectionViewCell()
 @property (nonatomic,strong) UIImageView *checkMarkImage;
 @end
 
 @implementation SSJColorSelectCollectionViewCell
+
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
