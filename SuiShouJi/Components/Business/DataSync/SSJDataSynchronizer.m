@@ -91,7 +91,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     //  查询要同步的数据
-    NSData *data = [self getSyncDataWithError:&tError];
+    NSData *data = [self getDataToSyncWithError:&tError];
     if (tError) {
         failure(tError);
         return;
@@ -147,6 +147,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 return;
             }
             
+            //  合并数据
             if ([self mergeJsonData:jsonData error:&tError]) {
                 success();
             } else {
@@ -157,7 +158,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 //  获取要上传的数据
-- (NSData *)getSyncDataWithError:(NSError * __autoreleasing *)error {
+- (NSData *)getDataToSyncWithError:(NSError * __autoreleasing *)error {
     __block NSArray *userChargeRecords = nil;
     __block NSArray *fundInfoRecords = nil;
     __block NSArray *userBillRecords = nil;
@@ -287,7 +288,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         }
         
         if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
-            *rollback = YES;
             success = NO;
             *error = [db lastError];
         }
@@ -305,7 +305,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         }
         
         if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
-            *rollback = YES;
             success = NO;
             *error = [db lastError];
         }
@@ -324,7 +323,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         }
         
         if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
-            *rollback = YES;
             success = NO;
             *error = [db lastError];
         }
@@ -344,10 +342,12 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  所有数据合并、更新成功后，插入一个新的记录到BK_SYNC中
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        if (![SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] inDatabase:db]) {
-            success = NO;
-        }
+        success = [SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] inDatabase:db];
     }];
+    
+    if (success) {
+        SSJUpdateSyncVersion([versinStr longLongValue] + 1);
+    }
     
     return success;
 }

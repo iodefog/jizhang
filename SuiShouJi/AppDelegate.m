@@ -16,9 +16,6 @@
 #import "MobClick.h"
 #import "FMDB.h"
 
-#warning test
-#import "SSZipArchive.h"
-
 @interface AppDelegate ()
 
 @end
@@ -36,19 +33,20 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     //  添加友盟统计
     [self umengTrack];
     
-    //  创建数据表
-    [self createTables];
+    //  初始化数据库
+    [self initializeDatabase];
     
+    //  设置根控制器
     [self setRootViewController];
     
-//    FMDatabase *db = [[FMDatabase alloc] initWithPath:SSJSQLitePath()];
+//    FMDatabase *db = [[FMDatabase alloc] initWithPath:@"/Users/oldlang/Desktop/testDb.db"];
 //    [db open];
-//    FMResultSet *lastSyncResultSet = [db executeQuery:@"select max(VERSION) from BK_SYNC where TYPE = 0 and CUSERID = ?", SSJUSERID()];
-//    
-//    if (lastSyncResultSet) {
-//        [lastSyncResultSet next];
-//        [lastSyncResultSet longLongIntForColumnIndex:0];
+//    FMResultSet *result = [db executeQuery:@"select count(*) from t1"];
+//    if (result && [result next]) {
+//        NSLog(@"%d", [result intForColumnIndex:0]);
 //    }
+//    [result close];
+    
     
     return YES;
 }
@@ -97,8 +95,8 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     self.window.rootViewController = tabBarVC;
 }
 
-- (void)createTables {
-    
+- (void)initializeDatabase {
+    NSLog(@"<<< 开始初始化数据库 >>>");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *dbDocumentPath = SSJSQLitePath();
         
@@ -132,6 +130,8 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
         } failure:^(NSError *error) {
             
         }];
+        
+        NSLog(@"<<< 完成初始化数据库 >>>");
     });
 }
 

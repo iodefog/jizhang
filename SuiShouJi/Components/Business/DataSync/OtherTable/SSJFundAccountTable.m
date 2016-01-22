@@ -7,14 +7,12 @@
 //
 
 #import "SSJFundAccountTable.h"
-#import "SSJSyncTable.h"
 #import "FMDB.h"
 
 @implementation SSJFundAccountTable
 
 + (BOOL)updateBalanceInDatabase:(FMDatabase *)db {
-    int64_t lastSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
-    FMResultSet *result = [db executeQuery:@"select A.IFID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFID, B.ITYPE order by A.IFID", @(lastSyncVersion), SSJUSERID()];
+    __block FMResultSet *result = [db executeQuery:@"select A.IFID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFID, B.ITYPE order by A.IFID", SSJUSERID()];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -28,7 +26,7 @@
     
     while ([result next]) {
         int type = [result intForColumn:@"ITYPE"];
-        double money = [result doubleForColumn:@"IMONEY"];
+        double money = [result doubleForColumn:@"sum(A.IMONEY)"];
         NSString *fundId = [result stringForColumn:@"IFID"];
         if (!fundId.length) {
             continue;
@@ -51,11 +49,13 @@
         [moneyInfo setObject:@(sum) forKey:fundId];
     }
     
+    [result close];
+    
     __block BOOL success = YES;
     
     //  遍历moneyInfo，根据key（资金帐户id）查询BK_FUNS_ACCT表中是否存在相应的记录，存在就修改为最新的金额，反之则新建个记录
     [moneyInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        FMResultSet *result = [db executeQuery:@"select count(*) from BK_FUNS_ACCT where CFUNDID = ?", key];
+        result = [db executeQuery:@"select count(*) from BK_FUNS_ACCT where CFUNDID = ? and CUSERID = ?", key, SSJUSERID()];
         if (!result) {
             success = NO;
             *stop = YES;
@@ -64,7 +64,7 @@
         
         [result next];
         if ([result intForColumnIndex:0] > 0) {
-            if (![db executeUpdate:@"update BK_FUNS_ACCT set IBALANCE = (IBALANCE + ?) where CFUNDID = ?", obj, key]) {
+            if (![db executeUpdate:@"update BK_FUNS_ACCT set IBALANCE = ? where CFUNDID = ? and CUSERID = ?", obj, key, SSJUSERID()]) {
                 SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                 success = NO;
                 *stop = YES;
@@ -77,6 +77,8 @@
             }
         }
     }];
+    
+    [result close];
     
     return success;
 }

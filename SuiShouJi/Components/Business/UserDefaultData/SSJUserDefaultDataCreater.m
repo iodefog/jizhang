@@ -12,14 +12,20 @@
 @implementation SSJUserDefaultDataCreater
 
 + (void)createDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(SSJDefaultSyncVersion), SSJUSERID()]) {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) select ?, 0, ? where not exists (select count(*) from BK_SYNC where CUSERID = ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
             SSJUpdateSyncVersion(SSJDefaultSyncVersion + 1);
             success();
             return;
         }
         
         failure([db lastError]);
+    }];
+}
+
++ (void)asyncCreateDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        [self createDefaultSyncRecordWithSuccess:success failure:failure];
     }];
 }
 
@@ -33,7 +39,7 @@
     }
     
     //  创建默认的资金帐户
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
         
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金账户', '1', '#fe8a65', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
@@ -56,8 +62,14 @@
     }];
 }
 
-+ (void)createDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
++ (void)asyncCreateDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        [self createDefaultFundAccountsWithSuccess:success failure:failure];
+    }];
+}
+
++ (void)createDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         FMResultSet *result1 = [db executeQuery:@"select count(*) from BK_BILL_TYPE"];
         FMResultSet *result2 = [db executeQuery:@"select count(*) from BK_USER_BILL where CUSERID = ?", SSJUSERID()];
         
@@ -102,6 +114,12 @@
         } else {
             failure([db lastError]);
         }
+    }];
+}
+
++ (void)asyncCreateDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        [self createDefaultBillTypesIfNeededWithSuccess:success failure:failure];
     }];
 }
 

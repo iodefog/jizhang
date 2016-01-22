@@ -35,21 +35,6 @@
     return nil;
 }
 
-//+ (int64_t)lastSuccessSyncVersionInDatabase:(FMDatabase *)db {
-//    if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
-//        FMResultSet *lastSyncResultSet = [db executeQuery:@"select VERSION from BK_SYNC where TYPE = 1 and CUSERID =? limit 1 offset (select count(*) from BK_SYNC where TYPE = 0 and CUSERID =?)", SSJUSERID(), SSJUSERID()];
-//        
-//        if (!lastSyncResultSet) {
-//            SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-//            return lastSyncVersion;
-//        }
-//        
-//        [lastSyncResultSet next];
-//        lastSyncVersion = [lastSyncResultSet intForColumnIndex:0];
-//    }
-//    return lastSyncVersion;
-//}
-
 + (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
@@ -77,6 +62,9 @@
         }
         [syncRecords addObject:recordInfo];
     }
+    
+    [result close];
+    
     return syncRecords;
 }
 
@@ -163,9 +151,9 @@
         return nil;
     }
     BOOL isRecordExist = [result intForColumnIndex:0] > 0;
+    [result close];
     
     //  如果记录已存在，并且操作类型是修改（1）、删除（2），就更新记录；反之就插入记录
-    
     NSString *statement = nil;
     if (isRecordExist) {
         if (opertoryValue == 1 || opertoryValue == 2) {

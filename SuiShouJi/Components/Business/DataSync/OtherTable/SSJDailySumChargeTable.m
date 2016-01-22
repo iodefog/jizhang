@@ -30,8 +30,7 @@
 @implementation SSJDailySumChargeTable
 
 + (BOOL)updateDailySumChargeInDatabase:(FMDatabase *)db {
-    int64_t lastSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
-    FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.IVERSION > ? and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.CBILLDATE, B.ITYPE order by A.CBILLDATE", @(lastSyncVersion), SSJUSERID()];
+    __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.CBILLDATE, B.ITYPE order by A.CBILLDATE", SSJUSERID()];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -64,10 +63,12 @@
         [dailyChargeInfo setObject:model forKey:billDate];
     }
     
+    [result close];
+    
     __block BOOL success = YES;
     [dailyChargeInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         __SSJDailySumChargeTableModel *model = obj;
-        FMResultSet *result = [db executeQuery:@"select count(*) from BK_DAILYSUM_CHARGE where CBILLDATE = ?", model.billDate];
+        result = [db executeQuery:@"select count(*) from BK_DAILYSUM_CHARGE where CBILLDATE = ? and CUSERID = ?", model.billDate, SSJUSERID()];
         if (!result) {
             SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
             success = NO;
@@ -77,17 +78,19 @@
         
         [result next];
         if ([result intForColumnIndex:0] > 0) {
-            if (![db executeUpdate:@"update BK_DAILYSUM_CHARGE set EXPENCEAMOUNT = (EXPENCEAMOUNT + ?), INCOMEAMOUNT = (INCOMEAMOUNT + ?), SUMAMOUNT = (SUMAMOUNT + ?) where CBILLDATE = ?", model.expenceAmount, model.incomeAmount, (model.incomeAmount - model.expenceAmount), model.billDate]) {
+            if (![db executeUpdate:@"update BK_DAILYSUM_CHARGE set EXPENCEAMOUNT = ?, INCOMEAMOUNT = ?, SUMAMOUNT = ? where CBILLDATE = ?", @(model.expenceAmount), @(model.incomeAmount), @(model.incomeAmount - model.expenceAmount), model.billDate]) {
                 success = NO;
                 *stop = YES;
             }
         } else {
-            if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE (CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT) values (?, ?, ?, ?)", model.billDate, model.expenceAmount, model.incomeAmount, (model.incomeAmount - model.expenceAmount)]) {
+            if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE (CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT, CUSERID) values (?, ?, ?, ?, ?)", model.billDate, @(model.expenceAmount), @(model.incomeAmount), @(model.incomeAmount - model.expenceAmount), SSJUSERID()]) {
                 success = NO;
                 *stop = YES;
             }
         }
     }];
+    
+    [result close];
     
     return success;
 }

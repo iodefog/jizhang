@@ -63,16 +63,8 @@
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record;
 
 ///----------------------------------
-/// @name 只是调用，子类不可覆写！！！
+/// @name 只能调用，子类不可覆写！！！
 ///----------------------------------
-
-///**
-// *  获取上次同步成功的版本号
-// *
-// *  @param db FMDatabase实例
-// *  @return 上次同步成功的版本号
-// */
-//+ (int64_t)lastSuccessSyncVersionInDatabase:(FMDatabase *)db;
 
 /**
  *  查询需要同步的记录
