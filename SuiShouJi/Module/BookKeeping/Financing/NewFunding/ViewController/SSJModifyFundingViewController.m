@@ -76,9 +76,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.section != 4 && indexPath.section != 3) {
-        [((SSJModifyFundingTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).cellDetail resignFirstResponder];
-    }else if (indexPath.section == 4) {
+    if (indexPath.section == 4) {
         SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
         colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = self.item.fundingAmount;
