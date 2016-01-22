@@ -70,7 +70,11 @@
 
 -(void)setItem:(SSJFundingItem *)item{
     _item = item;
-    _fundingTitle.text = self.item.fundingName;
+    if ([_item.fundingParent isEqualToString:@"root"]) {
+        _fundingTitle.text = self.item.fundingName;
+    }else{
+        _fundingTitle.text = self.item.fundingName;
+    }
     [_fundingTitle sizeToFit];
     _fundingImage.image = [UIImage imageNamed:self.item.fundingIcon];
 }

@@ -13,7 +13,7 @@
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
-
+@property (nonatomic,strong) UIView *footerView;
 @end
 
 @implementation SSJCalenderDetailViewController
@@ -50,7 +50,6 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.1;
 }
-
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -96,6 +95,12 @@
     return fundingName;
 }
 
+#pragma mark - Getter
+//-(UIView *)footerView{
+//    if (!_footerView) {
+//        _footerView = [[UIView alloc]init];
+//    }
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

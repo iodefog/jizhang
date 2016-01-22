@@ -15,8 +15,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.cellTitle];
-        [self.contentView addSubview:self.cellDetail];
         [self.contentView addSubview:self.colorView];
+        [self.contentView addSubview:self.cellDetail];
     }
     return self;
 }
@@ -48,6 +48,7 @@
         _cellDetail.textAlignment = NSTextAlignmentRight;
         _cellDetail.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _cellDetail.font = [UIFont systemFontOfSize:15];
+        _cellDetail.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _cellDetail;
 }
