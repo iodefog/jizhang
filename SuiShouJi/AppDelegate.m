@@ -15,6 +15,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "MobClick.h"
 #import "FMDB.h"
+#import "SSJUserTableManager.h"
 
 @interface AppDelegate ()
 
@@ -41,11 +42,17 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
 //    FMDatabase *db = [[FMDatabase alloc] initWithPath:@"/Users/oldlang/Desktop/testDb.db"];
 //    [db open];
-//    FMResultSet *result = [db executeQuery:@"select count(*) from t1"];
-//    if (result && [result next]) {
-//        NSLog(@"%d", [result intForColumnIndex:0]);
+//    FMResultSet *result = [db executeQuery:@"select * from t1"];
+//    if (result) {
+//        NSError *error = nil;
+//        if ([result nextWithError:&error]) {
+//            NSLog(@"%@", [result stringForColumnIndex:0]);
+//        }
+//        NSLog(@"%@", error);
 //    }
+    
 //    [result close];
+    
     
     
     return YES;
@@ -95,6 +102,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     self.window.rootViewController = tabBarVC;
 }
 
+//  初始化数据库
 - (void)initializeDatabase {
     NSLog(@"<<< 开始初始化数据库 >>>");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -108,6 +116,13 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
             if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
                 SSJPRINT(@"move database error:%@",[error localizedDescription]);
             }
+            
+            //  载入用户id
+            [SSJUserTableManager reloadUserIdWithSuccess:^{
+                
+            } failure:^(NSError *error) {
+                
+            }];
             
             //  创建默认的同步表记录
             [SSJUserDefaultDataCreater createDefaultSyncRecordWithSuccess:^{

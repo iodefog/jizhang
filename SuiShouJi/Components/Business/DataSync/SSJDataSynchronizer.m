@@ -18,6 +18,8 @@
 #import "SSZipArchive.h"
 #import "AFNetworking.h"
 
+#import "SSJUserTableManager.h"
+
 #import <ZipZap/ZipZap.h>
 
 //  同步文件名称
@@ -162,6 +164,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     __block NSArray *userChargeRecords = nil;
     __block NSArray *fundInfoRecords = nil;
     __block NSArray *userBillRecords = nil;
+    __block NSString *userId = nil;
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
@@ -177,13 +180,15 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         userBillRecords = [SSJUserBillSyncTable queryRecordsNeedToSyncInDatabase:db];
         fundInfoRecords = [SSJFundInfoSyncTable queryRecordsNeedToSyncInDatabase:db];
         userChargeRecords = [SSJUserChargeSyncTable queryRecordsNeedToSyncInDatabase:db];
+        
+        userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
     }];
     
     if (*error) {
         return nil;
     }
     
-    NSArray *userRecords = @[@{@"cuserid":SSJUSERID(),
+    NSArray *userRecords = @[@{@"cuserid":userId,
                                @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
                                @"source":SSJDefaultSource()}];
     

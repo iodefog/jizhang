@@ -12,6 +12,12 @@
 @implementation SSJUserDefaultDataCreater
 
 + (void)createDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    NSError *error = [self verifyCurrentUserId];
+    if (error) {
+        failure(error);
+        return;
+    }
+    
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) select ?, 0, ? where not exists (select count(*) from BK_SYNC where CUSERID = ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
             SSJUpdateSyncVersion(SSJDefaultSyncVersion + 1);
@@ -30,16 +36,46 @@
 }
 
 + (void)createDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    //  判断当前userid有没有创建过默认资金帐户
-    NSString *key = @"SSJIsFundAccountsCreateKey";
-    NSDictionary *userFundAccountInfo = [[NSUserDefaults standardUserDefaults] dictionaryForKey:key];
-    if (userFundAccountInfo[SSJUSERID()]) {
-        success();
+    NSError *error = [self verifyCurrentUserId];
+    if (error) {
+        failure(error);
         return;
     }
     
     //  创建默认的资金帐户
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        //  查询用户表中存储的默认资金帐户创建状态
+        FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTFUNDACCTSTATE from BK_USER where CUSERID = ?", SSJUSERID()];
+        if (!reuslt) {
+            failure([db lastError]);
+            return;
+        }
+        
+        NSError *error = nil;
+        if (![reuslt nextWithError:&error]) {
+            if (error) {
+                [reuslt close];
+                failure(error);
+                return;
+            } else {
+                //  用户表中没有创建该用户的记录
+                
+            }
+        }
+        
+        //  根据表中存储的状态判断是否需要创建以下默认资金帐户
+        BOOL defaultFundAcctState = [reuslt boolForColumn:@"CDEFAULTFUNDACCTSTATE"];
+        if (defaultFundAcctState) {
+            success();
+            return;
+        }
+        
+        if (![db executeUpdate:@"update BK_USER set CDEFAULTFUNDACCTSTATE = 1"]) {
+            failure([db lastError]);
+            return;
+        }
+        
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
         
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金账户', '1', '#fe8a65', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
@@ -50,13 +86,8 @@
         
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝余额', '7', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'", SSJUUID() , writeDate, @(SSJSyncVersion()), SSJUSERID()];
         
-        [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root'",SSJUSERID(),[NSNumber numberWithDouble:0.00]];
         
-        //  标记当前userid创建过默认资金帐户
-        NSMutableDictionary *newUserFundAcctInfo = [userFundAccountInfo mutableCopy];
-        [newUserFundAcctInfo setObject:@(YES) forKey:SSJUSERID()];
-        [[NSUserDefaults standardUserDefaults] setObject:newUserFundAcctInfo forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root'",SSJUSERID(),[NSNumber numberWithDouble:0.00]];
         
         success();
     }];
@@ -69,6 +100,12 @@
 }
 
 + (void)createDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    NSError *error = [self verifyCurrentUserId];
+    if (error) {
+        failure(error);
+        return;
+    }
+    
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         FMResultSet *result1 = [db executeQuery:@"select count(*) from BK_BILL_TYPE"];
         FMResultSet *result2 = [db executeQuery:@"select count(*) from BK_USER_BILL where CUSERID = ?", SSJUSERID()];
@@ -127,6 +164,14 @@
 
 + (void)createAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     
+}
+
++ (NSError *)verifyCurrentUserId {
+    if (SSJUSERID().length) {
+        return nil;
+    }
+    
+    return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
 }
 
 @end
