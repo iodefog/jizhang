@@ -1,16 +1,15 @@
 //
-//  SSJSyncTable.m
+//  SSJBaseSyncTable.m
 //  SuiShouJi
 //
-//  Created by old lang on 16/1/7.
+//  Created by old lang on 16/1/21.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
+#import "SSJBaseSyncTable.h"
 #import "SSJSyncTable.h"
 
-int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
-
-@implementation SSJSyncTable
+@implementation SSJBaseSyncTable
 
 + (NSString *)tableName {
     return nil;
@@ -24,28 +23,40 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     return nil;
 }
 
-+ (int)lastSuccessSyncVersionInDatabase:(FMDatabase *)db {
-    if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
-        FMResultSet *lastSyncResultSet = [db executeQuery:@"select VERSION from BK_SYNC where TYPE = 1 and CUSERID =? limit 1 offset (select count(*) from BK_SYNC where TYPE = 1 and CUSERID =?)", SSJUSERID(), SSJUSERID()];
-        
-        if (!lastSyncResultSet) {
-            SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-            return lastSyncVersion;
-        }
-        
-        [lastSyncResultSet next];
-        lastSyncVersion = [lastSyncResultSet intForColumnIndex:0];
-    }
-    return lastSyncVersion;
++ (NSString *)queryRecordsForSyncAdditionalCondition {
+    return nil;
 }
 
-+ (NSArray *)queryRecordsForSyncInDatabase:(FMDatabase *)db {
-    int lastSyncVersion = [self lastSuccessSyncVersionInDatabase:db];
-    if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
++ (NSString *)updateSyncVersionAdditionalCondition {
+    return nil;
+}
+
++ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
+    return nil;
+}
+
+//+ (int64_t)lastSuccessSyncVersionInDatabase:(FMDatabase *)db {
+//    if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
+//        FMResultSet *lastSyncResultSet = [db executeQuery:@"select VERSION from BK_SYNC where TYPE = 1 and CUSERID =? limit 1 offset (select count(*) from BK_SYNC where TYPE = 0 and CUSERID =?)", SSJUSERID(), SSJUSERID()];
+//        
+//        if (!lastSyncResultSet) {
+//            SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+//            return lastSyncVersion;
+//        }
+//        
+//        [lastSyncResultSet next];
+//        lastSyncVersion = [lastSyncResultSet intForColumnIndex:0];
+//    }
+//    return lastSyncVersion;
+//}
+
++ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db {
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
         return nil;
     }
     
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %d and CUSERID = '%@'", [self tableName], (int)lastSyncVersion, SSJUSERID()];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, SSJUSERID()];
     NSString *additionalCondition = [self queryRecordsForSyncAdditionalCondition];
     if (additionalCondition.length) {
         [query appendFormat:@" and %@", additionalCondition];
@@ -61,24 +72,27 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     while ([result next]) {
         NSMutableDictionary *recordInfo = [NSMutableDictionary dictionaryWithCapacity:[self columns].count];
         for (NSString *column in [self columns]) {
-            [recordInfo setObject:[result stringForColumn:column] forKey:column];
+            NSString *value = [result stringForColumn:column];
+            [recordInfo setObject:(value ?: @"") forKey:column];
         }
         [syncRecords addObject:recordInfo];
     }
     return syncRecords;
 }
 
-+ (NSString *)queryRecordsForSyncAdditionalCondition {
-    return nil;
-}
-
-+ (BOOL)updateSyncVersionToServerSyncVersion:(int)version inDatabase:(FMDatabase *)db {
-    int lastSyncVersion = [self lastSuccessSyncVersionInDatabase:db];
-    if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db {
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }
     
-    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %d where IVERSION > %d and CUSERID = '%@'", [self tableName], version, lastSyncVersion + 1, SSJUSERID()];
+    if (newVersion == SSJ_INVALID_SYNC_VERSION) {
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], newVersion, version + 1, SSJUSERID()];
     NSString *additionalCondition = [self updateSyncVersionAdditionalCondition];
     if (additionalCondition.length) {
         [update appendFormat:@" and %@", additionalCondition];
@@ -90,10 +104,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
     }
     
     return success;
-}
-
-+ (NSString *)updateSyncVersionAdditionalCondition {
-    return nil;
 }
 
 + (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db {
@@ -120,7 +130,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         return success;
     }
     
-    SSJPRINT(@">>>SSJ warning:array records has no element\n records:%@", records);
     return YES;
 }
 
@@ -239,10 +248,6 @@ int lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
         }
     }
     return [conditions componentsJoinedByString:joinString];
-}
-
-+ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
-    return nil;
 }
 
 @end

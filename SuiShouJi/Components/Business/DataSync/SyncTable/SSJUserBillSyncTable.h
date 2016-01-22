@@ -6,8 +6,8 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJSyncTable.h"
+#import "SSJBaseSyncTable.h"
 
-@interface SSJUserBillSyncTable : SSJSyncTable
+@interface SSJUserBillSyncTable : SSJBaseSyncTable
 
 @end

@@ -10,11 +10,15 @@
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
+#import "SSJSyncTable.h"
 #import "SSJFundAccountTable.h"
 #import "SSJDailySumChargeTable.h"
+
 #import "SSJDatabaseQueue.h"
 #import "SSZipArchive.h"
 #import "AFNetworking.h"
+
+#import <ZipZap/ZipZap.h>
 
 //  同步文件名称
 static NSString *const kSyncFileName = @"sync_data.json";
@@ -31,6 +35,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 @property (nonatomic, weak) NSURLSessionDataTask *task;
 @property (nonatomic, strong) dispatch_queue_t syncQueue;
+@property (nonatomic) int64_t lastSuccessSyncVersion;
 
 @end
 
@@ -57,8 +62,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
-        lastSyncVersion = SSJ_INVALID_SYNC_VERSION;
-        
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
             [self syncDataWithSuccess:success failure:failure];
@@ -71,129 +74,46 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)syncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    __block NSInteger currentSyncVersion;
     
-    __block NSArray *userChargeRecords = nil;
-    __block NSArray *fundInfoRecords = nil;
-    __block NSArray *userBillRecords = nil;
+    __block NSError *tError = nil;
     
-    __block BOOL databaseSuccess = YES;
+    //  获取上次同步成功的版本号
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
-        //  获取上次同步成功的版本号
-        [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
-        if (lastSyncVersion == SSJ_INVALID_SYNC_VERSION) {
-            lastSyncVersion = SSJDefaultSyncVersion;
+        self.lastSuccessSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
+        if (self.lastSuccessSyncVersion == SSJ_INVALID_SYNC_VERSION) {
+            tError = [db lastError];
         }
-        
-        //  设置当前同步的版本号
-        currentSyncVersion = lastSyncVersion + 1;
-        
-        //  把当前同步的版本号插入到BK_SYNC表中
-        if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(currentSyncVersion), SSJUSERID()]) {
-            SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-            databaseSuccess = NO;
-            return;
-        }
-        
-        SSJUpdateSyncVersion(currentSyncVersion + 1);
-        
-        //  查询需要同步的表中 版本号（IVERSION）大于上次同步成功版本号（lastSyncVersion）的记录，
-        userBillRecords = [SSJUserBillSyncTable queryRecordsForSyncInDatabase:db];
-        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsForSyncInDatabase:db];
-        userChargeRecords = [SSJUserChargeSyncTable queryRecordsForSyncInDatabase:db];
     }];
     
-    if (!databaseSuccess) {
-        failure(nil);
+    if (tError) {
+        failure(tError);
         return;
     }
     
-    NSArray *userRecords = @[@{@"cuserid":SSJUSERID(),
-                               @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                               @"source":SSJDefaultSource()}];
-    
-    //  将查询得到的结果放入字典中，转换成json数据
-    NSError *error = nil;
-    NSData *syncData = [NSJSONSerialization dataWithJSONObject:@{@"bk_user_bill":userBillRecords,
-                                                                 @"bk_fund_info":fundInfoRecords,
-                                                                 @"bk_user_charge":userChargeRecords,
-                                                                 @"bk_user":userRecords}
-                                                       options:NSJSONWritingPrettyPrinted
-                                                         error:&error];
-    if (error) {
-        SSJPRINT(@">>>SSJ warning\n error:%@", error);
-        failure(error);
+    //  查询要同步的数据
+    NSData *data = [self getSyncDataWithError:&tError];
+    if (tError) {
+        failure(tError);
         return;
     }
     
-    //  将json写入文件，并进行zip压缩
-    NSString *filePath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncFileName];
-    NSString *zipPath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncZipFileName];
-    
-    if (![syncData writeToFile:filePath atomically:YES]) {
-        failure(nil);
+    if (!data) {
+        tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"there is no data to be uploaded"}];
+        failure(tError);
         return;
     }
-    
-    if (![SSZipArchive createZipFileAtPath:zipPath withContentsOfDirectory:filePath]) {
-        failure(nil);
-        return;
-    }
-    
-//#warning test
-//    [syncData writeToFile:@"/Users/oldlang/Desktop/sync_data.txt" atomically:YES];
-//    [SSZipArchive createZipFileAtPath:@"/Users/oldlang/Desktop/sync_data.zip" withContentsOfDirectory:@"/Users/oldlang/Desktop/sync_data.json"];
-//    
-//    NSError *err1 = nil;
-//    BOOL sss = [SSZipArchive unzipFileAtPath:@"/Users/oldlang/Desktop/sync_data.zip" toDestination:@"/Users/oldlang/Desktop/unzip.txt" overwrite:YES password:nil error:&err1];
-    
     
     //  读取压缩好的文件，上传到服务端
-    NSData *zipData = [NSData dataWithContentsOfFile:zipPath options:NSDataReadingMappedIfSafe error:&error];
-    if (error) {
-        SSJPRINT(@">>>SSJ warning\n error:%@", error);
-        failure(error);
+    NSData *zipData = [self zipData:data error:&tError];
+    
+    if (tError) {
+        SSJPRINT(@">>>SSJ warning:an error occured when zip json data \n error:%@", tError);
+        failure(tError);
         return;
     }
     
-    //  创建请求
-    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
-    
-    NSError *serializationError = nil;
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:zipData name:@"zip" fileName:kSyncZipFileName mimeType:@"application/zip"];
-    } error:&serializationError];
-    
-    //  封装参数，传入请求头
-    NSString *userId = SSJUSERID();
-    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
-    NSString *source = SSJDefaultSource();
-    NSString *iversion = [NSString stringWithFormat:@"%d", lastSyncVersion];
-    NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, timestamp, source, iversion, kSignKey] ssj_md5HexDigest];
-    
-    NSDictionary *parameters = @{@"cuserId":userId,
-                                 @"imei":imei,
-                                 @"timestamp":timestamp,
-                                 @"source":source,
-                                 @"iversion":iversion,
-                                 @"md5Code":zipData.md5Hash,
-                                 @"sign":signStr};
-    
-    [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        [request setValue:obj forHTTPHeaderField:key];
-    }];
-    
-    if (serializationError) {
-        failure(serializationError);
-        return;
-    }
-    
-    //  开始上传
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    self.task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
-        
+    //  上传数据
+    [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         //  因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
             
@@ -202,114 +122,271 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 return;
             }
             
-            //  上传成功后，将数据解压，并解析json数据
+            //  上传成功后，如果返回是字典类型，就有错误，解析错误信息
             if (![responseObject isKindOfClass:[NSData class]]) {
                 if ([responseObject isKindOfClass:[NSDictionary class]]) {
                     NSInteger code = [responseObject[@"code"] integerValue];
                     NSString *desc = responseObject[@"desc"];
-                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
-                    failure(error);
+                    tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
+                    failure(tError);
                 } else {
                     SSJPRINT(@">>>SSJ warning:responseObject is not NSData or NSDictionary type");
-                    failure(nil);
+                    tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"responseObject is not NSData or NSDictionary type"}];
+                    failure(tError);
                 }
                 return;
             }
             
-            if (![responseObject writeToFile:zipPath atomically:YES]) {
-                SSJPRINT(@">>>SSJ warning:an error occured when write to file");
-                failure(nil);
+            //  将数据解压
+            NSError *tError = nil;
+            NSData *jsonData = [self unzipData:responseObject error:&tError];
+            
+            if (tError) {
+                SSJPRINT(@">>>SSJ warning:an error occured when unzip response data\n error:%@", tError);
+                failure(tError);
                 return;
             }
             
-            if (![SSZipArchive unzipFileAtPath:zipPath toDestination:filePath]) {
-                SSJPRINT(@">>>SSJ warning:an error occured when unzip file");
-                failure(nil);
-                return;
+            if ([self mergeJsonData:jsonData error:&tError]) {
+                success();
+            } else {
+                failure(tError);
             }
-            
-            NSError *error = nil;
-            NSData *jsonData = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&error];
-            
-            if (error) {
-                SSJPRINT(@">>>SSJ warning\n error:%@", error);
-                failure(error);
-                return;
-            }
-            
-            NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&error];
-            if (error) {
-                SSJPRINT(@">>>SSJ warning\n error:%@", error);
-                failure(error);
-                return;
-            }
-            
-            int syncSuccessVersion;
-            __block BOOL shouldGoNext = YES;
-            
-            //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
-            [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-                if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"BK_USER_BILL"] inDatabase:db]
-                    || ![SSJUserBillSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
-                    *rollback = YES;
-                    shouldGoNext = NO;
-                }
-            }];
-            
-            if (!shouldGoNext) {
-                failure(nil);
-                return;
-            }
-            
-            [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-                if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db]
-                    || ![SSJFundInfoSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
-                    *rollback = YES;
-                    shouldGoNext = NO;
-                }
-            }];
-            
-            if (!shouldGoNext) {
-                failure(nil);
-                return;
-            }
-            
-            [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-                if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db]
-                    || ![SSJUserChargeSyncTable updateSyncVersionToServerSyncVersion:syncSuccessVersion inDatabase:db]) {
-                    *rollback = YES;
-                    shouldGoNext = NO;
-                    return;
-                }
-                
-                //  根据流水表计算资金帐户余额表和每日流水统计表
-                if (![SSJFundAccountTable updateBalanceInDatabase:db]
-                    || ![SSJDailySumChargeTable updateDailySumChargeInDatabase:db]) {
-                    *rollback = YES;
-                    shouldGoNext = NO;
-                }
-            }];
-            
-            if (!shouldGoNext) {
-                failure(nil);
-                return;
-            }
-            
-            //  所有数据合并、更新成功后，插入一个新的记录到BK_SYNC中
-            if (shouldGoNext) {
-                [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-                    if (![db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(syncSuccessVersion), SSJUSERID()]) {
-                        SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-                        failure(nil);
-                    }
-                }];
-            }
-            
-            success();
         });
     }];
+}
+
+//  获取要上传的数据
+- (NSData *)getSyncDataWithError:(NSError * __autoreleasing *)error {
+    __block NSArray *userChargeRecords = nil;
+    __block NSArray *fundInfoRecords = nil;
+    __block NSArray *userBillRecords = nil;
+    
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        //  把当前同步的版本号插入到BK_SYNC表中
+        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) inDatabase:db]) {
+            *error = [db lastError];
+            return;
+        }
+        
+        SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
+        
+        //  查询需要同步的表中 版本号（IVERSION）大于上次同步成功版本号（lastSyncVersion）的记录，
+        userBillRecords = [SSJUserBillSyncTable queryRecordsNeedToSyncInDatabase:db];
+        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsNeedToSyncInDatabase:db];
+        userChargeRecords = [SSJUserChargeSyncTable queryRecordsNeedToSyncInDatabase:db];
+    }];
+    
+    if (*error) {
+        return nil;
+    }
+    
+    NSArray *userRecords = @[@{@"cuserid":SSJUSERID(),
+                               @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                               @"source":SSJDefaultSource()}];
+    
+    NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+    if (userBillRecords.count) {
+        [jsonObject setObject:userBillRecords forKey:@"bk_user_bill"];
+    }
+    if (fundInfoRecords.count) {
+        [jsonObject setObject:fundInfoRecords forKey:@"bk_fund_info"];
+    }
+    if (userChargeRecords.count) {
+        [jsonObject setObject:userChargeRecords forKey:@"bk_user_charge"];
+    }
+    if (userRecords.count) {
+        [jsonObject setObject:userRecords forKey:@"bk_user"];
+    }
+    
+    //  将查询得到的结果放入字典中，转换成json数据
+    NSData *syncData = [NSJSONSerialization dataWithJSONObject:jsonObject
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:error];
+    if (*error) {
+        SSJPRINT(@">>>SSJ warning:an error occured when parse json data \n error:%@", *error);
+        return nil;
+    }
+    
+    return syncData;
+}
+
+//  上传文件流
+- (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
+    
+    //  创建请求
+    NSString *urlString = [[NSURL URLWithString:@"/sync/syncdata.go" relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
+    
+    NSError *tError = nil;
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:data name:@"zip" fileName:kSyncZipFileName mimeType:@"application/x-zip-compressed"];
+    } error:&tError];
+    
+    if (tError) {
+        completionHandler(nil, nil, tError);
+        return;
+    }
+    
+    //  封装参数，传入请求头
+    NSString *userId = SSJUSERID();
+    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
+    NSString *source = SSJDefaultSource();
+    NSString *iversion = [NSString stringWithFormat:@"%lld", self.lastSuccessSyncVersion];
+    NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, timestamp, source, iversion, kSignKey] ssj_md5HexDigest];
+    
+    NSDictionary *parameters = @{@"cuserId":userId,
+                                 @"imei":imei,
+                                 @"timestamp":timestamp,
+                                 @"source":source,
+                                 @"iversion":iversion,
+                                 @"md5Code":data.md5Hash,
+                                 @"sign":signStr};
+    
+    [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [request setValue:obj forHTTPHeaderField:key];
+    }];
+    
+    //  开始上传
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    self.task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     
     [self.task resume];
+}
+
+//  合并json数据
+- (BOOL)mergeJsonData:(NSData *)jsonData error:(NSError **)error {
+    
+    //  解析json数据
+    NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:error];
+    if (*error) {
+        SSJPRINT(@">>>SSJ warning:an error occured when parse json data\n error:%@", *error);
+        return NO;
+    }
+    
+    NSInteger errorCode = [tableInfo[@"code"] integerValue];
+    if (errorCode != 1) {
+        *error = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
+        SSJPRINT(@">>>SSJ warning:server response an error:%@", *error);
+        return NO;
+    }
+    
+    NSString *versinStr = tableInfo[@"syncversion"];
+    
+    __block BOOL success = YES;
+    
+    //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"BK_USER_BILL"] inDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+        }
+        
+        if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+        }
+    }];
+    
+    if (!success) {
+        return NO;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+        }
+        
+        if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+        }
+    }];
+    
+    if (!success) {
+        return NO;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+            return;
+        }
+        
+        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+        }
+        
+        //  根据流水表计算资金帐户余额表和每日流水统计表
+        if (![SSJFundAccountTable updateBalanceInDatabase:db]
+            || ![SSJDailySumChargeTable updateDailySumChargeInDatabase:db]) {
+            *rollback = YES;
+            success = NO;
+            *error = [db lastError];
+        }
+    }];
+    
+    if (!success) {
+        return NO;
+    }
+    
+    //  所有数据合并、更新成功后，插入一个新的记录到BK_SYNC中
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        if (![SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] inDatabase:db]) {
+            success = NO;
+        }
+    }];
+    
+    return success;
+}
+
+//  将data进行zip压缩
+- (NSData *)zipData:(NSData *)data error:(NSError **)error {
+    NSString *zipPath = [SSJDocumentPath() stringByAppendingPathComponent:kSyncZipFileName];
+    ZZArchive *newArchive = [[ZZArchive alloc] initWithURL:[NSURL fileURLWithPath:zipPath]
+                                                   options:@{ZZOpenOptionsCreateIfMissingKey:@YES}
+                                                     error:error];
+    
+//    ZZArchive *newArchive = [[ZZArchive alloc] initWithData:data options:@{ZZOpenOptionsCreateIfMissingKey:@YES} error:error];
+    
+    ZZArchiveEntry *entry = [ZZArchiveEntry archiveEntryWithFileName:kSyncFileName
+                                                            compress:YES
+                                                           dataBlock:^(NSError **error) {
+                                                               return data;
+                                                           }];
+    
+    if (![newArchive updateEntries:@[entry] error:error]) {
+        return nil;
+    }
+    
+//    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[zipPath pathExtension], NULL);
+//    CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
+    
+    return [NSData dataWithContentsOfFile:@"/Users/oldlang/Desktop/test/new.zip" options:NSDataReadingUncached error:error];
+}
+
+//  将data进行解压
+- (NSData *)unzipData:(NSData *)data error:(NSError **)error {
+//    ZZArchive *archive = [ZZArchive archiveWithURL:[NSURL fileURLWithPath:@"/Users/oldlang/Desktop/test/sync_data.txt.zip"] error:error];
+    ZZArchive *archive = [ZZArchive archiveWithData:data error:error];
+    if (archive.entries.count > 0) {
+        ZZArchiveEntry *entry = archive.entries[0];
+        return [entry newDataWithError:error];
+    }
+    
+    return nil;
 }
 
 @end

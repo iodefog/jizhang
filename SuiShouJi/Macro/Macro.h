@@ -78,4 +78,7 @@ alpha:(a)]
 //  默认错误提示
 #define SSJ_ERROR_MESSAGE @"出错啦，休息一下再试^_^"
 
+//  无效的版本号，int类型
+#define SSJ_INVALID_SYNC_VERSION LONG_LONG_MIN
+
 #endif

@@ -7,8 +7,8 @@
 //
 
 #import "SSJUtil.h"
-#import <CommonCrypto/CommonDigest.h>
-#import "SFHFKeychainUtils.h"
+//#import <CommonCrypto/CommonDigest.h>
+//#import "SFHFKeychainUtils.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
     return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
@@ -84,46 +84,6 @@ UIViewController* SSJVisibalController() {
             return appRootViewController;
         }
     }
-}
-
-static NSString *const kAppIdKey = @"kAppIdKey";
-
-void SSJSaveAppId(NSString *appId) {
-    [[NSUserDefaults standardUserDefaults] setObject:appId forKey:kAppIdKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-NSString *SSJAppId() {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:kAppIdKey];
-}
-
-static NSString *const AccessTokenKey = @"AccessTokenKey";
-
-void SSJSaveAccessToken(NSString *token) {
-    //    NSString *escapedToken = [token stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
-    [[NSUserDefaults standardUserDefaults] setObject:token forKey:AccessTokenKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-NSString *SSJAccessToken() {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:AccessTokenKey];
-}
-
-static NSString *const kUserLoginedKey = @"kUserLoginedKey";
-
-BOOL SSJSaveUserLogined(BOOL logined) {
-    [[NSUserDefaults standardUserDefaults] setBool:logined forKey:kUserLoginedKey];
-    return [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-BOOL SSJIsUserLogined() {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:kUserLoginedKey];
-}
-
-void SSJClearLoginInfo() {
-    SSJSaveAppId(nil);
-    SSJSaveAccessToken(nil);
-    SSJSaveUserLogined(NO);
 }
 
 NSString* SSJProjectSettingsPath(){
@@ -271,32 +231,5 @@ NSString *SSJUUID(){
     CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
     NSString *strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
     return strUUID;
-}
-
-NSString *SSJUSERID(){
-    NSString *strUSERID = [[NSUserDefaults standardUserDefaults] objectForKey:@"USERID"];
-    if (!strUSERID || [strUSERID isEqualToString:@""]) {
-        NSDate *datenow = [NSDate date];
-        NSTimeInterval timeSince1970 = [datenow timeIntervalSince1970]*1000;
-        NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)timeSince1970];
-        strUSERID = [[[NSString stringWithFormat:@"%@%@",SSJUUID(),timeSp] ssj_md5HexDigest] lowercaseString];
-        [[NSUserDefaults standardUserDefaults]setObject:strUSERID forKey:@"USERID"];
-    }
-    return strUSERID;
-}
-
-static NSString *const kSSJSycnVersion = @"kSSJSycnVersion";
-
-NSInteger SSJSyncVersion() {
-    NSNumber *version = [[NSUserDefaults standardUserDefaults] objectForKey:kSSJSycnVersion];
-    if (version) {
-        return [version integerValue];
-    }
-    return SSJDefaultSyncVersion + 1;
-};
-
-BOOL SSJUpdateSyncVersion(NSInteger version) {
-    [[NSUserDefaults standardUserDefaults] setObject:@(version) forKey:kSSJSycnVersion];
-    return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

@@ -37,4 +37,6 @@
  */
 + (void)createDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
++ (void)createAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+
 @end

@@ -8,7 +8,7 @@
 
 #import "SSJConstant.h"
 
-const NSInteger SSJDefaultSyncVersion = -1;
+const int64_t SSJDefaultSyncVersion = -1;
 
 //  接口域名
 #ifdef DEBUG

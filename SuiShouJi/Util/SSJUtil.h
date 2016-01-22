@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class UIViewController;
+
 /**
  *  返回完整的接口地址
  *
@@ -53,56 +55,6 @@ float SSJSystemVersion();
  *  @return (UIViewController *)
  */
 UIViewController *SSJVisibalController();
-
-/**
- *  存储服务器返回的appid，如果要清除就传nil
- *
- *  @param id appid
- */
-void SSJSaveAppId(NSString *appId);
-
-/**
- *  返回appid
- *
- *  @return (NSString *)
- */
-NSString *SSJAppId();
-
-/**
- *  存储token，如果要清除就传nil
- *
- *  @param token token字符串
- */
-void SSJSaveAccessToken(NSString *token);
-
-/**
- *  获取token
- *
- *  @return (NSString *)
- */
-NSString *SSJAccessToken();
-
-/**
- *  存储用户是否登录
- *
- *  @param logined 是否登录
- *  @return (BOOL) 是否存储成功
- */
-BOOL SSJSaveUserLogined(BOOL logined);
-
-/**
- *  返回用户是否登录
- *
- *  @return (NSString *)
- */
-BOOL SSJIsUserLogined();
-
-/**
- *  清除用户登录信息
- *
- *  @return (BOOL) 是否清除成功
- */
-void SSJClearLoginInfo();
 
 /**
  *  获取当前的渠道值
@@ -193,18 +145,3 @@ BOOL SSJSaveQQList(NSArray *qqList);
  */
 NSString *SSJUUID();
 
-/**
- *  获取USERID
- *
- *  @return (NSString *)
- */
-NSString *SSJUSERID();
-
-/**
- *  获取当前版本号
- *
- *  @return (NSString *)
- */
-NSInteger SSJSyncVersion();
-
-BOOL SSJUpdateSyncVersion(NSInteger version);

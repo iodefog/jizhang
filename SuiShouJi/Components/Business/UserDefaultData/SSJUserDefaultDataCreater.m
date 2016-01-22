@@ -36,17 +36,13 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME , CPARENT , CCOLOR , CWRITEDATE , OPERATORTYPE , IVERSION , CUSERID) VALUES (?, '现金账户', '1', '#fe8a65', ?, 0, ?, ?)", SSJUUID(), writeDate , SSJSyncVersion(), SSJUSERID()];
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1') WHERE CACCTNAME = '现金账户'"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金账户', '1', '#fe8a65', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID , CACCTNAME , CPARENT , CCOLOR , CWRITEDATE , OPERATORTYPE , IVERSION , CUSERID) VALUES (?, '储蓄卡余额', '2', '#ffb944', ?, 0, ?, ?)", SSJUUID(), writeDate, SSJSyncVersion(), SSJUSERID()];
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2') WHERE CACCTNAME = '储蓄卡余额'"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '储蓄卡余额', '2', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, '信用卡透支', '3', '#8dc4fa', ?, 0, ?, ?)", SSJUUID(), writeDate, SSJSyncVersion(), SSJUSERID()];
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3') WHERE CACCTNAME = '信用卡透支'"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '信用卡透支', '3', '#8dc4fa', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
         
-        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, '支付宝余额', '7', '#ffb944', ?, 0, ?, ?)", SSJUUID() , writeDate, SSJSyncVersion(), SSJUSERID()];
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN=(SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7') WHERE CACCTNAME = '支付宝余额'"];
+        [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝余额', '7', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'", SSJUUID() , writeDate, @(SSJSyncVersion()), SSJUSERID()];
         
         [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root'",SSJUSERID(),[NSNumber numberWithDouble:0.00]];
         
@@ -54,6 +50,7 @@
         NSMutableDictionary *newUserFundAcctInfo = [userFundAccountInfo mutableCopy];
         [newUserFundAcctInfo setObject:@(YES) forKey:SSJUSERID()];
         [[NSUserDefaults standardUserDefaults] setObject:newUserFundAcctInfo forKey:key];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
         success();
     }];
@@ -70,6 +67,9 @@
             [result2 close];
             return;
         }
+        
+        [result1 next];
+        [result2 next];
         
         if ([result1 intForColumnIndex:0] <= [result2 intForColumnIndex:0]) {
             success();
@@ -93,7 +93,7 @@
             int state = [billTypeResult intForColumn:@"istate"];
             NSString *date = [[NSDate date] ssj_systemCurrentDateWithFormat:nil];
             
-            BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ?)", SSJUSERID(), billId, @(state), date, SSJSyncVersion(), billId];
+            BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ?)", SSJUSERID(), billId, @(state), date, @(SSJSyncVersion()), billId];
             successfull = successfull && executeSuccessfull;
         }
         
@@ -105,31 +105,8 @@
     }];
 }
 
-+ (void)queryLastSyncVersionWithSuccess:(void (^)(NSInteger))success failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select count(*) from BK_SYNC where CUSERID = ?", SSJUSERID];
-        if (!result) {
-            failure([db lastError]);
-            return;
-        }
-        
-        [result next];
-        if ([result intForColumnIndex:0]) {
-            result = [db executeQuery:@"select max(CUSERID) from BK_SYNC where CUSERID = ?", SSJUSERID()];
-            if (!result) {
-                failure([db lastError]);
-                return;
-            }
-            
-            [result next];
-            success([result intForColumnIndex:0]);
-            return;
-        }
-        
-        [self createDefaultSyncRecordWithSuccess:^{
-            success(SSJDefaultSyncVersion);
-        } failure:failure];
-    }];
++ (void)createAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    
 }
 
 @end
