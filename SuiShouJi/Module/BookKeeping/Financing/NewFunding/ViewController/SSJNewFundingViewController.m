@@ -75,6 +75,7 @@
     }else if (indexPath.section == 3) {
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
         __weak typeof(self) weakSelf = self;
+        fundingTypeVC.selectFundID = _selectParent;
         fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent){
             _selectParent = selectParent;
             [weakSelf.tableview reloadData];
