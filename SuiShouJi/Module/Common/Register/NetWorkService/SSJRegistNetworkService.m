@@ -81,30 +81,32 @@
     self.interfaceType = SSJRegistNetworkServiceTypeSetPassword;
     switch (self.type) {
         case SSJRegistAndForgetPasswordTypeRegist:
-            [self request:@"/user/mobregister.go" params:@{@"mobileNo":mobileNo ?: @"",@"cuserid":SSJUSERID(),
-                                                                          @"yzm":authCode ?: @"",
-                                                                          @"pwd":password ?: @""}];
+            [self request:@"/user/mobregister.go" params:@{@"mobileNo":mobileNo ?: @"",
+                                                           @"cuserid":SSJUSERID() ?: @"",
+                                                               @"yzm":authCode ?: @"",
+                                                               @"pwd":password ?: @""}];
             break;
             
         case SSJRegistAndForgetPasswordTypeForgetPassword:
             [self request:@"/user/resetpwd.go" params:@{@"mobileNo":mobileNo ?: @"",
-                                                                          @"yzm":authCode ?: @"",
-                                                                          @"pwd":password ?: @""}];
+                                                             @"yzm":authCode ?: @"",
+                                                             @"pwd":password ?: @""}];
             break;
     }
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement {
-    if (self.interfaceType == SSJRegistNetworkServiceTypeSetPassword) {
-        if ([self.returnCode isEqualToString:@"1"]) {
-            NSDictionary *resultInfo = [rootElement objectForKey:@"results"];
-            if (resultInfo) {
-                SSJSaveAppId(resultInfo[@"appId"] ?: @"");
-                SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
-                SSJSaveUserLogined(YES);
-            }
-        }
-    }
-}
+//- (void)requestDidFinish:(NSDictionary *)rootElement {
+//    if (self.interfaceType == SSJRegistNetworkServiceTypeSetPassword
+//        && self.type == SSJRegistAndForgetPasswordTypeRegist
+//        && [self.returnCode isEqualToString:@"1"]) {
+//        
+//        NSDictionary *resultInfo = [rootElement objectForKey:@"results"];
+//        if (resultInfo) {
+//            SSJSaveAppId(resultInfo[@"appId"] ?: @"");
+//            SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
+//            SSJSaveUserLogined(YES);
+//        }
+//    }
+//}
 
 @end

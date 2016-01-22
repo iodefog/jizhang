@@ -9,6 +9,7 @@
 #import "SSJRegistCompleteViewController.h"
 #import "SSJRegistNetworkService.h"
 #import "TPKeyboardAvoidingScrollView.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJRegistCompleteViewController () <UITextFieldDelegate>
 
@@ -93,33 +94,30 @@
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-//    [super serverDidFinished:service];
+    [super serverDidFinished:service];
     
     if ([self.registCompleteService.returnCode isEqualToString:@"1"]) {
         
-        [self.passwordField resignFirstResponder];
-        
-        __weak typeof(self) weakSelf = self;
-        SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
-            if (weakSelf.finishHandle) {
-                weakSelf.finishHandle(weakSelf);
+        //  更新当前用户的注册状态，只有成功才按照注册成功处理，反之败则按照注册失败处理
+        [SSJUserTableManager registerUserIdWithSuccess:^{
+            [self.passwordField resignFirstResponder];
+            [self showSuccessMessage];
+            
+            NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
+            if (resultInfo) {
+                SSJSaveAppId(resultInfo[@"appId"] ?: @"");
+                SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
+                SSJSaveUserLogined(YES);
             }
+            
+        } failure:^(NSError *error) {
+            [self.passwordField becomeFirstResponder];
+            [self showErrorMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
         }];
-        if (self.type == 0) {
-            if (self.RegistCompleteBlock) {
-                self.RegistCompleteBlock(self.mobileNo);
-            }
-        }
-        NSString *message = self.type == SSJRegistAndForgetPasswordTypeRegist ? @"注册成功" : @"设置密码成功";
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
         
     } else {
-        
         [self.passwordField becomeFirstResponder];
-        
-        NSString *errorMessage = self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE;
-        SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:errorMessage action:sureAction, nil];
+        [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
     }
 }
 
@@ -140,6 +138,23 @@
     } else {
         [CDAutoHideMessageHUD showMessage:@"只能输入6-15位字母、数字组合"];
     }
+}
+
+#pragma mark - Private
+- (void)showSuccessMessage {
+    __weak typeof(self) weakSelf = self;
+    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        if (weakSelf.finishHandle) {
+            weakSelf.finishHandle(weakSelf);
+        }
+    }];
+    NSString *message = self.type == SSJRegistAndForgetPasswordTypeRegist ? @"注册成功" : @"设置密码成功";
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
+}
+
+- (void)showErrorMessage:(NSString *)message {
+    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:NULL];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
 }
 
 #pragma mark - Getter

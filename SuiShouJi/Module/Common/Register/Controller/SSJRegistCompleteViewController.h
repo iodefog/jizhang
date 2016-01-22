@@ -13,11 +13,6 @@
 
 @interface SSJRegistCompleteViewController : SSJBaseViewController
 
-//注册成功回调
-typedef void (^RegistCompleteBlock)(NSString *mobileNum);
-
-@property (nonatomic, copy) RegistCompleteBlock RegistCompleteBlock;
-
 /**
  *  标准初始化方法
  *

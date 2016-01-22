@@ -16,4 +16,6 @@
 
 + (NSString *)unregisteredUserIdInDatabase:(FMDatabase *)db error:(NSError **)error;
 
++ (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+
 @end

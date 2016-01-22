@@ -70,4 +70,19 @@
     return userId;
 }
 
++ (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    if (SSJUSERID().length) {
+        SSJPRINT(@">>>SSJ warning:invalid user id");
+        return;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"update BK_USER set CREGISTERSTATE = 1 where CUSERID = ?", SSJUSERID()]) {
+            success();
+            return;
+        }
+        failure([db lastError]);
+    }];
+}
+
 @end

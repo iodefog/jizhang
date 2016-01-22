@@ -46,6 +46,7 @@ typedef NS_ENUM(NSInteger, SSJRegistNetworkServiceType) {
  *  验证验证码接口
  *
  *  @param mobileNo 手机号
+ *  @param authCode 验证码
  */
 - (void)checkAuthCodeWithMobileNo:(NSString *)mobileNo authCode:(NSString *)authCode;
 
@@ -53,6 +54,8 @@ typedef NS_ENUM(NSInteger, SSJRegistNetworkServiceType) {
  *  设置密码接口
  *
  *  @param mobileNo 手机号
+ *  @param authCode 验证码
+ *  @param password 登录密码
  */
 - (void)setPasswordWithMobileNo:(NSString *)mobileNo authCode:(NSString *)authCode password:(NSString *)password;
 

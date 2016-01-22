@@ -54,18 +54,21 @@
         
         NSError *error = nil;
         if (![reuslt nextWithError:&error]) {
-            if (error) {
-                [reuslt close];
-                failure(error);
-                return;
-            } else {
-                //  用户表中没有创建该用户的记录
-                
-            }
+            [reuslt close];
+            failure(error);
+            return;
+//            if (error) {
+//                
+//            } else {
+//                //  用户表中没有创建该用户的记录
+//                
+//            }
         }
         
         //  根据表中存储的状态判断是否需要创建以下默认资金帐户
         BOOL defaultFundAcctState = [reuslt boolForColumn:@"CDEFAULTFUNDACCTSTATE"];
+        [reuslt close];
+        
         if (defaultFundAcctState) {
             success();
             return;
@@ -85,7 +88,6 @@
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '信用卡透支', '3', '#8dc4fa', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
         
         [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝余额', '7', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'", SSJUUID() , writeDate, @(SSJSyncVersion()), SSJUSERID()];
-        
         
         [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root'",SSJUSERID(),[NSNumber numberWithDouble:0.00]];
         
