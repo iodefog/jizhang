@@ -120,12 +120,13 @@
 
 #pragma mark - private
 -(void)getDateFromDb{
+    [self.items removeAllObjects];
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 0",[NSNumber numberWithBool:self.incomeOrExpence]];
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
     while ([rs next]) {
         SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
         item.categoryTitle = [rs stringForColumn:@"CNAME"];
@@ -148,7 +149,7 @@
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"首页类型已满,类别已满，请移除一些类别后再添加" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
     }else{
-        [db executeUpdate:@"UPDATE BK_BILL_TYPE SET ISTATE = 1 WHERE ID = ? AND ITYPE = ?",_selectedID,[NSNumber numberWithBool:self.incomeOrExpence]];
+        [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
         [self getDateFromDb];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"addNewTypeNotification" object:nil];
         [self.collectionView reloadData];
