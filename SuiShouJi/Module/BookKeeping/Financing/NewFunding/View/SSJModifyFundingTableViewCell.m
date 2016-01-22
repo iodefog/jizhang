@@ -48,7 +48,6 @@
         _cellDetail.textAlignment = NSTextAlignmentRight;
         _cellDetail.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _cellDetail.font = [UIFont systemFontOfSize:15];
-        _cellDetail.delegate = self;
     }
     return _cellDetail;
 }
