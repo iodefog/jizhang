@@ -64,7 +64,7 @@
 -(UIButton *)editButton{
     if (!_editButton) {
         _editButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 12, 12)];
-        [_editButton setImage:[UIImage imageNamed:@"edit test"] forState:UIControlStateNormal];
+        [_editButton setImage:[UIImage imageNamed:@"bt_delete"] forState:UIControlStateNormal];
         _editButton.layer.cornerRadius = 6.0f;
         _editButton.layer.masksToBounds = YES;
         _editButton.hidden = YES;
@@ -106,7 +106,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    [db executeUpdate:@"UPDATE BK_BILL_TYPE SET ISTATE = 0 WHERE ID = ?",self.item.categoryID];
+    [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],SSJSyncVersion(),self.item.categoryID,SSJUSERID()];
     [db close];
     if (self.removeCategoryBlock) {
         self.removeCategoryBlock();

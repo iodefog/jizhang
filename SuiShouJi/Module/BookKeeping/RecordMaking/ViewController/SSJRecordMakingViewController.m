@@ -393,7 +393,7 @@
         [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:self.datePickerButton];
         self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
-        self.calendarView.frame = CGRectMake(self.view.width - 32, 0, 30, 30);
+        self.calendarView.frame = CGRectMake(self.view.width - 32, 0, 22, 22);
         self.calendarView.centerY = _inputAccessoryView.height / 2;
         [_inputAccessoryView addSubview:self.calendarView];
     }
