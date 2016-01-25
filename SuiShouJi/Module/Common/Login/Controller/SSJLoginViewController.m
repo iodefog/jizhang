@@ -58,9 +58,10 @@
 -(void)viewDidLayoutSubviews{
     self.tfPhoneNum.top = 40;
     self.tfPassword.top = self.tfPhoneNum.bottom + 10;
-    self.forgetButton.leftTop = CGPointMake(10, self.tfPassword.bottom + 10);
-    self.registerButton.rightTop = CGPointMake(self.view.width - 10, self.tfPassword.bottom + 10);
-    self.loginButton.top = self.registerButton.bottom + 40;
+    self.loginButton.top = self.tfPassword.bottom + 40;
+    self.loginButton.centerX = self.view.width / 2;
+    self.forgetButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 10);
+    self.registerButton.rightTop = CGPointMake(self.loginButton.right, self.loginButton.bottom + 10);
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
