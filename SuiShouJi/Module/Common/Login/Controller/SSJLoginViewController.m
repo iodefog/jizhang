@@ -47,13 +47,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-    [scrollView addSubview:self.loginView];
-    [self.loginView addSubview:self.tfPhoneNum];
-    [self.loginView addSubview:self.tfPassword];
+    [scrollView addSubview:self.tfPhoneNum];
+    [scrollView addSubview:self.tfPassword];
     [scrollView addSubview:self.loginButton];
     [scrollView addSubview:self.forgetButton];
     [scrollView addSubview:self.registerButton];
     [self.view addSubview:scrollView];
+}
+
+-(void)viewDidLayoutSubviews{
+    self.tfPhoneNum.top = 40;
+    self.tfPassword.top = self.tfPhoneNum.bottom + 10;
+    self.forgetButton.leftTop = CGPointMake(10, self.tfPassword.bottom + 10);
+    self.registerButton.rightTop = CGPointMake(self.view.width - 10, self.tfPassword.bottom + 10);
+    self.loginButton.top = self.registerButton.bottom + 40;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -140,37 +147,35 @@
     return _loginService;
 }
 
--(UIView*)loginView{
-    if (!_loginView) {
-        _loginView = [[UIView alloc]initWithFrame:CGRectMake(11, 24, self.view.width - 22, 94)];
-        _loginView.backgroundColor = [UIColor whiteColor];
-        _loginView.layer.borderWidth = 1;
-        _loginView.layer.borderColor = [UIColor ssj_colorWithHex:@"#d4d4d4"].CGColor;
-        _loginView.layer.cornerRadius = 5;
-        _loginView.layer.masksToBounds = YES;
-    }
-    return _loginView;
-}
+//-(UIView*)loginView{
+//    if (!_loginView) {
+//        _loginView = [[UIView alloc]initWithFrame:CGRectMake(11, 24, self.view.width - 22, 94)];
+//        _loginView.backgroundColor = [UIColor whiteColor];
+//        _loginView.layer.borderWidth = 1;
+//        _loginView.layer.borderColor = [UIColor ssj_colorWithHex:@"#d4d4d4"].CGColor;
+//        _loginView.layer.cornerRadius = 5;
+//        _loginView.layer.masksToBounds = YES;
+//    }
+//    return _loginView;
+//}
 
 -(UITextField*)tfPhoneNum{
     if (!_tfPhoneNum) {
-        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_phone"]];
+        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_username"]];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         
-        _tfPhoneNum = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 47)];
-        _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfPhoneNum.placeholder = @"手机号/9188用户名";
-        _tfPhoneNum.font = [UIFont systemFontOfSize:16];
-//        [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:@"#d4d4d4"] forKeyPath:@"_placeholderLabel.textColor"];
-//        [_tfPhoneNum setValue:[UIFont systemFontOfSize:18] forKeyPath:@"_placeholderLabel.font"];
-        [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        _tfPhoneNum = [[UITextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47)];
         [_tfPhoneNum ssj_setBorderWidth:1.0];
-        [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#d4d4d4"]];
+        [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
+        [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _tfPhoneNum.placeholder = @"手机号";
+        _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         [_tfPhoneNum ssj_setBorderInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
         _tfPhoneNum.delegate = self;
-//        _tfPhoneNum.keyboardType = UIKeyboardTypeASCIICapable;
+        _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
         _tfPhoneNum.leftView = leftView;
         _tfPhoneNum.leftViewMode = UITextFieldViewModeAlways;
     }
@@ -179,17 +184,18 @@
 
 -(UITextField*)tfPassword{
     if (!_tfPassword) {
-        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_lock"]];
+        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
-        
-        _tfPassword = [[UITextField alloc]initWithFrame:CGRectMake(0, 47, self.view.width - 22, 47)];
+        _tfPassword = [[UITextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47)];
+        [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_tfPassword ssj_setBorderWidth:1.0];
+        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
+        [_tfPassword ssj_setBorderInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
         _tfPassword.font = [UIFont systemFontOfSize:16];
-//        [_tfPassword setValue:[UIColor ssj_colorWithHex:@"#d4d4d4"] forKeyPath:@"_placeholderLabel.textColor"];
-//        [_tfPassword setValue:[UIFont systemFontOfSize:18] forKeyPath:@"_placeholderLabel.font"];
         _tfPassword.secureTextEntry = YES;
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;
