@@ -43,6 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = self.rightButton;
     [self.view addSubview:self.transferIntext];
@@ -290,6 +291,10 @@
             TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
         }
     }
+}
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
 }
 
 - (void)didReceiveMemoryWarning {

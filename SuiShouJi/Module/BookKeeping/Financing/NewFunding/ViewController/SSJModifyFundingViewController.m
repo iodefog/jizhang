@@ -43,7 +43,7 @@
     [super viewDidLoad];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.title = self.item.fundingName;
-    _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择账户颜色"];
+    _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择颜色"];
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
     [self.view addSubview:self.tableView];
@@ -135,7 +135,7 @@
             _amountTextField = NewFundingCell.cellDetail;
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",self.item.fundingAmount];
-            NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeDecimalPad;
+            NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             _amountTextField.delegate = self;
 
         }
@@ -176,6 +176,11 @@
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
         if (existedLength - selectedLength + replaceLength > 13) {
+            if (textField == _nameTextField) {
+                [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+            }else{
+                [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+            }
             return NO;
         }
     }else if (textField == _amountTextField){

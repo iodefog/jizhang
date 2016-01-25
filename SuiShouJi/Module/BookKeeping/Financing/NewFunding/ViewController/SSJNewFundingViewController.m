@@ -105,18 +105,22 @@
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellText.placeholder = @"请输入账户名称";
             _nameTextField = NewFundingCell.cellText;
+            _nameTextField.delegate = self;
         }
             break;
         case 1:{
             _amountTextField = NewFundingCell.cellText;
             NewFundingCell.cellText.placeholder = @"请输入账户余额";
-            NewFundingCell.cellText.keyboardType = UIKeyboardTypeDecimalPad;
+            NewFundingCell.cellText.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            _amountTextField.delegate = self;
         }
             break;
         case 2:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellText.placeholder = @"备注说明";
             _memoTextField = NewFundingCell.cellText;
+            _memoTextField.delegate = self;
+
         }
             break;
         case 3:{
@@ -131,7 +135,7 @@
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
-            NewFundingCell.cellText.text = @"选择账户颜色";
+            NewFundingCell.cellText.text = @"选择颜色";
             NewFundingCell.cellText.enabled = NO;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -151,6 +155,11 @@
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
         if (existedLength - selectedLength + replaceLength > 13) {
+            if (textField == _nameTextField) {
+                [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+            }else{
+                [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+            }
             return NO;
         }
     }else if (textField == _amountTextField){

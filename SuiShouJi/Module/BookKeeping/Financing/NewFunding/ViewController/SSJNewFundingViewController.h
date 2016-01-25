@@ -8,6 +8,6 @@
 
 #import "SSJBaseViewController.h"
 
-@interface SSJNewFundingViewController : SSJBaseViewController<UITableViewDataSource,UITableViewDelegate>
+@interface SSJNewFundingViewController : SSJBaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
 @end

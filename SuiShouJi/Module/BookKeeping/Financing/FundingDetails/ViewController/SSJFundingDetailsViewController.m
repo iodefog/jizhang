@@ -100,6 +100,8 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     [headerView.dateLabel sizeToFit];
     if ([sectionInfo[SSJFundingDetailSumKey] doubleValue] > 0) {
         headerView.balanceLabel.text = [NSString stringWithFormat:@"+%@",sectionInfo[SSJFundingDetailSumKey]];
+    }else{
+        headerView.balanceLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailSumKey]];
     }
     [headerView.balanceLabel sizeToFit];
     return headerView;

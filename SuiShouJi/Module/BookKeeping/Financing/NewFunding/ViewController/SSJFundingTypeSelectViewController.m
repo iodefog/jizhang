@@ -22,7 +22,7 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"请选择账户类型";
+        self.title = @"选择账户类型";
     }
     return self;
 }
@@ -31,6 +31,7 @@
     [super viewDidLoad];
     _items = [[NSMutableArray alloc]init];
     [self getDateFromDb];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     // Do any additional setup after loading the view.
 }
 
@@ -119,6 +120,11 @@
         }
     }
 }
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
