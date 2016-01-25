@@ -56,16 +56,16 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.transferIntext.size = CGSizeMake(self.view.width, 35);
-    self.transferIntext.leftTop = CGPointMake(0, 45);
-    [self.transferIntext ssj_relayoutBorder];
     self.transferOuttext.size = CGSizeMake(self.view.width, 35);
-    self.transferOuttext.leftTop = CGPointMake(0, self.transferIntext.bottom + 60);
+    self.transferOuttext.leftTop = CGPointMake(0, 45);
     [self.transferOuttext ssj_relayoutBorder];
+    self.transferIntext.size = CGSizeMake(self.view.width, 35);
+    self.transferIntext.leftTop = CGPointMake(0, self.transferOuttext.bottom + 60);
+    [self.transferIntext ssj_relayoutBorder];
     _transferImage.size = CGSizeMake(14, 24);
     _transferImage.centerX = self.view.width / 2 - 14;
     _transferImage.centerY = self.view.height / 2;
-    _transferImage.top = self.transferIntext.bottom + 20;
+    _transferImage.top = self.transferOuttext.bottom + 20;
     _transferLabel.left = _transferImage.right;
     _transferLabel.centerY = _transferImage.centerY;
 }

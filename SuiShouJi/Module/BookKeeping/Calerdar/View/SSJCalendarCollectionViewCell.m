@@ -52,6 +52,7 @@
             self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         }else{
             self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+            
         }
     }
 }
