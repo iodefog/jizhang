@@ -12,11 +12,14 @@
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "SSJLoginViewController.h"
+#import "SSJUserTableManager.h"
+#import "SSJUserDefaultDataCreater.h"
 #import "SSJPortraitUploadNetworkService.h"
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
+@property (nonatomic,strong) UIView *loggedFooterView;
 @end
 
 @implementation SSJMineHomeViewController{
@@ -34,39 +37,13 @@
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     _titleForSectionTwoArray = [[NSArray alloc]initWithObjects:@"同步设置",@"关于我们",@"用户协议与隐私说明", nil];
-    __weak typeof(self) weakSelf = self;
-    if (SSJIsUserLogined()) {
-        _header.HeaderButtonClickedBlock = ^(){
-            UIActionSheet *sheet;
-            sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
-            [sheet showInView:weakSelf.view];
-        };
-    }else{
-        _header.HeaderButtonClickedBlock = ^(){
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-            loginVC.backController = weakSelf;
-            [weakSelf.navigationController pushViewController:loginVC animated:YES];
-        };
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tableView.tableHeaderView = self.header;
-    __weak typeof(self) weakSelf = self;
-    if (SSJIsUserLogined()) {
-        _header.HeaderButtonClickedBlock = ^(){
-            UIActionSheet *sheet;
-            sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
-            [sheet showInView:weakSelf.view];
-        };
-    }else{
-        _header.HeaderButtonClickedBlock = ^(){
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-            loginVC.backController = weakSelf;
-            [weakSelf.navigationController pushViewController:loginVC animated:YES];
-        };
-    }
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Getter
@@ -74,9 +51,34 @@
     if (!_header) {
         _header = [SSJMineHomeTableViewHeader MineHomeHeader];
         _header.frame = CGRectMake(0, 0, self.view.width, 125);
-
+        __weak typeof(self) weakSelf = self;
+        _header.HeaderButtonClickedBlock = ^(){
+            if (SSJIsUserLogined()) {
+                UIActionSheet *sheet;
+                sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
+                [sheet showInView:weakSelf.view];
+            }else{
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }
+        };
     }
     return _header;
+}
+
+-(UIView *)loggedFooterView{
+    if (_loggedFooterView == nil) {
+        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 120)];
+        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 260, 40)];
+        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
+        [quitLogButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        quitLogButton.backgroundColor = [UIColor whiteColor];
+        [_loggedFooterView addSubview:quitLogButton];
+        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
+    }
+    return _loggedFooterView;
 }
 
 #pragma mark - UITableViewDelegate
@@ -89,8 +91,18 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (SSJIsUserLogined() && section == 2) {
+        return self.loggedFooterView;
+    }
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
     return footerView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (SSJIsUserLogined() && section == 2) {
+        return 120;
+    }
+    return 0.1f;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -181,7 +193,19 @@
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
-
+-(void)quitLogButtonClicked:(id)sender{
+    SSJClearLoginInfo();
+    [self.tableView reloadData];
+    [SSJUserTableManager reloadUserIdWithSuccess:^(){
+        [SSJUserDefaultDataCreater createAllDefaultDataWithSuccess:^(){
+            
+        }failure:^(NSError *error){
+            
+        }];
+    }failure:^(NSError *error){
+        
+    }];
+}
 
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

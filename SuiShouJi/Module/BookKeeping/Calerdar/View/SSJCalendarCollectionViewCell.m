@@ -31,8 +31,6 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _dateLabel.font = [UIFont systemFontOfSize:15];
     }
     return _dateLabel;
 }
@@ -44,12 +42,17 @@
 
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
-    if (isSelected) {
-        self.layer.cornerRadius = self.width / 2;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
-        self.layer.borderWidth = 1.f;
+    if (_isSelected) {
+        self.dateLabel.textColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        self.layer.cornerRadius = self.height / 2;
     }else{
-        self.layer.borderWidth = 0;
+        self.backgroundColor = [UIColor whiteColor];
+        if (self.selectable) {
+            self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        }else{
+            self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        }
     }
 }
 
@@ -57,7 +60,11 @@
     _selectable = selectable;
     if (_selectable == YES) {
         self.userInteractionEnabled = YES;
-        self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        if (self.isSelected) {
+            self.dateLabel.textColor = [UIColor whiteColor];
+        }else{
+            self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        }
     }else if (_selectable == NO){
         self.userInteractionEnabled = NO;
         self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];

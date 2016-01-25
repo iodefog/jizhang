@@ -163,6 +163,7 @@
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
+        _calendarView.day = _currentDay;
         __weak typeof(self) weakSelf = self;
         _calendarView.DateSelectedBlock = ^(long year , long month ,long day){
             weakSelf.selectedYear = year;

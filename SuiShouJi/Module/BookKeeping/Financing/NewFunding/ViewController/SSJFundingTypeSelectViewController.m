@@ -105,6 +105,7 @@
         item.fundingName = [rs stringForColumn:@"CACCTNAME"];
         item.fundingIcon = [rs stringForColumn:@"CICOIN"];
         item.fundingMemo = [rs stringForColumn:@"CMEMO"];
+        item.fundingParent = [rs stringForColumn:@"CPARENT"];
         [_items addObject:item];
     }
     [db close];

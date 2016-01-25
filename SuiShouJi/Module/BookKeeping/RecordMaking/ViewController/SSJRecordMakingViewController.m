@@ -130,8 +130,9 @@
     self.textInput.right = self.selectedCategoryView.right - 12;
     self.textInput.centerY = self.categoryImage.centerY;
     self.inputView.bottom = self.view.bottom;
-    self.customKeyBoard.height = 210;
+    self.customKeyBoard.height = 200;
     self.categoryListView.top = self.selectedCategoryView.bottom;
+    self.categoryListView.height = self.inputView.top - self.selectedCategoryView.bottom;
     self.inputAccessoryView.bottom = self.inputView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.inputAccessoryView.top - self.selectedCategoryView.bottom);
 
@@ -293,7 +294,7 @@
 #pragma mark - Getter
 -(SSJCustomKeyboard*)customKeyBoard{
     if (!_customKeyBoard) {
-        _customKeyBoard = [[SSJCustomKeyboard alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 210)];
+        _customKeyBoard = [[SSJCustomKeyboard alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
         _customKeyBoard.delegate = self;
     }
     return _customKeyBoard;
@@ -303,8 +304,6 @@
     if (!_selectedCategoryView) {
         _selectedCategoryView = [[UIView alloc]init];
 //        _selectedCategoryView.backgroundColor = [UIColor redColor];
-        _selectedCategoryView.layer.borderColor = [UIColor ssj_colorWithHex:@"cccccc"].CGColor;
-        _selectedCategoryView.layer.borderWidth = 1.0f;
         _selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     }
     return _selectedCategoryView;
@@ -366,17 +365,15 @@
 
 -(UIView*)inputView{
     if (!_inputView ) {
-        _inputView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 210)];
+        _inputView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
     }
     return _inputView;
 }
 
 -(UIView*)inputAccessoryView{
     if (!_inputAccessoryView ) {
-        _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
+        _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _inputAccessoryView.backgroundColor = [UIColor whiteColor];
-        [_inputAccessoryView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e2e2e2"]];
-        [_inputAccessoryView ssj_setBorderStyle:SSJBorderStyleTop];
         _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 50)];
         [_fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
         _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;

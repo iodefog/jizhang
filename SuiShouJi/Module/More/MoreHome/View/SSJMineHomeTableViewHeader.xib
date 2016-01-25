@@ -23,7 +23,7 @@
                         <constraint firstAttribute="width" constant="66" id="9Yc-5g-dvq"/>
                         <constraint firstAttribute="height" constant="66" id="uH5-rO-pXY"/>
                     </constraints>
-                    <state key="normal" image="defualtPortrait.png"/>
+                    <state key="normal" image="defualt_portrait.png"/>
                     <connections>
                         <action selector="loginButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="xYz-ND-bkT"/>
                     </connections>
@@ -45,6 +45,6 @@
         </view>
     </objects>
     <resources>
-        <image name="defualtPortrait.png" width="69" height="67"/>
+        <image name="defualt_portrait.png" width="63" height="63"/>
     </resources>
 </document>

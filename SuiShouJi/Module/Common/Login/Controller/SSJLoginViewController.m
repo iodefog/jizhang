@@ -172,7 +172,7 @@
         [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
         [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _tfPhoneNum.placeholder = @"手机号";
+        _tfPhoneNum.placeholder = @"请输入手机号";
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         [_tfPhoneNum ssj_setBorderInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
         _tfPhoneNum.delegate = self;
@@ -209,7 +209,7 @@
 -(UIButton*)loginButton{
     if (!_loginButton) {
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _loginButton.frame = CGRectMake(11, self.loginView.bottom + 26, self.view.width - 22, 47);
+        _loginButton.frame = CGRectMake(11, self.loginView.bottom + 26, self.view.width - 22 , 47);
         _loginButton.enabled = NO;
         _loginButton.clipsToBounds = YES;
         _loginButton.layer.cornerRadius = 3;

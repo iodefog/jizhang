@@ -45,7 +45,7 @@
 }
 
 -(void)layoutSubviews{
-    self.pageControl.top = self.scrollView.bottom;
+    self.pageControl.bottom = self.height;
     self.pageControl.centerX = self.centerX;
     if (_screenWidth == 375) {
         self.scrollView.frame = CGRectMake(0, 0, self.width, self.height - 20);
@@ -53,7 +53,6 @@
         self.scrollView.frame = CGRectMake(0, 0, self.width, self.height - 40);
     }else{
         self.scrollView.frame = CGRectMake(0, 0, self.width, self.height - 10);
-
     }
     _scrollView.contentSize = CGSizeMake(self.width * _page, 0);
     for (int i = 0; i < _page; i++) {

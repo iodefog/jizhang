@@ -71,7 +71,22 @@
 -(void)setItem:(SSJFundingItem *)item{
     _item = item;
     if ([_item.fundingParent isEqualToString:@"root"]) {
-        _fundingTitle.text = self.item.fundingName;
+        if (_item.fundingMemo == nil) {
+            _fundingTitle.text = self.item.fundingName;
+        }else{
+            NSString *string = [NSString stringWithFormat:@"%@ (%@)",self.item.fundingName,self.item.fundingMemo];
+            NSMutableAttributedString *attrString =
+            [[NSMutableAttributedString alloc] initWithString:string];
+            [attrString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18]
+                               range:[string rangeOfString:self.item.fundingName]];
+            [attrString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15]
+                               range:[string rangeOfString:[NSString stringWithFormat:@"(%@)",self.item.fundingMemo]]];
+            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"393939"]
+                               range:[string rangeOfString:self.item.fundingName]];
+            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"a7a7a7"]
+                               range:[string rangeOfString:[NSString stringWithFormat:@"(%@)",self.item.fundingMemo]]];
+            _fundingTitle.attributedText = attrString;
+        }
     }else{
         _fundingTitle.text = self.item.fundingName;
     }
