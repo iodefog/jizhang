@@ -24,7 +24,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"选择账户颜色";
+        self.title = @"选择颜色";
         _colorArray = @[@"#fe8a65",@"#ffb994",@"#58c8e9",@"#62b3fd",@"#fe79b4",@"#ff7a90",@"#aecc50",@"#c9a0ff",@"#8c99f6",@"#80e290"];
     }
     return self;
@@ -39,6 +39,8 @@
     }
     [self.view addSubview:self.headerView];
     [self.view addSubview:self.collectionView];
+    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
+
     // Do any additional setup after loading the view.
 }
 
@@ -130,6 +132,11 @@
         [_headerView addSubview:_amountLabel];
     }
     return _headerView;
+}
+
+#pragma mark - Private
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -139,7 +139,11 @@
         SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
         headerView.dateLabel.text = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",self.selectedYear,self.selectedMonth,self.selectedDay];
         [headerView.dateLabel sizeToFit];
-        headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",[self getBalance]];
+        if ([self getBalance] > 0) {
+            headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",[self getBalance]];
+        }else{
+            headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",[self getBalance]];
+        }
         [headerView.balanceLabel sizeToFit];
         return headerView;
     }
