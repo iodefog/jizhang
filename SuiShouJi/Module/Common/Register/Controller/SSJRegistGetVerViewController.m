@@ -10,6 +10,8 @@
 #import "SSJRegistCheckAuthCodeViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
+#import "SSJRegistOrderView.h"
+#import "SSJBaselineTextField.h"
 #import "SSJRegistNetworkService.h"
 
 @interface SSJRegistGetVerViewController () <UITextFieldDelegate>
@@ -17,7 +19,8 @@
 @property (nonatomic) SSJRegistAndForgetPasswordType type;
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
-@property (nonatomic, strong) UITextField *tfPhoneNum;
+@property (nonatomic, strong) SSJRegistOrderView *stepView;
+@property (nonatomic, strong) SSJBaselineTextField *tfPhoneNum;
 @property (nonatomic, strong) UIButton *agreeButton;
 @property (nonatomic, strong) UIButton *protocolButton;
 @property (nonatomic, strong) UIButton *nextButton;
@@ -40,15 +43,7 @@
 - (instancetype)initWithRegistAndForgetType:(SSJRegistAndForgetPasswordType)type {
     if (self = [super initWithNibName:nil bundle:nil]) {
         self.type = type;
-        switch (self.type) {
-            case SSJRegistAndForgetPasswordTypeRegist:
-                self.title = @"注册";
-                break;
-                
-            case SSJRegistAndForgetPasswordTypeForgetPassword:
-                self.title = @"忘记密码";
-                break;
-        }
+        self.title = @"注册";
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
@@ -59,13 +54,13 @@
     [super viewDidLoad];
     
     [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.tfPhoneNum];
-    if (self.type == SSJRegistAndForgetPasswordTypeRegist) {
-        [self.scrollView addSubview:self.agreeButton];
-        [self.scrollView addSubview:self.protocolButton];
-    }
+    [self.scrollView addSubview:self.agreeButton];
+    [self.scrollView addSubview:self.protocolButton];
     [self.scrollView addSubview:self.nextButton];
     
+    self.agreeButton.selected = YES;
     self.nextButton.enabled = self.tfPhoneNum.text.length >= 11;
 }
 
@@ -79,22 +74,22 @@
     [self.getVerCodeService cancel];
 }
 
-- (void)viewWillLayoutSubviews {
-    self.scrollView.frame = self.view.bounds;
-    self.tfPhoneNum.frame = CGRectMake(10, 20, self.view.width - 20, 48);
-    switch (self.type) {
-        case SSJRegistAndForgetPasswordTypeRegist: {
-            self.protocolButton.leftTop = CGPointMake(40, self.tfPhoneNum.bottom + 22);
-            self.agreeButton.size = CGSizeMake(40, 40);
-            self.agreeButton.center = CGPointMake(20, self.protocolButton.centerY);
-            self.nextButton.frame = CGRectMake(10, self.agreeButton.bottom + 30, self.view.width - 20, 40);
-        }   break;
-            
-        case SSJRegistAndForgetPasswordTypeForgetPassword: {
-            self.nextButton.frame = CGRectMake(10, self.tfPhoneNum.bottom + 25, self.view.width - 20, 40);
-        }   break;
-    }
-}
+//- (void)viewWillLayoutSubviews {
+//    self.scrollView.frame = self.view.bounds;
+//    self.tfPhoneNum.frame = CGRectMake(10, 20, self.view.width - 20, 48);
+//    switch (self.type) {
+//        case SSJRegistAndForgetPasswordTypeRegist: {
+//            self.protocolButton.leftTop = CGPointMake(40, self.tfPhoneNum.bottom + 22);
+//            self.agreeButton.size = CGSizeMake(40, 40);
+//            self.agreeButton.center = CGPointMake(20, self.protocolButton.centerY);
+//            self.nextButton.frame = CGRectMake(10, self.agreeButton.bottom + 30, self.view.width - 20, 40);
+//        }   break;
+//            
+//        case SSJRegistAndForgetPasswordTypeForgetPassword: {
+//            self.nextButton.frame = CGRectMake(10, self.tfPhoneNum.bottom + 25, self.view.width - 20, 40);
+//        }   break;
+//    }
+//}
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -156,7 +151,7 @@
 
 //  同意、不同意协议
 - (void)agreeProtocaolAction {
-    self.agreeButton.selected = !self.agreeButton.selected;
+//    self.agreeButton.selected = !self.agreeButton.selected;
 }
 
 //  查看协议
@@ -178,17 +173,23 @@
 
 - (TPKeyboardAvoidingScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:CGRectZero];
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
     }
     return _scrollView;
 }
 
-- (UITextField *)tfPhoneNum {
+- (SSJRegistOrderView *)stepView {
+    if (!_stepView) {
+        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 0, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputPhoneNo];
+    }
+    return _stepView;
+}
+
+- (SSJBaselineTextField *)tfPhoneNum {
     if (!_tfPhoneNum) {
-        _tfPhoneNum = [[UITextField alloc] initWithFrame:CGRectZero];
+        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:40];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
-        _tfPhoneNum.borderStyle = UITextBorderStyleRoundedRect;
-        _tfPhoneNum.placeholder = @"请输入您本人手机号码";
+        _tfPhoneNum.placeholder = @"请输入您的手机号";
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
@@ -199,14 +200,34 @@
     return _tfPhoneNum;
 }
 
+- (UIButton *)nextButton {
+    if (!_nextButton) {
+        _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _nextButton.frame = CGRectMake(25, self.tfPhoneNum.bottom + 40, self.view.width - 50, 40);
+        _nextButton.layer.cornerRadius = 3;
+        _nextButton.clipsToBounds = YES;
+        _nextButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_nextButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
+        [_nextButton addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _nextButton;
+}
+
 - (UIButton *)agreeButton {
     if (!_agreeButton) {
         _agreeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _agreeButton.frame = CGRectMake(25, self.nextButton.bottom + 20, 12, 12);
         _agreeButton.selected = YES;
-        [_agreeButton setImage:[UIImage imageNamed:@"regist_disagree"] forState:UIControlStateNormal];
-        [_agreeButton setImage:[UIImage imageNamed:@"regist_agree"] forState:UIControlStateSelected];
-        [_agreeButton setImage:[UIImage imageNamed:@"regist_agree"] forState:UIControlStateSelected | UIControlStateHighlighted];
+        [_agreeButton setImage:nil forState:UIControlStateNormal];
+        [_agreeButton setImage:[UIImage imageNamed:@"register_agreement"] forState:UIControlStateSelected];
         [_agreeButton addTarget:self action:@selector(agreeProtocaolAction) forControlEvents:UIControlEventTouchUpInside];
+        [_agreeButton ssj_setBorderWidth:1];
+        [_agreeButton ssj_setBorderStyle:SSJBorderStyleAll];
+        [_agreeButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+//        [_agreeButton ssj_setBorderInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
     }
     return _agreeButton;
 }
@@ -220,24 +241,10 @@
         [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:@"#757575"] forState:UIControlStateNormal];
         [_protocolButton sizeToFit];
         [_protocolButton addTarget:self action:@selector(checkProtocolAction) forControlEvents:UIControlEventTouchUpInside];
+        _protocolButton.left = self.agreeButton.right + 10;
+        _protocolButton.centerY = self.agreeButton.centerY;
     }
     return _protocolButton;
-}
-
-- (UIButton *)nextButton {
-    if (!_nextButton) {
-        _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _nextButton.layer.cornerRadius = 3;
-        _nextButton.clipsToBounds = YES;
-        _nextButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#d43e42"] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#661517"] forState:UIControlStateHighlighted];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cfd2d4"] forState:UIControlStateDisabled];
-        [_nextButton addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _nextButton;
 }
 
 @end
