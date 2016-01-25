@@ -64,6 +64,14 @@
  */
 + (void)asyncCreateDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
-+ (void)createAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+
+/**
+ *  异步创建当前用户默认的所有数据（同步表、资金帐户、收支类型）
+ *
+ *  @param success  成功的回调
+ *  @param failure  失败的回调
+ *  @return (void)
+ */
++ (void)asyncCreateAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 @end

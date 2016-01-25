@@ -9,6 +9,8 @@
 #import "SSJRegistCompleteViewController.h"
 #import "SSJRegistNetworkService.h"
 #import "TPKeyboardAvoidingScrollView.h"
+#import "SSJRegistOrderView.h"
+#import "SSJBaselineTextField.h"
 #import "SSJUserTableManager.h"
 
 @interface SSJRegistCompleteViewController () <UITextFieldDelegate>
@@ -18,8 +20,14 @@
 @property (nonatomic, copy) NSString *authCode;
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
-@property (nonatomic, strong) UITextField *passwordField;   //  密码输入框
-@property (nonatomic, strong) UIButton *finishBtn;          //  完成注册按钮
+
+@property (nonatomic, strong) SSJRegistOrderView *stepView;
+
+//  密码输入框
+@property (nonatomic, strong) SSJBaselineTextField *passwordField;
+
+//  完成注册按钮
+@property (nonatomic, strong) UIButton *finishBtn;
 @property (nonatomic, strong) SSJRegistNetworkService *registCompleteService;
 
 @end
@@ -61,6 +69,7 @@
     [super viewDidLoad];
     
     [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.passwordField];
     [self.scrollView addSubview:self.finishBtn];
     self.finishBtn.enabled = NO;
@@ -76,10 +85,10 @@
     [self.registCompleteService cancel];
 }
 
-- (void)viewWillLayoutSubviews {
-    self.passwordField.frame = CGRectMake(10, 20, self.view.width - 20, 48);
-    self.finishBtn.frame = CGRectMake(10, self.passwordField.bottom + 25, self.view.width - 20, 40);
-}
+//- (void)viewWillLayoutSubviews {
+//    self.passwordField.frame = CGRectMake(10, 20, self.view.width - 20, 48);
+//    self.finishBtn.frame = CGRectMake(10, self.passwordField.bottom + 25, self.view.width - 20, 40);
+//}
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -177,12 +186,18 @@
     return _scrollView;
 }
 
+- (SSJRegistOrderView *)stepView {
+    if (!_stepView) {
+        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 0, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputAuthCode];
+    }
+    return _stepView;
+}
+
 - (UITextField *)passwordField {
     if (!_passwordField) {
-        _passwordField = [[UITextField alloc] initWithFrame:CGRectZero];
+        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:40];
         _passwordField.secureTextEntry = YES;
-        _passwordField.font = [UIFont systemFontOfSize:16];
-        _passwordField.borderStyle = UITextBorderStyleRoundedRect;
+        _passwordField.font = [UIFont systemFontOfSize:15];
         _passwordField.placeholder = @"请输入6-15位字母、数字组合";
         _passwordField.delegate = self;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -193,14 +208,14 @@
 - (UIButton *)finishBtn {
     if (!_finishBtn) {
         _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _finishBtn.frame = CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40);
         _finishBtn.clipsToBounds = YES;
-        _finishBtn.layer.cornerRadius = 3;
-        _finishBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_finishBtn setTitle:@"确定" forState:UIControlStateNormal];
+        _finishBtn.layer.cornerRadius = 2;
+        _finishBtn.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_finishBtn setTitle:@"完成注册" forState:UIControlStateNormal];
         [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#d43e42"] forState:UIControlStateNormal];
-        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#661517"] forState:UIControlStateHighlighted];
-        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cfd2d4"] forState:UIControlStateDisabled];
+        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
         [_finishBtn addTarget:self action:@selector(finishBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _finishBtn;

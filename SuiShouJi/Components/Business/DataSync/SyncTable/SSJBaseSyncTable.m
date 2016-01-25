@@ -43,6 +43,7 @@
     }
     
     NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, SSJUSERID()];
+    
     NSString *additionalCondition = [self queryRecordsForSyncAdditionalCondition];
     if (additionalCondition.length) {
         [query appendFormat:@" and %@", additionalCondition];
