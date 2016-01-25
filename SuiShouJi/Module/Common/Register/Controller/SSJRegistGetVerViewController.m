@@ -8,6 +8,7 @@
 
 #import "SSJRegistGetVerViewController.h"
 #import "SSJRegistCheckAuthCodeViewController.h"
+#import "SSJForgetPasswordFirstStepViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJRegistOrderView.h"
@@ -15,8 +16,6 @@
 #import "SSJRegistNetworkService.h"
 
 @interface SSJRegistGetVerViewController () <UITextFieldDelegate>
-
-@property (nonatomic) SSJRegistAndForgetPasswordType type;
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 @property (nonatomic, strong) SSJRegistOrderView *stepView;
@@ -37,12 +36,7 @@
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [self initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeRegist];
-}
-
-- (instancetype)initWithRegistAndForgetType:(SSJRegistAndForgetPasswordType)type {
     if (self = [super initWithNibName:nil bundle:nil]) {
-        self.type = type;
         self.title = @"注册";
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
@@ -74,23 +68,6 @@
     [self.getVerCodeService cancel];
 }
 
-//- (void)viewWillLayoutSubviews {
-//    self.scrollView.frame = self.view.bounds;
-//    self.tfPhoneNum.frame = CGRectMake(10, 20, self.view.width - 20, 48);
-//    switch (self.type) {
-//        case SSJRegistAndForgetPasswordTypeRegist: {
-//            self.protocolButton.leftTop = CGPointMake(40, self.tfPhoneNum.bottom + 22);
-//            self.agreeButton.size = CGSizeMake(40, 40);
-//            self.agreeButton.center = CGPointMake(20, self.protocolButton.centerY);
-//            self.nextButton.frame = CGRectMake(10, self.agreeButton.bottom + 30, self.view.width - 20, 40);
-//        }   break;
-//            
-//        case SSJRegistAndForgetPasswordTypeForgetPassword: {
-//            self.nextButton.frame = CGRectMake(10, self.tfPhoneNum.bottom + 25, self.view.width - 20, 40);
-//        }   break;
-//    }
-//}
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *text = textField.text ? : @"";
@@ -110,7 +87,8 @@
         
         [CDAutoHideMessageHUD showMessage:@"验证码发送成功"];
         
-        SSJRegistCheckAuthCodeViewController *checkAuthCodeVC = [[SSJRegistCheckAuthCodeViewController alloc] initWithRegistAndForgetType:self.type mobileNo:self.getVerCodeService.mobileNo];
+        SSJRegistCheckAuthCodeViewController *checkAuthCodeVC = [[SSJRegistCheckAuthCodeViewController alloc] init];
+        checkAuthCodeVC.mobileNo = self.getVerCodeService.mobileNo;
         checkAuthCodeVC.finishHandle = self.finishHandle;
         [self.navigationController pushViewController:checkAuthCodeVC animated:YES];
         
@@ -119,8 +97,8 @@
         __weak typeof(self) weakSelf = self;
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
         SSJAlertViewAction *forgetAction = [SSJAlertViewAction actionWithTitle:@"忘记密码" handler:^(SSJAlertViewAction *action) {
-            SSJRegistGetVerViewController *forgetVC = [[SSJRegistGetVerViewController alloc] initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeForgetPassword];
-            forgetVC.forgetMobileNo = self.getVerCodeService.mobileNo;
+            SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
+            forgetVC.mobileNo = self.getVerCodeService.mobileNo;
             forgetVC.finishHandle = self.finishHandle;
             [weakSelf.navigationController pushViewController:forgetVC animated:YES];
         }];
@@ -164,7 +142,7 @@
 #pragma mark - Getter
 - (SSJRegistNetworkService *)getVerCodeService{
     if (_getVerCodeService==nil) {
-        _getVerCodeService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:self.type];
+        _getVerCodeService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:SSJRegistAndForgetPasswordTypeRegist];
         _getVerCodeService.showLodingIndicator = YES;
         _getVerCodeService.showMessageIfErrorOccured = NO;
     }
@@ -193,9 +171,6 @@
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
-        if (self.type == SSJRegistAndForgetPasswordTypeForgetPassword) {
-            _tfPhoneNum.text = self.forgetMobileNo;
-        }
     }
     return _tfPhoneNum;
 }

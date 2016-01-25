@@ -17,10 +17,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @interface SSJRegistCheckAuthCodeViewController () <UITextFieldDelegate>
 
-@property (nonatomic) SSJRegistAndForgetPasswordType type;
-
-@property (nonatomic, copy) NSString *mobileNo;
-
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
 @property (nonatomic, strong) SSJRegistOrderView *stepView;
@@ -52,24 +48,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [self initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeRegist mobileNo:nil];
-}
-
-- (instancetype)initWithRegistAndForgetType:(SSJRegistAndForgetPasswordType)type
-                                   mobileNo:(NSString *)mobileNo {
     if (self = [super initWithNibName:nil bundle:nil]) {
-        self.type = type;
-        self.mobileNo = mobileNo;
+        self.title = @"注册";
         self.countdown = kCountdownLimit;
-        switch (self.type) {
-            case SSJRegistAndForgetPasswordTypeRegist:
-                self.title = @"注册";
-                break;
-                
-            case SSJRegistAndForgetPasswordTypeForgetPassword:
-                self.title = @"忘记密码";
-                break;
-        }
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
@@ -102,17 +83,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
 }
 
-//- (void)viewWillLayoutSubviews {
-//    self.scrollView.frame = self.view.bounds;
-//    self.topLabel.leftTop = CGPointMake(10, 20);
-//    
-//    CGFloat baseWidth = self.view.width - 30;
-//    self.authCodeTextField.frame = CGRectMake(10, self.topLabel.bottom + 12, baseWidth * 0.6, 48);
-//    self.getAuthCodeBtn.frame = CGRectMake(self.authCodeTextField.right + 10, self.topLabel.bottom + 12, baseWidth * 0.4, 48);
-//    
-//    self.nextBtn.frame = CGRectMake(10, self.authCodeTextField.bottom + 20, self.view.width - 20, 40);
-//}
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *text = textField.text ? : @"";
@@ -140,7 +110,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     } else if (self.networkService.interfaceType == SSJRegistNetworkServiceTypeCheckAuthCode) {
         //  校验验证码
         if ([self.networkService.returnCode isEqualToString:@"1"]) {
-            SSJRegistCompleteViewController *registCompleteVC = [[SSJRegistCompleteViewController alloc] initWithRegistAndForgetType:self.type mobileNo:self.mobileNo authCode:self.networkService.authCode];
+            SSJRegistCompleteViewController *registCompleteVC = [[SSJRegistCompleteViewController alloc] init];
+            registCompleteVC.mobileNo = self.mobileNo;
+            registCompleteVC.authCode = self.networkService.authCode;
             registCompleteVC.finishHandle = self.finishHandle;
             [self.navigationController pushViewController:registCompleteVC animated:YES];
         }
@@ -200,7 +172,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #pragma mark - Getter
 - (SSJRegistNetworkService *)networkService {
     if (!_networkService) {
-        _networkService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:self.type];
+        _networkService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:SSJRegistAndForgetPasswordTypeRegist];
         _networkService.showLodingIndicator = YES;
     }
     return _networkService;
