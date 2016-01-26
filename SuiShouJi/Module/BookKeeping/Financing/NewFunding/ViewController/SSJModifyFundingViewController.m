@@ -29,6 +29,8 @@
     UITextField *_nameTextField;
     NSString *_selectParent;
     NSString *_selectColor;
+    NSString *_selectIcoin;
+
 }
 
 #pragma mark - Lifecycle
@@ -46,6 +48,7 @@
     _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择颜色"];
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
+    _selectIcoin = self.item.fundingIcon;
     [self.view addSubview:self.tableView];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     // Do any additional setup after loading the view.
@@ -91,8 +94,9 @@
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
         fundingTypeVC.selectFundID = _selectParent;
         __weak typeof(self) weakSelf = self;
-        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent){
+        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent,NSString *selectIcon){
             _selectParent = selectParent;
+            _selectIcoin = selectIcon;
             [weakSelf.tableView reloadData];
         };
         [self.navigationController pushViewController:fundingTypeVC animated:YES];
@@ -149,7 +153,9 @@
             break;
         case 3:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellDetail.text = [self getParentFundingNameWithParentfundingID:_selectParent];
+            NewFundingCell.typeTitle.text = [self getParentFundingNameWithParentfundingID:_selectParent];
+            [NewFundingCell.typeTitle sizeToFit];
+            NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
             NewFundingCell.cellDetail.enabled = NO;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }

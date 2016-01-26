@@ -9,6 +9,7 @@
 #import "SSJFundingTransferViewController.h"
 #import "SSJFundingItem.h"
 #import "SSJFundingTypeSelectView.h"
+#import "SSJNewFundingViewController.h"
 
 #import "FMDB.h"
 
@@ -56,16 +57,16 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.transferIntext.size = CGSizeMake(self.view.width, 35);
-    self.transferIntext.leftTop = CGPointMake(0, 45);
-    [self.transferIntext ssj_relayoutBorder];
     self.transferOuttext.size = CGSizeMake(self.view.width, 35);
-    self.transferOuttext.leftTop = CGPointMake(0, self.transferIntext.bottom + 60);
+    self.transferOuttext.leftTop = CGPointMake(0, 45);
     [self.transferOuttext ssj_relayoutBorder];
+    self.transferIntext.size = CGSizeMake(self.view.width, 35);
+    self.transferIntext.leftTop = CGPointMake(0, self.transferOuttext.bottom + 60);
+    [self.transferIntext ssj_relayoutBorder];
     _transferImage.size = CGSizeMake(14, 24);
     _transferImage.centerX = self.view.width / 2 - 14;
     _transferImage.centerY = self.view.height / 2;
-    _transferImage.top = self.transferIntext.bottom + 20;
+    _transferImage.top = self.transferOuttext.bottom + 20;
     _transferLabel.left = _transferImage.right;
     _transferLabel.centerY = _transferImage.centerY;
 }
@@ -160,9 +161,19 @@
         __weak typeof(self) weakSelf = self;
         _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            [weakSelf.transferInButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-            [weakSelf.transferInButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
-            _transferInItem = fundingItem;
+            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
+            {
+                [weakSelf.transferInButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+                [weakSelf.transferInButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
+                _transferInItem = fundingItem;
+            }else{
+                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
+                NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                    [weakSelf.transferOutButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
+                    [weakSelf.transferOutButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
+                };
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+            }
             [weakSelf.transferInFundingTypeSelect removeFromSuperview];
         };
     }
@@ -174,9 +185,19 @@
         __weak typeof(self) weakSelf = self;
         _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-            [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
-            _transferOutItem = fundingItem;
+            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
+            {
+                [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+                [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
+                _transferOutItem = fundingItem;
+            }else{
+                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
+                NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                    [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+                    [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
+                };
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+            }
             [weakSelf.transferOutFundingTypeSelect removeFromSuperview];
         };
     }

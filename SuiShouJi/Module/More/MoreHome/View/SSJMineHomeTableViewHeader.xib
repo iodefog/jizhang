@@ -17,34 +17,30 @@
                     <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXk-ez-d34">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defualt_portrait.png" translatesAutoresizingMaskIntoConstraints="NO" id="IQ8-Us-mzd">
                     <rect key="frame" x="106.5" y="10" width="66" height="66"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="66" id="9Yc-5g-dvq"/>
-                        <constraint firstAttribute="height" constant="66" id="uH5-rO-pXY"/>
+                        <constraint firstAttribute="height" constant="66" id="1tz-rS-m6q"/>
+                        <constraint firstAttribute="width" constant="66" id="VsI-AE-fNC"/>
                     </constraints>
-                    <state key="normal" image="defualtPortrait.png"/>
-                    <connections>
-                        <action selector="loginButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="xYz-ND-bkT"/>
-                    </connections>
-                </button>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="PXk-ez-d34" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="9Pk-vP-8tY"/>
-                <constraint firstItem="wL4-xQ-Oae" firstAttribute="top" secondItem="PXk-ez-d34" secondAttribute="bottom" constant="15" id="Rjd-Pw-4eP"/>
+                <constraint firstItem="wL4-xQ-Oae" firstAttribute="top" secondItem="IQ8-Us-mzd" secondAttribute="bottom" constant="15" id="3iY-BG-8Sw"/>
+                <constraint firstItem="IQ8-Us-mzd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="gz2-U6-2I0"/>
                 <constraint firstItem="wL4-xQ-Oae" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jl8-6u-5Ti"/>
-                <constraint firstItem="PXk-ez-d34" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="pVg-cl-wkt"/>
+                <constraint firstItem="IQ8-Us-mzd" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="pje-pJ-wyJ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="headPotraitImage" destination="IQ8-Us-mzd" id="1N9-gy-1Gz"/>
                 <outlet property="nicknameLabel" destination="wL4-xQ-Oae" id="uTW-tJ-2Iz"/>
-                <outlet property="portraitButton" destination="PXk-ez-d34" id="baI-3E-E5i"/>
             </connections>
-            <point key="canvasLocation" x="105.5" y="-131.5"/>
+            <point key="canvasLocation" x="112.5" y="-138.5"/>
         </view>
     </objects>
     <resources>
-        <image name="defualtPortrait.png" width="69" height="67"/>
+        <image name="defualt_portrait.png" width="63" height="63"/>
     </resources>
 </document>

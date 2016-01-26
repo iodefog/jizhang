@@ -51,7 +51,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.typeSelectedBlock) {
-        self.typeSelectedBlock(((SSJFundingItem*)[_items objectAtIndex:indexPath.section]).fundingID);
+        self.typeSelectedBlock(((SSJFundingItem*)[_items objectAtIndex:indexPath.section]).fundingID , ((SSJFundingItem*)[_items objectAtIndex:indexPath.section]).fundingIcon);
     };
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -105,6 +105,7 @@
         item.fundingName = [rs stringForColumn:@"CACCTNAME"];
         item.fundingIcon = [rs stringForColumn:@"CICOIN"];
         item.fundingMemo = [rs stringForColumn:@"CMEMO"];
+        item.fundingParent = [rs stringForColumn:@"CPARENT"];
         [_items addObject:item];
     }
     [db close];

@@ -94,8 +94,8 @@
         if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
             SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
             cell.currentDay = @"";
-            cell.isSelected = NO;
             cell.selectable = NO;
+            cell.isSelected = NO;
             return cell;
         }else{
             SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
@@ -111,13 +111,15 @@
                 cell.isSelected = NO;
             }else{
                 if ([cell.currentDay integerValue] == _currentDay && _year == _currentYear && _month == _currentMonth) {
+                    cell.selectable = YES;
                     cell.isSelected = YES;
                 }else if([cell.currentDay integerValue] == self.day && _year == self.selectedYear && _month == self.selectedMonth){
+                    cell.selectable = YES;
                     cell.isSelected = YES;
                 }else{
+                    cell.selectable = YES;
                     cell.isSelected = NO;
                 }
-                cell.selectable = YES;
             }
             return cell;
         }

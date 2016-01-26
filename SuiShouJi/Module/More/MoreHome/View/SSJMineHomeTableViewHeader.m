@@ -20,10 +20,15 @@
 }
 
 -(void)awakeFromNib{
-    self.portraitButton.layer.cornerRadius = 33;
-    self.portraitButton.layer.masksToBounds = YES;
+    self.headPotraitImage.layer.cornerRadius = 33;
+    self.headPotraitImage.layer.masksToBounds = YES;
+    self.headPotraitImage.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTap =
+    [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(loginButtonClicked:)];
+    [self.headPotraitImage addGestureRecognizer:singleTap];
 }
-- (IBAction)loginButtonClicked:(id)sender {
+
+- (void)loginButtonClicked:(id)sender {
     if (self.HeaderButtonClickedBlock) {
         self.HeaderButtonClickedBlock();
     }

@@ -18,4 +18,6 @@ typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
 //选择类型的回调
 @property (nonatomic, copy) fundingTypeSelectBlock fundingTypeSelectBlock;
 
+-(void)reloadDate;
+
 @end

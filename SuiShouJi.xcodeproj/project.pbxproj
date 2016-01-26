@@ -160,8 +160,6 @@
 		7DD7D6F31C4C8E6A00ACE71A /* checkmark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6481C4C8E6A00ACE71A /* checkmark@3x.png */; };
 		7DD7D6F41C4C8E6A00ACE71A /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D6491C4C8E6A00ACE71A /* close@2x.png */; };
 		7DD7D6F51C4C8E6A00ACE71A /* close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D64A1C4C8E6A00ACE71A /* close@3x.png */; };
-		7DD7D6F61C4C8E6A00ACE71A /* defualtPortrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D64B1C4C8E6A00ACE71A /* defualtPortrait@2x.png */; };
-		7DD7D6F71C4C8E6A00ACE71A /* defualtPortrait@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D64C1C4C8E6A00ACE71A /* defualtPortrait@3x.png */; };
 		7DD7D6F81C4C8E6A00ACE71A /* edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D64D1C4C8E6A00ACE71A /* edit@2x.png */; };
 		7DD7D6F91C4C8E6A00ACE71A /* edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D64E1C4C8E6A00ACE71A /* edit@3x.png */; };
 		7DD7D6FA1C4C8E6A00ACE71A /* founds_exchange@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D64F1C4C8E6A00ACE71A /* founds_exchange@2x.png */; };
@@ -292,6 +290,10 @@
 		BD37D2DE1C55BD4C0050BDAA /* login_username@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2DD1C55BD4C0050BDAA /* login_username@3x.png */; };
 		BD37D2E01C55BD610050BDAA /* login_username@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2DF1C55BD610050BDAA /* login_username@2x.png */; };
 		BD37D2E21C55BD680050BDAA /* login_password@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2E11C55BD680050BDAA /* login_password@2x.png */; };
+		BD37D2E41C55D4210050BDAA /* defualt_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2E31C55D4210050BDAA /* defualt_portrait@2x.png */; };
+		BD37D2E61C55D42C0050BDAA /* defualt_portrait@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2E51C55D42C0050BDAA /* defualt_portrait@3x.png */; };
+		BD37D2EB1C56443F0050BDAA /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2EA1C56443F0050BDAA /* SSJUserInfoNetworkService.m */; };
+		BD37D2EE1C56465F0050BDAA /* SSJUserInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */; };
 		BD4934341C34F86700300D43 /* SSJMineHomeTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */; };
 		BD4934361C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */; };
 		BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934381C34FC1800300D43 /* SSJMineHomeViewController.m */; };
@@ -571,8 +573,6 @@
 		7DD7D6481C4C8E6A00ACE71A /* checkmark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@3x.png"; sourceTree = "<group>"; };
 		7DD7D6491C4C8E6A00ACE71A /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		7DD7D64A1C4C8E6A00ACE71A /* close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@3x.png"; sourceTree = "<group>"; };
-		7DD7D64B1C4C8E6A00ACE71A /* defualtPortrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defualtPortrait@2x.png"; sourceTree = "<group>"; };
-		7DD7D64C1C4C8E6A00ACE71A /* defualtPortrait@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defualtPortrait@3x.png"; sourceTree = "<group>"; };
 		7DD7D64D1C4C8E6A00ACE71A /* edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit@2x.png"; sourceTree = "<group>"; };
 		7DD7D64E1C4C8E6A00ACE71A /* edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "edit@3x.png"; sourceTree = "<group>"; };
 		7DD7D64F1C4C8E6A00ACE71A /* founds_exchange@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_exchange@2x.png"; sourceTree = "<group>"; };
@@ -765,6 +765,12 @@
 		BD37D2DD1C55BD4C0050BDAA /* login_username@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_username@3x.png"; sourceTree = "<group>"; };
 		BD37D2DF1C55BD610050BDAA /* login_username@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_username@2x.png"; sourceTree = "<group>"; };
 		BD37D2E11C55BD680050BDAA /* login_password@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_password@2x.png"; sourceTree = "<group>"; };
+		BD37D2E31C55D4210050BDAA /* defualt_portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defualt_portrait@2x.png"; sourceTree = "<group>"; };
+		BD37D2E51C55D42C0050BDAA /* defualt_portrait@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defualt_portrait@3x.png"; sourceTree = "<group>"; };
+		BD37D2E91C56443F0050BDAA /* SSJUserInfoNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserInfoNetworkService.h; sourceTree = "<group>"; };
+		BD37D2EA1C56443F0050BDAA /* SSJUserInfoNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserInfoNetworkService.m; sourceTree = "<group>"; };
+		BD37D2EC1C56465F0050BDAA /* SSJUserInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserInfoItem.h; sourceTree = "<group>"; };
+		BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserInfoItem.m; sourceTree = "<group>"; };
 		BD4934321C34F86700300D43 /* SSJMineHomeTableViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeTableViewHeader.h; sourceTree = "<group>"; };
 		BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeTableViewHeader.m; sourceTree = "<group>"; };
 		BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJMineHomeTableViewHeader.xib; sourceTree = "<group>"; };
@@ -1187,10 +1193,10 @@
 				7DD7D6481C4C8E6A00ACE71A /* checkmark@3x.png */,
 				7DD7D6491C4C8E6A00ACE71A /* close@2x.png */,
 				7DD7D64A1C4C8E6A00ACE71A /* close@3x.png */,
-				7DD7D64B1C4C8E6A00ACE71A /* defualtPortrait@2x.png */,
-				7DD7D64C1C4C8E6A00ACE71A /* defualtPortrait@3x.png */,
 				7DD7D64D1C4C8E6A00ACE71A /* edit@2x.png */,
 				7DD7D64E1C4C8E6A00ACE71A /* edit@3x.png */,
+				BD37D2E31C55D4210050BDAA /* defualt_portrait@2x.png */,
+				BD37D2E51C55D42C0050BDAA /* defualt_portrait@3x.png */,
 				7DD7D64F1C4C8E6A00ACE71A /* founds_exchange@2x.png */,
 				7DD7D6501C4C8E6A00ACE71A /* founds_exchange@3x.png */,
 				7DD7D6511C4C8E6A00ACE71A /* founds_zhuanchu@2x.png */,
@@ -1778,6 +1784,8 @@
 		BD0433B31C1AA2A40051E7AB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BD37D2EC1C56465F0050BDAA /* SSJUserInfoItem.h */,
+				BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1787,6 +1795,8 @@
 			children = (
 				BD976FA11C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.h */,
 				BD976FA21C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m */,
+				BD37D2E91C56443F0050BDAA /* SSJUserInfoNetworkService.h */,
+				BD37D2EA1C56443F0050BDAA /* SSJUserInfoNetworkService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -2460,8 +2470,6 @@
 				7DD7D6AB1C4C8E6A00ACE71A /* bt_gongjijin@3x.png in Resources */,
 				7DD7D72C1C4C8FA300ACE71A /* reportForms_period@3x.png in Resources */,
 				7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */,
-				7DD7D6F71C4C8E6A00ACE71A /* defualtPortrait@3x.png in Resources */,
-				7DD7D6F61C4C8E6A00ACE71A /* defualtPortrait@2x.png in Resources */,
 				BD976FC21C4F57F700B0E26D /* solid_circle@2x.png in Resources */,
 				7DD7D7271C4C8E6A00ACE71A /* tab_founds_nor@3x.png in Resources */,
 				7DD7D7001C4C8E6A00ACE71A /* ft_cash@2x.png in Resources */,
@@ -2482,6 +2490,7 @@
 				7DD7D69A1C4C8E6A00ACE71A /* bt_digital@2x.png in Resources */,
 				7DD7D6CB1C4C8E6A00ACE71A /* bt_recharge@3x.png in Resources */,
 				BD976FAA1C4E4A4600B0E26D /* home_jiantou.png in Resources */,
+				BD37D2E41C55D4210050BDAA /* defualt_portrait@2x.png in Resources */,
 				7DD7D6891C4C8E6A00ACE71A /* bt_baby@3x.png in Resources */,
 				7DD7D6A51C4C8E6A00ACE71A /* bt_fuli@3x.png in Resources */,
 				BD976FBB1C4F4CA200B0E26D /* circle@2x.png in Resources */,
@@ -2638,6 +2647,7 @@
 				7DD7D6941C4C8E6A00ACE71A /* bt_credit@2x.png in Resources */,
 				7DD7D6B71C4C8E6A00ACE71A /* bt_jiaoshui@3x.png in Resources */,
 				7DD7D6E21C4C8E6A00ACE71A /* bt_wage@2x.png in Resources */,
+				BD37D2E61C55D42C0050BDAA /* defualt_portrait@3x.png in Resources */,
 				BD37D2D61C52327D0050BDAA /* bt_delete@3x.png in Resources */,
 				7DD7D6CF1C4C8E6A00ACE71A /* bt_service@3x.png in Resources */,
 				7DD7D6E71C4C8E6A00ACE71A /* bt_yingye@3x.png in Resources */,
@@ -2751,6 +2761,7 @@
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
 				BD976FB91C4F353E00B0E26D /* SSJFundingDetailCell.m in Sources */,
+				BD37D2EE1C56465F0050BDAA /* SSJUserInfoItem.m in Sources */,
 				7D4EF88E1C4673A2003C4B20 /* SSJReportFormsPercentCircleAdditionView.m in Sources */,
 				BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */,
 				BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */,
@@ -2829,6 +2840,8 @@
 				BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */,
 				7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */,
 				BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */,
+				BD70DF591C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeVC.m in Sources */,
+				BD37D2EB1C56443F0050BDAA /* SSJUserInfoNetworkService.m in Sources */,
 				BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,

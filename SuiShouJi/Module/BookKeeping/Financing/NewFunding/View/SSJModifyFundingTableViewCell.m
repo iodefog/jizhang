@@ -17,6 +17,8 @@
         [self.contentView addSubview:self.cellTitle];
         [self.contentView addSubview:self.colorView];
         [self.contentView addSubview:self.cellDetail];
+        [self.contentView addSubview:self.typeTitle];
+        [self.contentView addSubview:self.typeImage];
     }
     return self;
 }
@@ -31,6 +33,12 @@
     self.colorView.size = CGSizeMake(30, 30);
     self.colorView.right = self.contentView.width - 10;
     self.colorView.centerY = self.height / 2;
+    self.typeTitle.right = self.cellDetail.right;
+    self.typeTitle.centerY = self.height / 2;
+    self.typeImage.size = CGSizeMake(30, 30);
+    self.typeImage.right = self.typeTitle.left - 10;
+    self.typeImage.centerY = self.height / 2;
+
 }
 
 -(UILabel *)cellTitle{
@@ -58,6 +66,22 @@
         _colorView = [[UIView alloc]init];
     }
     return _colorView;
+}
+
+-(UIImageView *)typeImage{
+    if (!_typeImage) {
+        _typeImage = [[UIImageView alloc]init];
+    }
+    return _typeImage;
+}
+
+-(UILabel *)typeTitle{
+    if (!_typeTitle) {
+        _typeTitle = [[UILabel alloc]init];
+        _typeTitle.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _typeTitle.font = [UIFont systemFontOfSize:15];
+    }
+    return _typeTitle;
 }
 
 /*
