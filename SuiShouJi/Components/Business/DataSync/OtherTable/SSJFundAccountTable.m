@@ -78,6 +78,14 @@
         }
     }];
     
+    
+    result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ?", SSJUSERID()];
+    while ([result next]) {
+        NSString *fundId = [result stringForColumn:@"cfundid"];
+        NSString *cuserId = [result stringForColumn:@"cuserid"];
+        success = [db executeUpdate:@"insert into BK_FUNS_ACCT (cfundid, cuserid, ibalance) select ?, ?, 0 where not exists (select count(*) from BK_FUNS_ACCT where cfundid = ? and cuserid = ?)", fundId, cuserId, fundId, cuserId];
+    }
+    
     [result close];
     
     return success;

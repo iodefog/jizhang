@@ -41,6 +41,13 @@
 ///----------------------------------
 
 /**
+ *  返回可选的列名，根据需要子类可以覆写
+ *
+ *  @return 返回对应的表的列名
+ */
++ (NSArray *)optionalColumns;
+
+/**
  *  返回查询需要同步的记录的其它条件，根据需要子类可以覆写
  *
  *  @return (BOOL) 查询需要同步的记录的其它条件
@@ -55,12 +62,20 @@
 + (NSString *)updateSyncVersionAdditionalCondition;
 
 /**
- *  返回合并记录的其它条件，根据需要子类可以覆写
+ *  返回合并记录的更新条件，根据需要子类可以覆写
  *
  *  @param record 要合并的记录数据
  *  @return (NSString *) 合并记录的其它条件
  */
-+ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record;
++ (NSString *)mergeConditionForUpdateRecord:(NSDictionary *)record;
+
+/**
+ *  返回合并记录的插入条件，根据需要子类可以覆写
+ *
+ *  @param record 要合并的记录数据
+ *  @return (NSString *) 合并记录的其它条件
+ */
++ (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db;
 
 ///----------------------------------
 /// @name 只能调用，子类不可覆写！！！
@@ -91,22 +106,5 @@
  *  @return 是否合并成功
  */
 + (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db error:(NSError **)error;
-
-
-///----------------------------------
-/// @name 用于单元测试暴露的方法
-///----------------------------------
-
-//  根据合并记录返回相应的sql语句
-+ (NSString *)sqlStatementForMergeRecord:(NSDictionary *)recordInfo inDatabase:(FMDatabase *)db;
-
-//  返回插入的sql语句
-+ (NSString *)insertStatementForMergeRecord:(NSDictionary *)recordInfo;
-
-//  返回更新的sql语句
-+ (NSString *)updateStatementForMergeRecord:(NSDictionary *)recordInfo compareWriteDate:(BOOL)compareWriteDate condition:(NSString *)condition;
-
-//
-+ (NSString *)spliceKeyAndValueForKeys:(NSArray *)keys record:(NSDictionary *)recordInfo joinString:(NSString *)joinString;
 
 @end
