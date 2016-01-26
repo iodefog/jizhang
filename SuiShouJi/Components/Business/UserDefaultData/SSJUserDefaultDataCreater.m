@@ -164,7 +164,10 @@
     NSError *error = nil;
     if (![reuslt nextWithError:&error]) {
         [reuslt close];
-        return [db lastError];
+        if (error) {
+            return error;
+        }
+        return nil;
         
         //            if (error) {
         //

@@ -11,6 +11,7 @@
 #import "SSJDatabaseQueue.h"
 
 NSString *const SSJBillingChargeDateKey = @"SSJBillingChargeDateKey";
+NSString *const SSJBillingChargeSumKey = @"SSJBillingChargeSumKey";
 NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
 
 @implementation SSJBillingChargeHelper
@@ -50,10 +51,6 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             return;
         }
         
-        NSMutableArray *result = [NSMutableArray array];
-        NSMutableDictionary *subDic = nil;
-        NSString *tempDate = nil;
-        
         NSDateFormatter *destinyFormatter = [[NSDateFormatter alloc] init];
         destinyFormatter.dateFormat = @"yyyy年MM月dd日";
         
@@ -62,6 +59,10 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
         originalFormatter.dateFormat = @"yyyy-MM-dd";
         
         NSCalendar *calendar = [NSCalendar currentCalendar];
+        
+        NSMutableArray *result = [NSMutableArray array];
+        NSMutableDictionary *subDic = nil;
+        NSString *tempDate = nil;
         
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
@@ -75,6 +76,15 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             if ([tempDate isEqualToString:billDate]) {
                 NSMutableArray *items = subDic[SSJBillingChargeRecordKey];
                 [items addObject:item];
+                
+                double sum = [subDic[SSJBillingChargeSumKey] doubleValue];
+                double money = [item.money doubleValue];
+                if (item.incomeOrExpence) {
+                    money = -money;
+                }
+                sum += money;
+                [subDic setObject:@(sum) forKey:SSJBillingChargeSumKey];
+                
             } else {
                 NSDate *transitDate = [originalFormatter dateFromString:billDate];
                 NSDateComponents *dateComponent = [calendar components:NSCalendarUnitWeekday fromDate:transitDate];
@@ -85,6 +95,13 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                 subDic = [NSMutableDictionary dictionary];
                 [subDic setObject:dateString forKey:SSJBillingChargeDateKey];
                 [subDic setObject:[@[item] mutableCopy] forKey:SSJBillingChargeRecordKey];
+                
+                double money = [item.money doubleValue];
+                if (item.incomeOrExpence) {
+                    money = -money;
+                }
+                [subDic setObject:@(money) forKey:SSJBillingChargeSumKey];
+                
                 [result addObject:subDic];
                 tempDate = billDate;
             }

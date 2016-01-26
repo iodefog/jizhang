@@ -86,6 +86,11 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
     SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kBillingChargeHeaderViewID];
     headerView.textLabel.text = sectionInfo[SSJBillingChargeDateKey];
+    
+    NSString *sumStr = sectionInfo[SSJBillingChargeSumKey];
+    sumStr = [NSString stringWithFormat:@"%.2f", [sumStr doubleValue]];
+    headerView.sumLabel.text = sumStr;
+    
     return headerView;
 }
 
