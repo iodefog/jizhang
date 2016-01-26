@@ -18,6 +18,8 @@
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserItem.h"
+#import "SSJUserDefaultDataCreater.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -90,45 +92,54 @@
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
-    __weak typeof(self) weakSelf = self;
     if ([self.loginService.returnCode isEqualToString: @"1"]) {
         __block NSError *error = nil;
-        [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-            BOOL fundInfoSuccess = true;
-            BOOL userBillSuccess = true;
-            if ([db intForQuery:@"select count(*) from BK_USER_BILL where cuserid = ?",self.loginService.item.cuserid]) {
-                fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
-            }
-            if ([db intForQuery:@"select count(*) from BK_FUNS_ACCT where cuserid = ?",self.loginService.item.cuserid]) {
-                userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
-            }
-            if (userBillSuccess && fundInfoSuccess) {
-                SSJSaveAppId(self.loginService.appid);
-                SSJSaveAccessToken(self.loginService.accesstoken);
-                SSJSaveUserLogined(YES);
-                SSJSetUserId(self.loginService.item.cuserid);
-                
-                //  登陆成功后强制同步一次
-                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-                //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [CDAutoHideMessageHUD showMessage:@"登录成功"];
-                    if (self.finishHandle) {
-                        self.finishHandle(self);
-                    } else {
-                        [self ssj_backOffAction];
-                    }
-                });
-                
-
-            }else{
-                *rollback = true;
-//                [CDAutoHideMessageHUD showMessage:@"登录失败"];
+        __block BOOL fundInfoSuccess = true;
+        __block BOOL userBillSuccess = true;
+        [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
+            userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
+            if (!userBillSuccess || !fundInfoSuccess) {
+                *rollback = YES;
+                return;
             }
         }];
+        if (userBillSuccess && fundInfoSuccess) {
+            if (self.loginService.userBillArray.count == 0) {
+                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:^(){
+                    
+                }failure:^(NSError *error){
+                    
+                }];
+            }
+            if ([self.loginService.item.cuserid isEqualToString:SSJUSERID()])
+            {
+                [SSJUserTableManager registerUserIdWithSuccess:^(){
+                    
+                }failure:^(NSError *error){
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [CDAutoHideMessageHUD showMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
+                    });
+                }];
+            }
+            SSJSaveAppId(self.loginService.appid);
+            SSJSaveAccessToken(self.loginService.accesstoken);
+            SSJSaveUserLogined(YES);
+            SSJSetUserId(self.loginService.item.cuserid);
+            //  登陆成功后强制同步一次
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+            //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                } else {
+                    [self ssj_backOffAction];
+                }
+            });
+        }
     }else{
-//        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
+        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
     }
 }
 

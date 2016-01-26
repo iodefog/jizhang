@@ -50,6 +50,8 @@
         self.accesstoken = [dict  objectForKey:@"accessToken"];
         NSDictionary *result = [dict objectForKey:@"user"];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
+        self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
+        self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
     }
 }
 

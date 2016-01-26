@@ -238,6 +238,8 @@
     }failure:^(NSError *error){
         
     }];
+    self.header.nicknameLabel.text = @"待君登录";
+    [self.tableView reloadData];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
