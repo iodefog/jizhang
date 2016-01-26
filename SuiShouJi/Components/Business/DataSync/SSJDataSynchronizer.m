@@ -22,6 +22,8 @@
 
 #import <ZipZap/ZipZap.h>
 
+static NSTimeInterval kSyncInterval = 60 * 60;
+
 //  同步文件名称
 static NSString *const kSyncFileName = @"sync_data.json";
 
@@ -36,8 +38,12 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 @interface SSJDataSynchronizer ()
 
 @property (nonatomic, weak) NSURLSessionDataTask *task;
+
 @property (nonatomic, strong) dispatch_queue_t syncQueue;
+
 @property (nonatomic) int64_t lastSuccessSyncVersion;
+
+@property (nonatomic, strong) NSTimer *timer;
 
 @end
 
@@ -62,6 +68,24 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     return self;
 }
 
+- (void)startTimingSync {
+    if (!_timer) {
+        _timer = [NSTimer timerWithTimeInterval:kSyncInterval target:self selector:@selector(syncData) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+}
+
+- (void)syncData {
+    if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWiFi == AFNetworkReachabilityStatusReachableViaWiFi) {
+        
+        [self startSyncWithSuccess:^{
+            
+        } failure:^(NSError *error) {
+            
+        }];
+    }
+}
+
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
@@ -72,6 +96,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 [self syncDataWithSuccess:success failure:failure];
             });
         }
+    } else {
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncBusy userInfo:@{NSLocalizedDescriptionKey:@"there is a sync task in progress"}];
+        failure(error);
     }
 }
 

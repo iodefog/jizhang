@@ -122,6 +122,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             SSJForgetPasswordSecondStepViewController *secondVC = [[SSJForgetPasswordSecondStepViewController alloc] init];
             secondVC.mobileNo = self.networkService.mobileNo;
             secondVC.authCode = self.networkService.authCode;
+            secondVC.finishHandle = self.finishHandle;
             [self.navigationController pushViewController:secondVC animated:YES];
         }
     }
@@ -144,8 +145,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 #pragma mark - Event
 - (void)getAuthCodeAction {
+    if (self.phoneNoField.text.length < 11) {
+        [CDAutoHideMessageHUD showMessage:@"手机号码不能小于11位"];
+        return;
+    }
+    
     self.getAuthCodeBtn.enabled = NO;
-    [self.getAuthCodeBtn setTitle:@"重新发送" forState:UIControlStateDisabled];
+    [self.getAuthCodeBtn setTitle:@"发送中" forState:UIControlStateDisabled];
     [self.networkService getAuthCodeWithMobileNo:self.phoneNoField.text];
 }
 

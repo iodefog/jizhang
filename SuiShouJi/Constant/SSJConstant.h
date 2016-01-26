@@ -23,8 +23,10 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
     SSJRegistAndForgetPasswordTypeForgetPassword    //  忘记密码
 };
 
+//  自定义错误码，从10000开始
 typedef NS_ENUM(NSInteger, SSJErrorCode) {
-    SSJErrorCodeUndefined = -1
+    SSJErrorCodeUndefined = 10000,
+    SSJErrorCodeDataSyncBusy = 10001
 };
 
 //___________________________________________________________________

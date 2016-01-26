@@ -19,6 +19,7 @@
 #import "SSJUserInfoNetworkService.h"
 
 #import "UIImageView+WebCache.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
@@ -221,8 +222,20 @@
 }
 
 -(void)quitLogButtonClicked:(id)sender{
+    //  登陆成功后强制同步一次
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+        [self reloadUserData];
+    } failure:^(NSError *error) {
+        [self reloadUserData];
+    }];
+}
+
+//  重载用户数据
+- (void)reloadUserData {
     SSJClearLoginInfo();
     [self.tableView reloadData];
+    
+    //  如果还有未注册的userid，就作为当前的userid；反之新建一个userid
     [SSJUserTableManager reloadUserIdWithSuccess:^(){
         [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^(){
             
