@@ -12,7 +12,6 @@
 		7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */; };
 		7D2B23FD1C3A1B63009A74A8 /* SSJBillingChargeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */; };
 		7D2B24001C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23FF1C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m */; };
-		7D2B24131C3AACD2009A74A8 /* SSJDataSyncModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24121C3AACD2009A74A8 /* SSJDataSyncModel.m */; };
 		7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */; };
 		7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24231C3E097C009A74A8 /* SSJUserChargeSyncTable.m */; };
 		7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24261C3E098F009A74A8 /* SSJFundInfoSyncTable.m */; };
@@ -398,8 +397,6 @@
 		7D2B23FC1C3A1B63009A74A8 /* SSJBillingChargeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeHelper.m; sourceTree = "<group>"; };
 		7D2B23FE1C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeHeaderView.h; sourceTree = "<group>"; };
 		7D2B23FF1C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeHeaderView.m; sourceTree = "<group>"; };
-		7D2B24111C3AACD2009A74A8 /* SSJDataSyncModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSyncModel.h; sourceTree = "<group>"; };
-		7D2B24121C3AACD2009A74A8 /* SSJDataSyncModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSyncModel.m; sourceTree = "<group>"; };
 		7D2B241A1C3E091B009A74A8 /* SSJDataSynchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSynchronizer.h; sourceTree = "<group>"; };
 		7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizer.m; sourceTree = "<group>"; };
 		7D2B24221C3E097C009A74A8 /* SSJUserChargeSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargeSyncTable.h; sourceTree = "<group>"; };
@@ -1002,20 +999,10 @@
 			children = (
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
-				7D2B24031C3AAA4A009A74A8 /* Model */,
 				7D2B241A1C3E091B009A74A8 /* SSJDataSynchronizer.h */,
 				7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */,
 			);
 			path = DataSync;
-			sourceTree = "<group>";
-		};
-		7D2B24031C3AAA4A009A74A8 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				7D2B24111C3AACD2009A74A8 /* SSJDataSyncModel.h */,
-				7D2B24121C3AACD2009A74A8 /* SSJDataSyncModel.m */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		7D2B241E1C3E093E009A74A8 /* SyncTable */ = {
@@ -2836,11 +2823,9 @@
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
 				BD70DF641C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m in Sources */,
-				7D2B24131C3AACD2009A74A8 /* SSJDataSyncModel.m in Sources */,
 				BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */,
 				7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */,
 				BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */,
-				BD70DF591C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeVC.m in Sources */,
 				BD37D2EB1C56443F0050BDAA /* SSJUserInfoNetworkService.m in Sources */,
 				BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,

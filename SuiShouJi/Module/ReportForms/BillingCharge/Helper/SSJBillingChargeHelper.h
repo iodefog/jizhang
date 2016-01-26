@@ -11,6 +11,9 @@
 //  对应日期的key
 extern NSString *const SSJBillingChargeDateKey;
 
+//  对应总金额的key
+extern NSString *const SSJBillingChargeSumKey;
+
 //  对应记账流水模型的key
 extern NSString *const SSJBillingChargeRecordKey;
 

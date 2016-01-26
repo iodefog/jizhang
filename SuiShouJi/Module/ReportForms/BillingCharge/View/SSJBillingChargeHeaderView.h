@@ -10,4 +10,7 @@
 
 @interface SSJBillingChargeHeaderView : UITableViewHeaderFooterView
 
+//  总金额
+@property (nonatomic ,readonly, strong) UILabel *sumLabel;
+
 @end
