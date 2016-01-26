@@ -101,10 +101,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
         NSLog(@"success");
     } failure:^(NSError *error) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [aler show];
-        });
+        UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [aler show];
         NSLog(@"%@", error);
     }];
 }

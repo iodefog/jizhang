@@ -11,8 +11,6 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
 
-#warning test
-
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
 

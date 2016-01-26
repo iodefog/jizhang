@@ -223,15 +223,8 @@
 
 -(void)quitLogButtonClicked:(id)sender{
     //  登陆成功后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-        [self reloadUserData];
-    } failure:^(NSError *error) {
-        [self reloadUserData];
-    }];
-}
-
-//  重载用户数据
-- (void)reloadUserData {
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+    
     SSJClearLoginInfo();
     [self.tableView reloadData];
     
