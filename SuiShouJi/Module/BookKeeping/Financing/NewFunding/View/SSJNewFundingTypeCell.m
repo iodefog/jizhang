@@ -19,6 +19,7 @@
         [self.contentView addSubview:self.cellText];
         [self.contentView addSubview:self.typeLabel];
         [self.contentView addSubview:self.colorView];
+        [self.contentView addSubview:self.typeImage];
     }
     return self;
 }
@@ -31,6 +32,9 @@
     self.colorView.size = CGSizeMake(30, 30);
     self.colorView.right = self.contentView.width - 10;
     self.colorView.centerY = self.contentView.height / 2;
+    self.typeImage.size = CGSizeMake(30, 30);
+    self.typeImage.right = self.typeLabel.left - 10;
+    self.typeImage.centerY = self.height / 2;
 }
 
 -(UITextField *)cellText{
@@ -57,6 +61,13 @@
         _colorView = [[UIView alloc]init];
     }
     return _colorView;
+}
+
+-(UIImageView *)typeImage{
+    if (!_typeImage) {
+        _typeImage = [[UIImageView alloc]init];
+    }
+    return _typeImage;
 }
 
 /*

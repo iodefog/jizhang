@@ -12,4 +12,5 @@
 @property (nonatomic,strong) UITextField *cellText;
 @property (nonatomic,strong) UILabel *typeLabel;
 @property (nonatomic,strong) UIView *colorView;
+@property (nonatomic,strong) UIImageView *typeImage;
 @end

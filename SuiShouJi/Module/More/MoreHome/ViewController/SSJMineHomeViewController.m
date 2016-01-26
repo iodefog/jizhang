@@ -13,13 +13,19 @@
 #import "SSJNormalWebViewController.h"
 #import "SSJLoginViewController.h"
 #import "SSJUserTableManager.h"
+#import "SSJUserInfoItem.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJPortraitUploadNetworkService.h"
+#import "SSJUserInfoNetworkService.h"
+
+#import "UIImageView+WebCache.h"
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property (nonatomic,strong) UIView *loggedFooterView;
+@property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
+@property (nonatomic,strong) SSJUserInfoItem *item;
 @end
 
 @implementation SSJMineHomeViewController{
@@ -42,7 +48,9 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tableView.tableHeaderView = self.header;
-    
+    if (SSJIsUserLogined()) {
+        [self.userInfoService requestUserInfo];
+    }
     [self.tableView reloadData];
 }
 
@@ -79,6 +87,13 @@
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
     }
     return _loggedFooterView;
+}
+
+-(SSJUserInfoNetworkService *)userInfoService{
+    if (!_userInfoService) {
+        _userInfoService = [[SSJUserInfoNetworkService alloc]initWithDelegate:self];
+    }
+    return _userInfoService;
 }
 
 #pragma mark - UITableViewDelegate
@@ -167,6 +182,18 @@
     }
 }
 
+#pragma mark - SCYBaseNetworkServiceDelegate
+-(void)serverDidFinished:(SSJBaseNetworkService *)service{
+    [super serverDidFinished:service];
+    if (service == self.userInfoService) {
+        self.item = self.userInfoService.item;
+        NSString *phoneNum = [self.item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        self.header.nicknameLabel.text = phoneNum;
+        [self.header.nicknameLabel sizeToFit];
+        [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+    }
+}
+
 #pragma mark - Event
 -(void)takePhoto{
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -197,7 +224,7 @@
     SSJClearLoginInfo();
     [self.tableView reloadData];
     [SSJUserTableManager reloadUserIdWithSuccess:^(){
-        [SSJUserDefaultDataCreater createAllDefaultDataWithSuccess:^(){
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^(){
             
         }failure:^(NSError *error){
             
@@ -214,10 +241,11 @@
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^{
-//        [self loadUserBaseServiceShowIndicator:YES];
-//        [weakSelf.tableView reloadData];
+        self.header.headPotraitImage.image = image;
+        [self.tableView reloadData];
     }];
 }
+
 
 
 - (void)didReceiveMemoryWarning {

@@ -10,4 +10,8 @@
 
 @interface SSJNewFundingViewController : SSJBaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
+typedef void (^finishBlock)(NSString *fundingId);
+
+@property(nonatomic,copy) finishBlock finishBlock;
+
 @end

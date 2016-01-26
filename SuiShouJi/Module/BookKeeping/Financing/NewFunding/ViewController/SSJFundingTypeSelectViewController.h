@@ -10,7 +10,7 @@
 
 @interface SSJFundingTypeSelectViewController : SSJNewBaseTableViewController
 
-typedef void (^typeSelectedBlock)(NSString *selectParent);
+typedef void (^typeSelectedBlock)(NSString *selectParent , NSString *selectIcoin);
 
 @property(nonatomic,copy) typeSelectedBlock typeSelectedBlock;
 

@@ -18,6 +18,7 @@
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
+#import "SSJNewFundingViewController.h"
 
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
@@ -436,9 +437,18 @@
             _FundingTypeSelectView.selectFundID = self.item.fundID;
         }
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-            [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
-            _selectItem = fundingItem;
+            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
+                [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
+                [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
+                _selectItem = fundingItem;
+            }else{
+                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
+                NewFundingVC.finishBlock = ^(NSString *fundingId){
+                    weakSelf.FundingTypeSelectView.selectFundID = fundingId;
+                    [weakSelf.FundingTypeSelectView reloadDate]; 
+                };
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+            }
             [weakSelf.FundingTypeSelectView removeFromSuperview];
         };
     }

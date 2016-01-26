@@ -28,6 +28,8 @@
     UITextField *_memoTextField;
     NSString *_selectParent;
     NSString *_selectColor;
+    NSString *_selectIcoin;
+
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -42,6 +44,7 @@
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     _selectParent = @"1";
     _selectColor = @"fe8a65";
+    _selectIcoin = @"ft_cash";
     [self.view addSubview:self.tableview];
     self.navigationItem.rightBarButtonItem = self.rightButton;
 }
@@ -76,8 +79,9 @@
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
         __weak typeof(self) weakSelf = self;
         fundingTypeVC.selectFundID = _selectParent;
-        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent){
+        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent , NSString *selectIcon){
             _selectParent = selectParent;
+            _selectIcoin = selectIcon;
             [weakSelf.tableview reloadData];
         };
         [self.navigationController pushViewController:fundingTypeVC animated:YES];
@@ -127,6 +131,7 @@
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellText.text = @"账户类型";
             NewFundingCell.typeLabel.text = [self getParentFundingNameWithParentfundingID:_selectParent];
+            NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
             [NewFundingCell.typeLabel sizeToFit];
             NewFundingCell.cellText.enabled = NO;
             NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -234,6 +239,9 @@
             [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"1",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
         }else if([_amountTextField.text doubleValue] < 0){
             [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"2",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
+        }
+        if (self.finishBlock) {
+            self.finishBlock(fundId);
         }
     }
     [db close];
