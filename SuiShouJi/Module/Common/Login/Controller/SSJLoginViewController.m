@@ -96,10 +96,10 @@
         [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
             BOOL fundInfoSuccess = true;
             BOOL userBillSuccess = true;
-            if ([db intForQuery:@"select count(*) from BK_USER_BILL where userid = ?",self.loginService.item.cuserid]) {
+            if ([db intForQuery:@"select count(*) from BK_USER_BILL where cuserid = ?",self.loginService.item.cuserid]) {
                 fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
             }
-            if ([db intForQuery:@"select count(*) from BK_FUNS_ACCT where userid = ?",self.loginService.item.cuserid]) {
+            if ([db intForQuery:@"select count(*) from BK_FUNS_ACCT where cuserid = ?",self.loginService.item.cuserid]) {
                 userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
             }
             if (userBillSuccess && fundInfoSuccess) {
@@ -107,10 +107,20 @@
                 SSJSaveAccessToken(self.loginService.accesstoken);
                 SSJSaveUserLogined(YES);
                 SSJSetUserId(self.loginService.item.cuserid);
-//                [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                
                 //  登陆成功后强制同步一次
                 [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
                 //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                    if (self.finishHandle) {
+                        self.finishHandle(self);
+                    } else {
+                        [self ssj_backOffAction];
+                    }
+                });
+                
 
             }else{
                 *rollback = true;
@@ -119,11 +129,6 @@
         }];
     }else{
 //        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
-    }
-    if (self.finishHandle) {
-        self.finishHandle(self);
-    } else {
-        [self ssj_backOffAction];
     }
 }
 
