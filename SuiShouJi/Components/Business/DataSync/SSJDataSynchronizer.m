@@ -269,7 +269,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     if (userChargeRecords.count) {
         [jsonObject setObject:userChargeRecords forKey:@"bk_user_charge"];
     }
-    if (userId.length) {
+    if (userId.length && !SSJIsUserLogined()) {
         [jsonObject setObject:@[@{@"cuserid":userId,
                                   @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
                                   @"source":SSJDefaultSource()}] forKey:@"bk_user"];
@@ -300,7 +300,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:@"zip" fileName:kSyncZipFileName mimeType:@"application/x-zip-compressed"];
+        NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
+        [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/x-zip-compressed"];
     } error:&tError];
     
     if (tError) {
@@ -364,7 +365,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"BK_USER_BILL"] inDatabase:db error:error]) {
+        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
         }
@@ -379,7 +380,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"BK_FUND_INFO"] inDatabase:db  error:error]) {
+        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db  error:error]) {
             *rollback = YES;
             success = NO;
         }
@@ -394,7 +395,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"BK_USER_CHARGE"] inDatabase:db error:error]) {
+        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"bk_user_charge"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
             return;

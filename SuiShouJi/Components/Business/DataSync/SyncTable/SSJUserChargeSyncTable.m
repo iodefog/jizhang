@@ -15,7 +15,7 @@
 }
 
 + (NSArray *)columns {
-    return @[@"ichargeid", @"imoney", @"ibillid", @"ifid", @"cadddate", @"ioldmoney", @"ibalance", @"cbilldate", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"ichargeid", @"imoney", @"ibillid", @"ifunsid", @"cadddate", @"ioldmoney", @"ibalance", @"cbilldate", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
@@ -23,7 +23,7 @@
 }
 
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
-    return [NSString stringWithFormat:@"(select count(*) from BK_USER_BILL where CUSERID = '%@' and CBILLID = '%@') > 0 and (select count(*) from BK_FUND_INFO where CUSERID = '%@' and CFUNDID = '%@') > 0", record[@"CUSERID"], record[@"IBILLID"], record[@"CUSERID"], record[@"IFID"]];
+    return [NSString stringWithFormat:@"(select count(*) from BK_USER_BILL where CUSERID = '%@' and CBILLID = '%@') > 0 and (select count(*) from BK_FUND_INFO where CUSERID = '%@' and CFUNDID = '%@') > 0", record[@"cuserid"], record[@"ibillid"], record[@"cuserid"], record[@"ifunsid"]];
 }
 
 @end

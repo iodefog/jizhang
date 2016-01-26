@@ -23,7 +23,7 @@
 }
 
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
-    return [NSString stringWithFormat:@"(select count(*) from BK_BILL_TYPE where ID = '%@') > 0", record[@"CBILLID"]];
+    return [NSString stringWithFormat:@"(select count(*) from BK_BILL_TYPE where ID = '%@') > 0", record[@"cbillid"]];
 }
 
 @end

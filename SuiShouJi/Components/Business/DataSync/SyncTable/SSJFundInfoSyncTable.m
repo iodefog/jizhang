@@ -15,11 +15,11 @@
 }
 
 + (NSArray *)columns {
-    return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"ifunsid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
-    return @[@"cfundid"];
+    return @[@"ifunsid"];
 }
 
 + (NSString *)queryRecordsForSyncAdditionalCondition {
@@ -31,7 +31,7 @@
 }
 
 + (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
-    return [NSString stringWithFormat:@"(select count(*) from BK_FUND_INFO where CFUNDID = '%@') > 0", record[@"CPARENT"]];
+    return [NSString stringWithFormat:@"(select count(*) from BK_FUND_INFO where CFUNDID = '%@') > 0", record[@"cparent"]];
 }
 
 @end
