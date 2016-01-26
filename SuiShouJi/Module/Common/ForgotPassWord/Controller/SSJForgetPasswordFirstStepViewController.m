@@ -198,22 +198,27 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (SSJBaselineTextField *)phoneNoField {
     if (!_phoneNoField) {
-        _phoneNoField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 30, self.view.width - 50, 50) contentHeight:40];
+        _phoneNoField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 30, self.view.width - 50, 50) contentHeight:34];
         _phoneNoField.font = [UIFont systemFontOfSize:15];
         _phoneNoField.placeholder = @"请输入您的手机号";
         _phoneNoField.text = self.mobileNo.length ? self.mobileNo : @"";
         _phoneNoField.delegate = self;
         _phoneNoField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _phoneNoField.keyboardType = UIKeyboardTypeNumberPad;
+        
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 36)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_username"]];
+        imageView.center = CGPointMake(leftView.width * 0.5, leftView.height * 0.5);
+        [leftView addSubview:imageView];
         _phoneNoField.leftViewMode = UITextFieldViewModeAlways;
-        _phoneNoField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_username"]];
+        _phoneNoField.leftView = leftView;
     }
     return _phoneNoField;
 }
 
 - (SSJBaselineTextField *)authCodeField {
     if (!_authCodeField) {
-        _authCodeField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, self.phoneNoField.bottom, self.view.width - 50, 50) contentHeight:40];
+        _authCodeField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, self.phoneNoField.bottom, self.view.width - 50, 50) contentHeight:34];
         _authCodeField.font = [UIFont systemFontOfSize:15];
         _authCodeField.placeholder = @"请输入验证码";
         _authCodeField.delegate = self;
@@ -221,8 +226,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _authCodeField.keyboardType = UIKeyboardTypeNumberPad;
         _authCodeField.rightView = self.getAuthCodeBtn;
         _authCodeField.rightViewMode = UITextFieldViewModeAlways;
+        
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 36)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
+        imageView.center = CGPointMake(leftView.width * 0.5, leftView.height * 0.5);
+        [leftView addSubview:imageView];
         _authCodeField.leftViewMode = UITextFieldViewModeAlways;
-        _authCodeField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
+        _authCodeField.leftView = leftView;
     }
     return _authCodeField;
 }

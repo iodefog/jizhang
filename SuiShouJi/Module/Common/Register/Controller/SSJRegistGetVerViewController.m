@@ -165,7 +165,7 @@
 
 - (SSJBaselineTextField *)tfPhoneNum {
     if (!_tfPhoneNum) {
-        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:40];
+        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:34];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.placeholder = @"请输入您的手机号";
         _tfPhoneNum.delegate = self;

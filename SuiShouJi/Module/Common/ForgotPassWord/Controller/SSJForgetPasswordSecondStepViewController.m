@@ -123,12 +123,19 @@
 
 - (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
-        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 30, self.view.width - 50, 50) contentHeight:40];
+        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 30, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
         _passwordField.placeholder = @"请输入新密码";
         _passwordField.delegate = self;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 36)];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
+        imageView.center = CGPointMake(leftView.width * 0.5, leftView.height * 0.5);
+        [leftView addSubview:imageView];
+        _passwordField.leftViewMode = UITextFieldViewModeAlways;
+        _passwordField.leftView = leftView;
     }
     return _passwordField;
 }
@@ -136,6 +143,7 @@
 - (UIButton *)nextButton {
     if (!_nextButton) {
         _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _nextButton.enabled = NO;
         _nextButton.frame = CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40);
         _nextButton.layer.cornerRadius = 3;
         _nextButton.clipsToBounds = YES;

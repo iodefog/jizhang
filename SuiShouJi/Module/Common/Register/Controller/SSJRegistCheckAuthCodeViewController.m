@@ -194,7 +194,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (SSJBaselineTextField *)authCodeTextField {
     if (!_authCodeTextField) {
-        _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:40];
+        _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:34];
         _authCodeTextField.font = [UIFont systemFontOfSize:15];
         _authCodeTextField.placeholder = @"请输入验证码";
         _authCodeTextField.delegate = self;

@@ -23,7 +23,6 @@
 - (instancetype)initWithFrame:(CGRect)frame contentHeight:(CGFloat)height {
     if (self = [super initWithFrame:frame]) {
         self.contentHeight = height;
-        self.contentHeight = 40;
         
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderWidth:2.0];
