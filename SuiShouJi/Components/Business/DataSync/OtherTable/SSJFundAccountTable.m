@@ -12,7 +12,7 @@
 @implementation SSJFundAccountTable
 
 + (BOOL)updateBalanceInDatabase:(FMDatabase *)db {
-    __block FMResultSet *result = [db executeQuery:@"select A.IFID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFID, B.ITYPE order by A.IFID", SSJUSERID()];
+    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFUNSID, B.ITYPE order by A.IFUNSID", SSJUSERID()];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -27,7 +27,7 @@
     while ([result next]) {
         int type = [result intForColumn:@"ITYPE"];
         double money = [result doubleForColumn:@"sum(A.IMONEY)"];
-        NSString *fundId = [result stringForColumn:@"IFID"];
+        NSString *fundId = [result stringForColumn:@"IFUNSID"];
         if (!fundId.length) {
             continue;
         }
