@@ -90,10 +90,34 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     if (self.task == nil) {
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
-            [self syncDataWithSuccess:success failure:failure];
+            [self syncDataWithSuccess:^{
+                if (success) {
+                    SSJDispatch_main_async_safe(^{
+                        success();
+                    });
+                }
+            } failure:^(NSError *error) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure(error);
+                    });
+                }
+            }];
         } else {
             dispatch_async(self.syncQueue, ^{
-                [self syncDataWithSuccess:success failure:failure];
+                [self syncDataWithSuccess:^{
+                    if (success) {
+                        SSJDispatch_main_async_safe(^{
+                            success();
+                        });
+                    }
+                } failure:^(NSError *error) {
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure(error);
+                        });
+                    }
+                }];
             });
         }
     } else {
@@ -115,20 +139,26 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }];
     
     if (tError) {
-        failure(tError);
+        if (failure) {
+            failure(tError);
+        }
         return;
     }
     
     //  查询要同步的数据
     NSData *data = [self getDataToSyncWithError:&tError];
     if (tError) {
-        failure(tError);
+        if (failure) {
+            failure(tError);
+        }
         return;
     }
     
     if (!data) {
         tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"there is no data to be uploaded"}];
-        failure(tError);
+        if (failure) {
+            failure(tError);
+        }
         return;
     }
     
@@ -137,7 +167,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     if (tError) {
         SSJPRINT(@">>> SSJ warning:an error occured when zip json data \n error:%@", tError);
-        failure(tError);
+        if (failure) {
+            failure(tError);
+        }
         return;
     }
     
@@ -147,7 +179,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         dispatch_async(self.syncQueue, ^{
             
             if (error) {
-                failure(error);
+                if (failure) {
+                    failure(error);
+                }
                 return;
             }
             
@@ -157,12 +191,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                     NSInteger code = [responseObject[@"code"] integerValue];
                     NSString *desc = responseObject[@"desc"];
                     tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
-                    failure(tError);
+                    if (failure) {
+                        failure(tError);
+                    }
                     SSJPRINT(@">>> sync response data:%@", responseObject);
                 } else {
                     SSJPRINT(@">>> SSJ warning:responseObject is not NSData or NSDictionary type");
                     tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"responseObject is not NSData or NSDictionary type"}];
-                    failure(tError);
+                    if (failure) {
+                        failure(tError);
+                    }
                 }
                 return;
             }
@@ -173,15 +211,21 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             
             if (tError) {
                 SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
-                failure(tError);
+                if (failure) {
+                    failure(tError);
+                }
                 return;
             }
             
             //  合并数据
             if ([self mergeJsonData:jsonData error:&tError]) {
-                success();
+                if (success) {
+                    success();
+                }
             } else {
-                failure(tError);
+                if (failure) {
+                    failure(tError);
+                }
             }
         });
     }];
@@ -226,9 +270,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         [jsonObject setObject:userChargeRecords forKey:@"bk_user_charge"];
     }
     if (userId.length) {
-        [jsonObject setObject:@{@"cuserid":userId,
-                                @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                                @"source":SSJDefaultSource()} forKey:@"bk_user"];
+        [jsonObject setObject:@[@{@"cuserid":userId,
+                                  @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                  @"source":SSJDefaultSource()}] forKey:@"bk_user"];
     }
     
     SSJPRINT(@">>> sync upload data:%@", jsonObject);
@@ -241,6 +285,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJPRINT(@">>> SSJ warning:an error occured when parse json data \n error:%@", *error);
         return nil;
     }
+    
+#warning test
+    [syncData writeToFile:@"/Users/oldlang/Desktop/sync_data.txt" atomically:YES];
     
     return syncData;
 }
@@ -257,7 +304,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     } error:&tError];
     
     if (tError) {
-        completionHandler(nil, nil, tError);
+        if (completionHandler) {
+            completionHandler(nil, nil, tError);
+        }
         return;
     }
     
@@ -402,7 +451,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 //    CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef)[zipPath pathExtension], NULL);
 //    CFStringRef MIMEType = UTTypeCopyPreferredTagWithClass (UTI, kUTTagClassMIMEType);
     
-    return [NSData dataWithContentsOfFile:@"/Users/oldlang/Desktop/test/new.zip" options:NSDataReadingUncached error:error];
+    return [NSData dataWithContentsOfFile:zipPath options:NSDataReadingUncached error:error];
 }
 
 //  将data进行解压

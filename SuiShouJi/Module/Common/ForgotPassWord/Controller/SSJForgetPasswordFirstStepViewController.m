@@ -60,9 +60,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self.scrollView addSubview:self.nextButton];
     
     [self upateNextButtonState];
-    
-    UIBarButtonItem *test = [[UIBarButtonItem alloc] initWithTitle:@"test" style:UIBarButtonItemStylePlain target:self action:@selector(testAction)];
-    self.navigationItem.rightBarButtonItem = test;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -73,14 +70,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     } else {
         [self.phoneNoField becomeFirstResponder];
     }
-}
-
-#warning test
-- (void)testAction {
-    SSJForgetPasswordSecondStepViewController *secondVC = [[SSJForgetPasswordSecondStepViewController alloc] init];
-    secondVC.mobileNo = self.networkService.mobileNo;
-    secondVC.authCode = self.networkService.authCode;
-    [self.navigationController pushViewController:secondVC animated:YES];
 }
 
 #pragma mark - UITextFieldDelegate
