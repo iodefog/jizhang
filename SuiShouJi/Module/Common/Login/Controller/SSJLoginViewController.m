@@ -14,6 +14,10 @@
 #import "SSJRegistCompleteViewController.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJUserBillSyncTable.h"
+#import "SSJFundInfoSyncTable.h"
+#import "SSJUserItem.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -88,19 +92,36 @@
     [super serverDidFinished:service];
     
     if ([self.loginService.returnCode isEqualToString: @"1"]) {
-        [CDAutoHideMessageHUD showMessage:@"登录成功"];
-        
-        //  登陆成功后强制同步一次
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-        
-        //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-        if (self.finishHandle) {
-            self.finishHandle(self);
-        } else {
-            [self ssj_backOffAction];
-        }
+        __block NSError *error = nil;
+        [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+            BOOL fundInfoSuccess = true;
+            BOOL userBillSuccess = true;
+            if ([db intForQuery:@"select count(*) from BK_USER_BILL where userid = ?",self.loginService.item.cuserid]) {
+                fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
+            }
+            if ([db intForQuery:@"select count(*) from BK_FUNS_ACCT where userid = ?",self.loginService.item.cuserid]) {
+                userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
+            }
+            if (userBillSuccess && fundInfoSuccess) {
+                SSJSaveAppId(self.loginService.appid);
+                SSJSaveAccessToken(self.loginService.accesstoken);
+                SSJSaveUserLogined(YES);
+                [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                //  登陆成功后强制同步一次
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+                //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                } else {
+                    [self ssj_backOffAction];
+                }
+            }else{
+                *rollback = true;
+                [CDAutoHideMessageHUD showMessage:@"登录失败"];
+            }
+        }];
     }else{
-//        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
+        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
     }
 }
 
