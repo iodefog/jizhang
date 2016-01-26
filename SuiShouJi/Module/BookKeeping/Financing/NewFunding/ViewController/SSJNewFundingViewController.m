@@ -11,6 +11,7 @@
 #import "SSJNewFundingTypeCell.h"
 #import "SSJColorSelectViewControllerViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJFundingItem.h"
 
 #import "FMDB.h"
 
@@ -226,11 +227,16 @@
         [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];
         return;
     }
+    
     NSString *fundId = SSJUUID();
     NSString *fundName = _nameTextField.text;
     double fundAmount = [_amountTextField.text doubleValue];
     NSString *fundMemo = _memoTextField.text;
-
+    if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ?",_nameTextField.text,fundId] > 0){
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
     BOOL success = [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID,CACCTNAME,CPARENT,CCOLOR,CWRITEDATE,OPERATORTYPE,IVERSION,CMEMO,CUSERID) VALUES (?,?,?,?,?,?,?,?,?)",fundId,fundName,_selectParent,_selectColor,[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],[NSNumber numberWithInt:0],@(SSJSyncVersion()),fundMemo,SSJUSERID()];
     [db executeUpdate:@"UPDATE BK_FUND_INFO SET CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) WHERE CFUNDID = ?",_selectParent,fundId];
     if (success) {
@@ -240,8 +246,16 @@
         }else if([_amountTextField.text doubleValue] < 0){
             [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"2",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss:SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
         }
+        SSJFundingItem *item = [[SSJFundingItem alloc]init];
+        item.fundingID = fundId;
+        item.fundingName = fundName;
+        item.fundingIcon = _selectIcoin;
+        item.fundingColor = _selectColor;
+        item.fundingBalance = fundAmount;
+        item.fundingMemo = fundMemo;
+        item.fundingParent = _selectParent;
         if (self.finishBlock) {
-            self.finishBlock(fundId);
+            self.finishBlock(item);
         }
     }
     [db close];

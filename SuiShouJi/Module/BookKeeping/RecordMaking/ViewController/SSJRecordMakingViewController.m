@@ -443,9 +443,11 @@
                 _selectItem = fundingItem;
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.finishBlock = ^(NSString *fundingId){
-                    weakSelf.FundingTypeSelectView.selectFundID = fundingId;
-                    [weakSelf.FundingTypeSelectView reloadDate]; 
+                NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                    [weakSelf.FundingTypeSelectView reloadDate];
+                    [weakSelf.fundingTypeButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
+                    [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
+                    _selectItem = newFundingItem;
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }

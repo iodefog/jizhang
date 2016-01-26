@@ -146,7 +146,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2r"];
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?",SSJUSERID()];
     _items = [[NSMutableArray alloc]init];
     while ([rs next]) {
         SSJFundingItem *item = [[SSJFundingItem alloc]init];

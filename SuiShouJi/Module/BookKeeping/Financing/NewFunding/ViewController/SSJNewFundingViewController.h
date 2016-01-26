@@ -7,10 +7,11 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJFundingItem.h"
 
 @interface SSJNewFundingViewController : SSJBaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
-typedef void (^finishBlock)(NSString *fundingId);
+typedef void (^finishBlock)(SSJFundingItem *newFundingItem);
 
 @property(nonatomic,copy) finishBlock finishBlock;
 
