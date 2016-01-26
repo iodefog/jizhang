@@ -16,6 +16,11 @@
 + (instancetype)shareInstance;
 
 /**
+ *  开启定时同步，只在wifi环境下每间隔1小时同步1次；
+ */
+- (void)startTimingSync;
+
+/**
  *  开始数据同步
  *
  *  @param success  同步成功回调
