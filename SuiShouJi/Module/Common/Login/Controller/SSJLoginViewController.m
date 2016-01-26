@@ -13,6 +13,7 @@
 #import "SSJForgetPasswordFirstStepViewController.h"
 #import "SSJRegistCompleteViewController.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -88,6 +89,10 @@
     
     if ([self.loginService.returnCode isEqualToString: @"1"]) {
         [CDAutoHideMessageHUD showMessage:@"登录成功"];
+        
+        //  登陆成功后强制同步一次
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        
         //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
         if (self.finishHandle) {
             self.finishHandle(self);
