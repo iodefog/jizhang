@@ -90,7 +90,7 @@
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
-    
+    __weak typeof(self) weakSelf = self;
     if ([self.loginService.returnCode isEqualToString: @"1"]) {
         __block NSError *error = nil;
         [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -106,22 +106,24 @@
                 SSJSaveAppId(self.loginService.appid);
                 SSJSaveAccessToken(self.loginService.accesstoken);
                 SSJSaveUserLogined(YES);
-                [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                SSJSetUserId(self.loginService.item.cuserid);
+//                [CDAutoHideMessageHUD showMessage:@"登录成功"];
                 //  登陆成功后强制同步一次
                 [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
                 //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                } else {
-                    [self ssj_backOffAction];
-                }
+
             }else{
                 *rollback = true;
-                [CDAutoHideMessageHUD showMessage:@"登录失败"];
+//                [CDAutoHideMessageHUD showMessage:@"登录失败"];
             }
         }];
     }else{
-        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
+//        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
+    }
+    if (self.finishHandle) {
+        self.finishHandle(self);
+    } else {
+        [self ssj_backOffAction];
     }
 }
 

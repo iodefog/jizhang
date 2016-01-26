@@ -44,6 +44,7 @@
     [super requestDidFinish:rootElement];
     NSLog(@"%@",self.desc);
     if ([self.returnCode isEqualToString:@"1"]) {
+        self.item = [[SSJUserItem alloc]init];
         NSDictionary *dict=[rootElement objectForKey:@"results"];
         self.appid = [dict objectForKey:@"appId"];
         self.accesstoken = [dict  objectForKey:@"accessToken"];
