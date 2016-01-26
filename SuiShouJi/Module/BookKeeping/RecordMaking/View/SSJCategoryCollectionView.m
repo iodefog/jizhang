@@ -141,14 +141,14 @@
     if (self.page != self.totalPage - 1) {
         if (_screenWidth == 320) {
             if (_screenHeight == 568) {
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
             }else{
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 4]];
             }
         }else if(_screenWidth == 375){
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
         }else{
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 12]];
+            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 12]];
         }
         while ([rs next]) {
             SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
@@ -162,14 +162,14 @@
     }else{
         if (_screenWidth == 320) {
             if (_screenHeight == 568) {
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
             }else{
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 3 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 4]];
+                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 3 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 4]];
             }
         }else if(_screenWidth == 375){
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 8]];
+            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
         }else{
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID LIMIT 11 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],[NSNumber numberWithInt:self.page * 12]];
+            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 11 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 12]];
         }
         while ([rs next]) {
             SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
