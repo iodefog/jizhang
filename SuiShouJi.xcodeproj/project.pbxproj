@@ -293,6 +293,7 @@
 		BD37D2E61C55D42C0050BDAA /* defualt_portrait@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2E51C55D42C0050BDAA /* defualt_portrait@3x.png */; };
 		BD37D2EB1C56443F0050BDAA /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2EA1C56443F0050BDAA /* SSJUserInfoNetworkService.m */; };
 		BD37D2EE1C56465F0050BDAA /* SSJUserInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */; };
+		BD390DF41C573F7800B4B3A3 /* SSJUserItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD390DF31C573F7800B4B3A3 /* SSJUserItem.m */; };
 		BD4934341C34F86700300D43 /* SSJMineHomeTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */; };
 		BD4934361C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */; };
 		BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934381C34FC1800300D43 /* SSJMineHomeViewController.m */; };
@@ -768,6 +769,8 @@
 		BD37D2EA1C56443F0050BDAA /* SSJUserInfoNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserInfoNetworkService.m; sourceTree = "<group>"; };
 		BD37D2EC1C56465F0050BDAA /* SSJUserInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserInfoItem.h; sourceTree = "<group>"; };
 		BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserInfoItem.m; sourceTree = "<group>"; };
+		BD390DF21C573F7800B4B3A3 /* SSJUserItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserItem.h; sourceTree = "<group>"; };
+		BD390DF31C573F7800B4B3A3 /* SSJUserItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserItem.m; sourceTree = "<group>"; };
 		BD4934321C34F86700300D43 /* SSJMineHomeTableViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeTableViewHeader.h; sourceTree = "<group>"; };
 		BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeTableViewHeader.m; sourceTree = "<group>"; };
 		BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJMineHomeTableViewHeader.xib; sourceTree = "<group>"; };
@@ -1913,6 +1916,15 @@
 			path = SSJAlertViewAdapter;
 			sourceTree = "<group>";
 		};
+		BD390DF11C573F4F00B4B3A3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BD390DF21C573F7800B4B3A3 /* SSJUserItem.h */,
+				BD390DF31C573F7800B4B3A3 /* SSJUserItem.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		BD543C331C1A6DBC00910D61 = {
 			isa = PBXGroup;
 			children = (
@@ -2047,6 +2059,7 @@
 		BD70DF461C4751EA000E6CC9 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				BD390DF11C573F4F00B4B3A3 /* Model */,
 				BD70DF471C4751EA000E6CC9 /* Controller */,
 				BD70DF4A1C4751EA000E6CC9 /* NetWorkService */,
 			);
@@ -2840,6 +2853,7 @@
 				BD70DF631C4751EA000E6CC9 /* SSJLoginService.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
 				BD7BC8351C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m in Sources */,
+				BD390DF41C573F7800B4B3A3 /* SSJUserItem.m in Sources */,
 				BD7BC84B1C3A6716001DE5D8 /* SSJFundingDetailHelper.m in Sources */,
 				BD7BC8541C3ADAAA001DE5D8 /* SSJFundingDetailDateHeader.m in Sources */,
 				7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */,

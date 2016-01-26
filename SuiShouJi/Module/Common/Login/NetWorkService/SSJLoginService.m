@@ -7,6 +7,7 @@
 //
 
 #import "SSJLoginService.h"
+#import "SSJUserInfoItem.h"
 
 @implementation SSJLoginService
 
@@ -43,15 +44,12 @@
     [super requestDidFinish:rootElement];
     NSLog(@"%@",self.desc);
     if ([self.returnCode isEqualToString:@"1"]) {
+        self.item = [[SSJUserItem alloc]init];
         NSDictionary *dict=[rootElement objectForKey:@"results"];
-        NSString *appId = [dict objectForKey:@"appId"];
-        SSJSaveAppId(appId);
-        NSString *token = [dict  objectForKey:@"accessToken"];
-        SSJSaveAccessToken(token);
-        SSJSaveUserLogined(YES);
-//        [[NSUserDefaults standardUserDefaults] setObject:<#(nullable id)#> forKey:<#(nonnull NSString *)#>];
-//        NSString *isbind = [[rootElement attributeForName:@"isbind"] stringValue];
-//        SSJSaveInvitedUser(isbind);
+        self.appid = [dict objectForKey:@"appId"];
+        self.accesstoken = [dict  objectForKey:@"accessToken"];
+        NSDictionary *result = [dict objectForKey:@"user"];
+        self.item = [SSJUserItem mj_objectWithKeyValues:result];
     }
 }
 
