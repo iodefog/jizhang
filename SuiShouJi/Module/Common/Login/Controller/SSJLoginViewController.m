@@ -10,6 +10,7 @@
 #import "SSJLoginService.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJRegistGetVerViewController.h"
+#import "SSJForgetPasswordFirstStepViewController.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -115,16 +116,17 @@
 
 -(void)forgetButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    SSJRegistGetVerViewController *forgetPsVc = [[SSJRegistGetVerViewController alloc]initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeForgetPassword];
-    forgetPsVc.finishHandle = ^(UIViewController *controller){
+    SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc]
+                                                          init];
+    forgetVC.finishHandle = ^(UIViewController *controller){
         [weakSelf.navigationController popToViewController:weakSelf animated:YES];
     };
-    [self.navigationController pushViewController:forgetPsVc animated:YES];
+    [self.navigationController pushViewController:forgetVC animated:YES];
 }
 
 -(void)registerButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc]initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeRegist];
+    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
     registerVc.finishHandle = ^(UIViewController *controller){
         [weakSelf ssj_backOffAction];
     };

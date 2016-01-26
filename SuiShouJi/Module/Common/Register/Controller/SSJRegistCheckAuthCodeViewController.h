@@ -13,13 +13,6 @@
 
 @interface SSJRegistCheckAuthCodeViewController : SSJBaseViewController
 
-/**
- *  标准初始化方法
- *
- *  @param type 区分是注册还是忘记密码
- *  @param mobileNo 手机号
- */
-- (instancetype)initWithRegistAndForgetType:(SSJRegistAndForgetPasswordType)type
-                                   mobileNo:(NSString *)mobileNo;
+@property (nonatomic, copy) NSString *mobileNo;
 
 @end

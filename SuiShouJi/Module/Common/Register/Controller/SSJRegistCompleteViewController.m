@@ -15,10 +15,6 @@
 
 @interface SSJRegistCompleteViewController () <UITextFieldDelegate>
 
-@property (nonatomic) SSJRegistAndForgetPasswordType type;
-@property (nonatomic, copy) NSString *mobileNo;
-@property (nonatomic, copy) NSString *authCode;
-
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
 @property (nonatomic, strong) SSJRegistOrderView *stepView;
@@ -40,25 +36,8 @@
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    return [self initWithRegistAndForgetType:SSJRegistAndForgetPasswordTypeRegist mobileNo:nil authCode:nil];
-}
-
-- (instancetype)initWithRegistAndForgetType:(SSJRegistAndForgetPasswordType)type
-                                   mobileNo:(NSString *)mobileNo
-                                   authCode:(NSString *)authCode {
     if (self = [super initWithNibName:nil bundle:nil]) {
-        self.type = type;
-        self.mobileNo = mobileNo;
-        self.authCode = authCode;
-        switch (self.type) {
-            case SSJRegistAndForgetPasswordTypeRegist:
-                self.title = @"注册";
-                break;
-                
-            case SSJRegistAndForgetPasswordTypeForgetPassword:
-                self.title = @"忘记密码";
-                break;
-        }
+        self.title = @"注册";
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
@@ -161,8 +140,7 @@
             weakSelf.finishHandle(weakSelf);
         }
     }];
-    NSString *message = self.type == SSJRegistAndForgetPasswordTypeRegist ? @"注册成功" : @"设置密码成功";
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:sureAction, nil];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"注册成功" action:sureAction, nil];
 }
 
 - (void)showErrorMessage:(NSString *)message {
@@ -173,7 +151,7 @@
 #pragma mark - Getter
 - (SSJRegistNetworkService *)registCompleteService {
     if (!_registCompleteService) {
-        _registCompleteService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:self.type];
+        _registCompleteService = [[SSJRegistNetworkService alloc] initWithDelegate:self type:SSJRegistAndForgetPasswordTypeRegist];
         _registCompleteService.showLodingIndicator = YES;
     }
     return _registCompleteService;
@@ -193,9 +171,9 @@
     return _stepView;
 }
 
-- (UITextField *)passwordField {
+- (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
-        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:40];
+        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
         _passwordField.placeholder = @"请输入6-15位字母、数字组合";
