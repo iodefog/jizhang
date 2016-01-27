@@ -83,7 +83,15 @@
     while ([result next]) {
         NSString *fundId = [result stringForColumn:@"cfundid"];
         NSString *cuserId = [result stringForColumn:@"cuserid"];
-        success = [db executeUpdate:@"insert into BK_FUNS_ACCT (cfundid, cuserid, ibalance) select ?, ?, 0 where not exists (select count(*) from BK_FUNS_ACCT where cfundid = ? and cuserid = ?)", fundId, cuserId, fundId, cuserId];
+        
+        BOOL isExist = [db boolForQuery:@"select count(*) from BK_FUNS_ACCT where cfundid = ? and cuserid = ?", fundId, cuserId];
+        
+        if (!isExist) {
+            BOOL tSuccess = [db executeUpdate:@"insert into BK_FUNS_ACCT (cfundid, cuserid, ibalance) values (?, ?, 0)", fundId, cuserId];
+            success = (success && tSuccess);
+        }
+//        BOOL tSuccess = [db executeUpdate:@"insert into BK_FUNS_ACCT (cfundid, cuserid, ibalance) select ?, ?, ? where not exists (select count(*) from BK_FUNS_ACCT where cfundid = ? and cuserid = ?)", fundId, cuserId, @0, fundId, cuserId];
+//        success = (success && tSuccess);
     }
     
     [result close];
