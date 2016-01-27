@@ -616,6 +616,7 @@
     self.categoryListView.incomeOrExpence = !self.titleSegment.selectedSegmentIndex;
     self.categoryListView.scrollView.contentOffset = CGPointMake(0, 0);
     [self getDefualtColorAndDefualtId];
+    self.categoryListView.selectedId = _defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
