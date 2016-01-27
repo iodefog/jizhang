@@ -198,11 +198,7 @@
         }
         
         [columns addObject:column];
-        if ([value isKindOfClass:[NSString class]]) {
-            [values addObject:[NSString stringWithFormat:@"'%@'", value]];
-        } else {
-            [values addObject:value];
-        }
+        [values addObject:[NSString stringWithFormat:@"'%@'", value]];
     }
     
     NSString *columnsStr = [columns componentsJoinedByString:@", "];
@@ -228,11 +224,7 @@
             continue;
         }
         
-        if ([value isKindOfClass:[NSString class]]) {
-            [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
-        } else {
-            [keyValues addObject:[NSString stringWithFormat:@"%@ = %@", key, value]];
-        }
+        [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
     }
     return [keyValues componentsJoinedByString:joinString];
 }
