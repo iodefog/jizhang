@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJBaseItem.h"
 
-@interface SSJBookKeepHomeItem : NSObject
+@interface SSJBookKeepHomeItem : SSJBaseItem
 
 //记账编辑时间
 @property (nonatomic,strong) NSString *editeDate;

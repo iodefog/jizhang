@@ -58,13 +58,11 @@
     }
     
     SSJBookKeepHomeItem *item = (SSJBookKeepHomeItem *)cellItem;
-    
+    [self getBillDetailWithBillId:item.billID];
     self.imageView.image = [UIImage imageNamed:self.cellImage];
-    self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@""].CGColor;
-    
+    self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.cellColor].CGColor;
     self.textLabel.text = self.cellTitle;
     [self.textLabel sizeToFit];
-    
     self.moneyLab.text = [NSString stringWithFormat:@"%@%.2f", self.incomeOrExpence ? @"－" : @"＋", item.chargeMoney];
     [self.moneyLab sizeToFit];
     
@@ -86,10 +84,14 @@
         NSLog(@"Could not open db");
         return;
     }
-    FMResultSet *rs = [db executeQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?"];
-//    while ([rs next]) {
-//        fundingName = [rs stringForColumn:@"CACCTNAME"];
-//    }
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
+    while ([rs next]) {
+        self.cellTitle = [rs stringForColumn:@"CNAME"];
+        self.cellImage = [rs stringForColumn:@"CCOIN"];
+        self.cellColor = [rs stringForColumn:@"CCOLOR"];
+        self.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+    }
+    [db close];
 }
 
 @end

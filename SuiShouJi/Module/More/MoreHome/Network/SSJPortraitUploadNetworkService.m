@@ -26,7 +26,6 @@
     [paraDic setObject:SSJUSERID() forKey:@"cuserid"];
     [paraDic setObject:(SSJAccessToken() ? SSJAccessToken() : @"") forKey:@"accessToken"];
     [paraDic setObject:(SSJAppId() ? SSJAppId() : @"") forKey:@"appId"];
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     NSData *data = UIImageJPEGRepresentation(image, 0.5);

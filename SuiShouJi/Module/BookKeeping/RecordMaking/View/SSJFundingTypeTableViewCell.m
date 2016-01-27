@@ -73,6 +73,7 @@
     if ([_item.fundingParent isEqualToString:@"root"]) {
         if (_item.fundingMemo == nil) {
             _fundingTitle.text = self.item.fundingName;
+            _fundingTitle.font = [UIFont systemFontOfSize:18];
         }else{
             NSString *string = [NSString stringWithFormat:@"%@ (%@)",self.item.fundingName,self.item.fundingMemo];
             NSMutableAttributedString *attrString =

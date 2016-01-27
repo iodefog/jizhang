@@ -11,10 +11,16 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderDetailCell.h"
 #import "SSJRecordMakingViewController.h"
+#import "SSJCalenderTableViewCell.h"
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
 @property (nonatomic,strong) UIView *footerView;
+@property (nonatomic, strong) NSString *cellImage;
+@property (nonatomic,strong) NSString *cellTitle;
+@property (nonatomic,strong) NSString *cellColor;
+@property (nonatomic)BOOL incomeOrExpence;
+@property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @end
 
 @implementation SSJCalenderDetailViewController
@@ -28,10 +34,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self getBillDetailWithBillId:self.item.billID];
+    self.navigationItem.rightBarButtonItem = self.rightBarButton;
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.colorValue] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCell"];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCell"];
     [self.tableView registerClass:[SSJCalenderDetailCell class] forCellReuseIdentifier:@"calenderDetailCellID"];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self getDataFromDb];
+    [self.tableView reloadData];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 
 }
 
@@ -49,7 +64,11 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.1;
+    return 100;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    return self.footerView;
 }
 
 #pragma mark - UITableViewDataSource
@@ -60,7 +79,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
-        SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCell" forIndexPath:indexPath];
+        SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCell" forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setCellItem:self.item];
         return cell;
@@ -73,7 +92,7 @@
         return detailcell;
     }else{
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.parent];
+        detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundID];
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"资金类型";
         [detailcell.cellLabel sizeToFit];
@@ -99,24 +118,89 @@
 #pragma mark - Getter
 -(UIView *)footerView{
     if (!_footerView) {
-        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 40)];
-        UIButton *editeButton = [[UIButton alloc]init];
+        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 100)];
+        UIButton *editeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 40)];
         [editeButton setTitle:@"修改此记录" forState:UIControlStateNormal];
         [editeButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         editeButton.layer.borderWidth = 1.f;
         editeButton.layer.cornerRadius = 2.f;
         editeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
-        editeButton.center = CGPointMake(_footerView.height / 2, _footerView.width / 2);
+        editeButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
         [editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_footerView addSubview:editeButton];
     }
     return _footerView;
 }
+
+-(UIBarButtonItem*)rightBarButton{
+    if (!_rightBarButton) {
+        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
+        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _rightBarButton;
+}
+
 
 #pragma mark - Private
 -(void)editeButtonClicked:(id)sender{
     SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
     recordMakingVc.item = self.item;
     [self.navigationController pushViewController:recordMakingVc animated:YES];
+}
+
+-(void)getBillDetailWithBillId:(NSString *)billId{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return;
+    }
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
+    while ([rs next]) {
+        self.cellTitle = [rs stringForColumn:@"CNAME"];
+        self.cellImage = [rs stringForColumn:@"CCOIN"];
+        self.cellColor = [rs stringForColumn:@"CCOLOR"];
+        self.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+    }
+    [db close];
+}
+
+-(void)getDataFromDb{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return;
+    }
+    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER_CHARGE WHERE ICHARGEID = ? AND CUSERID = ? ",self.item.chargeID,SSJUSERID()];
+    while ([rs next]) {
+        self.item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
+        self.item.billID = [rs stringForColumn:@"IBILLID"];
+        self.item.billDate = [rs stringForColumn:@"CBILLDATE"];
+        self.item.fundID = [rs stringForColumn:@"IFUNSID"];
+    }
+    [db close];
+}
+
+-(void)rightBarButtonClicked:(id)sender{
+    [self deleteCharge];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)deleteCharge{
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        NSLog(@"Could not open db");
+        return ;
+    }
+    [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.chargeID];
+    if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
+        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
+        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate];
+    }else{
+        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
+        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate];
+    }
+    [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
+    [db close];
 }
 
 - (void)didReceiveMemoryWarning {

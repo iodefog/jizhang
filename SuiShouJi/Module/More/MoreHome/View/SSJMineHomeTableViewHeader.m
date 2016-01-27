@@ -26,6 +26,9 @@
     UITapGestureRecognizer *singleTap =
     [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(loginButtonClicked:)];
     [self.headPotraitImage addGestureRecognizer:singleTap];
+    UITapGestureRecognizer *backsingleTap =
+    [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backsingleTap:)];
+    [self addGestureRecognizer:backsingleTap];
 }
 
 - (void)loginButtonClicked:(id)sender {
@@ -33,6 +36,13 @@
         self.HeaderButtonClickedBlock();
     }
 }
+
+-(void)backsingleTap:(id)sender{
+    if (self.HeaderClickedBlock) {
+        self.HeaderClickedBlock();
+    }
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

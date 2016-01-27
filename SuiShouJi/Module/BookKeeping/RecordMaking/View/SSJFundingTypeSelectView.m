@@ -76,7 +76,6 @@
             FundingTypeCell.selectedOrNot = YES;
         }else{
             FundingTypeCell.selectedOrNot = NO;
-
         }
     }else{
         if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
