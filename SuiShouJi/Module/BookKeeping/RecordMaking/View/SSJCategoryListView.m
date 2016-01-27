@@ -62,17 +62,7 @@
 }
 
 -(void)setCollectionView{
-    if (_screenWidth == 320) {
-        if (_screenHeight == 568) {
-            _totalPage = 3;
-        }else{
-            _totalPage = 5;
-        }
-    }else if(_screenWidth == 375){
-        _totalPage = 3;
-    }else{
-        _totalPage = 2;
-    }
+    _totalPage = 8;
     for (int i = 0; i < _totalPage; i++) {
         SSJCategoryCollectionView *collectionView = [[SSJCategoryCollectionView alloc]init];
         collectionView.incomeOrExpence = self.incomeOrExpence;
@@ -156,7 +146,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ID = B.CBILLID AND A.ITYPE = ? AND B.ISTATE = 1 AND B.CUSERID = ? LIMIT 20",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()] + 1;
+    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ID = B.CBILLID AND A.ITYPE = ? AND B.ISTATE = 1 AND B.CUSERID = ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()] + 1;
     if (_screenWidth == 320) {
         if (_screenHeight == 568) {
             if (count % 8 == 0) {
