@@ -230,6 +230,6 @@ BOOL SSJSaveQQList(NSArray *qqList) {
 NSString *SSJUUID(){
     CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
     NSString *strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
-    return strUUID;
+    return [strUUID lowercaseString];
 }
 

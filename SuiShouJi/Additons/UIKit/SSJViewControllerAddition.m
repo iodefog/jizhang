@@ -29,14 +29,7 @@ static const void *kBackControllerKey = &kBackControllerKey;
 }
 
 - (void)ssj_showBackButtonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector {
-    UIButton *backoffButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backoffButton setFrame:CGRectMake(0, 0, 30, 30)];
-    [backoffButton setImage:image forState:UIControlStateNormal];
-    [backoffButton setImageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, backoffButton.width - image.size.width)];
-    if ([self respondsToSelector:selector]) {
-        [backoffButton addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
-    }
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:backoffButton];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:selector];
     self.navigationItem.leftBarButtonItem = leftItem;
 }
 
