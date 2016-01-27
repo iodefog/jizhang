@@ -60,6 +60,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.navigationController.navigationBar.barTintColor = self.color;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 #pragma mark - UITableViewDataSource

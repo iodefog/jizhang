@@ -145,8 +145,6 @@
                 }
             });
         }
-    }else{
-        [CDAutoHideMessageHUD showMessage:self.loginService.desc];
     }
 }
 

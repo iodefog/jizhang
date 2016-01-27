@@ -66,6 +66,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         self.circleItems = [NSMutableArray array];
         self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
         self.automaticallyAdjustsScrollViewInsets = NO;
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -73,12 +74,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    
     self.navigationItem.titleView = self.segmentControl;
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(filterAction)];
     self.navigationItem.rightBarButtonItem = rightItem;
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+    
+
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.switchDateControl];
@@ -108,6 +112,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     [self reloadDatas];
 }
 
@@ -175,7 +180,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
     if ([selectedTitle isEqualToString:kSegmentTitlePay]
         || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
-        self.tableView.tableFooterView = nil;
+        
+        self.tableView.tableFooterView = [[UIView alloc] init];
+        
     } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
         self.tableView.tableFooterView = self.surplusView;
     }
@@ -425,6 +432,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.contentInset = UIEdgeInsetsMake(self.switchDateControl.bottom, 0, self.tabBarController.tabBar.height, 0);
         _tableView.tableHeaderView = self.chartView;
+        _tableView.tableFooterView = [[UIView alloc] init];
     }
     return _tableView;
 }
