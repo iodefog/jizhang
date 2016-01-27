@@ -99,11 +99,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (void)testAction {
     [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-        NSLog(@"success");
+        
     } failure:^(NSError *error) {
-        UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [aler show];
-        NSLog(@"%@", error);
+       
     }];
 }
 
