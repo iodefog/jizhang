@@ -86,17 +86,24 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
 }
 
+#warning test
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
             [self syncDataWithSuccess:^{
+                SSJDispatch_main_async_safe(^{
+                    [CDAutoHideMessageHUD showMessage:@"同步成功"];
+                });
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
                     });
                 }
             } failure:^(NSError *error) {
+                SSJDispatch_main_async_safe(^{
+                    [CDAutoHideMessageHUD showMessage:@"同步失败"];
+                });
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure(error);
@@ -106,12 +113,18 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         } else {
             dispatch_async(self.syncQueue, ^{
                 [self syncDataWithSuccess:^{
+                    SSJDispatch_main_async_safe(^{
+                        [CDAutoHideMessageHUD showMessage:@"同步成功"];
+                    });
                     if (success) {
                         SSJDispatch_main_async_safe(^{
                             success();
                         });
                     }
                 } failure:^(NSError *error) {
+                    SSJDispatch_main_async_safe(^{
+                        [CDAutoHideMessageHUD showMessage:@"同步失败"];
+                    });
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure(error);
@@ -121,6 +134,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             });
         }
     } else {
+        SSJPRINT(@">>> SSJ warning:there is a sync task in progress");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncBusy userInfo:@{NSLocalizedDescriptionKey:@"there is a sync task in progress"}];
         failure(error);
     }
