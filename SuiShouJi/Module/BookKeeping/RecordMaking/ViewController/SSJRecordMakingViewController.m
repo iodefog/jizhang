@@ -313,6 +313,8 @@
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
+        _categoryListView.selectedId = _defualtID;
+        [_categoryListView reloadData];
         if (self.item == nil) {
             _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
         }else{
@@ -320,14 +322,15 @@
         }
         [_categoryListView reloadData];
         __weak typeof(self) weakSelf = self;
-        _categoryListView.CategorySelected = ^(NSString *categoryTitle , NSString *categoryImage,NSString *categoryID , NSString *categoryColor){
-            _categoryID = categoryID;
-            if (![categoryTitle isEqualToString:@"添加"]) {
-                weakSelf.categoryNameLabel.text = categoryTitle;
+        _categoryListView.CategorySelectedBlock = ^(SSJRecordMakingCategoryItem *item){
+            _categoryID = item.categoryTitle;
+            if (![item.categoryTitle isEqualToString:@"添加"]) {
+                weakSelf.categoryNameLabel.text = item.categoryTitle;
                 [weakSelf.categoryNameLabel sizeToFit];
-                weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:categoryColor];
+                weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
                 weakSelf.categoryImage.tintColor = [UIColor whiteColor];
-                weakSelf.categoryImage.image = [[UIImage imageNamed:categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                _categoryID = item.categoryID;
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
                 addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
@@ -375,7 +378,7 @@
     if (!_inputAccessoryView ) {
         _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _inputAccessoryView.backgroundColor = [UIColor whiteColor];
-        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 50)];
+        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
         [_fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
         _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_fundingTypeButton setImage:[UIImage imageNamed:_selectItem.fundingIcon] forState:UIControlStateNormal];
@@ -383,17 +386,18 @@
         _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:_fundingTypeButton];
-        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 52, 50)];
+        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
         _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
         [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
         [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputAccessoryView addSubview:self.datePickerButton];
         self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
-        self.calendarView.frame = CGRectMake(self.view.width - 32, 0, 22, 22);
-        self.calendarView.centerY = _inputAccessoryView.height / 2;
-        [_inputAccessoryView addSubview:self.calendarView];
+        self.calendarView.frame = CGRectMake(self.datePickerButton.width - 20, 0, 30, 30);
+        self.calendarView.centerY = self.datePickerButton.height / 2;
+        [self.datePickerButton addSubview:self.calendarView];
     }
     return _inputAccessoryView;
 }
@@ -649,7 +653,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID LIMIT 1",@"root"];
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 LIMIT 1",@"root"];
     _defualtItem = [[SSJFundingItem alloc]init];
     while ([rs next]) {
         _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];

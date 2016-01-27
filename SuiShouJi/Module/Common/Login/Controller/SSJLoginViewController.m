@@ -20,13 +20,14 @@
 #import "SSJUserItem.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
+#import "SSJBaselineTextField.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) SSJLoginService *loginService;
 
-@property (nonatomic,strong)UITextField *tfPhoneNum;
-@property (nonatomic,strong)UITextField *tfPassword;
+@property (nonatomic,strong)SSJBaselineTextField *tfPhoneNum;
+@property (nonatomic,strong)SSJBaselineTextField *tfPassword;
 @property (nonatomic,copy)NSString *strUserAccount;
 @property (nonatomic,copy)NSString *strUserPassword;
 @property (nonatomic,strong)UIView *loginView;
@@ -65,13 +66,19 @@
     [self.view addSubview:scrollView];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.tfPhoneNum becomeFirstResponder];
+}
+
 -(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
     self.tfPhoneNum.top = 40;
     self.tfPassword.top = self.tfPhoneNum.bottom + 10;
     self.loginButton.top = self.tfPassword.bottom + 40;
     self.loginButton.centerX = self.view.width / 2;
-    self.forgetButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 10);
-    self.registerButton.rightTop = CGPointMake(self.loginButton.right, self.loginButton.bottom + 10);
+    self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 10);
+    self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.loginButton.bottom + 10);
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -211,21 +218,17 @@
 //    return _loginView;
 //}
 
--(UITextField*)tfPhoneNum{
+-(SSJBaselineTextField*)tfPhoneNum{
     if (!_tfPhoneNum) {
         UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_username"]];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         
-        _tfPhoneNum = [[UITextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47)];
-        [_tfPhoneNum ssj_setBorderWidth:1.0];
-        [_tfPhoneNum ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
-        [_tfPhoneNum ssj_setBorderStyle:SSJBorderStyleBottom];
+        _tfPhoneNum = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47) contentHeight:34];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
-        [_tfPhoneNum ssj_setBorderInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
         _tfPhoneNum.leftView = leftView;
@@ -234,17 +237,13 @@
     return _tfPhoneNum;
 }
 
--(UITextField*)tfPassword{
+-(SSJBaselineTextField*)tfPassword{
     if (!_tfPassword) {
         UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
-        _tfPassword = [[UITextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47)];
-        [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_tfPassword ssj_setBorderWidth:1.0];
-        [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
-        [_tfPassword ssj_setBorderInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
+        _tfPassword = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47) contentHeight:34];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
         _tfPassword.font = [UIFont systemFontOfSize:16];
@@ -268,7 +267,6 @@
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cfd2d4"] forState:UIControlStateDisabled];
         [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _loginButton;
@@ -279,7 +277,7 @@
         _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _registerButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_registerButton setLeft:self.loginButton.left];
-        [_registerButton setTitle:@"手机号快速注册" forState:UIControlStateNormal];
+        [_registerButton setTitle:@"立刻注册" forState:UIControlStateNormal];
         _registerButton.titleLabel.font = [UIFont systemFontOfSize:18];
 
         [_registerButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];

@@ -11,6 +11,7 @@
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJADDNewTypeViewController.h"
 #import "FMDB.h"
+#import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJCategoryCollectionView()
 @property (nonatomic,strong) NSMutableArray *Items;
@@ -50,7 +51,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.Items objectAtIndex:indexPath.row];
-    if (self.page == self.selectedPage && [indexPath compare:self.selectedIndex] == NSOrderedSame) {
+    if ([cell.item.categoryID isEqualToString:self.selectedId]) {
         cell.categorySelected = YES;
     }else{
         cell.categorySelected = NO;
@@ -97,14 +98,8 @@
     if ([cell.item.categoryTitle isEqualToString:@"添加"]) {
         [[NSNotificationCenter defaultCenter]postNotificationName:@"addButtonClickedNotification" object:nil];
     }
-    __weak typeof(self) weakSelf = self;
     if (self.ItemClickedBlock) {
-        NSString *image = cell.item.categoryImage;
-        NSString *title = cell.categoryName.text;
-        NSString *categoryID = cell.item.categoryID;
-        NSString *categoryColor = cell.item.categoryColor;
-        NSIndexPath *index = indexPath;
-        weakSelf.ItemClickedBlock(title,image,categoryID,categoryColor,self.page,index);
+        self.ItemClickedBlock(cell.item);
     }
 }
 

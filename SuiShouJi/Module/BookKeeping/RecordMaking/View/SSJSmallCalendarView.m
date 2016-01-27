@@ -17,6 +17,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.userInteractionEnabled = NO;
         [self addSubview:self.calenderImage];
         [self addSubview:self.dateLabel];
     }
@@ -42,7 +43,7 @@
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor ssj_colorWithHex:@"cccccc"];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.font = [UIFont systemFontOfSize:12];
+        _dateLabel.font = [UIFont systemFontOfSize:18];
     }
     return _dateLabel;
 }
