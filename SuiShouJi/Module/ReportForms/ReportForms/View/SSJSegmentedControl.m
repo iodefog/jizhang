@@ -24,7 +24,7 @@
     if (self = [super initWithFrame:CGRectZero]) {
         self.layer.cornerRadius = 3;
         self.layer.borderWidth = 1;
-        self.font = [UIFont systemFontOfSize:18];
+        self.font = [UIFont systemFontOfSize:15];
         self.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         self.buttons = [NSMutableArray arrayWithCapacity:items.count];
         
