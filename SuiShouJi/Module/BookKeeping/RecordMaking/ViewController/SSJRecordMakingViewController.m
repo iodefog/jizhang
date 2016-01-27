@@ -654,7 +654,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 LIMIT 1",@"root"];
+    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? LIMIT 1",@"root",SSJUSERID()];
     _defualtItem = [[SSJFundingItem alloc]init];
     while ([rs next]) {
         _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
