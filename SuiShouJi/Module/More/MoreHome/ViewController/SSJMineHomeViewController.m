@@ -229,7 +229,7 @@
 }
 
 -(void)quitLogButtonClicked:(id)sender{
-    //  登陆成功后强制同步一次
+    //  退出登陆后强制同步一次
     [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     
     SSJClearLoginInfo();

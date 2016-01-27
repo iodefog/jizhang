@@ -10,6 +10,7 @@
 #import "SSJSyncTable.h"
 #import "FMDB.h"
 
+//  每日收支流水模型
 @interface __SSJDailySumChargeTableModel : NSObject
 
 //  流水日期
