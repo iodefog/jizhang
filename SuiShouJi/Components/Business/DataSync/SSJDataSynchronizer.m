@@ -95,20 +95,22 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 SSJDispatch_main_async_safe(^{
                     [CDAutoHideMessageHUD showMessage:@"同步成功"];
                 });
-                if (success) {
-                    SSJDispatch_main_async_safe(^{
+                SSJDispatch_main_async_safe(^{
+                    if (success) {
                         success();
-                    });
-                }
+                    }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
+                });
+                
             } failure:^(NSError *error) {
                 SSJDispatch_main_async_safe(^{
                     [CDAutoHideMessageHUD showMessage:@"同步失败"];
                 });
-                if (failure) {
-                    SSJDispatch_main_async_safe(^{
+                SSJDispatch_main_async_safe(^{
+                    if (failure) {
                         failure(error);
-                    });
-                }
+                    }
+                });
             }];
         } else {
             dispatch_async(self.syncQueue, ^{
@@ -116,20 +118,23 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                     SSJDispatch_main_async_safe(^{
                         [CDAutoHideMessageHUD showMessage:@"同步成功"];
                     });
-                    if (success) {
-                        SSJDispatch_main_async_safe(^{
+                    SSJDispatch_main_async_safe(^{
+                        if (success) {
                             success();
-                        });
-                    }
+                        }
+                        [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
+                    });
+                    
                 } failure:^(NSError *error) {
                     SSJDispatch_main_async_safe(^{
                         [CDAutoHideMessageHUD showMessage:@"同步失败"];
                     });
-                    if (failure) {
-                        SSJDispatch_main_async_safe(^{
+                    SSJDispatch_main_async_safe(^{
+                        if (failure) {
                             failure(error);
-                        });
-                    }
+                        }
+                    });
+                    
                 }];
             });
         }

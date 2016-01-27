@@ -24,3 +24,5 @@ NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 NSString *const lastSelectFundItemKey = @"lastSelectFundKey";
 
+NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
+

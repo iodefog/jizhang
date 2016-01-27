@@ -1656,12 +1656,12 @@
 		BD0433861C1A8DA50051E7AB /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				BD0433871C1A8DA50051E7AB /* SSJBaseCollectionViewController.h */,
-				BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */,
 				BD0433891C1A8DA50051E7AB /* SSJBaseViewController.h */,
 				BD04338A1C1A8DA50051E7AB /* SSJBaseViewController.m */,
 				BD04338B1C1A8DA50051E7AB /* SSJNewBaseTableViewController.h */,
 				BD04338C1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m */,
+				BD0433871C1A8DA50051E7AB /* SSJBaseCollectionViewController.h */,
+				BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */,
 				BD04338D1C1A8DA50051E7AB /* SSJNormalWebViewController.h */,
 				BD04338E1C1A8DA50051E7AB /* SSJNormalWebViewController.m */,
 			);
