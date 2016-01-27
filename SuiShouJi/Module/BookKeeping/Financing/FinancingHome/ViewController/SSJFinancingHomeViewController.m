@@ -188,7 +188,7 @@
     item.fundingIcon = @"add";
     item.isAddOrNot = YES;
     [self.items addObject:item];
-    _profitAmount = [db doubleForQuery:@"SELECT SUM(IBALANCE) FROM BK_FUNS_ACCT"];
+    _profitAmount = [db doubleForQuery:@"SELECT SUM(A.IBALANCE) FROM BK_FUNS_ACCT A , BK_FUND_INFO B WHERE A.CFUNDID = B.CFUNDID AND A.CUSERID = ? AND B.OPERATORTYPE <> 2"];
     _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
     [_profitAmountLabel sizeToFit];
 }
