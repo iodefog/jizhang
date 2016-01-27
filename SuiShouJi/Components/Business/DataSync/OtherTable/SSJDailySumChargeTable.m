@@ -93,7 +93,19 @@
     
     [result close];
     
-    return success;
+    if (!success) {
+        return NO;
+    }
+    
+    //  将没有流水的日期从BK_DAILYSUM_CHARGE表中删除
+    NSArray *allBillDates = [dailyChargeInfo allKeys];
+    NSMutableArray *billDateSet = [NSMutableArray arrayWithCapacity:allBillDates.count];
+    for (NSString *billdate in allBillDates) {
+        [billDateSet addObject:[NSString stringWithFormat:@"'%@'", billdate]];
+    }
+    NSString *billDateStr = [billDateSet componentsJoinedByString:@", "];
+    
+    return [db executeUpdate:[NSString stringWithFormat:@"delete from BK_DAILYSUM_CHARGE where cbilldate not in (%@)", billDateStr]];
 }
 
 @end
