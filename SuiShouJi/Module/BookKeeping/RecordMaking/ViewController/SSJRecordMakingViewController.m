@@ -103,7 +103,12 @@
     if (self.item != nil) {
         [self getSelectedFundingType];
     }else{
-        _selectItem = _defualtItem;
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:lastSelectFundItemKey] == nil) {
+            _selectItem = _defualtItem;
+        }else{
+            NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:lastSelectFundItemKey];
+            _selectItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
+        }
     }
     [self settitleSegment];
     [self.view addSubview:self.selectedCategoryView];
@@ -437,14 +442,14 @@
     if (!_FundingTypeSelectView) {
         __weak typeof(self) weakSelf = self;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        if (self.item != nil) {
-            _FundingTypeSelectView.selectFundID = self.item.fundID;
-        }
+        _FundingTypeSelectView.selectFundID = _selectItem.fundingID;
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
                 [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
                 [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _selectItem = fundingItem;
+                 NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
+                [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:lastSelectFundItemKey];
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
