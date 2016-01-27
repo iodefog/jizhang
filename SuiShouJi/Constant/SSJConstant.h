@@ -42,7 +42,8 @@ extern NSString *const SSJBaseURLString;
 //
 extern NSString *const SSJErrorDomain;
 
-//
+//上一次选择的资金账户类型
+extern NSString *const lastSelectFundItemKey;
 
 
 

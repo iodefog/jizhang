@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJFundingItem : NSObject
+@interface SSJFundingItem : NSObject<NSCoding>
 
 //账户ID
 @property (nonatomic,strong) NSString *fundingID;

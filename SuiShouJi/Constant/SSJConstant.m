@@ -22,4 +22,5 @@ NSString *const SSJBaseURLString = @"http://1.9188.com";
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
+NSString *const lastSelectFundItemKey = @"lastSelectFundKey";
 
