@@ -238,6 +238,7 @@
     }failure:^(NSError *error){
         
     }];
+    self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
     self.header.nicknameLabel.text = @"待君登录";
     [self.tableView reloadData];
 }

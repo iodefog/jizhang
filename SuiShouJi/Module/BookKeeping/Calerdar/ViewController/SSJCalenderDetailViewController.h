@@ -7,8 +7,8 @@
 //
 
 #import "SSJNewBaseTableViewController.h"
-#import "SSJBillingChargeCellItem.h"
+#import "SSJBookKeepHomeItem.h"
 
 @interface SSJCalenderDetailViewController :SSJNewBaseTableViewController
-@property (nonatomic,strong) SSJBillingChargeCellItem *item;
+@property (nonatomic,strong) SSJBookKeepHomeItem *item;
 @end

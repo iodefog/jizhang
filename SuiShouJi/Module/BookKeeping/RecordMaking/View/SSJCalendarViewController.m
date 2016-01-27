@@ -9,11 +9,12 @@
 #import "SSJCalendarViewController.h"
 #import "SSJCalendarView.h"
 #import "SSJRecordMakingViewController.h"
-#import "SSJBillingChargeCellItem.h"
+#import "SSJBookKeepHomeItem.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJFundingDetailDateHeader.h"
 #import "SSJCalenderDetailViewController.h"
+#import "SSJCalenderTableViewCell.h"
 
 #import "FMDB.h"
 
@@ -54,7 +55,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
-    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
+    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
     self.selectedMonth = _currentMonth;
@@ -111,8 +112,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJBillingChargeCell *cell = (SSJBillingChargeCell*)[tableView cellForRowAtIndexPath:indexPath];
-    SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
+    SSJCalenderTableViewCell *cell = (SSJCalenderTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    SSJBookKeepHomeItem *item = (SSJBookKeepHomeItem*)cell.cellItem;
     SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
     CalenderDetailVC.item = item;
     [self.navigationController pushViewController:CalenderDetailVC animated:YES];
@@ -150,7 +151,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
+    SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setCellItem:[self.items ssj_safeObjectAtIndex:indexPath.row]];
     return cell;
@@ -255,15 +256,12 @@
     }
     FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
     while ([rs next]) {
-        SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
-        item.imageName = [rs stringForColumn:@"CCOIN"];
-        item.typeName = [rs stringForColumn:@"CNAME"];
-        item.ID = [rs stringForColumn:@"ICHARGEID"];
-        item.money = [rs stringForColumn:@"IMONEY"];
-        item.colorValue = [rs stringForColumn:@"CCOLOR"];
-        item.incomeOrExpence = [rs intForColumn:@"ITYPE"];
+        SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
+        item.chargeID = [rs stringForColumn:@"ICHARGEID"];
+        item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
         item.billDate = [rs stringForColumn:@"CBILLDATE"];
-        item.parent = [rs stringForColumn:@"CPARENT"];
+        item.billID = [rs stringForColumn:@"IBILLID"];
+        item.fundID = [rs stringForColumn:@"IFUNSID"];
         [self.items addObject:item];
     }
     [db close];
@@ -276,7 +274,7 @@
         NSLog(@"Could not open db");
         return 0;
     }
-    double balance = [db doubleForQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
+    double balance = [db doubleForQuery:@"SELECT * FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
     return balance;
 }
 
