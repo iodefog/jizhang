@@ -78,6 +78,22 @@
         }
     }];
     
+    
+    result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ?", SSJUSERID()];
+    while ([result next]) {
+        NSString *fundId = [result stringForColumn:@"cfundid"];
+        NSString *cuserId = [result stringForColumn:@"cuserid"];
+        
+        BOOL isExist = [db boolForQuery:@"select count(*) from BK_FUNS_ACCT where cfundid = ? and cuserid = ?", fundId, cuserId];
+        
+        if (!isExist) {
+            BOOL tSuccess = [db executeUpdate:@"insert into BK_FUNS_ACCT (cfundid, cuserid, ibalance) values (?, ?, 0)", fundId, cuserId];
+            success = (success && tSuccess);
+        }
+//        BOOL tSuccess = [db executeUpdate:@"insert into BK_FUNS_ACCT (cfundid, cuserid, ibalance) select ?, ?, ? where not exists (select count(*) from BK_FUNS_ACCT where cfundid = ? and cuserid = ?)", fundId, cuserId, @0, fundId, cuserId];
+//        success = (success && tSuccess);
+    }
+    
     [result close];
     
     return success;

@@ -23,6 +23,10 @@
     return nil;
 }
 
++ (NSArray *)optionalColumns {
+    return nil;
+}
+
 + (NSString *)queryRecordsForSyncAdditionalCondition {
     return nil;
 }
@@ -31,8 +35,8 @@
     return nil;
 }
 
-+ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
-    return nil;
++ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
+    return YES;
 }
 
 + (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db error:(NSError **)error {
@@ -101,39 +105,39 @@
 
 + (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
-        
         if (![recordInfo isKindOfClass:[NSDictionary class]]) {
             *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
             SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", recordInfo);
             return NO;
         }
         
-        //  根据合并记录返回相应的sql语句
-        NSMutableString *sql = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db] mutableCopy];
-        
-        //  添加附加条件
-        NSString *additionalCondition = [self additionalConditionForMergeRecord:recordInfo];
-        if (additionalCondition.length) {
-            [sql appendFormat:@" and %@", additionalCondition];
+        if (![self shouldMergeRecord:recordInfo inDatabase:db]) {
+            continue;
         }
         
-        BOOL success = [db executeUpdate:sql];
+        //  根据合并记录返回相应的sql语句
+        NSMutableString *statement = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db error:error] mutableCopy];
+        if (!statement) {
+            return NO;
+        }
+        
+        BOOL success = [db executeUpdate:statement];
         if (!success) {
             *error = [db lastError];
-            SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+            return NO;
         }
-        return success;
     }
     
     return YES;
 }
 
 //  根据合并记录返回相应的sql语句
-+ (NSString *)sqlStatementForMergeRecord:(NSDictionary *)recordInfo inDatabase:(FMDatabase *)db {
++ (NSString *)sqlStatementForMergeRecord:(NSDictionary *)recordInfo inDatabase:(FMDatabase *)db error:(NSError **)error {
     
     //  根据记录的操作类型，对记录进行相应的操作
     NSString *opertoryType = recordInfo[@"operatortype"];
     if (opertoryType.length == 0) {
+        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record is lack of column operatortype"}];
         SSJPRINT(@">>>SSJ warning: merge record lack of column 'OPERATORTYPE'\n record:%@", recordInfo);
         return nil;
     }
@@ -141,6 +145,7 @@
     //  0添加  1修改  2删除
     int opertoryValue = [opertoryType intValue];
     if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
+        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"record has unknown operatortype value %@", opertoryType]}];
         SSJPRINT(@">>>SSJ warning:unknown OPERATORTYPE value %d", opertoryValue);
         return nil;
     }
@@ -148,36 +153,30 @@
     //  根据表中的主键拼接合并条件
     NSString *necessaryCondition = [self spliceKeyAndValueForKeys:[self primaryKeys] record:recordInfo joinString:@" and "];
     if (!necessaryCondition.length) {
+        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"an error occured when splice record's keys and values"}];
+        SSJPRINT(@">>>SSJ warning:an error occured when splice record's keys and values");
         return nil;
     }
     
     //  检测表中是否存在将要合并的记录
-    FMResultSet *result = [db executeQuery:[NSString stringWithFormat:@"select count(*) from %@ where %@", [self tableName], necessaryCondition]];
-    if (!result) {
-        SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-        return nil;
-    }
-    BOOL isRecordExist = [result intForColumnIndex:0] > 0;
-    [result close];
+    BOOL isExisted = [db boolForQuery:[NSString stringWithFormat:@"select count(*) from %@ where %@", [self tableName], necessaryCondition]];
     
     //  如果记录已存在，并且操作类型是修改（1）、删除（2），就更新记录；反之就插入记录
     NSString *statement = nil;
-    if (isRecordExist) {
-        if (opertoryValue == 1 || opertoryValue == 2) {
-            BOOL needToCompareWriteDate = (opertoryValue == 1);
-            NSString *updateStatement = [self updateStatementForMergeRecord:recordInfo compareWriteDate:needToCompareWriteDate condition:necessaryCondition];
-            if (!updateStatement.length) {
-                return nil;
-            }
-            
-            statement = updateStatement;
+    
+    if (isExisted) {
+        NSMutableString *condition = [necessaryCondition mutableCopy];
+        if (opertoryValue == 0 || opertoryValue == 1) {
+            [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
+        }
+        
+        NSString *updateStatement = [self updateStatementForMergeRecord:recordInfo];
+        
+        if (updateStatement) {
+            statement = [NSString stringWithFormat:@"%@ where %@", updateStatement, condition];
         }
     } else {
-        NSString *insertStatement = [self insertStatementForMergeRecord:recordInfo];
-        if (!insertStatement.length) {
-            return nil;
-        }
-        statement =  insertStatement;
+        statement = [self insertStatementForMergeRecord:recordInfo];
     }
     
     return statement;
@@ -190,8 +189,12 @@
     for (NSString *column in [self columns]) {
         id value = [recordInfo objectForKey:column];
         if (!value) {
-            SSJPRINT(@">>>SSJ warning: merge record lack of column '%@'\n record:%@", column, recordInfo);
-            return nil;
+            if ([[self optionalColumns] indexOfObject:column] == NSNotFound) {
+                SSJPRINT(@">>>SSJ warning: merge record lack of column '%@'\n record:%@", column, recordInfo);
+                return nil;
+            } else {
+               continue;
+            }
         }
         
         [columns addObject:column];
@@ -209,40 +212,29 @@
 }
 
 //  返回更新的sql语句
-+ (NSString *)updateStatementForMergeRecord:(NSDictionary *)recordInfo compareWriteDate:(BOOL)compareWriteDate condition:(NSString *)condition {
-    if (!((NSString *)recordInfo[@"cwritedate"]).length
-        || !condition.length) {
-        SSJPRINT(@">>>SSJ warning: merge record lack of column 'cwritedate'\n record:%@", recordInfo);
-        return nil;
-    }
-    
++ (NSString *)updateStatementForMergeRecord:(NSDictionary *)recordInfo {
     NSString *keyValuesStr = [self spliceKeyAndValueForKeys:[self columns] record:recordInfo joinString:@", "];
-    
-    NSMutableString *updateSql = [NSMutableString stringWithFormat:@"update %@ set %@ where %@", [self tableName], keyValuesStr, condition];
-    
-    if (compareWriteDate) {
-        [updateSql appendFormat:@" and cwritedate < %@", recordInfo[@"cwritedate"]];
-    }
+    NSMutableString *updateSql = [NSMutableString stringWithFormat:@"update %@ set %@", [self tableName], keyValuesStr];
     
     return updateSql;
 }
 
 + (NSString *)spliceKeyAndValueForKeys:(NSArray *)keys record:(NSDictionary *)recordInfo joinString:(NSString *)joinString {
-    NSMutableArray *conditions = [NSMutableArray arrayWithCapacity:keys.count];
+    NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:keys.count];
     for (NSString *key in keys) {
         id value = recordInfo[key];
         if (!value) {
             SSJPRINT(@">>>SSJ warning: splice record lack of key '%@'\n record:%@", key, recordInfo);
-            return nil;
+            continue;
         }
         
         if ([value isKindOfClass:[NSString class]]) {
-            [conditions addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
+            [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
         } else {
-            [conditions addObject:[NSString stringWithFormat:@"%@ = %@", key, value]];
+            [keyValues addObject:[NSString stringWithFormat:@"%@ = %@", key, value]];
         }
     }
-    return [conditions componentsJoinedByString:joinString];
+    return [keyValues componentsJoinedByString:joinString];
 }
 
 @end

@@ -15,11 +15,15 @@
 }
 
 + (NSArray *)columns {
-    return @[@"ifunsid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
-    return @[@"ifunsid"];
+    return @[@"cfundid"];
+}
+
++ (NSArray *)optionalColumns {
+    return @[@"cmemo"];
 }
 
 + (NSString *)queryRecordsForSyncAdditionalCondition {
@@ -30,8 +34,12 @@
     return @"cparent <> 'root'";
 }
 
-+ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
++ (NSString *)mergeConditionForUpdateRecord:(NSDictionary *)record {
     return [NSString stringWithFormat:@"(select count(*) from BK_FUND_INFO where CFUNDID = '%@') > 0", record[@"cparent"]];
+}
+
++ (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
+    return [db boolForQuery:@"select count(*) from BK_FUND_INFO where CFUNDID = ?", record[@"cparent"]];
 }
 
 @end

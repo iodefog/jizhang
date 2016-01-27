@@ -22,8 +22,14 @@
     return @[@"ichargeid"];
 }
 
-+ (NSString *)additionalConditionForMergeRecord:(NSDictionary *)record {
++ (NSString *)mergeConditionForUpdateRecord:(NSDictionary *)record {
     return [NSString stringWithFormat:@"(select count(*) from BK_USER_BILL where CUSERID = '%@' and CBILLID = '%@') > 0 and (select count(*) from BK_FUND_INFO where CUSERID = '%@' and CFUNDID = '%@') > 0", record[@"cuserid"], record[@"ibillid"], record[@"cuserid"], record[@"ifunsid"]];
+}
+
++ (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
+    BOOL hasBillType = [db boolForQuery:@"select count(*) from BK_USER_BILL where CUSERID = ? and CBILLID = ?", record[@"cuserid"], record[@"ibillid"]];
+    BOOL hasFundAccount = [db boolForQuery:@"select count(*) from BK_FUND_INFO where CUSERID = ? and CFUNDID = ?", record[@"cuserid"], record[@"ifunsid"]];
+    return (hasBillType && hasFundAccount);
 }
 
 @end
