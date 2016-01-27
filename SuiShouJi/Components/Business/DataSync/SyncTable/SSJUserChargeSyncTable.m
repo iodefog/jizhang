@@ -22,7 +22,7 @@
     return @[@"ichargeid"];
 }
 
-+ (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
     BOOL hasBillType = [db boolForQuery:@"select count(*) from BK_USER_BILL where CUSERID = ? and CBILLID = ?", record[@"cuserid"], record[@"ibillid"]];
     BOOL hasFundAccount = [db boolForQuery:@"select count(*) from BK_FUND_INFO where CUSERID = ? and CFUNDID = ?", record[@"cuserid"], record[@"ifunsid"]];
     return (hasBillType && hasFundAccount);
