@@ -23,6 +23,7 @@
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
+@property (nonatomic,strong) UIView *clearView;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -77,6 +78,7 @@
     self.bookKeepingHeader.top = 64;
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.tableView.height = self.view.height - self.bookKeepingHeader.bottom - 49;
+    self.clearView.frame = self.view.frame;
 }
 
 #pragma mark - UITableViewDelegate
@@ -169,6 +171,18 @@
     return _bookKeepingHeader;
 }
 
+//-(UIView *)clearView{
+//    if (!_clearView) {
+//        _clearView = [[UIView alloc]init];
+//        _clearView.backgroundColor = [UIColor clearColor];
+//        UITapGestureRecognizer* singleRecognizer;
+//        singleRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(SingleTap:)];
+//        singleRecognizer.numberOfTapsRequired = 1;
+//        [_clearView addGestureRecognizer:singleRecognizer];
+//    }
+//    return _clearView;
+//}
+
 #pragma mark - Private
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
@@ -183,8 +197,7 @@
         return ;
     }
 
-    FMResultSet *rs = [db executeQuery:@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7)  AND OPERATORTYPE != 2 AND CUSERID = ?) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC ,CWRITEDATE DESC",SSJUSERID()];
-
+    FMResultSet *rs = [db executeQuery:@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC LIMIT 7)  AND OPERATORTYPE != 2 AND CUSERID = ?) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' UNION SELECT * FROM ( SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7) ORDER BY CBILLDATE DESC ,CWRITEDATE DESC",SSJUSERID(),SSJUSERID()];
     while ([rs next]) {
         SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
         item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
@@ -213,6 +226,12 @@
     _currentMonth = [dateComponent month];
 }
 
+//-(void)SingleTap:(id)sender{
+//    _selectIndex = nil;
+//    [self getDateFromDatebase];
+//    [self.tableView reloadData];
+//    [self.clearView removeFromSuperview];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

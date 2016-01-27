@@ -79,26 +79,21 @@
         collectionView.frame = CGRectZero;
         collectionView.page = i;
         collectionView.incomeOrExpence = self.incomeOrExpence;
-        collectionView.selectedIndex = _selectedIndex;
-        collectionView.selectedPage = _selectedPage;
+        collectionView.selectedId = self.selectedId;
         __weak typeof(self) weakSelf = self;
-        collectionView.ItemClickedBlock = ^(NSString *categoryTitle , NSString *categoryImage , NSString *categoryID , NSString *categoryColor , int page , NSIndexPath *index){
-            if ([categoryTitle isEqualToString:@"添加"]){
-            }else{
-                _selectedPage = page;
-                _selectedIndex = index;
-                for (int i = 0; i < _page; i++) {
-                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
-                    _pageControl.numberOfPages = _page;
-                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
-                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
-                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
-                    ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
-//                    [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
-                }
+        collectionView.ItemClickedBlock = ^(SSJRecordMakingCategoryItem *item){
+            self.item = item;
+            for (int i = 0; i < _page; i++) {
+                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedId = self.selectedId;
+                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
+                _pageControl.numberOfPages = _page;
+                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
+                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
+                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedId = item.categoryID;
+                [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
             }
-            if (weakSelf.CategorySelected) {
-                weakSelf.CategorySelected(categoryTitle,categoryImage,categoryID,categoryColor);
+            if (weakSelf.CategorySelectedBlock) {
+                weakSelf.CategorySelectedBlock(self.item);
             }
         };
         collectionView.removeFromCategoryListBlock = ^{
@@ -144,10 +139,8 @@
 -(void)reloadData{
     [self getPage];
     self.scrollView.contentSize = CGSizeMake(self.width * _page, 0);
-    _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-    _selectedPage = 0;
-    for (int i = 0; i < _totalPage; i ++) {                ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedPage = _selectedPage;
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedIndex = _selectedIndex;
+    for (int i = 0; i < _totalPage; i ++) {
+        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedId = self.selectedId;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
         _pageControl.numberOfPages = _page;
         ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;

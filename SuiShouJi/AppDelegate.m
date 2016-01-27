@@ -86,7 +86,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     financingNavi.tabBarItem.title = @"资金";
     financingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_founds_nor"];
     
-    SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
+    SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_mine_nor"];
@@ -103,7 +103,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     NSLog(@"<<< 开始初始化数据库 >>>");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *dbDocumentPath = SSJSQLitePath();
-        
+        NSLog(@"%@",dbDocumentPath);
         if (![[NSFileManager defaultManager] fileExistsAtPath:dbDocumentPath]) {
             //  迁移数据库到document中
             NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];

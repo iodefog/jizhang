@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJCategoryCollectionView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property(nonatomic,strong)UICollectionView *collectionView;
 
-typedef void (^ItemClickedBlock)(NSString *categoryTitle , NSString *categoryImage , NSString *categoryID , NSString *categoryColor , int currentPage , NSIndexPath *index);
+typedef void (^ItemClickedBlock)(SSJRecordMakingCategoryItem *item);
 
 typedef void (^removeFromCategoryListBlock)();
 
@@ -26,7 +27,5 @@ typedef void (^removeFromCategoryListBlock)();
 
 @property (nonatomic) BOOL incomeOrExpence;
 
-@property (nonatomic,strong) NSIndexPath *selectedIndex;
-
-@property (nonatomic) long selectedPage;
+@property (nonatomic,strong) NSString *selectedId;
 @end

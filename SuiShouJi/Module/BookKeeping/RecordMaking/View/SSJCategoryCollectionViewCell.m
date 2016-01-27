@@ -106,7 +106,7 @@
         NSLog(@"Could not open db");
         return ;
     }
-    [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],SSJSyncVersion(),self.item.categoryID,SSJUSERID()];
+    [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],self.item.categoryID,SSJUSERID()];
     [db close];
     if (self.removeCategoryBlock) {
         self.removeCategoryBlock();

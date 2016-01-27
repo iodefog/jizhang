@@ -64,7 +64,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     if (self.mobileNo.length) {
         [self.authCodeField becomeFirstResponder];
     } else {
