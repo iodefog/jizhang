@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJBookKeepHomeItem.h"
 
 @interface SSJCalenderTableViewCell : SSJBaseTableViewCell
 

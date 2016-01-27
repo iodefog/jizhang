@@ -208,8 +208,8 @@
         item.fundID = [rs stringForColumn:@"IFUNSID"];
         [self.items addObject:item];
     }
-    double income = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__'", _currentYear,_currentMonth]];
-    double expence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__'", _currentYear,_currentMonth]];
+    double income = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@'", _currentYear,_currentMonth,SSJUSERID()]];
+    double expence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@'", _currentYear,_currentMonth,SSJUSERID()]];
     self.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",income];
     self.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",expence];
     [db close];

@@ -10,6 +10,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderDetailCell.h"
+#import "SSJRecordMakingViewController.h"
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
@@ -96,11 +97,27 @@
 }
 
 #pragma mark - Getter
-//-(UIView *)footerView{
-//    if (!_footerView) {
-//        _footerView = [[UIView alloc]init];
-//    }
-//}
+-(UIView *)footerView{
+    if (!_footerView) {
+        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 40)];
+        UIButton *editeButton = [[UIButton alloc]init];
+        [editeButton setTitle:@"修改此记录" forState:UIControlStateNormal];
+        [editeButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        editeButton.layer.borderWidth = 1.f;
+        editeButton.layer.cornerRadius = 2.f;
+        editeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        editeButton.center = CGPointMake(_footerView.height / 2, _footerView.width / 2);
+        [editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _footerView;
+}
+
+#pragma mark - Private
+-(void)editeButtonClicked:(id)sender{
+    SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
+    recordMakingVc.item = self.item;
+    [self.navigationController pushViewController:recordMakingVc animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
