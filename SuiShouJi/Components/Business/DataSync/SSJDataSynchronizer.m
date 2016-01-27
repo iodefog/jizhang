@@ -219,6 +219,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 return;
             }
             
+#warning test
+            [responseObject writeToFile:@"/Users/oldlang/Desktop/sync_data.zip" atomically:YES];
+
             //  将数据解压
             NSError *tError = nil;
             NSData *jsonData = [self unzipData:responseObject error:&tError];
