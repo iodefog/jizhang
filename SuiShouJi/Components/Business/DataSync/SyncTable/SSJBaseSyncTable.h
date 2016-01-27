@@ -62,20 +62,12 @@
 + (NSString *)updateSyncVersionAdditionalCondition;
 
 /**
- *  返回合并记录的更新条件，根据需要子类可以覆写
- *
- *  @param record 要合并的记录数据
- *  @return (NSString *) 合并记录的其它条件
- */
-+ (NSString *)mergeConditionForUpdateRecord:(NSDictionary *)record;
-
-/**
  *  返回合并记录的插入条件，根据需要子类可以覆写
  *
  *  @param record 要合并的记录数据
  *  @return (NSString *) 合并记录的其它条件
  */
-+ (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db;
++ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db;
 
 ///----------------------------------
 /// @name 只能调用，子类不可覆写！！！
