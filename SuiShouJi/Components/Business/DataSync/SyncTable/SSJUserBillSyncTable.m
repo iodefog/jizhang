@@ -22,10 +22,6 @@
     return @[@"cbillid", @"cuserid"];
 }
 
-+ (NSString *)mergeConditionForUpdateRecord:(NSDictionary *)record {
-    return [NSString stringWithFormat:@"(select count(*) from BK_BILL_TYPE where ID = '%@') > 0", record[@"cbillid"]];
-}
-
 + (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
     return [db boolForQuery:@"select count(*) from BK_BILL_TYPE where ID = ?", record[@"cbillid"]];
 }

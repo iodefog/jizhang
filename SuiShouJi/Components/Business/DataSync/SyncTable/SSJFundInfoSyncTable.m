@@ -34,10 +34,6 @@
     return @"cparent <> 'root'";
 }
 
-+ (NSString *)mergeConditionForUpdateRecord:(NSDictionary *)record {
-    return [NSString stringWithFormat:@"(select count(*) from BK_FUND_INFO where CFUNDID = '%@') > 0", record[@"cparent"]];
-}
-
 + (BOOL)shouldInsertForMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
     return [db boolForQuery:@"select count(*) from BK_FUND_INFO where CFUNDID = ?", record[@"cparent"]];
 }
