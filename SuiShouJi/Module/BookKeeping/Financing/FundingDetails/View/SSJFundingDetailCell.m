@@ -58,7 +58,11 @@
     self.imageView.image = [UIImage imageNamed:item.imageName];
     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
     
-    self.textLabel.text = item.typeName;
+    if ([item.typeName isEqualToString:@"平账收入"] || [item.typeName isEqualToString:@"平账支出"]) {
+        self.textLabel.text = [NSString stringWithFormat:@"余额变更(%@)",item.typeName];
+    }else{
+        self.textLabel.text = item.typeName;
+    }
     [self.textLabel sizeToFit];
     
     self.moneyLab.text = [NSString stringWithFormat:@"%@",item.money];
