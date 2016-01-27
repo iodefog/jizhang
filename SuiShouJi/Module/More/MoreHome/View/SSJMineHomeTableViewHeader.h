@@ -18,4 +18,8 @@
 typedef void (^HeaderButtonClickedBlock)();
 
 @property (nonatomic, copy) HeaderButtonClickedBlock HeaderButtonClickedBlock;
+
+typedef void (^HeaderClickedBlock)();
+
+@property (nonatomic, copy) HeaderClickedBlock HeaderClickedBlock;
 @end

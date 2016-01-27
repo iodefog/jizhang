@@ -72,13 +72,20 @@
                 [weakSelf.navigationController pushViewController:loginVC animated:YES];
             }
         };
+        _header.HeaderClickedBlock = ^(){
+            if (!SSJIsUserLogined()) {
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }
+        };
     }
     return _header;
 }
 
 -(UIView *)loggedFooterView{
     if (_loggedFooterView == nil) {
-        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 120)];
+        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
         UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 260, 40)];
         [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
         [quitLogButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
@@ -116,7 +123,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (SSJIsUserLogined() && section == 2) {
-        return 120;
+        return 80;
     }
     return 0.1f;
 }
