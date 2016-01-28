@@ -78,6 +78,13 @@
     }
 }
 
+- (void)setTintColor:(UIColor *)tintColor {
+    [super setTintColor:tintColor];
+    for (UIButton *button in self.buttons) {
+        button.tintColor = tintColor;
+    }
+}
+
 - (CGSize)sizeThatFits:(CGSize)size {
     if (!_pageImage) {
         return CGSizeZero;
@@ -102,6 +109,7 @@
         [button setImage:_currentPageImage forState:UIControlStateSelected];
         [button setImage:_currentPageImage forState:(UIControlStateHighlighted | UIControlStateSelected)];
         [button addTarget:self action:@selector(p_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+        button.tintColor = self.tintColor;
         [_buttons addObject:button];
         [self addSubview:button];
     }

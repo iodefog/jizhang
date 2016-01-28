@@ -217,6 +217,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self updateSwitchDateControlNextBtnState];
 }
 
+- (void)reloadDataAfterSync {
+    [self reloadDatas];
+}
+
 #pragma mark - Private
 //  返回当前收支类型
 - (SSJReportFormsIncomeOrPayType)currentType {
