@@ -58,7 +58,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.authCodeTextField];
