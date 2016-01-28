@@ -7,6 +7,7 @@
 //
 
 #import "SSJCalenderTableViewCell.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJCalenderTableViewCell ()
@@ -79,19 +80,16 @@
 }
 
 -(void)getBillDetailWithBillId:(NSString *)billId{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
-    while ([rs next]) {
-        self.cellTitle = [rs stringForColumn:@"CNAME"];
-        self.cellImage = [rs stringForColumn:@"CCOIN"];
-        self.cellColor = [rs stringForColumn:@"CCOLOR"];
-        self.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
-    }
-    [db close];
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
+        while ([rs next]) {
+            weakSelf.cellTitle = [rs stringForColumn:@"CNAME"];
+            weakSelf.cellImage = [rs stringForColumn:@"CCOIN"];
+            weakSelf.cellColor = [rs stringForColumn:@"CCOLOR"];
+            weakSelf.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+        }
+    }];
 }
 
 @end

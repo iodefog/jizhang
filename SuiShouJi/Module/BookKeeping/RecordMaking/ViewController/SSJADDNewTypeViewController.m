@@ -9,6 +9,7 @@
 #import "SSJADDNewTypeViewController.h"
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJRecordMakingCategoryItem.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJADDNewTypeViewController ()
@@ -25,6 +26,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"添加新类别";
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -121,40 +123,31 @@
 #pragma mark - private
 -(void)getDateFromDb{
     [self.items removeAllObjects];
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
-    while ([rs next]) {
-        SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-        item.categoryTitle = [rs stringForColumn:@"CNAME"];
-        item.categoryImage = [rs stringForColumn:@"CCOIN"];
-        item.categoryColor = [rs stringForColumn:@"CCOLOR"];
-        item.categoryID = [rs stringForColumn:@"ID"];
-        [self.items addObject:item];
-    }
-    [db close];
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
+        while ([rs next]) {
+            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+            item.categoryTitle = [rs stringForColumn:@"CNAME"];
+            item.categoryImage = [rs stringForColumn:@"CCOIN"];
+            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+            item.categoryID = [rs stringForColumn:@"ID"];
+            [self.items addObject:item];
+        }
+    }];
 }
 
 -(void)comfirmButtonClick:(id)sender{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    NSInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1",[NSNumber numberWithBool:self.incomeOrExpence]];
-    if (count >= 20) {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"首页类型已满,类别已满，请移除一些类别后再添加" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
-    }else{
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
         [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
         [self getDateFromDb];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"addNewTypeNotification" object:nil];
-        [self.collectionView reloadData];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"addNewTypeNotification" object:nil];
+            [self.collectionView reloadData];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }];
+
 }
 
 -(void)closeButtonClicked:(id)sender{
