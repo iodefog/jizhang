@@ -133,24 +133,22 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 
 #pragma mark - Private
 -(void)getTotalIcomeAndExpence{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()] ;
-    if (![db open]) {
-        NSLog(@"Could not open db.");
-        return ;
-    }
+    __weak typeof(self) weakSelf = self;
+    __block NSString *titleStr;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         _totalIncome = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFUNSID = ? AND A.OPERATORTYPE != 2",[NSNumber numberWithInt:0],self.item.fundingID];
         _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFUNSID = ? AND A.OPERATORTYPE != 2",[NSNumber numberWithInt:1],self.item.fundingID];
+        weakSelf.item.fundingColor = [db stringForQuery:@"SELECT CCOLOR FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];
+        titleStr = [db stringForQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",weakSelf.item.fundingID];
         dispatch_async(dispatch_get_main_queue(), ^(){
-            self.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",_totalIncome];
-            [self.header.totalIncomeLabel sizeToFit];
-            
-            self.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
-            [self.header.totalExpenceLabel sizeToFit];
+            weakSelf.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",_totalIncome];
+            [weakSelf.header.totalIncomeLabel sizeToFit];
+            weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
+            [weakSelf.header.totalExpenceLabel sizeToFit];
+            weakSelf.title = titleStr;
         });
     }];
-    self.title = [db stringForQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];
-    self.item.fundingColor = [db stringForQuery:@"SELECT CCOLOR FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];
+
 }
 
 -(void)rightButtonClicked:(id)sender{

@@ -11,6 +11,7 @@
 #import "SSJColorSelectViewControllerViewController.h"
 #import "SSJModifyFundingTableViewCell.h"
 #import "TPKeyboardAvoidingTableView.h"
+#import "SSJDatabaseQueue.h"
 
 #import "FMDB.h"
 
@@ -59,6 +60,13 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.item.fundingAmount = [_amountTextField.text doubleValue];
+    self.item.fundingMemo = _memoTextField.text;
+    self.item.fundingName = _nameTextField.text;
 }
 
 #pragma mark - UITableViewDelegate
@@ -289,14 +297,13 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
-        FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-        if (![db open]) {
-            NSLog(@"Could not open db");
-            return ;
-        }
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.fundingID,SSJUSERID()];
-        [db class];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        __weak typeof(self) weakSelf = self;
+        [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+            [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.fundingID,SSJUSERID()];
+            SSJDispatch_main_async_safe(^(){
+                [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+            });
+        }];
     }
 }
 
