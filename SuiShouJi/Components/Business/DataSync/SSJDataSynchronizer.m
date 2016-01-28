@@ -200,6 +200,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  上传数据
     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+#warning test
+        NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
+        NSLog(@"<<< response headers:%@ >>>", tResponse.allHeaderFields);
+        
         //  因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
             
@@ -232,9 +236,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             
 #warning test
             NSDateFormatter *format = [[NSDateFormatter alloc] init];
-            [format setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            [format setDateFormat:@"HH:mm:ss"];
             NSString *date = [format stringFromDate:[NSDate date]];
-            [responseObject writeToFile:[NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_%@.zip", date] atomically:YES];
+            NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
+            NSError *ttError = nil;
+            [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
 
             //  将数据解压
             NSError *tError = nil;
@@ -332,7 +338,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
-        [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/x-zip-compressed"];
+        [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
     } error:&tError];
     
     if (tError) {
