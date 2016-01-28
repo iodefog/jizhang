@@ -671,6 +671,7 @@
 }
 
 -(void)getSelectedFundingType{
+//    [[SSJDatabaseQueue sharedInstance] ]
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
