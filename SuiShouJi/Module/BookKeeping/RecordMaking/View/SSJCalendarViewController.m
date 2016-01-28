@@ -60,8 +60,6 @@
     self.selectedYear = _currentYear;
     self.selectedMonth = _currentMonth;
     self.selectedDay = _currentDay;
-    self.items = [[NSMutableArray alloc]init];
-    [self.items removeAllObjects];
     [self getDataFromDateBase];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
@@ -73,7 +71,6 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    [self.items removeAllObjects];
     [self getDataFromDateBase];
 }
 
@@ -172,9 +169,7 @@
             weakSelf.selectedYear = year;
             weakSelf.selectedMonth = month ;
             weakSelf.selectedDay = day;
-            [weakSelf.items removeAllObjects];
             [weakSelf getDataFromDateBase];
-            [weakSelf.tableView reloadData];
             [weakSelf.view setNeedsLayout];
         };
     }
@@ -253,6 +248,7 @@
     __weak typeof(self) weakSelf = self;
      __block NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
         while ([rs next]) {
             SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
@@ -261,9 +257,10 @@
             item.billDate = [rs stringForColumn:@"CBILLDATE"];
             item.billID = [rs stringForColumn:@"IBILLID"];
             item.fundID = [rs stringForColumn:@"IFUNSID"];
-            [self.items addObject:item];
+            [tempArray addObject:item];
         }
         SSJDispatch_main_async_safe(^(){
+            weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
             [weakSelf.tableView reloadData];
         });
     }];
