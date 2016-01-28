@@ -94,7 +94,7 @@
                     SSJSaveAppId(resultInfo[@"appId"] ?: @"");
                     SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
                     SSJSaveUserLogined(YES);
-                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:haveLoginOrRegistKey];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }
                 

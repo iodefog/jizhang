@@ -98,6 +98,7 @@
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
         FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_FUND_INFO WHERE CPARENT = 'root' ORDER BY CFUNDID ASC"];
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         while ([rs next]) {
             SSJFundingItem *item = [[SSJFundingItem alloc]init];
             item.fundingID = [rs stringForColumn:@"CFUNDID"];
@@ -105,9 +106,10 @@
             item.fundingIcon = [rs stringForColumn:@"CICOIN"];
             item.fundingMemo = [rs stringForColumn:@"CMEMO"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            [_items addObject:item];
+            [tempArray addObject:item];
         }
         SSJDispatch_main_async_safe(^(){
+            _items = tempArray;
             [weakSelf.tableView reloadData];
         });
     }];

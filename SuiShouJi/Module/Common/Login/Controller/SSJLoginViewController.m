@@ -138,7 +138,7 @@
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSUserDefaults standardUserDefaults]setBool:YES forKey:haveLoginOrRegistKey];
+                [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
                 [CDAutoHideMessageHUD showMessage:@"登录成功"];
                 if (self.finishHandle) {
                     self.finishHandle(self);

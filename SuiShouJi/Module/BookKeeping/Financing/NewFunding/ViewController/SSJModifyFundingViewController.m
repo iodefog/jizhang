@@ -224,8 +224,9 @@
 
 -(TPKeyboardAvoidingTableView *)tableView{
     if (!_tableView) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor clearColor];
+
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }

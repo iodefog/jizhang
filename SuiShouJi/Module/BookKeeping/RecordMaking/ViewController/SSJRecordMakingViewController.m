@@ -105,10 +105,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (self.item != nil) {
         [self getSelectedFundingType];
     }else{
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:lastSelectFundItemKey] == nil) {
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey] == nil) {
             [self getDefualtFudingItem];
         }else{
-            NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:lastSelectFundItemKey];
+            NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey];
             _selectItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
         }
     }
@@ -458,7 +458,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _selectItem = fundingItem;
                  NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
-                [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:lastSelectFundItemKey];
+                [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:SSJLastSelectFundItemKey];
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){

@@ -50,6 +50,12 @@
     self.navigationItem.rightBarButtonItem = self.rightButton;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+
+}
+
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
@@ -176,12 +182,10 @@
     return YES;
 }
 
-
-
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableview{
     if (!_tableview) {
-        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame];
+        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
         _tableview.backgroundColor = [UIColor clearColor];
         _tableview.delegate = self;
         _tableview.dataSource = self;

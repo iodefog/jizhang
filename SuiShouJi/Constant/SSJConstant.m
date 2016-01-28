@@ -22,10 +22,12 @@ NSString *const SSJBaseURLString = @"http://1.9188.com";
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
-NSString *const lastSelectFundItemKey = @"lastSelectFundKey";
+NSString *const SSJLastSelectFundItemKey = @"lastSelectFundKey";
 
-NSString *const lastPopTimeKey = @"lastPopTimeKey";
+NSString *const SSJLastPopTimeKey = @"lastPopTimeKey";
 
-NSString *const haveLoginOrRegistKey = @"haveLoginOrRegistKey";
+NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
+
+

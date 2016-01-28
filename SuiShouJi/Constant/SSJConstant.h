@@ -48,13 +48,13 @@ extern NSString *const SSJBaseURLString;
 extern NSString *const SSJErrorDomain;
 
 //上一次选择的资金账户类型
-extern NSString *const lastSelectFundItemKey;
+extern NSString *const SSJLastSelectFundItemKey;
 
 //保存上次弹窗的时间
-extern NSString *const lastPopTimeKey;
+extern NSString *const SSJLastPopTimeKey;
 
 //保存是否登录或者注册过
-extern NSString *const haveLoginOrRegistKey;
+extern NSString *const SSJHaveLoginOrRegistKey;
 
 //  同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
