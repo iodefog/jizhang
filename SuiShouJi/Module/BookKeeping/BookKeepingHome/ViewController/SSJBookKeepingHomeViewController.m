@@ -222,9 +222,9 @@
 }
 
 -(void)getDateFromDatebase{
-    self.items = [[NSMutableArray alloc]init];
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         FMResultSet *rs = [db executeQuery:@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC LIMIT 7)  ORDER BY CBILLDATE DESC ,CWRITEDATE DESC",SSJUSERID(),SSJUSERID()];
         while ([rs next]) {
             SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
@@ -234,13 +234,14 @@
             item.chargeID = [rs stringForColumn:@"ICHARGEID"];
             item.billID = [rs stringForColumn:@"IBILLID"];
             item.fundID = [rs stringForColumn:@"IFUNSID"];
-            [weakSelf.items addObject:item];
+            [tempArray addObject:item];
         }
         double income = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@'", _currentYear,_currentMonth,SSJUSERID()]];
         double expence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@'", _currentYear,_currentMonth,SSJUSERID()]];
         dispatch_async(dispatch_get_main_queue(), ^(){
             weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",income];
             weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",expence];
+            weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
             [weakSelf.tableView reloadData];
         });
     }];

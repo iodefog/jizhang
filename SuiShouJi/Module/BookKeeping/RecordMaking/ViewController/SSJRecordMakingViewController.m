@@ -99,13 +99,12 @@
         self.selectedDay = _originaldDay;
         _categoryID = self.item.billID;
     }
-    [self getDefualtFudingItem];
     [self getDefualtColorAndDefualtId];
     if (self.item != nil) {
         [self getSelectedFundingType];
     }else{
         if ([[NSUserDefaults standardUserDefaults]objectForKey:lastSelectFundItemKey] == nil) {
-            _selectItem = _defualtItem;
+            [self getDefualtFudingItem];
         }else{
             NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:lastSelectFundItemKey];
             _selectItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
@@ -625,7 +624,6 @@
     self.categoryListView.selectedId = _defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.categoryListView reloadData];
 }
 
 -(void)getDefualtColorAndDefualtId{
@@ -647,6 +645,12 @@
                 _defualtType = [rs intForColumn:@"ITYPE"];
             }
         }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            weakSelf.categoryListView.selectedId = _defualtID;
+            weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
+            weakSelf.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [weakSelf.categoryListView reloadData];
+        });
     }];
 }
 
@@ -662,6 +666,7 @@
             _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
             _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
         }
+        _selectItem = _defualtItem;
     }];
 }
 

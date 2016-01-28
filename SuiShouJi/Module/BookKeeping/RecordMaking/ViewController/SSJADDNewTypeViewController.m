@@ -36,9 +36,8 @@
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.view.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
     _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-    self.items = [[NSMutableArray alloc]init];
-    [self getDateFromDb];
     [self.view addSubview:self.collectionView];
+    [self getDateFromDb];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
     self.navigationItem.rightBarButtonItem = rightBarButton;
     _selectedID = ((SSJRecordMakingCategoryItem*)[self.items firstObject]).categoryID;
@@ -122,8 +121,9 @@
 
 #pragma mark - private
 -(void)getDateFromDb{
-    [self.items removeAllObjects];
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
         while ([rs next]) {
             SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
@@ -131,8 +131,12 @@
             item.categoryImage = [rs stringForColumn:@"CCOIN"];
             item.categoryColor = [rs stringForColumn:@"CCOLOR"];
             item.categoryID = [rs stringForColumn:@"ID"];
-            [self.items addObject:item];
+            [tempArray addObject:item];
         }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            weakSelf.items = tempArray;
+            [weakSelf.collectionView reloadData];
+        });
     }];
 }
 
