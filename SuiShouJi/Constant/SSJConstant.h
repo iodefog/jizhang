@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-//___________________________________________________________________
-//** 枚举 **//
+///------------------------------------------
+/// @name 枚举
+///------------------------------------------
 
 //  渠道号
 typedef NS_ENUM(NSInteger, SSJAppSource) {
@@ -29,12 +30,16 @@ typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeDataSyncBusy = 10001
 };
 
-//___________________________________________________________________
+///------------------------------------------
+/// @name 基本数据常量
+///------------------------------------------
 
 extern const int64_t SSJDefaultSyncVersion;
 
-//___________________________________________________________________
-//** 字符串常量 **//
+
+///------------------------------------------
+/// @name 字符串常量
+///------------------------------------------
 
 //  接口地址
 extern NSString *const SSJBaseURLString;
@@ -45,11 +50,16 @@ extern NSString *const SSJErrorDomain;
 //上一次选择的资金账户类型
 extern NSString *const lastSelectFundItemKey;
 
+<<<<<<< HEAD
 //保存上次弹窗的时间
 extern NSString *const lastPopTimeKey;
 
 //保存是否登录或者注册过
 extern NSString *const haveLoginOrRegistKey;
+=======
+//  同步成功通知
+extern NSString *const SSJSyncDataSuccessNotification;
+>>>>>>> ed650f6f4ea4ccf0d659326140891af1f0e42c72
 
 
 

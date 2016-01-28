@@ -17,4 +17,9 @@
  */
 @property (nonatomic) BOOL hideKeyboradWhenTouch;
 
+/**
+ *  同步成功后重载数据，子类根据情况重写，父类中没有做任何处理
+ */
+- (void)reloadDataAfterSync;
+
 @end

@@ -18,9 +18,14 @@
 @implementation SSJBaseViewController
 
 #pragma mark - Lifecycle
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataAfterSync) name:SSJSyncDataSuccessNotification object:nil];
     }
     return self;
 }
@@ -66,6 +71,10 @@
     if (self.title.length) {
         [MobClick endLogPageView:self.title];
     }
+}
+
+- (void)reloadDataAfterSync {
+    
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate

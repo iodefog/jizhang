@@ -230,21 +230,22 @@
 
 -(void)quitLogButtonClicked:(id)sender{
     //  退出登陆后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-    
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+        [self quiteLogin];
+    } failure:^(NSError *error) {
+        [self quiteLogin];
+    }];
+}
+
+- (void)quiteLogin {
     SSJClearLoginInfo();
     [self.tableView reloadData];
     
     //  如果还有未注册的userid，就作为当前的userid；反之新建一个userid
     [SSJUserTableManager reloadUserIdWithSuccess:^(){
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^(){
-            
-        }failure:^(NSError *error){
-            
-        }];
-    }failure:^(NSError *error){
-        
-    }];
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+    }failure:NULL];
+    
     self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
     self.header.nicknameLabel.text = @"待君登录";
     [self.tableView reloadData];
