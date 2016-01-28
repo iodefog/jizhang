@@ -232,7 +232,7 @@
     NSString *fundName = _nameTextField.text;
     double fundAmount = [_amountTextField.text doubleValue];
     NSString *fundMemo = _memoTextField.text;
-    if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ?",_nameTextField.text,fundId] > 0){
+    if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ?",_nameTextField.text,fundId,SSJUSERID()] > 0){
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alert show];
         return;

@@ -12,6 +12,7 @@
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
 #import "SSJNewFundingViewController.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -23,9 +24,7 @@
 @property (nonatomic,strong) UIButton *transferButton;
 @end
 
-@implementation SSJFinancingHomeViewController{
-    double _profitAmount;
-}
+@implementation SSJFinancingHomeViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -163,34 +162,37 @@
 }
 #pragma mark - Private
 -(void)getDateFromDateBase{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()] ;
-    if (![db open]) {
-        NSLog(@"Could not open db.");
-        return ;
-    }
-    self.items = [[NSMutableArray alloc]init];
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?",SSJUSERID()];
-    while ([rs next]) {
+    __weak typeof(self) weakSelf = self;
+    __block double profitAmount;
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        weakSelf.items = [[NSMutableArray alloc]init];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?",SSJUSERID()];
+        while ([rs next]) {
+            SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
+            item.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            item.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            item.fundingID = [rs stringForColumn:@"CFUNDID"];
+            item.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            item.fundingParent = [rs stringForColumn:@"CPARENT"];
+            item.fundingAmount = [rs doubleForColumn:@"IBALANCE"];
+            item.fundingMemo = [rs stringForColumn:@"CMEMO"];
+            item.isAddOrNot = NO;
+            [weakSelf.items addObject:item];
+        }
         SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
-        item.fundingColor = [rs stringForColumn:@"CCOLOR"];
-        item.fundingIcon = [rs stringForColumn:@"CICOIN"];
-        item.fundingID = [rs stringForColumn:@"CFUNDID"];
-        item.fundingName = [rs stringForColumn:@"CACCTNAME"];
-        item.fundingParent = [rs stringForColumn:@"CPARENT"];
-        item.fundingAmount = [rs doubleForColumn:@"IBALANCE"];
-        item.fundingMemo = [rs stringForColumn:@"CMEMO"];
-        item.isAddOrNot = NO;
-        [self.items addObject:item];
-    }
-    SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
-    item.fundingName = @"添加资金账户";
-    item.fundingColor = @"cccccc";
-    item.fundingIcon = @"add";
-    item.isAddOrNot = YES;
-    [self.items addObject:item];
-    _profitAmount = [db doubleForQuery:@"SELECT SUM(A.IBALANCE) FROM BK_FUNS_ACCT A , BK_FUND_INFO B WHERE A.CFUNDID = B.CFUNDID AND A.CUSERID = ? AND B.OPERATORTYPE <> 2",SSJUSERID()];
-    _profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",_profitAmount];
-    [_profitAmountLabel sizeToFit];
+        item.fundingName = @"添加资金账户";
+        item.fundingColor = @"cccccc";
+        item.fundingIcon = @"add";
+        item.isAddOrNot = YES;
+        [weakSelf.items addObject:item];
+        profitAmount = [db doubleForQuery:@"SELECT SUM(A.IBALANCE) FROM BK_FUNS_ACCT A , BK_FUND_INFO B WHERE A.CFUNDID = B.CFUNDID AND A.CUSERID = ? AND B.OPERATORTYPE <> 2",SSJUSERID()];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            weakSelf.profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",profitAmount];
+            [weakSelf.profitAmountLabel sizeToFit];
+            [weakSelf.view setNeedsLayout];
+        });
+    }];
+
 }
 
 -(void)transferButtonClicked{

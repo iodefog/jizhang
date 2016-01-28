@@ -63,6 +63,7 @@
     self.items = [[NSMutableArray alloc]init];
     [self.items removeAllObjects];
     [self getDataFromDateBase];
+    [self.tableView reloadData];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
@@ -264,7 +265,7 @@
             item.fundID = [rs stringForColumn:@"IFUNSID"];
             [self.items addObject:item];
         }
-        dispatch_async(dispatch_get_main_queue(), ^(){
+        SSJDispatch_main_async_safe(^(){
             [weakSelf.tableView reloadData];
         });
     }];

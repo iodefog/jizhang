@@ -10,6 +10,7 @@
 #import "SSJCategoryCollectionView.h"
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJPageControl.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJCategoryListView()

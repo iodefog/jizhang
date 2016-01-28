@@ -9,7 +9,7 @@
 #import "SSJFundingTypeSelectView.h"
 #import "SSJFundingTypeTableViewCell.h"
 #import "SSJFundingItem.h"
-
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJFundingTypeSelectView()
@@ -145,23 +145,28 @@
         NSLog(@"Could not open db");
         return ;
     }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?",SSJUSERID()];
-    _items = [[NSMutableArray alloc]init];
-    while ([rs next]) {
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?",SSJUSERID()];
+        _items = [[NSMutableArray alloc]init];
+        while ([rs next]) {
+            SSJFundingItem *item = [[SSJFundingItem alloc]init];
+            item.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            item.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            item.fundingID = [rs stringForColumn:@"CFUNDID"];
+            item.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            item.fundingParent = [rs stringForColumn:@"CPARENT"];
+            item.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+            [_items addObject:item];
+        }
         SSJFundingItem *item = [[SSJFundingItem alloc]init];
-        item.fundingColor = [rs stringForColumn:@"CCOLOR"];
-        item.fundingIcon = [rs stringForColumn:@"CICOIN"];
-        item.fundingID = [rs stringForColumn:@"CFUNDID"];
-        item.fundingName = [rs stringForColumn:@"CACCTNAME"];
-        item.fundingParent = [rs stringForColumn:@"CPARENT"];
-        item.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+        item.fundingName = @"添加资金新的账户";
+        item.fundingIcon = @"add";
         [_items addObject:item];
-    }
-    SSJFundingItem *item = [[SSJFundingItem alloc]init];
-    item.fundingName = @"添加资金新的账户";
-    item.fundingIcon = @"add";
-    [_items addObject:item];
-    [self.tableView reloadData];
+        SSJDispatch_main_async_safe(^(){
+            [weakSelf.tableView reloadData];
+        });
+    }];
 }
 
 -(void)reloadDate{
