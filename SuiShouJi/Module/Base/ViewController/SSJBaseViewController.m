@@ -25,7 +25,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataAfterSync) name:SSJSyncDataSuccessNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
     }
     return self;
 }
@@ -70,6 +70,12 @@
     [super viewWillDisappear:animated];
     if (self.title.length) {
         [MobClick endLogPageView:self.title];
+    }
+}
+
+- (void)reloadDataIfNeeded {
+    if (SSJVisibalController() == self) {
+        [self reloadDataAfterSync];
     }
 }
 
