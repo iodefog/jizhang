@@ -124,6 +124,8 @@
 
 #pragma mark - private
 -(void)getDateFromDb{
+    [self.collectionView ssj_showLoadingIndicator];
+    
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
@@ -139,6 +141,7 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             weakSelf.items = tempArray;
             [weakSelf.collectionView reloadData];
+            [weakSelf.collectionView ssj_hideLoadingIndicator];
         });
     }];
 }
