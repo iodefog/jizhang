@@ -24,6 +24,8 @@
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
 
+static const NSTimeInterval kAnimationDuration = 0.2;
+
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
 @property (nonatomic,strong) SSJCategoryCollectionView* collectionView;
@@ -330,12 +332,14 @@
         _categoryListView.CategorySelectedBlock = ^(SSJRecordMakingCategoryItem *item){
             _categoryID = item.categoryTitle;
             if (![item.categoryTitle isEqualToString:@"添加"]) {
-                weakSelf.categoryNameLabel.text = item.categoryTitle;
-                [weakSelf.categoryNameLabel sizeToFit];
-                weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
-                weakSelf.categoryImage.tintColor = [UIColor whiteColor];
-                weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                _categoryID = item.categoryID;
+                [UIView animateWithDuration:kAnimationDuration animations:^{
+                    weakSelf.categoryNameLabel.text = item.categoryTitle;
+                    [weakSelf.categoryNameLabel sizeToFit];
+                    weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
+                    weakSelf.categoryImage.tintColor = [UIColor whiteColor];
+                    weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    _categoryID = item.categoryID;
+                }];
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
                 addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
@@ -631,7 +635,7 @@
 
 -(void)getDefualtColorAndDefualtId{
     __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         if (weakSelf.item == nil) {
             FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!weakSelf.titleSegment.selectedSegmentIndex]];
             while([rs next]) {
@@ -649,16 +653,18 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
+                weakSelf.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            }];
             weakSelf.categoryListView.selectedId = _defualtID;
-            weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
-            weakSelf.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [weakSelf.categoryListView reloadData];
         });
     }];
 }
 
 -(void)getDefualtFudingItem{
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? LIMIT 1",@"root",SSJUSERID()];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
@@ -674,22 +680,18 @@
 }
 
 -(void)getSelectedFundingType{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundID];
-    _selectItem = [[SSJFundingItem alloc]init];
-    while ([rs next]) {
-        _selectItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-        _selectItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-        _selectItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-        _selectItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-        _selectItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-        _selectItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
-    }
-    [db close];
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundID];
+        _selectItem = [[SSJFundingItem alloc]init];
+        while ([rs next]) {
+            _selectItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            _selectItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            _selectItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+            _selectItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            _selectItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+            _selectItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+        }
+    }];
 }
 
 -(void)addNewType{

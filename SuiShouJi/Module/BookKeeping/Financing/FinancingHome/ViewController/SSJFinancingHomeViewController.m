@@ -193,7 +193,6 @@
             [weakSelf.collectionView reloadData];
         });
     }];
-
 }
 
 -(void)transferButtonClicked{
