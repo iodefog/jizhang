@@ -1,4 +1,4 @@
-//
+    //
 //  SJJBookKeepingHomeViewController.m
 //  SuiShouJi
 //
@@ -47,6 +47,18 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    BOOL haveLoginOrRegist = [[NSUserDefaults standardUserDefaults]boolForKey:haveLoginOrRegistKey];
+    if (!haveLoginOrRegist) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSString *currentDateStr = [[NSDate alloc]ssj_systemCurrentDateWithFormat:nil];
+        NSDate *currentDate = [formatter dateFromString:currentDateStr];
+        NSLog(@"%@",currentDate);
+        NSDate *lastPopTime = [formatter dateFromString:[[NSUserDefaults standardUserDefaults]objectForKey:lastPopTimeKey]];
+        NSLog(@"%@",lastPopTime);
+
+    }
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];

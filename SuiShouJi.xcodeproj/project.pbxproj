@@ -355,6 +355,12 @@
 		BDA3FDFE1C58CAC400FB57B1 /* ft_wangluochongzhi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDEA1C58CAC400FB57B1 /* ft_wangluochongzhi@3x.png */; };
 		BDA3FDFF1C58CAC400FB57B1 /* ft_yingshouqian@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDEB1C58CAC400FB57B1 /* ft_yingshouqian@2x.png */; };
 		BDA3FE001C58CAC400FB57B1 /* ft_yingshouqian@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDEC1C58CAC400FB57B1 /* ft_yingshouqian@3x.png */; };
+		BDA3FE031C59032B00FB57B1 /* SSJBookKeepingHomePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA3FE021C59032B00FB57B1 /* SSJBookKeepingHomePopView.m */; };
+		BDA3FE061C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE051C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib */; };
+		BDA3FE081C5903A800FB57B1 /* home_tankuang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE071C5903A800FB57B1 /* home_tankuang@2x.png */; };
+		BDA3FE0A1C5903B200FB57B1 /* home_tankuang@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE091C5903B200FB57B1 /* home_tankuang@3x.png */; };
+		BDA3FE0C1C5904C900FB57B1 /* home_tankuang_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */; };
+		BDA3FE0E1C5904D200FB57B1 /* home_tankuang_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */; };
 		BDAB44961C58777E004289BA /* SSJCalenderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDAB44951C58777E004289BA /* SSJCalenderTableViewCell.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
@@ -882,6 +888,13 @@
 		BDA3FDEA1C58CAC400FB57B1 /* ft_wangluochongzhi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_wangluochongzhi@3x.png"; sourceTree = "<group>"; };
 		BDA3FDEB1C58CAC400FB57B1 /* ft_yingshouqian@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_yingshouqian@2x.png"; sourceTree = "<group>"; };
 		BDA3FDEC1C58CAC400FB57B1 /* ft_yingshouqian@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_yingshouqian@3x.png"; sourceTree = "<group>"; };
+		BDA3FE011C59032B00FB57B1 /* SSJBookKeepingHomePopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomePopView.h; sourceTree = "<group>"; };
+		BDA3FE021C59032B00FB57B1 /* SSJBookKeepingHomePopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomePopView.m; sourceTree = "<group>"; };
+		BDA3FE051C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHomePopView.xib; sourceTree = "<group>"; };
+		BDA3FE071C5903A800FB57B1 /* home_tankuang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang@2x.png"; sourceTree = "<group>"; };
+		BDA3FE091C5903B200FB57B1 /* home_tankuang@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang@3x.png"; sourceTree = "<group>"; };
+		BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang_close@2x.png"; sourceTree = "<group>"; };
+		BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang_close@3x.png"; sourceTree = "<group>"; };
 		BDAB44941C58777E004289BA /* SSJCalenderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderTableViewCell.h; sourceTree = "<group>"; };
 		BDAB44951C58777E004289BA /* SSJCalenderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderTableViewCell.m; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
@@ -1208,6 +1221,10 @@
 				BD976FA91C4E4A4600B0E26D /* home_jiantou.png */,
 				BD976FA71C4E49D900B0E26D /* home_bear.png */,
 				BD976FB51C4F2D0000B0E26D /* home_bg.png */,
+				BDA3FE071C5903A800FB57B1 /* home_tankuang@2x.png */,
+				BDA3FE091C5903B200FB57B1 /* home_tankuang@3x.png */,
+				BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */,
+				BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */,
 				BD976FBA1C4F4CA200B0E26D /* circle@2x.png */,
 				BD976FBF1C4F57F200B0E26D /* circle@3x.png */,
 				BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */,
@@ -1735,6 +1752,9 @@
 				BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */,
 				BD976FA41C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.h */,
 				BD976FA51C4E498900B0E26D /* SSJBookKeepingHomeNodateFooter.m */,
+				BDA3FE011C59032B00FB57B1 /* SSJBookKeepingHomePopView.h */,
+				BDA3FE021C59032B00FB57B1 /* SSJBookKeepingHomePopView.m */,
+				BDA3FE051C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2523,6 +2543,7 @@
 				7DD7D6991C4C8E6A00ACE71A /* bt_deficit@3x.png in Resources */,
 				7DD7D71C1C4C8E6A00ACE71A /* reportForm_empty@3x.png in Resources */,
 				7DD7D68A1C4C8E6A00ACE71A /* bt_baoxiao@2x.png in Resources */,
+				BDA3FE061C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib in Resources */,
 				7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */,
 				7DD7D6DF1C4C8E6A00ACE71A /* bt_traffic@3x.png in Resources */,
 				BD37D2E01C55BD610050BDAA /* login_username@2x.png in Resources */,
@@ -2612,6 +2633,7 @@
 				BDA3FDF91C58CAC400FB57B1 /* ft_invest@2x.png in Resources */,
 				7DD7D6B01C4C8E6A00ACE71A /* bt_interest@2x.png in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
+				BDA3FE0C1C5904C900FB57B1 /* home_tankuang_close@2x.png in Resources */,
 				7DD7D6A81C4C8E6A00ACE71A /* bt_gift@2x.png in Resources */,
 				7DD7D6E91C4C8E6A00ACE71A /* bt_yiwai@3x.png in Resources */,
 				7DD7D7341C4CA8BD00ACE71A /* reportForms_expenses@3x.png in Resources */,
@@ -2631,6 +2653,8 @@
 				7DD7D6D81C4C8E6A00ACE71A /* bt_sport@2x.png in Resources */,
 				7DD7D6E01C4C8E6A00ACE71A /* bt_tuikuan@2x.png in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
+				BDA3FE0A1C5903B200FB57B1 /* home_tankuang@3x.png in Resources */,
+				BDA3FE081C5903A800FB57B1 /* home_tankuang@2x.png in Resources */,
 				7DD7D6901C4C8E6A00ACE71A /* bt_clean@2x.png in Resources */,
 				7DD7D69B1C4C8E6A00ACE71A /* bt_digital@3x.png in Resources */,
 				7DE6E85F1C55BA7B001C9138 /* login_lock@2x.png in Resources */,
@@ -2646,6 +2670,7 @@
 				7DD7D68F1C4C8E6A00ACE71A /* bt_car@3x.png in Resources */,
 				7DD7D6B31C4C8E6A00ACE71A /* bt_investment@3x.png in Resources */,
 				7DD7D6AF1C4C8E6A00ACE71A /* bt_house@3x.png in Resources */,
+				BDA3FE0E1C5904D200FB57B1 /* home_tankuang_close@3x.png in Resources */,
 				7DD7D6BD1C4C8E6A00ACE71A /* bt_medicine@3x.png in Resources */,
 				7DD7D7251C4C8E6A00ACE71A /* tab_form_nor@3x.png in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
@@ -2794,6 +2819,7 @@
 				BD70DF5D1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */,
 				BD04331C1C1A78B40051E7AB /* SSJArrayAddition.m in Sources */,
+				BDA3FE031C59032B00FB57B1 /* SSJBookKeepingHomePopView.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
 				BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */,
