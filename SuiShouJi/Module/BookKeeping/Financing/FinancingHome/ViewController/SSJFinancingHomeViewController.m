@@ -47,7 +47,6 @@
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getDateFromDateBase];
-    [self.collectionView reloadData];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -190,6 +189,7 @@
             weakSelf.profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",profitAmount];
             [weakSelf.profitAmountLabel sizeToFit];
             [weakSelf.view setNeedsLayout];
+            [weakSelf.collectionView reloadData];
         });
     }];
 

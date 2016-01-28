@@ -103,7 +103,6 @@
     _selectIndex = nil;
     [self getCurrentDate];
     [self getDateFromDatebase];
-    [self.tableView reloadData];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -257,13 +256,6 @@
     _currentDay = [dateComponent day];
     _currentMonth = [dateComponent month];
 }
-
-//-(void)SingleTap:(id)sender{
-//    _selectIndex = nil;
-//    [self getDateFromDatebase];
-//    [self.tableView reloadData];
-//    [self.clearView removeFromSuperview];
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

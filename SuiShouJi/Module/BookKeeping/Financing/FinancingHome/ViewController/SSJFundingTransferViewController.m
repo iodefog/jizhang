@@ -239,7 +239,6 @@
         [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
         return;
     }
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()] ;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),str,@"3",_transferInItem.fundingID,@"",@"",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd hh:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]])
         {
