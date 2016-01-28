@@ -113,27 +113,24 @@
             }
         }];
         if (userBillSuccess && fundInfoSuccess) {
+            
+            SSJSaveAppId(self.loginService.appid);
+            SSJSaveAccessToken(self.loginService.accesstoken);
+            SSJSaveUserLogined(YES);
+            SSJSetUserId(self.loginService.item.cuserid);
+            
             if (self.loginService.userBillArray.count == 0) {
-                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:^(){
-                    
-                }failure:^(NSError *error){
-                    
-                }];
+                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:NULL failure:NULL];
             }
             if ([self.loginService.item.cuserid isEqualToString:SSJUSERID()])
             {
-                [SSJUserTableManager registerUserIdWithSuccess:^(){
-                    
-                }failure:^(NSError *error){
+                [SSJUserTableManager registerUserIdWithSuccess:NULL failure:^(NSError *error){
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         [CDAutoHideMessageHUD showMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
                     });
                 }];
             }
-            SSJSaveAppId(self.loginService.appid);
-            SSJSaveAccessToken(self.loginService.accesstoken);
-            SSJSaveUserLogined(YES);
-            SSJSetUserId(self.loginService.item.cuserid);
+            
             //  登陆成功后强制同步一次
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程

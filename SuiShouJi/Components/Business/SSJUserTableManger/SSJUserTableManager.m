@@ -37,18 +37,24 @@
         
         if (tUserId.length) {
             SSJSetUserId(tUserId);
-            success();
+            if (success) {
+                success();
+            }
             return;
         }
         
         tUserId = SSJUUID();
         if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, 0, 0)", tUserId]) {
-            failure([db lastError]);
+            if (failure) {
+                failure([db lastError]);
+            }
             return;
         }
         
         SSJSetUserId(tUserId);
-        success();
+        if (success) {
+            success();
+        }
     }];
 }
 
@@ -78,10 +84,15 @@
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if ([db executeUpdate:@"update BK_USER set CREGISTERSTATE = 1 where CUSERID = ?", SSJUSERID()]) {
-            success();
+            if (success) {
+                success();
+            }
             return;
         }
-        failure([db lastError]);
+        
+        if (failure) {
+            failure([db lastError]);
+        }
     }];
 }
 
