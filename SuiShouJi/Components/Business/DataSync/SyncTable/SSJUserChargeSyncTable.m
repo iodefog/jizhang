@@ -37,7 +37,7 @@
         hasBillType = [db boolForQuery:@"select count(*) from BK_USER_BILL where CUSERID = ? and CBILLID = ?", userId, billId];
     }
     
-    //  查询fund_info中是否有对应的父帐户
+    //  查询fund_info中是否有对应的资金帐户
     BOOL hasFundAccount = [db boolForQuery:@"select count(*) from BK_FUND_INFO where CUSERID = ? and CFUNDID = ?", userId, fundId];
     
     return (hasBillType && hasFundAccount);

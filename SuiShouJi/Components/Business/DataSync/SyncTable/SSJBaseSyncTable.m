@@ -181,10 +181,7 @@
             statement = [NSString stringWithFormat:@"%@ where %@", updateStatement, condition];
         }
     } else {
-        //  如果是删除（opertoryValue ＝ 2），就不需要merge该记录
-        if (opertoryValue == 0 || opertoryValue == 1) {
-            statement = [self insertStatementForMergeRecord:recordInfo];
-        }
+        statement = [self insertStatementForMergeRecord:recordInfo];
     }
     
     return statement;

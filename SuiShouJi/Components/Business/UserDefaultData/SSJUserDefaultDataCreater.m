@@ -237,10 +237,11 @@
     }
     
     BOOL successfull = YES;
+    NSString *date = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
     while ([billTypeResult next]) {
         NSString *billId = [billTypeResult stringForColumn:@"id"];
         int state = [billTypeResult intForColumn:@"istate"];
-        NSString *date = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", SSJUSERID(), billId, @(state), date, @(SSJSyncVersion()), billId, SSJUSERID()];
         successfull = successfull && executeSuccessfull;
