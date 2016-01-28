@@ -46,8 +46,10 @@
     [super viewWillAppear:animated];
     [self getDataFromDb];
     [self.tableView reloadData];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 #pragma mark - UITableViewDelegate
@@ -135,7 +137,6 @@
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
         _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
-        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
     return _rightBarButton;
 }

@@ -76,7 +76,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)syncData {
-    if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWiFi == AFNetworkReachabilityStatusReachableViaWiFi) {
+    if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
         
         [self startSyncWithSuccess:^{
             
@@ -104,7 +104,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 
             } failure:^(NSError *error) {
                 SSJDispatch_main_async_safe(^{
-                    [CDAutoHideMessageHUD showMessage:@"同步失败"];
+                    [self showError:error];
                 });
                 SSJDispatch_main_async_safe(^{
                     if (failure) {
@@ -127,7 +127,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                     
                 } failure:^(NSError *error) {
                     SSJDispatch_main_async_safe(^{
-                        [CDAutoHideMessageHUD showMessage:@"同步失败"];
+//                        NSLog(@"%@", error);
+                        [self showError:error];
                     });
                     SSJDispatch_main_async_safe(^{
                         if (failure) {
@@ -143,6 +144,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncBusy userInfo:@{NSLocalizedDescriptionKey:@"there is a sync task in progress"}];
         failure(error);
     }
+}
+
+- (void)showError:(NSError *)error {
+    UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"同步失败" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [aler show];
 }
 
 - (void)syncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
@@ -225,7 +231,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             
 #warning test
-            [responseObject writeToFile:@"/Users/oldlang/Desktop/sync_data.zip" atomically:YES];
+            NSDateFormatter *format = [[NSDateFormatter alloc] init];
+            [format setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSString *date = [format stringFromDate:[NSDate date]];
+            [responseObject writeToFile:[NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_%@.zip", date] atomically:YES];
 
             //  将数据解压
             NSError *tError = nil;
