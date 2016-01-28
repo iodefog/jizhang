@@ -78,8 +78,8 @@
         }
     }];
     
-    
-    result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ?", SSJUSERID()];
+    //
+    result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ? ", SSJUSERID()];
     while ([result next]) {
         NSString *fundId = [result stringForColumn:@"cfundid"];
         NSString *cuserId = [result stringForColumn:@"cuserid"];

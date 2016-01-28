@@ -117,8 +117,13 @@
         
         //  根据合并记录返回相应的sql语句
         NSMutableString *statement = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db error:error] mutableCopy];
-        if (!statement) {
+        if (*error) {
             return NO;
+        }
+        
+        //  如果返回nil，就不需要对这条数据进行处理
+        if (!statement) {
+            continue;
         }
         
         BOOL success = [db executeUpdate:statement];
@@ -176,7 +181,10 @@
             statement = [NSString stringWithFormat:@"%@ where %@", updateStatement, condition];
         }
     } else {
-        statement = [self insertStatementForMergeRecord:recordInfo];
+        //  如果是删除（opertoryValue ＝ 2），就不需要merge该记录
+        if (opertoryValue == 0 || opertoryValue == 1) {
+            statement = [self insertStatementForMergeRecord:recordInfo];
+        }
     }
     
     return statement;
