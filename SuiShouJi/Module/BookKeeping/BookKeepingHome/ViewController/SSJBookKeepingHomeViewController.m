@@ -222,6 +222,7 @@
 }
 
 -(void)getDateFromDatebase{
+    [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
@@ -243,6 +244,7 @@
             weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",expence];
             weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
             [weakSelf.tableView reloadData];
+            [weakSelf.tableView ssj_hideLoadingIndicator];
         });
     }];
 
