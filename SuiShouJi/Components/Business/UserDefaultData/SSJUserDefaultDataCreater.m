@@ -210,7 +210,7 @@
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
     
-    FMResultSet *result1 = [db executeQuery:@"select count(*) from BK_BILL_TYPE"];
+    FMResultSet *result1 = [db executeQuery:@"select count(*) from BK_BILL_TYPE where istate <> 2"];
     FMResultSet *result2 = [db executeQuery:@"select count(*) from BK_USER_BILL where CUSERID = ?", SSJUSERID()];
     
     if (!result1 || !result2) {
@@ -231,7 +231,7 @@
     [result1 close];
     [result2 close];
     
-    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate from BK_BILL_TYPE"];
+    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate from BK_BILL_TYPE where istate <> 2"];
     if (!billTypeResult) {
         return [db lastError];
     }

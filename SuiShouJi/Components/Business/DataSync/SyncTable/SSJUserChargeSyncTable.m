@@ -23,7 +23,19 @@
 }
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
-    BOOL hasBillType = [db boolForQuery:@"select count(*) from BK_USER_BILL where CUSERID = ? and CBILLID = ?", record[@"cuserid"], record[@"ibillid"]];
+    NSString *userId = record[@"cuserid"];
+    NSString *billId = record[@"ibillid"];
+    if (!userId || !billId) {
+        SSJPRINT(@">>> SSJ warning:cuserid and ibillid in record must not be nil \n record:%@", record);
+        return NO;
+    }
+    
+    // 如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型
+    BOOL hasBillType = [db intForQuery:@"select istate from bk_bill_type where id = ?", billId] == 2;
+    if (!hasBillType) {
+        hasBillType = [db boolForQuery:@"select count(*) from BK_USER_BILL where CUSERID = ? and CBILLID = ?", record[@"cuserid"], record[@"ibillid"]];
+    }
+    
     BOOL hasFundAccount = [db boolForQuery:@"select count(*) from BK_FUND_INFO where CUSERID = ? and CFUNDID = ?", record[@"cuserid"], record[@"ifunsid"]];
     return (hasBillType && hasFundAccount);
 }

@@ -17,6 +17,7 @@
 #import "FMDB.h"
 #import "SSJUserTableManager.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJGuideView.h"
 
 @interface AppDelegate ()
 
@@ -49,6 +50,9 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  设置根控制器
     [self setRootViewController];
+    
+    //  当前版本第一次启动显示引导页
+    [self showGuideViewIfNeeded];
     
     if (SSJIsFirstLaunchForCurrentVersion()) {
         
@@ -149,6 +153,17 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
         
         NSLog(@"<<< 完成初始化数据库 >>>");
     });
+}
+
+//  如果当前版本是第一次启动，显示引导页面，否则直接显示首页
+- (void)showGuideViewIfNeeded {
+    if (SSJIsFirstLaunchForCurrentVersion()) {
+        SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        guideView.beginHandle = ^(SSJGuideView *guideView) {
+            SSJAddLaunchTimesForCurrentVersion();
+        };
+        [guideView show:YES];
+    }
 }
 
 #pragma mark - 友盟
