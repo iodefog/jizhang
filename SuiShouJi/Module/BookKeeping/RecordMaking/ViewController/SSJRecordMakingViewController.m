@@ -339,6 +339,11 @@
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
                 addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
+                addNewTypeVc.CategorySelectedBlock = ^(SSJRecordMakingCategoryItem *item){
+                    weakSelf.categoryListView.selectedId = item.categoryID;
+                    _categoryID = item.categoryID;
+                    [weakSelf.categoryListView reloadData];
+                };
                 [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];
             }
         };
