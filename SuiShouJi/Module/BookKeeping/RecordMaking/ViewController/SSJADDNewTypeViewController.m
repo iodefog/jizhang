@@ -40,7 +40,7 @@
     [self getDateFromDb];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
     self.navigationItem.rightBarButtonItem = rightBarButton;
-    _selectedID = ((SSJRecordMakingCategoryItem*)[self.items firstObject]).categoryID;
+
 }
 
 -(void)viewDidLayoutSubviews{
@@ -85,9 +85,6 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.CategorySelectedBlock) {
-        self.CategorySelectedBlock(((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item);
-    }
     _selectedIndex = indexPath;
     _selectedID = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item.categoryID;
     [collectionView reloadData];
@@ -141,20 +138,24 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             weakSelf.items = tempArray;
             [weakSelf.collectionView reloadData];
+            _selectedID = ((SSJRecordMakingCategoryItem*)[weakSelf.items firstObject]).categoryID;
             [weakSelf.collectionView ssj_hideLoadingIndicator];
         });
     }];
 }
 
 -(void)comfirmButtonClick:(id)sender{
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
         [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
-        [self getDateFromDb];
-
+        [weakSelf getDateFromDb];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [[NSNotificationCenter defaultCenter]postNotificationName:@"addNewTypeNotification" object:nil];
-            [self.collectionView reloadData];
-            [self.navigationController popViewControllerAnimated:YES];
+            [weakSelf.collectionView reloadData];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            if (weakSelf.NewCategorySelectedBlock) {
+                weakSelf.NewCategorySelectedBlock(_selectedID);
+            }
         });
     }];
 

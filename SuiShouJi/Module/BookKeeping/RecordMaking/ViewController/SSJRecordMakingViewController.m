@@ -343,9 +343,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
                 addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
-                addNewTypeVc.CategorySelectedBlock = ^(SSJRecordMakingCategoryItem *item){
-                    weakSelf.categoryListView.selectedId = item.categoryID;
-                    _categoryID = item.categoryID;
+                addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID){
+                    weakSelf.categoryListView.selectedId = categoryID;
+                    _categoryID = categoryID;
                     [weakSelf.categoryListView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];

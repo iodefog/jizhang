@@ -13,10 +13,10 @@
 
 @property (nonatomic) BOOL incomeOrExpence;
 
-typedef void (^CategorySelectedBlock)(SSJRecordMakingCategoryItem *item);
+typedef void (^NewCategorySelectedBlock)(NSString *categoryID);
 
 
-@property (nonatomic, copy) CategorySelectedBlock CategorySelectedBlock;
+@property (nonatomic, copy) NewCategorySelectedBlock NewCategorySelectedBlock;
 
 
 @end
