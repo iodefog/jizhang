@@ -76,7 +76,7 @@
                 [weakSelf.navigationController pushViewController:registerVC animated:YES];
             };
             [[UIApplication sharedApplication].keyWindow addSubview:popView];
-            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:lastPopTimeke];
+            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:lastPopTimeKey];
         }
     }
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
