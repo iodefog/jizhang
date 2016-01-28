@@ -12,6 +12,7 @@
 #import "SSJCalenderDetailCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalenderTableViewCell.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
@@ -149,35 +150,28 @@
 }
 
 -(void)getBillDetailWithBillId:(NSString *)billId{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
-    while ([rs next]) {
-        self.cellTitle = [rs stringForColumn:@"CNAME"];
-        self.cellImage = [rs stringForColumn:@"CCOIN"];
-        self.cellColor = [rs stringForColumn:@"CCOLOR"];
-        self.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
-    }
-    [db close];
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
+        while ([rs next]) {
+            weakSelf.cellTitle = [rs stringForColumn:@"CNAME"];
+            weakSelf.cellImage = [rs stringForColumn:@"CCOIN"];
+            weakSelf.cellColor = [rs stringForColumn:@"CCOLOR"];
+            weakSelf.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+        }
+    }];
 }
 
 -(void)getDataFromDb{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER_CHARGE WHERE ICHARGEID = ? AND CUSERID = ? ",self.item.chargeID,SSJUSERID()];
-    while ([rs next]) {
-        self.item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
-        self.item.billID = [rs stringForColumn:@"IBILLID"];
-        self.item.billDate = [rs stringForColumn:@"CBILLDATE"];
-        self.item.fundID = [rs stringForColumn:@"IFUNSID"];
-    }
-    [db close];
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER_CHARGE WHERE ICHARGEID = ? AND CUSERID = ? ",self.item.chargeID,SSJUSERID()];
+        while ([rs next]) {
+            self.item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
+            self.item.billID = [rs stringForColumn:@"IBILLID"];
+            self.item.billDate = [rs stringForColumn:@"CBILLDATE"];
+            self.item.fundID = [rs stringForColumn:@"IFUNSID"];
+        }
+    }];
 }
 
 -(void)rightBarButtonClicked:(id)sender{
@@ -186,21 +180,19 @@
 }
 
 -(void)deleteCharge{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.chargeID];
-    if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
-        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate];
-    }else{
-        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate];
-    }
-    [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-    [db close];
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.chargeID];
+        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate]) {
+                *rollback = YES;
+            }
+        }else{
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate]) {
+                *rollback = YES;
+            }
+        }
+        [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

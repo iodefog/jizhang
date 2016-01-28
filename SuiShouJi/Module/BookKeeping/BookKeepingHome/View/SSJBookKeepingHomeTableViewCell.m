@@ -7,6 +7,7 @@
 //
 
 #import "SSJBookKeepingHomeTableViewCell.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJBookKeepingHomeTableViewCell()
@@ -194,42 +195,41 @@
             [self.expenditureLabel sizeToFit];
         }
     }else{
-        NSString *iconName;
-        NSString *categoryName;
-        NSString *categoryColor;
-        int categoryType = 0;
-        FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-        if (![db open]) {
-            NSLog(@"Could not open db");
-            return ;
-        }
-        FMResultSet *rs = [db executeQuery:@"SELECT CCOIN, CNAME , ITYPE , CCOLOR FROM BK_BILL_TYPE WHERE ID = ?",item.billID];
-        while ([rs next]) {
-            iconName = [rs stringForColumn:@"CCOIN"];
-            categoryName = [rs stringForColumn:@"CNAME"];
-            categoryType = [rs intForColumn:@"ITYPE"];
-            categoryColor =[rs stringForColumn:@"CCOLOR"];
-        }
-        if (!categoryType) {
-            self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
-            [self.incomeLabel sizeToFit];
-            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-            self.expenditureLabel.text = @"";
-        }else{
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
-            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-            [self.expenditureLabel sizeToFit];
-            self.incomeLabel.text = @"";
-        }
-        
-        UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:iconName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-        _categoryImageButton.contentMode = UIViewContentModeCenter;
-        [_categoryImageButton setImage:image forState:UIControlStateNormal];
-        _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
-        _categoryImageButton.layer.borderWidth = 1;
-        _categoryImageButton.backgroundColor = [UIColor clearColor];
-        _categoryImageButton.userInteractionEnabled = YES;
-        [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
+        __block NSString *iconName;
+        __block NSString *categoryName;
+        __block NSString *categoryColor;
+        __block int categoryType = 0;
+        [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+            FMResultSet *rs = [db executeQuery:@"SELECT CCOIN, CNAME , ITYPE , CCOLOR FROM BK_BILL_TYPE WHERE ID = ?",item.billID];
+            while ([rs next]) {
+                iconName = [rs stringForColumn:@"CCOIN"];
+                categoryName = [rs stringForColumn:@"CNAME"];
+                categoryType = [rs intForColumn:@"ITYPE"];
+                categoryColor =[rs stringForColumn:@"CCOLOR"];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                if (!categoryType) {
+                    self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
+                    [self.incomeLabel sizeToFit];
+                    self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+                    self.expenditureLabel.text = @"";
+                }else{
+                    self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
+                    self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+                    [self.expenditureLabel sizeToFit];
+                    self.incomeLabel.text = @"";
+                }
+                
+                UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:iconName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+                _categoryImageButton.contentMode = UIViewContentModeCenter;
+                [_categoryImageButton setImage:image forState:UIControlStateNormal];
+                _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
+                _categoryImageButton.layer.borderWidth = 1;
+                _categoryImageButton.backgroundColor = [UIColor clearColor];
+                _categoryImageButton.userInteractionEnabled = YES;
+                [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
+            });
+        }];
     }
     [self setNeedsLayout];
 }
@@ -253,21 +253,22 @@
 }
 
 -(void)deleteCharge{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.chargeID];
-    if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
-        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate];
-    }else{
-        [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID];
-        [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate];
-    }
-    [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-    [db close];
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.chargeID];
+        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billID]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
+            {
+                *rollback = YES;
+            };
+        }else{
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
+            {
+                *rollback = YES;
+            };
+        }
+        [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
+    }];
 }
 
 @end

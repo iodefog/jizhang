@@ -283,16 +283,22 @@
 }
 
 -(void)rightBarButtonClicked:(id)sender{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.fundingID,SSJUSERID()];
-    [db class];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"你确定要删除该资金账户吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+        if (![db open]) {
+            NSLog(@"Could not open db");
+            return ;
+        }
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.fundingID,SSJUSERID()];
+        [db class];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

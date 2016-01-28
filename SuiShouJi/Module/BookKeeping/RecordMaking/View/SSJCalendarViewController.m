@@ -15,7 +15,7 @@
 #import "SSJFundingDetailDateHeader.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJCalenderTableViewCell.h"
-
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 
@@ -140,12 +140,15 @@
         SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
         headerView.dateLabel.text = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",self.selectedYear,self.selectedMonth,self.selectedDay];
         [headerView.dateLabel sizeToFit];
-        if ([self getBalance] > 0) {
-            headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",[self getBalance]];
-        }else{
-            headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",[self getBalance]];
-        }
-        [headerView.balanceLabel sizeToFit];
+        [self getBalanceresult:^(double result) {
+            if (result > 0) {
+                headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",result];
+                [headerView.balanceLabel sizeToFit];
+            }else{
+                headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",result];
+                [headerView.balanceLabel sizeToFit];
+            }
+        }];
         return headerView;
     }
 }
@@ -248,34 +251,33 @@
 }
 
 -(void)getDataFromDateBase{
-    NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
-    while ([rs next]) {
-        SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
-        item.chargeID = [rs stringForColumn:@"ICHARGEID"];
-        item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
-        item.billDate = [rs stringForColumn:@"CBILLDATE"];
-        item.billID = [rs stringForColumn:@"IBILLID"];
-        item.fundID = [rs stringForColumn:@"IFUNSID"];
-        [self.items addObject:item];
-    }
-    [db close];
+    __weak typeof(self) weakSelf = self;
+     __block NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
+        while ([rs next]) {
+            SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
+            item.chargeID = [rs stringForColumn:@"ICHARGEID"];
+            item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
+            item.billDate = [rs stringForColumn:@"CBILLDATE"];
+            item.billID = [rs stringForColumn:@"IBILLID"];
+            item.fundID = [rs stringForColumn:@"IFUNSID"];
+            [self.items addObject:item];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [weakSelf.tableView reloadData];
+        });
+    }];
 }
 
--(double)getBalance{
-    NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return 0;
-    }
-    double balance = [db doubleForQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
-    return balance;
+-(void)getBalanceresult:(void (^)(double result))balanceresult{
+    __block NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        double balance = [db doubleForQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
+        SSJDispatch_main_async_safe(^(){
+            balanceresult(balance);
+        });
+    }];
 }
 
 -(void)closeButtonClicked:(id)sender{
