@@ -63,7 +63,6 @@
     self.items = [[NSMutableArray alloc]init];
     [self.items removeAllObjects];
     [self getDataFromDateBase];
-    [self.tableView reloadData];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
@@ -76,7 +75,6 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.items removeAllObjects];
     [self getDataFromDateBase];
-    [self.tableView reloadData];
 }
 
 -(void)viewDidLayoutSubviews{

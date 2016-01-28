@@ -166,7 +166,6 @@
 
 -(void)reloadDate{
     [self getDateFromDb];
-    [self.tableView reloadData];
 }
 
 /*

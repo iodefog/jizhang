@@ -19,6 +19,7 @@
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
 #import "SSJNewFundingViewController.h"
+#import "SSJDatabaseQueue.h"
 
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
@@ -624,52 +625,44 @@
     self.categoryListView.selectedId = _defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-
     [self.categoryListView reloadData];
 }
 
 -(void)getDefualtColorAndDefualtId{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    if (self.item == nil) {
-        FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!self.titleSegment.selectedSegmentIndex]];
-        while([rs next]) {
-            _defualtColor = [rs stringForColumn:@"CCOLOR"];
-            _defualtID = [rs stringForColumn:@"ID"];
-            _defualtImage = [rs stringForColumn:@"CCOIN"];
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        if (weakSelf.item == nil) {
+            FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!weakSelf.titleSegment.selectedSegmentIndex]];
+            while([rs next]) {
+                _defualtColor = [rs stringForColumn:@"CCOLOR"];
+                _defualtID = [rs stringForColumn:@"ID"];
+                _defualtImage = [rs stringForColumn:@"CCOIN"];
+            }
+        }else{
+            FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN , ITYPE FROM BK_BILL_TYPE  WHERE ID = ?",weakSelf.item.billID];
+            while([rs next]) {
+                _defualtColor = [rs stringForColumn:@"CCOLOR"];
+                _defualtID = [rs stringForColumn:@"ID"];
+                _defualtImage = [rs stringForColumn:@"CCOIN"];
+                _defualtType = [rs intForColumn:@"ITYPE"];
+            }
         }
-    }else{
-        FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN , ITYPE FROM BK_BILL_TYPE  WHERE ID = ?",self.item.billID];
-        while([rs next]) {
-            _defualtColor = [rs stringForColumn:@"CCOLOR"];
-            _defualtID = [rs stringForColumn:@"ID"];
-            _defualtImage = [rs stringForColumn:@"CCOIN"];
-            _defualtType = [rs intForColumn:@"ITYPE"];
-        }
-    }
-    [db close];
+    }];
 }
 
 -(void)getDefualtFudingItem{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? LIMIT 1",@"root",SSJUSERID()];
-    _defualtItem = [[SSJFundingItem alloc]init];
-    while ([rs next]) {
-        _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-        _defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-        _defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-        _defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-        _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-        _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
-    }
-    [db close];
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? LIMIT 1",@"root",SSJUSERID()];
+        _defualtItem = [[SSJFundingItem alloc]init];
+        while ([rs next]) {
+            _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            _defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            _defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+            _defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+            _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+        }
+    }];
 }
 
 -(void)getSelectedFundingType{
