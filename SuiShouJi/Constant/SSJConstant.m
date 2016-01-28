@@ -24,11 +24,8 @@ NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 NSString *const lastSelectFundItemKey = @"lastSelectFundKey";
 
-<<<<<<< HEAD
 NSString *const lastPopTimeKey = @"lastPopTimeKey";
 
 NSString *const haveLoginOrRegistKey = @"haveLoginOrRegistKey";
-=======
-NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
->>>>>>> ed650f6f4ea4ccf0d659326140891af1f0e42c72
+NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";

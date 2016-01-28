@@ -358,9 +358,9 @@
 		BDA3FE031C59032B00FB57B1 /* SSJBookKeepingHomePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA3FE021C59032B00FB57B1 /* SSJBookKeepingHomePopView.m */; };
 		BDA3FE061C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE051C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib */; };
 		BDA3FE081C5903A800FB57B1 /* home_tankuang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE071C5903A800FB57B1 /* home_tankuang@2x.png */; };
-		BDA3FE0A1C5903B200FB57B1 /* home_tankuang@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE091C5903B200FB57B1 /* home_tankuang@3x.png */; };
 		BDA3FE0C1C5904C900FB57B1 /* home_tankuang_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */; };
 		BDA3FE0E1C5904D200FB57B1 /* home_tankuang_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */; };
+		BDA3FE101C59C34300FB57B1 /* home_tankuang@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FE0F1C59C34300FB57B1 /* home_tankuang@3x.png */; };
 		BDAB44961C58777E004289BA /* SSJCalenderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDAB44951C58777E004289BA /* SSJCalenderTableViewCell.m */; };
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDC01FF61C313C17008B1F75 /* SSJBookKeepHomeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF51C313C17008B1F75 /* SSJBookKeepHomeItem.m */; };
@@ -892,9 +892,9 @@
 		BDA3FE021C59032B00FB57B1 /* SSJBookKeepingHomePopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomePopView.m; sourceTree = "<group>"; };
 		BDA3FE051C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHomePopView.xib; sourceTree = "<group>"; };
 		BDA3FE071C5903A800FB57B1 /* home_tankuang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang@2x.png"; sourceTree = "<group>"; };
-		BDA3FE091C5903B200FB57B1 /* home_tankuang@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang@3x.png"; sourceTree = "<group>"; };
 		BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang_close@2x.png"; sourceTree = "<group>"; };
 		BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang_close@3x.png"; sourceTree = "<group>"; };
+		BDA3FE0F1C59C34300FB57B1 /* home_tankuang@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_tankuang@3x.png"; sourceTree = "<group>"; };
 		BDAB44941C58777E004289BA /* SSJCalenderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderTableViewCell.h; sourceTree = "<group>"; };
 		BDAB44951C58777E004289BA /* SSJCalenderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderTableViewCell.m; sourceTree = "<group>"; };
 		BDC01FF11C2D92E3008B1F75 /* CDAutoHideMessageHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAutoHideMessageHUD.h; sourceTree = "<group>"; };
@@ -1222,7 +1222,7 @@
 				BD976FA71C4E49D900B0E26D /* home_bear.png */,
 				BD976FB51C4F2D0000B0E26D /* home_bg.png */,
 				BDA3FE071C5903A800FB57B1 /* home_tankuang@2x.png */,
-				BDA3FE091C5903B200FB57B1 /* home_tankuang@3x.png */,
+				BDA3FE0F1C59C34300FB57B1 /* home_tankuang@3x.png */,
 				BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */,
 				BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */,
 				BD976FBA1C4F4CA200B0E26D /* circle@2x.png */,
@@ -2516,6 +2516,7 @@
 				7DD7D6CA1C4C8E6A00ACE71A /* bt_recharge@2x.png in Resources */,
 				7DD7D6DD1C4C8E6A00ACE71A /* bt_tourism@3x.png in Resources */,
 				7DD7D7181C4C8E6A00ACE71A /* navigation_backOff@3x.png in Resources */,
+				BDA3FE101C59C34300FB57B1 /* home_tankuang@3x.png in Resources */,
 				7DD7D6BA1C4C8E6A00ACE71A /* bt_marry@2x.png in Resources */,
 				7DD7D6FC1C4C8E6A00ACE71A /* founds_zhuanchu@2x.png in Resources */,
 				7DD7D69A1C4C8E6A00ACE71A /* bt_digital@2x.png in Resources */,
@@ -2653,7 +2654,6 @@
 				7DD7D6D81C4C8E6A00ACE71A /* bt_sport@2x.png in Resources */,
 				7DD7D6E01C4C8E6A00ACE71A /* bt_tuikuan@2x.png in Resources */,
 				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
-				BDA3FE0A1C5903B200FB57B1 /* home_tankuang@3x.png in Resources */,
 				BDA3FE081C5903A800FB57B1 /* home_tankuang@2x.png in Resources */,
 				7DD7D6901C4C8E6A00ACE71A /* bt_clean@2x.png in Resources */,
 				7DD7D69B1C4C8E6A00ACE71A /* bt_digital@3x.png in Resources */,

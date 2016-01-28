@@ -50,16 +50,14 @@ extern NSString *const SSJErrorDomain;
 //上一次选择的资金账户类型
 extern NSString *const lastSelectFundItemKey;
 
-<<<<<<< HEAD
 //保存上次弹窗的时间
 extern NSString *const lastPopTimeKey;
 
 //保存是否登录或者注册过
 extern NSString *const haveLoginOrRegistKey;
-=======
+
 //  同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
->>>>>>> ed650f6f4ea4ccf0d659326140891af1f0e42c72
 
 
 

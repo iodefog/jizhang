@@ -44,7 +44,7 @@
     [super viewDidLoad];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     _selectParent = @"1";
-    _selectColor = @"fe8a65";
+    _selectColor = @"#fe8a65";
     _selectIcoin = @"ft_cash";
     [self.view addSubview:self.tableview];
     self.navigationItem.rightBarButtonItem = self.rightButton;

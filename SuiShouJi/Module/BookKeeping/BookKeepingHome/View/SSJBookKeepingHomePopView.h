@@ -10,4 +10,13 @@
 
 @interface SSJBookKeepingHomePopView : UIView
 
+typedef void(^loginBtnClickBlock)();
+
+@property (nonatomic, copy) loginBtnClickBlock loginBtnClickBlock;
+
+typedef void(^registerBtnClickBlock)();
+
+@property (nonatomic, copy) registerBtnClickBlock registerBtnClickBlock;
+
++ (id)BookKeepingHomePopView;
 @end
