@@ -10,6 +10,7 @@
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJFundingTypeTableViewCell.h"
 #import "SSJFundingItem.h"
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJFundingTypeSelectViewController ()
@@ -94,22 +95,22 @@
 
 #pragma mark - Private
 -(void)getDateFromDb{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_FUND_INFO WHERE CPARENT = 'root' ORDER BY CFUNDID ASC"];
-    while ([rs next]) {
-        SSJFundingItem *item = [[SSJFundingItem alloc]init];
-        item.fundingID = [rs stringForColumn:@"CFUNDID"];
-        item.fundingName = [rs stringForColumn:@"CACCTNAME"];
-        item.fundingIcon = [rs stringForColumn:@"CICOIN"];
-        item.fundingMemo = [rs stringForColumn:@"CMEMO"];
-        item.fundingParent = [rs stringForColumn:@"CPARENT"];
-        [_items addObject:item];
-    }
-    [db close];
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_FUND_INFO WHERE CPARENT = 'root' ORDER BY CFUNDID ASC"];
+        while ([rs next]) {
+            SSJFundingItem *item = [[SSJFundingItem alloc]init];
+            item.fundingID = [rs stringForColumn:@"CFUNDID"];
+            item.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            item.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            item.fundingMemo = [rs stringForColumn:@"CMEMO"];
+            item.fundingParent = [rs stringForColumn:@"CPARENT"];
+            [_items addObject:item];
+        }
+        SSJDispatch_main_async_safe(^(){
+            [weakSelf.tableView reloadData];
+        });
+    }];
 }
 
 -(void)reloadSelectedStatusexceptIndexPath:(NSIndexPath*)selectedIndexpath{

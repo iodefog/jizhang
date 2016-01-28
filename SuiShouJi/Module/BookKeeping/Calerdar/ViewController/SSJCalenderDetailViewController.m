@@ -164,14 +164,19 @@
 }
 
 -(void)getDataFromDb{
+    __weak typeof(self) weakSelf = self;
+
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
         FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER_CHARGE WHERE ICHARGEID = ? AND CUSERID = ? ",self.item.chargeID,SSJUSERID()];
         while ([rs next]) {
-            self.item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
-            self.item.billID = [rs stringForColumn:@"IBILLID"];
-            self.item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            self.item.fundID = [rs stringForColumn:@"IFUNSID"];
+            weakSelf.item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
+            weakSelf.item.billID = [rs stringForColumn:@"IBILLID"];
+            weakSelf.item.billDate = [rs stringForColumn:@"CBILLDATE"];
+            weakSelf.item.fundID = [rs stringForColumn:@"IFUNSID"];
         }
+        SSJDispatch_main_async_safe(^(){
+            [weakSelf.tableView reloadData];
+        })
     }];
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "SSJCategoryCollectionViewCell.h"
-
+#import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
 @interface SSJCategoryCollectionViewCell()
@@ -101,17 +101,17 @@
 }
 
 -(void)removeCategory:(id)sender{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],self.item.categoryID,SSJUSERID()];
-    [db close];
-    if (self.removeCategoryBlock) {
-        self.removeCategoryBlock();
-    }
-    self.EditeModel = NO;
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],[NSNumber numberWithInt:1],self.item.categoryID,SSJUSERID()];
+        SSJDispatch_main_async_safe(^(){
+            if (weakSelf.removeCategoryBlock) {
+                weakSelf.removeCategoryBlock();
+            }
+            weakSelf.EditeModel = NO;
+        });
+    }];
+
 }
 
 -(void)setCategorySelected:(BOOL)categorySelected{
