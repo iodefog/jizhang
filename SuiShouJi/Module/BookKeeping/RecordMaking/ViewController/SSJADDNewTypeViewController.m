@@ -85,6 +85,9 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.CategorySelectedBlock) {
+        self.CategorySelectedBlock(((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item);
+    }
     _selectedIndex = indexPath;
     _selectedID = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item.categoryID;
     [collectionView reloadData];

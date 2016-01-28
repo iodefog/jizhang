@@ -6,9 +6,17 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
+#import "SSJRecordMakingCategoryItem.h"
 #import "SSJBaseViewController.h"
 
 @interface SSJADDNewTypeViewController : SSJBaseViewController<UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property (nonatomic) BOOL incomeOrExpence;
+
+typedef void (^CategorySelectedBlock)(SSJRecordMakingCategoryItem *item);
+
+
+@property (nonatomic, copy) CategorySelectedBlock CategorySelectedBlock;
+
+
 @end
