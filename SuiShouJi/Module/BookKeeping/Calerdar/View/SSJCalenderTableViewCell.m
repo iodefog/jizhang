@@ -81,7 +81,7 @@
 
 -(void)getBillDetailWithBillId:(NSString *)billId{
     __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
         FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
         while ([rs next]) {
             weakSelf.cellTitle = [rs stringForColumn:@"CNAME"];
