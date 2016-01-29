@@ -75,3 +75,14 @@ BOOL SSJUpdateSyncVersion(int64_t version) {
     [[NSUserDefaults standardUserDefaults] setObject:@(version) forKey:kSSJSycnVersion];
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+static NSString *const kSSJSyncSettingTypeKey = @"kSSJSyncSettingTypeKey";
+
+SSJSyncSettingType SSJSyncSetting() {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kSSJSyncSettingTypeKey];
+}
+
+BOOL SSJSaveSyncSetting(SSJSyncSettingType setting) {
+    [[NSUserDefaults standardUserDefaults] setInteger:setting forKey:kSSJSyncSettingTypeKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}

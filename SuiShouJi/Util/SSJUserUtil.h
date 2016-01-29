@@ -88,3 +88,7 @@ int64_t SSJSyncVersion();
  */
 BOOL SSJUpdateSyncVersion(int64_t version);
 
+SSJSyncSettingType SSJSyncSetting();
+
+BOOL SSJSaveSyncSetting(SSJSyncSettingType setting);
+
