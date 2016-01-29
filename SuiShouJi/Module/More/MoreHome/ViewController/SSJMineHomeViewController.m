@@ -44,15 +44,11 @@
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     _titleForSectionTwoArray = [[NSArray alloc]initWithObjects:@"同步设置",@"关于我们",@"用户协议与隐私说明", nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateUserInfo) name:SSJLoginOrRegisterNotification object:nil];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tableView.tableHeaderView = self.header;
-    if (SSJIsUserLogined()) {
-        [self.userInfoService requestUserInfo];
-    }
-    [self.tableView reloadData];
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 #pragma mark - Getter
@@ -248,6 +244,14 @@
     
     self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
     self.header.nicknameLabel.text = @"待君登录";
+    [self.tableView reloadData];
+}
+
+-(void)updateUserInfo{
+    self.tableView.tableHeaderView = self.header;
+    if (SSJIsUserLogined()) {
+        [self.userInfoService requestUserInfo];
+    }
     [self.tableView reloadData];
 }
 

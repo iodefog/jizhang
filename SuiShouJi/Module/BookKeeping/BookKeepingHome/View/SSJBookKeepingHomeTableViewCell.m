@@ -36,6 +36,14 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.categoryImageButton.bottom = self.height;
+    self.categoryImageButton.centerX = self.width * 0.5;
+    self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
+    self.incomeLabel.centerY = self.categoryImageButton.centerY;
+    self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
+    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
+    self.lineView.size = CGSizeMake(1, self.height - self.categoryImageButton.height);
+    self.lineView.centerX = self.centerX;
     if (_isEdite == YES) {
         self.editeButton.frame = self.categoryImageButton.frame;
         self.deleteButton.frame = self.categoryImageButton.frame;
@@ -58,14 +66,7 @@
             self.incomeLabel.hidden = NO;
         }];
     }
-    self.categoryImageButton.bottom = self.height;
-    self.categoryImageButton.centerX = self.width * 0.5;
-    self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
-    self.incomeLabel.centerY = self.categoryImageButton.centerY;
-    self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
-    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
-    self.lineView.size = CGSizeMake(1, self.height - self.categoryImageButton.height);
-    self.lineView.centerX = self.centerX;
+
 }
 
 -(UILabel*)incomeLabel{
@@ -228,6 +229,7 @@
                 _categoryImageButton.backgroundColor = [UIColor clearColor];
                 _categoryImageButton.userInteractionEnabled = YES;
                 [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
+                [self setNeedsLayout];
             });
         }];
     }
@@ -255,14 +257,14 @@
 -(void)deleteCharge{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate alloc] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.chargeID];
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.chargeID];
         if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billID]) {
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
             {
                 *rollback = YES;
             };
         }else{
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
             {
                 *rollback = YES;
             };

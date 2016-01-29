@@ -255,7 +255,7 @@
         return;
     }
     __weak typeof(self) weakSelf = self;
-    __block NSString *currentDateStr = [[NSDate alloc]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
+    __block NSString *currentDateStr = [[NSDate date]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db,BOOL *rollback){
         if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ?",_nameTextField.text,weakSelf.item.fundingID,SSJUSERID()] > 0){
             dispatch_async(dispatch_get_main_queue(), ^(){
@@ -265,17 +265,17 @@
             });
         }
         if ([_amountTextField.text doubleValue] < self.item.fundingAmount) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",self.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:2],weakSelf.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",self.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:2],weakSelf.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
                 *rollback = YES;
             }
             
         }else if ([_amountTextField.text doubleValue] > self.item.fundingAmount) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue] - self.item.fundingAmount],@"1",weakSelf.item.fundingID,[NSNumber numberWithDouble:weakSelf.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue] - self.item.fundingAmount],@"1",weakSelf.item.fundingID,[NSNumber numberWithDouble:weakSelf.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
                 *rollback = YES;
             }
         }
         [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = ? WHERE CFUNDID = ? AND CUSERID = ? ",[NSNumber numberWithDouble:[_amountTextField.text doubleValue]] , weakSelf.item.fundingID,SSJUSERID()];
-        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) , CMEMO = ? , IVERSION = ? , CWRITEDATE = ? , OPERATORTYPE = ? WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , _memoTextField.text , @(SSJSyncVersion()), [[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] , [NSNumber numberWithInt:1] ,weakSelf.item.fundingID,SSJUSERID()];
+        [db executeUpdate:@"UPDATE BK_FUND_INFO SET CACCTNAME = ? , CPARENT = ? , CCOLOR = ? , CICOIN = (SELECT CICOIN FROM BK_FUND_INFO WHERE CFUNDID = ?) , CMEMO = ? , IVERSION = ? , CWRITEDATE = ? , OPERATORTYPE = ? WHERE CFUNDID = ? AND CUSERID = ? ",_nameTextField.text,_selectParent,_selectColor, _selectParent , _memoTextField.text , @(SSJSyncVersion()), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] , [NSNumber numberWithInt:1] ,weakSelf.item.fundingID,SSJUSERID()];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });
@@ -310,7 +310,7 @@
     if (buttonIndex == 1) {
         __weak typeof(self) weakSelf = self;
         [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-            [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.fundingID,SSJUSERID()];
+            [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.fundingID,SSJUSERID()];
             SSJDispatch_main_async_safe(^(){
                 [weakSelf.navigationController popToRootViewControllerAnimated:YES];
             });

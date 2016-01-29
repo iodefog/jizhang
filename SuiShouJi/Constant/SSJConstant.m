@@ -30,4 +30,6 @@ NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
+NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";
+
 
