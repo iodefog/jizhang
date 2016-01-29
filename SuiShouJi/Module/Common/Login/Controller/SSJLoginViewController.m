@@ -145,7 +145,6 @@
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
             
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-<<<<<<< HEAD
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
                 [CDAutoHideMessageHUD showMessage:@"登录成功"];
@@ -156,15 +155,6 @@
                     [self ssj_backOffAction];
                 }
             });
-=======
-            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
-            [CDAutoHideMessageHUD showMessage:@"登录成功"];
-            if (self.finishHandle) {
-                self.finishHandle(self);
-            } else {
-                [self ssj_backOffAction];
-            }
->>>>>>> df78f303df442db46c470ad32cd4a3a31f9b8d54
         }
     }
 }

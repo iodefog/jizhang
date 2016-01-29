@@ -36,6 +36,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
     //  添加友盟统计
     [self umengTrack];

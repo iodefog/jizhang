@@ -35,10 +35,6 @@
         [self addSubview:self.calendarView];
         [self addSubview:self.titleView];
         [self addSubview:self.dateChangeView];
-        UITapGestureRecognizer* singleRecognizer;
-        singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTap:)];
-        singleRecognizer.numberOfTapsRequired = 1;
-        [self addGestureRecognizer:singleRecognizer];
     }
     return self;
 }
@@ -169,9 +165,10 @@
     _currentMonth = [dateComponent month];
 }
 
--(void)SingleTap:(id)sender{
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
     [self removeFromSuperview];
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
