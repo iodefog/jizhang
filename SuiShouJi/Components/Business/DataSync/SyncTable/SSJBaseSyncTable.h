@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
+#import "SSJDataSyncHelper.h"
 
 @interface SSJBaseSyncTable : NSObject
 
