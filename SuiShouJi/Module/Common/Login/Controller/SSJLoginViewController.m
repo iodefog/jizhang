@@ -100,10 +100,13 @@
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
+    
     if ([self.loginService.returnCode isEqualToString: @"1"]) {
         __block NSError *error = nil;
         __block BOOL fundInfoSuccess = true;
         __block BOOL userBillSuccess = true;
+        
+        //  merge登陆接口返回的收支类型和资金帐户
         [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
             fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
             userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
@@ -112,6 +115,8 @@
                 return;
             }
         }];
+        
+        //  merge成功后才算登陆成功
         if (userBillSuccess && fundInfoSuccess) {
             
             SSJSaveAppId(self.loginService.appid);
@@ -119,10 +124,11 @@
             SSJSaveUserLogined(YES);
             SSJSetUserId(self.loginService.item.cuserid);
             
-            //  如果没有返回当前用户的收支类型，则创建
+            //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
             if (self.loginService.userBillArray.count == 0) {
-                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:NULL failure:NULL];
-                [SSJUserDefaultDataCreater createDefaultFundAccountsWithSuccess:NULL failure:NULL];
+                [SSJUserTableManager saveCurrentUserIdWithError:nil];
+                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+                [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
             }
             
             //  如果是9188帐户，则将当前的userid标记为已注册
@@ -137,7 +143,9 @@
             
             //  登陆成功后强制同步一次
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+            
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+<<<<<<< HEAD
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
                 [CDAutoHideMessageHUD showMessage:@"登录成功"];
@@ -148,6 +156,15 @@
                     [self ssj_backOffAction];
                 }
             });
+=======
+            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
+            [CDAutoHideMessageHUD showMessage:@"登录成功"];
+            if (self.finishHandle) {
+                self.finishHandle(self);
+            } else {
+                [self ssj_backOffAction];
+            }
+>>>>>>> df78f303df442db46c470ad32cd4a3a31f9b8d54
         }
     }
 }

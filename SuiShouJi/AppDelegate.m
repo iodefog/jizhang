@@ -107,51 +107,34 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
 
 //  初始化数据库
 - (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
-    NSLog(@"<<< 开始初始化数据库 >>>");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *dbDocumentPath = SSJSQLitePath();
-        NSLog(@"%@",dbDocumentPath);
+        SSJPRINT(@"%@", dbDocumentPath);
+        
+        NSError *error = nil;
+        
         if (![[NSFileManager defaultManager] fileExistsAtPath:dbDocumentPath]) {
             //  迁移数据库到document中
             NSString *dbBundlePath = [[NSBundle mainBundle] pathForResource:@"mydatabase" ofType:@"db"];
-            NSError *error = nil;
             
             if (![[NSFileManager defaultManager] copyItemAtPath:dbBundlePath toPath:dbDocumentPath error:&error]) {
                 SSJPRINT(@"move database error:%@",[error localizedDescription]);
             }
             
             //  载入用户id
-            [SSJUserTableManager reloadUserIdWithSuccess:^{
-                
-            } failure:^(NSError *error) {
-                
-            }];
+            [SSJUserTableManager reloadUserIdWithError:nil];
             
             //  创建默认的同步表记录
-            [SSJUserDefaultDataCreater createDefaultSyncRecordWithSuccess:^{
-                
-            } failure:^(NSError *error) {
-                
-            }];
+            [SSJUserDefaultDataCreater createDefaultSyncRecordWithError:nil];
             
             //  创建默认的资金帐户
-            [SSJUserDefaultDataCreater createDefaultFundAccountsWithSuccess:^{
-                
-            } failure:^(NSError *error) {
-                
-            }];
+            [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
         }
 
         //  创建默认的收支类型
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:^{
-            
-        } failure:^(NSError *error) {
-            
-        }];
+        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
         finishHandler();
-        
-        NSLog(@"<<< 完成初始化数据库 >>>");
     });
 }
 

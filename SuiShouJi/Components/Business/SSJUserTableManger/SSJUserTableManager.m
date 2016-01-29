@@ -20,40 +20,53 @@
 //    return cache;
 //}
 
-+ (void)reloadUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
++ (void)reloadUserIdWithError:(NSError **)error {
+    __block NSError *tError = nil;
+    
     if (SSJUSERID().length) {
+        tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current userid is invalid"}];
+        SSJPRINT(@">>> SSJ warning:current userid is invalid");
+        if (error) {
+            *error = tError;
+        }
         return;
     }
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
 
-        NSError *error = nil;
-        NSString *tUserId = [self unregisteredUserIdInDatabase:db error:&error];
+        NSString *tUserId = [self unregisteredUserIdInDatabase:db error:&tError];
         
-        if (error) {
-            failure(error);
+        if (tError) {
+            if (error) {
+                *error = tError;
+            }
             return;
         }
         
         if (tUserId.length) {
             SSJSetUserId(tUserId);
-            if (success) {
-                success();
-            }
             return;
         }
         
         tUserId = SSJUUID();
         if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, 0, 0)", tUserId]) {
-            if (failure) {
-                failure([db lastError]);
+            tError = [db lastError];
+            if (error) {
+                *error = tError;
             }
             return;
         }
         
         SSJSetUserId(tUserId);
-        if (success) {
-            success();
+    }];
+}
+
++ (void)saveCurrentUserIdWithError:(NSError **)error {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) select ?, 1, 0 where not exists (select count(*) from BK_USER where cuserid = ?)", SSJUSERID(), SSJUSERID()]) {
+            if (error) {
+                *error = [db lastError];
+            }
         }
     }];
 }
