@@ -249,14 +249,6 @@
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
     }
-<<<<<<< HEAD
-=======
-//    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-//    if (![db open]) {
-//        NSLog(@"Could not open db");
-//        return;
-//    }
->>>>>>> 517d2256e7d7b36507b19551d7cb9a0feef83e57
     __weak typeof(self) weakSelf = self;
     __block NSString *currentDateStr = [[NSDate date]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db,BOOL *rollback){
