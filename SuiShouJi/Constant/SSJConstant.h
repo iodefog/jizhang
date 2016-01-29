@@ -59,6 +59,8 @@ extern NSString *const SSJHaveLoginOrRegistKey;
 //  同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
 
+//  登录或者注册成功通知
+extern NSString *const SSJLoginOrRegisterNotification;
 
 
 

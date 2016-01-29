@@ -95,9 +95,6 @@
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
-    if ([cell.item.categoryTitle isEqualToString:@"添加"]) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"addButtonClickedNotification" object:nil];
-    }
     if (self.ItemClickedBlock) {
         self.ItemClickedBlock(cell.item);
     }

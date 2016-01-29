@@ -52,33 +52,32 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSTimeZone *zone = [NSTimeZone systemTimeZone];
-        NSString *currentDateStr = [[NSDate alloc]ssj_systemCurrentDateWithFormat:nil];
-        NSInteger interval = [zone secondsFromGMTForDate:[formatter dateFromString:currentDateStr]];
-        NSDate *currentDate = [[formatter dateFromString:currentDateStr]  dateByAddingTimeInterval:interval];
-        NSString *lastPopTimeStr =[[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
-        NSDate *lastPopTime = [[formatter dateFromString:lastPopTimeStr]  dateByAddingTimeInterval:interval];
-        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
-        int days=((int)time)/(3600*24);
-        if (days > 14) {
-            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
-            popView.frame = [UIScreen mainScreen].bounds;
-            __weak typeof(self) weakSelf = self;
-            popView.loginBtnClickBlock = ^(){
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            };
-            popView.registerBtnClickBlock = ^(){
-                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
-                registerVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:registerVC animated:YES];
-            };
-            [[UIApplication sharedApplication].keyWindow addSubview:popView];
-            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
-        }
+//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//        NSTimeZone *zone = [NSTimeZone systemTimeZone];
+//        NSString *currentDateStr = [[NSDate date]ssj_systemCurrentDateWithFormat:nil];
+//        NSInteger interval = [zone secondsFromGMTForDate:[formatter dateFromString:currentDateStr]];
+//        NSDate *currentDate = [[formatter dateFromString:currentDateStr]  dateByAddingTimeInterval:interval];
+//        NSDate *lastPopTime = [[[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey]  dateByAddingTimeInterval:interval];
+//        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
+//        int days=((int)time)/(3600*24);
+//        if (days > 14) {
+//            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
+//            popView.frame = [UIScreen mainScreen].bounds;
+//            __weak typeof(self) weakSelf = self;
+//            popView.loginBtnClickBlock = ^(){
+//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+//                loginVC.backController = weakSelf;
+//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+//            };
+//            popView.registerBtnClickBlock = ^(){
+//                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
+//                registerVC.backController = weakSelf;
+//                [weakSelf.navigationController pushViewController:registerVC animated:YES];
+//            };
+//            [[UIApplication sharedApplication].keyWindow addSubview:popView];
+//            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
+//        }
     }
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];

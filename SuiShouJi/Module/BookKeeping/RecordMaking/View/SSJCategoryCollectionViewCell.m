@@ -103,7 +103,7 @@
 -(void)removeCategory:(id)sender{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate alloc]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],[NSNumber numberWithInt:1],self.item.categoryID,SSJUSERID()];
+        [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = ? WHERE CBILLID = ? AND CUSERID = ? ",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],[NSNumber numberWithInt:1],self.item.categoryID,SSJUSERID()];
         SSJDispatch_main_async_safe(^(){
             if (weakSelf.removeCategoryBlock) {
                 weakSelf.removeCategoryBlock();
