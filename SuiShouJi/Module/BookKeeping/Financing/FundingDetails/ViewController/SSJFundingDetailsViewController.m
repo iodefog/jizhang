@@ -50,8 +50,9 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:kFundingDetailHeaderViewID];
     self.tableView.tableHeaderView = self.header;
     [self getTotalIcomeAndExpence];
+    __weak typeof(self) weakSelf = self;
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
-        self.datas = data;
+        weakSelf.datas = data;
         [self.tableView reloadData];
     } failure:^(NSError *error) {
     }];
@@ -60,7 +61,6 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self getTotalIcomeAndExpence];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -157,6 +157,15 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     [self.navigationController pushViewController:newFundingVC animated:YES];
 }
 
+-(void)reloadDataAfterSync{
+    __weak typeof(self) weakSelf = self;
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
+        weakSelf.datas = data;
+        [weakSelf.tableView reloadData];
+    } failure:^(NSError *error) {
+    }];
+    [self getTotalIcomeAndExpence];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

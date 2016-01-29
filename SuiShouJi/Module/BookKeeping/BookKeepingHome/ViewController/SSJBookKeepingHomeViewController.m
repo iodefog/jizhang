@@ -260,6 +260,10 @@
     _currentMonth = [dateComponent month];
 }
 
+-(void)reloadDataAfterSync{
+    [self getDateFromDatebase];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
