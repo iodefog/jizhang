@@ -183,12 +183,11 @@
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSInteger existedLength = textField.text.length;
+    NSInteger selectedLength = range.length;
+    NSInteger replaceLength = string.length;
     if (textField == _nameTextField || textField == _memoTextField) {
         if (string.length == 0) return YES;
-        
-        NSInteger existedLength = textField.text.length;
-        NSInteger selectedLength = range.length;
-        NSInteger replaceLength = string.length;
         if (existedLength - selectedLength + replaceLength > 13) {
             if (textField == _nameTextField) {
                 [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
@@ -200,7 +199,9 @@
     }else if (textField == _amountTextField){
         NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-        return [string isEqualToString:filtered];
+        if (![string isEqualToString:filtered] || (existedLength - selectedLength + replaceLength > 13)) {
+            return NO;
+        }
     }
     return YES;
 }
@@ -249,11 +250,6 @@
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
     }
-//    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-//    if (![db open]) {
-//        NSLog(@"Could not open db");
-//        return;
-//    }
     __weak typeof(self) weakSelf = self;
     __block NSString *currentDateStr = [[NSDate date]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db,BOOL *rollback){
