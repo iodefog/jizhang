@@ -32,6 +32,10 @@
         [self addSubview:self.tableview];
 //        [self addSubview:self.addNewTypeButtonView];
         [self addSubview:self.titleView];
+        UITapGestureRecognizer* singleRecognizer;
+        singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTap:)];
+        singleRecognizer.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:singleRecognizer];
     }
     return self;
 }
@@ -162,6 +166,10 @@
             [weakSelf.tableView reloadData];
         });
     }];
+}
+
+-(void)SingleTap:(id)sender{
+    [self removeFromSuperview];
 }
 
 -(void)reloadDate{

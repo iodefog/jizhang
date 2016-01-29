@@ -141,6 +141,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
                 [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
                 if (self.finishHandle) {
                     self.finishHandle(self);
                 } else {

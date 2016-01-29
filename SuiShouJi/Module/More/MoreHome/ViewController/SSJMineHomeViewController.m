@@ -36,6 +36,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"个人中心";
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -43,12 +44,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
+    if (SSJIsUserLogined()) {
+        [self.userInfoService requestUserInfo];
+    }
+    [self.tableView reloadData];
     _titleForSectionTwoArray = [[NSArray alloc]initWithObjects:@"同步设置",@"关于我们",@"用户协议与隐私说明", nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateUserInfo) name:SSJLoginOrRegisterNotification object:nil];
 }
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.userInfoService cancel];
 }
 
 #pragma mark - Getter
@@ -158,6 +168,7 @@
     SSJMineHomeTabelviewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     if (indexPath.section == 0) {
         mineHomeCell.cellTitle = @"给个好评";
@@ -264,6 +275,7 @@
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^{
         self.header.headPotraitImage.image = image;
         [self.tableView reloadData];
+        [SSJUserDefaultDataCreater createDefaultFundAccountsWithSuccess:NULL failure:NULL];
     }];
 }
 

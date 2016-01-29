@@ -28,6 +28,8 @@ NSString *const SSJLastPopTimeKey = @"lastPopTimeKey";
 
 NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";
 
+NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";
+
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
 NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";

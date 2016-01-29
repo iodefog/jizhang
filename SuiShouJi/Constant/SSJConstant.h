@@ -56,6 +56,9 @@ extern NSString *const SSJLastPopTimeKey;
 //保存是否登录或者注册过
 extern NSString *const SSJHaveLoginOrRegistKey;
 
+//是否进入过资金账户首页
+extern NSString *const SSJHaveEnterFundingHomeKey;
+
 //  同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
 

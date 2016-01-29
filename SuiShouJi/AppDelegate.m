@@ -32,13 +32,13 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
     }
     //  添加友盟统计
     [self umengTrack];
-    
     //  初始化数据库
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
