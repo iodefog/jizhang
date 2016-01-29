@@ -169,6 +169,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
                 [self addSubview:additionView];
                 [self.additionViews addObject:additionView];
             }
+            
+//            [self addSubview:additionView];
+//            [self.additionViews addObject:additionView];
         }
     }
 }

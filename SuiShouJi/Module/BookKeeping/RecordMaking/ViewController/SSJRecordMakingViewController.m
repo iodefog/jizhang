@@ -110,6 +110,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         }else{
             NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey];
             _selectItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
+            [self updateFundingType];
         }
     }
     [self settitleSegment];
@@ -391,14 +392,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_inputAccessoryView ) {
         _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _inputAccessoryView.backgroundColor = [UIColor whiteColor];
-        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
-        [_fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
-        _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [_fundingTypeButton setImage:[UIImage imageNamed:_selectItem.fundingIcon] forState:UIControlStateNormal];
-        [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_inputAccessoryView addSubview:_fundingTypeButton];
+        
+        [_inputAccessoryView addSubview:self.fundingTypeButton];
         self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
         _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
@@ -413,6 +408,24 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [self.datePickerButton addSubview:self.calendarView];
     }
     return _inputAccessoryView;
+}
+
+- (UIButton *)fundingTypeButton {
+    if (!_fundingTypeButton) {
+        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
+        _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _fundingTypeButton;
+}
+
+- (void)updateFundingType {
+    [self.fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
+    [self.fundingTypeButton setImage:[UIImage imageNamed:_selectItem.fundingIcon] forState:UIControlStateNormal];
+    
+    self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
 }
 
 -(SSJDateSelectedView*)DateSelectedView{
@@ -450,12 +463,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_FundingTypeSelectView) {
         __weak typeof(self) weakSelf = self;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        _FundingTypeSelectView.selectFundID = _selectItem.fundingID;
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
-                [weakSelf.fundingTypeButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-                [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                 _selectItem = fundingItem;
+                [weakSelf updateFundingType];
                  NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
                 [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:SSJLastSelectFundItemKey];
             }else{
@@ -465,6 +476,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [weakSelf.fundingTypeButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
                     [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
                     _selectItem = newFundingItem;
+                    [weakSelf updateFundingType];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
@@ -674,22 +686,29 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
             _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
         }
-        _selectItem = _defualtItem;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _selectItem = _defualtItem;
+            [self updateFundingType];
+        });
     }];
 }
 
 -(void)getSelectedFundingType{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundID];
-        _selectItem = [[SSJFundingItem alloc]init];
+        _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
-            _selectItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-            _selectItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-            _selectItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-            _selectItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-            _selectItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-            _selectItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+            _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            _defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            _defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+            _defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+            _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _selectItem = _defualtItem;
+            [self updateFundingType];
+        });
     }];
 }
 
