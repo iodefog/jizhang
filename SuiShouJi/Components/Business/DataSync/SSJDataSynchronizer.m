@@ -22,6 +22,7 @@
 
 #import <ZipZap/ZipZap.h>
 
+//  定时同步时间间隔
 static NSTimeInterval kSyncInterval = 60 * 60;
 
 //  同步文件名称
@@ -76,13 +77,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)syncData {
-    if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWiFi) {
-        
-        [self startSyncWithSuccess:^{
-            
-        } failure:^(NSError *error) {
-            
-        }];
+    if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWWAN
+        || [AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWiFi) {
+        [self startSyncWithSuccess:NULL failure:NULL];
     }
 }
 

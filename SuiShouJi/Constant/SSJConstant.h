@@ -24,6 +24,11 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
     SSJRegistAndForgetPasswordTypeForgetPassword    //  忘记密码
 };
 
+typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
+    SSJSyncSettingTypeWIFI,
+    SSJSyncSettingTypeWWAN
+};
+
 //  自定义错误码，从10000开始
 typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeUndefined = 10000,

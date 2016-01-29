@@ -26,7 +26,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self loadSelectedIndex];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self saveSetting];
 }
 
 #pragma mark - UITableViewDelegate
@@ -38,7 +43,7 @@
     return 10;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
     return footerView;
 }
@@ -46,15 +51,12 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     _selectedIndex = indexPath;
-    [tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 2;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -74,20 +76,25 @@
     return mineHomeCell;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)saveSetting {
+    if ([_selectedIndex compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
+        SSJSaveSyncSetting(SSJSyncSettingTypeWIFI);
+    } else if ([_selectedIndex compare:[NSIndexPath indexPathForRow:1 inSection:0]] == NSOrderedSame) {
+        SSJSaveSyncSetting(SSJSyncSettingTypeWWAN);
+    }
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)loadSelectedIndex {
+    SSJSyncSettingType setting = SSJSyncSetting();
+    switch (setting) {
+        case SSJSyncSettingTypeWIFI:
+            _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+            break;
+            
+        case SSJSyncSettingTypeWWAN:
+            _selectedIndex = [NSIndexPath indexPathForRow:1 inSection:0];
+            break;
+    }
 }
-*/
 
 @end
