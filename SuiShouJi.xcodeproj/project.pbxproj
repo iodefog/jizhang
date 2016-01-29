@@ -381,6 +381,8 @@
 		BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */; };
 		BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */; };
 		BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */; };
+		BDD8817B1C5B642600B6FC02 /* SSJFinancingHomePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD881791C5B642600B6FC02 /* SSJFinancingHomePopView.m */; };
+		BDD8817C1C5B642600B6FC02 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD8817A1C5B642600B6FC02 /* SSJFinancingHomePopView.xib */; };
 		BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */; };
 		BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDDC5B921C291ADF00FC2887 /* SSJDateSelectedView.m */; };
 		BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */; };
@@ -939,6 +941,9 @@
 		BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarView.m; sourceTree = "<group>"; };
 		BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeTableViewCell.h; sourceTree = "<group>"; };
 		BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeTableViewCell.m; sourceTree = "<group>"; };
+		BDD881781C5B642600B6FC02 /* SSJFinancingHomePopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomePopView.h; sourceTree = "<group>"; };
+		BDD881791C5B642600B6FC02 /* SSJFinancingHomePopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomePopView.m; sourceTree = "<group>"; };
+		BDD8817A1C5B642600B6FC02 /* SSJFinancingHomePopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJFinancingHomePopView.xib; sourceTree = "<group>"; };
 		BDDC5B8A1C2850D500FC2887 /* SSJCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionViewCell.h; sourceTree = "<group>"; };
 		BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionViewCell.m; sourceTree = "<group>"; };
 		BDDC5B911C291ADF00FC2887 /* SSJDateSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDateSelectedView.h; sourceTree = "<group>"; };
@@ -1259,9 +1264,7 @@
 				7DD7D6521C4C8E6A00ACE71A /* founds_zhuanchu@3x.png */,
 				7DD7D6531C4C8E6A00ACE71A /* founds_zhuanru@2x.png */,
 				7DD7D6541C4C8E6A00ACE71A /* founds_zhuanru@3x.png */,
-				BDA3FE161C5B409C00FB57B1 /* founds_pop@2x.png */,
 				BDF069A61C5B4CCB001430BB /* founds_pop@3x.png */,
-				BDA3FE181C5B445000FB57B1 /* founds_pop2@2x.png */,
 				BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */,
 				BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */,
 				BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */,
@@ -2266,6 +2269,9 @@
 		BD7BC8261C3A1A0F001DE5D8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BDD881781C5B642600B6FC02 /* SSJFinancingHomePopView.h */,
+				BDD881791C5B642600B6FC02 /* SSJFinancingHomePopView.m */,
+				BDD8817A1C5B642600B6FC02 /* SSJFinancingHomePopView.xib */,
 				BD7BC8271C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.h */,
 				BD7BC8281C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m */,
 			);
@@ -2740,6 +2746,7 @@
 				7DD7D69B1C4C8E6A00ACE71A /* bt_digital@3x.png in Resources */,
 				BDF069AD1C5B4D01001430BB /* white_jiantou@2x.png in Resources */,
 				7DE6E85F1C55BA7B001C9138 /* login_lock@2x.png in Resources */,
+				BDD8817C1C5B642600B6FC02 /* SSJFinancingHomePopView.xib in Resources */,
 				7DD7D6BB1C4C8E6A00ACE71A /* bt_marry@3x.png in Resources */,
 				7DD7D6FE1C4C8E6A00ACE71A /* founds_zhuanru@2x.png in Resources */,
 				7DD7D6CC1C4C8E6A00ACE71A /* bt_repair@2x.png in Resources */,
@@ -2957,6 +2964,7 @@
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
 				7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */,
+				BDD8817B1C5B642600B6FC02 /* SSJFinancingHomePopView.m in Sources */,
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
