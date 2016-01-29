@@ -188,8 +188,8 @@
         </view>
     </objects>
     <resources>
-        <image name="founds_pop.png" width="94" height="85"/>
-        <image name="founds_pop2.png" width="72" height="59"/>
+        <image name="founds_pop.png" width="82" height="91"/>
+        <image name="founds_pop2.png" width="80" height="66"/>
         <image name="white_jiantou.png" width="52" height="52"/>
     </resources>
 </document>
