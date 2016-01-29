@@ -96,6 +96,7 @@
                     SSJSaveUserLogined(YES);
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                 }
                 
                 [self.passwordField resignFirstResponder];

@@ -122,6 +122,7 @@
             //  如果没有返回当前用户的收支类型，则创建
             if (self.loginService.userBillArray.count == 0) {
                 [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithSuccess:NULL failure:NULL];
+                [SSJUserDefaultDataCreater createDefaultFundAccountsWithSuccess:NULL failure:NULL];
             }
             
             //  如果是9188帐户，则将当前的userid标记为已注册
