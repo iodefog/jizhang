@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */; };
 		7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */; };
 		7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */; };
@@ -409,6 +410,8 @@
 
 /* Begin PBXFileReference section */
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7D09ECAD1C5B0FA200C85D8E /* SSJDataSyncHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSyncHelper.h; sourceTree = "<group>"; };
+		7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSyncHelper.m; sourceTree = "<group>"; };
 		7D2B23F11C3A1225009A74A8 /* SSJBillingChargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeViewController.h; sourceTree = "<group>"; };
 		7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeViewController.m; sourceTree = "<group>"; };
 		7D2B23F41C3A14D8009A74A8 /* SSJBillingChargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeCell.h; sourceTree = "<group>"; };
@@ -992,6 +995,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7D09ECAC1C5B0F8300C85D8E /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				7D09ECAD1C5B0FA200C85D8E /* SSJDataSyncHelper.h */,
+				7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		7D2B23ED1C3A11EC009A74A8 /* BillingCharge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1044,6 +1056,7 @@
 		7D2B24011C3AA3AD009A74A8 /* DataSync */ = {
 			isa = PBXGroup;
 			children = (
+				7D09ECAC1C5B0F8300C85D8E /* Helper */,
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
 				7D2B241A1C3E091B009A74A8 /* SSJDataSynchronizer.h */,
@@ -2943,6 +2956,7 @@
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
 				BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */,
+				7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */,
 				7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,

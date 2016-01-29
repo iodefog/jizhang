@@ -89,6 +89,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 #warning test
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
+        
+        //  开始同步前保存当前的用户id，防止同步过程中userid被修改导致同步数据错乱
+        SSJSetCurrentSyncUserId(SSJUSERID());
+        
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
             [self syncDataWithSuccess:^{
@@ -349,7 +353,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     //  封装参数，传入请求头
-    NSString *userId = SSJUSERID();
+    NSString *userId = SSJCurrentSyncUserId();
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
     NSString *source = SSJDefaultSource();
