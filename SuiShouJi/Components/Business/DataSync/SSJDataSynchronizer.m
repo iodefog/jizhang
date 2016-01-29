@@ -143,7 +143,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     } else {
         SSJPRINT(@">>> SSJ warning:there is a sync task in progress");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncBusy userInfo:@{NSLocalizedDescriptionKey:@"there is a sync task in progress"}];
-        failure(error);
+        if (failure) {
+            failure(error);
+        }
     }
 }
 
