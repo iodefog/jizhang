@@ -28,17 +28,15 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self getDateFromDb];
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+
+//        UIView *backView = [[UIView alloc]initWithFrame:self.frame];
         [self addSubview:self.tableview];
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
 //        [self addSubview:self.addNewTypeButtonView];
         [self addSubview:self.titleView];
-        UITapGestureRecognizer* singleRecognizer;
-        singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SingleTap:)];
-        singleRecognizer.numberOfTapsRequired = 1;
-        [self addGestureRecognizer:singleRecognizer];
     }
     return self;
-}
+}      
 
 -(void)layoutSubviews{
     self.tableview.bottom = self.height;
@@ -125,6 +123,9 @@
     return _titleView;
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
+    [self removeFromSuperview];
+}
 
 #pragma mark - private
 -(void)closeButtonClicked:(UIButton*)button{
@@ -168,9 +169,6 @@
     }];
 }
 
--(void)SingleTap:(id)sender{
-    [self removeFromSuperview];
-}
 
 -(void)reloadDate{
     [self getDateFromDb];

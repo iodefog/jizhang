@@ -386,6 +386,10 @@
 		BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */; };
 		BDEA87321C50C415002681BD /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDEA87311C50C415002681BD /* delete@2x.png */; };
 		BDEA87361C50D0D7002681BD /* delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDEA87351C50D0D7002681BD /* delete@3x.png */; };
+		BDF069A71C5B4CCB001430BB /* founds_pop@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069A61C5B4CCB001430BB /* founds_pop@3x.png */; };
+		BDF069A91C5B4CE1001430BB /* founds_pop2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */; };
+		BDF069AB1C5B4CFD001430BB /* white_jiantou@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */; };
+		BDF069AD1C5B4D01001430BB /* white_jiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */; };
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
@@ -943,6 +947,10 @@
 		BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSmallCalendarView.m; sourceTree = "<group>"; };
 		BDEA87311C50C415002681BD /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete@2x.png"; sourceTree = "<group>"; };
 		BDEA87351C50D0D7002681BD /* delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete@3x.png"; sourceTree = "<group>"; };
+		BDF069A61C5B4CCB001430BB /* founds_pop@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_pop@3x.png"; sourceTree = "<group>"; };
+		BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_pop2@3x.png"; sourceTree = "<group>"; };
+		BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_jiantou@3x.png"; sourceTree = "<group>"; };
+		BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_jiantou@2x.png"; sourceTree = "<group>"; };
 		BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarButton.h; sourceTree = "<group>"; };
 		BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarButton.m; sourceTree = "<group>"; };
 		BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewControllerViewController.h; sourceTree = "<group>"; };
@@ -1251,6 +1259,12 @@
 				7DD7D6521C4C8E6A00ACE71A /* founds_zhuanchu@3x.png */,
 				7DD7D6531C4C8E6A00ACE71A /* founds_zhuanru@2x.png */,
 				7DD7D6541C4C8E6A00ACE71A /* founds_zhuanru@3x.png */,
+				BDA3FE161C5B409C00FB57B1 /* founds_pop@2x.png */,
+				BDF069A61C5B4CCB001430BB /* founds_pop@3x.png */,
+				BDA3FE181C5B445000FB57B1 /* founds_pop2@2x.png */,
+				BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */,
+				BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */,
+				BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */,
 				7DD7D6551C4C8E6A00ACE71A /* fundTypeImage */,
 				7DD7D6681C4C8E6A00ACE71A /* home_calender@2x.png */,
 				7DD7D6691C4C8E6A00ACE71A /* home_delet@2x.png */,
@@ -2581,6 +2595,7 @@
 				7DD7D69A1C4C8E6A00ACE71A /* bt_digital@2x.png in Resources */,
 				7DD7D6CB1C4C8E6A00ACE71A /* bt_recharge@3x.png in Resources */,
 				BD976FAA1C4E4A4600B0E26D /* home_jiantou.png in Resources */,
+				BDF069A91C5B4CE1001430BB /* founds_pop2@3x.png in Resources */,
 				BD37D2E41C55D4210050BDAA /* defualt_portrait@2x.png in Resources */,
 				7DD7D6891C4C8E6A00ACE71A /* bt_baby@3x.png in Resources */,
 				7DD7D6A51C4C8E6A00ACE71A /* bt_fuli@3x.png in Resources */,
@@ -2631,6 +2646,7 @@
 				7DD7D6E81C4C8E6A00ACE71A /* bt_yiwai@2x.png in Resources */,
 				7DD7D7221C4C8E6A00ACE71A /* tab_accounte_nor@2x.png in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
+				BDF069AB1C5B4CFD001430BB /* white_jiantou@3x.png in Resources */,
 				7DD7D6E41C4C8E6A00ACE71A /* bt_water@2x.png in Resources */,
 				BDA3FDFE1C58CAC400FB57B1 /* ft_wangluochongzhi@3x.png in Resources */,
 				7DD7D69F1C4C8E6A00ACE71A /* bt_entertainment@3x.png in Resources */,
@@ -2722,6 +2738,7 @@
 				BDA3FE081C5903A800FB57B1 /* home_tankuang@2x.png in Resources */,
 				7DD7D6901C4C8E6A00ACE71A /* bt_clean@2x.png in Resources */,
 				7DD7D69B1C4C8E6A00ACE71A /* bt_digital@3x.png in Resources */,
+				BDF069AD1C5B4D01001430BB /* white_jiantou@2x.png in Resources */,
 				7DE6E85F1C55BA7B001C9138 /* login_lock@2x.png in Resources */,
 				7DD7D6BB1C4C8E6A00ACE71A /* bt_marry@3x.png in Resources */,
 				7DD7D6FE1C4C8E6A00ACE71A /* founds_zhuanru@2x.png in Resources */,
@@ -2735,6 +2752,7 @@
 				7DD7D68B1C4C8E6A00ACE71A /* bt_baoxiao@3x.png in Resources */,
 				7DD7D68F1C4C8E6A00ACE71A /* bt_car@3x.png in Resources */,
 				7DD7D6B31C4C8E6A00ACE71A /* bt_investment@3x.png in Resources */,
+				BDF069A71C5B4CCB001430BB /* founds_pop@3x.png in Resources */,
 				7DD7D6AF1C4C8E6A00ACE71A /* bt_house@3x.png in Resources */,
 				BDA3FE0E1C5904D200FB57B1 /* home_tankuang_close@3x.png in Resources */,
 				7DD7D6BD1C4C8E6A00ACE71A /* bt_medicine@3x.png in Resources */,

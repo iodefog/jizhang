@@ -12,6 +12,7 @@
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
 #import "SSJNewFundingViewController.h"
+#import "SSJFinancingHomePopView.h"
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
@@ -47,6 +48,12 @@
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getDateFromDateBase];
+    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
+        SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] objectAtIndex:0];
+        popView.frame = [UIScreen mainScreen].bounds;
+        [[UIApplication sharedApplication].keyWindow addSubview:popView];
+        [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveEnterFundingHomeKey];
+    }
 }
 
 -(void)viewDidLayoutSubviews{
