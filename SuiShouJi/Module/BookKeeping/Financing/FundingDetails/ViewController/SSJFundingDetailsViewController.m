@@ -147,7 +147,6 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
             [weakSelf.tableView reloadData];
         });
     }];
-
 }
 
 -(void)rightButtonClicked:(id)sender{

@@ -93,9 +93,12 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
             [self syncDataWithSuccess:^{
+#ifdef DEBUG
                 SSJDispatch_main_async_safe(^{
                     [CDAutoHideMessageHUD showMessage:@"同步成功"];
                 });
+#endif
+                
                 SSJDispatch_main_async_safe(^{
                     if (success) {
                         success();
@@ -104,9 +107,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 });
                 
             } failure:^(NSError *error) {
+#ifdef DEBUG
                 SSJDispatch_main_async_safe(^{
                     [self showError:error];
                 });
+#endif
                 SSJDispatch_main_async_safe(^{
                     if (failure) {
                         failure(error);
@@ -116,9 +121,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         } else {
             dispatch_async(self.syncQueue, ^{
                 [self syncDataWithSuccess:^{
+#ifdef DEBUG
                     SSJDispatch_main_async_safe(^{
                         [CDAutoHideMessageHUD showMessage:@"同步成功"];
                     });
+#endif
                     SSJDispatch_main_async_safe(^{
                         if (success) {
                             success();
@@ -127,10 +134,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                     });
                     
                 } failure:^(NSError *error) {
+#ifdef DEBUG
                     SSJDispatch_main_async_safe(^{
-//                        NSLog(@"%@", error);
                         [self showError:error];
                     });
+#endif
                     SSJDispatch_main_async_safe(^{
                         if (failure) {
                             failure(error);
