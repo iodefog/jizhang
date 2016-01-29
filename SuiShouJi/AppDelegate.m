@@ -33,7 +33,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     if (SSJIsFirstLaunchForCurrentVersion()) {
-        [[NSUserDefaults standardUserDefaults]setObject:[[NSDate date]ssj_systemCurrentDateWithFormat:nil] forKey:SSJLastPopTimeKey];
+        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
     }
     //  添加友盟统计
