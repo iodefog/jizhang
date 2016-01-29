@@ -224,26 +224,18 @@
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
--(void)quitLogButtonClicked:(id)sender{
+-(void)quitLogButtonClicked:(id)sender {
     //  退出登陆后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-        [self quiteLogin];
-    } failure:^(NSError *error) {
-        [self quiteLogin];
-    }];
-}
-
-- (void)quiteLogin {
-    SSJClearLoginInfo();
-    [self.tableView reloadData];
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     
-    //  如果还有未注册的userid，就作为当前的userid；反之新建一个userid
-    [SSJUserTableManager reloadUserIdWithSuccess:^(){
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-    }failure:NULL];
+    SSJClearLoginInfo();
+    
+    [SSJUserTableManager reloadUserIdWithError:nil];
+    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
     
     self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
     self.header.nicknameLabel.text = @"待君登录";
+    
     [self.tableView reloadData];
 }
 
@@ -266,22 +258,5 @@
         [self.tableView reloadData];
     }];
 }
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -11,17 +11,11 @@
 
 @implementation SSJUserDefaultDataCreater
 
-+ (void)createDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
++ (void)createDefaultSyncRecordWithError:(NSError **)error {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultSyncRecordInDatabase:db];
+        NSError *tError = [self createDefaultSyncRecordInDatabase:db];
         if (error) {
-            if (failure) {
-                failure(error);
-            }
-        } else {
-            if (success) {
-                success();
-            }
+            *error = tError;
         }
     }];
 }
@@ -41,18 +35,12 @@
     }];
 }
 
-+ (void)createDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
++ (void)createDefaultFundAccountsWithError:(NSError **)error {
     //  创建默认的资金帐户
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultFundAccountsInDatabase:db];
+        NSError *tError = [self createDefaultFundAccountsInDatabase:db];
         if (error) {
-            if (failure) {
-                failure(error);
-            }
-        } else {
-            if (success) {
-                success();
-            }
+            *error = tError;
         }
     }];
 }
@@ -73,17 +61,11 @@
     }];
 }
 
-+ (void)createDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
++ (void)createDefaultBillTypesIfNeededWithError:(NSError **)error {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultBillTypesIfNeededInDatabase:db];
+        NSError *tError = [self createDefaultBillTypesIfNeededInDatabase:db];
         if (error) {
-            if (failure) {
-                failure(error);
-            }
-        } else {
-            if (success) {
-                success();
-            }
+            *error = tError;
         }
     }];
 }
