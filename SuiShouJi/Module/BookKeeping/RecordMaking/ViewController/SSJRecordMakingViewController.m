@@ -123,7 +123,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.categoryListView];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addNewType) name:@"addNewTypeNotification" object:nil];
      _intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
     _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
 }
@@ -694,10 +693,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     }];
 }
 
--(void)addNewType{
-    [self.categoryListView reloadData];
-}
-
 -(void)getSelectedDateFromDate:(NSString*)date{
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc]init];
     [dateFormater setDateFormat:@"yyyy-MM-dd"];
@@ -712,6 +707,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];
+}
+
+-(void)reloadDataAfterSync{
+    [self.categoryListView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
