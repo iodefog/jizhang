@@ -267,7 +267,7 @@
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^{
         self.header.headPotraitImage.image = image;
         [self.tableView reloadData];
-        [SSJUserDefaultDataCreater createDefaultFundAccountsWithSuccess:NULL failure:NULL];
+        [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
     }];
 }
 
