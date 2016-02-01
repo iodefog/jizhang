@@ -28,4 +28,13 @@
  */
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
+/**
+ *  开始数据同步
+ *
+ *  @param progress  实时返回进度的回调
+ *  @param success  同步成功回调
+ *  @param failure  同步失败回调
+ */
+//- (void)startSyncWithProgress:(void (^)(double progress))progress success:(void (^)(void))success failure:(void (^)(NSError *))failure;
+
 @end

@@ -13,6 +13,8 @@
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
+@property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
+
 @end
 
 @implementation SSJBaseViewController
@@ -26,6 +28,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
     }
     return self;
 }
@@ -172,6 +176,50 @@
 
 - (void)hideKeyboard {
     [self.view endEditing:YES];
+}
+
+- (UIBarButtonItem *)syncLoadingItem {
+    if (!_syncLoadingItem) {
+        UIView *syncLoadingView = [[UIView alloc] init];
+        
+        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [indicator startAnimating];
+        
+        UILabel *label = [[UILabel alloc] init];
+        label.text = @"同步中...";
+        label.font = [UIFont systemFontOfSize:14];
+        [label sizeToFit];
+        
+        [syncLoadingView addSubview:indicator];
+        [syncLoadingView addSubview:label];
+        
+        CGFloat gap = 5;
+        CGFloat width = label.width + indicator.width + gap;
+        CGFloat height = MAX(label.height, indicator.height);
+        syncLoadingView.size = CGSizeMake(width, height);
+        
+        label.left = indicator.right + gap;
+        indicator.centerY = label.centerY = syncLoadingView.height * 0.5;
+        
+        _syncLoadingItem = [[UIBarButtonItem alloc] initWithCustomView:syncLoadingView];
+    }
+    return _syncLoadingItem;
+}
+
+- (void)showSyncLoadingIndicator {
+    NSMutableArray *leftItems = [self.navigationItem.leftBarButtonItems mutableCopy];
+    if (!leftItems) {
+        leftItems = [@[] mutableCopy];
+    }
+    
+    [leftItems addObject:self.syncLoadingItem];
+    [self.navigationItem setLeftBarButtonItems:leftItems animated:YES];
+}
+
+- (void)hideSyncLoadingIndicator {
+    NSMutableArray *leftItems = [self.navigationItem.leftBarButtonItems mutableCopy];
+    [leftItems removeObject:self.syncLoadingItem];
+    [self.navigationItem setLeftBarButtonItems:leftItems animated:YES];
 }
 
 @end

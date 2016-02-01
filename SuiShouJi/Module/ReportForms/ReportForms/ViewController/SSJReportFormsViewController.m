@@ -18,8 +18,8 @@
 #import "SSJBillingChargeViewController.h"
 #import "SSJReportFormsUtil.h"
 
-#warning test
-#import "SSJDataSynchronizer.h"
+//#warning test
+//#import "SSJDataSynchronizer.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -88,22 +88,22 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
     
-    [self setTestItem];
+//    [self setTestItem];
 }
 
-#warning test
-- (void)setTestItem {
-    UIBarButtonItem *testItem = [[UIBarButtonItem alloc] initWithTitle:@"test" style:UIBarButtonItemStylePlain target:self action:@selector(testAction)];
-    self.navigationItem.leftBarButtonItem = testItem;
-}
-
-- (void)testAction {
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-        
-    } failure:^(NSError *error) {
-       
-    }];
-}
+//#warning test
+//- (void)setTestItem {
+//    UIBarButtonItem *testItem = [[UIBarButtonItem alloc] initWithTitle:@"test" style:UIBarButtonItemStylePlain target:self action:@selector(testAction)];
+//    self.navigationItem.leftBarButtonItem = testItem;
+//}
+//
+//- (void)testAction {
+//    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+//        
+//    } failure:^(NSError *error) {
+//       
+//    }];
+//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

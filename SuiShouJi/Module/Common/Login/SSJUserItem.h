@@ -22,4 +22,6 @@
 
 @property (nonatomic,strong) NSString *operatortype;
 
+@property (nonatomic, copy) NSString *cmobileno;
+
 @end

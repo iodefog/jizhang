@@ -25,8 +25,8 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
 };
 
 typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
-    SSJSyncSettingTypeWIFI,
-    SSJSyncSettingTypeWWAN
+    SSJSyncSettingTypeWIFI, //
+    SSJSyncSettingTypeWWAN  //
 };
 
 //  自定义错误码，从10000开始
@@ -70,5 +70,9 @@ extern NSString *const SSJSyncDataSuccessNotification;
 //  登录或者注册成功通知
 extern NSString *const SSJLoginOrRegisterNotification;
 
+//  显示同步中通知
+extern NSString *const SSJShowSyncLoadingNotification;
 
+//  隐藏同步中通知
+extern NSString *const SSJHideSyncLoadingNotification;
 
