@@ -18,6 +18,7 @@
 #import "SSJPortraitUploadNetworkService.h"
 #import "SSJUserInfoNetworkService.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJUserInfoItem.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -57,12 +58,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (SSJIsUserLogined() && ([self.header.nicknameLabel.text isEqualToString:@"待君登录"] || [self.header.nicknameLabel.text isEqualToString:@""])) {
-        [self getMobileNumresult:^(NSString *result) {
-            NSString *phoneNum = [result stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            self.header.nicknameLabel.text = phoneNum;
-        }];
-    }
+    [self getUserInfo:^(SSJUserInfoItem *item){
+        NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        self.header.nicknameLabel.text = phoneNum;
+        [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+    }];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -110,13 +110,6 @@
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
     }
     return _loggedFooterView;
-}
-
--(SSJUserInfoNetworkService *)userInfoService{
-    if (!_userInfoService) {
-        _userInfoService = [[SSJUserInfoNetworkService alloc]initWithDelegate:self];
-    }
-    return _userInfoService;
 }
 
 #pragma mark - UITableViewDelegate
@@ -205,18 +198,6 @@
     }
 }
 
-#pragma mark - SCYBaseNetworkServiceDelegate
--(void)serverDidFinished:(SSJBaseNetworkService *)service{
-    [super serverDidFinished:service];
-    if (service == self.userInfoService) {
-        self.item = self.userInfoService.item;
-        NSString *phoneNum = [self.item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-        self.header.nicknameLabel.text = phoneNum;
-        [self.header.nicknameLabel sizeToFit];
-        [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-    }
-}
-
 #pragma mark - Event
 -(void)takePhoto{
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -266,11 +247,17 @@
     [self.tableView reloadData];
 }
 
--(void)getMobileNumresult:(void (^)(NSString *result))MobileNumresult{
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        NSString *mobileNum = [db stringForQuery:@"SELECT CMOBILENO FROM BK_USER WHERE CUSERID = ?",SSJUSERID()];
+-(void)getUserInfo:(void (^)(SSJUserInfoItem *item))UserInfo{
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER WHERE CUSERID = ?",SSJUSERID()];
+        SSJUserInfoItem *item = [[SSJUserInfoItem alloc]init];
+        while ([rs next]) {
+            item.cuserid = [rs stringForColumn:@"CUSERID"];
+            item.cmobileno = [rs stringForColumn:@"CMOBILENO"];
+            item.cicon = [rs stringForColumn:@"CICONS"];
+        }
         SSJDispatch_main_async_safe(^(){
-            MobileNumresult(mobileNum);
+            UserInfo(item);
         });
     }];
 }
