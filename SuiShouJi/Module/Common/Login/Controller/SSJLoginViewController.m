@@ -161,6 +161,7 @@
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
             [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
             [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
             if (self.finishHandle) {
                 self.finishHandle(self);

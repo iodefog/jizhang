@@ -251,7 +251,7 @@
     
     [SSJUserTableManager reloadUserIdWithError:nil];
     [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-    
+    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
     self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
     self.header.nicknameLabel.text = @"待君登录";
     

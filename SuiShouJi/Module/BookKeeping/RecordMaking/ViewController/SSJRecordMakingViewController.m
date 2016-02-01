@@ -428,7 +428,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 - (void)updateFundingType {
     [self.fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
     [self.fundingTypeButton setImage:[UIImage imageNamed:_selectItem.fundingIcon] forState:UIControlStateNormal];
-    
     self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
 }
 
@@ -552,12 +551,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         NSString *operationTime = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *selectDate;
         selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        SSJFundingItem *fundingType;
-        if (_selectItem == nil) {
-            fundingType = _defualtItem;
-        }else{
-            fundingType = _selectItem;
-        }
+        SSJFundingItem *fundingType = _selectItem;
         if (self.item == nil) {
             if (!_categoryID) {
                 _categoryID = _defualtID;
