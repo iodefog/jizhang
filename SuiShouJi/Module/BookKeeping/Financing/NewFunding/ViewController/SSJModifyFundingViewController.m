@@ -12,6 +12,7 @@
 #import "SSJModifyFundingTableViewCell.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 #import "FMDB.h"
 
@@ -252,7 +253,7 @@
     }
     __weak typeof(self) weakSelf = self;
     __block NSString *currentDateStr = [[NSDate date]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db,BOOL *rollback){
+    [[SSJDatabaseQueue sharedInstance]inTransaction:^(FMDatabase *db,BOOL *rollback){
         if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ?",_nameTextField.text,weakSelf.item.fundingID,SSJUSERID()] > 0){
             dispatch_async(dispatch_get_main_queue(), ^(){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -276,6 +277,13 @@
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });
     }];
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 -(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{
@@ -305,7 +313,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
         __weak typeof(self) weakSelf = self;
-        [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
             [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.fundingID,SSJUSERID()];
             SSJDispatch_main_async_safe(^(){
                 [weakSelf.navigationController popToRootViewControllerAnimated:YES];

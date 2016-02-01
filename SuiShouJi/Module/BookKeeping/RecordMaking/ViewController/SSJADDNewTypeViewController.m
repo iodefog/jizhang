@@ -10,6 +10,7 @@
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 
 @interface SSJADDNewTypeViewController ()
@@ -162,7 +163,13 @@
             }
         });
     }];
-
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 -(void)closeButtonClicked:(id)sender{

@@ -8,6 +8,7 @@
 
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 
 @interface SSJBookKeepingHomeTableViewCell()
@@ -271,6 +272,13 @@
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
     }];
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 @end

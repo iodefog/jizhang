@@ -12,6 +12,7 @@
 #import "SSJColorSelectViewControllerViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJFundingItem.h"
+#import "SSJDataSynchronizer.h"
 
 #import "FMDB.h"
 
@@ -159,13 +160,11 @@
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    
     NSInteger existedLength = textField.text.length;
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
     if (textField == _nameTextField || textField == _memoTextField) {
         if (string.length == 0) return YES;
-
         if (existedLength - selectedLength + replaceLength > 13) {
             if (textField == _nameTextField) {
                 [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
@@ -263,6 +262,13 @@
         if (self.finishBlock) {
             self.finishBlock(item);
         }
+    }
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
     }
     [db close];
     [self.navigationController popViewControllerAnimated:YES];

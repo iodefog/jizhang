@@ -53,7 +53,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     __weak typeof(self) weakSelf = self;
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
         weakSelf.datas = data;
-        [self.tableView reloadData];
+        [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
     }];
 }
@@ -66,12 +66,13 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     _header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+    [self getTotalIcomeAndExpence];
+    __weak typeof(self) weakSelf = self;
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
         self.datas = data;
-        [self.tableView reloadData];
+        [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
     }];
-    [self getTotalIcomeAndExpence];
 }
 
 #pragma mark - UITableViewDataSource
@@ -144,7 +145,6 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
             weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
             [weakSelf.header.totalExpenceLabel sizeToFit];
             weakSelf.title = titleStr;
-            [weakSelf.tableView reloadData];
         });
     }];
 }
