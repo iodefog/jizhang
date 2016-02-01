@@ -22,6 +22,8 @@
 
 #import <ZipZap/ZipZap.h>
 
+static const NSInteger kLargestSyncCount = 5;
+
 //  定时同步时间间隔
 static NSTimeInterval kSyncInterval = 60 * 60;
 
@@ -37,6 +39,8 @@ static NSString *const kSignKey = @"accountbook";
 static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpecificKey;
 
 @interface SSJDataSynchronizer ()
+
+@property (nonatomic, strong) NSMutableArray *taskQueqe;
 
 @property (nonatomic, weak) NSURLSessionDataTask *task;
 
@@ -83,7 +87,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
 }
 
-#warning test
+- (void)startSyncWithProgress:(void (^)(double progress))progress success:(void (^)(void))success failure:(void (^)(NSError *))failure {
+    
+}
+
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
         
@@ -157,11 +164,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
 }
 
-- (void)showError:(NSError *)error {
-    UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"同步失败" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-    [aler show];
-}
-
 - (void)syncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     
     __block NSError *tError = nil;
@@ -211,9 +213,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  上传数据
     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-#warning test
-        NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
-        NSLog(@"<<< response headers:%@ >>>", tResponse.allHeaderFields);
+        
+//#warning test
+//        NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
+//        NSLog(@"<<< response headers:%@ >>>", tResponse.allHeaderFields);
         
         //  因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
@@ -245,13 +248,13 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 return;
             }
             
-#warning test
-            NSDateFormatter *format = [[NSDateFormatter alloc] init];
-            [format setDateFormat:@"HH:mm:ss"];
-            NSString *date = [format stringFromDate:[NSDate date]];
-            NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
-            NSError *ttError = nil;
-            [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
+//#warning test
+//            NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//            [format setDateFormat:@"HH:mm:ss"];
+//            NSString *date = [format stringFromDate:[NSDate date]];
+//            NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
+//            NSError *ttError = nil;
+//            [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
 
             //  将数据解压
             NSError *tError = nil;
@@ -334,8 +337,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         return nil;
     }
     
-#warning test
+#ifdef DEBUG
     [syncData writeToFile:@"/Users/oldlang/Desktop/sync_data.txt" atomically:YES];
+#endif
     
     return syncData;
 }
@@ -383,6 +387,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
+//    NSProgress *progress = nil;
     self.task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     
     [self.task resume];
@@ -513,6 +518,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     return nil;
+}
+
+- (void)showError:(NSError *)error {
+    UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"同步失败" message:[NSString stringWithFormat:@"%@", error] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [aler show];
 }
 
 @end

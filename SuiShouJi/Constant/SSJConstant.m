@@ -14,10 +14,10 @@ const int64_t SSJDefaultSyncVersion = -1;
 #ifdef DEBUG
 //NSString *const SSJBaseURLString = @"http://192.168.2.47:8080";  // 东亚
 //NSString *const SSJBaseURLString = @"http://192.168.1.155:8091";
-NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
-//NSString *const SSJBaseURLString = @"http://1.9188.com";
+//NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
+NSString *const SSJBaseURLString = @"http://jz.9188.com";
 #else
-NSString *const SSJBaseURLString = @"http://jz.9188.com/user/mobregisterchk.go";
+NSString *const SSJBaseURLString = @"http://jz.9188.com";
 #endif
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
@@ -34,4 +34,7 @@ NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotificatio
 
 NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";
 
+NSString *const SSJShowSyncLoadingNotification = @"SSJShowSyncLoadingNotification";
+
+NSString *const SSJHideSyncLoadingNotification = @"SSJHideSyncLoadingNotification";
 

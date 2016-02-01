@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJFinancingHomePopView : UIView
-+ (id)FinancingHomePopView;
+
 @end

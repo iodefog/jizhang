@@ -193,6 +193,8 @@
 		7DD7D7351C4CA8BD00ACE71A /* reportForms_income@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D7311C4CA8BD00ACE71A /* reportForms_income@2x.png */; };
 		7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D7321C4CA8BD00ACE71A /* reportForms_income@3x.png */; };
 		7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */; };
+		7DE3AD731C5F07C2009B2131 /* SSJLoginSyncLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD721C5F07C2009B2131 /* SSJLoginSyncLoadingView.m */; };
+		7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */; };
 		7DE6E85F1C55BA7B001C9138 /* login_lock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */; };
 		7DE6E8601C55BA7B001C9138 /* login_lock@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */; };
 		7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
@@ -635,6 +637,10 @@
 		7DD7D7321C4CA8BD00ACE71A /* reportForms_income@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_income@3x.png"; sourceTree = "<group>"; };
 		7DD7D73E1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserDefaultDataCreater.h; sourceTree = "<group>"; };
 		7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserDefaultDataCreater.m; sourceTree = "<group>"; };
+		7DE3AD711C5F07C2009B2131 /* SSJLoginSyncLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginSyncLoadingView.h; sourceTree = "<group>"; };
+		7DE3AD721C5F07C2009B2131 /* SSJLoginSyncLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginSyncLoadingView.m; sourceTree = "<group>"; };
+		7DE3AD741C5F26D5009B2131 /* SSJDataSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSynchronizeTask.h; sourceTree = "<group>"; };
+		7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizeTask.m; sourceTree = "<group>"; };
 		7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@2x.png"; sourceTree = "<group>"; };
 		7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@3x.png"; sourceTree = "<group>"; };
 		7DE6E8661C55DB75001C9138 /* SSJBaselineTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaselineTextField.h; sourceTree = "<group>"; };
@@ -1074,6 +1080,8 @@
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
 				7D2B241A1C3E091B009A74A8 /* SSJDataSynchronizer.h */,
 				7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */,
+				7DE3AD741C5F26D5009B2131 /* SSJDataSynchronizeTask.h */,
+				7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */,
 			);
 			path = DataSync;
 			sourceTree = "<group>";
@@ -1485,6 +1493,15 @@
 				7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */,
 			);
 			path = UserDefaultData;
+			sourceTree = "<group>";
+		};
+		7DE3AD701C5F077D009B2131 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7DE3AD711C5F07C2009B2131 /* SSJLoginSyncLoadingView.h */,
+				7DE3AD721C5F07C2009B2131 /* SSJLoginSyncLoadingView.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		7DE6E8651C55DB54001C9138 /* SSJBaselineTextField */ = {
@@ -2162,6 +2179,7 @@
 		BD70DF461C4751EA000E6CC9 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				7DE3AD701C5F077D009B2131 /* View */,
 				BD390DF11C573F4F00B4B3A3 /* Model */,
 				BD70DF471C4751EA000E6CC9 /* Controller */,
 				BD70DF4A1C4751EA000E6CC9 /* NetWorkService */,
@@ -2902,6 +2920,7 @@
 				BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */,
 				BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
+				7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */,
 				7D6AAB6E1C3146500007C0A3 /* SSJReportFormsUtil.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
@@ -2920,6 +2939,7 @@
 				BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */,
 				BD0433291C1A78B40051E7AB /* SSJViewControllerAddition.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
+				7DE3AD731C5F07C2009B2131 /* SSJLoginSyncLoadingView.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				BD0433951C1A8DA50051E7AB /* SSJBaseTableViewCell.m in Sources */,

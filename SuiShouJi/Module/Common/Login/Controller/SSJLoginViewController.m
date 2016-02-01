@@ -21,6 +21,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
+#import "SSJLoginSyncLoadingView.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -34,6 +35,7 @@
 @property (nonatomic,strong)UIButton *loginButton;
 @property (nonatomic,strong)UIButton *registerButton;
 @property (nonatomic,strong)UIButton *forgetButton;
+@property (nonatomic, strong) SSJLoginSyncLoadingView *syncLoadingView;
 
 @end
 
@@ -142,7 +144,17 @@
             }
             
             //  登陆成功后强制同步一次
-            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+//            [self.syncLoadingView show];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+//                [self.syncLoadingView dismissWithSuccess:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+                [CDAutoHideMessageHUD showMessage:@"同步成功"];
+            } failure:^(NSError *error) {
+//                [self.syncLoadingView dismissWithSuccess:NO];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+                [CDAutoHideMessageHUD showMessage:@"同步失败"];
+            }];
             
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
             [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
@@ -308,6 +320,13 @@
         _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
     }
     return _forgetButton;
+}
+
+- (SSJLoginSyncLoadingView *)syncLoadingView {
+    if (!_syncLoadingView) {
+        _syncLoadingView = [[SSJLoginSyncLoadingView alloc] init];
+    }
+    return _syncLoadingView;
 }
 
 @end
