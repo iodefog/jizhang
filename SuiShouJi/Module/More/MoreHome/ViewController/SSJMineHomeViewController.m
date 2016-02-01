@@ -268,10 +268,11 @@
     [picker dismissViewControllerAnimated:YES completion:^{}];
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
-    [self.portraitUploadService uploadimgWithIMG:image finishBlock:^{
+    [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
         self.header.headPotraitImage.image = image;
         [self.tableView reloadData];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+        [SSJUserTableManager asyncSaveIcon:icon success:NULL failure:NULL];
     }];
 }
 

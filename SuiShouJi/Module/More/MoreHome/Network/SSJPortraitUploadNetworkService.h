@@ -15,7 +15,7 @@
  *  @param image 头像图片
  */
 
-typedef void (^UploadCompleteBlock)(); //上传头像完成的回调
+typedef void (^UploadCompleteBlock)(NSString *icon); //上传头像完成的回调
 
 @property (nonatomic, copy) UploadCompleteBlock UploadCompleteBlock;
 

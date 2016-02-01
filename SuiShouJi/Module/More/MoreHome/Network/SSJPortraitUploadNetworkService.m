@@ -43,10 +43,12 @@
         NSString *strDesc = data[@"desc"];
         [CDPointActivityIndicator startAnimating];
         if (strReturnCode == 1) {
+            NSDictionary *resultInfo = data[@"results"];
+            NSString *icon = resultInfo[@"icon"];
             [CDPointActivityIndicator stopAnimating];
             [CDAutoHideMessageHUD showMessage:@"头像上传成功"];
             if (self.UploadCompleteBlock) {
-                self.UploadCompleteBlock();
+                self.UploadCompleteBlock(icon);
             }
         }else{
             [CDPointActivityIndicator stopAnimating];
