@@ -11,6 +11,8 @@
 #import "SSJFundingTypeSelectView.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
+
 #import "FMDB.h"
 
 @interface SSJFundingTransferViewController ()
@@ -256,8 +258,16 @@
         }
         SSJDispatch_main_async_safe(^(){
             [self.navigationController popViewControllerAnimated:YES];
+            
         });
     }];
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 -(void)transferTextDidChange{

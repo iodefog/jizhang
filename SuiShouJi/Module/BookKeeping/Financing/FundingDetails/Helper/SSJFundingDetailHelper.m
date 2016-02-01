@@ -38,7 +38,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE , a.ICHARGEID , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = ? and a.CBILLDATE like ? and a.operatortype != 2 order by a.CBILLDATE desc", ID, dateStr];
+        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE , a.ICHARGEID , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = ? and a.CBILLDATE like ? and a.operatortype != 2 order by a.cbilldate desc , a.cwritedate desc", ID, dateStr];
         if (!resultSet) {
             SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
@@ -108,13 +108,13 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
     switch (weekday) {
-        case 1: return @"星期二";
-        case 2: return @"星期三";
-        case 3: return @"星期四";
-        case 4: return @"星期五";
-        case 5: return @"星期六";
-        case 6: return @"星期日";
-        case 7: return @"星期一";
+        case 1: return @"星期日";
+        case 2: return @"星期一";
+        case 3: return @"星期二";
+        case 4: return @"星期三";
+        case 5: return @"星期四";
+        case 6: return @"星期五";
+        case 7: return @"星期六";
             
         default: return nil;
     }

@@ -10,6 +10,7 @@
 #import "SSJCategoryCollectionViewCell.h"
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 
 @interface SSJADDNewTypeViewController ()
@@ -21,6 +22,7 @@
 @implementation SSJADDNewTypeViewController{
     NSIndexPath *_selectedIndex;
     NSString *_selectedID;
+    SSJRecordMakingCategoryItem *_selectedItem;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -91,6 +93,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     _selectedIndex = indexPath;
     _selectedID = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item.categoryID;
+    _selectedItem = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item;
     [collectionView reloadData];
 }
 
@@ -158,11 +161,17 @@
             [weakSelf.collectionView reloadData];
             [weakSelf.navigationController popViewControllerAnimated:YES];
             if (weakSelf.NewCategorySelectedBlock) {
-                weakSelf.NewCategorySelectedBlock(_selectedID);
+                weakSelf.NewCategorySelectedBlock(_selectedID,_selectedItem);
             }
         });
     }];
-
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 -(void)closeButtonClicked:(id)sender{
