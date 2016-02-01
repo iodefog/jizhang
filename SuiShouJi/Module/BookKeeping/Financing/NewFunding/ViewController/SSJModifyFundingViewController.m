@@ -32,7 +32,7 @@
     NSString *_selectParent;
     NSString *_selectColor;
     NSString *_selectIcoin;
-
+    double _amountValue;
 }
 
 #pragma mark - Lifecycle
@@ -51,6 +51,7 @@
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
     _selectIcoin = self.item.fundingIcon;
+    _amountValue = self.item.fundingAmount;
     [self.view addSubview:self.tableView];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     // Do any additional setup after loading the view.
@@ -65,7 +66,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    self.item.fundingAmount = [_amountTextField.text doubleValue];
+    _amountValue = [_amountTextField.text doubleValue];
     self.item.fundingMemo = _memoTextField.text;
     self.item.fundingName = _nameTextField.text;
 }
@@ -91,7 +92,7 @@
     if (indexPath.section == 4) {
         SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
         colorSelectVC.fundingColor = _selectColor;
-        colorSelectVC.fundingAmount = self.item.fundingAmount;
+        colorSelectVC.fundingAmount = _amountValue;
         colorSelectVC.fundingName = self.item.fundingName;
         __weak typeof(self) weakSelf = self;
         colorSelectVC.colorSelectedBlock = ^(NSString *selectColor){
@@ -147,7 +148,7 @@
         case 1:{
             _amountTextField = NewFundingCell.cellDetail;
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",self.item.fundingAmount];
+            NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",_amountValue];
             NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             _amountTextField.delegate = self;
 
@@ -253,7 +254,7 @@
     }
     __weak typeof(self) weakSelf = self;
     __block NSString *currentDateStr = [[NSDate date]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
-    [[SSJDatabaseQueue sharedInstance]inTransaction:^(FMDatabase *db,BOOL *rollback){
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db,BOOL *rollback){
         if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ?",_nameTextField.text,weakSelf.item.fundingID,SSJUSERID()] > 0){
             dispatch_async(dispatch_get_main_queue(), ^(){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles:nil];
@@ -262,12 +263,12 @@
             });
         }
         if ([_amountTextField.text doubleValue] < self.item.fundingAmount) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",self.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:2],weakSelf.item.fundingID,[NSNumber numberWithDouble:self.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",weakSelf.item.fundingAmount - [_amountTextField.text doubleValue]],[NSNumber numberWithInt:2],weakSelf.item.fundingID,[NSNumber numberWithDouble:_amountValue],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
                 *rollback = YES;
             }
             
         }else if ([_amountTextField.text doubleValue] > self.item.fundingAmount) {
-            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue] - self.item.fundingAmount],@"1",weakSelf.item.fundingID,[NSNumber numberWithDouble:weakSelf.item.fundingAmount],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue] - weakSelf.item.fundingAmount],@"1",weakSelf.item.fundingID,[NSNumber numberWithDouble:_amountValue],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],currentDateStr]) {
                 *rollback = YES;
             }
         }
