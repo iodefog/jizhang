@@ -203,6 +203,13 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     //  读取压缩好的文件，上传到服务端
     NSData *zipData = [self zipData:data error:&tError];
     
+#warning test
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"HH:mm:ss"];
+    NSString *date = [format stringFromDate:[NSDate date]];
+    NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/upload_zip/sync_%@.zip", date];
+    [zipData writeToFile:filePath atomically:YES];
+    
     if (tError) {
         SSJPRINT(@">>> SSJ warning:an error occured when zip json data \n error:%@", tError);
         if (failure) {
@@ -214,10 +221,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     //  上传数据
     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         
-//#warning test
-//        NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
-//        NSLog(@"<<< response headers:%@ >>>", tResponse.allHeaderFields);
-        
         //  因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
             
@@ -228,19 +231,52 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 return;
             }
             
-            //  上传成功后，如果返回是字典类型，就有错误，解析错误信息
-            if (![responseObject isKindOfClass:[NSData class]]) {
-                if ([responseObject isKindOfClass:[NSDictionary class]]) {
-                    NSInteger code = [responseObject[@"code"] integerValue];
-                    NSString *desc = responseObject[@"desc"];
-                    tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
+            NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
+            SSJPRINT(@">>> SSJ Sync response headers:%@", tResponse.allHeaderFields);
+            NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
+            
+            //  返回的是json数据格式
+            if ([contentType isEqualToString:@"text/json;charset=UTF-8"]) {
+                NSDictionary *responseInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&tError];
+                NSInteger code = [responseInfo[@"code"] integerValue];
+                NSString *desc = responseInfo[@"desc"];
+                tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
+                
+                if (failure) {
+                    failure(tError);
+                }
+                SSJPRINT(@">>> sync response data:%@", responseObject);
+                return;
+            }
+            
+            //  返回的是zip压缩包
+            if ([contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
+#warning test
+                NSDateFormatter *format = [[NSDateFormatter alloc] init];
+                [format setDateFormat:@"HH:mm:ss"];
+                NSString *date = [format stringFromDate:[NSDate date]];
+                NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
+                NSError *ttError = nil;
+                [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
+                
+                //  将数据解压
+                NSError *tError = nil;
+                NSData *jsonData = [self unzipData:responseObject error:&tError];
+                
+                if (tError) {
+                    SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
                     if (failure) {
                         failure(tError);
                     }
-                    SSJPRINT(@">>> sync response data:%@", responseObject);
+                    return;
+                }
+                
+                //  合并数据
+                if ([self mergeJsonData:jsonData error:&tError]) {
+                    if (success) {
+                        success();
+                    }
                 } else {
-                    SSJPRINT(@">>> SSJ warning:responseObject is not NSData or NSDictionary type");
-                    tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"responseObject is not NSData or NSDictionary type"}];
                     if (failure) {
                         failure(tError);
                     }
@@ -248,35 +284,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 return;
             }
             
-//#warning test
-//            NSDateFormatter *format = [[NSDateFormatter alloc] init];
-//            [format setDateFormat:@"HH:mm:ss"];
-//            NSString *date = [format stringFromDate:[NSDate date]];
-//            NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
-//            NSError *ttError = nil;
-//            [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
-
-            //  将数据解压
-            NSError *tError = nil;
-            NSData *jsonData = [self unzipData:responseObject error:&tError];
-            
-            if (tError) {
-                SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
-                if (failure) {
-                    failure(tError);
-                }
-                return;
-            }
-            
-            //  合并数据
-            if ([self mergeJsonData:jsonData error:&tError]) {
-                if (success) {
-                    success();
-                }
-            } else {
-                if (failure) {
-                    failure(tError);
-                }
+            //  返回未知数据
+            SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
+            tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
+            if (failure) {
+                failure(tError);
             }
         });
     }];
@@ -382,6 +394,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [request setValue:obj forHTTPHeaderField:key];
     }];
+    
+    SSJPRINT(@">>> SSJ Sync request header:%@", request.allHTTPHeaderFields);
     
     //  开始上传
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];

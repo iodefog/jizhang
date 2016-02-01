@@ -63,9 +63,11 @@
 
 + (void)saveCurrentUserIdWithError:(NSError **)error {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) select ?, 1, 0 where not exists (select count(*) from BK_USER where cuserid = ?)", SSJUSERID(), SSJUSERID()]) {
-            if (error) {
-                *error = [db lastError];
+        if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", SSJUSERID()]) {
+            if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, 1, 0)", SSJUSERID()]) {
+                if (error) {
+                    *error = [db lastError];
+                }
             }
         }
     }];
