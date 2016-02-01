@@ -344,12 +344,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
                 addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
-                addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID , SSJRecordMakingCategoryItem *selectedItem){
+                addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
                     weakSelf.categoryListView.selectedId = categoryID;
                     _categoryID = categoryID;
-                    weakSelf.categoryImage.image = [[UIImage imageNamed:selectedItem.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    weakSelf.categoryNameLabel.text = selectedItem.categoryTitle;
-                    weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.categoryColor];
+                    weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
                     [weakSelf.categoryListView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];

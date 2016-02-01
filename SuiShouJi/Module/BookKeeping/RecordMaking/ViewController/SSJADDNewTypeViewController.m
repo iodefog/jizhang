@@ -23,6 +23,7 @@
     NSIndexPath *_selectedIndex;
     NSString *_selectedID;
     SSJRecordMakingCategoryItem *_selectedItem;
+    SSJRecordMakingCategoryItem *_defualtItem;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -37,7 +38,7 @@
     [super viewDidLoad];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.view.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
-    _selectedIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self getdefualtItem];
     [self.view addSubview:self.collectionView];
     [self getDateFromDb];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
@@ -65,7 +66,7 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
-    if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
+    if ([cell.item.categoryID isEqualToString:_selectedItem.categoryID]) {
         cell.categoryImage.tintColor = [UIColor whiteColor];
         cell.categoryImage.image = [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
@@ -91,7 +92,6 @@
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    _selectedIndex = indexPath;
     _selectedID = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item.categoryID;
     _selectedItem = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item;
     [collectionView reloadData];
@@ -172,6 +172,20 @@
             
         }];
     }
+}
+
+-(void)getdefualtItem{
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID LIMIT 1 OFFSET 0",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
+        while ([rs next]) {
+            _defualtItem = [[SSJRecordMakingCategoryItem alloc]init];
+            _defualtItem.categoryTitle = [rs stringForColumn:@"CNAME"];
+            _defualtItem.categoryImage = [rs stringForColumn:@"CCOIN"];
+            _defualtItem.categoryColor = [rs stringForColumn:@"CCOLOR"];
+            _defualtItem.categoryID = [rs stringForColumn:@"ID"];
+        }
+        _selectedItem = _defualtItem;
+    }];
 }
 
 -(void)closeButtonClicked:(id)sender{
