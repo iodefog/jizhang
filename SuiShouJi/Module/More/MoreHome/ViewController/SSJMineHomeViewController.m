@@ -17,6 +17,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJPortraitUploadNetworkService.h"
 #import "SSJUserInfoNetworkService.h"
+#import "SSJDatabaseQueue.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -56,6 +57,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (SSJIsUserLogined() && ([self.header.nicknameLabel.text isEqualToString:@"待君登录"] || [self.header.nicknameLabel.text isEqualToString:@""])) {
+        [self getMobileNumresult:^(NSString *result) {
+            NSString *phoneNum = [result stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            self.header.nicknameLabel.text = phoneNum;
+        }];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -192,7 +199,6 @@
         case 0:  //打开照相机拍照
             [self takePhoto];
             break;
-            
         case 1:  //打开本地相册
             [self localPhoto];
             break;
@@ -258,6 +264,15 @@
         [self.userInfoService requestUserInfo];
     }
     [self.tableView reloadData];
+}
+
+-(void)getMobileNumresult:(void (^)(NSString *result))MobileNumresult{
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        NSString *mobileNum = [db stringForQuery:@"SELECT CMOBILENO FROM BK_USER WHERE CUSERID = ?",SSJUSERID()];
+        SSJDispatch_main_async_safe(^(){
+            MobileNumresult(mobileNum);
+        });
+    }];
 }
 
 #pragma mark - UIImagePickerControllerDelegate

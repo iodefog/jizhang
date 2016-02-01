@@ -150,6 +150,7 @@
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",_amountValue];
             NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            NewFundingCell.cellDetail.clearsOnBeginEditing = YES;
             _amountTextField.delegate = self;
 
         }
