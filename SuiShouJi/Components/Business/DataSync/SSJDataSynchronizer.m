@@ -430,6 +430,22 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     __block BOOL success = YES;
     
+    //  存储当前同步用户数据
+    NSArray *userArr = tableInfo[@"bk_user"];
+    for (NSDictionary *userInfo in userArr) {
+        NSString *userId = userInfo[@"cuserid"];
+        if (![userId isEqualToString:SSJCurrentSyncUserId()]) {
+            continue;
+        }
+        NSString *mobileNo = userInfo[@"cmobileno"];
+        NSString *icon = userInfo[@"cicon"];
+        [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+            [SSJUserTableManager saveUserId:userId withError:nil];
+            [SSJUserTableManager asyncSaveMobileNo:mobileNo success:NULL failure:NULL];
+            [SSJUserTableManager asyncSaveIcon:icon success:NULL failure:NULL];
+        }];
+    }
+    
     //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] inDatabase:db error:error]) {

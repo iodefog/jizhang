@@ -23,13 +23,6 @@
 + (void)reloadUserIdWithError:(NSError **)error;
 
 /**
- *  保存当前用户id
- *
- *  @param error 错误对象，如果不为nil，则查询过程发生错误
- */
-+ (void)saveCurrentUserIdWithError:(NSError **)error;
-
-/**
  *  从用户表中查询未注册的用户编号，如果没有则返回nil
  *
  *  @param db 数据库对象
@@ -46,6 +39,13 @@
 + (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 /**
+ *  保存当前用户id
+ *
+ *  @param error 错误对象，如果不为nil，则查询过程发生错误
+ */
++ (void)saveUserId:(NSString *)userId withError:(NSError **)error;
+
+/**
  *  将手机号码保存到用户表中当前用户记录下
  *
  *  @param mobileNo 要保存的手机号
@@ -53,5 +53,14 @@
  *  @param failure 失败的回调
  */
 + (void)asyncSaveMobileNo:(NSString *)mobileNo success:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+
+/**
+ *  将头像地址保存到用户表中当前用户记录下
+ *
+ *  @param mobileNo 要保存的头像地址
+ *  @param success 成功的回调
+ *  @param failure 失败的回调
+ */
++ (void)asyncSaveIcon:(NSString *)icon success:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 @end

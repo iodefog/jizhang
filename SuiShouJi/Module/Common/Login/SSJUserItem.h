@@ -22,6 +22,10 @@
 
 @property (nonatomic,strong) NSString *operatortype;
 
+//  手机号码
 @property (nonatomic, copy) NSString *cmobileno;
+
+//  头像地址
+@property (nonatomic, copy) NSString *cicons;
 
 @end

@@ -61,18 +61,6 @@
     }];
 }
 
-+ (void)saveCurrentUserIdWithError:(NSError **)error {
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", SSJUSERID()]) {
-            if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, 1, 0)", SSJUSERID()]) {
-                if (error) {
-                    *error = [db lastError];
-                }
-            }
-        }
-    }];
-}
-
 + (NSString *)unregisteredUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {
     FMResultSet *result = [db executeQuery:@"select CUSERID from BK_USER where CREGISTERSTATE = 0"];
     if (!result) {
@@ -111,9 +99,43 @@
     }];
 }
 
-+ (void)asyncSaveMobileNo:(NSString *)mobileNo success:(void (^)(void))success failure:(void (^)(NSError *error))failure; {
++ (void)saveUserId:(NSString *)userId withError:(NSError **)error {
+    if (!userId) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userId user id must not be nil"}];
+        }
+        return;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
+            if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, 1, 0)", SSJUSERID()]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+            }
+        }
+    }];
+}
+
++ (void)asyncSaveMobileNo:(NSString *)mobileNo success:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if ([db executeUpdate:@"update bk_user set cmobileno = ? where cuserid = ?", mobileNo, SSJUSERID()]) {
+            if (success) {
+                success();
+            }
+            return;
+        }
+        
+        if (failure) {
+            failure([db lastError]);
+        }
+    }];
+}
+
++ (void)asyncSaveIcon:(NSString *)icon success:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"update bk_user set cicons = ? where cuserid = ?", icon, SSJUSERID()]) {
             if (success) {
                 success();
             }

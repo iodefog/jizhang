@@ -103,7 +103,7 @@
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
     
-    if ([self.loginService.returnCode isEqualToString: @"1"]) {
+    if ([self.loginService.returnCode isEqualToString:@"1"]) {
         __block NSError *error = nil;
         __block BOOL fundInfoSuccess = true;
         __block BOOL userBillSuccess = true;
@@ -126,8 +126,9 @@
             SSJSaveUserLogined(YES);
             SSJSetUserId(self.loginService.item.cuserid);
             
-            [SSJUserTableManager saveCurrentUserIdWithError:nil];
+            [SSJUserTableManager saveUserId:SSJUSERID() withError:nil];
             [SSJUserTableManager asyncSaveMobileNo:self.loginService.item.cmobileno success:NULL failure:NULL];
+            [SSJUserTableManager asyncSaveIcon:self.loginService.item.cicons success:NULL failure:NULL];
             
             //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
             if (self.loginService.userBillArray.count == 0) {
