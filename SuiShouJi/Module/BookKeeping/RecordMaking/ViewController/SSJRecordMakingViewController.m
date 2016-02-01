@@ -570,11 +570,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
             }
             [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate];
-            int count = 0;
-            FMResultSet *s = [db executeQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
-            if ([s next]) {
-                count = [s intForColumn:@"COUNT"];
-            }
+            int count = [db intForQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
             double incomeSum = 0.0;
             double expenseSum = 0.0;
             double sum = 0.0;
@@ -664,6 +660,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 _defualtID = [rs stringForColumn:@"ID"];
                 _defualtImage = [rs stringForColumn:@"CCOIN"];
             }
+            [rs close];
         }else{
             FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN , ITYPE FROM BK_BILL_TYPE  WHERE ID = ?",weakSelf.item.billID];
             while([rs next]) {
@@ -672,6 +669,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 _defualtImage = [rs stringForColumn:@"CCOIN"];
                 _defualtType = [rs intForColumn:@"ITYPE"];
             }
+            [rs close];
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             [UIView animateWithDuration:kAnimationDuration animations:^{

@@ -44,10 +44,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
-    
     [self.tableView reloadData];
     _titleForSectionTwoArray = [[NSArray alloc]initWithObjects:@"同步设置",@"关于我们",@"用户协议与隐私说明", nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateUserInfo) name:SSJLoginOrRegisterNotification object:nil];
+    [self updateUserInfo];
 }
 
 -(void)dealloc{
@@ -56,9 +56,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (SSJIsUserLogined() && !self.userInfoService.isLoaded) {
-        [self.userInfoService requestUserInfo];
-    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
