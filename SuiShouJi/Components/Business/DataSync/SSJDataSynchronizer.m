@@ -22,11 +22,6 @@
 
 #import <ZipZap/ZipZap.h>
 
-static const NSInteger kLargestSyncCount = 5;
-
-//  定时同步时间间隔
-static NSTimeInterval kSyncInterval = 60 * 60;
-
 //  同步文件名称
 static NSString *const kSyncFileName = @"sync_data.json";
 
@@ -35,6 +30,11 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 //  加密密钥字符串
 static NSString *const kSignKey = @"accountbook";
+
+static const NSInteger kLargestSyncCount = 5;
+
+//  定时同步时间间隔
+static NSTimeInterval kSyncInterval = 60 * 60;
 
 static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpecificKey;
 

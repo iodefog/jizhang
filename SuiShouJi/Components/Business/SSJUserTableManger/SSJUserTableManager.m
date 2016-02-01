@@ -109,4 +109,19 @@
     }];
 }
 
++ (void)asyncSaveMobileNo:(NSString *)mobileNo success:(void (^)(void))success failure:(void (^)(NSError *error))failure; {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"update bk_user set cmobileno = ? where cuserid = ?", mobileNo, SSJUSERID()]) {
+            if (success) {
+                success();
+            }
+            return;
+        }
+        
+        if (failure) {
+            failure([db lastError]);
+        }
+    }];
+}
+
 @end

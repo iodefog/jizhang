@@ -18,11 +18,15 @@
  *  2:如果存储的当前用户编号无效，则从用户表中查询没有注册的用户编号，并设置其为当前的用户编号；
  *  3:如果用户表中没有未注册的用户编号，则新建一个用户编号存储到表中，并设置其为当前用户编号；
  *
- *  @param success 成功的回调
- *  @param failure 失败的回调
+ *  @param error 错误对象，如果不为nil，则查询过程发生错误
  */
 + (void)reloadUserIdWithError:(NSError **)error;
 
+/**
+ *  保存当前用户id
+ *
+ *  @param error 错误对象，如果不为nil，则查询过程发生错误
+ */
 + (void)saveCurrentUserIdWithError:(NSError **)error;
 
 /**
@@ -40,5 +44,14 @@
  *  @param failure 失败的回调
  */
 + (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+
+/**
+ *  将手机号码保存到用户表中当前用户记录下
+ *
+ *  @param mobileNo 要保存的手机号
+ *  @param success 成功的回调
+ *  @param failure 失败的回调
+ */
++ (void)asyncSaveMobileNo:(NSString *)mobileNo success:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 @end

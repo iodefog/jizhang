@@ -126,9 +126,11 @@
             SSJSaveUserLogined(YES);
             SSJSetUserId(self.loginService.item.cuserid);
             
+            [SSJUserTableManager saveCurrentUserIdWithError:nil];
+            [SSJUserTableManager asyncSaveMobileNo:self.loginService.item.cmobileno success:NULL failure:NULL];
+            
             //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
             if (self.loginService.userBillArray.count == 0) {
-                [SSJUserTableManager saveCurrentUserIdWithError:nil];
                 [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
                 [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
             }

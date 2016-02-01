@@ -97,6 +97,7 @@
                     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
+                    [SSJUserTableManager asyncSaveMobileNo:self.mobileNo success:NULL failure:NULL];
                 }
                 
                 [self.passwordField resignFirstResponder];
