@@ -7,9 +7,11 @@
 //
 
 #import "SSJBillingChargeViewController.h"
+#import "SSJCalenderDetailViewController.h"
 #import "SSJBillingChargeHeaderView.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
+#import "SSJBookKeepHomeItem.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
@@ -39,19 +41,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellID];
     [self.tableView registerClass:[SSJBillingChargeHeaderView class] forHeaderFooterViewReuseIdentifier:kBillingChargeHeaderViewID];
-    
-    [self.view ssj_showLoadingIndicator];
-    
-    [SSJBillingChargeHelper queryDataWithBillTypeID:self.billTypeID InYear:self.year month:self.month success:^(NSArray<NSDictionary *> *data) {
-        [self.view ssj_hideLoadingIndicator];
-        self.datas = data;
-        [self.tableView reloadData];
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        
-        NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -61,6 +50,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:self.color size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    [self reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -93,6 +83,45 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     headerView.sumLabel.text = sumStr;
     
     return headerView;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
+    NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
+    SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
+    
+    if (selectedItem) {
+        SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc] init];
+        item.chargeID = selectedItem.ID;
+        item.chargeMoney = [selectedItem.money doubleValue];
+        item.billDate = selectedItem.billDate;
+        item.billID = self.billTypeID;
+        item.fundID = selectedItem.fundId;
+        
+        SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] init];
+        calenderDetailVC.item = item;
+        [self.navigationController pushViewController:calenderDetailVC animated:YES];
+    }
+}
+
+#pragma mark - Private
+- (void)reloadData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJBillingChargeHelper queryDataWithBillTypeID:self.billTypeID InYear:self.year month:self.month success:^(NSArray<NSDictionary *> *data) {
+        [self.view ssj_hideLoadingIndicator];
+        self.datas = data;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+    }];
+}
+
+- (void)reloadDataAfterSync {
+    [self reloadData];
 }
 
 #pragma mark - Getter

@@ -7,7 +7,7 @@
 //
 
 /**
- *  引导
+ *  引导页
  */
 
 #import <UIKit/UIKit.h>
@@ -18,9 +18,9 @@ typedef void(^SSJGuideViewBeginBlock)(SSJGuideView *guideView);
 
 @interface SSJGuideView : UIView
 
-//  点击开始按钮的回调
-@property (nonatomic, copy) SSJGuideViewBeginBlock beginHandle;
+////  点击开始按钮的回调
+//@property (nonatomic, copy) SSJGuideViewBeginBlock beginHandle;
 
-- (void)show:(BOOL)animated;
+- (void)showIfNeeded;
 
 @end

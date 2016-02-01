@@ -18,28 +18,29 @@
 #import "SSJUserTableManager.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJGuideView.h"
-
-@interface AppDelegate ()
-
-@end
+#import "SSJStartChecker.h"
 
 @implementation AppDelegate
-static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
 
-
+//  友盟key
+static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
+    
     //  添加友盟统计
     [self umengTrack];
+    
     //  初始化数据库
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -53,28 +54,13 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     [self setRootViewController];
     
     //  当前版本第一次启动显示引导页
-    [self showGuideViewIfNeeded];
+    SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [guideView showIfNeeded];
     
-    if (SSJIsFirstLaunchForCurrentVersion()) {
-        
-    }
+    //  请求启动接口，检测是否有更新、苹果是否正在审核
+    [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
     
     return YES;
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
 }
 
 //  设置根控制器
@@ -139,17 +125,6 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     });
 }
 
-//  如果当前版本是第一次启动，显示引导页面，否则直接显示首页
-- (void)showGuideViewIfNeeded {
-    if (SSJIsFirstLaunchForCurrentVersion()) {
-        SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        guideView.beginHandle = ^(SSJGuideView *guideView) {
-            SSJAddLaunchTimesForCurrentVersion();
-        };
-        [guideView show:YES];
-    }
-}
-
 #pragma mark - 友盟
 /* 友盟统计 */
 - (void)umengTrack {
@@ -160,7 +135,7 @@ static NSString *const UMAppKey = @"566e6f12e0f55ac052003f62";
     [MobClick setAppVersion:SSJAppVersion()]; //参数为NSString * 类型,自定义app版本信息，如果不设置，默认从CFBundleVersion里取
     //  reportPolicy为枚举类型,可以为 REALTIME, BATCH,SENDDAILY,SENDWIFIONLY几种
     //  channelId 为NSString * 类型，channelId 为nil或@""时,默认会被被当作@"App Store"渠道
-    [MobClick startWithAppkey:UMAppKey reportPolicy:(ReportPolicy)BATCH channelId:SSJDefaultSource()];
+    [MobClick startWithAppkey:kUMAppKey reportPolicy:(ReportPolicy)BATCH channelId:SSJDefaultSource()];
 }
 
 @end

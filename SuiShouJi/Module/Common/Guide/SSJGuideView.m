@@ -46,10 +46,10 @@
 //    self.beginButton.center = self.pageControl.center;
 }
 
-- (void)show:(BOOL)animated {
-    if (!self.superview) {
+- (void)showIfNeeded {
+    if (!self.superview && SSJIsFirstLaunchForCurrentVersion()) {
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:(animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone)];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
         [UIView transitionWithView:window duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             [window addSubview:self];
         } completion:NULL];
@@ -95,26 +95,14 @@
         [self.scrollView addSubview:imageView];
         [self.contentViews addObject:imageView];
     }
-//    for (int idx = 0; idx < 4; idx ++) {
-//        UIView *contentView = nil;
-//        if (idx < 3) {
-//            NSString *imageName = images[idx];
-//            contentView = [[SSJGuideContentView alloc] init];
-//            ((SSJGuideContentView *)contentView).imageName = imageName;
-//        } else {
-//            contentView = [[SSJGuideLastContentView alloc] init];
-//        }
-//        
-//        [self.scrollView addSubview:contentView];
-//        [self.contentViews addObject:contentView];
-//    }
 }
 
 - (void)beginButtonAciton {
     [self dismiss:YES];
-    if (self.beginHandle) {
-        self.beginHandle(self);
-    }
+    SSJAddLaunchTimesForCurrentVersion();
+//    if (self.beginHandle) {
+//        self.beginHandle(self);
+//    }
 }
 
 - (UIScrollView *)scrollView {

@@ -22,6 +22,12 @@
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJStartChecker.h"
+
+static NSString *const kTitle1 = @"给个好评";
+static NSString *const kTitle2 = @"同步设置";
+static NSString *const kTitle3 = @"关于我们";
+static NSString *const kTitle4 = @"用户协议与隐私说明";
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
@@ -29,6 +35,8 @@
 @property (nonatomic,strong) UIView *loggedFooterView;
 @property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
+@property (nonatomic, strong) NSArray *titles;
+
 @end
 
 @implementation SSJMineHomeViewController{
@@ -39,6 +47,11 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"个人中心";
         self.extendedLayoutIncludesOpaqueBars = YES;
+        if ([SSJStartChecker sharedInstance].isInReview) {
+            self.titles = @[@[kTitle2], @[kTitle3, kTitle4]];
+        } else {
+            self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3, kTitle4]];
+        }
     }
     return self;
 }
@@ -146,31 +159,45 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row == 0 && indexPath.section == 1) {
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    
+    //  给个好评
+    if ([title isEqualToString:kTitle1]) {
+        return;
+    }
+    
+    //  同步设置
+    if ([title isEqualToString:kTitle2]) {
         SSJSyncSettingViewController *syncSettingVc = [[SSJSyncSettingViewController alloc]init];
         [self.navigationController pushViewController:syncSettingVc animated:YES];
-    }else if (indexPath.section == 2 && indexPath.row == 0){
+        return;
+    }
+    
+    //  关于我们
+    if ([title isEqualToString:kTitle3]) {
         NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/about.html"];
         SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
         webVC.title = @"关于我们";
         [self.navigationController pushViewController:webVC animated:YES];
-    }else if (indexPath.section == 2 && indexPath.row == 1){
+        return;
+    }
+    
+    //  用户协议与隐私说明
+    if ([title isEqualToString:kTitle4]) {
         NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/protocol.html"];
         SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
         webVC.title = @"用户协议";
         [self.navigationController pushViewController:webVC animated:YES];
+        return;
     }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0 || section == 1) {
-        return 1;
-    }
-    return 2;
+    return [self.titles[section] count];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 3;
+    return self.titles.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -180,14 +207,8 @@
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    if (indexPath.section == 0) {
-        mineHomeCell.cellTitle = @"给个好评";
-    }else if(indexPath.section == 1){
-        mineHomeCell.cellTitle = @"同步设置";
-    }else if (indexPath.section == 2){
-        NSArray *titleForcell = @[@"关于我们",@"用户协议与隐私说明"];
-        mineHomeCell.cellTitle = [titleForcell objectAtIndex:indexPath.row];
-    }
+    mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
+    
     return mineHomeCell;
 }
 

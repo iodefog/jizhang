@@ -203,12 +203,12 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     //  读取压缩好的文件，上传到服务端
     NSData *zipData = [self zipData:data error:&tError];
     
-#warning test
-    NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"HH:mm:ss"];
-    NSString *date = [format stringFromDate:[NSDate date]];
-    NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/upload_zip/sync_%@.zip", date];
-    [zipData writeToFile:filePath atomically:YES];
+//#warning test
+//    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//    [format setDateFormat:@"HH:mm:ss"];
+//    NSString *date = [format stringFromDate:[NSDate date]];
+//    NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/upload_zip/sync_%@.zip", date];
+//    [zipData writeToFile:filePath atomically:YES];
     
     if (tError) {
         SSJPRINT(@">>> SSJ warning:an error occured when zip json data \n error:%@", tError);
@@ -251,13 +251,13 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             
             //  返回的是zip压缩包
             if ([contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
-#warning test
-                NSDateFormatter *format = [[NSDateFormatter alloc] init];
-                [format setDateFormat:@"HH:mm:ss"];
-                NSString *date = [format stringFromDate:[NSDate date]];
-                NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
-                NSError *ttError = nil;
-                [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
+//#warning test
+//                NSDateFormatter *format = [[NSDateFormatter alloc] init];
+//                [format setDateFormat:@"HH:mm:ss"];
+//                NSString *date = [format stringFromDate:[NSDate date]];
+//                NSString *filePath = [NSString stringWithFormat:@"/Users/oldlang/Desktop/sync_zip/sync_%@.zip", date];
+//                NSError *ttError = nil;
+//                [responseObject writeToFile:filePath options:NSDataWritingAtomic error:&ttError];
                 
                 //  将数据解压
                 NSError *tError = nil;

@@ -21,7 +21,6 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
-#import "SSJLoginSyncLoadingView.h"
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -35,7 +34,6 @@
 @property (nonatomic,strong)UIButton *loginButton;
 @property (nonatomic,strong)UIButton *registerButton;
 @property (nonatomic,strong)UIButton *forgetButton;
-@property (nonatomic, strong) SSJLoginSyncLoadingView *syncLoadingView;
 
 @end
 
@@ -327,13 +325,6 @@
         _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
     }
     return _forgetButton;
-}
-
-- (SSJLoginSyncLoadingView *)syncLoadingView {
-    if (!_syncLoadingView) {
-        _syncLoadingView = [[SSJLoginSyncLoadingView alloc] init];
-    }
-    return _syncLoadingView;
 }
 
 @end

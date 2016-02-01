@@ -41,7 +41,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, dateStr, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE, a.IFUNSID, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, dateStr, SSJUSERID()];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -71,9 +71,11 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.money = [resultSet stringForColumn:@"IMONEY"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
             item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
-            NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
+            item.ID = [resultSet stringForColumn:@"ICHARGEID"];
+            item.fundId = [resultSet stringForColumn:@"IFUNSID"];
+            item.billDate = [resultSet stringForColumn:@"CBILLDATE"];
             
-            if ([tempDate isEqualToString:billDate]) {
+            if ([tempDate isEqualToString:item.billDate]) {
                 NSMutableArray *items = subDic[SSJBillingChargeRecordKey];
                 [items addObject:item];
                 
@@ -86,7 +88,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                 [subDic setObject:@(sum) forKey:SSJBillingChargeSumKey];
                 
             } else {
-                NSDate *transitDate = [originalFormatter dateFromString:billDate];
+                NSDate *transitDate = [originalFormatter dateFromString:item.billDate];
                 NSDateComponents *dateComponent = [calendar components:NSCalendarUnitWeekday fromDate:transitDate];
                 NSString *weekday = [self stringFromWeekday:[dateComponent weekday]];
                 NSString *destinyDate = [destinyFormatter stringFromDate:transitDate];
@@ -103,7 +105,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                 [subDic setObject:@(money) forKey:SSJBillingChargeSumKey];
                 
                 [result addObject:subDic];
-                tempDate = billDate;
+                tempDate = item.billDate;
             }
         }
         

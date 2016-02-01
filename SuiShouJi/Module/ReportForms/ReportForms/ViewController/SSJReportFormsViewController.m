@@ -376,6 +376,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [view dismiss:YES];
             [weakSelf reloadDatas];
             [weakSelf updateSwithDateControlTitle];
+            [weakSelf updateSurplusViewTitle];
         };
     }
     return _periodSelectionView;
