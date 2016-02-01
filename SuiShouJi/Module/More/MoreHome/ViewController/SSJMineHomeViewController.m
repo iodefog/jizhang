@@ -58,10 +58,18 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (SSJIsUserLogined()) {
+        
+    }
     [self getUserInfo:^(SSJUserInfoItem *item){
-        NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-        self.header.nicknameLabel.text = phoneNum;
-        [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        if (SSJIsUserLogined()) {
+            NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            self.header.nicknameLabel.text = phoneNum;
+            [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        } else {
+            self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            self.header.nicknameLabel.text = @"待君登录";
+        }
     }];
 }
 
@@ -272,7 +280,8 @@
         self.header.headPotraitImage.image = image;
         [self.tableView reloadData];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
-        [SSJUserTableManager asyncSaveIcon:icon success:NULL failure:NULL];
+        [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(SSJUSERID() ?: @""),
+                                            SSJUserIconKey:(icon ?: @"")} error:nil];
     }];
 }
 

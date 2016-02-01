@@ -9,6 +9,10 @@
 #import "SSJUserTableManager.h"
 #import "SSJDatabaseQueue.h"
 
+NSString *const SSJUserIdKey = @"SSJUserIdKey";
+NSString *const SSJUserMobileNoKey = @"SSJUserMobileNoKey";
+NSString *const SSJUserIconKey = @"SSJUserIconKey";
+
 @implementation SSJUserTableManager
 
 //+ (NSCache *)memCache {
@@ -144,6 +148,35 @@
         
         if (failure) {
             failure([db lastError]);
+        }
+    }];
+}
+
++ (void)saveUserInfo:(NSDictionary *)userInfo error:(NSError **)error {
+    NSString *userId = userInfo[SSJUserIdKey];
+    if (!userId || !userId.length) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userId user id must not be nil"}];
+        }
+        return;
+    }
+    
+    NSString *mobileNo = userInfo[SSJUserMobileNoKey];
+    NSString *icon = userInfo[SSJUserIconKey];
+    
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
+            if (![db executeUpdate:@"insert into BK_USER (cuserid, cmobileno, cicons, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ?, 1, 0)", userId, mobileNo, icon]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+            }
+        } else {
+            if (![db executeUpdate:@"update bk_user set cmobileno = ?, cicons = ? where cuserid = ?", mobileNo, icon, userId]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+            }
         }
     }];
 }

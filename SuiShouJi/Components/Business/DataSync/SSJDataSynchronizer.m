@@ -439,9 +439,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         }
         NSString *mobileNo = userInfo[@"cmobileno"];
         NSString *icon = userInfo[@"cicon"];
-        [SSJUserTableManager saveUserId:userId withError:nil];
-        [SSJUserTableManager asyncSaveMobileNo:mobileNo success:NULL failure:NULL];
-        [SSJUserTableManager asyncSaveIcon:icon success:NULL failure:NULL];
+        [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:userId ?: @"",
+                                            SSJUserMobileNoKey:mobileNo ?: @"",
+                                            SSJUserIconKey:icon ?: @""} error:nil];
     }
     
     //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
