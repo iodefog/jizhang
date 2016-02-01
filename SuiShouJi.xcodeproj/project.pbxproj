@@ -392,6 +392,8 @@
 		BDF069A91C5B4CE1001430BB /* founds_pop2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */; };
 		BDF069AB1C5B4CFD001430BB /* white_jiantou@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */; };
 		BDF069AD1C5B4D01001430BB /* white_jiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */; };
+		BDF318701C5F0A9400302DD6 /* record_ok@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */; };
+		BDF318721C5F0AA900302DD6 /* record_ok@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF318711C5F0AA800302DD6 /* record_ok@2x.png */; };
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
@@ -956,6 +958,8 @@
 		BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_pop2@3x.png"; sourceTree = "<group>"; };
 		BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_jiantou@3x.png"; sourceTree = "<group>"; };
 		BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_jiantou@2x.png"; sourceTree = "<group>"; };
+		BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_ok@3x.png"; sourceTree = "<group>"; };
+		BDF318711C5F0AA800302DD6 /* record_ok@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_ok@2x.png"; sourceTree = "<group>"; };
 		BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarButton.h; sourceTree = "<group>"; };
 		BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarButton.m; sourceTree = "<group>"; };
 		BDF3823F1C3E0E4100955038 /* SSJColorSelectViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewControllerViewController.h; sourceTree = "<group>"; };
@@ -1268,6 +1272,8 @@
 				BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */,
 				BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */,
 				BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */,
+				BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */,
+				BDF318711C5F0AA800302DD6 /* record_ok@2x.png */,
 				7DD7D6551C4C8E6A00ACE71A /* fundTypeImage */,
 				7DD7D6681C4C8E6A00ACE71A /* home_calender@2x.png */,
 				7DD7D6691C4C8E6A00ACE71A /* home_delet@2x.png */,
@@ -2694,6 +2700,7 @@
 				7DD7D6F11C4C8E6A00ACE71A /* calender@3x.png in Resources */,
 				7DD7D6981C4C8E6A00ACE71A /* bt_deficit@2x.png in Resources */,
 				7DD7D7121C4C8E6A00ACE71A /* home_calender@2x.png in Resources */,
+				BDF318721C5F0AA900302DD6 /* record_ok@2x.png in Resources */,
 				7DD7D6AD1C4C8E6A00ACE71A /* bt_hongbao@3x.png in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				7DD7D6D91C4C8E6A00ACE71A /* bt_sport@3x.png in Resources */,
@@ -2780,6 +2787,7 @@
 				BD37D2D61C52327D0050BDAA /* bt_delete@3x.png in Resources */,
 				7DD7D6CF1C4C8E6A00ACE71A /* bt_service@3x.png in Resources */,
 				7DD7D6E71C4C8E6A00ACE71A /* bt_yingye@3x.png in Resources */,
+				BDF318701C5F0A9400302DD6 /* record_ok@3x.png in Resources */,
 				7DD7D6D11C4C8E6A00ACE71A /* bt_shebao@3x.png in Resources */,
 				7DD7D6AA1C4C8E6A00ACE71A /* bt_gongjijin@2x.png in Resources */,
 				7DF8DEDD1C59BFE700CC5DFA /* guide_3@3x.png in Resources */,
@@ -3193,8 +3201,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

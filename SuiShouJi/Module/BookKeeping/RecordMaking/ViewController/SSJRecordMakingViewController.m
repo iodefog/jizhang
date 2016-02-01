@@ -344,9 +344,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
                 addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
-                addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID){
+                addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID , SSJRecordMakingCategoryItem *selectedItem){
                     weakSelf.categoryListView.selectedId = categoryID;
                     _categoryID = categoryID;
+                    weakSelf.categoryImage.image = [[UIImage imageNamed:selectedItem.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    weakSelf.categoryNameLabel.text = selectedItem.categoryTitle;
+                    weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.categoryColor];
                     [weakSelf.categoryListView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];
@@ -492,7 +495,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
         UIButton *comfirmButton = [[UIButton alloc]init];
         comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [comfirmButton setImage:[UIImage imageNamed:@"record_ok"] forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_rightbuttonView addSubview:comfirmButton];
     }
