@@ -812,7 +812,7 @@
 		BD49343B1C35010200300D43 /* SSJMineHomeTabelviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeTabelviewCell.m; sourceTree = "<group>"; };
 		BD4934401C350D3600300D43 /* SSJSyncSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSyncSettingViewController.h; sourceTree = "<group>"; };
 		BD4934411C350D3600300D43 /* SSJSyncSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncSettingViewController.m; sourceTree = "<group>"; };
-		BD543C3C1C1A6DBC00910D61 /* 9188记账.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "9188记账.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD543C3C1C1A6DBC00910D61 /* SuiShouJi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD543C401C1A6DBC00910D61 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BD543C421C1A6DBC00910D61 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BD543C431C1A6DBC00910D61 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -2066,7 +2066,7 @@
 		BD543C3D1C1A6DBC00910D61 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BD543C3C1C1A6DBC00910D61 /* 9188记账.app */,
+				BD543C3C1C1A6DBC00910D61 /* SuiShouJi.app */,
 				BD543C551C1A6DBC00910D61 /* SuiShouJiTests.xctest */,
 				BD543C601C1A6DBC00910D61 /* SuiShouJiUITests.xctest */,
 			);
@@ -2508,7 +2508,7 @@
 			);
 			name = SuiShouJi;
 			productName = SuiShouJi;
-			productReference = BD543C3C1C1A6DBC00910D61 /* 9188记账.app */;
+			productReference = BD543C3C1C1A6DBC00910D61 /* SuiShouJi.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BD543C541C1A6DBC00910D61 /* SuiShouJiTests */ = {
@@ -3210,7 +3210,7 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
-				PRODUCT_NAME = "9188记账";
+				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
 			};
 			name = Debug;
@@ -3238,7 +3238,7 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
-				PRODUCT_NAME = "9188记账";
+				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "9797bbfc-b22d-4c22-a4f3-865f4702750a";
 			};
 			name = Release;

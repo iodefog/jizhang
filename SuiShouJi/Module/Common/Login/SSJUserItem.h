@@ -26,6 +26,6 @@
 @property (nonatomic, copy) NSString *cmobileno;
 
 //  头像地址
-@property (nonatomic, copy) NSString *cicons;
+@property (nonatomic, copy) NSString *cicon;
 
 @end

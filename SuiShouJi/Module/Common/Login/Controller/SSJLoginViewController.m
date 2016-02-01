@@ -128,7 +128,7 @@
             
             NSString *userId = SSJUSERID();
             NSString *mobileNo = self.loginService.item.cmobileno;
-            NSString *icon = self.loginService.item.cicons;
+            NSString *icon = self.loginService.item.cicon;
             [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(userId ?: @""),
                                                 SSJUserMobileNoKey:(mobileNo ?: @""),
                                                 SSJUserIconKey:icon ?: @""} error:nil];

@@ -65,7 +65,7 @@
         if (SSJIsUserLogined()) {
             NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
             self.header.nicknameLabel.text = phoneNum;
-            [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
             self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
             self.header.nicknameLabel.text = @"待君登录";
