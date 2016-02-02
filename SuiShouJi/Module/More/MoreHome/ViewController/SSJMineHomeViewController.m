@@ -71,9 +71,6 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (SSJIsUserLogined()) {
-        
-    }
     [self getUserInfo:^(SSJUserInfoItem *item){
         if (SSJIsUserLogined()) {
             NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
