@@ -8,6 +8,7 @@
 
 #import "SSJStartChecker.h"
 #import "SSJStartNetworkService.h"
+#import "SSJStartUpgradeAlertView.h"
 
 static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的次数限制
 
@@ -18,9 +19,6 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
 
 //  请求失败的回调
 @property (nonatomic, copy) void (^failure)(NSString *);
-
-//  是否正在审核
-@property (nonatomic) BOOL isInReview;
 
 //  网络请求
 @property (nonatomic, strong) SSJStartNetworkService *networkService;
@@ -48,6 +46,10 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
     self.success = success;
     self.failure = failure;
     [self checkUpdate];
+}
+
+- (BOOL)isInReview {
+    return self.networkService.isInReview;
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -112,78 +114,35 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
         }
     }
     
-    switch (updateType) {
-        case SSJAppUpdateTypeNone:
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"已是最新版本" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-            break;
-            
-        case SSJAppUpdateTypeUpdate:
-            [self showAlertWithSureTitle:@"确定" cancelTitle:@"取消"];
-            break;
-            
-        case SSJAppUpdateTypeForceUpdate:
-            [self showAlertWithSureTitle:@"确定" cancelTitle:nil];
-            break;
+    if ([self isInReview]) {
+        return;
     }
     
-//    if (!self.isInReview) {
-//        switch (updateType) {
-//            case SSJAppUpdateTypeNone:
-//                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"已是最新版本" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-//                break;
-//                
-//            case SSJAppUpdateTypeUpdate:
-//                [self showAlertWithSureTitle:@"确定" cancelTitle:@"取消"];
-//                break;
-//                
-//            case SSJAppUpdateTypeForceUpdate:
-//                [self showAlertWithSureTitle:@"确定" cancelTitle:nil];
-//                break;
-//        }
-//    }
-}
-
-//  显示提示框提示更新
-- (void)showAlertWithSureTitle:(NSString *)sureTitle cancelTitle:(NSString *)cancelTitle {
-    if (SSJSystemVersion() >= 8.0) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"版本更新" message:self.networkService.content preferredStyle:UIAlertControllerStyleAlert];
-        
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.alignment = NSTextAlignmentLeft;
-        paragraphStyle.lineSpacing = 2.0;
-        
-        NSDictionary * attributes = @{NSParagraphStyleAttributeName:paragraphStyle,
-                                      NSFontAttributeName:[UIFont systemFontOfSize:13.0]};
-        
-        NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:self.networkService.content];
-        [attributedTitle addAttributes:attributes range:NSMakeRange(0, self.networkService.content.length)];
-        [alertController setValue:attributedTitle forKey:@"attributedMessage"];
-        
-        if (cancelTitle) {
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelTitle
-                                                                   style:UIAlertActionStyleDefault
-                                                                 handler:nil];
-            [alertController addAction:cancelAction];
-        }
-        
-        if (sureTitle) {
-            __weak typeof(self) block_self = self;
-            UIAlertAction *sureAction = [UIAlertAction actionWithTitle:sureTitle
-                                                                 style:UIAlertActionStyleDefault
-                                                               handler:^(UIAlertAction *action) {
-                                                                   [block_self gotoUpdate];
-                                                               }];
-            [alertController addAction:sureAction];
-        }
-        [SSJVisibalController() presentViewController:alertController animated:YES completion:nil];
-        
-    } else {
-        UIAlertView *aler = [[UIAlertView alloc] initWithTitle:@"版本更新" message:self.networkService.content delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:sureTitle, nil];
-        [aler show];
+    __weak typeof(self) weakSelf = self;
+    switch (updateType) {
+        case SSJAppUpdateTypeNone:
+            break;
+            
+        case SSJAppUpdateTypeUpdate: {
+            SSJStartUpgradeAlertView *alertView = [[SSJStartUpgradeAlertView alloc] initWithTitle:@"我升级啦" message:self.networkService.content cancelButtonTitle:@"取消" sureButtonTitle:@"去升级" cancelButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
+                [alert dismiss];
+            } sureButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
+                [alert dismiss];
+                [weakSelf gotoUpdate];
+            }];
+            [alertView show];
+        }   break;
+            
+        case SSJAppUpdateTypeForceUpdate: {
+            SSJStartUpgradeAlertView *alertView = [[SSJStartUpgradeAlertView alloc] initWithTitle:@"我升级啦" message:self.networkService.content cancelButtonTitle:nil sureButtonTitle:@"去升级" cancelButtonClickHandler:NULL sureButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
+                [weakSelf gotoUpdate];
+            }];
+            [alertView show];
+        }   break;
     }
 }
 
-//  前往appstore升级
+//  前往升级
 - (void)gotoUpdate {
     NSURL *updateUrl = [NSURL URLWithString:self.networkService.url];
     if (SSJIsAppStoreSource()) {

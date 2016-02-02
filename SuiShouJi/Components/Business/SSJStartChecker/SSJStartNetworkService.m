@@ -14,6 +14,7 @@
 @property (readwrite, nonatomic, copy) NSString *appversion;
 @property (readwrite, nonatomic, copy) NSString *url;
 @property (readwrite, nonatomic, copy) NSString *type;
+@property (readwrite, nonatomic) BOOL isInReview;
 
 @end
 
@@ -30,6 +31,8 @@
     self.type = nil;
     
     NSDictionary *results = [rootElement objectForKey:@"results"];
+    
+    //  解析升级信息
     NSDictionary *appInfo = [results objectForKey:@"app"];
     if (appInfo) {
         self.content = [appInfo objectForKey:@"content"];
@@ -38,8 +41,8 @@
         self.type = [appInfo objectForKey:@"type"];
     }
     
-//    NSArray *qqList = [results objectForKey:@"qqlist"];
-//    SCYSaveQQList(qqList);
+    //  解析审核配置
+    self.isInReview = [[results objectForKey:@"review"] boolValue];
 }
 
 @end

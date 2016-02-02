@@ -22,6 +22,9 @@
 //  0 为普通升级 1 为强制升级
 @property (readonly, nonatomic, copy) NSString *type;
 
+//  是否正在审核
+@property (readonly, nonatomic) BOOL isInReview;
+
 - (void)request;
 
 @end

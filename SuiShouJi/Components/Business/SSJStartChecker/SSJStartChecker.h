@@ -25,18 +25,24 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
 
 @interface SSJStartChecker : NSObject
 
+/**
+ *  返回唯一实例
+ *
+ *  @return (instancetype) 返回唯一实例对象
+ */
 + (instancetype)sharedInstance;
 
 /**
- *  请求启动接口（版本更新、苹果审核监测）
+ *  请求启动接口（版本更新、苹果审核控制）
  *
- *  @param completion 检测完成的回调
+ *  @param success 请求成功的回调
+ *  @param failure 请求失败的回调
  */
 - (void)checkWithSuccess:(void(^)(BOOL isInReview, SSJAppUpdateType type))success
                  failure:(void(^)(NSString *message))failure;
 
 /**
- *  返回是否正在审核
+ *  返回是否正在审核，应该在checkWithSuccess:failure:方法之后嗲用，如果之前没有调用果，则直接返回NO；
  *
  *  @return BOOL 是否正在审核
  */

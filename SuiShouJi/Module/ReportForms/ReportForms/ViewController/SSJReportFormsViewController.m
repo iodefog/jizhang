@@ -412,7 +412,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (SSJReportFormsPercentCircle *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 247) insets:UIEdgeInsetsMake(30, 80, 60, 80) thickness:39];
+        _chartView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 247) insets:UIEdgeInsetsMake(44, 80, 44, 80) thickness:39];
         _chartView.dataSource = self;
         [_chartView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
