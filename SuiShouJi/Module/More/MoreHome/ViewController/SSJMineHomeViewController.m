@@ -65,15 +65,17 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         if (SSJIsUserLogined()) {
             NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            self.header.nicknameLabel.text = phoneNum;
-            [self.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            weakSelf.header.nicknameLabel.text = phoneNum;
+            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            self.header.nicknameLabel.text = @"待君登录";
+            weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.nicknameLabel.text = @"待君登录";
         }
+        [weakSelf.tableView reloadData];
     }];
 }
 
