@@ -52,6 +52,10 @@ extern NSString *const SSJBaseURLString;
 //
 extern NSString *const SSJErrorDomain;
 
+//  appstore地址
+extern NSString *const SSJAppStoreAddress;
+
+/** -------------------- KEY -------------------- */
 //上一次选择的资金账户类型
 extern NSString *const SSJLastSelectFundItemKey;
 
@@ -64,6 +68,7 @@ extern NSString *const SSJHaveLoginOrRegistKey;
 //是否进入过资金账户首页
 extern NSString *const SSJHaveEnterFundingHomeKey;
 
+/** --------------- Notification --------------- */
 //  同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
 

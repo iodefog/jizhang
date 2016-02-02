@@ -159,6 +159,10 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
     
     //  给个好评
     if ([title isEqualToString:kTitle1]) {
+        NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url];
+        }
         return;
     }
     
