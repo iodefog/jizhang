@@ -53,6 +53,11 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self reloadData];
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.frame = self.view.bounds;
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [self.datas count];

@@ -209,7 +209,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             
             NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
-            SSJPRINT(@">>> SSJ sync response headers:%@", tResponse.allHeaderFields);
+//            SSJPRINT(@">>> SSJ sync response headers:%@", tResponse.allHeaderFields);
             NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
             
             //  返回的是json数据格式
@@ -219,7 +219,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 NSString *desc = responseInfo[@"desc"];
                 tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                 
-                SSJPRINT(@">>> SSJ sync response data:%@", responseObject);
+//                SSJPRINT(@">>> SSJ sync response data:%@", responseObject);
                 [self failToSync:failure error:tError];
                 return;
             }
@@ -305,7 +305,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                                   @"source":SSJDefaultSource()}] forKey:@"bk_user"];
     }
     
-    SSJPRINT(@">>> sync upload data:%@", jsonObject);
+//    SSJPRINT(@">>> sync upload data:%@", jsonObject);
     
     //  将查询得到的结果放入字典中，转换成json数据
     NSData *syncData = [NSJSONSerialization dataWithJSONObject:jsonObject
@@ -362,7 +362,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         [request setValue:obj forHTTPHeaderField:key];
     }];
     
-    SSJPRINT(@">>> SSJ Sync request header:%@", request.allHTTPHeaderFields);
+//    SSJPRINT(@">>> SSJ Sync request header:%@", request.allHTTPHeaderFields);
     
     //  开始上传
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -384,7 +384,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         return NO;
     }
     
-    SSJPRINT(@">>> sync response data:%@", tableInfo);
+//    SSJPRINT(@">>> sync response data:%@", tableInfo);
     
     NSInteger errorCode = [tableInfo[@"code"] integerValue];
     if (errorCode != 1) {

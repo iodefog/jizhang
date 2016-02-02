@@ -6,16 +6,16 @@
 	<string>11500</string>
 	<key>AppStoreSources</key>
 	<array>
-		<string>8000</string>
+		<string>11501</string>
 	</array>
 	<key>RemoteNotificationInfo</key>
 	<dict>
-		<key>8000</key>
+		<key>11501</key>
 		<dict>
 			<key>AppID</key>
-			<string>cgg40h1a9epe7gbtxfv8g2rybmofcthams28kf1mn3a7t4lr</string>
+			<string></string>
 			<key>AppKey</key>
-			<string>eu6fm7uk7xcz6ubsv75sgl32kkk4ed5rt0oym2puhpb71sf4</string>
+			<string></string>
 		</dict>
 	</dict>
 </dict>

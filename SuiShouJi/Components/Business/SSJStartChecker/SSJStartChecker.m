@@ -50,6 +50,13 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
     [self checkUpdate];
 }
 
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == alertView.firstOtherButtonIndex) {
+        [self gotoUpdate];
+    }
+}
+
 #pragma mark - SCYBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([self.networkService.returnCode isEqualToString:@"1"]) {
@@ -103,23 +110,37 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
         if (self.success) {
             self.success(NO, updateType);
         }
-        
-        if (!self.isInReview) {
-            switch (updateType) {
-                case SSJAppUpdateTypeNone:
-                    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"已是最新版本" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-                    break;
-                    
-                case SSJAppUpdateTypeUpdate:
-                    [self showAlertWithSureTitle:@"确定" cancelTitle:@"取消"];
-                    break;
-                    
-                case SSJAppUpdateTypeForceUpdate:
-                    [self showAlertWithSureTitle:@"确定" cancelTitle:nil];
-                    break;
-            }
-        }
     }
+    
+    switch (updateType) {
+        case SSJAppUpdateTypeNone:
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"已是最新版本" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+            break;
+            
+        case SSJAppUpdateTypeUpdate:
+            [self showAlertWithSureTitle:@"确定" cancelTitle:@"取消"];
+            break;
+            
+        case SSJAppUpdateTypeForceUpdate:
+            [self showAlertWithSureTitle:@"确定" cancelTitle:nil];
+            break;
+    }
+    
+//    if (!self.isInReview) {
+//        switch (updateType) {
+//            case SSJAppUpdateTypeNone:
+//                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"已是最新版本" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+//                break;
+//                
+//            case SSJAppUpdateTypeUpdate:
+//                [self showAlertWithSureTitle:@"确定" cancelTitle:@"取消"];
+//                break;
+//                
+//            case SSJAppUpdateTypeForceUpdate:
+//                [self showAlertWithSureTitle:@"确定" cancelTitle:nil];
+//                break;
+//        }
+//    }
 }
 
 //  显示提示框提示更新

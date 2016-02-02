@@ -163,6 +163,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 #pragma mark - Event
+//  切换周期（年、月）
 - (void)filterAction {
     if ([self.periodSelectionView isShowed]) {
         [self.periodSelectionView dismiss:YES];
@@ -171,6 +172,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
+//  切换支出、收入、结余
 - (void)segmentControlValueDidChange {
     [self.periodSelectionView dismiss:YES];
     [self reloadDatas];
@@ -187,6 +189,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
+//  切换到上一个周期时间
 - (void)switchDateControlPreAction {
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
@@ -198,10 +201,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             break;
     }
     [self updateSwithDateControlTitle];
+    [self updateSurplusViewTitle];
     [self reloadDatas];
     [self updateSwitchDateControlNextBtnState];
 }
 
+//  切换到下一个周期时间
 - (void)switchDateControlNextAction {
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
@@ -213,6 +218,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             break;
     }
     [self updateSwithDateControlTitle];
+    [self updateSurplusViewTitle];
     [self reloadDatas];
     [self updateSwitchDateControlNextBtnState];
 }
