@@ -122,7 +122,7 @@
 - (NSMutableDictionary *)packParameters:(NSMutableDictionary *)params {
     NSMutableDictionary *paraDic = params ? [params mutableCopy] : [[NSMutableDictionary alloc] init];
     [paraDic setObject:SSJDefaultSource() forKey:@"source"];
-    [paraDic setObject:SSJAppVersion() forKey:@"appVersion"];
+//    [paraDic setObject:SSJAppVersion() forKey:@"appVersion"];
     [paraDic setObject:SSJAppVersion() forKey:@"releaseVersion"];
     if (_isLoginService) {
         [paraDic setObject:(SSJAccessToken() ?: @"") forKey:@"accessToken"];

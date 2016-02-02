@@ -31,7 +31,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 //  加密密钥字符串
 static NSString *const kSignKey = @"accountbook";
 
-static const NSInteger kLargestSyncCount = 5;
+//static const NSInteger kLargestSyncCount = 5;
 
 //  定时同步时间间隔
 static NSTimeInterval kSyncInterval = 60 * 60;
@@ -49,6 +49,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 @property (nonatomic) int64_t lastSuccessSyncVersion;
 
 @property (nonatomic, strong) NSTimer *timer;
+
+@property (nonatomic) NSInteger syncCounter;
 
 @end
 
@@ -75,93 +77,78 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 - (void)startTimingSync {
     if (!_timer) {
-        _timer = [NSTimer timerWithTimeInterval:kSyncInterval target:self selector:@selector(syncData) userInfo:nil repeats:YES];
+        _timer = [NSTimer timerWithTimeInterval:kSyncInterval target:self selector:@selector(timingSyncData) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
     }
 }
 
-- (void)syncData {
+- (void)timingSyncData {
     if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWWAN
         || [AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWiFi) {
         [self startSyncWithSuccess:NULL failure:NULL];
     }
 }
 
-- (void)startSyncWithProgress:(void (^)(double progress))progress success:(void (^)(void))success failure:(void (^)(NSError *))failure {
-    
-}
-
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     if (self.task == nil) {
-        
         //  开始同步前保存当前的用户id，防止同步过程中userid被修改导致同步数据错乱
         SSJSetCurrentSyncUserId(SSJUSERID());
         
         SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
         if (currentSynchronizer == self) {
-            [self syncDataWithSuccess:^{
-#ifdef DEBUG
-                SSJDispatch_main_async_safe(^{
-                    [CDAutoHideMessageHUD showMessage:@"同步成功"];
-                });
-#endif
-                
-                SSJDispatch_main_async_safe(^{
-                    if (success) {
-                        success();
-                    }
-                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
-                });
-                
-            } failure:^(NSError *error) {
-#ifdef DEBUG
-                SSJDispatch_main_async_safe(^{
-                    [self showError:error];
-                });
-#endif
-                SSJDispatch_main_async_safe(^{
-                    if (failure) {
-                        failure(error);
-                    }
-                });
-            }];
+            [self syncDataWithSuccess:success failure:failure];
         } else {
             dispatch_async(self.syncQueue, ^{
-                [self syncDataWithSuccess:^{
-#ifdef DEBUG
-                    SSJDispatch_main_async_safe(^{
-                        [CDAutoHideMessageHUD showMessage:@"同步成功"];
-                    });
-#endif
-                    SSJDispatch_main_async_safe(^{
-                        if (success) {
-                            success();
-                        }
-                        [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
-                    });
-                    
-                } failure:^(NSError *error) {
-#ifdef DEBUG
-                    SSJDispatch_main_async_safe(^{
-                        [self showError:error];
-                    });
-#endif
-                    SSJDispatch_main_async_safe(^{
-                        if (failure) {
-                            failure(error);
-                        }
-                    });
-                    
-                }];
+                [self syncDataWithSuccess:success failure:failure];
             });
         }
     } else {
-        SSJPRINT(@">>> SSJ warning:there is a sync task in progress");
-        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncBusy userInfo:@{NSLocalizedDescriptionKey:@"there is a sync task in progress"}];
+#ifdef DEBUG
+        SSJDispatch_main_async_safe(^{
+            [CDAutoHideMessageHUD showMessage:@"有任务正在同步！"];
+        });
+#endif
+        self.syncCounter ++;
+    }
+}
+
+- (void)successToSync:(void (^)(void))success {
+#ifdef DEBUG
+    SSJDispatch_main_async_safe(^{
+        [CDAutoHideMessageHUD showMessage:@"同步成功"];
+    });
+#endif
+    
+    if (self.syncCounter > 0) {
+        [self syncDataWithSuccess:NULL failure:NULL];
+        self.syncCounter --;
+    }
+    
+    SSJDispatch_main_async_safe(^{
+        if (success) {
+            success();
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
+    });
+}
+
+- (void)failToSync:(void (^)(NSError *error))failure error:(NSError *)error {
+#ifdef DEBUG
+    SSJDispatch_main_async_safe(^{
+        [self showError:error];
+    });
+#endif
+    
+    if (self.syncCounter > 0) {
+        [self syncDataWithSuccess:NULL failure:NULL];
+        self.syncCounter --;
+    }
+    
+    SSJDispatch_main_async_safe(^{
         if (failure) {
             failure(error);
         }
-    }
+    });
 }
 
 - (void)syncDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
@@ -177,26 +164,20 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }];
     
     if (tError) {
-        if (failure) {
-            failure(tError);
-        }
+        [self failToSync:failure error:tError];
         return;
     }
     
     //  查询要同步的数据
     NSData *data = [self getDataToSyncWithError:&tError];
     if (tError) {
-        if (failure) {
-            failure(tError);
-        }
+        [self failToSync:failure error:tError];
         return;
     }
     
     if (!data) {
         tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"there is no data to be uploaded"}];
-        if (failure) {
-            failure(tError);
-        }
+        [self failToSync:failure error:tError];
         return;
     }
     
@@ -212,9 +193,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     if (tError) {
         SSJPRINT(@">>> SSJ warning:an error occured when zip json data \n error:%@", tError);
-        if (failure) {
-            failure(tError);
-        }
+        [self failToSync:failure error:tError];
         return;
     }
     
@@ -225,14 +204,12 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         dispatch_async(self.syncQueue, ^{
             
             if (error) {
-                if (failure) {
-                    failure(error);
-                }
+                [self failToSync:failure error:tError];
                 return;
             }
             
             NSHTTPURLResponse *tResponse = (NSHTTPURLResponse *)response;
-            SSJPRINT(@">>> SSJ Sync response headers:%@", tResponse.allHeaderFields);
+            SSJPRINT(@">>> SSJ sync response headers:%@", tResponse.allHeaderFields);
             NSString *contentType = tResponse.allHeaderFields[@"Content-Type"];
             
             //  返回的是json数据格式
@@ -242,10 +219,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 NSString *desc = responseInfo[@"desc"];
                 tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                 
-                if (failure) {
-                    failure(tError);
-                }
-                SSJPRINT(@">>> sync response data:%@", responseObject);
+                SSJPRINT(@">>> SSJ sync response data:%@", responseObject);
+                [self failToSync:failure error:tError];
                 return;
             }
             
@@ -265,21 +240,15 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 
                 if (tError) {
                     SSJPRINT(@">>> SSJ warning:an error occured when unzip response data\n error:%@", tError);
-                    if (failure) {
-                        failure(tError);
-                    }
+                    [self failToSync:failure error:tError];
                     return;
                 }
                 
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
-                    if (success) {
-                        success();
-                    }
+                    [self successToSync:success];
                 } else {
-                    if (failure) {
-                        failure(tError);
-                    }
+                    [self failToSync:failure error:tError];
                 }
                 return;
             }
@@ -287,9 +256,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             //  返回未知数据
             SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
             tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
-            if (failure) {
-                failure(tError);
-            }
+            [self failToSync:failure error:tError];
         });
     }];
 }
