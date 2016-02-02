@@ -136,7 +136,7 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 - (void)cancel;
 
 /**
- *  请求完成时调用此方法，需要时子类可以重写此方法，但必须调用父类方法
+ *  请求完成时调用此方法，需要时子类可以重写此方法，不用调用父类方法
  *
  *  @param rootElement 请求返回的数据
  */
