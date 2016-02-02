@@ -24,6 +24,7 @@
 @property(nonatomic) BOOL PlusOrMinusModel;
 
 @property(nonatomic,strong)SSJCustomKeyBoardButton *ComfirmButton;
+
 @property(nonatomic, assign) id<SSJCustomKeyboardDelegate> delegate;
 
 @end
