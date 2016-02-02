@@ -121,12 +121,16 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.view addSubview:self.inputView];
     [self.inputView addSubview:self.customKeyBoard];
     [self.view addSubview:self.inputAccessoryView];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.categoryListView];
      _intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
     _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
 
