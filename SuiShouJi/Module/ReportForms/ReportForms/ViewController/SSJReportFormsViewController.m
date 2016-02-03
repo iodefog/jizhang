@@ -168,6 +168,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     if ([self.periodSelectionView isShowed]) {
         [self.periodSelectionView dismiss:YES];
     } else {
+        
        [self.periodSelectionView showInView:self.view fromTop:self.navigationController.navigationBar.bottom animated:YES];
     }
 }
@@ -384,6 +385,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [weakSelf updateSwithDateControlTitle];
             [weakSelf updateSurplusViewTitle];
         };
+        [_periodSelectionView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_periodSelectionView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_periodSelectionView ssj_setBorderWidth:1];
     }
     return _periodSelectionView;
 }

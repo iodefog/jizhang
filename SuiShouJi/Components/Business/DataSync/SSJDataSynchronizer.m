@@ -301,8 +301,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     if (userId.length && !SSJIsUserLogined()) {
         [jsonObject setObject:@[@{@"cuserid":userId,
-                                  @"imei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                                  @"source":SSJDefaultSource()}] forKey:@"bk_user"];
+                                  @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                  @"isource":SSJDefaultSource()}] forKey:@"bk_user"];
     }
     
 //    SSJPRINT(@">>> sync upload data:%@", jsonObject);
