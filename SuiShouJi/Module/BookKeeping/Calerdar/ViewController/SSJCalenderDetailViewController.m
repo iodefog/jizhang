@@ -144,12 +144,21 @@
 
 
 #pragma mark - Private
+
+/**
+ *  修改流水
+ */
 -(void)editeButtonClicked:(id)sender{
     SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
     recordMakingVc.item = self.item;
     [self.navigationController pushViewController:recordMakingVc animated:YES];
 }
 
+/**
+ *  通过类型id获取记账类型详情
+ *
+ *  @param billId 记账类型id
+ */
 -(void)getBillDetailWithBillId:(NSString *)billId{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
@@ -185,6 +194,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+/**
+ *  数据库中删除流水
+ */
 -(void)deleteCharge{
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.chargeID];

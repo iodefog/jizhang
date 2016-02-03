@@ -141,6 +141,10 @@
     [self setNeedsLayout];
 }
 
+
+/**
+ *  算出所有启用的记账类型所学的页数
+ */
 -(void)getPage{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {

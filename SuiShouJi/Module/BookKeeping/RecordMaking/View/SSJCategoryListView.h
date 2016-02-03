@@ -11,6 +11,7 @@
 
 @interface SSJCategoryListView : UIView<UIScrollViewDelegate>
 
+
 typedef void (^CategorySelectedBlock)(SSJRecordMakingCategoryItem *item);
 
 

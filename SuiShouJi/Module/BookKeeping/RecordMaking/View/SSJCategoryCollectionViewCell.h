@@ -12,9 +12,13 @@
 @interface SSJCategoryCollectionViewCell : UICollectionViewCell
 @property (strong, nonatomic) UIImageView *categoryImage;
 @property (strong, nonatomic) UILabel *categoryName;
+
+//编辑模式
 @property (nonatomic) BOOL EditeModel;
 @property (nonatomic) BOOL categorySelected;
 @property (nonatomic,strong) SSJRecordMakingCategoryItem *item;
+
+//删除记账类型回调
 typedef void (^removeCategoryBlock)();
 
 @property(nonatomic,copy) removeCategoryBlock removeCategoryBlock;
