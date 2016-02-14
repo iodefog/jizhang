@@ -12,8 +12,14 @@
 #import "SSJBookKeepHomeItem.h"
 
 @interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate,UIScrollViewDelegate,UITextFieldDelegate>
+
+//当前选中的年
 @property (nonatomic) long selectedYear;
+
+//当前选中的月
 @property (nonatomic) long selectedMonth;
+
+//当前选中的日
 @property (nonatomic) long selectedDay;
 
 //流水item(item为空位新建,有值为修改)

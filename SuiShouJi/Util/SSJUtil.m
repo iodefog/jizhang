@@ -15,7 +15,7 @@ NSString* SSJURLWithAPI(NSString* api) {
 }
 
 NSString* SSJImageURLWithAPI(NSString* api) {
-    return [NSString stringWithFormat:@"http://gjj.9188.com/jz%@",api];
+    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:@"http://jz.9188.com"]] absoluteString];
 }
 
 NSString *SSJAppName() {
