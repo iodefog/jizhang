@@ -123,6 +123,7 @@
     return _collectionView;
 }
 
+//获取当前页的所有记账类型
 -(void)getDateFromDB{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {

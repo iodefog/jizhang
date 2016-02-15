@@ -143,7 +143,7 @@
 
 
 /**
- *  算出所有启用的记账类型所学的页数
+ *  算出所有启用的记账类型所有的页数
  */
 -(void)getPage{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
