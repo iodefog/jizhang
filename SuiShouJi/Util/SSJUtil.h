@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class UIViewController;
 
@@ -145,5 +146,22 @@ BOOL SSJSaveQQList(NSArray *qqList);
  */
 NSString *SSJUUID();
 
+/**
+ *  将图片存进沙盒
+ *
+ *  @param image 要保存的图片
+ *  @param imageName 图片名称
+ *
+ *  @return (BOOL) 是否保存成功
+ */
+BOOL SSJSaveImage(UIImage *image , NSString *imageName);
 
+/**
+ *  取出图片在沙盒中的路径
+ *
+ *  @param imageName 图片名称
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJImagePath(NSString *imageName);
 

@@ -233,3 +233,16 @@ NSString *SSJUUID(){
     return [strUUID lowercaseString];
 }
 
+BOOL SSJSaveImage(UIImage *image , NSString *imageName){
+    NSString *fullImageName = [NSString stringWithFormat:@"%@.png",imageName];
+    NSData *imageData = UIImagePNGRepresentation(image);
+    NSString *fullPath = [SSJDocumentPath() stringByAppendingPathComponent:fullImageName];
+    return [imageData writeToFile:fullPath atomically:YES];
+};
+
+NSString *SSJImagePath(NSString *imageName){
+    NSString *fullImageName = [NSString stringWithFormat:@"%@.png",imageName];
+    NSString *fullPath = [SSJDocumentPath() stringByAppendingPathComponent:fullImageName];
+    return fullPath;
+};
+

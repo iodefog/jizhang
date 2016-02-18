@@ -54,7 +54,7 @@
 
 -(void)setCurrentDay:(long)currentDay{
     _currentDay = currentDay;
-    self.dateLabel.text = [NSString stringWithFormat:@"%02d",_currentDay];
+    self.dateLabel.text = [NSString stringWithFormat:@"%02ld",_currentDay];
     [self.dateLabel sizeToFit];
 }
 @end
