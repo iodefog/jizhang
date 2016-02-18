@@ -14,6 +14,12 @@
 
 @property (nonatomic) BOOL incomeOrExpence;
 
+/**
+ *  选择新的记账类型回调
+ *
+ *  @param categoryID 记账类型id
+ *  @param item       记账类型的item
+ */
 typedef void (^NewCategorySelectedBlock)(NSString *categoryID , SSJRecordMakingCategoryItem *item);
 
 

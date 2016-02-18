@@ -26,7 +26,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.Items = [[NSMutableArray alloc]init];
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         [self getDateFromDB];
@@ -123,12 +122,14 @@
     return _collectionView;
 }
 
+//获取当前页的所有记账类型
 -(void)getDateFromDB{
     FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
     if (![db open]) {
         NSLog(@"Could not open db");
         return ;
     }
+    self.Items = [[NSMutableArray alloc]init];
     FMResultSet *rs;
     if (self.page != self.totalPage - 1) {
         if (_screenWidth == 320) {
@@ -181,7 +182,7 @@
 
 -(void)setIncomeOrExpence:(BOOL)incomeOrExpence{
     _incomeOrExpence = incomeOrExpence;
-    [self.Items removeAllObjects];
+//    [self.Items removeAllObjects];
     [self getDateFromDB];
     [self.collectionView reloadData];
 }
@@ -192,6 +193,7 @@
     [self getDateFromDB];
     [self.collectionView reloadData];
 }
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
