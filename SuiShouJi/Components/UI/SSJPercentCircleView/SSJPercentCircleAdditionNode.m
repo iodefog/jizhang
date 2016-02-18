@@ -26,6 +26,8 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @property (nonatomic) CGPoint endPoint;
 
+@property (nonatomic, copy) void (^completion)(void);
+
 @end
 
 @implementation SSJPercentCircleAdditionNode
@@ -69,32 +71,6 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     self.textLabel.top = self.imageView.centerY + self.item.imageRadius + self.item.gapBetweenImageAndText;
     self.textLabel.centerX = self.imageView.centerX;
 }
-
-//- (CGSize)sizeThatFits:(CGSize)size {
-//    CGSize textSize = [self.item.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.item.textSize]}];
-//    CGFloat width = 0;
-//    CGFloat height = 0;
-//    switch (self.item.orientation) {
-//        case SSJReportFormsPercentCircleAdditionViewOrientationTopRight:
-//            width = self.item.endPoint.x - self.item.startPoint.x + MAX(self.item.imageRadius * 2, textSize.width);
-//            height = self.item.imageRadius + MAX(self.item.imageRadius + self.item.gapBetweenImageAndText + textSize.height, self.item.startPoint.y - self.item.endPoint.y);
-//            break;
-//        case SSJReportFormsPercentCircleAdditionViewOrientationBottomRight:
-//            width = self.item.endPoint.x - self.item.startPoint.x + MAX(self.item.imageRadius * 2, textSize.width);
-//            height = self.item.imageRadius + self.item.gapBetweenImageAndText + textSize.height + MAX(self.item.imageRadius, self.item.endPoint.y - self.item.startPoint.y);
-//            break;
-//            
-//        case SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft:
-//            width = self.item.startPoint.x - self.item.endPoint.x + MAX(self.item.imageRadius * 2, textSize.width);
-//            height = self.item.imageRadius + self.item.gapBetweenImageAndText + textSize.height + MAX(self.item.imageRadius, self.item.endPoint.y - self.item.startPoint.y);
-//            break;
-//        case SSJReportFormsPercentCircleAdditionViewOrientationTopLeft:
-//            width = self.item.startPoint.x - self.item.endPoint.x + MAX(self.item.imageRadius * 2, textSize.width);
-//            height = self.item.imageRadius + MAX(self.item.imageRadius + self.item.gapBetweenImageAndText + textSize.height, self.item.startPoint.y - self.item.endPoint.y);
-//            break;
-//    }
-//    return CGSizeMake(width, height);
-//}
 
 - (BOOL)testOverlap:(SSJPercentCircleAdditionNode *)view {
     if (![view isKindOfClass:[SSJPercentCircleAdditionNode class]]) {
@@ -274,8 +250,24 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     return YES;
 }
 
-- (void)beginDraw {
-    [self drawBrokenLine];
+- (void)beginDrawWithCompletion:(void (^)(void))completion {
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:self.startPoint];
+    [path addLineToPoint:self.turnPoint];
+    [path addLineToPoint:self.endPoint];
+    
+    self.brokenLineLayer.path = path.CGPath;
+    
+    CABasicAnimation *lineAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    lineAnimation.duration = 0.35;
+    lineAnimation.toValue = @(1);
+    lineAnimation.delegate = self;
+    lineAnimation.removedOnCompletion = NO;
+    lineAnimation.fillMode = kCAFillModeForwards;
+    lineAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    [self.brokenLineLayer addAnimation:lineAnimation forKey:kAnimationKey];
+    
+    self.completion = completion;
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -293,24 +285,6 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 #pragma mark - Private
-- (void)drawBrokenLine {
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:self.startPoint];
-    [path addLineToPoint:self.turnPoint];
-    [path addLineToPoint:self.endPoint];
-    
-    self.brokenLineLayer.path = path.CGPath;
-    
-    CABasicAnimation *lineAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    lineAnimation.duration = 0.35;
-    lineAnimation.toValue = @(1);
-    lineAnimation.delegate = self;
-    lineAnimation.removedOnCompletion = NO;
-    lineAnimation.fillMode = kCAFillModeForwards;
-    lineAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-    [self.brokenLineLayer addAnimation:lineAnimation forKey:kAnimationKey];
-}
-
 - (void)showImageView {
     [UIView animateKeyframesWithDuration:0.36 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.25 animations:^{
@@ -333,6 +307,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 - (void)showTextLabel {
     [UIView transitionWithView:self.textLabel duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         self.textLabel.hidden = NO;
+        if (self.completion) {
+            self.completion();
+        }
     } completion:NULL];
 }
 

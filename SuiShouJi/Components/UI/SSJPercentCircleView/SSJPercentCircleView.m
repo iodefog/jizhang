@@ -7,9 +7,8 @@
 //
 
 #import "SSJPercentCircleView.h"
+#import "SSJPercentCircleNode.h"
 #import "SSJPercentCircleAdditionNode.h"
-
-static NSString *const kAnimationKey = @"kAnimationKey";
 
 @interface SSJPercentCircleView ()
 
@@ -19,13 +18,13 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @property (nonatomic) CGRect circleFrame;
 
-@property (nonatomic, strong) CAShapeLayer *maskLayer;
-
-@property (nonatomic, strong) NSMutableArray *circleLayers;
+@property (nonatomic, strong) SSJPercentCircleNode *circleNode;
 
 @property (nonatomic, strong) NSMutableArray *additionViews;
 
-@property (nonatomic) NSUInteger circleAnimationCounter;
+@property (nonatomic) NSUInteger additionNodeAnimationCounter;
+
+@property (nonatomic, strong) UIImageView *skinView;
 
 @end
 
@@ -37,11 +36,17 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 - (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets thickness:(CGFloat)thickness {
     if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor whiteColor];
         self.circleInsets = insets;
         self.circleThickness = thickness;
-        self.circleLayers = [NSMutableArray array];
+        
         self.additionViews = [NSMutableArray array];
-        [self.layer addSublayer:self.maskLayer];
+        
+        self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
+        self.skinView.layer.borderWidth = 5;
+        self.skinView.layer.borderColor = [UIColor redColor].CGColor;
+        self.skinView.hidden = YES;
+        [self addSubview:self.skinView];
     }
     return self;
 }
@@ -61,11 +66,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         return;
     }
     
-    //  移除之前的子视图、图层
-    [self.circleLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-    [self.circleLayers removeAllObjects];
+    self.skinView.hidden = YES;
     
-    [self.additionViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    //  移除之前的子视图、图层
     [self.additionViews removeAllObjects];
     
     NSUInteger numberOfComponents = [self.dataSource numberOfComponentsInPercentCircle:self];
@@ -73,10 +76,17 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     CGFloat overlapScale = 0;
     
     //  添加圆环图层
-    UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame)) radius:(CGRectGetWidth(self.circleFrame) * 0.5 - self.circleThickness) startAngle:-M_PI_2 endAngle:M_PI * 1.5 clockwise:YES];
+    self.additionNodeAnimationCounter = 0;
     
-    self.maskLayer.path = circlePath.CGPath;
-    self.circleAnimationCounter = 0;
+    NSMutableArray *circleNodeItems = [NSMutableArray arrayWithCapacity:numberOfComponents];
+    
+    if (!self.circleNode) {
+        CGPoint center = CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame));
+        CGFloat radius = CGRectGetWidth(self.circleFrame) * 0.5 - self.circleThickness;
+        CGFloat lineWith = self.circleThickness * 2;
+        self.circleNode = [SSJPercentCircleNode nodeWithCenter:center radius:radius lineWith:lineWith];
+        [self addSubview:self.circleNode];
+    }
     
     for (NSUInteger idx = 0; idx < numberOfComponents; idx ++) {
         
@@ -88,28 +98,11 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             
             item.previousScale = overlapScale;
             
-            //  添加圆环
-            CAShapeLayer *layer = [CAShapeLayer layer];
-            layer.contentsScale = [[UIScreen mainScreen] scale];
-            layer.path = circlePath.CGPath;
-            layer.fillColor = [UIColor whiteColor].CGColor;
-            layer.lineWidth = self.circleThickness * 2;
-            layer.strokeColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
-            layer.strokeEnd = 0;
-            layer.zPosition = numberOfComponents - idx;
-            [self.layer addSublayer:layer];
-            
-            [self.circleLayers addObject:layer];
-            
-            //  给圆环添加动画
-            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-            animation.toValue = @(overlapScale + item.scale);
-            animation.duration = 0.7;
-            animation.delegate = self;
-            animation.removedOnCompletion = NO;
-            animation.fillMode = kCAFillModeForwards;
-            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-            [layer addAnimation:animation forKey:kAnimationKey];
+            SSJPercentCircleNodeItem *circleNodeItem = [[SSJPercentCircleNodeItem alloc] init];
+            circleNodeItem.startAngle = overlapScale * M_PI * 2;
+            circleNodeItem.endAngle = (overlapScale + item.scale) * M_PI * 2;
+            circleNodeItem.colorValue = item.colorValue;
+            [circleNodeItems addObject:circleNodeItem];
             
             overlapScale += item.scale;
             
@@ -169,45 +162,39 @@ static NSString *const kAnimationKey = @"kAnimationKey";
                 [self addSubview:additionView];
                 [self.additionViews addObject:additionView];
             }
-            
-//            [self addSubview:additionView];
-//            [self.additionViews addObject:additionView];
         }
     }
-}
-
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    for (CAShapeLayer *circleLayer in self.circleLayers) {
-        if ([circleLayer animationForKey:kAnimationKey] == anim) {
-            CABasicAnimation *circleAnimation = (CABasicAnimation *)anim;
-            [circleLayer removeAnimationForKey:kAnimationKey];
-            circleLayer.strokeEnd = [circleAnimation.toValue floatValue];
-            
-            self.circleAnimationCounter ++;
-            if (self.circleAnimationCounter == self.circleLayers.count) {
-                [self.additionViews makeObjectsPerformSelector:@selector(beginDraw)];
+    
+    __weak typeof(self) weakSelf = self;
+    self.circleNode.hidden = NO;
+    [self.circleNode setItems:circleNodeItems completion:^{
+        [weakSelf.additionViews makeObjectsPerformSelector:@selector(beginDrawWithCompletion:) withObject:^{
+            weakSelf.additionNodeAnimationCounter ++;
+            if (weakSelf.additionNodeAnimationCounter == weakSelf.additionViews.count) {
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    UIImage *screentShot = [weakSelf ssj_takeScreenShot];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        weakSelf.skinView.hidden = NO;
+                        weakSelf.skinView.image = screentShot;
+                        weakSelf.skinView.size = screentShot.size;
+                        
+                        //                NSData *data = UIImagePNGRepresentation(screentShot);
+                        //                [data writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
+                        
+                        weakSelf.circleNode.hidden = YES;
+                        [weakSelf.additionViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+                    });
+                });
             }
-            
-            return;
-        }
-    }
+        }];
+    }];
 }
 
 - (void)updateCircleFrame {
     CGRect circleFrame = UIEdgeInsetsInsetRect(self.bounds, self.circleInsets);
     CGFloat circleDiam = MIN(circleFrame.size.width, circleFrame.size.height);
     self.circleFrame = CGRectMake((self.width - circleDiam) * 0.5, circleFrame.origin.y, circleDiam, circleDiam);
-}
-
-- (CAShapeLayer *)maskLayer {
-    if (!_maskLayer) {
-        _maskLayer = [CAShapeLayer layer];
-        _maskLayer.fillColor = [UIColor whiteColor].CGColor;
-        _maskLayer.contentsScale = [[UIScreen mainScreen] scale];
-        _maskLayer.lineWidth = 0;
-        _maskLayer.zPosition = FLT_MAX;
-    }
-    return _maskLayer;
 }
 
 @end

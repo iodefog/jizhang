@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)testOverlap:(SSJPercentCircleAdditionNode *)view;
 
-- (void)beginDraw;
+- (void)beginDrawWithCompletion:(void (^)(void))completion;
     
 @end
 

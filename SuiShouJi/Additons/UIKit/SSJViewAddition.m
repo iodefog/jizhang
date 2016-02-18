@@ -429,7 +429,7 @@ static const void *kBackViewIdentifier = &kBackViewIdentifier;
 }
 
 - (UIImage *)ssj_takeScreenShotWithSize:(CGSize)size opaque:(BOOL)opaque scale:(CGFloat)scale {
-    return [self ssj_takeScreenShotWithSize:size opaque:opaque scale:scale];
+    return [self.layer ssj_takeScreenShotWithSize:size opaque:opaque scale:scale];
 }
 
 @end
