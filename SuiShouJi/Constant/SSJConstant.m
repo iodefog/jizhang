@@ -20,8 +20,8 @@ NSString *const SSJBaseURLString = @"http://jz.9188.com";
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
-//NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/9188ji-zhang/id1080564439?l=zh&ls=1&mt=8";
-NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";
+NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/cn/app/9188ji-zhang/id1080564439?mt=8";
+//NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";
 
 NSString *const SSJLastSelectFundItemKey = @"lastSelectFundKey";
 
