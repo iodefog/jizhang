@@ -6,13 +6,13 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJReportFormsPercentCircleAdditionView.h"
+#import "SSJPercentCircleAdditionNode.h"
 
 static NSString *const kAnimationKey = @"kAnimationKey";
 
-@interface SSJReportFormsPercentCircleAdditionView ()
+@interface SSJPercentCircleAdditionNode ()
 
-@property (nonatomic, readwrite, strong) SSJReportFormsPercentCircleAdditionViewItem *item;
+@property (nonatomic, readwrite, strong) SSJPercentCircleAdditionNodeItem *item;
 
 @property (nonatomic, strong) CAShapeLayer *brokenLineLayer;
 
@@ -28,9 +28,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @end
 
-@implementation SSJReportFormsPercentCircleAdditionView
+@implementation SSJPercentCircleAdditionNode
 
-- (instancetype)initWithItem:(SSJReportFormsPercentCircleAdditionViewItem *)item {
+- (instancetype)initWithItem:(SSJPercentCircleAdditionNodeItem *)item {
     if (!item) {
         return nil;
     }
@@ -56,13 +56,13 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 - (void)layoutSubviews {
     switch (self.item.orientation) {
-        case SSJReportFormsPercentCircleAdditionViewOrientationTopRight:
-        case SSJReportFormsPercentCircleAdditionViewOrientationBottomRight:
+        case SSJPercentCircleAdditionNodeOrientationTopRight:
+        case SSJPercentCircleAdditionNodeOrientationBottomRight:
             self.imageView.center = CGPointMake(self.endPoint.x + self.item.imageRadius, self.endPoint.y);
             break;
             
-        case SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft:
-        case SSJReportFormsPercentCircleAdditionViewOrientationTopLeft:
+        case SSJPercentCircleAdditionNodeOrientationBottomLeft:
+        case SSJPercentCircleAdditionNodeOrientationTopLeft:
             self.imageView.center = CGPointMake(self.endPoint.x - self.item.imageRadius, self.endPoint.y);
             break;
     }
@@ -96,13 +96,13 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 //    return CGSizeMake(width, height);
 //}
 
-- (BOOL)testOverlap:(SSJReportFormsPercentCircleAdditionView *)view {
-    if (![view isKindOfClass:[SSJReportFormsPercentCircleAdditionView class]]) {
+- (BOOL)testOverlap:(SSJPercentCircleAdditionNode *)view {
+    if (![view isKindOfClass:[SSJPercentCircleAdditionNode class]]) {
         return NO;
     }
     
-    SSJReportFormsPercentCircleAdditionViewItem *anotherItem = view.item;
-    if (![anotherItem isKindOfClass:[SSJReportFormsPercentCircleAdditionViewItem class]]) {
+    SSJPercentCircleAdditionNodeItem *anotherItem = view.item;
+    if (![anotherItem isKindOfClass:[SSJPercentCircleAdditionNodeItem class]]) {
         return NO;
     }
     
@@ -112,9 +112,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     
     if (self.item.orientation == anotherItem.orientation) {
         switch (anotherItem.orientation) {
-            case SSJReportFormsPercentCircleAdditionViewOrientationTopRight: {
-                SSJReportFormsPercentCircleAdditionViewItem *item1 = nil;
-                SSJReportFormsPercentCircleAdditionViewItem *item2 = nil;
+            case SSJPercentCircleAdditionNodeOrientationTopRight: {
+                SSJPercentCircleAdditionNodeItem *item1 = nil;
+                SSJPercentCircleAdditionNodeItem *item2 = nil;
                 
                 if (self.item.startPoint.x < anotherItem.startPoint.x) {
                     item1 = self.item;
@@ -143,9 +143,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             }
                 break;
                 
-            case SSJReportFormsPercentCircleAdditionViewOrientationBottomRight: {
-                SSJReportFormsPercentCircleAdditionViewItem *item1 = nil;
-                SSJReportFormsPercentCircleAdditionViewItem *item2 = nil;
+            case SSJPercentCircleAdditionNodeOrientationBottomRight: {
+                SSJPercentCircleAdditionNodeItem *item1 = nil;
+                SSJPercentCircleAdditionNodeItem *item2 = nil;
                 
                 if (self.item.startPoint.x < anotherItem.startPoint.x) {
                     item1 = anotherItem;
@@ -179,9 +179,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             }
                 break;
                 
-            case SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft: {
-                SSJReportFormsPercentCircleAdditionViewItem *item1 = nil;
-                SSJReportFormsPercentCircleAdditionViewItem *item2 = nil;
+            case SSJPercentCircleAdditionNodeOrientationBottomLeft: {
+                SSJPercentCircleAdditionNodeItem *item1 = nil;
+                SSJPercentCircleAdditionNodeItem *item2 = nil;
                 
                 if (self.item.startPoint.x < anotherItem.startPoint.x) {
                     item1 = anotherItem;
@@ -214,9 +214,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             }
                 break;
                 
-            case SSJReportFormsPercentCircleAdditionViewOrientationTopLeft: {
-                SSJReportFormsPercentCircleAdditionViewItem *item1 = nil;
-                SSJReportFormsPercentCircleAdditionViewItem *item2 = nil;
+            case SSJPercentCircleAdditionNodeOrientationTopLeft: {
+                SSJPercentCircleAdditionNodeItem *item1 = nil;
+                SSJPercentCircleAdditionNodeItem *item2 = nil;
                 
                 if (self.item.startPoint.x < anotherItem.startPoint.x) {
                     item1 = self.item;
@@ -250,20 +250,20 @@ static NSString *const kAnimationKey = @"kAnimationKey";
                 break;
         }
     } else {
-        if ((self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopRight
-             && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomRight)
-            || (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopLeft
-                && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft)) {
+        if ((self.item.orientation == SSJPercentCircleAdditionNodeOrientationTopRight
+             && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationBottomRight)
+            || (self.item.orientation == SSJPercentCircleAdditionNodeOrientationTopLeft
+                && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationBottomLeft)) {
                 
                 if (anotherItem.endPoint.y - anotherItem.imageRadius <= self.item.endPoint.y + self.item.imageRadius + self.item.gapBetweenImageAndText + self.item.textSize) {
                     return NO;
                 }
             }
         
-        if ((self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomRight
-             && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopRight)
-            || (self.item.orientation == SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft
-                && anotherItem.orientation == SSJReportFormsPercentCircleAdditionViewOrientationTopLeft)) {
+        if ((self.item.orientation == SSJPercentCircleAdditionNodeOrientationBottomRight
+             && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationTopRight)
+            || (self.item.orientation == SSJPercentCircleAdditionNodeOrientationBottomLeft
+                && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationTopLeft)) {
                 
                 if (self.item.endPoint.y - self.item.imageRadius <= anotherItem.endPoint.y + anotherItem.imageRadius + anotherItem.gapBetweenImageAndText + anotherItem.textSize) {
                     return NO;

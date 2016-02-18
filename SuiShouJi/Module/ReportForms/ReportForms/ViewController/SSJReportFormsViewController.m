@@ -8,7 +8,7 @@
 
 #import "SSJReportFormsViewController.h"
 #import "SSJReportFormsPeriodSelectionView.h"
-#import "SSJReportFormsPercentCircle.h"
+#import "SSJPercentCircleView.h"
 #import "SSJReportFormsSwitchYearControl.h"
 #import "SSJPageControl.h"
 #import "SSJSegmentedControl.h"
@@ -39,7 +39,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 @property (nonatomic, strong) SSJReportFormsSwitchYearControl *switchDateControl;
 
 //  月份收支图表
-@property (nonatomic, strong) SSJReportFormsPercentCircle *chartView;
+@property (nonatomic, strong) SSJPercentCircleView *chartView;
 
 //  结余金额视图
 @property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
@@ -151,11 +151,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
-- (NSUInteger)numberOfComponentsInPercentCircle:(SSJReportFormsPercentCircle *)circle {
+- (NSUInteger)numberOfComponentsInPercentCircle:(SSJPercentCircleView *)circle {
     return self.circleItems.count;
 }
 
-- (SSJReportFormsPercentCircleItem *)percentCircle:(SSJReportFormsPercentCircle *)circle itemForComponentAtIndex:(NSUInteger)index {
+- (SSJReportFormsPercentCircleItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index {
     if (index < self.circleItems.count) {
         return self.circleItems[index];
     }
@@ -414,9 +414,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     return _switchDateControl;
 }
 
-- (SSJReportFormsPercentCircle *)chartView {
+- (SSJPercentCircleView *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJReportFormsPercentCircle alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 247) insets:UIEdgeInsetsMake(44, 80, 44, 80) thickness:39];
+        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 247) insets:UIEdgeInsetsMake(44, 80, 44, 80) thickness:39];
         _chartView.dataSource = self;
         [_chartView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];

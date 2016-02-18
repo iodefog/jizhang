@@ -1,8 +1,8 @@
 //
-//  SSJReportFormsPercentCircleAdditionViewItem.h
+//  SSJPercentCircleAdditionNodeItem.h
 //  SuiShouJi
 //
-//  Created by old lang on 16/1/13.
+//  Created by old lang on 16/2/18.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
@@ -10,14 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, SSJReportFormsPercentCircleAdditionViewOrientation) {
-    SSJReportFormsPercentCircleAdditionViewOrientationTopRight,
-    SSJReportFormsPercentCircleAdditionViewOrientationBottomRight,
-    SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft,
-    SSJReportFormsPercentCircleAdditionViewOrientationTopLeft
+typedef NS_ENUM(NSUInteger, SSJPercentCircleAdditionNodeOrientation) {
+    SSJPercentCircleAdditionNodeOrientationTopRight,
+    SSJPercentCircleAdditionNodeOrientationBottomRight,
+    SSJPercentCircleAdditionNodeOrientationBottomLeft,
+    SSJPercentCircleAdditionNodeOrientationTopLeft
 };
 
-@interface SSJReportFormsPercentCircleAdditionViewItem : NSObject
+@interface SSJPercentCircleAdditionNodeItem : NSObject
 
 @property (nonatomic) CGPoint startPoint;
 
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsPercentCircleAdditionViewOrientation) 
 
 @property (nonatomic, copy) NSString *textColorValue;
 
-@property (nonatomic) SSJReportFormsPercentCircleAdditionViewOrientation orientation;
+@property (nonatomic) SSJPercentCircleAdditionNodeOrientation orientation;
 
 @end
 

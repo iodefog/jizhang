@@ -6,12 +6,12 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJReportFormsPercentCircle.h"
-#import "SSJReportFormsPercentCircleAdditionView.h"
+#import "SSJPercentCircleView.h"
+#import "SSJPercentCircleAdditionNode.h"
 
 static NSString *const kAnimationKey = @"kAnimationKey";
 
-@interface SSJReportFormsPercentCircle ()
+@interface SSJPercentCircleView ()
 
 @property (nonatomic, readwrite) UIEdgeInsets circleInsets;
 
@@ -29,7 +29,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @end
 
-@implementation SSJReportFormsPercentCircle
+@implementation SSJPercentCircleView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     return [self initWithFrame:frame insets:UIEdgeInsetsZero thickness:0];
@@ -114,13 +114,13 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             overlapScale += item.scale;
             
             //  添加附加视图(折线、图片、比例)
-            SSJReportFormsPercentCircleAdditionViewItem *additionViewItem = [[SSJReportFormsPercentCircleAdditionViewItem alloc] init];
+            SSJPercentCircleAdditionNodeItem *additionViewItem = [[SSJPercentCircleAdditionNodeItem alloc] init];
             
             CGPoint startPoint = CGPointZero;
             CGPoint turnPoint = CGPointZero;
             CGPoint endPoint = CGPointZero;
             
-            SSJReportFormsPercentCircleAdditionViewOrientation orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopRight;
+            SSJPercentCircleAdditionNodeOrientation orientation = SSJPercentCircleAdditionNodeOrientationTopRight;
             
             //  根据比例计算出角度，再根据角度计算出折现的起点
             CGFloat angle = (0.5 * item.scale + item.previousScale) * M_PI * 2;
@@ -131,19 +131,19 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             if (angle >= 0 && angle < M_PI_2) {
                 turnPoint = CGPointMake(axisX + 5, axisY - 10);
                 endPoint = CGPointMake(axisX + 5 + 35, axisY - 10);
-                orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopRight;
+                orientation = SSJPercentCircleAdditionNodeOrientationTopRight;
             } else if (angle >= M_PI_2 && angle < M_PI) {
                 turnPoint = CGPointMake(axisX + 5, axisY + 10);
                 endPoint = CGPointMake(axisX + 5 + 35, axisY + 10);
-                orientation = SSJReportFormsPercentCircleAdditionViewOrientationBottomRight;
+                orientation = SSJPercentCircleAdditionNodeOrientationBottomRight;
             } else if (angle >= M_PI && angle < M_PI + M_PI_2) {
                 turnPoint = CGPointMake(axisX - 5, axisY + 10);
                 endPoint = CGPointMake(axisX - 5 - 35, axisY + 10);
-                orientation = SSJReportFormsPercentCircleAdditionViewOrientationBottomLeft;
+                orientation = SSJPercentCircleAdditionNodeOrientationBottomLeft;
             } else if (angle >= M_PI + M_PI_2) {
                 turnPoint = CGPointMake(axisX - 5, axisY - 10);
                 endPoint = CGPointMake(axisX - 5 - 35, axisY - 10);
-                orientation = SSJReportFormsPercentCircleAdditionViewOrientationTopLeft;
+                orientation = SSJPercentCircleAdditionNodeOrientationTopLeft;
             }
             
             additionViewItem.startPoint = startPoint;
@@ -158,8 +158,8 @@ static NSString *const kAnimationKey = @"kAnimationKey";
             additionViewItem.textSize = 15;
             additionViewItem.textColorValue = @"#a7a7a7";
             
-            SSJReportFormsPercentCircleAdditionView *additionView = [[SSJReportFormsPercentCircleAdditionView alloc] initWithItem:additionViewItem];
-            SSJReportFormsPercentCircleAdditionView *lastAdditionView = [self.additionViews lastObject];
+            SSJPercentCircleAdditionNode *additionView = [[SSJPercentCircleAdditionNode alloc] initWithItem:additionViewItem];
+            SSJPercentCircleAdditionNode *lastAdditionView = [self.additionViews lastObject];
             if (lastAdditionView) {
                 if ([additionView testOverlap:lastAdditionView]) {
                     [self addSubview:additionView];
