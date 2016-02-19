@@ -6,8 +6,8 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJReportFormsPercentCircleItem.h"
+#import "SSJPercentCircleViewItem.h"
 
-@implementation SSJReportFormsPercentCircleItem
+@implementation SSJPercentCircleViewItem
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJReportFormsPercentCircleItem.h"
+#import "SSJPercentCircleViewItem.h"
 
 @class SSJPercentCircleView;
 
@@ -15,7 +15,7 @@
 
 - (NSUInteger)numberOfComponentsInPercentCircle:(SSJPercentCircleView *)circle;
 
-- (SSJReportFormsPercentCircleItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index;
+- (SSJPercentCircleViewItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index;
 
 @end
 

@@ -85,7 +85,7 @@
     for (NSUInteger idx = 0; idx < numberOfComponents; idx ++) {
         
         if ([self.dataSource respondsToSelector:@selector(percentCircle:itemForComponentAtIndex:)]) {
-            SSJReportFormsPercentCircleItem *item = [self.dataSource percentCircle:self itemForComponentAtIndex:idx];
+            SSJPercentCircleViewItem *item = [self.dataSource percentCircle:self itemForComponentAtIndex:idx];
             if (!item) {
                 return;
             }

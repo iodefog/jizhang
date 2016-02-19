@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJReportFormsPercentCircleItem : NSObject
+@interface SSJPercentCircleViewItem : NSObject
 
 //  圆环组件比例值，在0～1之间
 @property (nonatomic) double scale;

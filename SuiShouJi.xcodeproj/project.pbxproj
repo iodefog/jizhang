@@ -30,7 +30,6 @@
 		7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB41C5106CE00E202A2 /* SSJBaseSyncTable.m */; };
 		7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB71C5107C300E202A2 /* SSJSyncTable.m */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
-		7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */; };
 		7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */; };
 		7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB661C3130220007C0A3 /* SSJPageControl.m */; };
 		7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB691C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m */; };
@@ -207,6 +206,7 @@
 		7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545C1C75F81B00A90153 /* SSJPercentCircleNode.m */; };
 		7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */; };
 		7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */; };
+		7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
 		7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */; };
@@ -469,8 +469,6 @@
 		7D581EB71C5107C300E202A2 /* SSJSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncTable.m; sourceTree = "<group>"; };
 		7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchYearControl.h; sourceTree = "<group>"; };
 		7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchYearControl.m; sourceTree = "<group>"; };
-		7D6AAB571C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPercentCircleItem.h; sourceTree = "<group>"; };
-		7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPercentCircleItem.m; sourceTree = "<group>"; };
 		7D6AAB611C312C500007C0A3 /* SSJUnlimitedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUnlimitedScrollView.h; sourceTree = "<group>"; };
 		7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUnlimitedScrollView.m; sourceTree = "<group>"; };
 		7D6AAB651C3130220007C0A3 /* SSJPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPageControl.h; sourceTree = "<group>"; };
@@ -669,6 +667,8 @@
 		7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleNodeItem.m; sourceTree = "<group>"; };
 		7DEF54611C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionGroupNode.h; sourceTree = "<group>"; };
 		7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionGroupNode.m; sourceTree = "<group>"; };
+		7DEF54641C76DCAB00A90153 /* SSJPercentCircleViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleViewItem.h; sourceTree = "<group>"; };
+		7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleViewItem.m; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
 		7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-667@2x.png"; sourceTree = "<group>"; };
 		7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@3x.png"; sourceTree = "<group>"; };
@@ -1166,8 +1166,6 @@
 		7D6AAB4E1C30EC1F0007C0A3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				7D6AAB571C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.h */,
-				7D6AAB581C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m */,
 				7D6AAB821C32A5480007C0A3 /* SSJReportFormsItem.h */,
 				7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */,
 			);
@@ -1548,6 +1546,8 @@
 			children = (
 				7DEF54501C75DEEC00A90153 /* SSJPercentCircleView.h */,
 				7DEF54511C75DEEC00A90153 /* SSJPercentCircleView.m */,
+				7DEF54641C76DCAB00A90153 /* SSJPercentCircleViewItem.h */,
+				7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */,
 				7DEF545B1C75F81B00A90153 /* SSJPercentCircleNode.h */,
 				7DEF545C1C75F81B00A90153 /* SSJPercentCircleNode.m */,
 				7DEF545E1C75F82A00A90153 /* SSJPercentCircleNodeItem.h */,
@@ -3045,6 +3045,7 @@
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,
 				7DE6E86C1C55DD9C001C9138 /* SSJRegistOrderView.m in Sources */,
+				7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
 				BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */,
@@ -3061,7 +3062,6 @@
 				BD7BC8541C3ADAAA001DE5D8 /* SSJFundingDetailDateHeader.m in Sources */,
 				7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */,
 				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,
-				7D6AAB591C310DDA0007C0A3 /* SSJReportFormsPercentCircleItem.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,

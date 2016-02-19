@@ -155,7 +155,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     return self.circleItems.count;
 }
 
-- (SSJReportFormsPercentCircleItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index {
+- (SSJPercentCircleViewItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index {
     if (index < self.circleItems.count) {
         return self.circleItems[index];
     }
@@ -328,7 +328,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             if ([selectedTitle isEqualToString:kSegmentTitlePay]
                 || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
                 //  收入、支出
-                SSJReportFormsPercentCircleItem *circleItem = [[SSJReportFormsPercentCircleItem alloc] init];
+                SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
                 circleItem.scale = item.scale / scaleAmount;
                 circleItem.imageName = item.imageName;
                 circleItem.colorValue = item.colorValue;
@@ -339,7 +339,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                 //  结余，结余最多只有收入、支出两种类型
                 NSUInteger index = [result indexOfObject:item];
                 if (index <= 1) {
-                    SSJReportFormsPercentCircleItem *circleItem = [[SSJReportFormsPercentCircleItem alloc] init];
+                    SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
                     circleItem.scale = item.scale / scaleAmount;
                     circleItem.imageName = item.imageName;
                     circleItem.colorValue = item.colorValue;
