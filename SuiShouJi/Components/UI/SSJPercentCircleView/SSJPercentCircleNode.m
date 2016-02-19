@@ -89,6 +89,13 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     [self.maskLayer removeFromSuperlayer];
     self.maskLayer = nil;
     
+    if (self.items.count == 0) {
+        if (self.completion) {
+            self.completion();
+        }
+        return;
+    }
+    
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:self.centerPoint radius:self.radius startAngle:-M_PI_2 endAngle:M_PI * 1.5 clockwise:YES];
     
     for (int idx = 0; idx < self.items.count; idx ++) {

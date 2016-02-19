@@ -307,10 +307,11 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 - (void)showTextLabel {
     [UIView transitionWithView:self.textLabel duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         self.textLabel.hidden = NO;
+    } completion:^(BOOL finished) {
         if (self.completion) {
             self.completion();
         }
-    } completion:NULL];
+    }];
 }
 
 #pragma mark - Getter

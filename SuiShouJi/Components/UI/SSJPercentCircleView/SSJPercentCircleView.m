@@ -9,6 +9,7 @@
 #import "SSJPercentCircleView.h"
 #import "SSJPercentCircleNode.h"
 #import "SSJPercentCircleAdditionNode.h"
+#import "SSJPercentCircleAdditionGroupNode.h"
 
 @interface SSJPercentCircleView ()
 
@@ -20,11 +21,11 @@
 
 @property (nonatomic, strong) SSJPercentCircleNode *circleNode;
 
-@property (nonatomic, strong) NSMutableArray *additionViews;
-
-@property (nonatomic) NSUInteger additionNodeAnimationCounter;
+@property (nonatomic, strong) SSJPercentCircleAdditionGroupNode *additionGroupNode;
 
 @property (nonatomic, strong) UIImageView *skinView;
+
+@property (nonatomic) NSUInteger animateCounter;
 
 @end
 
@@ -40,11 +41,10 @@
         self.circleInsets = insets;
         self.circleThickness = thickness;
         
-        self.additionViews = [NSMutableArray array];
+        self.additionGroupNode = [SSJPercentCircleAdditionGroupNode node];
+        [self addSubview:self.additionGroupNode];
         
         self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
-        self.skinView.layer.borderWidth = 5;
-        self.skinView.layer.borderColor = [UIColor redColor].CGColor;
         self.skinView.hidden = YES;
         [self addSubview:self.skinView];
     }
@@ -68,17 +68,8 @@
     
     self.skinView.hidden = YES;
     
-    //  移除之前的子视图、图层
-    [self.additionViews removeAllObjects];
-    
     NSUInteger numberOfComponents = [self.dataSource numberOfComponentsInPercentCircle:self];
-    
     CGFloat overlapScale = 0;
-    
-    //  添加圆环图层
-    self.additionNodeAnimationCounter = 0;
-    
-    NSMutableArray *circleNodeItems = [NSMutableArray arrayWithCapacity:numberOfComponents];
     
     if (!self.circleNode) {
         CGPoint center = CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame));
@@ -87,6 +78,9 @@
         self.circleNode = [SSJPercentCircleNode nodeWithCenter:center radius:radius lineWith:lineWith];
         [self addSubview:self.circleNode];
     }
+    
+    NSMutableArray *circleNodeItems = [NSMutableArray arrayWithCapacity:numberOfComponents];
+    NSMutableArray *additionNodeItems = [NSMutableArray array];
     
     for (NSUInteger idx = 0; idx < numberOfComponents; idx ++) {
         
@@ -150,43 +144,34 @@
             additionViewItem.text = item.additionalText;
             additionViewItem.textSize = 15;
             additionViewItem.textColorValue = @"#a7a7a7";
-            
-            SSJPercentCircleAdditionNode *additionView = [[SSJPercentCircleAdditionNode alloc] initWithItem:additionViewItem];
-            SSJPercentCircleAdditionNode *lastAdditionView = [self.additionViews lastObject];
-            if (lastAdditionView) {
-                if ([additionView testOverlap:lastAdditionView]) {
-                    [self addSubview:additionView];
-                    [self.additionViews addObject:additionView];
-                }
-            } else {
-                [self addSubview:additionView];
-                [self.additionViews addObject:additionView];
-            }
+            [additionNodeItems addObject:additionViewItem];
         }
     }
     
-    __weak typeof(self) weakSelf = self;
     self.circleNode.hidden = NO;
+    [self.additionGroupNode cleanUpAdditionNodes];
+    
+    self.animateCounter ++;
+    
+    __weak typeof(self) weakSelf = self;
     [self.circleNode setItems:circleNodeItems completion:^{
-        [weakSelf.additionViews makeObjectsPerformSelector:@selector(beginDrawWithCompletion:) withObject:^{
-            weakSelf.additionNodeAnimationCounter ++;
-            if (weakSelf.additionNodeAnimationCounter == weakSelf.additionViews.count) {
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    UIImage *screentShot = [weakSelf ssj_takeScreenShot];
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        weakSelf.skinView.hidden = NO;
-                        weakSelf.skinView.image = screentShot;
-                        weakSelf.skinView.size = screentShot.size;
-                        
-                        //                NSData *data = UIImagePNGRepresentation(screentShot);
-                        //                [data writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
-                        
-                        weakSelf.circleNode.hidden = YES;
-                        [weakSelf.additionViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-                    });
-                });
+        [weakSelf.additionGroupNode setItems:additionNodeItems completion:^{
+            weakSelf.animateCounter --;
+            if (weakSelf.animateCounter > 0 || numberOfComponents == 0) {
+                return;
             }
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                UIImage *screentShot = [weakSelf ssj_takeScreenShot];
+                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    weakSelf.skinView.hidden = NO;
+                    weakSelf.skinView.image = screentShot;
+                    weakSelf.skinView.size = screentShot.size;
+                    
+                    weakSelf.circleNode.hidden = YES;
+                });
+            });
         }];
     }];
 }

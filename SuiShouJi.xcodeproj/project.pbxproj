@@ -206,6 +206,7 @@
 		7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54511C75DEEC00A90153 /* SSJPercentCircleView.m */; };
 		7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545C1C75F81B00A90153 /* SSJPercentCircleNode.m */; };
 		7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */; };
+		7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
 		7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */; };
@@ -666,6 +667,8 @@
 		7DEF545C1C75F81B00A90153 /* SSJPercentCircleNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleNode.m; sourceTree = "<group>"; };
 		7DEF545E1C75F82A00A90153 /* SSJPercentCircleNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleNodeItem.h; sourceTree = "<group>"; };
 		7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleNodeItem.m; sourceTree = "<group>"; };
+		7DEF54611C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionGroupNode.h; sourceTree = "<group>"; };
+		7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionGroupNode.m; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
 		7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-667@2x.png"; sourceTree = "<group>"; };
 		7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@3x.png"; sourceTree = "<group>"; };
@@ -1553,6 +1556,8 @@
 				7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */,
 				7DEF544E1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.h */,
 				7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */,
+				7DEF54611C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.h */,
+				7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */,
 			);
 			path = SSJPercentCircleView;
 			sourceTree = "<group>";
@@ -3023,6 +3028,7 @@
 				BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */,
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
+				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */,
 				BDD8817B1C5B642600B6FC02 /* SSJFinancingHomePopView.m in Sources */,
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,
@@ -3225,8 +3231,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3241,9 +3247,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
+				PROVISIONING_PROFILE = "14d03a4e-a7cc-480e-81e8-e3046628f89f";
 			};
 			name = Debug;
 		};
@@ -3269,7 +3275,7 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "9797bbfc-b22d-4c22-a4f3-865f4702750a";
 			};
