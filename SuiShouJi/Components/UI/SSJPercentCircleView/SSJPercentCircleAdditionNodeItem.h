@@ -21,9 +21,13 @@ typedef NS_ENUM(NSUInteger, SSJPercentCircleAdditionNodeOrientation) {
 
 @property (nonatomic) CGPoint startPoint;
 
-@property (nonatomic) CGPoint turnPoint;
+//@property (nonatomic) CGPoint turnPoint;
+//
+//@property (nonatomic) CGPoint endPoint;
 
-@property (nonatomic) CGPoint endPoint;
+@property (nonatomic) CGFloat angle;
+
+@property (nonatomic) CGFloat lineLength;
 
 @property (nonatomic, copy) NSString *imageName;
 
