@@ -87,23 +87,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
-    
-//    [self setTestItem];
 }
-
-//#warning test
-//- (void)setTestItem {
-//    UIBarButtonItem *testItem = [[UIBarButtonItem alloc] initWithTitle:@"test" style:UIBarButtonItemStylePlain target:self action:@selector(testAction)];
-//    self.navigationItem.leftBarButtonItem = testItem;
-//}
-//
-//- (void)testAction {
-//    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-//        
-//    } failure:^(NSError *error) {
-//       
-//    }];
-//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -307,7 +291,18 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         
         [self.view ssj_hideLoadingIndicator];
         
-        self.datas = result;
+        //  将datas按照收支类型所占比例从大到小进行排序
+        self.datas = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            SSJReportFormsItem *item1 = obj1;
+            SSJReportFormsItem *item2 = obj2;
+            if (item1.scale > item2.scale) {
+                return NSOrderedAscending;
+            } else if (item1.scale < item2.scale) {
+                return NSOrderedDescending;
+            } else {
+                return NSOrderedSame;
+            }
+        }];
         [self.tableView reloadData];
         
         //  将比例小于0.01的item过滤掉

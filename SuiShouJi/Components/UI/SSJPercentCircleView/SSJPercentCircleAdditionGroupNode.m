@@ -41,20 +41,26 @@
     
     for (int idx = 0; idx < items.count; idx ++) {
         SSJPercentCircleAdditionNodeItem *item = items[idx];
-        SSJPercentCircleAdditionNode *additionNode = [[SSJPercentCircleAdditionNode alloc] initWithItem:item];
-        SSJPercentCircleAdditionNode *lastAdditionNode = [self.additionNodes lastObject];
-        if (lastAdditionNode) {
-            if ([additionNode testOverlap:lastAdditionNode]) {
-                [self addSubview:additionNode];
-                [self.additionNodes addObject:additionNode];
-            }
-        } else {
-            [self addSubview:additionNode];
-            [self.additionNodes addObject:additionNode];
-        }
-        
-        [additionNode beginDrawWithCompletion:^{
+        SSJPercentCircleAdditionNode *currentNode = [[SSJPercentCircleAdditionNode alloc] initWithItem:item];
+        SSJPercentCircleAdditionNode *lastNode = [self.additionNodes lastObject];
+        if (![currentNode testOverlap:lastNode]) {
             if (idx == items.count - 1) {
+                SSJPercentCircleAdditionNode *firstNode = [self.additionNodes firstObject];
+                if (![currentNode testOverlap:firstNode]) {
+                    [self addSubview:currentNode];
+                    [self.additionNodes addObject:currentNode];
+                }
+            } else {
+                [self addSubview:currentNode];
+                [self.additionNodes addObject:currentNode];
+            }
+        }
+    }
+    
+    for (int i = 0; i < self.additionNodes.count; i ++) {
+        SSJPercentCircleAdditionNode *node = self.additionNodes[i];
+        [node beginDrawWithCompletion:^{
+            if (i == items.count - 1) {
                 if (completion) {
                     completion();
                 }

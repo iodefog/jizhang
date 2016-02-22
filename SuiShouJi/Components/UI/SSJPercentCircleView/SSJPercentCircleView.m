@@ -103,41 +103,14 @@
             //  添加附加视图(折线、图片、比例)
             SSJPercentCircleAdditionNodeItem *additionViewItem = [[SSJPercentCircleAdditionNodeItem alloc] init];
             
-//            CGPoint startPoint = CGPointZero;
-//            CGPoint turnPoint = CGPointZero;
-//            CGPoint endPoint = CGPointZero;
-            
-            SSJPercentCircleAdditionNodeOrientation orientation = SSJPercentCircleAdditionNodeOrientationTopRight;
-            
             //  根据比例计算出角度，再根据角度计算出折现的起点
             CGFloat angle = (0.5 * item.scale + item.previousScale) * M_PI * 2 + M_PI * 1.5;
             CGFloat axisX = cos(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidX(self.circleFrame);
             CGFloat axisY = sin(angle) * CGRectGetWidth(self.circleFrame) * 0.5 + CGRectGetMidY(self.circleFrame);
             
-//            if (angle >= 0 && angle < M_PI_2) {
-//                turnPoint = CGPointMake(axisX + 5, axisY - 10);
-//                endPoint = CGPointMake(axisX + 5 + 35, axisY - 10);
-//                orientation = SSJPercentCircleAdditionNodeOrientationTopRight;
-//            } else if (angle >= M_PI_2 && angle < M_PI) {
-//                turnPoint = CGPointMake(axisX + 5, axisY + 10);
-//                endPoint = CGPointMake(axisX + 5 + 35, axisY + 10);
-//                orientation = SSJPercentCircleAdditionNodeOrientationBottomRight;
-//            } else if (angle >= M_PI && angle < M_PI + M_PI_2) {
-//                turnPoint = CGPointMake(axisX - 5, axisY + 10);
-//                endPoint = CGPointMake(axisX - 5 - 35, axisY + 10);
-//                orientation = SSJPercentCircleAdditionNodeOrientationBottomLeft;
-//            } else if (angle >= M_PI + M_PI_2) {
-//                turnPoint = CGPointMake(axisX - 5, axisY - 10);
-//                endPoint = CGPointMake(axisX - 5 - 35, axisY - 10);
-//                orientation = SSJPercentCircleAdditionNodeOrientationTopLeft;
-//            }
-            
             additionViewItem.startPoint = CGPointMake(axisX, axisY);
             additionViewItem.angle = angle;
             additionViewItem.lineLength = 20;
-//            additionViewItem.turnPoint = turnPoint;
-//            additionViewItem.endPoint = endPoint;
-            additionViewItem.orientation = orientation;
             additionViewItem.imageName = item.imageName;
             additionViewItem.imageRadius = 13;
             additionViewItem.borderColorValue = item.colorValue;
@@ -157,22 +130,23 @@
     __weak typeof(self) weakSelf = self;
     [self.circleNode setItems:circleNodeItems completion:^{
         [weakSelf.additionGroupNode setItems:additionNodeItems completion:^{
-//            weakSelf.animateCounter --;
-//            if (weakSelf.animateCounter > 0 || numberOfComponents == 0) {
-//                return;
-//            }
-//            
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                UIImage *screentShot = [weakSelf ssj_takeScreenShot];
-//                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
-//                dispatch_sync(dispatch_get_main_queue(), ^{
-//                    weakSelf.skinView.hidden = NO;
-//                    weakSelf.skinView.image = screentShot;
-//                    weakSelf.skinView.size = screentShot.size;
-//                    
-//                    weakSelf.circleNode.hidden = YES;
-//                });
-//            });
+            weakSelf.animateCounter --;
+            if (weakSelf.animateCounter > 0 || numberOfComponents == 0) {
+                return;
+            }
+            
+            //  渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                UIImage *screentShot = [weakSelf ssj_takeScreenShot];
+                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    weakSelf.skinView.hidden = NO;
+                    weakSelf.skinView.image = screentShot;
+                    weakSelf.skinView.size = screentShot.size;
+                    
+                    weakSelf.circleNode.hidden = YES;
+                });
+            });
         }];
     }];
 }

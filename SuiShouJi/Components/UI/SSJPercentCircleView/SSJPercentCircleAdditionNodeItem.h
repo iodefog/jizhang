@@ -10,20 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, SSJPercentCircleAdditionNodeOrientation) {
-    SSJPercentCircleAdditionNodeOrientationTopRight,
-    SSJPercentCircleAdditionNodeOrientationBottomRight,
-    SSJPercentCircleAdditionNodeOrientationBottomLeft,
-    SSJPercentCircleAdditionNodeOrientationTopLeft
-};
-
 @interface SSJPercentCircleAdditionNodeItem : NSObject
 
 @property (nonatomic) CGPoint startPoint;
-
-//@property (nonatomic) CGPoint turnPoint;
-//
-//@property (nonatomic) CGPoint endPoint;
 
 @property (nonatomic) CGFloat angle;
 
@@ -42,8 +31,6 @@ typedef NS_ENUM(NSUInteger, SSJPercentCircleAdditionNodeOrientation) {
 @property (nonatomic) CGFloat textSize;
 
 @property (nonatomic, copy) NSString *textColorValue;
-
-@property (nonatomic) SSJPercentCircleAdditionNodeOrientation orientation;
 
 @end
 

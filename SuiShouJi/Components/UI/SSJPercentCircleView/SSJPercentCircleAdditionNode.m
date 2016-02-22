@@ -20,20 +20,6 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @property (nonatomic, strong) UILabel *textLabel;
 
-//@property (nonatomic) CGPoint startPoint;
-
-//@property (nonatomic) CGPoint turnPoint;
-//
-//@property (nonatomic) CGPoint endPoint;
-
-@property (nonatomic) CGPoint lineStartPoint;
-
-@property (nonatomic) CGPoint lineEndPoint;
-
-@property (nonatomic) CGPoint imageCenter;
-
-@property (nonatomic) CGPoint labelCenter;
-
 @property (nonatomic, copy) void (^completion)(void);
 
 @end
@@ -47,7 +33,6 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     
     if (self = [super initWithFrame:CGRectZero]) {
         self.item = item;
-        [self caculatePoint];
         
         self.brokenLineLayer.strokeColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
         [self.layer addSublayer:self.brokenLineLayer];
@@ -58,206 +43,36 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 - (void)layoutSubviews {
-//    switch (self.item.orientation) {
-//        case SSJPercentCircleAdditionNodeOrientationTopRight:
-//        case SSJPercentCircleAdditionNodeOrientationBottomRight:
-//            self.imageView.center = CGPointMake(self.endPoint.x + self.item.imageRadius, self.endPoint.y);
-//            break;
-//            
-//        case SSJPercentCircleAdditionNodeOrientationBottomLeft:
-//        case SSJPercentCircleAdditionNodeOrientationTopLeft:
-//            self.imageView.center = CGPointMake(self.endPoint.x - self.item.imageRadius, self.endPoint.y);
-//            break;
-//    }
-//    self.textLabel.top = self.imageView.centerY + self.item.imageRadius + self.item.gapBetweenImageAndText;
-//    self.textLabel.centerX = self.imageView.centerX;
-    self.imageView.center = self.imageCenter;
-    self.textLabel.center = self.labelCenter;
+    self.imageView.center = [self imageCenterForItem:self.item];
+    self.textLabel.center = [self labelCenterForItem:self.item];
 }
 
 - (BOOL)testOverlap:(SSJPercentCircleAdditionNode *)view {
-//    if (![view isKindOfClass:[SSJPercentCircleAdditionNode class]]) {
-//        return NO;
-//    }
-//    
-//    SSJPercentCircleAdditionNodeItem *anotherItem = view.item;
-//    if (![anotherItem isKindOfClass:[SSJPercentCircleAdditionNodeItem class]]) {
-//        return NO;
-//    }
-//    
-//    if (self.item.startPoint.x == anotherItem.startPoint.x) {
-//        return NO;
-//    }
-//    
-//    if (self.item.orientation == anotherItem.orientation) {
-//        switch (anotherItem.orientation) {
-//            case SSJPercentCircleAdditionNodeOrientationTopRight: {
-//                SSJPercentCircleAdditionNodeItem *item1 = nil;
-//                SSJPercentCircleAdditionNodeItem *item2 = nil;
-//                
-//                if (self.item.startPoint.x < anotherItem.startPoint.x) {
-//                    item1 = self.item;
-//                    item2 = anotherItem;
-//                } else if (self.item.startPoint.x > anotherItem.startPoint.x) {
-//                    item1 = anotherItem;
-//                    item2 = self.item;
-//                }
-//                
-//                CGSize textSize = [item1.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:anotherItem.textSize]}];
-//                CGFloat item1TextBottom = item1.endPoint.y + item1.imageRadius + item1.gapBetweenImageAndText + textSize.height;
-//                CGFloat item1TextRight = item1.endPoint.x + item1.imageRadius + textSize.width * 0.5;
-//                
-//                if (item2.endPoint.y <= item1TextBottom) {
-//                    return NO;
-//                }
-//                
-//                if (item2.endPoint.x < item1TextRight) {
-//                    return NO;
-//                }
-//                
-//                double bevelingSquare = pow(item2.startPoint.x - item1.startPoint.x, 2) + pow(item2.startPoint.y - item1.startPoint.y, 2);
-//                if (bevelingSquare < pow(item1.imageRadius + item2.imageRadius, 2)) {
-//                    return NO;
-//                }
-//            }
-//                break;
-//                
-//            case SSJPercentCircleAdditionNodeOrientationBottomRight: {
-//                SSJPercentCircleAdditionNodeItem *item1 = nil;
-//                SSJPercentCircleAdditionNodeItem *item2 = nil;
-//                
-//                if (self.item.startPoint.x < anotherItem.startPoint.x) {
-//                    item1 = anotherItem;
-//                    item2 = self.item;
-//                } else if (self.item.startPoint.x > anotherItem.startPoint.x) {
-//                    item1 = self.item;
-//                    item2 = anotherItem;
-//                }
-//                
-//                //  图片和折线是否重叠
-//                if (item2.endPoint.y - item2.imageRadius <= item1.endPoint.y) {
-//                    return NO;
-//                }
-//                
-//                //  图片和文本是否重叠
-//                CGSize item1TextSize = [item1.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:item1.textSize]}];
-//                CGFloat item1TextLeft = item1.endPoint.x + item1.imageRadius - item1TextSize.width * 0.5;
-//                CGFloat item1TextTop = item1.endPoint.y + item1.imageRadius + item1.gapBetweenImageAndText;
-//                CGRect item1TextFrame = CGRectMake(item1TextLeft, item1TextTop, item1TextSize.width, item1TextSize.height);
-//                
-//                CGRect item2ImageFrame = CGRectMake(item2.endPoint.x, item2.endPoint.y - item2.imageRadius, item2.imageRadius * 2, item2.imageRadius * 2);
-//                if (CGRectIntersectsRect(item1TextFrame, item2ImageFrame)) {
-//                    return NO;
-//                }
-//                
-//                //  图片和图片是否重叠
-//                double bevelingSquare = pow(item2.startPoint.x - item1.startPoint.x, 2) + pow(item2.startPoint.y - item1.startPoint.y, 2);
-//                if (bevelingSquare < pow(item1.imageRadius + item2.imageRadius, 2)) {
-//                    return NO;
-//                }
-//            }
-//                break;
-//                
-//            case SSJPercentCircleAdditionNodeOrientationBottomLeft: {
-//                SSJPercentCircleAdditionNodeItem *item1 = nil;
-//                SSJPercentCircleAdditionNodeItem *item2 = nil;
-//                
-//                if (self.item.startPoint.x < anotherItem.startPoint.x) {
-//                    item1 = anotherItem;
-//                    item2 = self.item;
-//                } else if (self.item.startPoint.x > anotherItem.startPoint.x) {
-//                    item1 = self.item;
-//                    item2 = anotherItem;
-//                }
-//                
-//                //  图片和折线是否重叠
-//                if (item1.endPoint.y - item1.imageRadius <= item2.endPoint.y) {
-//                    return NO;
-//                }
-//                
-//                //  图片和文本是否重叠
-//                CGSize item2TextSize = [item2.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:item2.textSize]}];
-//                CGFloat item2TextLeft = item2.endPoint.x - item2.imageRadius - item2TextSize.width * 0.5;
-//                CGFloat item2TextTop = item2.endPoint.y + item2.imageRadius + item2.gapBetweenImageAndText;
-//                CGRect item2TextFrame = CGRectMake(item2TextLeft, item2TextTop, item2TextSize.width, item2TextSize.height);
-//                CGRect item1ImageFrame = CGRectMake(item1.endPoint.x - item1.imageRadius * 2, item1.endPoint.y - item1.imageRadius, item1.imageRadius * 2, item1.imageRadius * 2);
-//                if (CGRectIntersectsRect(item1ImageFrame, item2TextFrame)) {
-//                    return NO;
-//                }
-//                
-//                //  图片和图片是否重叠
-//                double bevelingSquare = pow(item2.startPoint.x - item1.startPoint.x, 2) + pow(item2.startPoint.y - item1.startPoint.y, 2);
-//                if (bevelingSquare < pow(item1.imageRadius + item2.imageRadius, 2)) {
-//                    return NO;
-//                }
-//            }
-//                break;
-//                
-//            case SSJPercentCircleAdditionNodeOrientationTopLeft: {
-//                SSJPercentCircleAdditionNodeItem *item1 = nil;
-//                SSJPercentCircleAdditionNodeItem *item2 = nil;
-//                
-//                if (self.item.startPoint.x < anotherItem.startPoint.x) {
-//                    item1 = self.item;
-//                    item2 = anotherItem;
-//                } else if (self.item.startPoint.x > anotherItem.startPoint.x) {
-//                    item1 = anotherItem;
-//                    item2 = self.item;
-//                }
-//                
-//                //  图片和折线是否重叠
-//                if (item1.endPoint.y - item1.imageRadius <= item2.endPoint.y) {
-//                    return NO;
-//                }
-//                
-//                //  图片和文本是否重叠
-//                CGSize item2TextSize = [item2.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:item2.textSize]}];
-//                CGFloat item2TextLeft = item2.endPoint.x - item2.imageRadius - item2TextSize.width * 0.5;
-//                CGFloat item2TextTop = item2.endPoint.y + item2.imageRadius + item2.gapBetweenImageAndText;
-//                CGRect item2TextFrame = CGRectMake(item2TextLeft, item2TextTop, item2TextSize.width, item2TextSize.height);
-//                CGRect item1ImageFrame = CGRectMake(item1.endPoint.x - item1.imageRadius * 2, item1.endPoint.y - item1.imageRadius, item1.imageRadius * 2, item1.imageRadius * 2);
-//                if (CGRectIntersectsRect(item1ImageFrame, item2TextFrame)) {
-//                    return NO;
-//                }
-//                
-//                //  图片和图片是否重叠
-//                double bevelingSquare = pow(item2.startPoint.x - item1.startPoint.x, 2) + pow(item2.startPoint.y - item1.startPoint.y, 2);
-//                if (bevelingSquare < pow(item1.imageRadius + item2.imageRadius, 2)) {
-//                    return NO;
-//                }
-//            }
-//                break;
-//        }
-//    } else {
-//        if ((self.item.orientation == SSJPercentCircleAdditionNodeOrientationTopRight
-//             && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationBottomRight)
-//            || (self.item.orientation == SSJPercentCircleAdditionNodeOrientationTopLeft
-//                && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationBottomLeft)) {
-//                
-//                if (anotherItem.endPoint.y - anotherItem.imageRadius <= self.item.endPoint.y + self.item.imageRadius + self.item.gapBetweenImageAndText + self.item.textSize) {
-//                    return NO;
-//                }
-//            }
-//        
-//        if ((self.item.orientation == SSJPercentCircleAdditionNodeOrientationBottomRight
-//             && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationTopRight)
-//            || (self.item.orientation == SSJPercentCircleAdditionNodeOrientationBottomLeft
-//                && anotherItem.orientation == SSJPercentCircleAdditionNodeOrientationTopLeft)) {
-//                
-//                if (self.item.endPoint.y - self.item.imageRadius <= anotherItem.endPoint.y + anotherItem.imageRadius + anotherItem.gapBetweenImageAndText + anotherItem.textSize) {
-//                    return NO;
-//                }
-//        }
-//    }
     
-    return YES;
+    if (!view) {
+        return NO;
+    }
+    
+    SSJPercentCircleAdditionNodeItem *anotherItem = view.item;
+    if (self.item.startPoint.x == anotherItem.startPoint.x) {
+        return YES;
+    }
+    
+    CGPoint lastImageCenter = [self imageCenterForItem:view.item];
+    CGFloat lastImageRadius = view.item.imageRadius;
+    CGRect lastImageRect = CGRectMake(lastImageCenter.x - lastImageRadius, lastImageCenter.y - lastImageRadius, lastImageRadius * 2, lastImageRadius * 2);
+    
+    CGPoint currentImageCenter = [self imageCenterForItem:self.item];
+    CGFloat currentImageRadius = self.item.imageRadius;
+    CGRect currentImageRect = CGRectMake(currentImageCenter.x - currentImageRadius, currentImageCenter.y - currentImageRadius, currentImageRadius * 2, currentImageRadius * 2);
+    
+    return CGRectIntersectsRect(lastImageRect, currentImageRect);
 }
 
 - (void)beginDrawWithCompletion:(void (^)(void))completion {
     UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:self.lineStartPoint];
-//    [path addLineToPoint:self.turnPoint];
-    [path addLineToPoint:self.lineEndPoint];
+    [path moveToPoint:self.item.startPoint];
+    [path addLineToPoint:[self lineEndPointForItem:self.item]];
     
     self.brokenLineLayer.path = path.CGPath;
     
@@ -271,14 +86,6 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     [self.brokenLineLayer addAnimation:lineAnimation forKey:kAnimationKey];
     
     self.completion = completion;
-    
-//    UIView *p1 = [[UIView alloc] initWithFrame:CGRectMake(self.lineStartPoint.x, self.lineStartPoint.y, 2, 2)];
-//    p1.backgroundColor = [UIColor redColor];
-//    [self addSubview:p1];
-//    
-//    UIView *p2 = [[UIView alloc] initWithFrame:CGRectMake(self.lineEndPoint.x, self.lineEndPoint.y, 2, 2)];
-//    p2.backgroundColor = [UIColor orangeColor];
-//    [self addSubview:p2];
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -325,97 +132,108 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     }];
 }
 
-- (void)caculatePoint {
-    
-    self.lineStartPoint = self.item.startPoint;
-    
-    CGSize labelSize = [self.item.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.item.textSize]}];
-    CGFloat labelRadius = MAX(labelSize.width, labelSize.height) * 0.5;
-    
-    CGFloat angle = self.item.angle;
+- (CGPoint)lineEndPointForItem:(SSJPercentCircleAdditionNodeItem *)item {
+    CGFloat angle = item.angle;
     angle = angle - floor(angle / (M_PI * 2)) * M_PI * 2;
     
-    CGFloat lineEndPointX = self.item.startPoint.x + cos(angle) * self.item.lineLength;
-    CGFloat lineEndPointY = self.item.startPoint.y + sin(angle) * self.item.lineLength;
+    CGFloat lineEndPointX = item.startPoint.x + cos(angle) * item.lineLength;
+    CGFloat lineEndPointY = item.startPoint.y + sin(angle) * item.lineLength;
     
-    self.lineEndPoint = CGPointMake(lineEndPointX, lineEndPointY);
+    return CGPointMake(lineEndPointX, lineEndPointY);
+}
+
+- (CGPoint)imageCenterForItem:(SSJPercentCircleAdditionNodeItem *)item {
+    CGFloat angle = item.angle;
+    angle = angle - floor(angle / (M_PI * 2)) * M_PI * 2;
     
-    CGFloat imageCenterX = self.item.startPoint.x + cos(angle) * (self.item.lineLength + self.item.imageRadius);
-    CGFloat imageCenterY = self.item.startPoint.y + sin(angle) * (self.item.lineLength + self.item.imageRadius);
+    CGFloat imageCenterX = item.startPoint.x + cos(angle) * (item.lineLength + item.imageRadius);
+    CGFloat imageCenterY = item.startPoint.y + sin(angle) * (item.lineLength + item.imageRadius);
     
-    self.imageCenter = CGPointMake(imageCenterX, imageCenterY);
+    return CGPointMake(imageCenterX, imageCenterY);
+}
+
+- (CGPoint)labelCenterForItem:(SSJPercentCircleAdditionNodeItem *)item {
+    CGFloat angle = item.angle;
+    angle = angle - floor(angle / (M_PI * 2)) * M_PI * 2;
+    
+    CGSize labelSize = [item.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:item.textSize]}];
+    CGFloat labelRadius = MAX(labelSize.width, labelSize.height) * 0.5;
+    
+    CGPoint labelCenter = CGPointZero;
     
     if (angle == 0) {
-        self.labelCenter = CGPointMake(self.item.startPoint.x + self.item.lineLength + self.item.imageRadius * 2 + labelRadius + 5 , self.item.startPoint.y);
+        labelCenter = CGPointMake(item.startPoint.x + item.lineLength + item.imageRadius * 2 + labelRadius + 5 , item.startPoint.y);
     } else if (angle > 0 && angle < M_PI_4) {
         
-        CGFloat sideLength = fabs(cos(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x + sideLength;
-        CGFloat labelCenterY = self.item.startPoint.y + sideLength * fabs(tan(angle));
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(cos(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x + sideLength;
+        CGFloat labelCenterY = item.startPoint.y + sideLength * fabs(tan(angle));
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle >= M_PI_4 && angle < M_PI_2) {
-
-        CGFloat sideLength = fabs(sin(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x + sideLength / fabs(tan(angle));
-        CGFloat labelCenterY = self.item.startPoint.y + sideLength;
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        
+        CGFloat sideLength = fabs(sin(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x + sideLength / fabs(tan(angle));
+        CGFloat labelCenterY = item.startPoint.y + sideLength;
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle == M_PI_2) {
         
-        self.labelCenter = CGPointMake(self.item.startPoint.x , self.item.startPoint.y + self.item.lineLength + self.item.imageRadius * 2 + labelRadius + 5);
+        labelCenter = CGPointMake(item.startPoint.x , item.startPoint.y + item.lineLength + item.imageRadius * 2 + labelRadius + 5);
         
     } else if (angle > M_PI_2 && angle < M_PI_2 + M_PI_4) {
         
-        CGFloat sideLength = fabs(sin(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x - sideLength / fabs(tan(angle));
-        CGFloat labelCenterY = self.item.startPoint.y + sideLength;
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(sin(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x - sideLength / fabs(tan(angle));
+        CGFloat labelCenterY = item.startPoint.y + sideLength;
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle >= M_PI_2 + M_PI_4 && angle < M_PI) {
         
-        CGFloat sideLength = fabs(cos(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x - sideLength;
-        CGFloat labelCenterY = self.item.startPoint.y + sideLength * fabs(tan(angle));
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(cos(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x - sideLength;
+        CGFloat labelCenterY = item.startPoint.y + sideLength * fabs(tan(angle));
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle == M_PI) {
         
-        self.labelCenter = CGPointMake(self.item.startPoint.x - self.item.lineLength - self.item.imageRadius * 2 - labelRadius - 5, self.item.startPoint.y);
+        labelCenter = CGPointMake(item.startPoint.x - item.lineLength - item.imageRadius * 2 - labelRadius - 5, item.startPoint.y);
         
     } else if (angle > M_PI && angle < M_PI + M_PI_4) {
         
-        CGFloat sideLength = fabs(cos(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x - sideLength;
-        CGFloat labelCenterY = self.item.startPoint.y - sideLength * fabs(tan(angle));
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(cos(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x - sideLength;
+        CGFloat labelCenterY = item.startPoint.y - sideLength * fabs(tan(angle));
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle >= M_PI + M_PI_4 && angle < M_PI * 1.5) {
         
-        CGFloat sideLength = fabs(sin(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x - sideLength / fabs(tan(angle));
-        CGFloat labelCenterY = self.item.startPoint.y - sideLength;
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(sin(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x - sideLength / fabs(tan(angle));
+        CGFloat labelCenterY = item.startPoint.y - sideLength;
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle == M_PI * 1.5) {
         
-        self.labelCenter = CGPointMake(self.item.startPoint.x, self.item.startPoint.y - self.item.lineLength - self.item.imageRadius * 2 - labelRadius - 5);
+        labelCenter = CGPointMake(item.startPoint.x, item.startPoint.y - item.lineLength - item.imageRadius * 2 - labelRadius - 5);
         
     } else if (angle > M_PI * 1.5 && angle < M_PI * 1.5 + M_PI_4) {
         
-        CGFloat sideLength = fabs(sin(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x + sideLength / fabs(tan(angle));
-        CGFloat labelCenterY = self.item.startPoint.y - sideLength;
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(sin(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x + sideLength / fabs(tan(angle));
+        CGFloat labelCenterY = item.startPoint.y - sideLength;
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     } else if (angle >= M_PI * 1.5 + M_PI_4 && angle < M_PI * 2) {
         
-        CGFloat sideLength = fabs(cos(angle)) * (self.item.lineLength + self.item.imageRadius) + self.item.imageRadius + labelRadius;
-        CGFloat labelCenterX = self.item.startPoint.x + sideLength;
-        CGFloat labelCenterY = self.item.startPoint.y - sideLength * fabs(tan(angle));
-        self.labelCenter = CGPointMake(labelCenterX, labelCenterY);
+        CGFloat sideLength = fabs(cos(angle)) * (item.lineLength + item.imageRadius) + item.imageRadius + labelRadius;
+        CGFloat labelCenterX = item.startPoint.x + sideLength;
+        CGFloat labelCenterY = item.startPoint.y - sideLength * fabs(tan(angle));
+        labelCenter = CGPointMake(labelCenterX, labelCenterY);
         
     }
+    
+    return labelCenter;
 }
 
 #pragma mark - Getter
