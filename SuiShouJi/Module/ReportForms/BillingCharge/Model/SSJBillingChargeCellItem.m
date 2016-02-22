@@ -17,6 +17,11 @@
     item.money = self.money;
     item.ID = self.ID;
     item.incomeOrExpence = self.incomeOrExpence;
+    item.editeDate = self.editeDate;
+    item.billId = self.billId;
+    item.chargeImage = self.chargeImage;
+    item.chargeThumbImage = self.chargeThumbImage;
+    item.configId = self.configId;
     return item;
 }
 
