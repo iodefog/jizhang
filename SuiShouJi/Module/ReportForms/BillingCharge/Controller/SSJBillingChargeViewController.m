@@ -11,7 +11,6 @@
 #import "SSJBillingChargeHeaderView.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJBillingChargeHelper.h"
-#import "SSJBookKeepHomeItem.h"
 
 static NSString *const kBillingChargeCellID = @"kBillingChargeCellID";
 static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID";
@@ -96,19 +95,9 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    
-    if (selectedItem) {
-        SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc] init];
-        item.chargeID = selectedItem.ID;
-        item.chargeMoney = [selectedItem.money doubleValue];
-        item.billDate = selectedItem.billDate;
-        item.billID = self.billTypeID;
-        item.fundID = selectedItem.fundId;
-        
-        SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] init];
-        calenderDetailVC.item = item;
-        [self.navigationController pushViewController:calenderDetailVC animated:YES];
-    }
+    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] init];
+    calenderDetailVC.item = selectedItem;
+    [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
 
 #pragma mark - Private

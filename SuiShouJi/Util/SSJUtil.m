@@ -234,9 +234,12 @@ NSString *SSJUUID(){
 }
 
 BOOL SSJSaveImage(UIImage *image , NSString *imageName){
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
+    }
     NSString *fullImageName = [NSString stringWithFormat:@"%@.png",imageName];
-    NSData *imageData = UIImagePNGRepresentation(image);
-    NSString *fullPath = [SSJDocumentPath() stringByAppendingPathComponent:fullImageName];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
+    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
 };
 

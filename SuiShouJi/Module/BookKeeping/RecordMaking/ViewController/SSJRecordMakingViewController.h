@@ -9,9 +9,9 @@
 //记一笔页面
 #import "SSJBaseViewController.h"
 #import "SSJCustomKeyboard.h"
-#import "SSJBookKeepHomeItem.h"
+#import "SSJBillingChargeCellItem.h"
 
-@interface SSJRecordMakingViewController : SSJBaseViewController<SSJCustomKeyboardDelegate,UIScrollViewDelegate,UITextFieldDelegate>
+@interface SSJRecordMakingViewController : SSJBaseViewController<UIScrollViewDelegate,UITextFieldDelegate>
 
 //当前选中的年
 @property (nonatomic) long selectedYear;
@@ -23,6 +23,6 @@
 @property (nonatomic) long selectedDay;
 
 //流水item(item为空位新建,有值为修改)
-@property (nonatomic,strong) SSJBookKeepHomeItem *item;
+@property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
 @end

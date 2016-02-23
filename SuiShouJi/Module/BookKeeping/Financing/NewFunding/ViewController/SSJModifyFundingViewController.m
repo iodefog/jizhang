@@ -13,6 +13,7 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCustomKeyboard.h"
 
 #import "FMDB.h"
 
@@ -149,7 +150,7 @@
             _amountTextField = NewFundingCell.cellDetail;
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",_amountValue];
-            NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            NewFundingCell.cellDetail.inputView = [SSJCustomKeyboard sharedInstance];
             _amountTextField.delegate = self;
 
         }

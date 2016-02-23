@@ -36,7 +36,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self getBillDetailWithBillId:self.item.billID];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -48,7 +47,7 @@
     [super viewWillAppear:animated];
     [self getDataFromDb];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.colorValue] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                     NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
@@ -95,7 +94,7 @@
         return detailcell;
     }else{
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundID];
+        detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundId];
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"资金类型";
         [detailcell.cellLabel sizeToFit];
@@ -154,34 +153,24 @@
     [self.navigationController pushViewController:recordMakingVc animated:YES];
 }
 
-/**
- *  通过类型id获取记账类型详情
- *
- *  @param billId 记账类型id
- */
--(void)getBillDetailWithBillId:(NSString *)billId{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
-        while ([rs next]) {
-            weakSelf.cellTitle = [rs stringForColumn:@"CNAME"];
-            weakSelf.cellImage = [rs stringForColumn:@"CCOIN"];
-            weakSelf.cellColor = [rs stringForColumn:@"CCOLOR"];
-            weakSelf.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
-        }
-    }];
-}
 
+/**
+ *  每次进入页面之前获取一次最修改的数据
+ */
 -(void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
 
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_USER_CHARGE WHERE ICHARGEID = ? AND CUSERID = ? ",self.item.chargeID,SSJUSERID()];
+    [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db){
+        FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* FROM BK_USER_CHARGE AS A , BK_BILL_TYPE AS B WHERE A.ICHARGEID = ? AND A.CUSERID = ?  AND A.IBILLID = B.ID",self.item.ID,SSJUSERID()];
         while ([rs next]) {
-            weakSelf.item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
-            weakSelf.item.billID = [rs stringForColumn:@"IBILLID"];
+            weakSelf.item.money = [rs stringForColumn:@"IMONEY"];
+            weakSelf.item.billId = [rs stringForColumn:@"IBILLID"];
             weakSelf.item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            weakSelf.item.fundID = [rs stringForColumn:@"IFUNSID"];
+            weakSelf.item.fundId = [rs stringForColumn:@"IFUNSID"];
+            weakSelf.item.typeName = [rs stringForColumn:@"CNAME"];
+            weakSelf.item.imageName = [rs stringForColumn:@"CCOIN"];
+            weakSelf.item.colorValue = [rs stringForColumn:@"CCOLOR"];
+            weakSelf.item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
         }
         SSJDispatch_main_async_safe(^(){
             [weakSelf.tableView reloadData];
@@ -199,13 +188,13 @@
  */
 -(void)deleteCharge{
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.chargeID];
-        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID]) {
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate]) {
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),self.item.ID];
+        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billId]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],self.item.fundId] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],[NSNumber numberWithDouble:[self.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate]) {
                 *rollback = YES;
             }
         }else{
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],self.item.fundId] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],[NSNumber numberWithDouble:[self.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate]) {
                 *rollback = YES;
             }
         }

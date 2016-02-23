@@ -54,19 +54,17 @@
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
     [super setCellItem:cellItem];
-    if (![cellItem isKindOfClass:[SSJBookKeepHomeItem class]]) {
+    if (![cellItem isKindOfClass:[SSJBillingChargeCellItem class]]) {
         return;
     }
     
-    SSJBookKeepHomeItem *item = (SSJBookKeepHomeItem *)cellItem;
-    [self getBillDetailWithBillId:item.billID];
-    self.imageView.image = [UIImage imageNamed:self.cellImage];
-    self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.cellColor].CGColor;
-    self.textLabel.text = self.cellTitle;
+    SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem *)cellItem;
+    self.imageView.image = [UIImage imageNamed:item.imageName];
+    self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+    self.textLabel.text = item.typeName;
     [self.textLabel sizeToFit];
-    self.moneyLab.text = [NSString stringWithFormat:@"%@%.2f", self.incomeOrExpence ? @"－" : @"＋", item.chargeMoney];
+    self.moneyLab.text = [NSString stringWithFormat:@"%@%@", item.incomeOrExpence ? @"－" : @"＋", item.money];
     [self.moneyLab sizeToFit];
-    
     [self setNeedsLayout];
 }
 
@@ -77,19 +75,6 @@
         _moneyLab.font = [UIFont systemFontOfSize:20];
     }
     return _moneyLab;
-}
-
--(void)getBillDetailWithBillId:(NSString *)billId{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE WHERE ID = ? ",billId];
-        while ([rs next]) {
-            weakSelf.cellTitle = [rs stringForColumn:@"CNAME"];
-            weakSelf.cellImage = [rs stringForColumn:@"CCOIN"];
-            weakSelf.cellColor = [rs stringForColumn:@"CCOLOR"];
-            weakSelf.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
-        }
-    }];
 }
 
 @end

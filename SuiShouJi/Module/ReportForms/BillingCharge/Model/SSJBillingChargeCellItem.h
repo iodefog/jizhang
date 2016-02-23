@@ -34,4 +34,19 @@
 // 资金帐户编号
 @property (nonatomic,strong) NSString *fundId;
 
+//记账编辑时间
+@property (nonatomic,strong) NSString *editeDate;
+
+//记账类型
+@property (nonatomic,strong) NSString *billId;
+
+//记账图片(大图)
+@property (nonatomic,strong) NSString *chargeImage;
+
+//记账图片(缩略图)
+@property (nonatomic,strong) NSString *chargeThumbImage;
+
+//循环记账配置ID
+@property (nonatomic,strong) NSString *configId;
+
 @end
