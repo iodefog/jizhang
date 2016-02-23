@@ -9,7 +9,7 @@
 #import "SSJCalendarViewController.h"
 #import "SSJCalendarView.h"
 #import "SSJRecordMakingViewController.h"
-#import "SSJBookKeepHomeItem.h"
+#import "SSJBillingChargeCellItem.h"
 #import "SSJBillingChargeCell.h"
 #import "SSJCalenderTableViewNoDataHeader.h"
 #import "SSJFundingDetailDateHeader.h"
@@ -109,7 +109,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJCalenderTableViewCell *cell = (SSJCalenderTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    SSJBookKeepHomeItem *item = (SSJBookKeepHomeItem*)cell.cellItem;
+    SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
     SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
     CalenderDetailVC.item = item;
     [self.navigationController pushViewController:CalenderDetailVC animated:YES];
@@ -251,12 +251,17 @@
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
         while ([rs next]) {
-            SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
-            item.chargeID = [rs stringForColumn:@"ICHARGEID"];
-            item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
+            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
+            item.imageName = [rs stringForColumn:@"CCOIN"];
+            item.typeName = [rs stringForColumn:@"CNAME"];
+            item.money = [rs stringForColumn:@"IMONEY"];
+            item.colorValue = [rs stringForColumn:@"CCOLOR"];
+            item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+            item.ID = [rs stringForColumn:@"ICHARGEID"];
+            item.fundId = [rs stringForColumn:@"IFUNSID"];
             item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            item.billID = [rs stringForColumn:@"IBILLID"];
-            item.fundID = [rs stringForColumn:@"IFUNSID"];
+            item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
+            item.billId = [rs stringForColumn:@"IBILLID"];
             [tempArray addObject:item];
         }
         SSJDispatch_main_async_safe(^(){

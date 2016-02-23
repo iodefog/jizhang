@@ -148,7 +148,7 @@
     [self setNeedsDisplay];
 }
 
--(void)setItem:(SSJBookKeepHomeItem *)item{
+-(void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
@@ -160,7 +160,7 @@
     long day = [dateComponent day];
     long month = [dateComponent month];
     long currentMonth = [currentdateComponent month];
-    if ([item.billID isEqualToString:@"-1"]) {
+    if ([item.billId isEqualToString:@"-1"]) {
         _categoryImageButton.layer.borderWidth = 0;
         _categoryImageButton.userInteractionEnabled = NO;
         [_categoryImageButton setImage:nil forState:UIControlStateNormal];
@@ -168,14 +168,13 @@
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
         _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
-        if (item.chargeMoney < 0) {
+        if ([item.money doubleValue] < 0) {
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
+            self.expenditureLabel.text = item.money;
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
-
             if (month == currentMonth) {
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
             }else{
@@ -185,7 +184,7 @@
 
         }else{
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.incomeLabel.text = [NSString stringWithFormat:@"%.2f",item.chargeMoney];
+            self.incomeLabel.text = [NSString stringWithFormat:@"+%@",item.money];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.incomeLabel sizeToFit];
             if (month == currentMonth) {
@@ -197,42 +196,26 @@
             [self.expenditureLabel sizeToFit];
         }
     }else{
-        __block NSString *iconName;
-        __block NSString *categoryName;
-        __block NSString *categoryColor;
-        __block int categoryType = 0;
-        [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-            FMResultSet *rs = [db executeQuery:@"SELECT CCOIN, CNAME , ITYPE , CCOLOR FROM BK_BILL_TYPE WHERE ID = ?",item.billID];
-            while ([rs next]) {
-                iconName = [rs stringForColumn:@"CCOIN"];
-                categoryName = [rs stringForColumn:@"CNAME"];
-                categoryType = [rs intForColumn:@"ITYPE"];
-                categoryColor =[rs stringForColumn:@"CCOLOR"];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                if (!categoryType) {
-                    self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
-                    [self.incomeLabel sizeToFit];
-                    self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-                    self.expenditureLabel.text = @"";
-                }else{
-                    self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",categoryName,item.chargeMoney];
-                    self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-                    [self.expenditureLabel sizeToFit];
-                    self.incomeLabel.text = @"";
-                }
-                
-                UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:iconName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-                _categoryImageButton.contentMode = UIViewContentModeCenter;
-                [_categoryImageButton setImage:image forState:UIControlStateNormal];
-                _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:categoryColor].CGColor;
-                _categoryImageButton.layer.borderWidth = 1;
-                _categoryImageButton.backgroundColor = [UIColor clearColor];
-                _categoryImageButton.userInteractionEnabled = YES;
-                [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
-                [self setNeedsLayout];
-            });
-        }];
+        if (!item.incomeOrExpence) {
+            self.incomeLabel.text = [NSString stringWithFormat:@"%@%@",item.typeName,item.money];
+            [self.incomeLabel sizeToFit];
+            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.expenditureLabel.text = @"";
+        }else{
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%@",item.typeName,item.money];
+            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            [self.expenditureLabel sizeToFit];
+            self.incomeLabel.text = @"";
+        }
+        UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:item.imageName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        _categoryImageButton.contentMode = UIViewContentModeCenter;
+        [_categoryImageButton setImage:image forState:UIControlStateNormal];
+        _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+        _categoryImageButton.layer.borderWidth = 1;
+        _categoryImageButton.backgroundColor = [UIColor clearColor];
+        _categoryImageButton.userInteractionEnabled = YES;
+        [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
+        [self setNeedsLayout];
     }
     [self setNeedsLayout];
 }
@@ -258,14 +241,14 @@
 -(void)deleteCharge{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.chargeID];
-        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billID]) {
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
+        [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.ID];
+        if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = EXPENCEAMOUNT - ? , SUMAMOUNT = SUMAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
             {
                 *rollback = YES;
             };
         }else{
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],weakSelf.item.fundID] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[NSNumber numberWithDouble:weakSelf.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE  CFUNDID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],weakSelf.item.fundId] || ![db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = INCOMEAMOUNT - ? , SUMAMOUnT = SUMAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate])
             {
                 *rollback = YES;
             };

@@ -7,10 +7,10 @@
 //
 
 #import "SSJBaseTableViewCell.h"
-#import "SSJBookKeepHomeItem.h"
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
-@property (nonatomic,strong) SSJBookKeepHomeItem *item;
+@property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
 typedef void(^beginEditeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
 

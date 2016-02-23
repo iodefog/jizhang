@@ -11,12 +11,12 @@
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-#import "SSJBookKeepHomeItem.h"
 #import "SSJBookKeepingHomeNodateFooter.h"
 #import "SSJHomeBarButton.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginViewController.h"
 #import "SSJRegistGetVerViewController.h"
+#import "SSJBillingChargeCellItem.h"
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
@@ -220,15 +220,19 @@
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-        FMResultSet *rs = [db executeQuery:@"SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC LIMIT 7)  ORDER BY CBILLDATE DESC ,CWRITEDATE DESC",SSJUSERID(),SSJUSERID()];
+        FMResultSet *rs = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC LIMIT 7)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC LIMIT 7)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID ORDER BY CBILLDATE DESC ,CWRITEDATE DESC",SSJUSERID(),SSJUSERID()];
         while ([rs next]) {
-            SSJBookKeepHomeItem *item = [[SSJBookKeepHomeItem alloc]init];
-            item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
+            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+            item.imageName = [rs stringForColumn:@"CCOIN"];
+            item.typeName = [rs stringForColumn:@"CNAME"];
+            item.money = [rs stringForColumn:@"IMONEY"];
+            item.colorValue = [rs stringForColumn:@"CCOLOR"];
+            item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+            item.ID = [rs stringForColumn:@"ICHARGEID"];
+            item.fundId = [rs stringForColumn:@"IFUNSID"];
             item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            item.chargeMoney = [rs doubleForColumn:@"IMONEY"];
-            item.chargeID = [rs stringForColumn:@"ICHARGEID"];
-            item.billID = [rs stringForColumn:@"IBILLID"];
-            item.fundID = [rs stringForColumn:@"IFUNSID"];
+            item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
+            item.billId = [rs stringForColumn:@"IBILLID"];
             [tempArray addObject:item];
         }
         double income = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@'", _currentYear,_currentMonth,SSJUSERID()]];
