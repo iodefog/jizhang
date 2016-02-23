@@ -9,13 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SSJCustomKeyBoardButton.h"
 
-@protocol SSJCustomKeyboardDelegate <NSObject>
-- (void)didNumKeyPressed:(UIButton *)button;
-- (void)didDecimalPointKeyPressed;
-- (void)didBackspaceKeyPressed;
-
-@end
 @interface SSJCustomKeyboard : UIView
+
++ (SSJCustomKeyboard *)sharedInstance;
 
 //小数点模式
 @property(nonatomic) BOOL decimalModel;
@@ -25,6 +21,15 @@
 
 @property(nonatomic,strong)SSJCustomKeyBoardButton *ComfirmButton;
 
-@property(nonatomic, assign) id<SSJCustomKeyboardDelegate> delegate;
+
+@property (nonatomic, weak) UITextField *textField;
+
+@end
+
+
+
+@interface NSObject (SSJCustomKeyboard)
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField;
 
 @end

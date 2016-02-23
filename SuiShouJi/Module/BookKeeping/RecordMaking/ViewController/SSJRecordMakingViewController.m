@@ -28,13 +28,12 @@
 static const NSTimeInterval kAnimationDuration = 0.2;
 
 @interface SSJRecordMakingViewController ()
-@property (nonatomic,strong) SSJCustomKeyboard* customKeyBoard;
 @property (nonatomic,strong) SSJCategoryCollectionView* collectionView;
 @property (nonatomic,strong) UIView* selectedCategoryView;
-@property (nonatomic,strong) UIView* inputView;
-@property (nonatomic,strong) UIView* inputAccessoryView;
+@property (nonatomic,strong) UIView* inputView1;
+//@property (nonatomic,strong) UIView* inputAccessoryView;
 @property (nonatomic,strong) SSJSegmentedControl *titleSegment;
-@property (nonatomic,strong) UILabel* textInput;
+@property (nonatomic,strong) UITextField* textInput;
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
 @property (nonatomic,strong) SSJCategoryListView* categoryListView;
@@ -80,6 +79,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.textInput becomeFirstResponder];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
     self.navigationItem.rightBarButtonItem = rightBarButton;
@@ -100,7 +100,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         self.selectedYear = _originaldYear;
         self.selectedMonth = _originaldMonth;
         self.selectedDay = _originaldDay;
-        _categoryID = self.item.billID;
+        _categoryID = self.item.billId;
     }
     [self getDefualtColorAndDefualtId];
     if (self.item != nil) {
@@ -118,21 +118,16 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryImage];
-    [self.view addSubview:self.inputView];
-    [self.inputView addSubview:self.customKeyBoard];
-    [self.view addSubview:self.inputAccessoryView];
+//    [self.view addSubview:self.inputView1];
+//    [self.view addSubview:self.inputAccessoryView];
     self.view.backgroundColor = [UIColor whiteColor];
-//    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.categoryListView];
-     _intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-    _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
-
 
 -(void)viewDidLayoutSubviews{
     self.selectedCategoryView.leftTop = CGPointMake(0, 0);
@@ -142,48 +137,46 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.categoryImage.centerY = self.selectedCategoryView.centerY;
     self.textInput.right = self.selectedCategoryView.right - 12;
     self.textInput.centerY = self.categoryImage.centerY;
-    self.inputView.bottom = self.view.bottom;
-    self.customKeyBoard.height = 200;
+    self.inputView1.bottom = self.view.bottom;
     self.categoryListView.top = self.selectedCategoryView.bottom;
-    self.categoryListView.height = self.inputView.top - self.selectedCategoryView.bottom;
-    self.inputAccessoryView.bottom = self.inputView.top;
-    self.categoryListView.size = CGSizeMake(self.view.width, self.inputAccessoryView.top - self.selectedCategoryView.bottom);
-
+    self.categoryListView.height = self.inputView1.top - self.selectedCategoryView.bottom;
+//    self.inputAccessoryView.bottom = self.inputView1.top;
+    self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 260 - self.selectedCategoryView.bottom);
 }
 
 #pragma mark SSJCustomKeyboardDelegate
-- (void)didNumKeyPressed:(UIButton *)button{
-    self.textInput.textColor = [UIColor whiteColor];
-    if ([_intPart length] > 7 && self.customKeyBoard.decimalModel == NO) {
-        return;
-    }
-    if (self.customKeyBoard.decimalModel == NO) {
-        if ([self.textInput.text isEqualToString:@"0.00"]) {
-            _intPart = button.titleLabel.text;
-            self.textInput.text = [NSString stringWithFormat:@"%@.00",_intPart];
-            if ([self.textInput.text isEqualToString:@"0.00"]) {
-                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-            }
-        }else{
-        self.textInput.text = [NSString stringWithFormat:@"%@%@.00",_intPart,button.titleLabel.text];
-        _intPart = [NSString stringWithFormat:@"%@%@",_intPart,button.titleLabel.text];
-        }
-    }else{
-        if (_decimalCount == 0) {
-            _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:button.titleLabel.text];
-            _decimalCount = _decimalCount + 1;
-        }else if (_decimalCount == 1) {
-            _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(1, 1) withString:button.titleLabel.text];
-            _decimalCount = _decimalCount + 1;
-        }
-        self.textInput.text = [NSString stringWithFormat:@"%@.%@",_intPart,_decimalPart];
-    _lastPressNum = [button.titleLabel.text integerValue];
-    }
-}
+//- (void)didNumKeyPressed:(UIButton *)button{
+//    self.textInput.textColor = [UIColor whiteColor];
+//    if ([_intPart length] > 7 && self.customKeyBoard.decimalModel == NO) {
+//        return;
+//    }
+//    if (self.customKeyBoard.decimalModel == NO) {
+//        if ([self.textInput.text isEqualToString:@"0.00"]) {
+//            _intPart = button.titleLabel.text;
+//            self.textInput.text = [NSString stringWithFormat:@"%@.00",_intPart];
+//            if ([self.textInput.text isEqualToString:@"0.00"]) {
+//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//            }
+//        }else{
+//        self.textInput.text = [NSString stringWithFormat:@"%@%@.00",_intPart,button.titleLabel.text];
+//        _intPart = [NSString stringWithFormat:@"%@%@",_intPart,button.titleLabel.text];
+//        }
+//    }else{
+//        if (_decimalCount == 0) {
+//            _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:button.titleLabel.text];
+//            _decimalCount = _decimalCount + 1;
+//        }else if (_decimalCount == 1) {
+//            _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(1, 1) withString:button.titleLabel.text];
+//            _decimalCount = _decimalCount + 1;
+//        }
+//        self.textInput.text = [NSString stringWithFormat:@"%@.%@",_intPart,_decimalPart];
+//    _lastPressNum = [button.titleLabel.text integerValue];
+//    }
+//}
 
-- (void)didDecimalPointKeyPressed{
-    self.customKeyBoard.decimalModel = YES;
-}
+//- (void)didDecimalPointKeyPressed{
+//    self.customKeyBoard.decimalModel = YES;
+//}
 
 //- (void)didClearKeyPressed{
 //    self.textInput.text = @"0.00";
@@ -193,62 +186,62 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //    _decimalCount = 0;
 //}
 
-- (void)didBackspaceKeyPressed{
-    self.textInput.textColor = [UIColor whiteColor];
-    NSString *intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-    NSString *decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-    if (![decimalPart isEqualToString:@"00"]) {
-        self.customKeyBoard.decimalModel = YES;
-    }
-    if (self.customKeyBoard.decimalModel == NO) {
-        if ([intPart isEqualToString:@"0"] | ([intPart length] == 1)) {
-            self.textInput.text = @"0.00";
-            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-            return;
-        }
-        if ([intPart hasPrefix:@"-"]&&[intPart length] == 2) {
-            self.textInput.text = @"0.00";
-            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-            return;
-        }
-        intPart = [intPart substringToIndex:[intPart length] - 1];
-        self.textInput.text = [NSString stringWithFormat:@"%@.%@",intPart,decimalPart];
-    }else{
-        if ([decimalPart isEqualToString:@"00"]) {
-            self.customKeyBoard.decimalModel = NO;
-            if ([intPart isEqualToString:@"0"]) {
-                self.textInput.text = @"0.00";
-                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-                _decimalCount = 0;
-                return;
-            }
-            if ([intPart length] == 1) {
-                self.textInput.text = @"0.00";
-                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-                _decimalCount = 0;
-                return;
-            }
-            intPart = [intPart substringToIndex:[intPart length] - 1];
-            self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
-        }else if ([decimalPart hasSuffix:@"0"]){
-            self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
-            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-            _decimalCount = _decimalCount - 1;
-        }else{
-            decimalPart = [decimalPart substringToIndex:1];
-            self.textInput.text = [NSString stringWithFormat:@"%@.%@0",intPart,decimalPart];
-            _decimalCount = _decimalCount - 1;
-        }
-    }
-    _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-    _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-}
+//- (void)didBackspaceKeyPressed{
+//    self.textInput.textColor = [UIColor whiteColor];
+//    NSString *intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+//    NSString *decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+//    if (![decimalPart isEqualToString:@"00"]) {
+//        self.customKeyBoard.decimalModel = YES;
+//    }
+//    if (self.customKeyBoard.decimalModel == NO) {
+//        if ([intPart isEqualToString:@"0"] | ([intPart length] == 1)) {
+//            self.textInput.text = @"0.00";
+//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+//            return;
+//        }
+//        if ([intPart hasPrefix:@"-"]&&[intPart length] == 2) {
+//            self.textInput.text = @"0.00";
+//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+//            return;
+//        }
+//        intPart = [intPart substringToIndex:[intPart length] - 1];
+//        self.textInput.text = [NSString stringWithFormat:@"%@.%@",intPart,decimalPart];
+//    }else{
+//        if ([decimalPart isEqualToString:@"00"]) {
+//            self.customKeyBoard.decimalModel = NO;
+//            if ([intPart isEqualToString:@"0"]) {
+//                self.textInput.text = @"0.00";
+//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//                _decimalCount = 0;
+//                return;
+//            }
+//            if ([intPart length] == 1) {
+//                self.textInput.text = @"0.00";
+//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//                _decimalCount = 0;
+//                return;
+//            }
+//            intPart = [intPart substringToIndex:[intPart length] - 1];
+//            self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
+//        }else if ([decimalPart hasSuffix:@"0"]){
+//            self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
+//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+//            _decimalCount = _decimalCount - 1;
+//        }else{
+//            decimalPart = [decimalPart substringToIndex:1];
+//            self.textInput.text = [NSString stringWithFormat:@"%@.%@0",intPart,decimalPart];
+//            _decimalCount = _decimalCount - 1;
+//        }
+//    }
+//    _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
+//    _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
+//}
 
 //- (void)didPlusKeyPressed{
 //    self.customKeyBoard.PlusOrMinusModel = YES;
@@ -305,13 +298,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 #pragma mark - Getter
--(SSJCustomKeyboard*)customKeyBoard{
-    if (!_customKeyBoard) {
-        _customKeyBoard = [[SSJCustomKeyboard alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
-        _customKeyBoard.delegate = self;
-    }
-    return _customKeyBoard;
-}
+//-(SSJCustomKeyboard*)customKeyBoard{
+//    if (!_customKeyBoard) {
+//        _customKeyBoard = [[SSJCustomKeyboard alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
+//    }
+//    return _customKeyBoard;
+//}
 
 -(UIView*)selectedCategoryView{
     if (!_selectedCategoryView) {
@@ -330,7 +322,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         if (self.item == nil) {
             _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
         }else{
-            _categoryListView.incomeOrExpence = _defualtType;
+            _categoryListView.incomeOrExpence = self.item.incomeOrExpence;
         }
         [_categoryListView reloadData];
         __weak typeof(self) weakSelf = self;
@@ -347,7 +339,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }];
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
-                addNewTypeVc.incomeOrExpence = !weakSelf.titleSegment.selectedSegmentIndex;
+                addNewTypeVc.incomeOrExpence = !
+                weakSelf.titleSegment.selectedSegmentIndex;
                 addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
                     weakSelf.categoryListView.selectedId = categoryID;
                     _categoryID = categoryID;
@@ -362,17 +355,17 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return _categoryListView;
 }
 
--(UILabel*)textInput{
+-(UITextField*)textInput{
     if (!_textInput) {
-        _textInput = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
+        _textInput = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
+        _textInput.inputView = [SSJCustomKeyboard sharedInstance];
+        _textInput.delegate = self;
         _textInput.font = [UIFont systemFontOfSize:30];
         _textInput.textAlignment = NSTextAlignmentRight;
+        _textInput.placeholder = @"0.00";
         if (self.item != nil) {
-            _textInput.text = [NSString stringWithFormat:@"%.2f",self.item.chargeMoney];
+            _textInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
             _textInput.textColor = [UIColor whiteColor];
-        }else{
-            _textInput.text = @"0.00";
-            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
         }
     }
     return _textInput;
@@ -388,34 +381,34 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return _categoryImage;
 }
 
--(UIView*)inputView{
-    if (!_inputView ) {
-        _inputView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
+-(UIView*)inputView1{
+    if (!_inputView1 ) {
+        _inputView1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
     }
-    return _inputView;
+    return _inputView1;
 }
 
--(UIView*)inputAccessoryView{
-    if (!_inputAccessoryView ) {
-        _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
-        _inputAccessoryView.backgroundColor = [UIColor whiteColor];
-        
-        [_inputAccessoryView addSubview:self.fundingTypeButton];
-        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
-        _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
-        [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
-        [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_inputAccessoryView addSubview:self.datePickerButton];
-        self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
-        self.calendarView.frame = CGRectMake(self.datePickerButton.width - 20, 0, 24, 24);
-        self.calendarView.centerY = self.datePickerButton.height / 2;
-        [self.datePickerButton addSubview:self.calendarView];
-    }
-    return _inputAccessoryView;
-}
+//-(UIView*)inputAccessoryView{
+//    if (!_inputAccessoryView ) {
+//        _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
+//        _inputAccessoryView.backgroundColor = [UIColor whiteColor];
+//        
+//        [_inputAccessoryView addSubview:self.fundingTypeButton];
+//        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
+//        _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+//        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
+//        [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+//        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+//        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
+//        [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+//        [_inputAccessoryView addSubview:self.datePickerButton];
+//        self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
+//        self.calendarView.frame = CGRectMake(self.datePickerButton.width - 20, 0, 24, 24);
+//        self.calendarView.centerY = self.datePickerButton.height / 2;
+//        [self.datePickerButton addSubview:self.calendarView];
+//    }
+//    return _inputAccessoryView;
+//}
 
 - (UIButton *)fundingTypeButton {
     if (!_fundingTypeButton) {
@@ -517,7 +510,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (self.item == nil) {
         _titleSegment.selectedSegmentIndex = 0;
     }else{
-        _titleSegment.selectedSegmentIndex = !_defualtType;
+        _titleSegment.selectedSegmentIndex = !self.item.incomeOrExpence;
     }
     _titleSegment.size = CGSizeMake(115, 30);
     _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
@@ -598,7 +591,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
             }
         }else{
-            [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.item.chargeID,SSJUSERID()];
+            [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.item.ID,SSJUSERID()];
             if (self.titleSegment.selectedSegmentIndex == 0) {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,SSJUSERID()];
                 if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()]){
@@ -614,13 +607,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , ICHARGEID  , IBILLID , CWRITEDATE , CUSERID) VALUES(?,?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],@"0",@"-1",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],SSJUSERID()];
                 }
             }
-            if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billID])
+            if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billId])
             {
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID,SSJUSERID()];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],self.item.fundId,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],[NSNumber numberWithDouble:[self.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate,SSJUSERID()];
             }else{
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],self.item.fundID,SSJUSERID()];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:self.item.chargeMoney],[NSNumber numberWithDouble:self.item.chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],self.item.fundId,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],[NSNumber numberWithDouble:[self.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate,SSJUSERID()];
             }
             
         }
@@ -659,14 +652,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }
             [rs close];
         }else{
-            FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN , ITYPE FROM BK_BILL_TYPE  WHERE ID = ?",weakSelf.item.billID];
-            while([rs next]) {
-                _defualtColor = [rs stringForColumn:@"CCOLOR"];
-                _defualtID = [rs stringForColumn:@"ID"];
-                _defualtImage = [rs stringForColumn:@"CCOIN"];
-                _defualtType = [rs intForColumn:@"ITYPE"];
-            }
-            [rs close];
+            _defualtColor = weakSelf.item.colorValue;
+            _defualtID = weakSelf.item.billId;
+            _defualtImage = weakSelf.item.imageName;
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             [UIView animateWithDuration:kAnimationDuration animations:^{
@@ -700,7 +688,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)getSelectedFundingType{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundID];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundId];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
             _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
@@ -741,9 +729,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
-
 
 /*
 #pragma mark - Navigation
