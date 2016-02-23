@@ -402,7 +402,6 @@
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
-		BDFBDAAA1C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAA91C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -982,8 +981,6 @@
 		BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectViewControllerViewController.m; sourceTree = "<group>"; };
 		BDF382421C3E151100955038 /* SSJColorSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectCollectionViewCell.h; sourceTree = "<group>"; };
 		BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectCollectionViewCell.m; sourceTree = "<group>"; };
-		BDFBDAA81C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
-		BDFBDAA91C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		DA9C2C669BC49A563D49451D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D0B59F205FC504E005DB6B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2021,8 +2018,6 @@
 				9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */,
 				BDEA872E1C509E80002681BD /* SSJSmallCalendarView.h */,
 				BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */,
-				BDFBDAA81C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.h */,
-				BDFBDAA91C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3022,7 +3017,6 @@
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
 				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
-				BDFBDAAA1C7AA9CF0049F179 /* SSJRecordMakingAdditionalView.m in Sources */,
 				7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */,
 				BDD8817B1C5B642600B6FC02 /* SSJFinancingHomePopView.m in Sources */,
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,

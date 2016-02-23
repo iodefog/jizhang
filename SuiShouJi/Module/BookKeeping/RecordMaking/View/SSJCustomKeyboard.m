@@ -201,7 +201,6 @@ static id _instance;
         _DecimalButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _DecimalButton.layer.borderWidth = 1.0f / 2;
         [self addSubview:_DecimalButton];
-        
     }
     return _DecimalButton;
 }
