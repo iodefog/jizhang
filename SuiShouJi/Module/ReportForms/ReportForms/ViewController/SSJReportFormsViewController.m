@@ -18,8 +18,8 @@
 #import "SSJBillingChargeViewController.h"
 #import "SSJReportFormsUtil.h"
 
-//#warning test
-//#import "SSJDataSynchronizer.h"
+#warning test
+#import "SSJBudgetDetailViewController.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -87,6 +87,16 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
+    
+#warning test
+    UIBarButtonItem *testItem = [[UIBarButtonItem alloc] initWithTitle:@"test" style:UIBarButtonItemStylePlain target:self action:@selector(testAction)];
+    self.navigationItem.leftBarButtonItem = testItem;
+}
+
+#warning test
+- (void)testAction {
+    SSJBudgetDetailViewController *budgetDetailVC = [[SSJBudgetDetailViewController alloc] init];
+    [self.navigationController pushViewController:budgetDetailVC animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

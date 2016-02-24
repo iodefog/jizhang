@@ -16,7 +16,10 @@
 //  用户id
 @property (nonatomic, copy) NSString *userId;
 
-//  预算类型 1:周预算 2:月预算 3:年预算
+//  收支类型id拼接的字符串，用，分隔；例如：1000,1001,1002
+@property (nonatomic, copy) NSString *billIds;
+
+//  预算类型 0:周预算 1:月预算 2:年预算
 @property (nonatomic) int type;
 
 //  预算金额
