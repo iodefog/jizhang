@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="334" height="189"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jcm-Xt-Zct">
+                    <rect key="frame" x="0.0" y="0.0" width="334" height="75"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L9O-3e-xEQ">
+                            <rect key="frame" x="152" y="22" width="30" height="30"/>
+                            <state key="normal" title="备注"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIn-13-FWB">
+                            <rect key="frame" x="232" y="22" width="30" height="30"/>
+                            <state key="normal" title="循环"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qh-8N-kQS">
+                            <rect key="frame" x="72" y="22" width="30" height="30"/>
+                            <state key="normal" title="拍照"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="qIn-13-FWB" firstAttribute="leading" secondItem="L9O-3e-xEQ" secondAttribute="trailing" constant="50" id="79r-sl-YIx"/>
+                        <constraint firstItem="L9O-3e-xEQ" firstAttribute="centerX" secondItem="jcm-Xt-Zct" secondAttribute="centerX" id="IhF-kq-slV"/>
+                        <constraint firstItem="qIn-13-FWB" firstAttribute="centerY" secondItem="L9O-3e-xEQ" secondAttribute="centerY" id="Xix-Y3-q9y"/>
+                        <constraint firstItem="5qh-8N-kQS" firstAttribute="trailing" secondItem="L9O-3e-xEQ" secondAttribute="leading" constant="-50" id="dXu-Ip-5tw"/>
+                        <constraint firstItem="5qh-8N-kQS" firstAttribute="centerY" secondItem="L9O-3e-xEQ" secondAttribute="centerY" id="g22-nU-mAN"/>
+                        <constraint firstItem="L9O-3e-xEQ" firstAttribute="centerY" secondItem="jcm-Xt-Zct" secondAttribute="centerY" id="iD7-sp-dgk"/>
+                        <constraint firstAttribute="height" constant="75" id="m8d-sF-xYV"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GsV-3E-PtB">
+                    <rect key="frame" x="135" y="105" width="64" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="cRn-0R-ryH"/>
+                        <constraint firstAttribute="width" constant="64" id="rkW-dr-ls2"/>
+                    </constraints>
+                    <state key="normal" title="确定"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="jcm-Xt-Zct" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="0fg-tf-op4"/>
+                <constraint firstItem="jcm-Xt-Zct" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="9b3-Sx-ggk"/>
+                <constraint firstItem="GsV-3E-PtB" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="I8v-GY-ZJX"/>
+                <constraint firstAttribute="trailing" secondItem="jcm-Xt-Zct" secondAttribute="trailing" id="lti-Qs-aTA"/>
+                <constraint firstItem="GsV-3E-PtB" firstAttribute="top" secondItem="jcm-Xt-Zct" secondAttribute="bottom" constant="30" id="mD9-9h-mks"/>
+                <constraint firstItem="jcm-Xt-Zct" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="qEm-e8-NIy"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="406" y="34.5"/>
+        </view>
+    </objects>
+</document>

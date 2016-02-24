@@ -122,6 +122,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //    [self.view addSubview:self.inputAccessoryView];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.categoryListView];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -270,7 +271,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //}
 
 - (void)comfirmButtonClick:(id)sender{
-    if ([self.textInput.text isEqualToString:@"0.00"]) {
+    if ([self.textInput.text isEqualToString:@"0.00"] || [self.textInput.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
         return;
     }
@@ -360,9 +361,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _textInput = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
         _textInput.inputView = [SSJCustomKeyboard sharedInstance];
         _textInput.delegate = self;
+        _textInput.textColor = [UIColor whiteColor];
         _textInput.font = [UIFont systemFontOfSize:30];
         _textInput.textAlignment = NSTextAlignmentRight;
         _textInput.placeholder = @"0.00";
+        [_textInput setValue:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
         if (self.item != nil) {
             _textInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
             _textInput.textColor = [UIColor whiteColor];
@@ -723,6 +726,42 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)reloadDataAfterSync{
     [self.categoryListView reloadData];
+}
+
+-(void)textFieldDidChange:(id)sender{
+    [self setupTextFiledNum:self.textInput num:2];
+}
+
+/**
+ *   限制输入框小数点(输入框只改变时候调用valueChange)
+ *
+ *  @param TF  输入框
+ *  @param num 小数点后限制位数
+ */
+-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+{
+    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+    
+    if ([TF.text isEqualToString:@"0."] || [TF.text isEqualToString:@"."]) {
+        TF.text = @"0.";
+    }else if (TF.text.length == 2) {
+        if ([TF.text floatValue] == 0) {
+            TF.text = @"0";
+        }else if(arr.count < 2){
+            TF.text = [NSString stringWithFormat:@"%d",[TF.text intValue]];
+        }
+    }
+    
+    if (arr.count > 2) {
+        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+    }
+    
+    if (arr.count == 2) {
+        NSString * lastStr = arr.lastObject;
+        if (lastStr.length > num) {
+            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

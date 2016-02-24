@@ -415,6 +415,8 @@
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
+		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
+		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1020,6 +1022,9 @@
 		BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectViewControllerViewController.m; sourceTree = "<group>"; };
 		BDF382421C3E151100955038 /* SSJColorSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectCollectionViewCell.h; sourceTree = "<group>"; };
 		BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectCollectionViewCell.m; sourceTree = "<group>"; };
+		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
+		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
+		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
 		DA9C2C669BC49A563D49451D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D0B59F205FC504E005DB6B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2131,6 +2136,9 @@
 				9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */,
 				BDEA872E1C509E80002681BD /* SSJSmallCalendarView.h */,
 				BDEA872F1C509E80002681BD /* SSJSmallCalendarView.m */,
+				BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */,
+				BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */,
+				BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2737,6 +2745,7 @@
 				BDA3FDF51C58CAC400FB57B1 /* ft_house@2x.png in Resources */,
 				7DD7D6AB1C4C8E6A00ACE71A /* bt_gongjijin@3x.png in Resources */,
 				7DD7D72C1C4C8FA300ACE71A /* reportForms_period@3x.png in Resources */,
+				BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */,
 				BDA3FDF41C58CAC400FB57B1 /* ft_creditcard@3x.png in Resources */,
 				7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */,
 				BD976FC21C4F57F700B0E26D /* solid_circle@2x.png in Resources */,
@@ -3159,6 +3168,7 @@
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
 				7DEF54831C7C722A00A90153 /* SSJBorderButton.m in Sources */,
 				BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */,
+				BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */,
 				7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */,
 				7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,
