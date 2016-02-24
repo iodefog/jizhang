@@ -73,14 +73,14 @@ static id _instance;
     self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
     self.ClearButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.ClearButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.ComfirmButton.rightTop = CGPointMake(self.right, 0);
-    self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.PlusButton.rightTop = CGPointMake(self.right, self.ComfirmButton.bottom);
+    self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.BackspaceButton.rightTop = CGPointMake(self.right, 0);
+    self.PlusButton.rightTop = CGPointMake(self.right, self.BackspaceButton.bottom);
     self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.MinusButton.rightTop = CGPointMake(self.right, self.PlusButton.bottom);
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.BackspaceButton.rightBottom = CGPointMake(self.right, self.bottom);
+    self.ComfirmButton.rightBottom = CGPointMake(self.right, self.height);
+    self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
 }
 
 //数字键
