@@ -271,7 +271,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //}
 
 - (void)comfirmButtonClick:(id)sender{
-    if ([self.textInput.text isEqualToString:@"0.00"]) {
+    if ([self.textInput.text isEqualToString:@"0.00"] || [self.textInput.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
         return;
     }

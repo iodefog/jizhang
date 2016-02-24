@@ -87,9 +87,7 @@
     [self.view addSubview:self.bookKeepingHeader];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    NSString *path = SSJSQLitePath();
     self.view.backgroundColor = [UIColor whiteColor];
-    NSLog(@"%@",path);
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
