@@ -165,3 +165,14 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName);
  */
 NSString *SSJImagePath(NSString *imageName);
 
+
+/**
+ *  根据图片名获取图片
+ *
+ *  @param imageName @param imageName 图片名称
+ *
+ *  @return @return (UIImage *)
+ */
+UIImage *SSJGetOriginalImage(NSString *imageName);
+
+

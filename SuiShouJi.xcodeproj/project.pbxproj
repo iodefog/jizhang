@@ -407,6 +407,7 @@
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
+		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -995,6 +996,8 @@
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
+		BDFBDAB01C7DA9240049F179 /* SSJImaageBrowseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJImaageBrowseViewController.h; sourceTree = "<group>"; };
+		BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJImaageBrowseViewController.m; sourceTree = "<group>"; };
 		DA9C2C669BC49A563D49451D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0D0B59F205FC504E005DB6B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2092,6 +2095,8 @@
 				BD0E43FD1C216C7600F9179D /* SSJRecordMakingViewController.m */,
 				BD8FD8321C34DA1F00B7AABA /* SSJADDNewTypeViewController.h */,
 				BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */,
+				BDFBDAB01C7DA9240049F179 /* SSJImaageBrowseViewController.h */,
+				BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -3082,6 +3087,7 @@
 				BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */,
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
+				BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */,
 				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				7DEF546E1C7BF42F00A90153 /* SSJBudgetListViewController.m in Sources */,
 				7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */,
@@ -3303,9 +3309,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "14d03a4e-a7cc-480e-81e8-e3046628f89f";
+				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
 			};
 			name = Debug;
 		};
@@ -3331,9 +3337,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "9797bbfc-b22d-4c22-a4f3-865f4702750a";
+				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
 			};
 			name = Release;
 		};

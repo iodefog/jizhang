@@ -18,9 +18,11 @@
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
+#import "SSJRecordMakingAdditionalView.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJImaageBrowseViewController.h"
 
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
@@ -30,10 +32,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @interface SSJRecordMakingViewController ()
 @property (nonatomic,strong) SSJCategoryCollectionView* collectionView;
 @property (nonatomic,strong) UIView* selectedCategoryView;
-@property (nonatomic,strong) UIView* inputView1;
-//@property (nonatomic,strong) UIView* inputAccessoryView;
+@property (nonatomic,strong) SSJRecordMakingAdditionalView* additionalView;
+@property (nonatomic,strong) UIView* inputTopView;
 @property (nonatomic,strong) SSJSegmentedControl *titleSegment;
 @property (nonatomic,strong) UITextField* textInput;
+@property (nonatomic,strong) UIImage *selectedImage;
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
 @property (nonatomic,strong) SSJCategoryListView* categoryListView;
@@ -118,8 +121,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
     [self.selectedCategoryView addSubview:self.categoryImage];
-//    [self.view addSubview:self.inputView1];
-//    [self.view addSubview:self.inputAccessoryView];
+    [self.view addSubview:self.additionalView];
+    [self.view addSubview:self.inputTopView];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.categoryListView];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
@@ -138,10 +141,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.categoryImage.centerY = self.selectedCategoryView.centerY;
     self.textInput.right = self.selectedCategoryView.right - 12;
     self.textInput.centerY = self.categoryImage.centerY;
-    self.inputView1.bottom = self.view.bottom;
+    self.additionalView.height = 200;
+    self.additionalView.bottom = self.view.height;
     self.categoryListView.top = self.selectedCategoryView.bottom;
-    self.categoryListView.height = self.inputView1.top - self.selectedCategoryView.bottom;
-//    self.inputAccessoryView.bottom = self.inputView1.top;
+//    self.categoryListView.height = self.additionalView.top - self.selectedCategoryView.bottom;
+    self.inputTopView.bottom = self.additionalView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 260 - self.selectedCategoryView.bottom);
 }
 
@@ -270,12 +274,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //    _decimalCount = 0;
 //}
 
-- (void)comfirmButtonClick:(id)sender{
-    if ([self.textInput.text isEqualToString:@"0.00"] || [self.textInput.text isEqualToString:@""]) {
-        [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
-        return;
-    }
-    [self makeArecord];
+//- (void)comfirmButtonClick:(id)sender{
+//    if ([self.textInput.text isEqualToString:@"0.00"] || [self.textInput.text isEqualToString:@""]) {
+//        [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
+//        return;
+//    }
+//    [self makeArecord];
 //    }else if ([button.titleLabel.text isEqualToString:@"="]){
 //        if (self.customKeyBoard.PlusOrMinusModel == YES) {
 //            _caculationValue = _caculationValue + [self.textInput.text floatValue];
@@ -296,7 +300,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //        }
 //        [self.customKeyBoard.ComfirmButton setTitle:@"确定" forState:UIControlStateNormal];
 //    }
-}
+//}
 
 #pragma mark - Getter
 //-(SSJCustomKeyboard*)customKeyBoard{
@@ -384,34 +388,60 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return _categoryImage;
 }
 
--(UIView*)inputView1{
-    if (!_inputView1 ) {
-        _inputView1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
+-(SSJRecordMakingAdditionalView*)additionalView{
+    if (!_additionalView ) {
+        _additionalView = [SSJRecordMakingAdditionalView RecordMakingAdditionalView];
+        [_additionalView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_additionalView ssj_setBorderStyle:SSJBorderStyleTop];
+        _additionalView.frame = CGRectMake(0, 0, self.view.width, 200);
+        __weak typeof(self) weakSelf = self;
+        _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
+            if (buttonTag == 1) {
+                if (_selectedImage == nil) {
+                    UIActionSheet *sheet;
+                    sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
+                    [sheet showInView:weakSelf.view];
+                }else{
+                    SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
+                    imageBrowserVC.image = weakSelf.selectedImage;
+                    [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
+                }
+            }else if (buttonTag == 4){
+                if ([weakSelf.textInput.text isEqualToString:@"0.00"] || [weakSelf.textInput.text isEqualToString:@""]) {
+                    [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
+                    return;
+                }
+                [weakSelf makeArecord];
+            }else if (buttonTag == 1){
+                
+            }
+        };
     }
-    return _inputView1;
+    return _additionalView;
 }
 
-//-(UIView*)inputAccessoryView{
-//    if (!_inputAccessoryView ) {
-//        _inputAccessoryView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
-//        _inputAccessoryView.backgroundColor = [UIColor whiteColor];
-//        
-//        [_inputAccessoryView addSubview:self.fundingTypeButton];
-//        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
-//        _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-//        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
-//        [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-//        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
-//        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
-//        [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//        [_inputAccessoryView addSubview:self.datePickerButton];
-//        self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
-//        self.calendarView.frame = CGRectMake(self.datePickerButton.width - 20, 0, 24, 24);
-//        self.calendarView.centerY = self.datePickerButton.height / 2;
-//        [self.datePickerButton addSubview:self.calendarView];
-//    }
-//    return _inputAccessoryView;
-//}
+-(UIView*)inputTopView{
+    if (!_inputTopView ) {
+        _inputTopView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
+        _inputTopView.backgroundColor = [UIColor whiteColor];
+        [_inputTopView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_inputTopView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_inputTopView addSubview:self.fundingTypeButton];
+        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
+        _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
+        [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
+        [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_inputTopView addSubview:self.datePickerButton];
+        self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
+        self.calendarView.frame = CGRectMake(self.datePickerButton.width - 20, 0, 24, 24);
+        self.calendarView.centerY = self.datePickerButton.height / 2;
+        [self.datePickerButton addSubview:self.calendarView];
+    }
+    return _inputTopView;
+}
 
 - (UIButton *)fundingTypeButton {
     if (!_fundingTypeButton) {
@@ -448,6 +478,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
             }
             [weakSelf.DateSelectedView removeFromSuperview];
+            [weakSelf.textInput becomeFirstResponder];
         };
     }
     return _DateSelectedView;
@@ -483,6 +514,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
             [weakSelf.FundingTypeSelectView removeFromSuperview];
+            [weakSelf.textInput becomeFirstResponder];
         };
     }
     return _FundingTypeSelectView;
@@ -507,7 +539,56 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return _calendarView;
 }
 
+#pragma mark - UIActionSheetDelegate
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex)
+    {
+        case 0:  //打开照相机拍照
+            [self takePhoto];
+            break;
+        case 1:  //打开本地相册
+            [self localPhoto];
+            break;
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.additionalView.selectedImage = image;
+    _selectedImage = image;
+}
+
+
 #pragma mark - private
+-(void)takePhoto{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = sourceType;
+        [self presentViewController:picker animated:YES completion:^{}];
+    }else
+    {
+        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+    }
+}
+
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
+}
+
 -(void)settitleSegment{
     _titleSegment = [[SSJSegmentedControl alloc]initWithItems:@[@"支出",@"收入"]];
     if (self.item == nil) {
@@ -527,10 +608,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)datePickerButtonClicked:(UIButton*)button{
     [[UIApplication sharedApplication].keyWindow addSubview:self.DateSelectedView];
+    [self.textInput resignFirstResponder];
 }
 
 -(void)fundingTypeButtonClicked:(UIButton*)button{
     [[UIApplication sharedApplication].keyWindow addSubview:self.FundingTypeSelectView];
+    [self.textInput resignFirstResponder];
 }
 
 -(void)getCurrentDate{
