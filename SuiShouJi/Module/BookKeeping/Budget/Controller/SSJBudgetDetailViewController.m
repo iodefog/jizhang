@@ -12,7 +12,7 @@
 #import "SSJBudgetDetailBottomView.h"
 #import "SSJBorderButton.h"
 #import "SSJPercentCircleView.h"
-#import "SSJBudgetHelper.h"
+#import "SSJBudgetDatabaseHelper.h"
 
 static const CGFloat kHeaderMargin = 8;
 
@@ -47,6 +47,13 @@ static const CGFloat kBottomViewHeight = 466;
 @implementation SSJBudgetDetailViewController
 
 #pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesBottomBarWhenPushed = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -97,7 +104,7 @@ static const CGFloat kBottomViewHeight = 466;
 - (void)loadAllData {
     [self.view ssj_showLoadingIndicator];
     
-    [SSJBudgetHelper queryForBudgetDetailWithID:self.budgetId success:^(NSDictionary * _Nonnull result) {
+    [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:self.budgetId success:^(NSDictionary * _Nonnull result) {
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
         
@@ -125,7 +132,7 @@ static const CGFloat kBottomViewHeight = 466;
         style.firstLineHeadIndent = 15;
         self.budgetTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算消费明细", tStr] attributes:@{NSParagraphStyleAttributeName:style}];
         
-        [SSJBudgetHelper queryForMonthBudgetIdListWithSuccess:^(NSArray<NSString *> * _Nonnull result) {
+        [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSArray<NSString *> * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
             
             self.budgetIdList = result;
@@ -168,7 +175,7 @@ static const CGFloat kBottomViewHeight = 466;
     [self.view ssj_showLoadingIndicator];
     NSString *budgetId = [self.budgetIdList ssj_safeObjectAtIndex:self.selectedBudgetIdIndex];
     
-    [SSJBudgetHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
+    [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
         
         self.budgetModel = result[SSJBudgetModelKey];

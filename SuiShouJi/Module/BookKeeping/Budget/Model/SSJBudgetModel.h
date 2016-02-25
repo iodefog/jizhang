@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJBudgetConst.h"
 
 @interface SSJBudgetModel : NSObject <NSCopying>
 
@@ -19,8 +20,7 @@
 //  收支类型id拼接的字符串，从小到大排序，用','分隔；例如：1000,1001,1002
 @property (nonatomic, copy) NSArray *billIds;
 
-//  预算类型 0:周预算 1:月预算 2:年预算
-@property (nonatomic) int type;
+@property (nonatomic) SSJBudgetPeriodType type;
 
 //  预算金额
 @property (nonatomic) double budgetMoney;
@@ -39,5 +39,8 @@
 
 //  是否自动续用
 @property (nonatomic) BOOL isAutoContinued;
+
+//  是否开启预算提醒
+@property (nonatomic) BOOL isRemind;
 
 @end

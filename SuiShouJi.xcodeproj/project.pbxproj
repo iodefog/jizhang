@@ -204,7 +204,7 @@
 		7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */; };
 		7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */; };
 		7DEF546E1C7BF42F00A90153 /* SSJBudgetListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF546D1C7BF42F00A90153 /* SSJBudgetListViewController.m */; };
-		7DEF54711C7BF47100A90153 /* SSJBudgetHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54701C7BF47100A90153 /* SSJBudgetHelper.m */; };
+		7DEF54711C7BF47100A90153 /* SSJBudgetDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54701C7BF47100A90153 /* SSJBudgetDatabaseHelper.m */; };
 		7DEF54741C7C243700A90153 /* SSJBudgetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54731C7C243700A90153 /* SSJBudgetModel.m */; };
 		7DEF54771C7C63F700A90153 /* SSJBudgetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54761C7C63F700A90153 /* SSJBudgetDetailViewController.m */; };
 		7DEF547A1C7C647200A90153 /* SSJBudgetEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54791C7C647200A90153 /* SSJBudgetEditViewController.m */; };
@@ -220,6 +220,8 @@
 		7DEF55451C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55411C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m */; };
 		7DEF55461C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55431C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m */; };
 		7DEF55521C7EEB3300A90153 /* SSJBudgetTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55511C7EEB3300A90153 /* SSJBudgetTypeModel.m */; };
+		7DEF55551C7EFCF500A90153 /* SSJBudgetCalendarHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */; };
+		7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
 		7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */; };
@@ -687,8 +689,8 @@
 		7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleViewItem.m; sourceTree = "<group>"; };
 		7DEF546C1C7BF42F00A90153 /* SSJBudgetListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetListViewController.h; sourceTree = "<group>"; };
 		7DEF546D1C7BF42F00A90153 /* SSJBudgetListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetListViewController.m; sourceTree = "<group>"; };
-		7DEF546F1C7BF47100A90153 /* SSJBudgetHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetHelper.h; sourceTree = "<group>"; };
-		7DEF54701C7BF47100A90153 /* SSJBudgetHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetHelper.m; sourceTree = "<group>"; };
+		7DEF546F1C7BF47100A90153 /* SSJBudgetDatabaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDatabaseHelper.h; sourceTree = "<group>"; };
+		7DEF54701C7BF47100A90153 /* SSJBudgetDatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDatabaseHelper.m; sourceTree = "<group>"; };
 		7DEF54721C7C243700A90153 /* SSJBudgetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetModel.h; sourceTree = "<group>"; };
 		7DEF54731C7C243700A90153 /* SSJBudgetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetModel.m; sourceTree = "<group>"; };
 		7DEF54751C7C63F700A90153 /* SSJBudgetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailViewController.h; sourceTree = "<group>"; };
@@ -719,6 +721,11 @@
 		7DEF55431C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditSwitchCtrlCell.m; sourceTree = "<group>"; };
 		7DEF55501C7EEB3300A90153 /* SSJBudgetTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetTypeModel.h; sourceTree = "<group>"; };
 		7DEF55511C7EEB3300A90153 /* SSJBudgetTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetTypeModel.m; sourceTree = "<group>"; };
+		7DEF55531C7EFCF500A90153 /* SSJBudgetCalendarHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetCalendarHelper.h; sourceTree = "<group>"; };
+		7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetCalendarHelper.m; sourceTree = "<group>"; };
+		7DEF55561C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditPeriodSelectionView.h; sourceTree = "<group>"; };
+		7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditPeriodSelectionView.m; sourceTree = "<group>"; };
+		7DEF555A1C7F23E500A90153 /* SSJBudgetConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSJBudgetConst.h; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
 		7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-667@2x.png"; sourceTree = "<group>"; };
 		7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@3x.png"; sourceTree = "<group>"; };
@@ -1624,6 +1631,7 @@
 		7DEF54671C7BF3C800A90153 /* Budget */ = {
 			isa = PBXGroup;
 			children = (
+				7DEF55591C7F23BA00A90153 /* Const */,
 				7DEF54681C7BF3C800A90153 /* Controller */,
 				7DEF54691C7BF3C800A90153 /* Helper */,
 				7DEF546A1C7BF3C800A90153 /* Model */,
@@ -1648,8 +1656,10 @@
 		7DEF54691C7BF3C800A90153 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				7DEF546F1C7BF47100A90153 /* SSJBudgetHelper.h */,
-				7DEF54701C7BF47100A90153 /* SSJBudgetHelper.m */,
+				7DEF546F1C7BF47100A90153 /* SSJBudgetDatabaseHelper.h */,
+				7DEF54701C7BF47100A90153 /* SSJBudgetDatabaseHelper.m */,
+				7DEF55531C7EFCF500A90153 /* SSJBudgetCalendarHelper.h */,
+				7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1688,6 +1698,8 @@
 				7DEF55411C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m */,
 				7DEF55421C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.h */,
 				7DEF55431C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m */,
+				7DEF55561C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.h */,
+				7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1699,6 +1711,14 @@
 				7DEF55261C7DAEDE00A90153 /* SuiShouJi-Bridging-Header.h */,
 			);
 			path = WaveLoadingIndicator;
+			sourceTree = "<group>";
+		};
+		7DEF55591C7F23BA00A90153 /* Const */ = {
+			isa = PBXGroup;
+			children = (
+				7DEF555A1C7F23E500A90153 /* SSJBudgetConst.h */,
+			);
+			path = Const;
 			sourceTree = "<group>";
 		};
 		7DF8DECB1C59BFE700CC5DFA /* Guide */ = {
@@ -3130,12 +3150,13 @@
 				BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */,
 				BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */,
 				BD0433291C1A78B40051E7AB /* SSJViewControllerAddition.m in Sources */,
-				7DEF54711C7BF47100A90153 /* SSJBudgetHelper.m in Sources */,
+				7DEF54711C7BF47100A90153 /* SSJBudgetDatabaseHelper.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */,
 				BD0433951C1A8DA50051E7AB /* SSJBaseTableViewCell.m in Sources */,
+				7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */,
 				BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */,
 				BD7BC8571C3B6F6C001DE5D8 /* SSJModifyFundingTableViewCell.m in Sources */,
 				BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */,
@@ -3239,6 +3260,7 @@
 				7DEF552E1C7DB43400A90153 /* SSJBudgetListCellItem.m in Sources */,
 				7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
+				7DEF55551C7EFCF500A90153 /* SSJBudgetCalendarHelper.m in Sources */,
 				9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */,
 				7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7DEF55281C7DAEDE00A90153 /* WaveLoadingIndicator.swift in Sources */,

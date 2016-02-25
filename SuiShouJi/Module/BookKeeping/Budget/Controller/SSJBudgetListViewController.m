@@ -7,9 +7,10 @@
 //
 
 #import "SSJBudgetListViewController.h"
+#import "SSJBudgetEditViewController.h"
 #import "SSJBudgetDetailViewController.h"
 #import "SSJBudgetListCell.h"
-#import "SSJBudgetHelper.h"
+#import "SSJBudgetDatabaseHelper.h"
 
 static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 
@@ -23,15 +24,18 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 
 @implementation SSJBudgetListViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"预算";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupAddBarButtonItem];
     [self.view addSubview:self.tableView];
 }
 
@@ -40,7 +44,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     
     [self.view ssj_showLoadingIndicator];
     
-    [SSJBudgetHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
         self.dataList = result;
         [self.tableView reloadData];
@@ -55,23 +59,6 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [super viewWillLayoutSubviews];
     
     self.tableView.frame = self.view.bounds;
-}
-
-- (UITableView *)tableView {
-    if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-        _tableView.dataSource = self;
-        _tableView.delegate = self;
-        _tableView.backgroundView = nil;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
-        [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        [_tableView setTableFooterView:[[UIView alloc] init]];
-        [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
-        _tableView.rowHeight = 100;
-        _tableView.sectionHeaderHeight = 10;
-    }
-    return _tableView;
 }
 
 #pragma mark - UITableViewDataSource
@@ -100,6 +87,12 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 
+#pragma mark - Event
+- (void)addNewBudgetAction {
+    SSJBudgetEditViewController *newBudgetVC = [[SSJBudgetEditViewController alloc] init];
+    [self.navigationController pushViewController:newBudgetVC animated:YES];
+}
+
 #pragma mark - Private
 - (SSJBudgetListCellItem *)convertCellItemFromModel:(SSJBudgetModel *)model {
     SSJBudgetListCellItem *cellItem = [[SSJBudgetListCellItem alloc] init];
@@ -120,6 +113,29 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     cellItem.payment = model.payMoney;
     cellItem.budget = model.budgetMoney;
     return cellItem;
+}
+
+- (void)setupAddBarButtonItem {
+    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(addNewBudgetAction)];
+    self.navigationItem.rightBarButtonItem = addItem;
+}
+
+#pragma mark - Getter
+- (UITableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.backgroundView = nil;
+        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        [_tableView setTableFooterView:[[UIView alloc] init]];
+        [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
+        _tableView.rowHeight = 100;
+        _tableView.sectionHeaderHeight = 10;
+    }
+    return _tableView;
 }
 
 @end

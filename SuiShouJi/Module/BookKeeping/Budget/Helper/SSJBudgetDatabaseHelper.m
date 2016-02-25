@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBudgetHelper.h"
+#import "SSJBudgetDatabaseHelper.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJPercentCircleViewItem.h"
 #import "MJExtension.h"
@@ -14,7 +14,7 @@
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
 
-@implementation SSJBudgetHelper
+@implementation SSJBudgetDatabaseHelper
 
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -23,7 +23,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *budgetList = [NSMutableArray array];
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ?", SSJUSERID(), currentDate, currentDate];
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ?", SSJUSERID(), currentDate, currentDate];
         
         if (!budgetResult) {
             if (failure) {
@@ -221,7 +221,8 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
                      @"remindMoney":@"iremindmoney",
                      @"beginDate":@"csdate",
                      @"endDate":@"cedate",
-                     @"isAutoContinued":@"istate"};
+                     @"isAutoContinued":@"istate",
+                     @"isRemind":@"iremind"};
         }];
         
         NSArray *billTypeArr = [model.billIds sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
@@ -284,6 +285,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     budgetModel.beginDate = [set stringForColumn:@"csdate"];
     budgetModel.endDate = [set stringForColumn:@"cedate"];
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
+    budgetModel.isRemind = [set boolForColumn:@"iremind"];
     budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in (?)", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, [self queryStringForBillIds:budgetModel.billIds]];
     
     return budgetModel;
