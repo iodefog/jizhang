@@ -9,6 +9,7 @@
 #import "SSJUtil.h"
 //#import <CommonCrypto/CommonDigest.h>
 //#import "SFHFKeychainUtils.h"
+#import "SDWebImageManager.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
     return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
@@ -237,15 +238,16 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    NSString *fullImageName = [NSString stringWithFormat:@"%@.png",imageName];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
+    NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
     NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
 };
 
 NSString *SSJImagePath(NSString *imageName){
-    NSString *fullImageName = [NSString stringWithFormat:@"%@.png",imageName];
+    NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
     NSString *fullPath = [SSJDocumentPath() stringByAppendingPathComponent:fullImageName];
     return fullPath;
 };
+
 

@@ -29,7 +29,6 @@
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&mobileNo=%@&pwd=%@&key=%@",strSignType,strAcctID,useraccount,encryptPassword,strKey];
     NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
-    
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     [dict setObject:useraccount forKey:@"mobileNo"];
     [dict setObject:strAcctID forKey:@"merchantacctId"];

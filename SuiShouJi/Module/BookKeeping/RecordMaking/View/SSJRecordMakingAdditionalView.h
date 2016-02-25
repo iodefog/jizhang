@@ -10,4 +10,12 @@
 
 @interface SSJRecordMakingAdditionalView : UIView
 
++ (id)RecordMakingAdditionalView;
+
+typedef void (^btnClickedBlock)(NSInteger buttonTag);
+
+//点击按钮的回调
+@property(nonatomic, copy)btnClickedBlock btnClickedBlock;
+
+@property (nonatomic,strong) UIImage *selectedImage;
 @end
