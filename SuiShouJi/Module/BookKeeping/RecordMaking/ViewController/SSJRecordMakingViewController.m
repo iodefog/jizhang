@@ -404,6 +404,14 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }else{
                     SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
                     imageBrowserVC.image = weakSelf.selectedImage;
+                    imageBrowserVC.NewImageSelectedBlock = ^(UIImage *image){
+                        weakSelf.additionalView.selectedImage = image;
+                        weakSelf.selectedImage = image;
+                    };
+                    imageBrowserVC.DeleteImageBlock = ^(){
+                        weakSelf.additionalView.selectedImage = nil;
+                        weakSelf.selectedImage = nil;
+                    };
                     [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
                 }
             }else if (buttonTag == 4){
@@ -526,7 +534,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         UIButton *comfirmButton = [[UIButton alloc]init];
         comfirmButton.frame = CGRectMake(0, 0, 44, 44);
         [comfirmButton setImage:[UIImage imageNamed:@"record_ok"] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_rightbuttonView addSubview:comfirmButton];
     }
     return _rightbuttonView;

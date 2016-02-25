@@ -36,8 +36,13 @@
 
 -(void)setSelectedImage:(UIImage *)selectedImage{
     _selectedImage = selectedImage;
-    [self.takePhotoButton setBackgroundImage:selectedImage forState:UIControlStateNormal];
-    [self.takePhotoButton setTitle:@"" forState:UIControlStateNormal];
+    if (_selectedImage == nil) {
+        [self.takePhotoButton setBackgroundImage:selectedImage forState:UIControlStateNormal];
+        [self.takePhotoButton setTitle:@"拍照" forState:UIControlStateNormal];
+    }else{
+        [self.takePhotoButton setBackgroundImage:selectedImage forState:UIControlStateNormal];
+        [self.takePhotoButton setTitle:@"" forState:UIControlStateNormal];
+    }
 }
 
 /*
