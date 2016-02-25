@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJBudgetModel : NSObject
+@interface SSJBudgetModel : NSObject <NSCopying>
 
 //  预算id
 @property (nonatomic, copy) NSString *ID;
@@ -16,8 +16,8 @@
 //  用户id
 @property (nonatomic, copy) NSString *userId;
 
-//  收支类型id拼接的字符串，用，分隔；例如：1000,1001,1002
-@property (nonatomic, copy) NSString *billIds;
+//  收支类型id拼接的字符串，从小到大排序，用','分隔；例如：1000,1001,1002
+@property (nonatomic, copy) NSArray *billIds;
 
 //  预算类型 0:周预算 1:月预算 2:年预算
 @property (nonatomic) int type;

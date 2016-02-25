@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJBudgetModel.h"
+#import "SSJBudgetTypeModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,7 @@ extern NSString *const SSJBudgetModelKey;
 
 //  预算图表模型key
 extern NSString *const SSJBudgetCircleItemsKey;
+
 
 @interface SSJBudgetHelper : NSObject
 
@@ -48,6 +50,16 @@ extern NSString *const SSJBudgetCircleItemsKey;
  */
 + (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSString *> *result))success
                                      failure:(void (^)(NSError * _Nullable error))failure;
+
+/**
+ *  根据预算模型查询类别名称与类别id的映射表；映射表结构：@{@"餐饮":@"1000", @"烟酒":@"1001"}
+ *
+ *  @param model     查询的预算模型
+ *  @param success   查询成功的回调
+ *  @param failure   查询失败的回调
+ */
++ (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success
+                            failure:(void (^)(NSError *error))failure;
 
 /**
  *  检测是否有和model冲突的预算（即预算类别、开始时间、预算周期三者都相同）
