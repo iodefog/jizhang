@@ -9,10 +9,11 @@
 #ifndef SSJBudgetConst_h
 #define SSJBudgetConst_h
 
+//  预算周期
 typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
-    SSJBudgetPeriodTypeWeek = 0,
-    SSJBudgetPeriodTypeMonth,
-    SSJBudgetPeriodTypeYear
+    SSJBudgetPeriodTypeWeek = 0,    //  每周
+    SSJBudgetPeriodTypeMonth,       //  每月
+    SSJBudgetPeriodTypeYear         //  每年
 };
 
 

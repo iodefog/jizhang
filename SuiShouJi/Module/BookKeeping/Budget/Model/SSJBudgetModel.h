@@ -20,6 +20,7 @@
 //  收支类型id拼接的字符串，从小到大排序，用','分隔；例如：1000,1001,1002
 @property (nonatomic, copy) NSArray *billIds;
 
+//  预算周期
 @property (nonatomic) SSJBudgetPeriodType type;
 
 //  预算金额
