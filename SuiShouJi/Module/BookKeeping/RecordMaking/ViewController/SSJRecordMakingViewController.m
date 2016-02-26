@@ -49,6 +49,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) SSJSmallCalendarView *calendarView;
 @property (nonatomic,strong) SSJChargeCircleSelectView *ChargeCircleSelectView;
 @property (nonatomic) NSInteger selectChargeCircleType;
+@property (nonatomic,strong) NSString *chargeMemo;
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -427,6 +428,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.ChargeCircleSelectView];
             }else if (buttonTag == 2){
                 SSJMemoMakingViewController *memoMakingVC = [[SSJMemoMakingViewController alloc]init];
+                memoMakingVC.oldMemo = weakSelf.chargeMemo;
+                memoMakingVC.MemoMakingBlock = ^(NSString *newMemo){
+                    if (![newMemo isEqualToString:@""]) {
+                        weakSelf.chargeMemo = newMemo;
+                    }
+                };
                 [weakSelf.navigationController pushViewController:memoMakingVC animated:YES];
             }
         };
@@ -677,7 +684,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }else{
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
             }
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE) VALUES(?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate];
+            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE , CMEMO) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate,self.chargeMemo];
             int count = [db intForQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
             double incomeSum = 0.0;
             double expenseSum = 0.0;
@@ -709,7 +716,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
             }
         }else{
-            [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.item.ID,SSJUSERID()];
+            [db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,SSJUSERID()];
             if (self.titleSegment.selectedSegmentIndex == 0) {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,SSJUSERID()];
                 if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()]){

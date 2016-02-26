@@ -9,5 +9,18 @@
 #import "SSJBaseCollectionViewController.h"
 
 @interface SSJMemoMakingViewController : SSJBaseCollectionViewController
-@property (nonatomic,strong) NSString *memo;
+
+//旧的备注(修改必传)
+@property (nonatomic,strong) NSString *oldMemo;
+
+/**
+ *  添加备注的回调
+ *
+ *  @param newMemo 新的备注
+ */
+typedef void (^MemoMakingBlock)(NSString *newMemo);
+
+
+@property (nonatomic, copy) MemoMakingBlock MemoMakingBlock;
+
 @end
