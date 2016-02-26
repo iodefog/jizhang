@@ -22,6 +22,7 @@
     model.beginDate = self.beginDate;
     model.endDate = self.endDate;
     model.isAutoContinued = self.isAutoContinued;
+    model.isRemind = self.isRemind;
     return model;
 }
 

@@ -38,7 +38,7 @@
     
     self.textLabel.left = self.detailTextLabel.left = 10;
     self.textLabel.centerY = self.contentView.height * 0.5;
-    self.detailTextLabel.centerY = (self.contentView.height - self.textLabel.bottom) * 0.5;
+    self.detailTextLabel.centerY = self.contentView.height - (self.contentView.height - self.textLabel.bottom) * 0.5;
 }
 
 @end

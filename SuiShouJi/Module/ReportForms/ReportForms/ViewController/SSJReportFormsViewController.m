@@ -19,7 +19,7 @@
 #import "SSJReportFormsUtil.h"
 
 #warning test
-#import "SSJBudgetDetailViewController.h"
+#import "SSJBudgetListViewController.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -95,8 +95,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 #warning test
 - (void)testAction {
-    SSJBudgetDetailViewController *budgetDetailVC = [[SSJBudgetDetailViewController alloc] init];
-    [self.navigationController pushViewController:budgetDetailVC animated:YES];
+    SSJBudgetListViewController *budgetVC = [[SSJBudgetListViewController alloc] init];
+    [self.navigationController pushViewController:budgetVC animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

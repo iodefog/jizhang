@@ -24,6 +24,7 @@
         self.textLabel.textColor = [UIColor lightGrayColor];
         
         self.textField = [[UITextField alloc] init];
+        self.textField.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:self.textField];
     }
     return self;
@@ -35,7 +36,7 @@
     self.textLabel.left = self.detailTextLabel.left = 10;
     self.textLabel.centerY = self.contentView.height * 0.5;
     
-    self.textField.frame = CGRectMake(self.contentView.width * 0.5, 0, self.contentView.width * 0.5, self.contentView.height);
+    self.textField.frame = CGRectMake(self.contentView.width * 0.5 - 10, 0, self.contentView.width * 0.5, self.contentView.height);
 }
 
 @end

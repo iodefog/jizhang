@@ -19,7 +19,7 @@ extern NSString *const SSJBudgetModelKey;
 extern NSString *const SSJBudgetCircleItemsKey;
 
 
-@interface SSJBudgetHelper : NSObject
+@interface SSJBudgetDatabaseHelper : NSObject
 
 /**
  *  查询当前有效的预算列表
@@ -82,6 +82,9 @@ extern NSString *const SSJBudgetCircleItemsKey;
 + (void)saveBudgetModel:(SSJBudgetModel *)model
                 success:(void(^)())success
                 failure:(void (^)(NSError *error))failure;
+
++ (void)supplementBudgetRecordWithSuccess:(void(^)())success
+                                  failure:(void (^)(NSError *error))failure;
 
 @end
 
