@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJChargeCircleSelectView : UIView<UIPickerViewDelegate,UIPickerViewDataSource>
+
+@property (nonatomic) NSInteger selectCircleType;
+
 //点击按钮的回调
 typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType);
 

@@ -49,4 +49,7 @@
 //循环记账配置ID
 @property (nonatomic,strong) NSString *configId;
 
+//循环记账类型
+@property (nonatomic) NSInteger chargeCircleType;
+
 @end

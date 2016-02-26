@@ -25,4 +25,8 @@
 //流水item(item为空位新建,有值为修改)
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
+
+//是否是修改循环记账配置
+@property (nonatomic) BOOL isModifyCofig;
+
 @end

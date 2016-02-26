@@ -113,6 +113,11 @@
     [self removeFromSuperview];
 }
 
+-(void)setSelectCircleType:(NSInteger)selectCircleType{
+    _selectCircleType = selectCircleType;
+    [self.pickerView selectRow:_selectCircleType inComponent:0 animated:NO];
+}
+
 -(void)comfirmButtonClicked:(id)sender{
     if (self.chargeCircleSelectBlock) {
         self.chargeCircleSelectBlock(_selectedCircle);
