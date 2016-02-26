@@ -578,6 +578,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return _ChargeCircleSelectView;
 }
 
+#pragma mark - UITextFieldDelegate
+-(void)textFieldDidChange:(id)sender{
+    [self setupTextFiledNum:self.textInput num:2];
+}
+
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -724,7 +729,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,SSJUSERID()];
                 }
             }
-        }else if (self.item.ID == nil){
+        }else if (self.item.ID != nil){
             //修改流水
             if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,SSJUSERID()]) {
                 if (weakSelf.selectChargeCircleType != weakSelf.item.chargeCircleType) {
@@ -878,9 +883,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.categoryListView reloadData];
 }
 
--(void)textFieldDidChange:(id)sender{
-    [self setupTextFiledNum:self.textInput num:2];
-}
 
 /**
  *   限制输入框小数点(输入框只改变时候调用valueChange)
