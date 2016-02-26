@@ -417,6 +417,9 @@
 		BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382391C3DFF8C00955038 /* SSJHomeBarButton.m */; };
 		BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */; };
 		BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */; };
+		BDF503831C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503821C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m */; };
+		BDF503861C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503851C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m */; };
+		BDF503891C80018C00DCFA99 /* SSJCustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
@@ -1040,6 +1043,12 @@
 		BDF382401C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectViewControllerViewController.m; sourceTree = "<group>"; };
 		BDF382421C3E151100955038 /* SSJColorSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectCollectionViewCell.h; sourceTree = "<group>"; };
 		BDF382431C3E151100955038 /* SSJColorSelectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectCollectionViewCell.m; sourceTree = "<group>"; };
+		BDF503811C7ED92C00DCFA99 /* SSJChargeCircleSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeCircleSelectView.h; sourceTree = "<group>"; };
+		BDF503821C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeCircleSelectView.m; sourceTree = "<group>"; };
+		BDF503841C7FF6AD00DCFA99 /* SSJMemoMakingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemoMakingViewController.h; sourceTree = "<group>"; };
+		BDF503851C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemoMakingViewController.m; sourceTree = "<group>"; };
+		BDF503871C80018C00DCFA99 /* SSJCustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomTextView.h; sourceTree = "<group>"; };
+		BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomTextView.m; sourceTree = "<group>"; };
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
@@ -2188,6 +2197,10 @@
 				BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */,
 				BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */,
 				BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */,
+				BDF503811C7ED92C00DCFA99 /* SSJChargeCircleSelectView.h */,
+				BDF503821C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m */,
+				BDF503871C80018C00DCFA99 /* SSJCustomTextView.h */,
+				BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2201,6 +2214,8 @@
 				BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */,
 				BDFBDAB01C7DA9240049F179 /* SSJImaageBrowseViewController.h */,
 				BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */,
+				BDF503841C7FF6AD00DCFA99 /* SSJMemoMakingViewController.h */,
+				BDF503851C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -3108,6 +3123,7 @@
 				7DEF54861C7C83B200A90153 /* SSJBudgetDetailBottomView.m in Sources */,
 				7DEF54771C7C63F700A90153 /* SSJBudgetDetailViewController.m in Sources */,
 				7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */,
+				BDF503891C80018C00DCFA99 /* SSJCustomTextView.m in Sources */,
 				7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */,
 				BD0214481C3E87AE000E944E /* SSJFundingTypeSelectViewController.m in Sources */,
 				BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */,
@@ -3135,6 +3151,7 @@
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */,
+				BDF503861C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m in Sources */,
 				BD976FAD1C4E582400B0E26D /* SSJCalenderDetailViewController.m in Sources */,
 				BD70DF5A1C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				BD70DF5C1C4751EA000E6CC9 /* SSJForgotPSWResetService.m in Sources */,
@@ -3256,6 +3273,7 @@
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
 				7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */,
 				BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */,
+				BDF503831C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m in Sources */,
 				7DEF55521C7EEB3300A90153 /* SSJBudgetTypeModel.m in Sources */,
 				7DEF552E1C7DB43400A90153 /* SSJBudgetListCellItem.m in Sources */,
 				7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */,

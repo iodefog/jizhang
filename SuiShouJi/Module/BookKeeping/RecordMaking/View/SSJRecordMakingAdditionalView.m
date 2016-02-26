@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *takePhotoButton;
 @property (weak, nonatomic) IBOutlet UIButton *circleButton;
 @property (weak, nonatomic) IBOutlet UIButton *memoButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lineHeight;
 
 @end
 
@@ -25,7 +26,7 @@
 }
 
 -(void)awakeFromNib{
-    
+    self.lineHeight.constant = 1.f / [UIScreen mainScreen].scale;
 }
 
 - (IBAction)additionalButtonClicked:(id)sender {

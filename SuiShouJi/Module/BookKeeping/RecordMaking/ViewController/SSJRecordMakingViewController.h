@@ -11,7 +11,7 @@
 #import "SSJCustomKeyboard.h"
 #import "SSJBillingChargeCellItem.h"
 
-@interface SSJRecordMakingViewController : SSJBaseViewController<UIScrollViewDelegate,UITextFieldDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface SSJRecordMakingViewController : SSJBaseViewController<UIScrollViewDelegate,UITextFieldDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
 
 //当前选中的年
 @property (nonatomic) long selectedYear;
@@ -24,5 +24,9 @@
 
 //流水item(item为空位新建,有值为修改)
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
+
+
+//是否是修改循环记账配置
+@property (nonatomic) BOOL isModifyCofig;
 
 @end
