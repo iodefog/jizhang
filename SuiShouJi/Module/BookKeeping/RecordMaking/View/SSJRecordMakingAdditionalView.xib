@@ -74,16 +74,8 @@
                     <rect key="frame" x="0.0" y="74" width="334" height="1"/>
                     <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="1" id="mMT-Vg-tpF"/>
                         <constraint firstAttribute="height" constant="1" id="nPi-BF-QqR"/>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="rKB-da-hud"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="mMT-Vg-tpF"/>
-                            <exclude reference="rKB-da-hud"/>
-                        </mask>
-                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -102,6 +94,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="circleButton" destination="qIn-13-FWB" id="Q10-Fx-NeX"/>
+                <outlet property="lineHeight" destination="nPi-BF-QqR" id="VS5-GZ-nHS"/>
                 <outlet property="memoButton" destination="L9O-3e-xEQ" id="Tij-Yc-rxP"/>
                 <outlet property="takePhotoButton" destination="5qh-8N-kQS" id="16Z-BK-Jw6"/>
             </connections>

@@ -23,6 +23,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJImaageBrowseViewController.h"
+#import "SSJChargeCircleSelectView.h"
 
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
@@ -46,6 +47,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) UIButton *fundingTypeButton;
 @property (nonatomic,strong) UIView *rightbuttonView;
 @property (nonatomic,strong) SSJSmallCalendarView *calendarView;
+@property (nonatomic,strong) SSJChargeCircleSelectView *ChargeCircleSelectView;
+@property (nonatomic) NSInteger selectChargeCircleType;
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -420,8 +423,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     return;
                 }
                 [weakSelf makeArecord];
-            }else if (buttonTag == 1){
-                
+            }else if (buttonTag == 3){
+                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.ChargeCircleSelectView];
             }
         };
     }
@@ -544,6 +547,25 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _calendarView = [[SSJSmallCalendarView alloc]init];
     }
     return _calendarView;
+}
+
+-(SSJChargeCircleSelectView *)ChargeCircleSelectView{
+    if (!_ChargeCircleSelectView) {
+        _ChargeCircleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        __weak typeof(self) weakSelf = self;
+        _ChargeCircleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
+            if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6){
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alert show];
+            }else if (chargeCircleType > 0) {
+                weakSelf.selectChargeCircleType = chargeCircleType;
+            }
+        };
+    }
+    return _ChargeCircleSelectView;
 }
 
 #pragma mark - UIActionSheetDelegate
