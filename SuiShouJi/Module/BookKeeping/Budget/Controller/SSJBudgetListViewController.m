@@ -38,11 +38,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [self setupAddBarButtonItem];
     [self.view addSubview:self.tableView];
     
-    [SSJBudgetDatabaseHelper supplementBudgetRecordWithSuccess:^{
-        
-    } failure:^(NSError * _Nonnull error) {
-        
-    }];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -50,14 +46,26 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     
     [self.view ssj_showLoadingIndicator];
     
-    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        [self.view ssj_hideLoadingIndicator];
-        self.dataList = result;
-        [self.tableView reloadData];
-    } failure:^(NSError * _Nullable error) {
-        [self.view ssj_hideLoadingIndicator];
-        SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+    [SSJBudgetDatabaseHelper supplementBudgetRecordWithSuccess:^{
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            [self.view ssj_hideLoadingIndicator];
+            self.dataList = result;
+            [self.tableView reloadData];
+        } failure:^(NSError * _Nullable error) {
+            [self.view ssj_hideLoadingIndicator];
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+        }];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            [self.view ssj_hideLoadingIndicator];
+            self.dataList = result;
+            [self.tableView reloadData];
+        } failure:^(NSError * _Nullable error) {
+            [self.view ssj_hideLoadingIndicator];
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+        }];
     }];
 }
 

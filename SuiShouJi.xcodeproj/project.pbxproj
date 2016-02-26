@@ -222,6 +222,7 @@
 		7DEF55521C7EEB3300A90153 /* SSJBudgetTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55511C7EEB3300A90153 /* SSJBudgetTypeModel.m */; };
 		7DEF55551C7EFCF500A90153 /* SSJBudgetCalendarHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */; };
 		7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */; };
+		7DEF555C1C808B4800A90153 /* SSJBudgetConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF555B1C808B4800A90153 /* SSJBudgetConst.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
 		7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */; };
@@ -729,6 +730,7 @@
 		7DEF55561C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditPeriodSelectionView.h; sourceTree = "<group>"; };
 		7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditPeriodSelectionView.m; sourceTree = "<group>"; };
 		7DEF555A1C7F23E500A90153 /* SSJBudgetConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSJBudgetConst.h; sourceTree = "<group>"; };
+		7DEF555B1C808B4800A90153 /* SSJBudgetConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetConst.m; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
 		7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-667@2x.png"; sourceTree = "<group>"; };
 		7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@3x.png"; sourceTree = "<group>"; };
@@ -1726,6 +1728,7 @@
 			isa = PBXGroup;
 			children = (
 				7DEF555A1C7F23E500A90153 /* SSJBudgetConst.h */,
+				7DEF555B1C808B4800A90153 /* SSJBudgetConst.m */,
 			);
 			path = Const;
 			sourceTree = "<group>";
@@ -3242,6 +3245,7 @@
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
 				7DEF54831C7C722A00A90153 /* SSJBorderButton.m in Sources */,
 				BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */,
+				7DEF555C1C808B4800A90153 /* SSJBudgetConst.m in Sources */,
 				7DEF55451C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */,
 				7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */,

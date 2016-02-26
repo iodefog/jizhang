@@ -10,13 +10,10 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJPercentCircleViewItem.h"
 #import "MJExtension.h"
-
+#import "SSJBudgetCalendarHelper.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
-
-NSString *const SSJBudgetPeriodBeginDateKey = @"SSJBudgetPeriodBeginDateKey";
-NSString *const SSJBudgetPeriodEndDateKey = @"SSJBudgetPeriodEndDateKey";
 
 @implementation SSJBudgetDatabaseHelper
 
@@ -313,20 +310,42 @@ NSString *const SSJBudgetPeriodEndDateKey = @"SSJBudgetPeriodEndDateKey";
 }
 
 + (NSArray *)periodArrayForType:(int)type sinceDate:(NSDate *)date {
+    NSCalendarUnit unit = NSCalendarUnitWeekOfMonth;
     switch (type) {
         case 0:
-            
+            unit = NSCalendarUnitWeekOfMonth;
             break;
-            
         case 1:
-            
+            unit = NSCalendarUnitMonth;
             break;
-            
         case 2:
-            
+            unit = NSCalendarUnitYear;
             break;
     }
-    return nil;
+    
+    NSMutableArray *periodArr = [NSMutableArray array];
+    
+    NSDate *tDate = [NSDate dateWithTimeInterval:(24 * 60 * 60) sinceDate:date];
+    NSDictionary *period = [SSJBudgetCalendarHelper getPeriodInfoWithCalendarUnit:unit ForDate:tDate];
+    NSDate *beginDate = period[SSJBudgetPeriodBeginDateKey];
+    NSDate *endDate = period[SSJBudgetPeriodEndDateKey];
+    
+    if ([endDate compare:[NSDate date]] == NSOrderedAscending) {
+        NSArray *anotherPeriod = [self periodArrayForType:type sinceDate:endDate];
+        [periodArr addObjectsFromArray:anotherPeriod];
+    }
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.timeZone = [NSTimeZone systemTimeZone];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    NSString *beginDateStr = [formatter stringFromDate:beginDate];
+    NSString *endDateStr = [formatter stringFromDate:endDate];
+    
+    [periodArr addObject:@{SSJBudgetPeriodBeginDateKey:beginDateStr,
+                           SSJBudgetPeriodEndDateKey:endDateStr}];
+    
+    return periodArr;
 }
 
 + (SSJBudgetModel *)budgetModelWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {

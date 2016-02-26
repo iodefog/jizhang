@@ -22,4 +22,6 @@
 
 + (NSString *)getLastDayOfCurrentYear;
 
++ (NSDictionary *)getPeriodInfoWithCalendarUnit:(NSCalendarUnit)unit ForDate:(NSDate *)date;
+
 @end

@@ -16,5 +16,8 @@ typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
     SSJBudgetPeriodTypeYear         //  每年
 };
 
+extern NSString *const SSJBudgetPeriodBeginDateKey;
+extern NSString *const SSJBudgetPeriodEndDateKey;
+
 
 #endif /* SSJBudgetConst_h */

@@ -7,6 +7,7 @@
 //
 
 #import "SSJBudgetCalendarHelper.h"
+#import "SSJBudgetConst.h"
 
 @implementation SSJBudgetCalendarHelper
 
@@ -35,32 +36,35 @@
 }
 
 + (NSString *)getFirstDayForUnit:(NSCalendarUnit)unit {
-    NSDate *beginDate = nil;
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    [calendar setFirstWeekday:2];//设定周一为周首日
-    //分别修改为 NSDayCalendarUnit NSWeekCalendarUnit NSYearCalendarUnit
-    if ([calendar rangeOfUnit:unit startDate:&beginDate interval:nil forDate:[NSDate date]]) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.timeZone = [NSTimeZone systemTimeZone];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
-        return [formatter stringFromDate:beginDate];//NSDateComponents
-    }
-    return nil;
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.timeZone = [NSTimeZone systemTimeZone];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    NSDictionary *period = [self getPeriodInfoWithCalendarUnit:unit ForDate:[NSDate date]];
+    NSDate *beginDate = period[SSJBudgetPeriodBeginDateKey];
+    return [formatter stringFromDate:beginDate];
 }
 
 + (NSString *)getLastDayForUnit:(NSCalendarUnit)unit {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.timeZone = [NSTimeZone systemTimeZone];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    
+    NSDictionary *period = [self getPeriodInfoWithCalendarUnit:unit ForDate:[NSDate date]];
+    NSDate *endDate = period[SSJBudgetPeriodEndDateKey];
+    return [formatter stringFromDate:endDate];
+}
+
++ (NSDictionary *)getPeriodInfoWithCalendarUnit:(NSCalendarUnit)unit ForDate:(NSDate *)date {
     NSTimeInterval interval = 0;
     NSDate *beginDate = nil;
     NSDate *endDate = nil;
     NSCalendar *calendar = [NSCalendar currentCalendar];
     [calendar setFirstWeekday:2];//设定周一为周首日
-    if ([calendar rangeOfUnit:unit startDate:&beginDate interval:&interval forDate:[NSDate date]]) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.timeZone = [NSTimeZone systemTimeZone];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
-        
+    if ([calendar rangeOfUnit:unit startDate:&beginDate interval:&interval forDate:date]) {
         endDate = [beginDate dateByAddingTimeInterval:interval-1];
-        return [formatter stringFromDate:endDate];
+        return @{SSJBudgetPeriodBeginDateKey:beginDate,
+                 SSJBudgetPeriodEndDateKey:endDate};
     }
     return nil;
 }
