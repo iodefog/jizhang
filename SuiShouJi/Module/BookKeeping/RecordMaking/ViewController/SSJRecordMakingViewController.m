@@ -24,7 +24,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJChargeCircleSelectView.h"
-
+#import "SSJMemoMakingViewController.h"
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
 
@@ -425,6 +425,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [weakSelf makeArecord];
             }else if (buttonTag == 3){
                 [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.ChargeCircleSelectView];
+            }else if (buttonTag == 2){
+                SSJMemoMakingViewController *memoMakingVC = [[SSJMemoMakingViewController alloc]init];
+                [weakSelf.navigationController pushViewController:memoMakingVC animated:YES];
             }
         };
     }

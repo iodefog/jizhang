@@ -7,25 +7,45 @@
 //
 
 #import "SSJMemoMakingViewController.h"
+#import "SSJCustomTextView.h"
 
 @interface SSJMemoMakingViewController ()
-@property (nonatomic,strong) UITextView *textView;
+@property (nonatomic,strong) SSJCustomTextView *textView;
 @property (nonatomic,strong) UIImageView *imageView;
 @end
 
 @implementation SSJMemoMakingViewController
 
+#pragma mark - Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.view addSubview:self.textView];
+    [self.view addSubview:self.imageView];
+}
+
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    self.textView.frame = self.view.frame;
 }
 
 #pragma mark - Getter
--(UITextView *)textView{
+-(SSJCustomTextView *)textView{
     if (!_textView) {
-        _textView = [[UITextView alloc]init];
+        _textView = [[SSJCustomTextView alloc]init];
+        if ([self.memo isEqualToString:@""] || self.memo == nil) {
+            _textView.placeholder = @"好记性不如烂笔头,备忘录开启~";
+        }else{
+            _textView.text = self.memo;
+        }
     }
     return _textView;
+}
+
+-(UIImageView *)imageView{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc]init];
+    }
+    return _imageView;
 }
 
 - (void)didReceiveMemoryWarning {

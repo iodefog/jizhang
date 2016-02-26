@@ -9,5 +9,5 @@
 #import "SSJBaseCollectionViewController.h"
 
 @interface SSJMemoMakingViewController : SSJBaseCollectionViewController
-
+@property (nonatomic,strong) NSString *memo;
 @end
