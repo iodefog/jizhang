@@ -154,6 +154,31 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     }];
 }
 
++ (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSMutableDictionary *map = [NSMutableDictionary dictionary];
+        FMResultSet *resultSet = [db executeQuery:@"select id, cname from bk_bill_type"];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        while ([resultSet next]) {
+            [map setObject:[resultSet stringForColumn:@"cname"] forKey:[resultSet stringForColumn:@"id"]];
+        }
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(map);
+            });
+        }
+    }];
+}
+
 + (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model success:(void(^)(BOOL isConficted))success failure:(void (^)(NSError *error))failure {
     if (![model isKindOfClass:[SSJBudgetModel class]]) {
         SSJPRINT(@"model is not kind of class SSJBudgetModel");
@@ -191,7 +216,6 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
         [SSJBudgetModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
             return @{@"ID":@"ibid",
                      @"userId":@"cuserid",
-                     @"billIds":@"cbilltype",
                      @"type":@"itype",
                      @"budgetMoney":@"imoney",
                      @"remindMoney":@"iremindmoney",
@@ -200,7 +224,19 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
                      @"isAutoContinued":@"istate"};
         }];
         
+        NSArray *billTypeArr = [model.billIds sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            if ([obj1 integerValue] < [obj2 integerValue]) {
+                return NSOrderedAscending;
+            } else if ([obj1 integerValue] > [obj2 integerValue]) {
+                return NSOrderedDescending;
+            } else {
+                return NSOrderedSame;
+            }
+        }];
+        NSString *billTypes = [billTypeArr componentsJoinedByString:@","];
+        
         NSMutableDictionary *parametersInfo = [[model mj_keyValues] mutableCopy];
+        [parametersInfo setObject:billTypes forKey:@"cbilltype"];
         [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"ccadddate"];
         [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
         [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
@@ -242,7 +278,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
     budgetModel.ID = [set stringForColumn:@"ibid"];
     budgetModel.type = [set intForColumn:@"itype"];
-    budgetModel.billIds = [set stringForColumn:@"cbilltype"];
+    budgetModel.billIds = [[set stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];
     budgetModel.budgetMoney = [set doubleForColumn:@"imoney"];
     budgetModel.remindMoney = [set doubleForColumn:@"iremindmoney"];
     budgetModel.beginDate = [set stringForColumn:@"csdate"];
@@ -253,10 +289,9 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     return budgetModel;
 }
 
-+ (NSString *)queryStringForBillIds:(NSString *)billIds {
-    NSArray *billIdArr = [billIds componentsSeparatedByString:@","];
-    NSMutableArray *tBillIdArr = [NSMutableArray arrayWithCapacity:billIdArr.count];
-    for (NSString *billId in billIdArr) {
++ (NSString *)queryStringForBillIds:(NSArray *)billIds {
+    NSMutableArray *tBillIdArr = [NSMutableArray arrayWithCapacity:billIds.count];
+    for (NSString *billId in billIds) {
         NSString *tBillId = [NSString stringWithFormat:@"'%@'", billId];
         [tBillIdArr addObject:tBillId];
     }

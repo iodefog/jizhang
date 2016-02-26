@@ -15,6 +15,6 @@
 @interface SSJBudgetEditViewController : SSJBaseViewController
 
 //  预算配置模型；新建不穿；编辑必传
-@property (nonatomic, copy) SSJBudgetModel *modle;
+@property (nonatomic, copy) SSJBudgetModel *model;
 
 @end

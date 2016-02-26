@@ -65,7 +65,6 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
-        [_tableView ssj_clearExtendSeparator];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
