@@ -83,6 +83,9 @@ extern NSString *const SSJBudgetCircleItemsKey;
                 success:(void(^)())success
                 failure:(void (^)(NSError *error))failure;
 
++ (void)supplementBudgetRecordWithSuccess:(void(^)())success
+                                  failure:(void (^)(NSError *error))failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

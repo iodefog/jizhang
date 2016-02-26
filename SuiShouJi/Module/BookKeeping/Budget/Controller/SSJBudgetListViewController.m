@@ -37,6 +37,12 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [super viewDidLoad];
     [self setupAddBarButtonItem];
     [self.view addSubview:self.tableView];
+    
+    [SSJBudgetDatabaseHelper supplementBudgetRecordWithSuccess:^{
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -11,11 +11,11 @@
 @implementation SSJBudgetCalendarHelper
 
 + (NSString *)getFirstDayOfCurrentWeek {
-    return [self getFirstDayForUnit:NSCalendarUnitWeekday];
+    return [self getFirstDayForUnit:NSCalendarUnitWeekOfMonth];
 }
 
 + (NSString *)getLastDayOfCurrentWeek {
-    return [self getLastDayForUnit:NSCalendarUnitWeekday];
+    return [self getLastDayForUnit:NSCalendarUnitWeekOfMonth];
 }
 
 + (NSString *)getFirstDayOfCurrentMonth {
@@ -43,7 +43,7 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.timeZone = [NSTimeZone systemTimeZone];
         [formatter setDateFormat:@"yyyy-MM-dd"];
-        return [formatter stringFromDate:beginDate];
+        return [formatter stringFromDate:beginDate];//NSDateComponents
     }
     return nil;
 }

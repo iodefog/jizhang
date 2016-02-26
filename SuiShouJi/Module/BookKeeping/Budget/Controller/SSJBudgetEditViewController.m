@@ -61,6 +61,11 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     [self.view addSubview:self.tableView];
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.frame = self.view.bounds;
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.cellTitles.count;
@@ -77,6 +82,39 @@ static NSString *const kBudgetPeriodTitle = @"周期";
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *cellTitle = [self.cellTitles ssj_objectAtIndexPath:indexPath];
+    if ([cellTitle isEqualToString:kBudgetTypeTitle]) {
+        //  预算类别
+        return 54;
+    } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
+        //  自动续用
+        return 66;
+    } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]) {
+        //  预算金额
+        return 54;
+    } else if ([cellTitle isEqualToString:kBudgetRemindTitle]) {
+        //  预算提醒
+        return 49;
+    } else if ([cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
+        //  预算占比提醒
+        return 62;
+    } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
+        //  周期
+        return 54;
+    } else {
+        return 0;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -103,32 +141,47 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     switch (self.periodSelectionView.periodType) {
         case SSJBudgetPeriodTypeWeek:
             self.model.type = 0;
+            self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentWeek];
+            self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentWeek];
             break;
             
         case SSJBudgetPeriodTypeMonth:
             self.model.type = 1;
+            self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentMonth];
+            self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentMonth];
             break;
             
         case SSJBudgetPeriodTypeYear:
             self.model.type = 2;
+            self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentYear];
+            self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentYear];
             break;
     }
     [self.tableView reloadData];
 }
 
 - (void)saveButtonAction {
-    self.saveBtn.enabled = NO;
-    [self.saveBtn ssj_showLoadingIndicator];
-    [self.saveBtn setTitle:nil forState:UIControlStateNormal];
+    [self updateSaveButtonState:YES];
     
-    [SSJBudgetDatabaseHelper saveBudgetModel:self.model success:^{
-        self.saveBtn.enabled = YES;
-        [self.saveBtn ssj_hideLoadingIndicator];
-        [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+    //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
+    [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(BOOL isConficted) {
+        if (isConficted) {
+            [self updateSaveButtonState:NO];
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudget] action:action, nil];
+        } else {
+            [SSJBudgetDatabaseHelper saveBudgetModel:self.model success:^{
+                [self updateSaveButtonState:NO];
+                [CDAutoHideMessageHUD showMessage:@"保存成功"];
+                [self ssj_backOffAction];
+            } failure:^(NSError * _Nonnull error) {
+                [self updateSaveButtonState:NO];
+                SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+            }];
+        }
     } failure:^(NSError * _Nonnull error) {
-        self.saveBtn.enabled = YES;
-        [self.saveBtn ssj_hideLoadingIndicator];
-        [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+        [self updateSaveButtonState:NO];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
     }];
@@ -144,7 +197,11 @@ static NSString *const kBudgetPeriodTitle = @"周期";
             [self initBudgetModel];
         }
         [self updateCellTitles];
+        
         [self.tableView reloadData];
+        if (self.tableView.tableFooterView != self.footerView) {
+            self.tableView.tableFooterView = self.footerView;
+        }
         
         self.periodSelectionView.periodType = self.model.type;
     } failure:^(NSError * _Nonnull error) {
@@ -162,8 +219,8 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     self.model.type = 1;
     self.model.budgetMoney = 3000;
     self.model.remindMoney = 300;
-    self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentWeek];
-    self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentWeek];
+    self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentMonth];
+    self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentMonth];
     self.model.isAutoContinued = YES;
     self.model.isRemind = YES;
 }
@@ -203,7 +260,6 @@ static NSString *const kBudgetPeriodTitle = @"周期";
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
         
         budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
-        [budgetTypeCell.subtitleLab sizeToFit];
         
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
@@ -233,7 +289,6 @@ static NSString *const kBudgetPeriodTitle = @"周期";
         //  预算占比提醒
         SSJBudgetEditLabelCell *budgetRemindScaleCell = cell;
         budgetRemindScaleCell.subtitleLab.text = [NSString stringWithFormat:@"%.0f％", (self.model.remindMoney / self.model.budgetMoney)];
-        [budgetRemindScaleCell.subtitleLab sizeToFit];
         
         budgetRemindScaleCell.detailTextLabel.text = [NSString stringWithFormat:@"当预算金额剩余%f时，即会提醒您哦！", self.model.remindMoney];
         [budgetRemindScaleCell.detailTextLabel sizeToFit];
@@ -245,7 +300,6 @@ static NSString *const kBudgetPeriodTitle = @"周期";
         //  周期
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
         budgetPeriodCell.subtitleLab.text = [self budgetPeriod];
-        [budgetPeriodCell.subtitleLab sizeToFit];
         
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
@@ -279,18 +333,40 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     return [typeNameArr componentsJoinedByString:@","];
 }
 
+//  已有冲突预算配置的提示信息
+- (NSString *)alertMessageForConflictedBudget {
+    switch (self.model.type) {
+        case 0:
+            return @"亲爱的用户，您已设置过相同支出类别的周预算了，请选其它周期或在原有周预算上编辑吧！";
+        case 1:
+            return @"亲爱的用户，您已设置过相同支出类别的月预算了，请选其它周期或在原有月预算上编辑吧！";
+        case 2:
+            return @"亲爱的用户，您已设置过相同支出类别的年预算了，请选其它周期或在原有年预算上编辑吧！";
+    }
+}
+
+- (void)updateSaveButtonState:(BOOL)isSaving {
+    if (isSaving) {
+        self.saveBtn.enabled = NO;
+        [self.saveBtn ssj_showLoadingIndicator];
+        [self.saveBtn setTitle:nil forState:UIControlStateNormal];
+    } else {
+        self.saveBtn.enabled = YES;
+        [self.saveBtn ssj_hideLoadingIndicator];
+        [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+    }
+}
+
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.sectionHeaderHeight = 10;
-        _tableView.tableFooterView = self.footerView;
         _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.tableFooterView = [[UIView alloc] init];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetEditLabelCell class] forCellReuseIdentifier:kBudgetEditLabelCellId];
         [_tableView registerClass:[SSJBudgetEditTextFieldCell class] forCellReuseIdentifier:kBudgetEditTextFieldCellId];
         [_tableView registerClass:[SSJBudgetEditSwitchCtrlCell class] forCellReuseIdentifier:kBudgetEditSwitchCtrlCellId];
@@ -300,7 +376,7 @@ static NSString *const kBudgetPeriodTitle = @"周期";
 
 - (UIView *)footerView {
     if (!_footerView) {
-        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 66)];
+        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 116)];
         _footerView.backgroundColor = [UIColor clearColor];
         [_footerView addSubview:self.saveBtn];
     }
@@ -310,7 +386,9 @@ static NSString *const kBudgetPeriodTitle = @"周期";
 - (UIButton *)saveBtn {
     if (!_saveBtn) {
         _saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _saveBtn.frame = CGRectMake(22, 22, self.view.width, 44);
+        _saveBtn.frame = CGRectMake(22, 22, self.view.width - 44, 44);
+        _saveBtn.layer.cornerRadius = 3;
+        _saveBtn.clipsToBounds = YES;
         _saveBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
         [_saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
