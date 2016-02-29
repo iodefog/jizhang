@@ -16,7 +16,7 @@
 
 static const CGFloat kHeaderMargin = 8;
 
-static const CGFloat kHeaderViewHeight = 266;
+static const CGFloat kHeaderViewHeight = 295;
 
 static const CGFloat kbudgetTitleLabelHeight = 40;
 
@@ -24,22 +24,31 @@ static const CGFloat kBottomViewHeight = 466;
 
 @interface SSJBudgetDetailViewController () <SSJReportFormsPercentCircleDataSource>
 
+//  导航栏标题视图
 @property (nonatomic, strong) SSJBudgetDetailNavigationTitleView *titleView;
 
+//  底层滚动视图
 @property (nonatomic, strong) UIScrollView *scrollView;
 
+//  包含本月预算、距结算日、已花、超支、波浪图表的视图
 @property (nonatomic, strong) SSJBudgetDetailHeaderView *headerView;
 
+//  预算消费明细的标题视图
 @property (nonatomic, strong) UILabel *budgetTitleLabel;
 
+//  包含预算消费明细图表、编辑按钮
 @property (nonatomic, strong) SSJBudgetDetailBottomView *bottomView;
 
+//  预算数据模型
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
+//  预算消费明细图表的数据源
 @property (nonatomic, strong) NSArray *circleItems;
 
+//  月预算历史id列表
 @property (nonatomic, strong) NSArray *budgetIdList;
 
+//
 @property (nonatomic) NSUInteger selectedBudgetIdIndex;
 
 @end
@@ -132,36 +141,34 @@ static const CGFloat kBottomViewHeight = 466;
         style.firstLineHeadIndent = 15;
         self.budgetTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算消费明细", tStr] attributes:@{NSParagraphStyleAttributeName:style}];
         
-        [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSArray<NSString *> * _Nonnull result) {
-            [self.view ssj_hideLoadingIndicator];
-            
-            self.budgetIdList = result;
-            self.selectedBudgetIdIndex = [result indexOfObject:self.budgetId];
-            if (self.selectedBudgetIdIndex == NSNotFound) {
+        if (self.budgetModel.type == 1) {
+            [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSArray<NSString *> * _Nonnull result) {
+                [self.view ssj_hideLoadingIndicator];
+                self.scrollView.hidden = NO;
+                
+                self.budgetIdList = result;
+                self.selectedBudgetIdIndex = [result indexOfObject:self.budgetId];
+                if (self.selectedBudgetIdIndex == NSNotFound) {
+                    SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+                    return;
+                }
+                
+                [self.headerView setBudgetModel:self.budgetModel];
+                [self.bottomView.circleView reloadData];
+                
+                NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
+                NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
+                self.bottomView.timeRangeLabel.text = [NSString stringWithFormat:@"预算日期：%@——%@", beginDate, endDate];
+                
+            } failure:^(NSError * _Nullable error) {
+                
+                [self.view ssj_hideLoadingIndicator];
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-                return;
-            }
-            
-            self.headerView.hidden = NO;
-            self.budgetTitleLabel.hidden = NO;
-            self.bottomView.hidden = NO;
-            
-            [self.headerView setBudgetModel:self.budgetModel];
-            [self.bottomView.circleView reloadData];
-            
-            NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
-            NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
-            self.bottomView.timeRangeLabel.text = [NSString stringWithFormat:@"预算日期：%@——%@", beginDate, endDate];
-            
-        } failure:^(NSError * _Nullable error) {
-            
-            [self.view ssj_hideLoadingIndicator];
-            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-            
-        }];
-        
+                
+            }];
+        }
     } failure:^(NSError * _Nullable error) {
         
         [self.view ssj_hideLoadingIndicator];
@@ -210,6 +217,7 @@ static const CGFloat kBottomViewHeight = 466;
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
         _scrollView.contentSize = CGSizeMake(self.view.width, kHeaderMargin + kHeaderViewHeight + kbudgetTitleLabelHeight + kBottomViewHeight);
         _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+        _scrollView.hidden = YES;
     }
     return _scrollView;
 }

@@ -24,7 +24,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor whiteColor];
-        self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:@"e9e9e9"].CGColor;
         self.layer.borderWidth = 3;
         
         self.waveIndicator = [[WaveLoadingIndicator alloc] init];
@@ -47,7 +47,11 @@
 }
 
 - (void)layoutSubviews {
-    self.waveIndicator.frame = self.bounds;
+    self.layer.cornerRadius = self.width * 0.5;
+    self.waveIndicator.frame = CGRectInset(self.bounds, self.layer.borderWidth * 0.5, self.layer.borderWidth * 0.5);
+    
+    self.topLabel.width = MIN(self.topLabel.width, self.waveIndicator.width);
+    self.bottomLabel.width = MIN(self.bottomLabel.width, self.waveIndicator.width);
     
     if (self.topLabel.text.length && self.bottomLabel.text.length) {
         CGFloat gap = 5;

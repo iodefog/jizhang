@@ -14,6 +14,8 @@
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
+NSString *const SSJBudgetMonthIDKey = @"SSJBudgetMonthIDKey";
+NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 
 @implementation SSJBudgetDatabaseHelper
 
@@ -71,7 +73,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select from ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate from bk_user_budget where ibid = ?", ID];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind from bk_user_budget where ibid = ?", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -79,12 +81,14 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
             return;
         }
         
-        SSJBudgetModel *budgetModel = [self budgetModelWithResultSet:resultSet inDatabase:db];
+        SSJBudgetModel *budgetModel = nil;
+        while ([resultSet next]) {
+            budgetModel = [self budgetModelWithResultSet:resultSet inDatabase:db];
+        }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-//        result = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
-        
-        resultSet = [db executeQuery:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in (?) group by a.ibillid", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, [self queryStringForBillIds:budgetModel.billIds]];
+        NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in %@ group by a.ibillid", [self queryStringForBillIds:budgetModel.billIds]];
+        resultSet = [db executeQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
         
         if (!resultSet) {
             if (failure) {
@@ -104,12 +108,12 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
             circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
             circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", circleItem.scale * 100];
             
-            double money = [resultSet doubleForColumn:@"a.imoney"];
+            double money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             double scale = money / budgetModel.payMoney;
             if (scale >= 0.01) {
                 amount += money;
                 [moneyArr addObject:@(money)];
-                [circleItemArr addObject:circleItemArr];
+                [circleItemArr addObject:circleItem];
             }
         }
         
@@ -130,9 +134,9 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     }];
 }
 
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSString *> *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSDictionary *> *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid from bk_user_budget where cuserid = ? and itype = 2"];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1", SSJUSERID()];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -359,7 +363,8 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     budgetModel.endDate = [set stringForColumn:@"cedate"];
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
     budgetModel.isRemind = [set boolForColumn:@"iremind"];
-    budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in (?)", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, [self queryStringForBillIds:budgetModel.billIds]];
+    NSString *query = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in %@", [self queryStringForBillIds:budgetModel.billIds]];
+    budgetModel.payMoney = [db doubleForQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
     
     return budgetModel;
 }
@@ -370,7 +375,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
         NSString *tBillId = [NSString stringWithFormat:@"'%@'", billId];
         [tBillIdArr addObject:tBillId];
     }
-    return [tBillIdArr componentsJoinedByString:@","];
+    return [NSString stringWithFormat:@"(%@)", [tBillIdArr componentsJoinedByString:@","]];
 }
 
 + (NSString *)billTypeStringWithBillTypeArr:(NSArray *)billTypeArr {

@@ -37,12 +37,12 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [super viewDidLoad];
     [self setupAddBarButtonItem];
     [self.view addSubview:self.tableView];
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     
     [self.view ssj_showLoadingIndicator];
     
@@ -92,6 +92,10 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -137,7 +141,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
@@ -146,8 +150,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
-        _tableView.rowHeight = 100;
-        _tableView.sectionHeaderHeight = 10;
+        _tableView.rowHeight = 165;
     }
     return _tableView;
 }
