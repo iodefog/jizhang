@@ -20,9 +20,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 @implementation SSJBudgetDatabaseHelper
 
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *currentDate = [formatter stringFromDate:[NSDate date]];
+    NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *budgetList = [NSMutableArray array];
@@ -146,17 +144,47 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             return;
         }
         
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd";
+        
         NSMutableArray *result = [NSMutableArray array];
         while ([resultSet next]) {
-            [result addObject:[resultSet stringForColumn:@"ibid"]];
+            NSString *budgetId = [resultSet stringForColumn:@"ibid"];
+            
+            NSString *beginDateStr = [resultSet stringForColumn:@"csdate"];
+            NSDate *beginDate = [formatter dateFromString:beginDateStr];
+            NSDateComponents *dateComponent = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:beginDate];
+            NSString *title = [self titleForMonth:[dateComponent month]];
+            
+            [result addObject:@{SSJBudgetMonthIDKey:(budgetId ?: @""),
+                                SSJBudgetMonthTitleKey:(title ?: @"")}];
         }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(result);
+                success([result copy]);
             });
         }
     }];
+}
+
++ (NSString *)titleForMonth:(NSInteger)month {
+    switch (month) {
+        case 1:     return @"1月预算";
+        case 2:     return @"2月预算";
+        case 3:     return @"3月预算";
+        case 4:     return @"4月预算";
+        case 5:     return @"5月预算";
+        case 6:     return @"6月预算";
+        case 7:     return @"7月预算";
+        case 8:     return @"8月预算";
+        case 9:     return @"9月预算";
+        case 10:    return @"10月预算";
+        case 11:    return @"11月预算";
+        case 12:    return @"12月预算";
+            
+        default:    return nil;
+    }
 }
 
 + (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success failure:(void (^)(NSError *error))failure {
@@ -216,15 +244,14 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
-        [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
-        [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"ccadddate"];
-        [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
-        [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
-        
         BOOL isExisted = [db boolForQuery:@"select count(*) from bk_user_budget where ibid = ?", model.ID];
         if (isExisted) {
-            if ([db executeUpdate:@"update bk_user_budget set itype = ?, imoney = ?, iremindmoney = ?, csdate = ?, cedate = ?, istate = ?, cbilltype = ?, cwritedate = ?, iversion = ?, operatortype = 1" withParameterDictionary:parametersInfo]) {
+            NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
+            [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
+            [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
+            [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+            
+            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -238,6 +265,12 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
                 }
             }
         } else {
+            NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
+            [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
+            [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"ccadddate"];
+            [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
+            [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+            
             if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :cwritedate, :iversion, 0)" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{

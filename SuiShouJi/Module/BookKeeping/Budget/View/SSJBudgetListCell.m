@@ -68,22 +68,22 @@
     [self.beginDateLab sizeToFit];
     
     UIColor *paymentColor = item.payment > item.budget ? [UIColor redColor] : [UIColor ssj_colorWithHex:@"47cfbe"];
-    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%f", item.payment]];
+    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", item.payment]];
     [paymentStr setAttributes:@{NSForegroundColorAttributeName:paymentColor} range:NSMakeRange(3, paymentStr.length - 3)];
     self.paymentLab.attributedText = paymentStr;
     [self.paymentLab sizeToFit];
     
-    self.budgetLab.text = [NSString stringWithFormat:@"计划：%f", item.budget];
+    self.budgetLab.text = [NSString stringWithFormat:@"计划：%.2f", item.budget];
     [self.budgetLab sizeToFit];
     
     if (item.payment <= item.budget) {
         [self.waveView setScale:((item.budget - item.payment) / item.budget)];
         [self.waveView setTopTitle:@"剩余"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%f", item.budget - item.payment]];
+        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", item.budget - item.payment]];
     } else {
         [self.waveView setScale:1];
         [self.waveView setTopTitle:@"超支"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%f", item.payment - item.budget]];
+        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", item.payment - item.budget]];
     }
 }
 

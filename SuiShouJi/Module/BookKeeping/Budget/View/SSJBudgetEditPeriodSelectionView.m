@@ -104,7 +104,7 @@ static NSString *kCellID = @"cellID";
     } else if ([title isEqualToString:kMonthTitle]) {
         self.periodType = SSJBudgetPeriodTypeMonth;
     } else if ([title isEqualToString:kYearTitle]) {
-        self.periodType = SSJBudgetPeriodTypeWeek;
+        self.periodType = SSJBudgetPeriodTypeYear;
     }
     
     [self.tableView reloadData];

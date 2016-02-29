@@ -91,7 +91,7 @@
     }
     [self.budgetMoneyTitleLab sizeToFit];
     
-    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%f", model.budgetMoney];
+    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", model.budgetMoney];
     [self.budgetMoneyLab sizeToFit];
     
     NSString *dateString = [self.formatter stringFromDate:[NSDate date]];
@@ -104,25 +104,25 @@
     if (model.payMoney <= model.budgetMoney) {
         [self.waveView setScale:((model.budgetMoney - model.payMoney) / model.budgetMoney)];
         [self.waveView setTopTitle:@"剩余"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%f", model.budgetMoney - model.payMoney]];
+        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
     } else {
         [self.waveView setScale:1];
         [self.waveView setTopTitle:@"超支"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%f", model.budgetMoney - model.payMoney]];
+        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
     }
     
-    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%f", model.payMoney];
+    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     [self.payMoneyLab sizeToFit];
     
     double balance = model.budgetMoney - model.payMoney;
     if (balance >= 0) {
-        NSString *money = [NSString stringWithFormat:@"%.0f", balance / interval];
+        NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"距结算日前，您每天还可花%@元哦", money]];
         [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]} range:NSMakeRange(12, money.length)];
         self.bottomLab.attributedText = text;
         [self.bottomLab sizeToFit];
     } else {
-        NSString *money = [NSString stringWithFormat:@"%.0f", ABS(balance)];
+        NSString *money = [NSString stringWithFormat:@"%.2f", ABS(balance)];
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您目前已超支%@元喽", money]];
         [text setAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:NSMakeRange(12, money.length)];
         self.bottomLab.attributedText = text;

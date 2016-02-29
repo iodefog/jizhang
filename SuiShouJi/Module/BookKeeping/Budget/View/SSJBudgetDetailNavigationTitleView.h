@@ -10,12 +10,12 @@
 
 typedef void(^SSJBudgetDetailNavigationTitleViewButtonAction)(void);
 
-@interface SSJBudgetDetailNavigationTitleView : UIView
+@interface SSJBudgetDetailNavigationTitleView : UIControl
 
-@property (nonatomic, strong, readonly) UILabel *titleLabel;
+@property (nonatomic) NSUInteger currentIndex;
 
-@property (nonatomic, strong, readonly) UIButton *preButton;
+- (void)setTitles:(NSArray *)titles;
 
-@property (nonatomic, strong, readonly) UIButton *nextButton;
+- (void)setButtonShowed:(BOOL)showed;
 
 @end

@@ -7,9 +7,11 @@
 //
 
 #import "SSJBudgetDetailViewController.h"
+#import "SSJBudgetEditViewController.h"
 #import "SSJBudgetDetailNavigationTitleView.h"
 #import "SSJBudgetDetailHeaderView.h"
 #import "SSJBudgetDetailBottomView.h"
+#import "SSJBudgetDetailMiddleTitleView.h"
 #import "SSJBorderButton.h"
 #import "SSJPercentCircleView.h"
 #import "SSJBudgetDatabaseHelper.h"
@@ -34,7 +36,7 @@ static const CGFloat kBottomViewHeight = 466;
 @property (nonatomic, strong) SSJBudgetDetailHeaderView *headerView;
 
 //  预算消费明细的标题视图
-@property (nonatomic, strong) UILabel *budgetTitleLabel;
+@property (nonatomic, strong) SSJBudgetDetailMiddleTitleView *middleView;
 
 //  包含预算消费明细图表、编辑按钮
 @property (nonatomic, strong) SSJBudgetDetailBottomView *bottomView;
@@ -46,10 +48,10 @@ static const CGFloat kBottomViewHeight = 466;
 @property (nonatomic, strong) NSArray *circleItems;
 
 //  月预算历史id列表
-@property (nonatomic, strong) NSArray *budgetIdList;
+@property (nonatomic, strong) NSArray *monthBudgetIdList;
 
-//
-@property (nonatomic) NSUInteger selectedBudgetIdIndex;
+//  月预算标题
+@property (nonatomic, strong) NSArray *monthTitles;
 
 @end
 
@@ -67,11 +69,16 @@ static const CGFloat kBottomViewHeight = 466;
     [super viewDidLoad];
     
     self.navigationItem.titleView = self.titleView;
+    
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.headerView];
-    [self.scrollView addSubview:self.budgetTitleLabel];
+    [self.scrollView addSubview:self.middleView];
     [self.scrollView addSubview:self.bottomView];
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     [self loadAllData];
 }
 
@@ -92,21 +99,28 @@ static const CGFloat kBottomViewHeight = 466;
 
 #pragma mark - Event
 - (void)editButtonAction {
+    SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc] init];
+    budgetEditVC.model = self.budgetModel;
+    [self.navigationController pushViewController:budgetEditVC animated:YES];
+}
+
+- (void)changeSelectedMonth {
+    [self.view ssj_showLoadingIndicator];
+    NSString *budgetId = [self.monthBudgetIdList ssj_safeObjectAtIndex:self.titleView.currentIndex];
     
-}
-
-- (void)preMonthButtonAction {
-    if (self.selectedBudgetIdIndex > 0) {
-        self.selectedBudgetIdIndex --;
-    }
-    [self reloadBudgetData];
-}
-
-- (void)nextMonthButtonAction {
-    if (self.selectedBudgetIdIndex < self.budgetIdList.count - 1) {
-        self.selectedBudgetIdIndex ++;
-    }
-    [self reloadBudgetData];
+    [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
+        [self.view ssj_hideLoadingIndicator];
+        
+        self.budgetModel = result[SSJBudgetModelKey];
+        self.circleItems = result[SSJBudgetCircleItemsKey];
+        
+        [self updateView];
+        
+    } failure:^(NSError * _Nullable error) {
+        [self.view ssj_hideLoadingIndicator];
+        SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+    }];
 }
 
 #pragma mark - Private
@@ -117,49 +131,20 @@ static const CGFloat kBottomViewHeight = 466;
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
         
-        NSString *tStr = nil;
-        switch (self.budgetModel.type) {
-            case 0:
-                tStr = @"周";
-                self.titleView.preButton.hidden = self.titleView.nextButton.hidden = YES;
-                break;
-                
-            case 1:
-                tStr = @"月";
-                break;
-                
-            case 2:
-                tStr = @"年";
-                self.titleView.preButton.hidden = self.titleView.nextButton.hidden = YES;
-                break;
-        }
-        self.titleView.titleLabel.text = [NSString stringWithFormat:@"%@预算", tStr];
-        [self.titleView sizeToFit];
-        
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.headIndent = 15;
-        style.firstLineHeadIndent = 15;
-        self.budgetTitleLabel.attributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算消费明细", tStr] attributes:@{NSParagraphStyleAttributeName:style}];
-        
+        //  如果是月预算，需要再查询历史月预算id；否则直接刷新页面
         if (self.budgetModel.type == 1) {
             [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSArray<NSString *> * _Nonnull result) {
                 [self.view ssj_hideLoadingIndicator];
-                self.scrollView.hidden = NO;
                 
-                self.budgetIdList = result;
-                self.selectedBudgetIdIndex = [result indexOfObject:self.budgetId];
-                if (self.selectedBudgetIdIndex == NSNotFound) {
+                self.monthTitles = [result valueForKeyPath:SSJBudgetMonthTitleKey];
+                self.monthBudgetIdList = [result valueForKeyPath:SSJBudgetMonthIDKey];
+                if ([self.monthBudgetIdList indexOfObject:self.budgetId] == NSNotFound) {
                     SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                     [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
                     return;
                 }
                 
-                [self.headerView setBudgetModel:self.budgetModel];
-                [self.bottomView.circleView reloadData];
-                
-                NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
-                NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
-                self.bottomView.timeRangeLabel.text = [NSString stringWithFormat:@"预算日期：%@——%@", beginDate, endDate];
+                [self updateView];
                 
             } failure:^(NSError * _Nullable error) {
                 
@@ -168,7 +153,11 @@ static const CGFloat kBottomViewHeight = 466;
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
                 
             }];
+        } else {
+            [self.view ssj_hideLoadingIndicator];
+            [self updateView];
         }
+        
     } failure:^(NSError * _Nullable error) {
         
         [self.view ssj_hideLoadingIndicator];
@@ -178,36 +167,45 @@ static const CGFloat kBottomViewHeight = 466;
     }];
 }
 
-- (void)reloadBudgetData {
-    [self.view ssj_showLoadingIndicator];
-    NSString *budgetId = [self.budgetIdList ssj_safeObjectAtIndex:self.selectedBudgetIdIndex];
+- (void)updateView {
+    self.scrollView.hidden = NO;
     
-    [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
-        [self.view ssj_hideLoadingIndicator];
-        
-        self.budgetModel = result[SSJBudgetModelKey];
-        self.circleItems = result[SSJBudgetCircleItemsKey];
-        
-        [self.headerView setBudgetModel:self.budgetModel];
-        [self.bottomView.circleView reloadData];
-        
-        NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
-        NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月d日"];
-        self.bottomView.timeRangeLabel.text = [NSString stringWithFormat:@"预算日期：%@——%@", beginDate, endDate];
-        
-    } failure:^(NSError * _Nullable error) {
-        [self.view ssj_hideLoadingIndicator];
-        SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-    }];
+    NSString *tStr = nil;
+    switch (self.budgetModel.type) {
+        case 0:
+            tStr = @"周";
+            [self.titleView setTitles:@[@"周预算"]];
+            [self.titleView setButtonShowed:NO];
+            break;
+            
+        case 1:
+            tStr = @"月";
+            [self.titleView setTitles:self.monthTitles];
+            [self.titleView setButtonShowed:YES];
+            break;
+            
+        case 2:
+            tStr = @"年";
+            [self.titleView setTitles:@[@"年预算"]];
+            [self.titleView setButtonShowed:NO];
+            break;
+    }
+    self.titleView.currentIndex = [self.monthBudgetIdList indexOfObject:self.budgetId];
+    
+    [self.headerView setBudgetModel:self.budgetModel];
+    [self.bottomView.circleView reloadData];
+    
+    NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-dd"];
+    NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-dd"];
+    [self.middleView setTitle:[NSString stringWithFormat:@"%@预算消费明细", tStr]];
+    [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
 }
 
 #pragma mark - Getter
 - (SSJBudgetDetailNavigationTitleView *)titleView {
     if (!_titleView) {
         _titleView = [[SSJBudgetDetailNavigationTitleView alloc] init];
-        [_titleView.preButton addTarget:self action:@selector(preMonthButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [_titleView.nextButton addTarget:self action:@selector(nextMonthButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        [_titleView addTarget:self action:@selector(changeSelectedMonth) forControlEvents:UIControlEventValueChanged];
     }
     return _titleView;
 }
@@ -229,14 +227,11 @@ static const CGFloat kBottomViewHeight = 466;
     return _headerView;
 }
 
-- (UILabel *)budgetTitleLabel {
-    if (!_budgetTitleLabel) {
-        _budgetTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, kHeaderMargin + kHeaderViewHeight, self.view.width, kbudgetTitleLabelHeight)];
-        _budgetTitleLabel.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
-        _budgetTitleLabel.textColor = [UIColor blackColor];
-        _budgetTitleLabel.font = [UIFont systemFontOfSize:14];
+- (SSJBudgetDetailMiddleTitleView *)middleView {
+    if (!_middleView) {
+        _middleView = [[SSJBudgetDetailMiddleTitleView alloc] initWithFrame:CGRectMake(0, kHeaderMargin + kHeaderViewHeight, self.view.width, kbudgetTitleLabelHeight)];
     }
-    return _budgetTitleLabel;
+    return _middleView;
 }
 
 - (SSJBudgetDetailBottomView *)bottomView {

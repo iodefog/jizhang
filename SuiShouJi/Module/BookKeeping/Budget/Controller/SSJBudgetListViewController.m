@@ -96,6 +96,10 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     return 10;
 }
 
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -127,7 +131,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
             cellItem.typeName = @"年预算";
             break;
     }
-    cellItem.beginDate = [model.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年mm月dd日"];
+    cellItem.beginDate = [model.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月dd日"];
     cellItem.payment = model.payMoney;
     cellItem.budget = model.budgetMoney;
     return cellItem;
@@ -141,7 +145,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;

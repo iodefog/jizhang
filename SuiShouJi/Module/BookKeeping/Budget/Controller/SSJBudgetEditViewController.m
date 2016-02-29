@@ -8,6 +8,7 @@
 
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetEditPeriodSelectionView.h"
+#import "TPKeyboardAvoidingTableView.h"
 #import "SSJBudgetEditLabelCell.h"
 #import "SSJBudgetEditTextFieldCell.h"
 #import "SSJBudgetEditSwitchCtrlCell.h"
@@ -27,7 +28,7 @@ static NSString *const kBudgetPeriodTitle = @"周期";
 
 @interface SSJBudgetEditViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
 @property (nonatomic, strong) UIView *footerView;
 
@@ -59,6 +60,11 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     
     [self queryBillTypeList];
     [self.view addSubview:self.tableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -358,9 +364,9 @@ static NSString *const kBudgetPeriodTitle = @"周期";
 }
 
 #pragma mark - Getter
-- (UITableView *)tableView {
+- (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;

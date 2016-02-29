@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */; };
+		7D1D7F3A1C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */; };
 		7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */; };
 		7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */; };
@@ -453,6 +454,8 @@
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7D09ECAD1C5B0FA200C85D8E /* SSJDataSyncHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSyncHelper.h; sourceTree = "<group>"; };
 		7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSyncHelper.m; sourceTree = "<group>"; };
+		7D1D7F381C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailMiddleTitleView.h; sourceTree = "<group>"; };
+		7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailMiddleTitleView.m; sourceTree = "<group>"; };
 		7D2B23F11C3A1225009A74A8 /* SSJBillingChargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeViewController.h; sourceTree = "<group>"; };
 		7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeViewController.m; sourceTree = "<group>"; };
 		7D2B23F41C3A14D8009A74A8 /* SSJBillingChargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeCell.h; sourceTree = "<group>"; };
@@ -1697,6 +1700,8 @@
 				7DEF547C1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m */,
 				7DEF54841C7C83B200A90153 /* SSJBudgetDetailBottomView.h */,
 				7DEF54851C7C83B200A90153 /* SSJBudgetDetailBottomView.m */,
+				7D1D7F381C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.h */,
+				7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */,
 				7DEF54811C7C722A00A90153 /* SSJBorderButton.h */,
 				7DEF54821C7C722A00A90153 /* SSJBorderButton.m */,
 				7DEF55231C7DAEA300A90153 /* SSJBudgetWaveScaleView.h */,
@@ -3276,6 +3281,7 @@
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
 				7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */,
+				7D1D7F3A1C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */,
 				BDF503831C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m in Sources */,
 				7DEF55521C7EEB3300A90153 /* SSJBudgetTypeModel.m in Sources */,
