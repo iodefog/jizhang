@@ -349,7 +349,7 @@ static id _instance;
             self.textField.text = @"0";
             [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
             self.decimalModel = NO;
-            self.textField.text = @"";
+            self.textField.text = @"";  
         }else if (sender.tag == 13){
             self.PlusOrMinusModel = NO;
             if (_numkeyHavePressed == NO) {

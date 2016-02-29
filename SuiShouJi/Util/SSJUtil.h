@@ -173,6 +173,6 @@ NSString *SSJImagePath(NSString *imageName);
  *
  *  @return @return (UIImage *)
  */
-UIImage *SSJGetOriginalImage(NSString *imageName);
+UIImage *SSJGetChargeImage(NSString *imageName);
 
 

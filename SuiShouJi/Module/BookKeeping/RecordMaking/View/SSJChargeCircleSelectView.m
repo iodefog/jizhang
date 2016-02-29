@@ -115,7 +115,7 @@
 
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
     _selectCircleType = selectCircleType;
-    [self.pickerView selectRow:_selectCircleType inComponent:0 animated:NO];
+    [self.pickerView selectRow:_selectCircleType + 1 inComponent:0 animated:NO];
 }
 
 -(void)comfirmButtonClicked:(id)sender{
