@@ -430,7 +430,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
-            }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType != -1){
+            }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType == 4){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
             }else{
