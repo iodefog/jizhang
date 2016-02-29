@@ -50,6 +50,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) SSJChargeCircleSelectView *ChargeCircleSelectView;
 @property (nonatomic) NSInteger selectChargeCircleType;
 @property (nonatomic,strong) NSString *chargeMemo;
+@property (nonatomic,strong) NSString *categoryID;
+@property (nonatomic,strong) NSString *defualtID;
+@property (nonatomic,strong) SSJFundingItem *selectItem;
+@property (nonatomic,strong) SSJFundingItem *defualtItem;
+
+
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -65,18 +71,18 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     NSString *_intPart;
     NSString *_decimalPart;
     int _decimalCount;
-    NSString *_categoryID;
     NSString *_defualtColor;
-    NSString *_defualtID;
     NSString *_defualtImage;
-    SSJFundingItem *_selectItem;
-    SSJFundingItem *_defualtItem;
     BOOL _defualtType;
     long _originaldMonth;
     long _originaldYear;
     long _originaldDay;
 }
 #pragma mark - Lifecycle
+-(void)dealloc{
+    
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -108,7 +114,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         self.selectedYear = _originaldYear;
         self.selectedMonth = _originaldMonth;
         self.selectedDay = _originaldDay;
-        _categoryID = self.item.billId;
+        self.categoryID = self.item.billId;
         self.selectChargeCircleType = self.item.chargeCircleType;
         if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
             self.selectedImage = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
@@ -181,7 +187,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(SSJCategoryListView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
-        _categoryListView.selectedId = _defualtID;
+        _categoryListView.selectedId = self.defualtID;
         [_categoryListView reloadData];
         if (self.item == nil) {
             _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
@@ -191,7 +197,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [_categoryListView reloadData];
         __weak typeof(self) weakSelf = self;
         _categoryListView.CategorySelectedBlock = ^(SSJRecordMakingCategoryItem *item){
-            _categoryID = item.categoryTitle;
+            weakSelf.categoryID = item.categoryTitle;
             if (![item.categoryTitle isEqualToString:@"添加"]) {
                 [UIView animateWithDuration:kAnimationDuration animations:^{
                     weakSelf.categoryNameLabel.text = item.categoryTitle;
@@ -199,7 +205,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
                     weakSelf.categoryImage.tintColor = [UIColor whiteColor];
                     weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    _categoryID = item.categoryID;
+                    weakSelf.categoryID = item.categoryID;
                 }];
             }else{
                 SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
@@ -207,7 +213,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 weakSelf.titleSegment.selectedSegmentIndex;
                 addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
                     weakSelf.categoryListView.selectedId = categoryID;
-                    _categoryID = categoryID;
+                    weakSelf.categoryID = categoryID;
                     weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
                     [weakSelf.categoryListView reloadData];
@@ -257,7 +263,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         __weak typeof(self) weakSelf = self;
         _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
             if (buttonTag == 1) {
-                if (_selectedImage == nil) {
+                if (weakSelf.selectedImage == nil) {
                     UIActionSheet *sheet;
                     sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
                     [sheet showInView:weakSelf.view];
@@ -342,9 +348,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
         __weak typeof(self) weakSelf = self;
         _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day){
-            _selectedDay = day;
-            _selectedMonth = month;
-            _selectedYear = year;
+            weakSelf.selectedDay = day;
+            weakSelf.selectedMonth = month;
+            weakSelf.selectedYear = year;
             [weakSelf.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
             weakSelf.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",weakSelf.selectedDay];
             for (int i = 0; i < [self.DateSelectedView.calendarView.calendar.visibleCells count]; i ++) {
@@ -375,7 +381,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
-                _selectItem = fundingItem;
+                weakSelf.selectItem = fundingItem;
                 [weakSelf updateFundingType];
                  NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
                 [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:SSJLastSelectFundItemKey];
@@ -385,7 +391,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [weakSelf.FundingTypeSelectView reloadDate];
                     [weakSelf.fundingTypeButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
                     [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
-                    _selectItem = newFundingItem;
+                    weakSelf.selectItem = newFundingItem;
                     [weakSelf updateFundingType];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
@@ -534,13 +540,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         NSString *operationTime = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *selectDate;
         selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        SSJFundingItem *fundingType = _selectItem;
+        SSJFundingItem *fundingType = weakSelf.selectItem;
         NSString *imageName = SSJUUID();
         NSString *iconfigId = SSJUUID();
         if (self.item == nil) {
             //新增流水
-            if (!_categoryID) {
-                _categoryID = _defualtID;
+            if (!weakSelf.categoryID) {
+                weakSelf.categoryID = weakSelf.defualtID;
             }
             NSString *chargeID = SSJUUID();
             NSString *userID = SSJUSERID();
@@ -549,9 +555,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }else{
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
             }
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE , CMEMO , ICONFIGID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate,self.chargeMemo,iconfigId];
+            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE , CMEMO , ICONFIGID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate,self.chargeMemo,iconfigId];
             if (weakSelf.selectChargeCircleType != -1) {
-                [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo];
+                [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo];
             }
             if (weakSelf.selectedImage != nil) {
                 if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
@@ -590,10 +596,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }
         }else if (self.item.ID != nil){
             //修改流水
-            if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,SSJUSERID()]) {
+            if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,SSJUSERID()]) {
                 if (weakSelf.selectChargeCircleType != weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1) {
                     if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,SSJUSERID()]) {
-                        [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
+                        [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
                     }
                 }
                 if (weakSelf.selectedImage != nil) {
@@ -631,7 +637,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         }else{
             //修改循环记账配置
             if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1){
-                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , IBILLID = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
+                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , IBILLID = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
                 if (weakSelf.selectedImage != nil) {
                     if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                         [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];
@@ -641,7 +647,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
             }else{
                 if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,SSJUSERID()]) {
-                    [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLTYPE , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
+                    [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLTYPE , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
                     if (weakSelf.selectedImage != nil) {
                         if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                             [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];
@@ -670,7 +676,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.categoryListView.incomeOrExpence = !self.titleSegment.selectedSegmentIndex;
     self.categoryListView.scrollView.contentOffset = CGPointMake(0, 0);
     [self getDefualtColorAndDefualtId];
-    self.categoryListView.selectedId = _defualtID;
+    self.categoryListView.selectedId = self.defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
@@ -703,38 +709,40 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 -(void)getDefualtFudingItem{
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? LIMIT 1",@"root",SSJUSERID()];
-        _defualtItem = [[SSJFundingItem alloc]init];
+        weakSelf.defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
-            _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-            _defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-            _defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-            _defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-            _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-            _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+            weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            weakSelf.defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            weakSelf.defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+            weakSelf.defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            weakSelf.defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+            weakSelf.defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            _selectItem = _defualtItem;
+            weakSelf.selectItem = _defualtItem;
             [self updateFundingType];
         });
     }];
 }
 
 -(void)getSelectedFundingType{
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundId];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
-            _defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-            _defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-            _defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-            _defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-            _defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-            _defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+            weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
+            weakSelf.defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
+            weakSelf.defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
+            weakSelf.defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
+            weakSelf.defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
+            weakSelf.defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            _selectItem = _defualtItem;
+            weakSelf.selectItem = weakSelf.defualtItem;
             [self updateFundingType];
         });
     }];
