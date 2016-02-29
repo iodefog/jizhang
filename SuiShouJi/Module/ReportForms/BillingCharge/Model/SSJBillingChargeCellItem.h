@@ -40,6 +40,10 @@
 //记账类型
 @property (nonatomic,strong) NSString *billId;
 
+//流水备注
+@property (nonatomic,strong) NSString *chargeMemo;
+
+
 //记账图片(大图)
 @property (nonatomic,strong) NSString *chargeImage;
 

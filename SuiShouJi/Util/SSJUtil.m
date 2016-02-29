@@ -246,8 +246,14 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
 
 NSString *SSJImagePath(NSString *imageName){
     NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
-    NSString *fullPath = [SSJDocumentPath() stringByAppendingPathComponent:fullImageName];
+    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return fullPath;
 };
 
+UIImage *SSJGetChargeImage(NSString *imageName){
+    NSString *imageURL = [NSString stringWithFormat:@"http://jz.9188.com/image/sync/%@",imageName];
+    NSData * imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
+    UIImage *image = [UIImage imageWithData:imageData];
+    return image;
+}
 

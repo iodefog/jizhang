@@ -102,12 +102,20 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         if (_selectedDay == 0) {
             self.selectedDay = _currentDay;
         }
+        self.selectChargeCircleType = -1;
     }else{
         [self getSelectedDateFromDate:self.item.billDate];
         self.selectedYear = _originaldYear;
         self.selectedMonth = _originaldMonth;
         self.selectedDay = _originaldDay;
         _categoryID = self.item.billId;
+        self.selectChargeCircleType = self.item.chargeCircleType;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+            self.selectedImage = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+        }else{
+            self.selectedImage = SSJGetChargeImage(self.item.chargeImage);
+        }
+        self.chargeMemo = self.item.chargeMemo;
     }
     [self getDefualtColorAndDefualtId];
     if (self.item != nil) {
@@ -152,159 +160,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.inputTopView.bottom = self.additionalView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 260 - self.selectedCategoryView.bottom);
 }
-
-#pragma mark SSJCustomKeyboardDelegate
-//- (void)didNumKeyPressed:(UIButton *)button{
-//    self.textInput.textColor = [UIColor whiteColor];
-//    if ([_intPart length] > 7 && self.customKeyBoard.decimalModel == NO) {
-//        return;
-//    }
-//    if (self.customKeyBoard.decimalModel == NO) {
-//        if ([self.textInput.text isEqualToString:@"0.00"]) {
-//            _intPart = button.titleLabel.text;
-//            self.textInput.text = [NSString stringWithFormat:@"%@.00",_intPart];
-//            if ([self.textInput.text isEqualToString:@"0.00"]) {
-//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//            }
-//        }else{
-//        self.textInput.text = [NSString stringWithFormat:@"%@%@.00",_intPart,button.titleLabel.text];
-//        _intPart = [NSString stringWithFormat:@"%@%@",_intPart,button.titleLabel.text];
-//        }
-//    }else{
-//        if (_decimalCount == 0) {
-//            _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:button.titleLabel.text];
-//            _decimalCount = _decimalCount + 1;
-//        }else if (_decimalCount == 1) {
-//            _decimalPart = [_decimalPart stringByReplacingCharactersInRange:NSMakeRange(1, 1) withString:button.titleLabel.text];
-//            _decimalCount = _decimalCount + 1;
-//        }
-//        self.textInput.text = [NSString stringWithFormat:@"%@.%@",_intPart,_decimalPart];
-//    _lastPressNum = [button.titleLabel.text integerValue];
-//    }
-//}
-
-//- (void)didDecimalPointKeyPressed{
-//    self.customKeyBoard.decimalModel = YES;
-//}
-
-//- (void)didClearKeyPressed{
-//    self.textInput.text = @"0.00";
-//    self.customKeyBoard.decimalModel = NO;
-//    _decimalPart = @"00";
-//    _intPart = @"0";
-//    _decimalCount = 0;
-//}
-
-//- (void)didBackspaceKeyPressed{
-//    self.textInput.textColor = [UIColor whiteColor];
-//    NSString *intPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-//    NSString *decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-//    if (![decimalPart isEqualToString:@"00"]) {
-//        self.customKeyBoard.decimalModel = YES;
-//    }
-//    if (self.customKeyBoard.decimalModel == NO) {
-//        if ([intPart isEqualToString:@"0"] | ([intPart length] == 1)) {
-//            self.textInput.text = @"0.00";
-//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-//            return;
-//        }
-//        if ([intPart hasPrefix:@"-"]&&[intPart length] == 2) {
-//            self.textInput.text = @"0.00";
-//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-//            return;
-//        }
-//        intPart = [intPart substringToIndex:[intPart length] - 1];
-//        self.textInput.text = [NSString stringWithFormat:@"%@.%@",intPart,decimalPart];
-//    }else{
-//        if ([decimalPart isEqualToString:@"00"]) {
-//            self.customKeyBoard.decimalModel = NO;
-//            if ([intPart isEqualToString:@"0"]) {
-//                self.textInput.text = @"0.00";
-//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//                _decimalCount = 0;
-//                return;
-//            }
-//            if ([intPart length] == 1) {
-//                self.textInput.text = @"0.00";
-//                _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//                _decimalCount = 0;
-//                return;
-//            }
-//            intPart = [intPart substringToIndex:[intPart length] - 1];
-//            self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
-//        }else if ([decimalPart hasSuffix:@"0"]){
-//            self.textInput.text = [NSString stringWithFormat:@"%@.00",intPart];
-//            _textInput.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-//            _decimalCount = _decimalCount - 1;
-//        }else{
-//            decimalPart = [decimalPart substringToIndex:1];
-//            self.textInput.text = [NSString stringWithFormat:@"%@.%@0",intPart,decimalPart];
-//            _decimalCount = _decimalCount - 1;
-//        }
-//    }
-//    _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-//    _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-//}
-
-//- (void)didPlusKeyPressed{
-//    self.customKeyBoard.PlusOrMinusModel = YES;
-//    _caculationValue =_caculationValue + [self.textInput.text floatValue];
-//    self.textInput.text = @"0.00";
-//    [self.customKeyBoard.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-//    self.customKeyBoard.decimalModel = NO;
-//    _decimalPart = @"00";
-//    _intPart = @"0";
-//    _decimalCount = 0;
-//}
-//
-//- (void)didMinusKeyPressed{
-//    self.customKeyBoard.PlusOrMinusModel = NO;
-//    if (_numkeyHavePressed == NO) {
-//        _caculationValue = [self.textInput.text floatValue];
-//    }else{
-//        _caculationValue = _caculationValue - [self.textInput.text floatValue];
-//    }
-//    self.textInput.text = @"0.00";
-//    [self.customKeyBoard.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-//    self.customKeyBoard.decimalModel = NO;
-//    _decimalPart = @"00";
-//    _intPart = @"0";
-//    _decimalCount = 0;
-//}
-
-//- (void)comfirmButtonClick:(id)sender{
-//    if ([self.textInput.text isEqualToString:@"0.00"] || [self.textInput.text isEqualToString:@""]) {
-//        [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
-//        return;
-//    }
-//    [self makeArecord];
-//    }else if ([button.titleLabel.text isEqualToString:@"="]){
-//        if (self.customKeyBoard.PlusOrMinusModel == YES) {
-//            _caculationValue = _caculationValue + [self.textInput.text floatValue];
-//            self.textInput.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-//            _caculationValue = 0.0f;
-//            self.customKeyBoard.decimalModel = NO;
-//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-//            _decimalCount = 0;
-//        }else{
-//            _caculationValue = _caculationValue  - [self.textInput.text floatValue];
-//            self.textInput.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-//            _caculationValue = 0.0f;
-//            self.customKeyBoard.decimalModel = NO;
-//            _decimalPart = [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:1];
-//            _intPart =  [[self.textInput.text componentsSeparatedByString:@"."] objectAtIndex:0];
-//            _decimalCount = 0;
-//        }
-//        [self.customKeyBoard.ComfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-//    }
-//}
 
 #pragma mark - Getter
 //-(SSJCustomKeyboard*)customKeyBoard{
@@ -397,6 +252,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _additionalView = [SSJRecordMakingAdditionalView RecordMakingAdditionalView];
         [_additionalView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_additionalView ssj_setBorderStyle:SSJBorderStyleTop];
+        _additionalView.selectedImage = self.selectedImage;
         _additionalView.frame = CGRectMake(0, 0, self.view.width, 200);
         __weak typeof(self) weakSelf = self;
         _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
@@ -562,15 +418,16 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(SSJChargeCircleSelectView *)ChargeCircleSelectView{
     if (!_ChargeCircleSelectView) {
         _ChargeCircleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _ChargeCircleSelectView.selectCircleType = self.selectChargeCircleType;
         __weak typeof(self) weakSelf = self;
         _ChargeCircleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
             if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
-            }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6){
+            }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType != -1){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
-            }else if (chargeCircleType > 0) {
+            }else{
                 weakSelf.selectChargeCircleType = chargeCircleType;
             }
         };
@@ -687,13 +544,15 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }
             NSString *chargeID = SSJUUID();
             NSString *userID = SSJUSERID();
-            if (self.titleSegment.selectedSegmentIndex == 0) {
+            if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
             }else{
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
             }
             [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE , CMEMO , ICONFIGID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate,self.chargeMemo,iconfigId];
-            [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLTYPE , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo];
+            if (weakSelf.selectChargeCircleType != -1) {
+                [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo];
+            }
             if (weakSelf.selectedImage != nil) {
                 if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                     [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",imageName,[NSString stringWithFormat:@"%@-thumb",imageName],chargeID,SSJUSERID()];
@@ -732,9 +591,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         }else if (self.item.ID != nil){
             //修改流水
             if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],_categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,SSJUSERID()]) {
-                if (weakSelf.selectChargeCircleType != weakSelf.item.chargeCircleType) {
+                if (weakSelf.selectChargeCircleType != weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1) {
                     if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,SSJUSERID()]) {
-                        [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLTYPE , ITYPE  , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
+                        [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
                     }
                 }
                 if (weakSelf.selectedImage != nil) {
@@ -760,19 +619,19 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , ICHARGEID  , IBILLID , CWRITEDATE , CUSERID) VALUES(?,?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],@"0",@"-1",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],SSJUSERID()];
                 }
             }
-            if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",self.item.billId])
+            if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId])
             {
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],self.item.fundId,SSJUSERID()];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],[NSNumber numberWithDouble:[self.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,SSJUSERID()];
             }else{
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],self.item.fundId,SSJUSERID()];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],[NSNumber numberWithDouble:[self.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],self.item.billDate,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,SSJUSERID()];
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,SSJUSERID()];
             }
             
         }else{
             //修改循环记账配置
-            if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType){
-                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
+            if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1){
+                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , IBILLID = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
                 if (weakSelf.selectedImage != nil) {
                     if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                         [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];
