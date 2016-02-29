@@ -741,6 +741,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                         [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",imageName,[NSString stringWithFormat:@"%@-thumb",imageName],weakSelf.item.ID,SSJUSERID()];
                     }
+                }else{
+                    [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",@"",@"",weakSelf.item.ID,SSJUSERID()];
                 }
             }
             if (self.titleSegment.selectedSegmentIndex == 0) {
@@ -770,10 +772,24 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         }else{
             //修改循环记账配置
             if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType){
-                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo];
+                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
+                if (weakSelf.selectedImage != nil) {
+                    if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
+                        [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];
+                    }
+                }else{
+                    [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",@"",weakSelf.item.configId,SSJUSERID()];
+                }
             }else{
                 if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,SSJUSERID()]) {
                     [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLTYPE , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),_categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
+                    if (weakSelf.selectedImage != nil) {
+                        if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
+                            [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];
+                        }
+                    }else{
+                        [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",@"",weakSelf.item.configId,SSJUSERID()];
+                    }
                 }
             }
         }
