@@ -79,10 +79,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     long _originaldDay;
 }
 #pragma mark - Lifecycle
--(void)dealloc{
-    
-}
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -162,7 +158,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.additionalView.height = 200;
     self.additionalView.bottom = self.view.height;
     self.categoryListView.top = self.selectedCategoryView.bottom;
-//    self.categoryListView.height = self.additionalView.top - self.selectedCategoryView.bottom;
     self.inputTopView.bottom = self.additionalView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 260 - self.selectedCategoryView.bottom);
 }
