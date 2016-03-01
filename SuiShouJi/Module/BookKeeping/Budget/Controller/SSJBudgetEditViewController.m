@@ -14,6 +14,7 @@
 #import "SSJBudgetEditSwitchCtrlCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJBudgetCalendarHelper.h"
+#import "SSJCustomKeyboard.h"
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
 static NSString *const kBudgetEditTextFieldCellId = @"kBudgetEditTextFieldCellId";
@@ -26,7 +27,10 @@ static NSString *const kBudgetRemindTitle = @"预算提醒";
 static NSString *const kBudgetRemindScaleTitle = @"预算占比提醒";
 static NSString *const kBudgetPeriodTitle = @"周期";
 
-@interface SSJBudgetEditViewController () <UITableViewDataSource, UITableViewDelegate>
+static const NSInteger kBudgetMoneyTextFieldTag = 1000;
+static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
+
+@interface SSJBudgetEditViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -134,6 +138,19 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     }
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField.tag == kBudgetMoneyTextFieldTag) {
+        
+    }
+    
+    if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        
+    }
+    
+    return YES;
+}
+
 #pragma mark - Event
 - (void)autoContinueSwitchCtrlAction:(UISwitch *)switchCtrl {
     self.model.isAutoContinued = switchCtrl.isOn;
@@ -231,27 +248,27 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     self.model.isRemind = YES;
 }
 
-- (void)updateCellTitles {
-    if (self.model.isRemind) {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
-    } else {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
-    }
-}
-
 - (NSString *)reuseCellIdForIndexPath:(NSIndexPath *)indexPath {
     NSString *cellTitle = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([cellTitle isEqualToString:kBudgetTypeTitle]
-        || [cellTitle isEqualToString:kBudgetRemindScaleTitle]
         || [cellTitle isEqualToString:kBudgetPeriodTitle]) {
         return kBudgetEditLabelCellId;
-    } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]) {
+    } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]
+               || [cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
         return kBudgetEditTextFieldCellId;
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]
                || [cellTitle isEqualToString:kBudgetRemindTitle]) {
         return kBudgetEditSwitchCtrlCellId;
     } else {
         return @"";
+    }
+}
+
+- (void)updateCellTitles {
+    if (self.model.isRemind) {
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
+    } else {
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
     }
 }
 
@@ -264,11 +281,10 @@ static NSString *const kBudgetPeriodTitle = @"周期";
     if ([cellTitle isEqualToString:kBudgetTypeTitle]) {
         //  预算类别
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
-        
         budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
-        
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
+        budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
@@ -282,6 +298,8 @@ static NSString *const kBudgetPeriodTitle = @"周期";
         //  预算金额
         SSJBudgetEditTextFieldCell *budgetMoneyCell = cell;
         budgetMoneyCell.textField.text = [NSString stringWithFormat:@"%f", self.model.budgetMoney];
+        budgetMoneyCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
+        budgetMoneyCell.textField.delegate = self;
         
     } else if ([cellTitle isEqualToString:kBudgetRemindTitle]) {
         //  预算提醒
@@ -293,23 +311,19 @@ static NSString *const kBudgetPeriodTitle = @"周期";
         
     } else if ([cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
         //  预算占比提醒
-        SSJBudgetEditLabelCell *budgetRemindScaleCell = cell;
-        budgetRemindScaleCell.subtitleLab.text = [NSString stringWithFormat:@"%.0f％", (self.model.remindMoney / self.model.budgetMoney)];
-        
+        SSJBudgetEditTextFieldCell *budgetRemindScaleCell = cell;
+        budgetRemindScaleCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
+        budgetRemindScaleCell.textField.delegate = self;
+        budgetRemindScaleCell.textField.text = [NSString stringWithFormat:@"%.0f％", (self.model.remindMoney / self.model.budgetMoney)];
         budgetRemindScaleCell.detailTextLabel.text = [NSString stringWithFormat:@"当预算金额剩余%f时，即会提醒您哦！", self.model.remindMoney];
         [budgetRemindScaleCell.detailTextLabel sizeToFit];
-        
-        budgetRemindScaleCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        budgetRemindScaleCell.selectionStyle = UITableViewCellSelectionStyleGray;
         
     } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
         //  周期
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
         budgetPeriodCell.subtitleLab.text = [self budgetPeriod];
-        
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
-        
         budgetPeriodCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
