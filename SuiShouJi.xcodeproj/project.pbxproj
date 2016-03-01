@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */; };
 		7D1D7F3A1C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */; };
-		7D1D7F3D1C8542230001F72A /* SSJTextFieldAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F3C1C8542230001F72A /* SSJTextFieldAddition.m */; };
+		7D1D7F401C85638A0001F72A /* SSJBudgetEditUnitTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F3F1C85638A0001F72A /* SSJBudgetEditUnitTextField.m */; };
 		7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */; };
 		7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */; };
@@ -457,8 +457,8 @@
 		7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSyncHelper.m; sourceTree = "<group>"; };
 		7D1D7F381C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailMiddleTitleView.h; sourceTree = "<group>"; };
 		7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailMiddleTitleView.m; sourceTree = "<group>"; };
-		7D1D7F3B1C8542230001F72A /* SSJTextFieldAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJTextFieldAddition.h; sourceTree = "<group>"; };
-		7D1D7F3C1C8542230001F72A /* SSJTextFieldAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJTextFieldAddition.m; sourceTree = "<group>"; };
+		7D1D7F3E1C85638A0001F72A /* SSJBudgetEditUnitTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditUnitTextField.h; sourceTree = "<group>"; };
+		7D1D7F3F1C85638A0001F72A /* SSJBudgetEditUnitTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditUnitTextField.m; sourceTree = "<group>"; };
 		7D2B23F11C3A1225009A74A8 /* SSJBillingChargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeViewController.h; sourceTree = "<group>"; };
 		7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeViewController.m; sourceTree = "<group>"; };
 		7D2B23F41C3A14D8009A74A8 /* SSJBillingChargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeCell.h; sourceTree = "<group>"; };
@@ -1719,6 +1719,8 @@
 				7DEF55431C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m */,
 				7DEF55561C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.h */,
 				7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */,
+				7D1D7F3E1C85638A0001F72A /* SSJBudgetEditUnitTextField.h */,
+				7D1D7F3F1C85638A0001F72A /* SSJBudgetEditUnitTextField.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1875,8 +1877,6 @@
 			children = (
 				BD0433071C1A78B40051E7AB /* SSJButtonAddition.h */,
 				BD0433081C1A78B40051E7AB /* SSJButtonAddition.m */,
-				7D1D7F3B1C8542230001F72A /* SSJTextFieldAddition.h */,
-				7D1D7F3C1C8542230001F72A /* SSJTextFieldAddition.m */,
 				BD0433091C1A78B40051E7AB /* SSJColorAddition.h */,
 				BD04330A1C1A78B40051E7AB /* SSJColorAddition.m */,
 				BD04330B1C1A78B40051E7AB /* SSJFontAddition.h */,
@@ -3129,6 +3129,7 @@
 				BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */,
 				7DE6E8711C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
+				7D1D7F401C85638A0001F72A /* SSJBudgetEditUnitTextField.m in Sources */,
 				7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */,
 				7DEF55441C7ED4A600A90153 /* SSJBudgetEditLabelCell.m in Sources */,
 				BD0432F31C1A77BB0051E7AB /* SRSlimeView.m in Sources */,
@@ -3220,7 +3221,6 @@
 				BD0432F71C1A77BB0051E7AB /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */,
 				7D99D4621C355130006EB113 /* SSJReportFormsSurplusView.m in Sources */,
-				7D1D7F3D1C8542230001F72A /* SSJTextFieldAddition.m in Sources */,
 				7D2B242A1C3E09A0009A74A8 /* SSJUserBillSyncTable.m in Sources */,
 				BD0433231C1A78B40051E7AB /* SSJFontAddition.m in Sources */,
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,

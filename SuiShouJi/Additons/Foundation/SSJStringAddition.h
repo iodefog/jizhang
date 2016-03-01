@@ -28,3 +28,9 @@
 // 算出字符串中得字符个数
 - (int)ssj_countWord;
 @end
+
+@interface NSString (SSJDecimal)
+
+- (NSString *)reserveDecimalDigits:(int)digits;
+
+@end
