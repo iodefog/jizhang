@@ -557,6 +557,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             if (weakSelf.selectedImage != nil) {
                 if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                     [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",imageName,[NSString stringWithFormat:@"%@-thumb",imageName],chargeID,SSJUSERID()];
+                    [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",chargeID,imageName,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
                 }
             }
             int count = [db intForQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,SSJUSERID()];
@@ -602,9 +603,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 if (weakSelf.selectedImage != nil) {
                     if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                         [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",imageName,[NSString stringWithFormat:@"%@-thumb",imageName],weakSelf.item.ID,SSJUSERID()];
+                        [db executeUpdate:@"update BK_IMG_SYNC set CIMGNAME = ? , ISYNCSTATE = ? where RID = ?",imageName,[NSNumber numberWithInt:0],self.item.ID];
                     }
                 }else{
                     [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",@"",@"",weakSelf.item.ID,SSJUSERID()];
+                    [db executeUpdate:@"delete from BK_IMG_SYNC where RID = ?",self.item.ID];
                 }
             }
             if (self.titleSegment.selectedSegmentIndex == 0) {
