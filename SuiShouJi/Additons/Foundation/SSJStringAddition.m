@@ -94,7 +94,7 @@
 
 @implementation NSString (SSJDecimal)
 
-- (NSString *)reserveDecimalDigits:(int)digits {
+- (NSString *)ssj_reserveDecimalDigits:(int)digits {
     NSArray *arr = [self componentsSeparatedByString:@"."];
     
     if ([self isEqualToString:@"0."] || [self isEqualToString:@"."]) {

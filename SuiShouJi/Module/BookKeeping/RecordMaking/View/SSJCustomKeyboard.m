@@ -292,7 +292,7 @@ static id _instance;
         inputString = @"";
     }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
         inputString = @"";
-    }else if (sender.tag < 10){
+    }else if (sender.tag < 10 || sender.tag == 14){
         inputString = sender.titleLabel.text;
     }
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {

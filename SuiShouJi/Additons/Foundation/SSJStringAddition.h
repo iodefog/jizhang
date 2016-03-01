@@ -31,6 +31,6 @@
 
 @interface NSString (SSJDecimal)
 
-- (NSString *)reserveDecimalDigits:(int)digits;
+- (NSString *)ssj_reserveDecimalDigits:(int)digits;
 
 @end
