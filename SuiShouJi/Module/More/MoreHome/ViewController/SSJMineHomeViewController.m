@@ -176,23 +176,19 @@ static NSString *const kTitle7 = @"设置";
         return;
     }
     
-    //  关于我们
+    //  周期记账
     if ([title isEqualToString:kTitle3]) {
-        NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/about.html"];
-        SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
-        webVC.title = @"关于我们";
-        [self.navigationController pushViewController:webVC animated:YES];
+
         return;
     }
-    
-    //  用户协议与隐私说明
-    if ([title isEqualToString:kTitle4]) {
-        NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/protocol.html"];
-        SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
-        webVC.title = @"用户协议";
-        [self.navigationController pushViewController:webVC animated:YES];
-        return;
-    }
+//
+//    //  用户协议与隐私说明
+//    if ([title isEqualToString:kTitle4]) {
+//        NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/protocol.html"];
+//        SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
+//        webVC.title = @"用户协议";
+//        [self.navigationController pushViewController:webVC animated:YES];
+//        return;
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

@@ -424,6 +424,7 @@
 		BDF503861C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503851C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m */; };
 		BDF503891C80018C00DCFA99 /* SSJCustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */; };
 		BDF5038C1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */; };
+		BDF5038F1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF5038E1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
@@ -1060,6 +1061,8 @@
 		BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomTextView.m; sourceTree = "<group>"; };
 		BDF5038A1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingReminderViewController.h; sourceTree = "<group>"; };
 		BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingReminderViewController.m; sourceTree = "<group>"; };
+		BDF5038D1C85924200DCFA99 /* SSJCircleChargeSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCircleChargeSettingViewController.h; sourceTree = "<group>"; };
+		BDF5038E1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCircleChargeSettingViewController.m; sourceTree = "<group>"; };
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
@@ -2158,6 +2161,8 @@
 				BD4934411C350D3600300D43 /* SSJSyncSettingViewController.m */,
 				BDF5038A1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.h */,
 				BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */,
+				BDF5038D1C85924200DCFA99 /* SSJCircleChargeSettingViewController.h */,
+				BDF5038E1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -3205,6 +3210,7 @@
 				BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */,
 				BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */,
 				BD7BC8481C3A63A5001DE5D8 /* SSJFundingDetailItem.m in Sources */,
+				BDF5038F1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m in Sources */,
 				BD0433261C1A78B40051E7AB /* SSJScrollViewAddition.m in Sources */,
 				7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,

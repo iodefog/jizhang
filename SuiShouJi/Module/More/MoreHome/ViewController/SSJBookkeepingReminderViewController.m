@@ -6,7 +6,7 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-static NSString *const kTitle1 = @"体型开关";
+static NSString *const kTitle1 = @"提醒开关";
 static NSString *const kTitle2 = @"提醒时间";
 static NSString *const kTitle3 = @"定期提醒";
 
@@ -48,6 +48,13 @@ static NSString *const kTitle3 = @"定期提醒";
     SSJMineHomeTabelviewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+    }
+    UISwitch *switchButton = [[UISwitch alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+    switchButton.onTintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    [switchButton addTarget:self action:@selector(switchButtonChange:) forControlEvents:UIControlEventValueChanged];
+    if (indexPath.section == 0) {
+        mineHomeCell.accessoryView = switchButton;
+    }else if (indexPath.section == 2){
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
@@ -55,6 +62,10 @@ static NSString *const kTitle3 = @"定期提醒";
     return mineHomeCell;
 }
 
+#pragma mark - Private
+-(void)switchButtonChange:(id)sender{
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -12,3 +12,5 @@ pod 'FMDB'
 pod 'SSZipArchive'
 
 pod 'iOS-WebP', '0.4'
+
+pod 'DateTools'
