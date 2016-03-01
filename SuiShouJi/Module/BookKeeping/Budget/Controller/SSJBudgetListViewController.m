@@ -37,12 +37,12 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [super viewDidLoad];
     [self setupAddBarButtonItem];
     [self.view addSubview:self.tableView];
-    
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     
     [self.view ssj_showLoadingIndicator];
     
@@ -92,6 +92,14 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -123,7 +131,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
             cellItem.typeName = @"年预算";
             break;
     }
-    cellItem.beginDate = [model.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年mm月dd日"];
+    cellItem.beginDate = [model.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月dd日"];
     cellItem.payment = model.payMoney;
     cellItem.budget = model.budgetMoney;
     return cellItem;
@@ -146,8 +154,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
-        _tableView.rowHeight = 100;
-        _tableView.sectionHeaderHeight = 10;
+        _tableView.rowHeight = 165;
     }
     return _tableView;
 }

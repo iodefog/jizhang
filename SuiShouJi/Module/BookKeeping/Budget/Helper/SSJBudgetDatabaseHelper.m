@@ -14,13 +14,13 @@
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
+NSString *const SSJBudgetMonthIDKey = @"SSJBudgetMonthIDKey";
+NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 
 @implementation SSJBudgetDatabaseHelper
 
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *currentDate = [formatter stringFromDate:[NSDate date]];
+    NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *budgetList = [NSMutableArray array];
@@ -71,7 +71,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select from ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate from bk_user_budget where ibid = ?", ID];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind from bk_user_budget where ibid = ?", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -79,12 +79,14 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
             return;
         }
         
-        SSJBudgetModel *budgetModel = [self budgetModelWithResultSet:resultSet inDatabase:db];
+        SSJBudgetModel *budgetModel = nil;
+        while ([resultSet next]) {
+            budgetModel = [self budgetModelWithResultSet:resultSet inDatabase:db];
+        }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-//        result = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
-        
-        resultSet = [db executeQuery:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in (?) group by a.ibillid", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, [self queryStringForBillIds:budgetModel.billIds]];
+        NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in %@ group by a.ibillid", [self queryStringForBillIds:budgetModel.billIds]];
+        resultSet = [db executeQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
         
         if (!resultSet) {
             if (failure) {
@@ -104,12 +106,12 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
             circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
             circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", circleItem.scale * 100];
             
-            double money = [resultSet doubleForColumn:@"a.imoney"];
+            double money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             double scale = money / budgetModel.payMoney;
             if (scale >= 0.01) {
                 amount += money;
                 [moneyArr addObject:@(money)];
-                [circleItemArr addObject:circleItemArr];
+                [circleItemArr addObject:circleItem];
             }
         }
         
@@ -130,9 +132,9 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     }];
 }
 
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSString *> *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSDictionary *> *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid from bk_user_budget where cuserid = ? and itype = 2"];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1", SSJUSERID()];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -142,17 +144,47 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
             return;
         }
         
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyy-MM-dd";
+        
         NSMutableArray *result = [NSMutableArray array];
         while ([resultSet next]) {
-            [result addObject:[resultSet stringForColumn:@"ibid"]];
+            NSString *budgetId = [resultSet stringForColumn:@"ibid"];
+            
+            NSString *beginDateStr = [resultSet stringForColumn:@"csdate"];
+            NSDate *beginDate = [formatter dateFromString:beginDateStr];
+            NSDateComponents *dateComponent = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:beginDate];
+            NSString *title = [self titleForMonth:[dateComponent month]];
+            
+            [result addObject:@{SSJBudgetMonthIDKey:(budgetId ?: @""),
+                                SSJBudgetMonthTitleKey:(title ?: @"")}];
         }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(result);
+                success([result copy]);
             });
         }
     }];
+}
+
++ (NSString *)titleForMonth:(NSInteger)month {
+    switch (month) {
+        case 1:     return @"1月预算";
+        case 2:     return @"2月预算";
+        case 3:     return @"3月预算";
+        case 4:     return @"4月预算";
+        case 5:     return @"5月预算";
+        case 6:     return @"6月预算";
+        case 7:     return @"7月预算";
+        case 8:     return @"8月预算";
+        case 9:     return @"9月预算";
+        case 10:    return @"10月预算";
+        case 11:    return @"11月预算";
+        case 12:    return @"12月预算";
+            
+        default:    return nil;
+    }
 }
 
 + (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success failure:(void (^)(NSError *error))failure {
@@ -212,15 +244,14 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
-        [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
-        [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"ccadddate"];
-        [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
-        [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
-        
         BOOL isExisted = [db boolForQuery:@"select count(*) from bk_user_budget where ibid = ?", model.ID];
         if (isExisted) {
-            if ([db executeUpdate:@"update bk_user_budget set itype = ?, imoney = ?, iremindmoney = ?, csdate = ?, cedate = ?, istate = ?, cbilltype = ?, cwritedate = ?, iversion = ?, operatortype = 1" withParameterDictionary:parametersInfo]) {
+            NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
+            [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
+            [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
+            [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+            
+            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -234,6 +265,12 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
                 }
             }
         } else {
+            NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
+            [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
+            [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"ccadddate"];
+            [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
+            [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+            
             if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :cwritedate, :iversion, 0)" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
@@ -359,7 +396,8 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
     budgetModel.endDate = [set stringForColumn:@"cedate"];
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
     budgetModel.isRemind = [set boolForColumn:@"iremind"];
-    budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in (?)", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, [self queryStringForBillIds:budgetModel.billIds]];
+    NSString *query = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in %@", [self queryStringForBillIds:budgetModel.billIds]];
+    budgetModel.payMoney = [db doubleForQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
     
     return budgetModel;
 }
@@ -370,7 +408,7 @@ NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
         NSString *tBillId = [NSString stringWithFormat:@"'%@'", billId];
         [tBillIdArr addObject:tBillId];
     }
-    return [tBillIdArr componentsJoinedByString:@","];
+    return [NSString stringWithFormat:@"(%@)", [tBillIdArr componentsJoinedByString:@","]];
 }
 
 + (NSString *)billTypeStringWithBillTypeArr:(NSArray *)billTypeArr {

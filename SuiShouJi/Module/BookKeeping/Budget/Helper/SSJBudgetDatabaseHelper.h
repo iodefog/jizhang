@@ -18,6 +18,12 @@ extern NSString *const SSJBudgetModelKey;
 //  预算图表模型key
 extern NSString *const SSJBudgetCircleItemsKey;
 
+//  月预算编号key
+extern NSString *const SSJBudgetMonthIDKey;
+
+//  月预算标题key
+extern NSString *const SSJBudgetMonthTitleKey;
+
 
 @interface SSJBudgetDatabaseHelper : NSObject
 
@@ -48,7 +54,7 @@ extern NSString *const SSJBudgetCircleItemsKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSString *> *result))success
++ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSDictionary *> *result))success
                                      failure:(void (^)(NSError * _Nullable error))failure;
 
 /**
@@ -83,6 +89,12 @@ extern NSString *const SSJBudgetCircleItemsKey;
                 success:(void(^)())success
                 failure:(void (^)(NSError *error))failure;
 
+/**
+ *  补充自动续用的预算记录
+ *
+ *  @param success   成功的回调
+ *  @param failure   失败的回调
+ */
 + (void)supplementBudgetRecordWithSuccess:(void(^)())success
                                   failure:(void (^)(NSError *error))failure;
 

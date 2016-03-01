@@ -28,8 +28,6 @@
 
 @property (nonatomic, strong) UILabel *payMoneyLab;
 
-@property (nonatomic, strong) UILabel *balanceLab;
-
 @property (nonatomic, strong) UILabel *bottomLab;
 
 @property (nonatomic, strong) NSDateFormatter *formatter;
@@ -53,25 +51,31 @@
 
 - (void)layoutSubviews {
     self.topView.frame = CGRectMake(0, 0, self.width, 95);
+    self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, 200);
+    
     CGFloat gap = 10;
     CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
     
-    self.budgetMoneyTitleLab.centerX = self.budgetMoneyLab.centerX = self.width * 0.5;
+    self.budgetMoneyLab.width = MIN(self.budgetMoneyLab.width, self.width * 0.5 - 20);
     self.budgetMoneyTitleLab.top = top1;
     self.budgetMoneyLab.top = self.budgetMoneyTitleLab.bottom + gap;
+    self.budgetMoneyTitleLab.centerX = self.budgetMoneyLab.centerX = self.width * 0.25;
     
-    self.intervalTitleLab.centerX = self.intervalLab.centerX = self.width * 1.5;
     self.intervalTitleLab.top = top1;
     self.intervalLab.top = self.intervalTitleLab.bottom + gap;
+    self.intervalTitleLab.centerX = self.intervalLab.centerX = self.width * 0.75;
     
-    self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, 170);
-    self.payMoneyLab.leftTop = CGPointMake(15, 95);
-    self.balanceLab.rightTop = CGPointMake(self.width - 15, 95);
-    self.bottomLab.leftTop = CGPointMake(15, 128);
-    self.waveView.frame = CGRectMake((self.width - 90) * 0.5, 16, 90, 90);
+    self.payMoneyLab.width = MIN(self.payMoneyLab.width, self.width - 20);
+    self.bottomLab.width = MIN(self.bottomLab.width, self.width - 20);
+    
+    self.waveView.top = 15;
+    self.payMoneyLab.top = self.waveView.bottom + 15;
+    self.bottomLab.top = self.payMoneyLab.bottom + 13;
+    self.waveView.centerX = self.payMoneyLab.centerX = self.bottomLab.centerX = self.width * 0.5;
 }
 
 - (void)setBudgetModel:(SSJBudgetModel *)model {
+    [self setNeedsLayout];
     switch (model.type) {
         case 0:
             self.budgetMoneyTitleLab.text = @"本周预算";
@@ -87,38 +91,41 @@
     }
     [self.budgetMoneyTitleLab sizeToFit];
     
-    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%f", model.budgetMoney];
+    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", model.budgetMoney];
     [self.budgetMoneyLab sizeToFit];
     
     NSString *dateString = [self.formatter stringFromDate:[NSDate date]];
     NSDate *currentDate = [self.formatter dateFromString:dateString];
     NSDate *endDate = [self.formatter dateFromString:model.endDate];
-    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60);
+    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60) + 1;
     self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
     [self.intervalLab sizeToFit];
     
-    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%f", model.payMoney];
-    [self.payMoneyLab sizeToFit];
-    
     if (model.payMoney <= model.budgetMoney) {
-        [self.waveView setScale:(model.payMoney / model.budgetMoney)];
-        [self.waveView setTopTitle:nil];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.0f％", (model.payMoney / model.budgetMoney * 100)]];
+        [self.waveView setScale:((model.budgetMoney - model.payMoney) / model.budgetMoney)];
+        [self.waveView setTopTitle:@"剩余"];
+        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
     } else {
-        [self.waveView setScale:0.7];
+        [self.waveView setScale:1];
         [self.waveView setTopTitle:@"超支"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%f", model.payMoney - model.budgetMoney]];
+        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
     }
     
-    double balance = model.budgetMoney - model.payMoney;
-    self.balanceLab.text = [NSString stringWithFormat:@"剩余：%f", balance];
-    [self.balanceLab sizeToFit];
+    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
+    [self.payMoneyLab sizeToFit];
     
+    double balance = model.budgetMoney - model.payMoney;
     if (balance >= 0) {
-        self.bottomLab.text = [NSString stringWithFormat:@"距结算日前，您每天还可花%f元哦", balance / interval];
+        NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"距结算日前，您每天还可花%@元哦", money]];
+        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]} range:NSMakeRange(12, money.length)];
+        self.bottomLab.attributedText = text;
         [self.bottomLab sizeToFit];
     } else {
-        self.bottomLab.text = [NSString stringWithFormat:@"亲爱的小主，您目前已超支%f元喽", ABS(balance)];
+        NSString *money = [NSString stringWithFormat:@"%.2f", ABS(balance)];
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您目前已超支%@元喽", money]];
+        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:NSMakeRange(12, money.length)];
+        self.bottomLab.attributedText = text;
         [self.bottomLab sizeToFit];
     }
 }
@@ -139,10 +146,9 @@
     if (!_bottomView) {
         _bottomView = [[UIView alloc] init];
         _bottomView.backgroundColor = [UIColor whiteColor];
+        [_bottomView addSubview:self.waveView];
         [_bottomView addSubview:self.payMoneyLab];
-        [_bottomView addSubview:self.balanceLab];
         [_bottomView addSubview:self.bottomLab];
-        [_bottomLab addSubview:self.waveView];
     }
     return _bottomView;
 }
@@ -152,7 +158,7 @@
         _budgetMoneyTitleLab = [[UILabel alloc] init];
         _budgetMoneyTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _budgetMoneyTitleLab.textColor = [UIColor whiteColor];
-        _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:16];
+        _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:12];
     }
     return _budgetMoneyTitleLab;
 }
@@ -162,14 +168,14 @@
         _budgetMoneyLab = [[UILabel alloc] init];
         _budgetMoneyLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _budgetMoneyLab.textColor = [UIColor whiteColor];
-        _budgetMoneyLab.font = [UIFont systemFontOfSize:24];
+        _budgetMoneyLab.font = [UIFont systemFontOfSize:18];
     }
     return _budgetMoneyLab;
 }
 
 - (SSJBudgetWaveScaleView *)waveView {
     if (!_waveView) {
-        _waveView = [[SSJBudgetWaveScaleView alloc] init];
+        _waveView = [[SSJBudgetWaveScaleView alloc] initWithFrame:CGRectMake(0, 0, 90, 90)];
     }
     return _waveView;
 }
@@ -179,7 +185,7 @@
         _intervalTitleLab = [[UILabel alloc] init];
         _intervalTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _intervalTitleLab.textColor = [UIColor whiteColor];
-        _intervalTitleLab.font = [UIFont systemFontOfSize:16];
+        _intervalTitleLab.font = [UIFont systemFontOfSize:12];
         _intervalTitleLab.text = @"据结算日";
         [_intervalTitleLab sizeToFit];
     }
@@ -191,7 +197,7 @@
         _intervalLab = [[UILabel alloc] init];
         _intervalLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _intervalLab.textColor = [UIColor whiteColor];
-        _intervalLab.font = [UIFont systemFontOfSize:24];
+        _intervalLab.font = [UIFont systemFontOfSize:18];
     }
     return _intervalLab;
 }
@@ -201,27 +207,17 @@
         _payMoneyLab = [[UILabel alloc] init];
         _payMoneyLab.backgroundColor = [UIColor whiteColor];
         _payMoneyLab.textColor = [UIColor blackColor];
-        _payMoneyLab.font = [UIFont systemFontOfSize:16];
+        _payMoneyLab.font = [UIFont systemFontOfSize:14];
     }
     return _payMoneyLab;
-}
-
-- (UILabel *)balanceLab {
-    if (!_balanceLab) {
-        _balanceLab = [[UILabel alloc] init];
-        _balanceLab.backgroundColor = [UIColor whiteColor];
-        _balanceLab.textColor = [UIColor blackColor];
-        _balanceLab.font = [UIFont systemFontOfSize:16];
-    }
-    return _balanceLab;
 }
 
 - (UILabel *)bottomLab {
     if (!_bottomLab) {
         _bottomLab = [[UILabel alloc] init];
         _bottomLab.backgroundColor = [UIColor whiteColor];
-        _bottomLab.textColor = [UIColor blackColor];
-        _bottomLab.font = [UIFont systemFontOfSize:16];
+        _bottomLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _bottomLab.font = [UIFont systemFontOfSize:12];
     }
     return _bottomLab;
 }

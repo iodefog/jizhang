@@ -14,8 +14,6 @@
 
 @property (nonatomic, strong, readonly) SSJPercentCircleView *circleView;
 
-@property (nonatomic, strong, readonly) UILabel *timeRangeLabel;
-
 @property (nonatomic, strong, readonly) SSJBorderButton *button;
 
 @end
