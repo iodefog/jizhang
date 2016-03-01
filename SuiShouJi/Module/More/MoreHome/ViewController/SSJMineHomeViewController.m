@@ -19,15 +19,19 @@
 #import "SSJUserInfoNetworkService.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJUserInfoItem.h"
+#import "SSJBookkeepingReminderViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
 
-static NSString *const kTitle1 = @"给个好评";
-static NSString *const kTitle2 = @"同步设置";
-static NSString *const kTitle3 = @"关于我们";
-static NSString *const kTitle4 = @"用户协议与隐私说明";
+static NSString *const kTitle1 = @"手势密码";
+static NSString *const kTitle2 = @"记账提醒";
+static NSString *const kTitle3 = @"周期记账";
+static NSString *const kTitle4 = @"把APP推荐给好友";
+static NSString *const kTitle5 = @"意见反馈";
+static NSString *const kTitle6 = @"给个好评";
+static NSString *const kTitle7 = @"设置";
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
@@ -55,7 +59,6 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
-    _titleForSectionTwoArray = [[NSArray alloc]initWithObjects:@"同步设置",@"关于我们",@"用户协议与隐私说明", nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -63,9 +66,9 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
     
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle2], @[kTitle3, kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle2, kTitle3],@[kTitle4],@[kTitle5],@[kTitle7]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3, kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle2, kTitle3], @[kTitle4],@[kTitle5, kTitle6],@[kTitle7]];
     }
     
     __weak typeof(self) weakSelf = self;
@@ -139,7 +142,7 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == 2) {
+    if (SSJIsUserLogined() && section == 5) {
         return self.loggedFooterView;
     }
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -158,7 +161,7 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     //  给个好评
-    if ([title isEqualToString:kTitle1]) {
+    if ([title isEqualToString:kTitle6]) {
         NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
@@ -166,10 +169,10 @@ static NSString *const kTitle4 = @"用户协议与隐私说明";
         return;
     }
     
-    //  同步设置
+    //  记账提醒
     if ([title isEqualToString:kTitle2]) {
-        SSJSyncSettingViewController *syncSettingVc = [[SSJSyncSettingViewController alloc]init];
-        [self.navigationController pushViewController:syncSettingVc animated:YES];
+        SSJBookkeepingReminderViewController *BookkeepingReminderVC = [[SSJBookkeepingReminderViewController alloc]init];
+        [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
     

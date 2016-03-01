@@ -422,6 +422,7 @@
 		BDF503831C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503821C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m */; };
 		BDF503861C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503851C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m */; };
 		BDF503891C80018C00DCFA99 /* SSJCustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */; };
+		BDF5038C1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
@@ -1054,6 +1055,8 @@
 		BDF503851C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemoMakingViewController.m; sourceTree = "<group>"; };
 		BDF503871C80018C00DCFA99 /* SSJCustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomTextView.h; sourceTree = "<group>"; };
 		BDF503881C80018C00DCFA99 /* SSJCustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomTextView.m; sourceTree = "<group>"; };
+		BDF5038A1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingReminderViewController.h; sourceTree = "<group>"; };
+		BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingReminderViewController.m; sourceTree = "<group>"; };
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
@@ -2148,6 +2151,8 @@
 				BD4934381C34FC1800300D43 /* SSJMineHomeViewController.m */,
 				BD4934401C350D3600300D43 /* SSJSyncSettingViewController.h */,
 				BD4934411C350D3600300D43 /* SSJSyncSettingViewController.m */,
+				BDF5038A1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.h */,
+				BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2297,10 +2302,10 @@
 			children = (
 				BD04336F1C1A8DA50051E7AB /* Module */,
 				7D6AAB5D1C312C340007C0A3 /* Components */,
-				BD0432F81C1A78B40051E7AB /* Additons */,
 				BD04333B1C1A82730051E7AB /* Util */,
 				BD0433301C1A82110051E7AB /* Constant */,
 				BD0E43EB1C2118E600F9179D /* Resource */,
+				BD0432F81C1A78B40051E7AB /* Additons */,
 				BD0432CD1C1A77BB0051E7AB /* Vendor */,
 				BD0432CB1C1A772A0051E7AB /* Macro */,
 				BD543C3F1C1A6DBC00910D61 /* Supporting Files */,
@@ -3201,6 +3206,7 @@
 				BD70DF621C4751EA000E6CC9 /* SSJLoginViewController.m in Sources */,
 				7DEF54741C7C243700A90153 /* SSJBudgetModel.m in Sources */,
 				7D2B24001C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m in Sources */,
+				BDF5038C1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m in Sources */,
 				BD70DF601C4751EA000E6CC9 /* SSJGuideView.m in Sources */,
 				BD04331D1C1A78B40051E7AB /* SSJDataAddition.m in Sources */,
 				7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */,
