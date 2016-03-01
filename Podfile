@@ -10,3 +10,5 @@ pod 'UMengAnalytics-NO-IDFA'
 pod 'FMDB'
 
 pod 'SSZipArchive'
+
+pod 'iOS-WebP', '0.4'
