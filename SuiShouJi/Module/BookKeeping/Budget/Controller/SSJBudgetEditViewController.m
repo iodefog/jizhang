@@ -51,6 +51,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 @implementation SSJBudgetEditViewController
 
 #pragma mark - Lifecycle
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"编辑预算";
@@ -129,11 +130,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString *title = [self.cellTitles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kBudgetMoneyTitle]) {
-        
-    } else if ([title isEqualToString:kBudgetRemindScaleTitle]) {
-        
-    } else if ([title isEqualToString:kBudgetPeriodTitle]) {
+    if ([title isEqualToString:kBudgetPeriodTitle]) {
         [self.periodSelectionView show];
     }
 }
@@ -141,14 +138,48 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (textField.tag == kBudgetMoneyTextFieldTag) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        text = [text stringByReplacingOccurrencesOfString:@"￥" withString:@""];
+        text = [text ssj_reserveDecimalDigits:2];
+        textField.text = [NSString stringWithFormat:@"￥%@", text];
         
-    }
-    
-    if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        self.model.budgetMoney = [text doubleValue];
+        self.model.remindMoney = MIN(self.model.remindMoney, self.model.budgetMoney);
         
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:3]];
+        if (cell) {
+            [self updateRemindMoneyScaleWithCell:cell];
+            [self updateRemindMoneyWithCell:cell];
+        }
+        return NO;
+        
+    } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:1];
+        
+        self.model.remindMoney = MIN([textField.text doubleValue], 100) / 100 * self.model.budgetMoney;
+        
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:3]];
+        if (cell) {
+            [self updateRemindMoneyWithCell:cell];
+        }
+        
+        return NO;
     }
     
     return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (textField.tag == kBudgetMoneyTextFieldTag) {
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+        cell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
+    } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:3]];
+        if (cell) {
+            [self updateRemindMoneyScaleWithCell:cell];
+        }
+    }
 }
 
 #pragma mark - Event
@@ -158,6 +189,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)remindSwitchCtrlAction:(UISwitch *)switchCtrl {
     self.model.isRemind = switchCtrl.isOn;
+    [self updateCellTitles];
+    [self.tableView beginUpdates];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 - (void)periodSelectionViewAction {
@@ -264,12 +299,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     }
 }
 
-- (void)updateCellTitles {
-    if (self.model.isRemind) {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
-    } else {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
-    }
+- (void)updateRemindMoneyWithCell:(SSJBudgetEditTextFieldCell *)cell {
+    NSString *remindMoney = [NSString stringWithFormat:@"%.2f", self.model.remindMoney];
+    NSMutableAttributedString *detailText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"当预算金额剩余%@元时，即会提醒您哦！", remindMoney]];
+    [detailText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]} range:NSMakeRange(7, remindMoney.length)];
+    cell.detailTextLabel.attributedText = detailText;
+    [cell.detailTextLabel sizeToFit];
+    [cell setNeedsLayout];
 }
 
 - (void)updateCell:(__kindof UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
@@ -285,39 +321,55 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
         budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        budgetTypeCell.accessoryType = UITableViewCellAccessoryNone;
 
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
         SSJBudgetEditSwitchCtrlCell *autoContinueCell = cell;
+        [autoContinueCell.switchCtrl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         [autoContinueCell.switchCtrl addTarget:self action:@selector(autoContinueSwitchCtrlAction:) forControlEvents:UIControlEventValueChanged];
-        [autoContinueCell.switchCtrl setOn:self.model.isAutoContinued animated:YES];
+        [autoContinueCell.switchCtrl setOn:self.model.isAutoContinued];
         autoContinueCell.detailTextLabel.text = @"系统会自动为您自动续用您设置的预算内容";
         [autoContinueCell.detailTextLabel sizeToFit];
         
     } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]) {
         //  预算金额
         SSJBudgetEditTextFieldCell *budgetMoneyCell = cell;
-        budgetMoneyCell.textField.text = [NSString stringWithFormat:@"%f", self.model.budgetMoney];
+        budgetMoneyCell.textField.tag = kBudgetMoneyTextFieldTag;
+        budgetMoneyCell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
         budgetMoneyCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
         budgetMoneyCell.textField.delegate = self;
+        budgetMoneyCell.textField.rightView = nil;
+        budgetMoneyCell.detailTextLabel.text = nil;
+        budgetMoneyCell.detailTextLabel.attributedText = nil;
+        [budgetMoneyCell.detailTextLabel sizeToFit];
         
     } else if ([cellTitle isEqualToString:kBudgetRemindTitle]) {
         //  预算提醒
         SSJBudgetEditSwitchCtrlCell *budgetRemindCell = cell;
+        [budgetRemindCell.switchCtrl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         [budgetRemindCell.switchCtrl addTarget:self action:@selector(remindSwitchCtrlAction:) forControlEvents:UIControlEventValueChanged];
-        [budgetRemindCell.switchCtrl setOn:self.model.isRemind animated:YES];
+        [budgetRemindCell.switchCtrl setOn:self.model.isRemind];
         budgetRemindCell.detailTextLabel.text = nil;
         [budgetRemindCell.detailTextLabel sizeToFit];
         
     } else if ([cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
-        //  预算占比提醒
-        SSJBudgetEditTextFieldCell *budgetRemindScaleCell = cell;
-        budgetRemindScaleCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
-        budgetRemindScaleCell.textField.delegate = self;
-        budgetRemindScaleCell.textField.text = [NSString stringWithFormat:@"%.0f％", (self.model.remindMoney / self.model.budgetMoney)];
-        budgetRemindScaleCell.detailTextLabel.text = [NSString stringWithFormat:@"当预算金额剩余%f时，即会提醒您哦！", self.model.remindMoney];
-        [budgetRemindScaleCell.detailTextLabel sizeToFit];
+        //  刷新预算占比提醒
+        SSJBudgetEditTextFieldCell *budgetScaleCell = cell;
+        budgetScaleCell.textField.tag = kBudgetRemindScaleTextFieldTag;
+        budgetScaleCell.textField.inputView = [SSJCustomKeyboard sharedInstance];
+        budgetScaleCell.textField.delegate = self;
         
+        [self updateRemindMoneyScaleWithCell:budgetScaleCell];
+        [self updateRemindMoneyWithCell:budgetScaleCell];
+        
+        UILabel *percentLab = [[UILabel alloc] init];
+        percentLab.font = [UIFont systemFontOfSize:18];
+        percentLab.text = @"％";
+        [percentLab sizeToFit];
+        
+        budgetScaleCell.textField.rightView = percentLab;
+        budgetScaleCell.textField.rightViewMode = UITextFieldViewModeAlways;
     } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
         //  周期
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
@@ -326,6 +378,22 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = UITableViewCellSelectionStyleGray;
+    }
+}
+
+- (void)updateCellTitles {
+    if (self.model.isRemind) {
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
+    } else {
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
+    }
+}
+
+- (void)updateRemindMoneyScaleWithCell:(SSJBudgetEditTextFieldCell *)cell {
+    if (self.model.budgetMoney <= 0) {
+        cell.textField.text = @"0.0";
+    } else {
+        cell.textField.text = [NSString stringWithFormat:@"%.1f", (self.model.remindMoney / self.model.budgetMoney) * 100];
     }
 }
 

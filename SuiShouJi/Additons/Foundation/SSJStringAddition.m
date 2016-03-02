@@ -88,4 +88,37 @@
     }
     return length;
 }
+
+@end
+
+
+@implementation NSString (SSJDecimal)
+
+- (NSString *)ssj_reserveDecimalDigits:(int)digits {
+    NSArray *arr = [self componentsSeparatedByString:@"."];
+    
+    if ([self isEqualToString:@"0."] || [self isEqualToString:@"."]) {
+        return @"0.";
+    }else if (self.length == 2) {
+        if ([self floatValue] == 0) {
+            return @"0";
+        }else if(arr.count < 2){
+            return [NSString stringWithFormat:@"%d",[self intValue]];
+        }
+    }
+    
+    if (arr.count > 2) {
+        return [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+    }
+    
+    if (arr.count == 2) {
+        NSString * lastStr = arr.lastObject;
+        if (lastStr.length > digits) {
+            return [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:digits]];
+        }
+    }
+    
+    return self;
+}
+
 @end
