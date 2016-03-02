@@ -81,7 +81,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
-    moreNavi.tabBarItem.title = @"我的";
+    moreNavi.tabBarItem.title = @"更多";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_mine_nor"];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
