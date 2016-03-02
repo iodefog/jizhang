@@ -10,6 +10,9 @@
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
+#import "SSJUserChargePeriodConfigSyncTable.h"
+#import "SSJUserBudgetSyncTable.h"
+
 #import "SSJSyncTable.h"
 #import "SSJFundAccountTable.h"
 #import "SSJDailySumChargeTable.h"
@@ -411,7 +414,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                                             SSJUserIconKey:icon ?: @""} error:nil];
     }
     
-    //  合并顺序：1.收支类型 2.资金帐户 3.记账流水
+    //  合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
+    
+    //  收支类型
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] inDatabase:db error:error]) {
             *rollback = YES;
@@ -427,8 +432,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         return NO;
     }
     
+    //  资金帐户
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db  error:error]) {
+        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
         }
@@ -442,6 +448,23 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         return NO;
     }
     
+    //  定期记账
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
+            *rollback = YES;
+            success = NO;
+        }
+        
+        if ([versinStr length] && ![SSJUserChargePeriodConfigSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+            success = NO;
+        }
+    }];
+    
+    if (!success) {
+        return NO;
+    }
+    
+    //  记账流水
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"bk_user_charge"] inDatabase:db error:error]) {
             *rollback = YES;

@@ -35,7 +35,7 @@
     return nil;
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
     return YES;
 }
 
@@ -111,7 +111,7 @@
             return NO;
         }
         
-        if (![self shouldMergeRecord:recordInfo inDatabase:db]) {
+        if (![self shouldMergeRecord:recordInfo inDatabase:db error:error]) {
             continue;
         }
         
