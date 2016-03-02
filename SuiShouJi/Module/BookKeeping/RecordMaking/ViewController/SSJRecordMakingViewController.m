@@ -425,8 +425,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
+                weakSelf.ChargeCircleSelectView.selectCircleType = -1;
             }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType == 4){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                weakSelf.ChargeCircleSelectView.selectCircleType = -1;
                 [alert show];
             }else{
                 weakSelf.selectChargeCircleType = chargeCircleType;
@@ -552,7 +554,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }
             [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE , CMEMO , ICONFIGID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userID,[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate,self.chargeMemo,iconfigId];
             if (weakSelf.selectChargeCircleType != -1) {
-                [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo];
+                [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO , ISTATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo,[NSNumber numberWithInt:1]];
             }
             if (weakSelf.selectedImage != nil) {
                 if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
@@ -595,7 +597,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,SSJUSERID()]) {
                 if (weakSelf.selectChargeCircleType != weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1) {
                     if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,SSJUSERID()]) {
-                        if ([db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo]) {
+                        if ([db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO , ISTATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo,[NSNumber numberWithInt:1]]) {
                             [db executeUpdate:@"update set BK_USER_CHARGE set ICONFIGID = ? where ICHARGEID = ? and CUSERID = ?",iconfigId,self.item.ID];
                         }
                     }
@@ -637,7 +639,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         }else{
             //修改循环记账配置
             if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1){
-                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLTYPE = ? , ITYPE = ? , IBILLID = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? . IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
+                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLID = ? , ITYPE = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? , IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,SSJUSERID()];
                 if (weakSelf.selectedImage != nil) {
                     if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                         [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];
@@ -647,7 +649,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
             }else{
                 if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,SSJUSERID()]) {
-                    [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLTYPE , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO ) VALUES(?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo];
+                    [db executeUpdate:@"insert into BK_CHARGE_PERIOD_CONFIG (ICONFIGID , CUSERID , IBILLID , ITYPE , CBILLDATE , OPERATORTYPE , IVERSION , CWRITEDATE , IMONEY , IFUNSID , CMEMO , ISTATE) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",iconfigId,SSJUSERID(),weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],selectDate,[NSNumber numberWithInt:0],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType,weakSelf.chargeMemo,[NSNumber numberWithInt:1]];
                     if (weakSelf.selectedImage != nil) {
                         if (SSJSaveImage(weakSelf.selectedImage, imageName)) {
                             [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ? AND CUSERID = ?",imageName,weakSelf.item.configId,SSJUSERID()];

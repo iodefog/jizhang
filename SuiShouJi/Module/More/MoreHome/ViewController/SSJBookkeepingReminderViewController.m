@@ -48,6 +48,7 @@ static NSString *const kTitle3 = @"定期提醒";
     SSJMineHomeTabelviewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        mineHomeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     UISwitch *switchButton = [[UISwitch alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
     switchButton.onTintColor = [UIColor ssj_colorWithHex:@"47cfbe"];

@@ -7,6 +7,8 @@
 //
 
 #import "SSJCircleChargeCell.h"
+#import "SSJDatabaseQueue.h"
+
 @interface SSJCircleChargeCell()
 @property (nonatomic,strong) UIImageView *categoryImage;
 @property (nonatomic,strong) UILabel *categoryLabel;
@@ -175,7 +177,18 @@
 
 
 -(void)switchButtonClicked:(id)sender{
-    
+    [self closeChargeConfig];
+}
+
+-(void)closeChargeConfig{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        if (weakSelf.switchButton.isOn) {
+            [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 1 , CWRITEDATE = ? , CBILLDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],weakSelf.item.configId];
+        }else{
+            [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 0 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.configId];
+        }
+    }];
 }
 
 /*

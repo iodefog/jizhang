@@ -447,6 +447,8 @@
 		BDF504941C868A8200DCFA99 /* xunhuan_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF504821C868A8200DCFA99 /* xunhuan_nor@2x.png */; };
 		BDF504951C868A8200DCFA99 /* xunhuan_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF504831C868A8200DCFA99 /* xunhuan_nor@3x.png */; };
 		BDF504961C868A8200DCFA99 /* xunhuan_sel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF504841C868A8200DCFA99 /* xunhuan_sel@3x.png */; };
+		BDF504981C86EBE700DCFA99 /* more_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF504971C86EBE700DCFA99 /* more_background@2x.png */; };
+		BDF5049A1C86EC8200DCFA99 /* more_background@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF504991C86EC8200DCFA99 /* more_background@3x.png */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
@@ -1110,6 +1112,8 @@
 		BDF504821C868A8200DCFA99 /* xunhuan_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xunhuan_nor@2x.png"; sourceTree = "<group>"; };
 		BDF504831C868A8200DCFA99 /* xunhuan_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xunhuan_nor@3x.png"; sourceTree = "<group>"; };
 		BDF504841C868A8200DCFA99 /* xunhuan_sel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xunhuan_sel@3x.png"; sourceTree = "<group>"; };
+		BDF504971C86EBE700DCFA99 /* more_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_background@2x.png"; sourceTree = "<group>"; };
+		BDF504991C86EC8200DCFA99 /* more_background@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_background@3x.png"; sourceTree = "<group>"; };
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
@@ -1456,6 +1460,8 @@
 				BDA3FE0F1C59C34300FB57B1 /* home_tankuang@3x.png */,
 				BDA3FE0B1C5904C900FB57B1 /* home_tankuang_close@2x.png */,
 				BDA3FE0D1C5904D200FB57B1 /* home_tankuang_close@3x.png */,
+				BDF504971C86EBE700DCFA99 /* more_background@2x.png */,
+				BDF504991C86EC8200DCFA99 /* more_background@3x.png */,
 				BD976FBA1C4F4CA200B0E26D /* circle@2x.png */,
 				BD976FBF1C4F57F200B0E26D /* circle@3x.png */,
 				BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */,
@@ -2977,6 +2983,7 @@
 				BDF504891C868A8200DCFA99 /* beizhu_sel@3x.png in Resources */,
 				BDA3FE061C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib in Resources */,
 				7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */,
+				BDF5049A1C86EC8200DCFA99 /* more_background@3x.png in Resources */,
 				7DD7D6DF1C4C8E6A00ACE71A /* bt_traffic@3x.png in Resources */,
 				BD37D2E01C55BD610050BDAA /* login_username@2x.png in Resources */,
 				7DD7D7171C4C8E6A00ACE71A /* navigation_backOff@2x.png in Resources */,
@@ -3135,6 +3142,7 @@
 				7DD7D6B71C4C8E6A00ACE71A /* bt_jiaoshui@3x.png in Resources */,
 				7DD7D6E21C4C8E6A00ACE71A /* bt_wage@2x.png in Resources */,
 				BDF504861C868A8200DCFA99 /* beizhu_nor@3x.png in Resources */,
+				BDF504981C86EBE700DCFA99 /* more_background@2x.png in Resources */,
 				BD37D2E61C55D42C0050BDAA /* defualt_portrait@3x.png in Resources */,
 				BD37D2D61C52327D0050BDAA /* bt_delete@3x.png in Resources */,
 				7DD7D6CF1C4C8E6A00ACE71A /* bt_service@3x.png in Resources */,
