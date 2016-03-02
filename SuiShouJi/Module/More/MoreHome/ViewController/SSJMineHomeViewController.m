@@ -20,6 +20,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJUserInfoItem.h"
 #import "SSJBookkeepingReminderViewController.h"
+#import "SSJCircleChargeSettingViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -142,7 +143,7 @@ static NSString *const kTitle7 = @"设置";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == 5) {
+    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
         return self.loggedFooterView;
     }
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -150,7 +151,7 @@ static NSString *const kTitle7 = @"设置";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == 2) {
+    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
         return 80;
     }
     return 0.1f;
@@ -178,7 +179,8 @@ static NSString *const kTitle7 = @"设置";
     
     //  周期记账
     if ([title isEqualToString:kTitle3]) {
-
+        SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]init];
+        [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
 //
