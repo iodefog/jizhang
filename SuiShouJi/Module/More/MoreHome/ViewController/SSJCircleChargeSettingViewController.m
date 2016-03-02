@@ -79,7 +79,7 @@
         circleChargeCell = [[SSJCircleChargeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         circleChargeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    circleChargeCell.item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    circleChargeCell.item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     return circleChargeCell;
 }
 

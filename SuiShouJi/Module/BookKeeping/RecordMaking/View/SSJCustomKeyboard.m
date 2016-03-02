@@ -295,6 +295,10 @@ static id _instance;
     }else if (sender.tag < 10 || sender.tag == 14){
         inputString = sender.titleLabel.text;
     }
+    if ([sender.titleLabel.text isEqualToString:@"OK"]) {
+        [self.textField resignFirstResponder];
+        return;
+    }
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
         NSRange selectedRange = [self selectedRange];
         NSRange changeRange = selectedRange;
@@ -329,20 +333,16 @@ static id _instance;
         if (sender.tag == 11) {
             self.textField.text = @"";
         }else if (sender.tag == 15){
-            if ([sender.titleLabel.text isEqualToString:@"OK"]) {
-                [self.textField resignFirstResponder];
+            if (self.PlusOrMinusModel == YES) {
+                _caculationValue = _caculationValue + [self.textField.text floatValue];
+                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+                _caculationValue = 0.0f;
             }else{
-                if (self.PlusOrMinusModel == YES) {
-                    _caculationValue = _caculationValue + [self.textField.text floatValue];
-                    self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-                    _caculationValue = 0.0f;
-                }else{
-                    _caculationValue = _caculationValue  - [self.textField.text floatValue];
-                    self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-                    _caculationValue = 0.0f;
-                }
-                [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
+                _caculationValue = _caculationValue  - [self.textField.text floatValue];
+                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+                _caculationValue = 0.0f;
             }
+            [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
         }else if (sender.tag == 12){
             self.PlusOrMinusModel = YES;
             _caculationValue =_caculationValue + [self.textField.text floatValue];
