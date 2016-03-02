@@ -11,12 +11,13 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJBillingChargeCellItem.h"
 #import "SSJCircleChargeCell.h"
+#import "SSJRecordMakingViewController.h"
 
 #import "FMDB.h"
 
 
 @interface SSJCircleChargeSettingViewController ()
-@property (nonatomic,strong) NSArray *items;
+@property (nonatomic,strong) NSMutableArray *items;
 @end
 
 @implementation SSJCircleChargeSettingViewController
@@ -31,11 +32,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = item;
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
     [self getDateFromDatebase];
 }
 
@@ -49,6 +53,24 @@
     return 10;
 }
 
+
+
+#pragma mark - UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.items.count;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    [self.items removeObjectAtIndex:indexPath.section];
+    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
+    [self deleteConfigWithConfigId:item.configId];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJCircleChargeCell";
     SSJCircleChargeCell *circleChargeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
@@ -60,14 +82,11 @@
     return circleChargeCell;
 }
 
-
-#pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.items.count;
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    SSJRecordMakingViewController *RecordMakingVC = [[SSJRecordMakingViewController alloc]init];
+    RecordMakingVC.item = item;
+    [self.navigationController pushViewController:RecordMakingVC animated:YES];
 }
 
 #pragma mark - Private
@@ -104,6 +123,21 @@
     
 }
 
+-(void)editeButtonClicked:(id)sender{
+    if ([self.navigationItem.rightBarButtonItem.title isEqualToString:@"编辑"]) {
+        self.navigationItem.rightBarButtonItem.title = @"完成";
+    }else{
+        self.navigationItem.rightBarButtonItem.title = @"编辑";
+    }
+    [self.tableView setEditing:!self.tableView.editing animated:YES];
+}
+
+-(void)deleteConfigWithConfigId:(NSString *)configId{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@""],configId];
+    }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
