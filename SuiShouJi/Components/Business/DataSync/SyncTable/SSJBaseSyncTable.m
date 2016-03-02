@@ -225,8 +225,12 @@
     for (NSString *key in keys) {
         id value = recordInfo[key];
         if (!value) {
-            SSJPRINT(@">>>SSJ warning: splice record lack of key '%@'\n record:%@", key, recordInfo);
-            continue;
+            if ([[self optionalColumns] indexOfObject:key] == NSNotFound) {
+                SSJPRINT(@">>>SSJ warning: splice record lack of key '%@'\n record:%@", key, recordInfo);
+                return nil;
+            } else {
+                continue;
+            }
         }
         
         [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
