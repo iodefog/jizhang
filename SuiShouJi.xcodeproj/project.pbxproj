@@ -343,6 +343,10 @@
 		BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF541C4751EA000E6CC9 /* SSJRegistGetVerViewController.m */; };
 		BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */; };
 		BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */; };
+		BD71E66E1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD71E66D1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m */; };
+		BD71E6711C881C8900796FF0 /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD71E6701C881C8900796FF0 /* SSJNoneCircleChargeView.m */; };
+		BD71E6731C881CAF00796FF0 /* zhouqi_none@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD71E6721C881CAF00796FF0 /* zhouqi_none@2x.png */; };
+		BD71E6751C881CBE00796FF0 /* zhouqi_none@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD71E6741C881CBE00796FF0 /* zhouqi_none@3x.png */; };
 		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
 		BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8241C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m */; };
 		BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8281C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m */; };
@@ -967,6 +971,12 @@
 		BD70DF571C4751EA000E6CC9 /* SSJRegistNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRegistNetworkService.m; sourceTree = "<group>"; };
 		BD70DF691C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SSJPageFlow.h"; sourceTree = "<group>"; };
 		BD70DF6A1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SSJPageFlow.m"; sourceTree = "<group>"; };
+		BD71E66C1C87DE7E00796FF0 /* SSJChargeReminderTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeReminderTimeView.h; sourceTree = "<group>"; };
+		BD71E66D1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeReminderTimeView.m; sourceTree = "<group>"; };
+		BD71E66F1C881C8900796FF0 /* SSJNoneCircleChargeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNoneCircleChargeView.h; sourceTree = "<group>"; };
+		BD71E6701C881C8900796FF0 /* SSJNoneCircleChargeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNoneCircleChargeView.m; sourceTree = "<group>"; };
+		BD71E6721C881CAF00796FF0 /* zhouqi_none@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhouqi_none@2x.png"; sourceTree = "<group>"; };
+		BD71E6741C881CBE00796FF0 /* zhouqi_none@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhouqi_none@3x.png"; sourceTree = "<group>"; };
 		BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryListView.h; sourceTree = "<group>"; };
 		BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryListView.m; sourceTree = "<group>"; };
 		BD7BC8231C3A1A0F001DE5D8 /* SSJFinancingHomeitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeitem.h; sourceTree = "<group>"; };
@@ -1465,6 +1475,8 @@
 				BD37D2DD1C55BD4C0050BDAA /* login_username@3x.png */,
 				BD37D2DF1C55BD610050BDAA /* login_username@2x.png */,
 				BD37D2E11C55BD680050BDAA /* login_password@2x.png */,
+				BD71E6721C881CAF00796FF0 /* zhouqi_none@2x.png */,
+				BD71E6741C881CBE00796FF0 /* zhouqi_none@3x.png */,
 				7DD7D6731C4C8E6A00ACE71A /* ReportForms */,
 				7DD7D6791C4C8E6A00ACE71A /* tabbarimage */,
 			);
@@ -2196,6 +2208,10 @@
 				BD37D2D11C5216130050BDAA /* SSJSyncSettingTableViewCell.m */,
 				BDF503901C85A00100DCFA99 /* SSJCircleChargeCell.h */,
 				BDF503911C85A00100DCFA99 /* SSJCircleChargeCell.m */,
+				BD71E66C1C87DE7E00796FF0 /* SSJChargeReminderTimeView.h */,
+				BD71E66D1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m */,
+				BD71E66F1C881C8900796FF0 /* SSJNoneCircleChargeView.h */,
+				BD71E6701C881C8900796FF0 /* SSJNoneCircleChargeView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3030,6 +3046,7 @@
 				BDF504871C868A8200DCFA99 /* beizhu_pen@2x.png in Resources */,
 				7DD7D6E31C4C8E6A00ACE71A /* bt_wage@3x.png in Resources */,
 				7DD7D6DE1C4C8E6A00ACE71A /* bt_traffic@2x.png in Resources */,
+				BD71E6731C881CAF00796FF0 /* zhouqi_none@2x.png in Resources */,
 				7DD7D6D21C4C8E6A00ACE71A /* bt_shopping@2x.png in Resources */,
 				7DD7D72D1C4C8FCF00ACE71A /* reportForms_period@2x.png in Resources */,
 				BDA3FDF11C58CAC400FB57B1 /* ft_chuxuka@2x.png in Resources */,
@@ -3118,6 +3135,7 @@
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
 				7DD7D6DC1C4C8E6A00ACE71A /* bt_tourism@2x.png in Resources */,
 				7DF8DEE21C59C47200CC5DFA /* guide_2@2x.png in Resources */,
+				BD71E6751C881CBE00796FF0 /* zhouqi_none@3x.png in Resources */,
 				BDA3FDEF1C58CAC400FB57B1 /* ft_chongzhika@2x.png in Resources */,
 				7DD7D6931C4C8E6A00ACE71A /* bt_clothes@3x.png in Resources */,
 				7DD7D6C21C4C8E6A00ACE71A /* bt_pet@2x.png in Resources */,
@@ -3265,6 +3283,7 @@
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
+				BD71E6711C881C8900796FF0 /* SSJNoneCircleChargeView.m in Sources */,
 				BDDC5B931C291ADF00FC2887 /* SSJDateSelectedView.m in Sources */,
 				BDF503861C7FF6AD00DCFA99 /* SSJMemoMakingViewController.m in Sources */,
 				BD976FAD1C4E582400B0E26D /* SSJCalenderDetailViewController.m in Sources */,
@@ -3351,6 +3370,7 @@
 				7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */,
 				BDF3823A1C3DFF8C00955038 /* SSJHomeBarButton.m in Sources */,
 				BD37D2EB1C56443F0050BDAA /* SSJUserInfoNetworkService.m in Sources */,
+				BD71E66E1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m in Sources */,
 				7DEF55461C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,

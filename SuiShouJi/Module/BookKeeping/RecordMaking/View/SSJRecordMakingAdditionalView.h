@@ -18,4 +18,8 @@ typedef void (^btnClickedBlock)(NSInteger buttonTag);
 @property(nonatomic, copy)btnClickedBlock btnClickedBlock;
 
 @property (nonatomic,strong) UIImage *selectedImage;
+
+@property (nonatomic) BOOL hasMemo;
+
+@property (nonatomic) BOOL hasCircle;
 @end

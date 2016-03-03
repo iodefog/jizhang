@@ -12,17 +12,40 @@ static NSString *const kTitle3 = @"定期提醒";
 
 #import "SSJBookkeepingReminderViewController.h"
 #import "SSJMineHomeTabelviewCell.h"
+#import "SSJChargeReminderTimeView.h"
 
 @interface SSJBookkeepingReminderViewController ()
 @property (nonatomic, strong) NSArray *titles;
-
+@property (nonatomic,strong) SSJChargeReminderTimeView *chargeReminder;
+@property (nonatomic,strong) NSString *selectTime;
 @end
 
 @implementation SSJBookkeepingReminderViewController
 
+#pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesBottomBarWhenPushed = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3]];
+}
+
+#pragma mark - Getter
+-(SSJChargeReminderTimeView *)chargeReminder{
+    if (!_chargeReminder) {
+        _chargeReminder = [[SSJChargeReminderTimeView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        __weak typeof(self) weakSelf = self;
+        _chargeReminder.timerSetBlock = ^(NSString *time , NSDate *date){
+            weakSelf.selectTime = time;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _chargeReminder;
 }
 
 #pragma mark - UITableViewDelegate
@@ -57,10 +80,18 @@ static NSString *const kTitle3 = @"定期提醒";
         mineHomeCell.accessoryView = switchButton;
     }else if (indexPath.section == 2){
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }else{
+        mineHomeCell.cellDetail = _selectTime;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     
     return mineHomeCell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 1) {
+        [[UIApplication sharedApplication].keyWindow addSubview:self.chargeReminder];
+    }
 }
 
 #pragma mark - Private

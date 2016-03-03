@@ -80,6 +80,8 @@
     [self getCurrentDate];
     [self getDateFromDatebase];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
+#warning test
+    NSLog(@"%ld",[NSDate date].weekday);
 }
 
 - (void)viewDidLoad {
