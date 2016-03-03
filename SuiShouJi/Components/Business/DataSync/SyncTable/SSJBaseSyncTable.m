@@ -35,7 +35,7 @@
     return nil;
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
     return YES;
 }
 
@@ -111,7 +111,7 @@
             return NO;
         }
         
-        if (![self shouldMergeRecord:recordInfo inDatabase:db]) {
+        if (![self shouldMergeRecord:recordInfo inDatabase:db error:error]) {
             continue;
         }
         
@@ -225,8 +225,12 @@
     for (NSString *key in keys) {
         id value = recordInfo[key];
         if (!value) {
-            SSJPRINT(@">>>SSJ warning: splice record lack of key '%@'\n record:%@", key, recordInfo);
-            continue;
+            if ([[self optionalColumns] indexOfObject:key] == NSNotFound) {
+                SSJPRINT(@">>>SSJ warning: splice record lack of key '%@'\n record:%@", key, recordInfo);
+                return nil;
+            } else {
+                continue;
+            }
         }
         
         [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];

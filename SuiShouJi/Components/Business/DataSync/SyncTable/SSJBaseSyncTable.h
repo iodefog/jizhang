@@ -68,7 +68,7 @@
  *  @param record 要合并的记录数据
  *  @return (NSString *) 合并记录的其它条件
  */
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db;
++ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 ///----------------------------------
 /// @name 只能调用，子类不可覆写！！！

@@ -120,6 +120,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         //  创建默认的收支类型
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
+//        [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+//            if (![db columnExists:@"cimgurl" inTableWithName:@"bk_user_charge"]) {
+//                [db executeUpdate:@"alter table bk_user_charge add cimgurl text(100)"];
+//            }
+//        }];
+        
         finishHandler();
     });
 }

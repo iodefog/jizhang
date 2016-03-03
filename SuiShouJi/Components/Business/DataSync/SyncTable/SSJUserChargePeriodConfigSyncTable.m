@@ -1,38 +1,38 @@
 //
-//  SSJUserChargeSyncTable.m
+//  SSJUserChargePeriodConfigSyncTable.m
 //  SuiShouJi
 //
-//  Created by old lang on 16/1/7.
+//  Created by old lang on 16/3/2.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJUserChargeSyncTable.h"
+#import "SSJUserChargePeriodConfigSyncTable.h"
 
-@implementation SSJUserChargeSyncTable
+@implementation SSJUserChargePeriodConfigSyncTable
 
 + (NSString *)tableName {
-    return @"bk_user_charge";
+    return @"bk_charge_period_config";
 }
 
 + (NSArray *)columns {
-    return @[@"ichargeid", @"imoney", @"ibillid", @"ifunsid", @"iconfigid", @"cadddate", @"ioldmoney", @"ibalance", @"cbilldate", @"cuserid", @"cimgurl", @"thumburl", @"cmemo", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"iconfigid", @"cuserid", @"ibillid", @"ifunsid", @"itype", @"imoney", @"cimgurl", @"cmemo", @"cbilldate", @"istate", @"iversion", @"cwritedate", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
-    return @[@"ichargeid"];
+    return @[@"iconfigid"];
 }
 
 + (NSArray *)optionalColumns {
-    return @[@"iconfigid", @"cimgurl", @"thumburl", @"cmemo"];
+    return @[@"cimgurl", @"cmemo"];
 }
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
-    NSString *configId = record[@"iconfigid"];  //  定期记账配置id可已为空（仅一次）
+    
     if (!billId || !fundId) {
         *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
-        SSJPRINT(@">>> SSJ warning: ibillid and fundId in record must not be nil \n record:%@", record);
+        SSJPRINT(@">>> SSJ warning:cuserid and ibillid in record must not be nil \n record:%@", record);
         return NO;
     }
     
@@ -45,13 +45,7 @@
     //  查询fund_info中是否有对应的资金帐户
     BOOL hasFundAccount = [db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", SSJUSERID(), fundId];
     
-    //  如果返回了定期配置id，就查询定期配置表中是否有这个id
-    BOOL hasPeriodConfig = YES;
-    if (configId.length) {
-        hasPeriodConfig = [db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ?", configId];
-    }
-    
-    return (hasBillType && hasFundAccount && hasPeriodConfig);
+    return (hasBillType && hasFundAccount);
 }
 
 @end
