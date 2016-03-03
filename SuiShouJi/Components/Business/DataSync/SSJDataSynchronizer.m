@@ -421,6 +421,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
+            return;
         }
         
         if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
@@ -437,6 +438,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
+            return;
         }
         
         if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
@@ -450,9 +452,10 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  定期记账
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
+        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_charge_period_config"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
+            return;
         }
         
         if ([versinStr length] && ![SSJUserChargePeriodConfigSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
@@ -472,16 +475,30 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             return;
         }
         
-        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
-            success = NO;
-        }
-        
         //  根据流水表计算资金帐户余额表和每日流水统计表
         if (![SSJFundAccountTable updateBalanceInDatabase:db]
             || ![SSJDailySumChargeTable updateDailySumChargeInDatabase:db]) {
             *rollback = YES;
             success = NO;
             *error = [db lastError];
+            return;
+        }
+        
+        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+            success = NO;
+        }
+    }];
+    
+    //  预算
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        if (![SSJUserBudgetSyncTable mergeRecords:tableInfo[@"bk_user_budget"] inDatabase:db error:error]) {
+            *rollback = YES;
+            success = NO;
+            return;
+        }
+        
+        if ([versinStr length] && ![SSJUserBudgetSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+            success = NO;
         }
     }];
     
