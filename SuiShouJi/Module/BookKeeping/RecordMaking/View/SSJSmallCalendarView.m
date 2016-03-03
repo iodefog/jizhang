@@ -33,7 +33,7 @@
 -(UIImageView *)calenderImage{
     if (_calenderImage == nil) {
         _calenderImage = [[UIImageView alloc]init];
-        _calenderImage.image = [UIImage imageNamed:@"bt_calender"];
+        _calenderImage.image = [UIImage imageNamed:@"calender"];
     }
     return _calenderImage;
 }
@@ -41,7 +41,7 @@
 -(UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
         _dateLabel.font = [UIFont systemFontOfSize:14];
     }
