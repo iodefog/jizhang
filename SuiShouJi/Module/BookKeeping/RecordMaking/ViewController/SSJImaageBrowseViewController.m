@@ -90,7 +90,7 @@
     if (!_changeImageButton) {
         _changeImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 45, 70)];
         [_changeImageButton setTitle:@"替换" forState:UIControlStateNormal];
-        [_changeImageButton setImage:[UIImage imageNamed:@"tihuan@3x"] forState:UIControlStateNormal];
+        [_changeImageButton setImage:[UIImage imageNamed:@"tihuan"] forState:UIControlStateNormal];
         _changeImageButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
         [_changeImageButton addTarget:self action:@selector(changeImageButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -101,7 +101,7 @@
     if (!_deleteButton) {
         _deleteButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 45, 70)];
         [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
-        [_deleteButton setImage:[UIImage imageNamed:@"big_delete@3x"] forState:UIControlStateNormal];
+        [_deleteButton setImage:[UIImage imageNamed:@"white_delete"] forState:UIControlStateNormal];
         _deleteButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
         [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 
