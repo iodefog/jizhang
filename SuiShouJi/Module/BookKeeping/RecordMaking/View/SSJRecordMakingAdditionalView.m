@@ -14,6 +14,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *circleButton;
 @property (weak, nonatomic) IBOutlet UIButton *memoButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *lineHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *takephotoLeading;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *circleButtonTrailing;
 
 @end
 
@@ -27,6 +29,8 @@
 
 -(void)awakeFromNib{
     self.lineHeight.constant = 1.f / [UIScreen mainScreen].scale;
+    self.takephotoLeading.constant = self.width / 2 / 2 - 21;
+    self.circleButtonTrailing.constant = self.width / 2 / 2 - 21;
 }
 
 - (IBAction)additionalButtonClicked:(id)sender {

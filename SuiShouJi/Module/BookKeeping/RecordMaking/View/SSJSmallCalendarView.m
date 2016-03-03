@@ -33,7 +33,7 @@
 -(UIImageView *)calenderImage{
     if (_calenderImage == nil) {
         _calenderImage = [[UIImageView alloc]init];
-        _calenderImage.image = [UIImage imageNamed:@"bt_calender"];
+        _calenderImage.image = [UIImage imageNamed:@"calender"];
     }
     return _calenderImage;
 }

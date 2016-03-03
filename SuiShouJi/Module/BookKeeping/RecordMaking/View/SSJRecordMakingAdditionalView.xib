@@ -14,35 +14,35 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jcm-Xt-Zct">
                     <rect key="frame" x="0.0" y="0.0" width="334" height="75"/>
                     <subviews>
-                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L9O-3e-xEQ">
-                            <rect key="frame" x="152" y="22" width="30" height="30"/>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L9O-3e-xEQ">
+                            <rect key="frame" x="146" y="16" width="42" height="42"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="30" id="T1U-LG-e3b"/>
-                                <constraint firstAttribute="width" constant="30" id="gat-yK-wUt"/>
+                                <constraint firstAttribute="height" constant="42" id="T1U-LG-e3b"/>
+                                <constraint firstAttribute="width" constant="42" id="gat-yK-wUt"/>
                             </constraints>
-                            <state key="normal" title="备注"/>
+                            <state key="normal" title="备注" image="beizhu_nor.png"/>
                             <connections>
                                 <action selector="additionalButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="Ar5-KH-axF"/>
                             </connections>
                         </button>
-                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIn-13-FWB">
-                            <rect key="frame" x="232" y="22" width="30" height="30"/>
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIn-13-FWB">
+                            <rect key="frame" x="222" y="16" width="42" height="42"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="30" id="Wzr-In-wyF"/>
-                                <constraint firstAttribute="width" constant="30" id="wh1-Ke-jOb"/>
+                                <constraint firstAttribute="height" constant="42" id="Wzr-In-wyF"/>
+                                <constraint firstAttribute="width" constant="42" id="wh1-Ke-jOb"/>
                             </constraints>
-                            <state key="normal" title="循环"/>
+                            <state key="normal" title="循环" image="xunhuan_nor.png"/>
                             <connections>
                                 <action selector="additionalButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="O3N-G6-7DQ"/>
                             </connections>
                         </button>
-                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qh-8N-kQS">
-                            <rect key="frame" x="72" y="22" width="30" height="30"/>
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qh-8N-kQS">
+                            <rect key="frame" x="70" y="16" width="42" height="42"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="30" id="EMo-lY-COM"/>
-                                <constraint firstAttribute="height" constant="30" id="JV0-4v-Goh"/>
+                                <constraint firstAttribute="width" constant="42" id="EMo-lY-COM"/>
+                                <constraint firstAttribute="height" constant="42" id="JV0-4v-Goh"/>
                             </constraints>
-                            <state key="normal" title="拍照"/>
+                            <state key="normal" title="拍照" image="paizhao.png"/>
                             <connections>
                                 <action selector="additionalButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZwY-Ne-Y7N"/>
                             </connections>
@@ -50,22 +50,22 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="qIn-13-FWB" firstAttribute="leading" secondItem="L9O-3e-xEQ" secondAttribute="trailing" constant="50" id="79r-sl-YIx"/>
+                        <constraint firstAttribute="trailing" secondItem="qIn-13-FWB" secondAttribute="trailing" constant="70" id="GfZ-S7-iJy"/>
                         <constraint firstItem="L9O-3e-xEQ" firstAttribute="centerX" secondItem="jcm-Xt-Zct" secondAttribute="centerX" id="IhF-kq-slV"/>
                         <constraint firstItem="qIn-13-FWB" firstAttribute="centerY" secondItem="L9O-3e-xEQ" secondAttribute="centerY" id="Xix-Y3-q9y"/>
-                        <constraint firstItem="5qh-8N-kQS" firstAttribute="trailing" secondItem="L9O-3e-xEQ" secondAttribute="leading" constant="-50" id="dXu-Ip-5tw"/>
+                        <constraint firstItem="5qh-8N-kQS" firstAttribute="leading" secondItem="jcm-Xt-Zct" secondAttribute="leading" constant="70" id="evY-SQ-fcV"/>
                         <constraint firstItem="5qh-8N-kQS" firstAttribute="centerY" secondItem="L9O-3e-xEQ" secondAttribute="centerY" id="g22-nU-mAN"/>
                         <constraint firstItem="L9O-3e-xEQ" firstAttribute="centerY" secondItem="jcm-Xt-Zct" secondAttribute="centerY" id="iD7-sp-dgk"/>
                         <constraint firstAttribute="height" constant="75" id="m8d-sF-xYV"/>
                     </constraints>
                 </view>
-                <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GsV-3E-PtB">
-                    <rect key="frame" x="135" y="105" width="64" height="64"/>
+                <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GsV-3E-PtB">
+                    <rect key="frame" x="135" y="105" width="63" height="63"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="64" id="cRn-0R-ryH"/>
-                        <constraint firstAttribute="width" constant="64" id="rkW-dr-ls2"/>
+                        <constraint firstAttribute="height" constant="63" id="cRn-0R-ryH"/>
+                        <constraint firstAttribute="width" constant="63" id="rkW-dr-ls2"/>
                     </constraints>
-                    <state key="normal" title="确定"/>
+                    <state key="normal" title="确定" image="save.png"/>
                     <connections>
                         <action selector="additionalButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="uiC-CX-o2s"/>
                     </connections>
@@ -94,11 +94,18 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="circleButton" destination="qIn-13-FWB" id="Q10-Fx-NeX"/>
+                <outlet property="circleButtonTrailing" destination="GfZ-S7-iJy" id="W07-8B-V3W"/>
                 <outlet property="lineHeight" destination="nPi-BF-QqR" id="VS5-GZ-nHS"/>
                 <outlet property="memoButton" destination="L9O-3e-xEQ" id="Tij-Yc-rxP"/>
-                <outlet property="takePhotoButton" destination="5qh-8N-kQS" id="16Z-BK-Jw6"/>
+                <outlet property="takephotoLeading" destination="evY-SQ-fcV" id="bIg-mg-rZ7"/>
             </connections>
             <point key="canvasLocation" x="406" y="34.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="beizhu_nor.png" width="41" height="41"/>
+        <image name="paizhao.png" width="41" height="41"/>
+        <image name="save.png" width="63" height="63"/>
+        <image name="xunhuan_nor.png" width="41" height="41"/>
+    </resources>
 </document>
