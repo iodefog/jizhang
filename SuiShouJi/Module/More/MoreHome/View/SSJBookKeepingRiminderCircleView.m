@@ -27,13 +27,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+        _weekdayArray = [[NSMutableArray alloc]initWithArray:@[@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"]];
         [self addSubview:self.tableView];
         [self addSubview:self.topView];
-
-#warning test
-        self.selectWeekStr = @"1,2,3,4,5,6,7";
-        _weekdayArray = @[@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"];
-        _selectWeekdayArray = [[NSMutableArray alloc]initWithArray:[self.selectWeekStr componentsSeparatedByString:@","]];
     }
     return self;
 }
@@ -187,6 +183,13 @@
     }
     [self removeFromSuperview];
 }
+
+-(void)setSelectWeekStr:(NSString *)selectWeekStr{
+    _selectWeekStr = selectWeekStr;
+    _selectWeekdayArray = [[NSMutableArray alloc]initWithArray:[self.selectWeekStr componentsSeparatedByString:@","]];
+    [self.tableView reloadData];
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

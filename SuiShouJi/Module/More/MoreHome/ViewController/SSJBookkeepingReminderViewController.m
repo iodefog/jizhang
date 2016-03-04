@@ -15,6 +15,7 @@ static NSString *const kTitle3 = @"定期提醒";
 #import "SSJChargeReminderTimeView.h"
 #import "SSJBookKeepingRiminderCircleView.h"
 #import "SSJChargeReminderItem.h"
+#import "SSJLocalNotificationHelper.h"
 #import "SSJDatabaseQueue.h"
 
 @interface SSJBookkeepingReminderViewController ()
@@ -25,6 +26,7 @@ static NSString *const kTitle3 = @"定期提醒";
 @property (nonatomic,strong) SSJChargeReminderItem *item;
 @property (nonatomic,strong) NSString *selectTime;
 @property (nonatomic,strong) NSString *selectCircle;
+@property (nonatomic,strong) NSString *selectNumCircle;
 @end
 
 @implementation SSJBookkeepingReminderViewController
@@ -63,6 +65,12 @@ static NSString *const kTitle3 = @"定期提醒";
 -(SSJBookKeepingRiminderCircleView *)chargeReminderCircle{
     if (!_chargeReminderCircle) {
         _chargeReminderCircle = [[SSJBookKeepingRiminderCircleView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        __weak typeof(self) weakSelf = self;
+        _chargeReminderCircle.circleSelectBlock = ^(NSString *dateNumString , NSString *dateString){
+            weakSelf.selectNumCircle  = dateNumString;
+            weakSelf.selectCircle = dateString;
+            [weakSelf.tableView reloadData];
+        };
     }
     return _chargeReminderCircle;
 }
@@ -162,16 +170,89 @@ static NSString *const kTitle3 = @"定期提醒";
             weakSelf.item.timeString = [result stringForColumn:@"TIME"];
             weakSelf.item.circleString = [result stringForColumn:@"CIRCLE"];
         }
+        weakSelf.selectNumCircle = weakSelf.item.circleString;
         dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.selectCircle = weakSelf.item.circleString;
+            NSArray *tempArr = [weakSelf.item.circleString componentsSeparatedByString:@","];
+            if (tempArr.count == 7) {
+                weakSelf.selectCircle = @"每天";
+            }else if (tempArr.count == 5 && ![tempArr containsObject:@"1"] &&  ![tempArr containsObject:@"7" ]){
+                weakSelf.selectCircle = @"每个工作日";
+            }else if (tempArr.count == 2 && [tempArr containsObject:@"1"] &&  [tempArr containsObject:@"7" ]){
+                weakSelf.selectCircle = @"每个周末";
+            }else{
+                NSMutableArray *array = [[NSMutableArray alloc]init];
+                for (int i = 0; i < tempArr.count; i ++) {
+                    NSInteger date = [[tempArr objectAtIndex:i] intValue];
+                    switch (date) {
+                        case 1:
+                            [array addObject:@"周日"];
+                            break;
+                        case 2:
+                            [array addObject:@"周一"];
+                            break;
+                        case 3:
+                            [array addObject:@"周二"];
+                            break;
+                        case 4:
+                            [array addObject:@"周三"];
+                            break;
+                        case 5:
+                            [array addObject:@"周四"];
+                            break;
+                        case 6:
+                            [array addObject:@"周五"];
+                            break;
+                        case 7:
+                            [array addObject:@"周六"];
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                weakSelf.selectCircle = [array componentsJoinedByString:@","];
+            }
             weakSelf.selectTime = weakSelf.item.timeString;
             [weakSelf.tableView reloadData];
+            weakSelf.chargeReminderCircle.selectWeekStr = weakSelf.selectNumCircle;
         });
     }];
 }
 
 -(void)saveButtonClicked:(id)sender{
-    
+    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
+    NSArray *tempArr = [self.selectCircle componentsSeparatedByString:@","];
+    NSString *baseDateStr = [NSString stringWithFormat:@"%@ %@:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],self.selectTime];
+    NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
+    if (tempArr.count == 7) {
+        if ([baseDate isEarlierThan:[NSDate date]]) {
+            baseDate = [baseDate dateByAddingDays:1];
+        }
+        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
+    }else if (tempArr.count == 1){
+        if ([baseDate isEarlierThan:[NSDate date]]) {
+            baseDate = [baseDate dateByAddingDays:7];
+        }
+        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitWeekday notificationKey:SSJChargeReminderNotification];
+    }else{
+        NSDate *firedate = [NSDate date];
+        for (int i = 0; i < tempArr.count; i ++) {
+            if ([(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] > [NSDate date].weekday){
+                firedate = [baseDate dateByAddingDays:[(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] - [NSDate date].weekday];
+                [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:firedate repeatIterval:NSCalendarUnitWeekday notificationKey:SSJChargeReminderNotification];
+            }else if ([(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] < [NSDate date].weekday){
+                firedate = [baseDate dateByAddingDays:[(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] - [NSDate date].weekday + 7];
+                [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:firedate repeatIterval:NSCalendarUnitWeekday notificationKey:SSJChargeReminderNotification];
+            }else{
+                if ([baseDate isEarlierThan:[NSDate date]]) {
+                    baseDate = [baseDate dateByAddingDays:7];
+                    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitWeekday notificationKey:SSJChargeReminderNotification];
+
+                }else{
+                    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitWeekday notificationKey:SSJChargeReminderNotification];
+                }
+            }
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

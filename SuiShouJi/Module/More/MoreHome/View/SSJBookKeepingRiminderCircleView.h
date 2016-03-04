@@ -11,6 +11,7 @@
 @interface SSJBookKeepingRiminderCircleView : UIView<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) NSString *selectWeekStr;
 
+
 //选择周期回调
 typedef void (^circleSelectBlock)(NSString *dateNumString , NSString *dateString);
 
