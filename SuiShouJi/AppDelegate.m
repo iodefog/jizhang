@@ -12,6 +12,7 @@
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJLocalNotificationHelper.h"
 
 #import "SSJUserDefaultDataCreater.h"
 #import "MobClick.h"
@@ -35,7 +36,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
@@ -162,32 +163,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if ([baseDate isEarlierThan:[NSDate date]]) {
         baseDate = [baseDate dateByAddingDays:1];
     }
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    // 设置触发通知的时间
-    NSDate *fireDate = baseDate;
-    notification.fireDate = fireDate;
-    // 时区
-    notification.timeZone = [NSTimeZone defaultTimeZone];
-    // 设置重复的间隔
-    notification.repeatInterval = kCFCalendarUnitDay;
-    // 通知内容
-    notification.alertBody =  @"精打细算，有吃有穿，小主快来记账啦～";
-    notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
-    // 通知被触发时播放的声音
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    // 通知参数
-    NSDictionary *userDict = [NSDictionary dictionaryWithObject:@"SSJEveryDayNotification" forKey:@"key"];
-    notification.userInfo = userDict;
-    // ios8后，需要添加这个注册，才能得到授权
-    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type
-                                        categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    }
-    // 执行通知注册
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-
+    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
+    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
 }
 
 #pragma mark - 友盟
