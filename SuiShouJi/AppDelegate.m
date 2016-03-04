@@ -25,6 +25,10 @@
 //  友盟key
 static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
+//- (void)applicationWillEnterForeground:(UIApplication *)application {
+//    
+//}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -60,6 +64,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
     
     return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    
 }
 
 //  设置根控制器

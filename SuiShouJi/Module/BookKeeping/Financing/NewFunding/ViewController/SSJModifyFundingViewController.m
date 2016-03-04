@@ -254,7 +254,7 @@
         return;
     }
     __weak typeof(self) weakSelf = self;
-    __block NSString *currentDateStr = [[NSDate date]ssj_dateStringWithFormat:@"yyyy-MM-dd"];
+    __block NSString *currentDateStr = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db,BOOL *rollback){
         if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ?",_nameTextField.text,weakSelf.item.fundingID,SSJUSERID()] > 0){
             dispatch_async(dispatch_get_main_queue(), ^(){

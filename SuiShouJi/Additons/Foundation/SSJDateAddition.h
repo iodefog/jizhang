@@ -18,7 +18,7 @@
  *
  *  @param format 日期格式(默认yyyy-MM-dd HH:mm:ss)
  *
- *  @return nsstring
+ *  @return NSString
  */
 - (NSString *)ssj_systemCurrentDateWithFormat:(NSString *)format;
 

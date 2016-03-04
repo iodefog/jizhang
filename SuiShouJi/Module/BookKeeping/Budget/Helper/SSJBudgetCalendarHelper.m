@@ -36,23 +36,15 @@
 }
 
 + (NSString *)getFirstDayForUnit:(NSCalendarUnit)unit {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.timeZone = [NSTimeZone systemTimeZone];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    
     NSDictionary *period = [self getPeriodInfoWithCalendarUnit:unit ForDate:[NSDate date]];
     NSDate *beginDate = period[SSJBudgetPeriodBeginDateKey];
-    return [formatter stringFromDate:beginDate];
+    return [beginDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
 }
 
 + (NSString *)getLastDayForUnit:(NSCalendarUnit)unit {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.timeZone = [NSTimeZone systemTimeZone];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    
     NSDictionary *period = [self getPeriodInfoWithCalendarUnit:unit ForDate:[NSDate date]];
     NSDate *endDate = period[SSJBudgetPeriodEndDateKey];
-    return [formatter stringFromDate:endDate];
+    return [endDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
 }
 
 + (NSDictionary *)getPeriodInfoWithCalendarUnit:(NSCalendarUnit)unit ForDate:(NSDate *)date {

@@ -95,8 +95,8 @@ extern NSString *const SSJBudgetMonthTitleKey;
  *  @param success   成功的回调
  *  @param failure   失败的回调
  */
-+ (void)supplementBudgetRecordWithSuccess:(void(^)())success
-                                  failure:(void (^)(NSError *error))failure;
+//+ (void)supplementBudgetRecordWithSuccess:(void(^)())success
+//                                  failure:(void (^)(NSError *error))failure;
 
 @end
 
