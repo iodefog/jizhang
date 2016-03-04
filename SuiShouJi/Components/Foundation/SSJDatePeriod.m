@@ -31,7 +31,6 @@
         
         period.startDate = startDate;
         period.endDate = endDate;
-        
     }
     
     return period;

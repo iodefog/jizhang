@@ -22,6 +22,7 @@
 #import "AFNetworking.h"
 
 #import "SSJUserTableManager.h"
+#import "SSJRegularManager.h"
 
 #import <ZipZap/ZipZap.h>
 
@@ -249,6 +250,9 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
+                    //  合并数据完成后
+                    [SSJRegularManager supplementBookkeepingIfNeeded];
+                    [SSJRegularManager supplementBudgetIfNeeded];
                     [self successToSync:success];
                 } else {
                     [self failToSync:failure error:tError];
@@ -398,8 +402,6 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     NSString *versinStr = tableInfo[@"syncversion"];
     
-    __block BOOL success = YES;
-    
     //  存储当前同步用户数据
     NSArray *userArr = tableInfo[@"bk_user"];
     for (NSDictionary *userInfo in userArr) {
@@ -415,21 +417,23 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     //  合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算
+    __block BOOL mergeSuccess = YES;
+    __block BOOL updateVersionSuccess = YES;
     
     //  收支类型
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] inDatabase:db error:error]) {
             *rollback = YES;
-            success = NO;
+            mergeSuccess = NO;
             return;
         }
         
         if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
-            success = NO;
+            updateVersionSuccess = NO;
         }
     }];
     
-    if (!success) {
+    if (!mergeSuccess) {
         return NO;
     }
     
@@ -437,16 +441,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
             *rollback = YES;
-            success = NO;
+            mergeSuccess = NO;
             return;
         }
         
         if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
-            success = NO;
+            updateVersionSuccess = NO;
         }
     }];
     
-    if (!success) {
+    if (!mergeSuccess) {
         return NO;
     }
     
@@ -454,16 +458,16 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_charge_period_config"] inDatabase:db error:error]) {
             *rollback = YES;
-            success = NO;
+            mergeSuccess = NO;
             return;
         }
         
         if ([versinStr length] && ![SSJUserChargePeriodConfigSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
-            success = NO;
+            updateVersionSuccess = NO;
         }
     }];
     
-    if (!success) {
+    if (!mergeSuccess) {
         return NO;
     }
     
@@ -471,7 +475,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"bk_user_charge"] inDatabase:db error:error]) {
             *rollback = YES;
-            success = NO;
+            mergeSuccess = NO;
             return;
         }
         
@@ -479,43 +483,50 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         if (![SSJFundAccountTable updateBalanceInDatabase:db]
             || ![SSJDailySumChargeTable updateDailySumChargeInDatabase:db]) {
             *rollback = YES;
-            success = NO;
+            mergeSuccess = NO;
             *error = [db lastError];
             return;
         }
         
         if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
-            success = NO;
+            updateVersionSuccess = NO;
         }
     }];
+    
+    if (!mergeSuccess) {
+        return NO;
+    }
     
     //  预算
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         if (![SSJUserBudgetSyncTable mergeRecords:tableInfo[@"bk_user_budget"] inDatabase:db error:error]) {
             *rollback = YES;
-            success = NO;
+            mergeSuccess = NO;
             return;
         }
         
         if ([versinStr length] && ![SSJUserBudgetSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
-            success = NO;
+            updateVersionSuccess = NO;
         }
     }];
     
-    if (!success) {
+    if (!mergeSuccess) {
         return NO;
     }
     
-    //  所有数据合并、更新成功后，插入一个新的记录到BK_SYNC中
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        success = [SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] inDatabase:db];
-    }];
-    
-    if (success) {
-        SSJUpdateSyncVersion([versinStr longLongValue] + 1);
+    //  所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
+    if (updateVersionSuccess) {
+        __block BOOL tSuccess = YES;
+        [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+            tSuccess = [SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] inDatabase:db];
+        }];
+        
+        if (tSuccess) {
+            SSJUpdateSyncVersion([versinStr longLongValue] + 1);
+        }
     }
     
-    return success;
+    return mergeSuccess;
 }
 
 //  将data进行zip压缩

@@ -68,6 +68,20 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     return YES;
 }
 
+- (void)registerRegularTask {
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeNone categories:nil]];
+    }
+    
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    NSDate *date = [NSDate date];
+    notification.fireDate = [NSDate dateWithYear:[date year] month:[date month] day:[date day]];
+    notification.repeatInterval = NSCalendarUnitDay;
+    notification.repeatCalendar = [NSCalendar currentCalendar];
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     
 }
