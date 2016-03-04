@@ -450,7 +450,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  定期记账
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
+        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_charge_period_config"] inDatabase:db error:error]) {
             *rollback = YES;
             success = NO;
         }
