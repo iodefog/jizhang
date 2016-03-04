@@ -50,6 +50,16 @@
     }
 }
 
+-(void)setHasCircle:(BOOL)hasCircle{
+    _hasCircle = hasCircle;
+    self.circleButton.selected = _hasCircle;
+}
+
+-(void)setHasMemo:(BOOL)hasMemo{
+    _hasMemo = hasMemo;
+    self.memoButton.selected = _hasMemo;
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

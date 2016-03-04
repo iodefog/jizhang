@@ -39,3 +39,5 @@ NSString *const SSJShowSyncLoadingNotification = @"SSJShowSyncLoadingNotificatio
 
 NSString *const SSJHideSyncLoadingNotification = @"SSJHideSyncLoadingNotification";
 
+NSString *const SSJChargeReminderNotification = @"SSJChargeReminderNotification";
+

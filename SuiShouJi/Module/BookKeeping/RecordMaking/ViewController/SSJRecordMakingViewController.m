@@ -254,6 +254,16 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [_additionalView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         [_additionalView ssj_setBorderStyle:SSJBorderStyleTop];
         _additionalView.selectedImage = self.selectedImage;
+        if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
+            _additionalView.hasMemo = YES;
+        }else{
+            _additionalView.hasMemo = NO;
+        }
+        if (self.selectChargeCircleType != -1) {
+            _additionalView.hasCircle = YES;
+        }else{
+            _additionalView.hasCircle = NO;
+        }
         _additionalView.frame = CGRectMake(0, 0, self.view.width, 200);
         __weak typeof(self) weakSelf = self;
         _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
@@ -289,6 +299,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 memoMakingVC.MemoMakingBlock = ^(NSString *newMemo){
                     if (![newMemo isEqualToString:@""]) {
                         weakSelf.chargeMemo = newMemo;
+                        weakSelf.additionalView.hasMemo = YES;
+                    }else{
+                        weakSelf.additionalView.hasMemo = NO;
                     }
                 };
                 [weakSelf.navigationController pushViewController:memoMakingVC animated:YES];
@@ -426,12 +439,20 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
+                weakSelf.additionalView.hasCircle = NO;
             }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType == 4){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
+                weakSelf.additionalView.hasCircle = NO;
                 [alert show];
             }else{
                 weakSelf.selectChargeCircleType = chargeCircleType;
+                if (chargeCircleType == -1) {
+                    weakSelf.additionalView.hasCircle = NO;
+                }else{
+                    weakSelf.additionalView.hasCircle = YES;
+
+                }
             }
         };
     }

@@ -80,6 +80,7 @@
     [self getCurrentDate];
     [self getDateFromDatebase];
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
+
 }
 
 - (void)viewDidLoad {

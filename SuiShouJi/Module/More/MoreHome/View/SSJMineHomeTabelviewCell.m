@@ -16,7 +16,8 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self addSubview:self.titleLabel];
+        [self.contentView addSubview:self.titleLabel];
+        [self.contentView addSubview:self.detailLabel];
     }
     return self;
 }
@@ -25,6 +26,8 @@
     [super layoutSubviews];
     self.titleLabel.left = 10;
     self.titleLabel.centerY = self.height / 2;
+    self.detailLabel.centerY = self.height / 2;
+    self.detailLabel.right = self.width - 10;
 }
 
 -(UILabel *)titleLabel{
@@ -35,10 +38,25 @@
     return _titleLabel;
 }
 
+-(UILabel *)detailLabel{
+    if (!_detailLabel) {
+        _detailLabel = [[UILabel alloc]init];
+        _detailLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _detailLabel.textAlignment = NSTextAlignmentRight;
+    }
+    return _detailLabel;
+}
+
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     _titleLabel.text = _cellTitle;
     [_titleLabel sizeToFit];
+}
+
+-(void)setCellDetail:(NSString *)cellDetail{
+    _cellDetail = cellDetail;
+    self.detailLabel.text = _cellDetail;
+    [self.detailLabel sizeToFit];
 }
 
 /*
