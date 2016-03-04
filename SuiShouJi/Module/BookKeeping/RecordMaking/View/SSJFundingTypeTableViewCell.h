@@ -15,4 +15,7 @@
 @property (nonatomic) BOOL selectedOrNot;
 
 @property (nonatomic,strong) SSJFundingItem *item;
+
+@property (nonatomic,strong) NSString *cellTitle;
+
 @end

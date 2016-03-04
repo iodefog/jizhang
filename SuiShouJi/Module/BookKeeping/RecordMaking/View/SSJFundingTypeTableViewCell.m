@@ -11,8 +11,8 @@
 @property (nonatomic,strong) UIImageView *fundingImage;
 @property (nonatomic,strong) UIImageView *checkMark;
 @property (nonatomic,strong) UILabel *fundingTitle;
-
 @end
+
 @implementation SSJFundingTypeTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -95,6 +95,11 @@
     _fundingImage.image = [UIImage imageNamed:self.item.fundingIcon];
 }
 
+-(void)setCellTitle:(NSString *)cellTitle{
+    _cellTitle = cellTitle;
+    self.fundingTitle.text = cellTitle;
+    [self.fundingTitle sizeToFit];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

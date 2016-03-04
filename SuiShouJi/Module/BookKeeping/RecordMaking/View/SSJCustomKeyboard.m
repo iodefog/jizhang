@@ -59,6 +59,13 @@ static id _instance;
         self.numButtonArray = [[NSMutableArray alloc]init];
         self.backgroundColor = [UIColor clearColor];
         [self setNumKey];
+        [self addSubview:self.DecimalButton];
+        [self addSubview:self.ZeroButton];
+        [self addSubview:self.ClearButton];
+        [self addSubview:self.BackspaceButton];
+        [self addSubview:self.PlusButton];
+        [self addSubview:self.MinusButton];
+        [self addSubview:self.ComfirmButton];
     }
     return self;
 }
@@ -68,19 +75,19 @@ static id _instance;
         ((SSJCustomKeyBoardButton*)([self.numButtonArray objectAtIndex:i])).frame = CGRectMake(i % 3 * _buttonWight, i / 3 * _buttonHeight, _buttonWight, _buttonHeight);
     }
     self.DecimalButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);
+    self.DecimalButton.leftBottom = CGPointMake(0, 200);
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
-    self.ClearButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.ClearButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.ClearButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.BackspaceButton.rightTop = CGPointMake(self.right, 0);
-    self.PlusButton.rightTop = CGPointMake(self.right, self.BackspaceButton.bottom);
     self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.MinusButton.rightTop = CGPointMake(self.right, self.PlusButton.bottom);
+    self.PlusButton.rightTop = CGPointMake(self.width, self.BackspaceButton.bottom);
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.ComfirmButton.rightBottom = CGPointMake(self.right, self.height);
+    self.MinusButton.rightTop = CGPointMake(self.width, self.PlusButton.bottom);
     self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.ComfirmButton.rightBottom = CGPointMake(self.width, self.height);
 }
 
 //数字键
@@ -114,7 +121,6 @@ static id _instance;
         _ZeroButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _ZeroButton.layer.borderWidth = 1.0f / 2;
         _ZeroButton.tag = 0;
-        [self addSubview:_ZeroButton];
     }
     return _ZeroButton;
 }
@@ -133,7 +139,6 @@ static id _instance;
         _BackspaceButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _BackspaceButton.layer.borderWidth = 1.0f / 2;
         _BackspaceButton.tag = 10;
-        [self addSubview:_BackspaceButton];
     }
     return _BackspaceButton;
 }
@@ -146,7 +151,6 @@ static id _instance;
         _ClearButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_ClearButton setTintColor:[UIColor whiteColor]];
         [_ClearButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:_ClearButton];
         _ClearButton.titleLabel.font = [UIFont systemFontOfSize:24];
         _ClearButton.backgroundColor = [UIColor whiteColor];
         _ClearButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
@@ -166,7 +170,6 @@ static id _instance;
         [_PlusButton setTintColor:[UIColor whiteColor]];
         [_PlusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _PlusButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        [self addSubview:_PlusButton];
         _PlusButton.backgroundColor = [UIColor whiteColor];
         _PlusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _PlusButton.layer.borderWidth = 1.0f / 2;
@@ -188,7 +191,6 @@ static id _instance;
         _MinusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _MinusButton.layer.borderWidth = 1.0f / 2;
         _MinusButton.tag = 13;
-        [self addSubview:_MinusButton];
     }
     return _MinusButton;
 }
@@ -207,7 +209,6 @@ static id _instance;
         _DecimalButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _DecimalButton.layer.borderWidth = 1.0f / 2;
         _DecimalButton.tag = 14;
-        [self addSubview:_DecimalButton];
     }
     return _DecimalButton;
 }
@@ -226,7 +227,6 @@ static id _instance;
         _ComfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _ComfirmButton.layer.borderWidth = 1.0f / 2;
         _ComfirmButton.tag = 15;
-        [self addSubview:_ComfirmButton];
     }
     return _ComfirmButton;
 }

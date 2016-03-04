@@ -132,6 +132,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     });
 }
 
+
+//注册通知
 -(void)setLocalNotification{
     NSString *baseDateStr = [NSString stringWithFormat:@"%@ 20:00:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
     NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
