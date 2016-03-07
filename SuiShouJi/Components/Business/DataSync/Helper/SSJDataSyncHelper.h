@@ -11,3 +11,9 @@
 BOOL SSJSetCurrentSyncUserId(NSString *userid);
 
 NSString *SSJCurrentSyncUserId();
+
+@interface SSJDataSyncHelper : NSObject
+
++ (void)uploadBodyData:(NSData *)data headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
+
+@end
