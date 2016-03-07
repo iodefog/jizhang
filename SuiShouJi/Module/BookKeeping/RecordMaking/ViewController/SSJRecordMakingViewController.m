@@ -112,7 +112,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         self.selectedMonth = _originaldMonth;
         self.selectedDay = _originaldDay;
         self.categoryID = self.item.billId;
-        self.selectChargeCircleType = self.item.chargeCircleType;
+        if ([self.item.configId isEqualToString:@""]) {
+            self.selectChargeCircleType = -1;
+        }else{
+            self.selectChargeCircleType = self.item.chargeCircleType;
+        }
         if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 self.selectedImage = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
@@ -569,7 +573,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         SSJFundingItem *fundingType = weakSelf.selectItem;
         NSString *imageName = SSJUUID();
-        NSString *iconfigId = SSJUUID();
+        NSString *iconfigId;
+        if (self.selectChargeCircleType == -1) {
+            iconfigId = @"";
+        }else{
+            iconfigId = SSJUUID();
+        }
         if (self.item == nil) {
             //新增流水
             if (!weakSelf.categoryID) {
