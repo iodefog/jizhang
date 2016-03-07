@@ -13,6 +13,9 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationHelper.h"
+#import "UMSocialWechatHandler.h"
+#import "UMSocialSinaSSOHandler.h"
+#import "UMSocialQQHandler.h"
 
 #import "SSJUserDefaultDataCreater.h"
 #import "MobClick.h"
@@ -42,6 +45,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     //  添加友盟统计
     [self umengTrack];
+    
+    [self umengShare];
     
     //  初始化数据库
     [self initializeDatabaseWithFinishHandler:^{
@@ -158,4 +163,15 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [MobClick startWithAppkey:kUMAppKey reportPolicy:(ReportPolicy)BATCH channelId:SSJDefaultSource()];
 }
 
+-(void)umengShare{
+    [UMSocialData setAppKey:kUMAppKey];
+    [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:SSJAppStoreAddress];
+    [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账——省钱必备，剁掉买买买～";
+    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账——省钱必备，剁掉买买买～";
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
+                                              secret:@"b0584e24371e5ad6118dfa0e3de3197c"
+                                         RedirectURL:SSJAppStoreAddress];
+    [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:SSJAppStoreAddress];
+    [UMSocialData defaultData].extConfig.qqData.title = @"9188记账——省钱必备，剁掉买买买～";
+}
 @end

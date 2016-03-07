@@ -40,6 +40,7 @@
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type
                                                                                  categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        notification.repeatInterval = repeatIterval;
     }
     // 执行通知注册
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -63,7 +64,9 @@
             }  
         }  
     }
-    NSLog(@"-----------%lu",localNotifications.count);
+    NSArray *NewlocalNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+
+    NSLog(@"-----------%lu",NewlocalNotifications.count);
 }
 
 
