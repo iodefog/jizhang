@@ -178,12 +178,12 @@ NSString *SSJImagePath(NSString *imageName);
 
 
 /**
- *  根据图片名获取图片
+ *  获取网络图片的url
  *
  *  @param imageName @param imageName 图片名称
  *
- *  @return @return (UIImage *)
+ *  @return (NSString *) 图片url地址
  */
-UIImage *SSJGetChargeImage(NSString *imageName);
+NSString *SSJGetChargeImageUrl(NSString *imageName);
 
 

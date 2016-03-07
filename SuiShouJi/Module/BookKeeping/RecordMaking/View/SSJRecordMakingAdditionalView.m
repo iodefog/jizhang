@@ -10,7 +10,6 @@
 #import "SSJRecordMakingAdditionalView.h"
 
 @interface SSJRecordMakingAdditionalView()
-@property (weak, nonatomic) IBOutlet UIButton *takePhotoButton;
 @property (weak, nonatomic) IBOutlet UIButton *circleButton;
 @property (weak, nonatomic) IBOutlet UIButton *memoButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *lineHeight;

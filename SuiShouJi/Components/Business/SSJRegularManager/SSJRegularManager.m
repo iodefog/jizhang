@@ -120,7 +120,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        [configIdArr addObject:configId];
+        [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
         
         int periodType = [resultSet intForColumn:@"itype"];
         NSDate *billDate = [resultSet dateForColumn:@"max(a.cbilldate)"];
@@ -135,7 +135,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     //  查询没有生成过流水的定期记账
-    resultSet = [db executeQuery:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate from bk_charge_period_config where cuserid = ? and istate = 1 and operatortype <> 2 and iconfigid not in (?)", [configIdArr componentsJoinedByString:@","]];
+    NSString *tConfigIdStr = [configIdArr componentsJoinedByString:@","];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
+    if (tConfigIdStr.length) {
+        [query appendFormat:@" and iconfigid not in (%@)", tConfigIdStr];
+    }
+    resultSet = [db executeQuery:query];
     if (!resultSet) {
         return NO;
     }
