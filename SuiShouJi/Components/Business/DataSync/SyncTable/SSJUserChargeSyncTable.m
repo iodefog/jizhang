@@ -37,21 +37,28 @@
     }
     
     //  如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
-    BOOL hasBillType = [db intForQuery:@"select istate from bk_bill_type where id = ?", billId] == 2;
-    if (!hasBillType) {
-        hasBillType = [db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", SSJCurrentSyncUserId(), billId];
+    if ([db intForQuery:@"select istate from bk_bill_type where id = ?", billId] != 2) {
+        if (![db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", SSJCurrentSyncUserId(), billId]) {
+            return NO;
+        }
     }
     
     //  查询fund_info中是否有对应的资金帐户
-    BOOL hasFundAccount = [db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", SSJCurrentSyncUserId(), fundId];
-    
-    //  如果返回了定期配置id，就查询定期配置表中是否有这个id
-    BOOL hasPeriodConfig = YES;
-    if (configId.length) {
-        hasPeriodConfig = [db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ?", configId];
+    if (![db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", SSJCurrentSyncUserId(), fundId]) {
+        return NO;
     }
     
-    return (hasBillType && hasFundAccount && hasPeriodConfig);
+    //  如果返回了定期配置id，就查询定期配置表中是否有这个id
+    if (configId.length && ![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, SSJCurrentSyncUserId()]) {
+        return NO;
+    }
+    
+    //  如果当前用户已经有了相同的定期记账流水，就不需要再合并了
+    if ([db boolForQuery:@"select count(*) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncUserId()]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

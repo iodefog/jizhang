@@ -135,7 +135,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     //  查询没有生成过流水的定期记账
-    resultSet = [db executeQuery:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate from bk_user_charge where cuserid = ? and istate = 1 and operatortype <> 2 and iconfigid not in (?)", [configIdArr componentsJoinedByString:@","]];
+    resultSet = [db executeQuery:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate from bk_charge_period_config where cuserid = ? and istate = 1 and operatortype <> 2 and iconfigid not in (?)", [configIdArr componentsJoinedByString:@","]];
     if (!resultSet) {
         return NO;
     }
