@@ -260,10 +260,8 @@ NSString *SSJImagePath(NSString *imageName){
     return fullPath;
 };
 
-UIImage *SSJGetChargeImage(NSString *imageName){
+NSString *SSJGetChargeImageUrl(NSString *imageName){
     NSString *imageURL = [NSString stringWithFormat:@"http://jz.9188.com/image/sync/%@",imageName];
-    NSData * imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
-    UIImage *image = [UIImage imageWithData:imageData];
-    return image;
+    return imageURL;
 }
 

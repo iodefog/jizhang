@@ -22,4 +22,6 @@ typedef void (^btnClickedBlock)(NSInteger buttonTag);
 @property (nonatomic) BOOL hasMemo;
 
 @property (nonatomic) BOOL hasCircle;
+
+@property (weak, nonatomic) IBOutlet UIButton *takePhotoButton;
 @end

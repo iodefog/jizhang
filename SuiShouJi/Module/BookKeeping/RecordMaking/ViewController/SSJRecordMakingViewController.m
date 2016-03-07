@@ -20,6 +20,7 @@
 #import "SSJSmallCalendarView.h"
 #import "SSJRecordMakingAdditionalView.h"
 #import "SSJNewFundingViewController.h"
+#import "UIButton+WebCache.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJImaageBrowseViewController.h"
@@ -112,10 +113,17 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         self.selectedDay = _originaldDay;
         self.categoryID = self.item.billId;
         self.selectChargeCircleType = self.item.chargeCircleType;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-            self.selectedImage = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+        if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                self.selectedImage = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+            }else{
+                __weak typeof(self) weakSelf = self;
+                [self.additionalView.takePhotoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(weakSelf.item.chargeThumbImage)] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    weakSelf.selectedImage = image;
+                }];
+            }
         }else{
-            self.selectedImage = SSJGetChargeImage(self.item.chargeImage);
+            self.selectedImage = nil;
         }
         self.chargeMemo = self.item.chargeMemo;
     }
@@ -265,6 +273,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             _additionalView.hasCircle = NO;
         }
         _additionalView.frame = CGRectMake(0, 0, self.view.width, 200);
+        _additionalView.selectedImage = self.selectedImage;
         __weak typeof(self) weakSelf = self;
         _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
             if (buttonTag == 1) {

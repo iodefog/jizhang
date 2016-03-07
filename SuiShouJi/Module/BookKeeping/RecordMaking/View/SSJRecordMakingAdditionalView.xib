@@ -44,6 +44,7 @@
                                 <constraint firstAttribute="width" constant="42" id="EMo-lY-COM"/>
                                 <constraint firstAttribute="height" constant="42" id="JV0-4v-Goh"/>
                             </constraints>
+                            <state key="normal" backgroundImage="paizhao.png"/>
                             <connections>
                                 <action selector="additionalButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZwY-Ne-Y7N"/>
                             </connections>
@@ -98,7 +99,7 @@
                 <outlet property="circleButtonTrailing" destination="GfZ-S7-iJy" id="W07-8B-V3W"/>
                 <outlet property="lineHeight" destination="nPi-BF-QqR" id="VS5-GZ-nHS"/>
                 <outlet property="memoButton" destination="L9O-3e-xEQ" id="Tij-Yc-rxP"/>
-                <outlet property="takePhotoButton" destination="5qh-8N-kQS" id="EGu-YA-utl"/>
+                <outlet property="takePhotoButton" destination="5qh-8N-kQS" id="l2i-0Z-p1g"/>
                 <outlet property="takephotoLeading" destination="evY-SQ-fcV" id="bIg-mg-rZ7"/>
             </connections>
             <point key="canvasLocation" x="406" y="34.5"/>
@@ -107,6 +108,7 @@
     <resources>
         <image name="beizhu_nor.png" width="41" height="41"/>
         <image name="beizhu_sel.png" width="41" height="41"/>
+        <image name="paizhao.png" width="41" height="41"/>
         <image name="save.png" width="63" height="63"/>
         <image name="xuhuan_sel.png" width="41" height="41"/>
         <image name="xunhuan_nor.png" width="41" height="41"/>
