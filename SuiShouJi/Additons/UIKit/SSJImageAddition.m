@@ -122,8 +122,16 @@
     return image;
 }
 
--(void)ssj_convertToWebpImageWithquality:(CGFloat)quality alpha:(CGFloat)alpha completionBlock:(void (^)(NSData *result))completionBlock failureBlock:(void (^)(NSError *error))failureBlock{
-    [UIImage imageToWebP:self quality:quality alpha:alpha preset:WEBP_PRESET_PICTURE completionBlock:completionBlock failureBlock:failureBlock];
+//-(void)ssj_convertToWebpImageWithquality:(CGFloat)quality alpha:(CGFloat)alpha completionBlock:(void (^)(NSData *result))completionBlock failureBlock:(void (^)(NSError *error))failureBlock{
+//    [UIImage imageToWebP:self quality:quality alpha:alpha preset:WEBP_PRESET_PICTURE completionBlock:completionBlock failureBlock:failureBlock];
+//}
+
+-(UIImage *)ssj_scaleImageWithSize:(CGSize)Size{
+    UIGraphicsBeginImageContext(Size);
+    [self drawInRect:CGRectMake(0, 0, Size.width, Size.height)];
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaledImage;
 }
 
 @end
