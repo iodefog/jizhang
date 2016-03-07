@@ -152,9 +152,20 @@ NSString *SSJUUID();
  *  @param image 要保存的图片
  *  @param imageName 图片名称
  *
- *  @return (BOOL) 是否保存成功
+ *  @return (void)
  */
-void SSJSaveImage(UIImage *image , NSString *imageName);
+BOOL SSJSaveImage(UIImage *image , NSString *imageName);
+
+/**
+ *  将缩略图存进沙盒
+ *
+ *  @param image 要保存的图片
+ *  @param imageName 图片名称
+ *
+ *  @return (void)
+ */
+BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName);
+
 
 /**
  *  取出图片在沙盒中的路径

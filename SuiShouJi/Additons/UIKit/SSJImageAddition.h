@@ -68,5 +68,14 @@
  *  @param failureBlock    失败的回调
  */
 -(void)ssj_convertToWebpImageWithquality:(CGFloat)quality alpha:(CGFloat)alpha completionBlock:(void (^)(NSData *result))completionBlock failureBlock:(void (^)(NSError *error))failureBlock;
+
+/**
+ *  改变图片到指定大小
+ *
+ *  @param Size 要改变成的大小
+ *
+ *  @return (UIImage *) 缩放后的图片
+ */
+-(UIImage *)ssj_scaleImageWithSize:(CGSize)Size;
 @end
 

@@ -234,22 +234,25 @@ NSString *SSJUUID(){
     return [strUUID lowercaseString];
 }
 
-void SSJSaveImage(UIImage *image , NSString *imageName){
+BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
-//    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
-//    return [imageData writeToFile:fullPath atomically:YES];
-    [image ssj_convertToWebpImageWithquality:80 alpha:1 completionBlock:^(NSData *result) {
-        NSString *fullImageName = [NSString stringWithFormat:@"%@.webp",imageName];
-        NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
-        if (![result writeToFile:fullPath atomically:YES]) {
-            NSLog(@"Failed to save file");
-        }
-    } failureBlock:^(NSError *error) {
-        NSLog(@"%@", error.localizedDescription);
-    }];
+    NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
+    return [imageData writeToFile:fullPath atomically:YES];
 };
+
+BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSString *fullImageName = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
+    NSData *imageData = UIImageJPEGRepresentation([image ssj_scaleImageWithSize:CGSizeMake(50, 50)], 0.5);
+    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
+    return [imageData writeToFile:fullPath atomically:YES];
+}
 
 NSString *SSJImagePath(NSString *imageName){
     NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];

@@ -56,6 +56,9 @@ PODS:
   - SDWebImage (3.7.3):
     - SDWebImage/Core (= 3.7.3)
   - SDWebImage/Core (3.7.3)
+  - SDWebImage/WebP (3.7.3):
+    - libwebp
+    - SDWebImage/Core
   - SSZipArchive (1.0.1)
   - UMengAnalytics-NO-IDFA (3.6.7)
   - UMengSocial (5.0)
@@ -67,6 +70,7 @@ DEPENDENCIES:
   - iOS-WebP (= 0.4)
   - MJExtension
   - SDWebImage (~> 3.7)
+  - SDWebImage/WebP
   - SSZipArchive
   - UMengAnalytics-NO-IDFA
   - UMengSocial (~> 5.0)
