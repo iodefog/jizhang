@@ -122,4 +122,8 @@
     return image;
 }
 
+-(void)ssj_convertToWebpImageWithquality:(CGFloat)quality alpha:(CGFloat)alpha completionBlock:(void (^)(NSData *result))completionBlock failureBlock:(void (^)(NSError *error))failureBlock{
+    [UIImage imageToWebP:self quality:quality alpha:alpha preset:WEBP_PRESET_PICTURE completionBlock:completionBlock failureBlock:failureBlock];
+}
+
 @end

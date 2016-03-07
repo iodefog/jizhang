@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIImage+WebP.h"
+
 
 @interface UIImage (SSJCategory)
 
@@ -54,5 +56,17 @@
  */
 - (UIImage *)ssj_blurredImageWithRadius:(CGFloat)radius iterations:(NSUInteger)iterations tintColor:(UIColor *)tintColor;
 
+
+
+
+/**
+ *  图片转换成webp格式
+ *
+ *  @param quality 图片的质量 [0, 100]
+ *  @param alpha   图片透明度 [0, 1]
+ *  @param completionBlock 完成的回调
+ *  @param failureBlock    失败的回调
+ */
+-(void)ssj_convertToWebpImageWithquality:(CGFloat)quality alpha:(CGFloat)alpha completionBlock:(void (^)(NSData *result))completionBlock failureBlock:(void (^)(NSError *error))failureBlock;
 @end
 

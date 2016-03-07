@@ -34,6 +34,9 @@ static NSString *const kTitle5 = @"意见反馈";
 static NSString *const kTitle6 = @"给个好评";
 static NSString *const kTitle7 = @"设置";
 
+static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
+
+
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
@@ -183,14 +186,17 @@ static NSString *const kTitle7 = @"设置";
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
-//
-//    //  用户协议与隐私说明
-//    if ([title isEqualToString:kTitle4]) {
-//        NSURL *url = [[NSURL alloc]initWithString:@"http://1.9188.com/h5/about_shq/protocol.html"];
-//        SSJNormalWebViewController *webVC = [SSJNormalWebViewController webViewVCWithURL:url];
-//        webVC.title = @"用户协议";
-//        [self.navigationController pushViewController:webVC animated:YES];
-//        return;
+
+    //  用户协议与隐私说明
+    if ([title isEqualToString:kTitle4]) {
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:kUMAppKey
+                                          shareText:@"养鱼要蓄水，致富要积累"
+                                         shareImage:[UIImage imageNamed:@"icon"]
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+                                           delegate:self];
+
+    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -213,6 +219,18 @@ static NSString *const kTitle7 = @"设置";
     return mineHomeCell;
 }
 
+#pragma mark - UMSocialUIDelegate
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]]delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+    }
+}
 
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

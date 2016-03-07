@@ -7,7 +7,8 @@
 //
 
 #import "SSJNewBaseTableViewController.h"
+#import "UMSocial.h"
 
-@interface SSJMineHomeViewController : SSJNewBaseTableViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface SSJMineHomeViewController : SSJNewBaseTableViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UMSocialUIDelegate>
 
 @end
