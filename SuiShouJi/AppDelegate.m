@@ -30,6 +30,10 @@
 //  友盟key
 static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
+//- (void)applicationWillEnterForeground:(UIApplication *)application {
+//    
+//}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -68,6 +72,24 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
     
     return YES;
+}
+
+- (void)registerRegularTask {
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeNone categories:nil]];
+    }
+    
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    NSDate *date = [NSDate date];
+    notification.fireDate = [NSDate dateWithYear:[date year] month:[date month] day:[date day]];
+    notification.repeatInterval = NSCalendarUnitDay;
+    notification.repeatCalendar = [NSCalendar currentCalendar];
+    
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    
 }
 
 //  设置根控制器

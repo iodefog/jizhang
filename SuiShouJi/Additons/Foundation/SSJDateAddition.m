@@ -10,10 +10,19 @@
 
 @implementation NSDate (SSJCategory)
 
+- (NSDateFormatter *)ssj_formatter {
+    static NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        formatter.timeZone = [NSTimeZone systemTimeZone];
+    });
+    return formatter;
+}
+
 - (NSString *)ssj_dateStringWithFormat:(NSString *)format {
-    NSDateFormatter *tempFormat = [[NSDateFormatter alloc] init];
-    [tempFormat setDateFormat:format];
-    NSString *dateString = [tempFormat stringFromDate:self];
+    [[self ssj_formatter] setDateFormat:format];
+    NSString *dateString = [[self ssj_formatter] stringFromDate:self];
     return dateString;
 }
 
@@ -22,10 +31,8 @@
     if (!format || format.length == 0) {
         format = @"yyyy-MM-dd HH:mm:ss";
     }
-    NSDateFormatter *tempFormat = [[NSDateFormatter alloc] init];
-    [tempFormat setDateFormat:format];
-    tempFormat.timeZone = [NSTimeZone systemTimeZone];
-    NSString *systemTimeZoneStr =  [tempFormat stringFromDate:now];
+    [[self ssj_formatter] setDateFormat:format];
+    NSString *systemTimeZoneStr = [[self ssj_formatter] stringFromDate:now];
     return systemTimeZoneStr;
 }
 

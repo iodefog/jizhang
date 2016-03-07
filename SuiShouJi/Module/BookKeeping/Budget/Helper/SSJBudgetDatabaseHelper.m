@@ -288,102 +288,102 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     }];
 }
 
-+ (void)supplementBudgetRecordWithSuccess:(void(^)())success
-                                  failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate) from bk_user_budget where cuserid = ? and operatortype <> 2 and istate = 1 group by itype, cbilltype", SSJUSERID()];
-        if (!resultSet) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        BOOL successfull = YES;
-        
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyy-MM-dd"];
+//+ (void)supplementBudgetRecordWithSuccess:(void(^)())success
+//                                  failure:(void (^)(NSError *error))failure {
+//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate) from bk_user_budget where cuserid = ? and operatortype <> 2 and istate = 1 group by itype, cbilltype", SSJUSERID()];
+//        if (!resultSet) {
+//            if (failure) {
+//                SSJDispatch_main_async_safe(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//            return;
+//        }
+//        
+//        BOOL successfull = YES;
+//        
+//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//        [formatter setDateFormat:@"yyyy-MM-dd"];
+//
+//        while ([resultSet next]) {
+//             NSDate *recentEndDate = [formatter dateFromString:[resultSet stringForColumn:@"max(cedate)"]];
+//            
+//            if ([recentEndDate compare:[NSDate date]] == NSOrderedAscending) {
+//                
+//                int itype = [resultSet intForColumn:@"itype"];
+//                NSString *imoney = [resultSet stringForColumn:@"imoney"];
+//                NSString *iremindmoney = [resultSet stringForColumn:@"iremindmoney"];
+//                NSString *cbilltype = [resultSet stringForColumn:@"cbilltype"];
+//                int iremind = [resultSet intForColumn:@"iremind"];
+//                NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+//                
+//                NSArray *periodArr = [self periodArrayForType:itype sinceDate:recentEndDate];
+//                
+//                for (NSDictionary *periodInfo in periodArr) {
+//                    NSString *beginDate = periodInfo[kBudgetPeriodBeginDateKey];
+//                    NSString *endDate = periodInfo[kBudgetPeriodEndDateKey];
+//                    
+//                    successfull = [db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), SSJUSERID(), @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDate, cbilltype, @(iremind), currentDate, @(SSJSyncVersion())];
+//                }
+//            }
+//        }
+//        
+//        if (successfull) {
+//            if (success) {
+//                SSJDispatch_main_async_safe(^{
+//                    success();
+//                });
+//            }
+//        } else {
+//            if (failure) {
+//                SSJDispatch_main_async_safe(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//        }
+//        
+//    }];
+//}
 
-        while ([resultSet next]) {
-             NSDate *recentEndDate = [formatter dateFromString:[resultSet stringForColumn:@"max(cedate)"]];
-            
-            if ([recentEndDate compare:[NSDate date]] == NSOrderedAscending) {
-                
-                int itype = [resultSet intForColumn:@"itype"];
-                NSString *imoney = [resultSet stringForColumn:@"imoney"];
-                NSString *iremindmoney = [resultSet stringForColumn:@"iremindmoney"];
-                NSString *cbilltype = [resultSet stringForColumn:@"cbilltype"];
-                int iremind = [resultSet intForColumn:@"iremind"];
-                NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                
-                NSArray *periodArr = [self periodArrayForType:itype sinceDate:recentEndDate];
-                
-                for (NSDictionary *periodInfo in periodArr) {
-                    NSString *beginDate = periodInfo[SSJBudgetPeriodBeginDateKey];
-                    NSString *endDate = periodInfo[SSJBudgetPeriodEndDateKey];
-                    
-                    successfull = [db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), SSJUSERID(), @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDate, cbilltype, @(iremind), currentDate, @(SSJSyncVersion())];
-                }
-            }
-        }
-        
-        if (successfull) {
-            if (success) {
-                SSJDispatch_main_async_safe(^{
-                    success();
-                });
-            }
-        } else {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-        }
-        
-    }];
-}
-
-+ (NSArray *)periodArrayForType:(int)type sinceDate:(NSDate *)date {
-    NSCalendarUnit unit = NSCalendarUnitWeekOfMonth;
-    switch (type) {
-        case 0:
-            unit = NSCalendarUnitWeekOfMonth;
-            break;
-        case 1:
-            unit = NSCalendarUnitMonth;
-            break;
-        case 2:
-            unit = NSCalendarUnitYear;
-            break;
-    }
-    
-    NSMutableArray *periodArr = [NSMutableArray array];
-    
-    NSDate *tDate = [NSDate dateWithTimeInterval:(24 * 60 * 60) sinceDate:date];
-    NSDictionary *period = [SSJBudgetCalendarHelper getPeriodInfoWithCalendarUnit:unit ForDate:tDate];
-    NSDate *beginDate = period[SSJBudgetPeriodBeginDateKey];
-    NSDate *endDate = period[SSJBudgetPeriodEndDateKey];
-    
-    if ([endDate compare:[NSDate date]] == NSOrderedAscending) {
-        NSArray *anotherPeriod = [self periodArrayForType:type sinceDate:endDate];
-        [periodArr addObjectsFromArray:anotherPeriod];
-    }
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.timeZone = [NSTimeZone systemTimeZone];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    
-    NSString *beginDateStr = [formatter stringFromDate:beginDate];
-    NSString *endDateStr = [formatter stringFromDate:endDate];
-    
-    [periodArr addObject:@{SSJBudgetPeriodBeginDateKey:beginDateStr,
-                           SSJBudgetPeriodEndDateKey:endDateStr}];
-    
-    return periodArr;
-}
+//+ (NSArray *)periodArrayForType:(int)type sinceDate:(NSDate *)date {
+//    NSCalendarUnit unit = NSCalendarUnitWeekOfMonth;
+//    switch (type) {
+//        case 0:
+//            unit = NSCalendarUnitWeekOfMonth;
+//            break;
+//        case 1:
+//            unit = NSCalendarUnitMonth;
+//            break;
+//        case 2:
+//            unit = NSCalendarUnitYear;
+//            break;
+//    }
+//    
+//    NSMutableArray *periodArr = [NSMutableArray array];
+//    
+//    NSDate *tDate = [NSDate dateWithTimeInterval:(24 * 60 * 60) sinceDate:date];
+//    NSDictionary *period = [SSJBudgetCalendarHelper getPeriodInfoWithCalendarUnit:unit ForDate:tDate];
+//    NSDate *beginDate = period[kBudgetPeriodBeginDateKey];
+//    NSDate *endDate = period[SSJBudgetPeriodEndDateKey];
+//    
+//    if ([endDate compare:[NSDate date]] == NSOrderedAscending) {
+//        NSArray *anotherPeriod = [self periodArrayForType:type sinceDate:endDate];
+//        [periodArr addObjectsFromArray:anotherPeriod];
+//    }
+//    
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    formatter.timeZone = [NSTimeZone systemTimeZone];
+//    [formatter setDateFormat:@"yyyy-MM-dd"];
+//    
+//    NSString *beginDateStr = [formatter stringFromDate:beginDate];
+//    NSString *endDateStr = [formatter stringFromDate:endDate];
+//    
+//    [periodArr addObject:@{kBudgetPeriodBeginDateKey:beginDateStr,
+//                           SSJBudgetPeriodEndDateKey:endDateStr}];
+//    
+//    return periodArr;
+//}
 
 + (SSJBudgetModel *)budgetModelWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
     SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
