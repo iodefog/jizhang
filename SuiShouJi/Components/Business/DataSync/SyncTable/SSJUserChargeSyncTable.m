@@ -49,13 +49,21 @@
     }
     
     //  如果返回了定期配置id，就查询定期配置表中是否有这个id
-    if (configId.length && ![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, SSJCurrentSyncDataUserId()]) {
-        return NO;
-    }
-    
-    //  如果当前用户已经有了相同的定期记账流水，就不需要再合并了
-    if ([db boolForQuery:@"select count(*) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncDataUserId()]) {
-        return NO;
+    if (configId.length) {
+        //  定期配置表中没有对应id的记录
+        if (![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, SSJCurrentSyncDataUserId()]) {
+            return NO;
+        }
+        
+        //  根据定期配置表中的有效时间，判断如果流水在有效时间外，就不合并
+//        if (![db boolForQuery:@"select count(*) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncDataUserId()]) {
+//            
+//        }
+        
+        //  如果当前用户已经有了相同的定期记账流水，将其operatortype改为2
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncDataUserId()]) {
+            return NO;
+        }
     }
     
     return YES;
