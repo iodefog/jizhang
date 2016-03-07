@@ -234,14 +234,21 @@ NSString *SSJUUID(){
     return [strUUID lowercaseString];
 }
 
-BOOL SSJSaveImage(UIImage *image , NSString *imageName){
+void SSJSaveImage(UIImage *image , NSString *imageName){
     if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
-    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
-    return [imageData writeToFile:fullPath atomically:YES];
+//    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
+//    return [imageData writeToFile:fullPath atomically:YES];
+    [image ssj_convertToWebpImageWithquality:80 alpha:1 completionBlock:^(NSData *result) {
+        NSString *fullImageName = [NSString stringWithFormat:@"%@.webp",imageName];
+        NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
+        if (![result writeToFile:fullPath atomically:YES]) {
+            NSLog(@"Failed to save file");
+        }
+    } failureBlock:^(NSError *error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
 };
 
 NSString *SSJImagePath(NSString *imageName){
