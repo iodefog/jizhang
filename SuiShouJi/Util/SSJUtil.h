@@ -154,7 +154,7 @@ NSString *SSJUUID();
  *
  *  @return (BOOL) 是否保存成功
  */
-void SSJSaveImage(UIImage *image , NSString *imageName);
+BOOL SSJSaveImage(UIImage *image , NSString *imageName);
 
 /**
  *  取出图片在沙盒中的路径
