@@ -49,12 +49,12 @@
     }
     
     //  如果返回了定期配置id，就查询定期配置表中是否有这个id
-    if (configId.length && ![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ?", configId]) {
+    if (configId.length && ![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, SSJCurrentSyncUserId()]) {
         return NO;
     }
     
     //  如果当前用户已经有了相同的定期记账流水，就不需要再合并了
-    if ([db boolForQuery:@"select count(*) from bk_user_charge where iconfigid = ? and cbilldate = ?", configId, record[@"cbilldate"]]) {
+    if ([db boolForQuery:@"select count(*) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncUserId()]) {
         return NO;
     }
     
