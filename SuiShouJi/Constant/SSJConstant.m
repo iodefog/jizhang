@@ -33,6 +33,8 @@ NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
+NSString *const SSJSyncImageSuccessNotification = @"SSJSyncImageSuccessNotification";
+
 NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";
 
 NSString *const SSJShowSyncLoadingNotification = @"SSJShowSyncLoadingNotification";

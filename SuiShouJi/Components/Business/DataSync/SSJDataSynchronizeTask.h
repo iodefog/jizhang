@@ -7,17 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJSynchronizeTask.h"
 
-@interface SSJDataSynchronizeTask : NSObject
-
-@property (nonatomic, weak) dispatch_queue_t syncQueue;
-
-/**
- *  开始数据同步
- *
- *  @param success  同步成功回调
- *  @param failure  同步失败回调
- */
-- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+@interface SSJDataSynchronizeTask : NSObject <SSJSynchronizeTask>
 
 @end

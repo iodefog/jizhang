@@ -12,10 +12,16 @@
 
 @implementation SSJImageSynchronizeTask
 
+@synthesize syncQueue;
+
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    NSMutableArray *uploadImages = [NSMutableArray array];
+    __block NSError *tError = nil;
+    NSMutableArray *imageNames = [NSMutableArray array];
+    
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.cimgname from bk_img_sync as a, bk_user_charge as b where a.rid = b.ichargeid and a.operatortype <> 2 and a.isynctype = 0 and a.isyncstate = 0 and b.cuserid = ?", SSJCurrentSyncUserId()];
+        
+        //  查询当前用户没有同步的图片
+        FMResultSet *resultSet = [db executeQuery:@"select a.cimgname from bk_img_sync as a, bk_user_charge as b where a.rid = b.ichargeid and a.operatortype <> 2 and a.isynctype = 0 and a.isyncstate = 0 and b.cuserid = ?", SSJCurrentSyncImageUserId()];
         if (!resultSet) {
             if (failure) {
                 failure([db lastError]);
@@ -24,14 +30,67 @@
         }
         
         while ([resultSet next]) {
-            [uploadImages addObject:[resultSet stringForColumn:@"cimgname"]];
+            NSString *imageName = [resultSet stringForColumn:@"cimgname"];
+            if (imageName.length) {
+                [imageNames addObject:imageName];
+            }
         }
     }];
     
-    for (NSString *imageName in uploadImages) {
+    //  遍历未同步的图片名称，并上传
+    for (NSString *imageName in imageNames) {
+        NSString *userId = SSJCurrentSyncImageUserId();
+        NSNumber *syncType = @0;
+        NSString *thumbImgName = [NSString stringWithFormat:@"%@-thumb", [imageName stringByDeletingPathExtension]];
+        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, kSignKey] ssj_md5HexDigest];
         
+        NSMutableData *imageData = [NSMutableData data];
+        [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
+        [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)]];
+        
+        NSDictionary *params = @{@"cuserId":userId,
+                                 @"imageName":imageName,
+                                 @"thumbName":thumbImgName,
+                                 @"syncType":syncType,
+                                 @"sign":sign};
+        
+        [SSJDataSyncHelper uploadBodyData:imageData headerParams:params toUrlPath:@"/sync/syncimg.go" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+            if (tError) {
+                tError = error;
+                return;
+            }
+            
+            //  解析json数据
+            NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:&tError];
+            if (tError) {
+                SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
+                return;
+            }
+            
+            if (![resultInfo[@"code"] isEqualToString:@"1"]) {
+                NSString *desc = resultInfo[@"desc"];
+                tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:desc ?: @""}];
+                return;
+            }
+            
+            //  更改图片同步状态
+            [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+                if (![db executeUpdate:@"update bk_img_sync set isyncstate = 1 where cimgname = ?", imageName]) {
+                    tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:[db lastError]}];
+                }
+            }];
+        }];
     }
     
+    if (tError) {
+        if (failure) {
+            failure(tError);
+        }
+    } else {
+        if (success) {
+            success();
+        }
+    }
 }
 
 @end

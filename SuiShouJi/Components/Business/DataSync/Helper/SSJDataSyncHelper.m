@@ -9,15 +9,28 @@
 #import "SSJDataSyncHelper.h"
 #import "AFNetworking.h"
 
-static NSString *const SSJCurrentSyncUserIdKey = @"SSJCurrentSyncUserIdKey";
+NSString *const kSignKey = @"accountbook";
 
-BOOL SSJSetCurrentSyncUserId(NSString *userid) {
-    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:SSJCurrentSyncUserIdKey];
+static NSString *const SSJCurrentSyncDataUserIdKey = @"SSJCurrentSyncDataUserIdKey";
+
+BOOL SSJSetCurrentSyncDataUserId(NSString *userid) {
+    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:SSJCurrentSyncDataUserIdKey];
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-NSString *SSJCurrentSyncUserId() {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:SSJCurrentSyncUserIdKey];
+NSString *SSJCurrentSyncDataUserId() {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:SSJCurrentSyncDataUserIdKey];
+}
+
+static NSString *const SSJCurrentSyncImageUserIdKey = @"SSJCurrentSyncImageUserIdKey";
+
+BOOL SSJSetCurrentSyncImageUserId(NSString *userid) {
+    [[NSUserDefaults standardUserDefaults] setObject:userid forKey:SSJCurrentSyncImageUserIdKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+NSString *SSJCurrentSyncImageUserId() {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:SSJCurrentSyncImageUserIdKey];
 }
 
 

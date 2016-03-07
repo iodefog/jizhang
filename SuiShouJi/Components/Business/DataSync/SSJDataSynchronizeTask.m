@@ -32,9 +32,6 @@ static NSString *const kSyncFileName = @"sync_data.json";
 //  压缩文件名称
 static NSString *const kSyncZipFileName = @"sync_data.zip";
 
-//  加密密钥字符串
-static NSString *const kSignKey = @"accountbook";
-
 @interface SSJDataSynchronizeTask ()
 
 @property (nonatomic) int64_t lastSuccessSyncVersion;
@@ -42,6 +39,8 @@ static NSString *const kSignKey = @"accountbook";
 @end
 
 @implementation SSJDataSynchronizeTask
+
+@synthesize syncQueue;
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
@@ -243,7 +242,7 @@ static NSString *const kSignKey = @"accountbook";
     }
     
     //  封装参数，传入请求头
-    NSString *userId = SSJCurrentSyncUserId();
+    NSString *userId = SSJCurrentSyncDataUserId();
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
     NSString *source = SSJDefaultSource();
@@ -296,7 +295,7 @@ static NSString *const kSignKey = @"accountbook";
     NSArray *userArr = tableInfo[@"bk_user"];
     for (NSDictionary *userInfo in userArr) {
         NSString *userId = userInfo[@"cuserid"];
-        if (![userId isEqualToString:SSJCurrentSyncUserId()]) {
+        if (![userId isEqualToString:SSJCurrentSyncDataUserId()]) {
             continue;
         }
         NSString *mobileNo = userInfo[@"cmobileno"];

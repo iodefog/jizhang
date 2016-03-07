@@ -21,6 +21,11 @@
 - (void)startTimingSync;
 
 /**
+ *  关闭定时同步
+ */
+- (void)stopTimingSync;
+
+/**
  *  开始数据同步
  *
  *  @param success  同步成功回调

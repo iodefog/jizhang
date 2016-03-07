@@ -194,7 +194,6 @@
 		7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDA48991C8821F20010EB01 /* SSJDatePeriod.m */; };
 		7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */; };
 		7DE69B611C8D26E7001D31C1 /* SSJImageSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */; };
-		7DE69C221C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C211C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.m */; };
 		7DE6E85F1C55BA7B001C9138 /* login_lock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */; };
 		7DE6E8601C55BA7B001C9138 /* login_lock@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */; };
 		7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
@@ -715,8 +714,7 @@
 		7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizeTask.m; sourceTree = "<group>"; };
 		7DE69B5F1C8D26E7001D31C1 /* SSJImageSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJImageSynchronizeTask.h; sourceTree = "<group>"; };
 		7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJImageSynchronizeTask.m; sourceTree = "<group>"; };
-		7DE69C201C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSynchronizeQueue.h; sourceTree = "<group>"; };
-		7DE69C211C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizeQueue.m; sourceTree = "<group>"; };
+		7DE69C231C8D698D001D31C1 /* SSJSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSynchronizeTask.h; sourceTree = "<group>"; };
 		7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@2x.png"; sourceTree = "<group>"; };
 		7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@3x.png"; sourceTree = "<group>"; };
 		7DE6E8661C55DB75001C9138 /* SSJBaselineTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaselineTextField.h; sourceTree = "<group>"; };
@@ -1272,12 +1270,11 @@
 				7D09ECAC1C5B0F8300C85D8E /* Helper */,
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
+				7DE69C231C8D698D001D31C1 /* SSJSynchronizeTask.h */,
 				7D2B241A1C3E091B009A74A8 /* SSJDataSynchronizer.h */,
 				7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */,
 				7DE3AD741C5F26D5009B2131 /* SSJDataSynchronizeTask.h */,
 				7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */,
-				7DE69C201C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.h */,
-				7DE69C211C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.m */,
 				7DE69B5F1C8D26E7001D31C1 /* SSJImageSynchronizeTask.h */,
 				7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */,
 			);
@@ -3438,7 +3435,6 @@
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
-				7DE69C221C8D4E5A001D31C1 /* SSJDataSynchronizeQueue.m in Sources */,
 				BD70DF641C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m in Sources */,
 				BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */,
 				7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */,

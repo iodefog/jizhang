@@ -32,7 +32,8 @@ typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
 //  自定义错误码，从10000开始
 typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeUndefined = 10000,
-    SSJErrorCodeDataSyncBusy = 10001
+    SSJErrorCodeDataSyncBusy = 10001,
+    SSJErrorCodeImageSyncFailed = 10002
 };
 
 ///------------------------------------------
@@ -69,8 +70,11 @@ extern NSString *const SSJHaveLoginOrRegistKey;
 extern NSString *const SSJHaveEnterFundingHomeKey;
 
 /** --------------- Notification --------------- */
-//  同步成功通知
+//  数据同步成功通知
 extern NSString *const SSJSyncDataSuccessNotification;
+
+//  图片同步成功通知
+extern NSString *const SSJSyncImageSuccessNotification;
 
 //  登录或者注册成功通知
 extern NSString *const SSJLoginOrRegisterNotification;

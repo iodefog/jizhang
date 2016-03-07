@@ -7,15 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJSynchronizeTask.h"
 
-@interface SSJImageSynchronizeTask : NSObject
-
-/**
- *  开始数据同步
- *
- *  @param success  同步成功回调
- *  @param failure  同步失败回调
- */
-- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+@interface SSJImageSynchronizeTask : NSObject <SSJSynchronizeTask>
 
 @end
