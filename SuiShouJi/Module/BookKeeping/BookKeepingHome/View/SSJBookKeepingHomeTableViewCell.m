@@ -60,6 +60,12 @@
     self.bottomlineView.centerX = self.centerX;
     self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
     self.expentureMemoLabel.leftTop = CGPointMake(self.expenditureLabel.left, self.expenditureLabel.bottom + 5);
+    self.IncomeImage.left = self.categoryImageButton.right + 10;
+    self.IncomeImage.size =CGSizeMake(35, 35);
+    self.IncomeImage.centerY = self.height / 2;
+    self.expentureImage.right = self.categoryImageButton.left - 10;
+    self.expentureImage.size =CGSizeMake(35, 35);
+    self.expentureImage.centerY = self.height / 2;
     if (_isEdite == YES) {
         self.editeButton.frame = self.categoryImageButton.frame;
         self.deleteButton.frame = self.categoryImageButton.frame;
@@ -69,6 +75,8 @@
         self.incomeMemoLabel.hidden = YES;
         self.expenditureLabel.hidden = YES;
         self.expentureMemoLabel.hidden = YES;
+        self.IncomeImage.hidden = YES;
+        self.expentureImage.hidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
             self.deleteButton.centerX = 40;
             self.editeButton.centerX = self.width - 40;
@@ -84,6 +92,8 @@
             self.incomeLabel.hidden = NO;
             self.expentureMemoLabel.hidden = NO;
             self.incomeMemoLabel.hidden = NO;
+            self.IncomeImage.hidden = NO;
+            self.expentureImage.hidden = NO;
         }];
     }
 
@@ -284,9 +294,31 @@
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
         [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
-        [self setNeedsLayout];
-    }
+        if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                if (self.item.incomeOrExpence) {
+                    self.expentureImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    self.IncomeImage.image = nil;
+                }else{
+                    self.IncomeImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    self.expentureImage.image = nil;
+                }
+            }else{
+                if (self.item.incomeOrExpence) {
+                    [self.expentureImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
+                    self.IncomeImage.image = nil;
+                }else{
+                    [self.IncomeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
+                    self.expentureImage.image = nil;
+                }
+            }
+        }else{
+            self.expentureImage.image = nil;
+            self.IncomeImage.image = nil;
+        }
     [self setNeedsLayout];
+    }
+    
 }
 
 -(void)setIsEdite:(BOOL)isEdite{
