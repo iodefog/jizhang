@@ -573,7 +573,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         SSJFundingItem *fundingType = weakSelf.selectItem;
         NSString *imageName = SSJUUID();
-        NSString *thumbImageName = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
         NSString *iconfigId;
         if (self.selectChargeCircleType == -1) {
             iconfigId = @"";
@@ -651,7 +650,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                         [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",weakSelf.item.ID,[NSString stringWithFormat:@"%@.jpg",imageName],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
                         if ([db intForQuery:@"select * from BK_IMG_SYNC where CIMGNAME = ? and RID <> ?",weakSelf.item.chargeImage,weakSelf.item.ID]+[db intForQuery:@"select * from BK_USER_CHARGE where CIMGURL = ? and ICHARGEID <> ?",weakSelf.item.chargeImage,weakSelf.item.ID] == 0) {
                             [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeImage) error:nil];
-                            [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath([NSString stringWithFormat:@"%@",weakSelf.item.chargeImage]) error:nil];
+                            [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeThumbImage) error:nil];
                             [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",weakSelf.item.chargeImage];
                         }
                     }
@@ -704,7 +703,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",weakSelf.item.configId,@"",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
                         if ([db intForQuery:@"select * from BK_IMG_SYNC where CIMGNAME = ? and RID <> ?",weakSelf.item.chargeImage,weakSelf.item.configId]+[db intForQuery:@"select * from BK_USER_CHARGE where CIMGURL = ? and ICHARGEID <> ?",weakSelf.item.chargeImage] == 0) {
                             [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeImage) error:nil];
-                            [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(thumbImageName) error:nil];
+                            [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeThumbImage) error:nil];
                             [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",weakSelf.item.chargeImage];
                         }
                     }
