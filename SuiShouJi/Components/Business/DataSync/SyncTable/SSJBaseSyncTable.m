@@ -164,23 +164,42 @@
     }
     
     //  检测表中是否存在将要合并的记录
-    BOOL isExisted = [db boolForQuery:[NSString stringWithFormat:@"select count(*) from %@ where %@", [self tableName], necessaryCondition]];
+    FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [self tableName], necessaryCondition]];
     
-    //  如果记录已存在，并且操作类型是修改（1）、删除（2），就更新记录；反之就插入记录
+    if (!resultSet) {
+        *error = [db lastError];
+        return nil;
+    }
+    
+    BOOL isExisted = NO;
     NSString *statement = nil;
     
-    if (isExisted) {
-        NSMutableString *condition = [necessaryCondition mutableCopy];
-        if (opertoryValue == 0 || opertoryValue == 1) {
-            [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
+    while ([resultSet next]) {
+        isExisted = YES;
+        int localOperatorType = [resultSet intForColumn:@"operatortype"];
+        if (localOperatorType == 0 || localOperatorType == 1) {
+            //  如果将要合并的记录操作类型是删除，就不需要根据操作时间决定保留哪条记录，直接合并
+            NSMutableString *condition = [necessaryCondition mutableCopy];
+            if (opertoryValue == 0 || opertoryValue == 1) {
+                [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
+            }
+            
+            NSString *updateStatement = [self updateStatementForMergeRecord:recordInfo];
+            
+            if (updateStatement) {
+                statement = [NSString stringWithFormat:@"%@ where %@", updateStatement, condition];
+            }
+        } else if (localOperatorType == 2) {
+            //  如果本地记录已经删除，就直接忽略将要合并的记录
+            return nil;
+        } else {
+//            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"local record's operatortype value is error,undefined value %d", localOperatorType]}];
+            SSJPRINT(@">>> SSJ Warning:local record's operatortype value is error,undefined value %d", localOperatorType);
+            return nil;
         }
-        
-        NSString *updateStatement = [self updateStatementForMergeRecord:recordInfo];
-        
-        if (updateStatement) {
-            statement = [NSString stringWithFormat:@"%@ where %@", updateStatement, condition];
-        }
-    } else {
+    }
+    
+    if (!isExisted) {
         statement = [self insertStatementForMergeRecord:recordInfo];
     }
     

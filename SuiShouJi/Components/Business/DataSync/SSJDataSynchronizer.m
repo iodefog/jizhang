@@ -50,7 +50,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     if (self = [super init]) {
         self.userIdsForSyncData = [NSMutableArray array];
         self.userIdsForSyncImage = [NSMutableArray array];
-        self.syncQueue = dispatch_queue_create("com.ShuiShouJi.SSJDataSync", DISPATCH_QUEUE_SERIAL);
+        self.syncQueue = dispatch_queue_create("com.ShuiShouJi.SSJDataSync", DISPATCH_QUEUE_CONCURRENT);
         dispatch_queue_set_specific(self.syncQueue, kSSJDataSynchronizerSpecificKey, (__bridge void *)self, NULL);
     }
     return self;
@@ -83,9 +83,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
     if (currentSynchronizer == self) {
         [self startSyncDataWithSuccessIfNeeded:success failure:failure];
+        [self startSyncImageWithSuccessIfNeeded:success failure:failure];
     } else {
         dispatch_async(self.syncQueue, ^{
             [self startSyncDataWithSuccessIfNeeded:success failure:failure];
+            [self startSyncImageWithSuccessIfNeeded:success failure:failure];
         });
     }
 }

@@ -70,14 +70,14 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }
     
     if (!data) {
-        tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"there is no data to be uploaded"}];
-        if (failure) {
-            failure(tError);
+        SSJPRINT(@"there is no data to be uploaded");
+        if (success) {
+            success();
         }
         return;
     }
     
-    //  读取压缩好的文件，上传到服务端
+    //  压缩文件，准备上传
     NSData *zipData = [self zipData:data error:&tError];
     
     if (tError) {
