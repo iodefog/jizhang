@@ -193,6 +193,23 @@
 		7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */; };
 		7DE69B611C8D26E7001D31C1 /* SSJImageSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */; };
 		7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */; };
+		7DE69C391C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C301C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m */; };
+		7DE69C3A1C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C321C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m */; };
+		7DE69C3B1C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */; };
+		7DE69C3C1C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C361C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m */; };
+		7DE69C3D1C8EC401001D31C1 /* SCYMotionEncryptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C381C8EC401001D31C1 /* SCYMotionEncryptionView.m */; };
+		7DE69C541C8EDF34001D31C1 /* motion_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C4A1C8EDF34001D31C1 /* motion_background.png */; };
+		7DE69C551C8EDF34001D31C1 /* motion_circle_correct-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C4B1C8EDF34001D31C1 /* motion_circle_correct-667@2x.png */; };
+		7DE69C561C8EDF34001D31C1 /* motion_circle_correct@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C4C1C8EDF34001D31C1 /* motion_circle_correct@2x.png */; };
+		7DE69C571C8EDF34001D31C1 /* motion_circle_correct@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C4D1C8EDF34001D31C1 /* motion_circle_correct@3x.png */; };
+		7DE69C581C8EDF34001D31C1 /* motion_circle_default-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C4E1C8EDF34001D31C1 /* motion_circle_default-667@2x.png */; };
+		7DE69C591C8EDF34001D31C1 /* motion_circle_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C4F1C8EDF34001D31C1 /* motion_circle_default@2x.png */; };
+		7DE69C5A1C8EDF34001D31C1 /* motion_circle_default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C501C8EDF34001D31C1 /* motion_circle_default@3x.png */; };
+		7DE69C5B1C8EDF34001D31C1 /* motion_circle_error-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C511C8EDF34001D31C1 /* motion_circle_error-667@2x.png */; };
+		7DE69C5C1C8EDF34001D31C1 /* motion_circle_error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C521C8EDF34001D31C1 /* motion_circle_error@2x.png */; };
+		7DE69C5D1C8EDF34001D31C1 /* motion_circle_error@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE69C531C8EDF34001D31C1 /* motion_circle_error@3x.png */; };
+		7DE69C681C8F023B001D31C1 /* SSJMotionPasswordHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C671C8F023B001D31C1 /* SSJMotionPasswordHelper.m */; };
+		7DE69C6B1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C6A1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m */; };
 		7DE6E85F1C55BA7B001C9138 /* login_lock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */; };
 		7DE6E8601C55BA7B001C9138 /* login_lock@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */; };
 		7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */; };
@@ -719,6 +736,30 @@
 		7DE69C231C8D698D001D31C1 /* SSJSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSynchronizeTask.h; sourceTree = "<group>"; };
 		7DE69C2B1C8EA84A001D31C1 /* SSJDatabaseUpgrader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseUpgrader.h; sourceTree = "<group>"; };
 		7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseUpgrader.m; sourceTree = "<group>"; };
+		7DE69C2F1C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYMotionEncryptionCircleLayer.h; sourceTree = "<group>"; };
+		7DE69C301C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYMotionEncryptionCircleLayer.m; sourceTree = "<group>"; };
+		7DE69C311C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYMotionEncryptionStrokeLayer.h; sourceTree = "<group>"; };
+		7DE69C321C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYMotionEncryptionStrokeLayer.m; sourceTree = "<group>"; };
+		7DE69C331C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYMotionEncryptionTriangleLayer.h; sourceTree = "<group>"; };
+		7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYMotionEncryptionTriangleLayer.m; sourceTree = "<group>"; };
+		7DE69C351C8EC401001D31C1 /* SCYMotionEncryptionUitlities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYMotionEncryptionUitlities.h; sourceTree = "<group>"; };
+		7DE69C361C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYMotionEncryptionUitlities.m; sourceTree = "<group>"; };
+		7DE69C371C8EC401001D31C1 /* SCYMotionEncryptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYMotionEncryptionView.h; sourceTree = "<group>"; };
+		7DE69C381C8EC401001D31C1 /* SCYMotionEncryptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYMotionEncryptionView.m; sourceTree = "<group>"; };
+		7DE69C4A1C8EDF34001D31C1 /* motion_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motion_background.png; sourceTree = "<group>"; };
+		7DE69C4B1C8EDF34001D31C1 /* motion_circle_correct-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_correct-667@2x.png"; sourceTree = "<group>"; };
+		7DE69C4C1C8EDF34001D31C1 /* motion_circle_correct@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_correct@2x.png"; sourceTree = "<group>"; };
+		7DE69C4D1C8EDF34001D31C1 /* motion_circle_correct@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_correct@3x.png"; sourceTree = "<group>"; };
+		7DE69C4E1C8EDF34001D31C1 /* motion_circle_default-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_default-667@2x.png"; sourceTree = "<group>"; };
+		7DE69C4F1C8EDF34001D31C1 /* motion_circle_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_default@2x.png"; sourceTree = "<group>"; };
+		7DE69C501C8EDF34001D31C1 /* motion_circle_default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_default@3x.png"; sourceTree = "<group>"; };
+		7DE69C511C8EDF34001D31C1 /* motion_circle_error-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_error-667@2x.png"; sourceTree = "<group>"; };
+		7DE69C521C8EDF34001D31C1 /* motion_circle_error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_error@2x.png"; sourceTree = "<group>"; };
+		7DE69C531C8EDF34001D31C1 /* motion_circle_error@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_error@3x.png"; sourceTree = "<group>"; };
+		7DE69C661C8F023B001D31C1 /* SSJMotionPasswordHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordHelper.h; sourceTree = "<group>"; };
+		7DE69C671C8F023B001D31C1 /* SSJMotionPasswordHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMotionPasswordHelper.m; sourceTree = "<group>"; };
+		7DE69C691C8F04DB001D31C1 /* SSJMotionPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordViewController.h; sourceTree = "<group>"; };
+		7DE69C6A1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMotionPasswordViewController.m; sourceTree = "<group>"; };
 		7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@2x.png"; sourceTree = "<group>"; };
 		7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@3x.png"; sourceTree = "<group>"; };
 		7DE6E8661C55DB75001C9138 /* SSJBaselineTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaselineTextField.h; sourceTree = "<group>"; };
@@ -1407,6 +1448,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7DE69C2E1C8EC401001D31C1 /* SCYMotionEncryptionControl */,
 				7DEF544B1C75DEEC00A90153 /* SSJPercentCircleView */,
 				7DE6E8651C55DB54001C9138 /* SSJBaselineTextField */,
 				BD33FD261C4B2E4C006A6942 /* SSJAlertViewAdapter */,
@@ -1465,6 +1507,7 @@
 		7DD7D5D51C4C8E6A00ACE71A /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				7DE69C491C8EDF34001D31C1 /* motion_password */,
 				BDF504721C868A8200DCFA99 /* MakeARecordImage */,
 				7DF8DECB1C59BFE700CC5DFA /* Guide */,
 				BDA2EEFB1C8B16FB007DD45F /* icon.png */,
@@ -1738,6 +1781,67 @@
 				7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */,
 			);
 			path = SSJDatabaseUpdater;
+			sourceTree = "<group>";
+		};
+		7DE69C2E1C8EC401001D31C1 /* SCYMotionEncryptionControl */ = {
+			isa = PBXGroup;
+			children = (
+				7DE69C351C8EC401001D31C1 /* SCYMotionEncryptionUitlities.h */,
+				7DE69C361C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m */,
+				7DE69C2F1C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.h */,
+				7DE69C301C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m */,
+				7DE69C311C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.h */,
+				7DE69C321C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m */,
+				7DE69C331C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.h */,
+				7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */,
+				7DE69C371C8EC401001D31C1 /* SCYMotionEncryptionView.h */,
+				7DE69C381C8EC401001D31C1 /* SCYMotionEncryptionView.m */,
+			);
+			path = SCYMotionEncryptionControl;
+			sourceTree = "<group>";
+		};
+		7DE69C3F1C8ED674001D31C1 /* MotionPassword */ = {
+			isa = PBXGroup;
+			children = (
+				7DE69C5E1C8F0224001D31C1 /* Controller */,
+				7DE69C631C8F0224001D31C1 /* Helper */,
+			);
+			path = MotionPassword;
+			sourceTree = "<group>";
+		};
+		7DE69C491C8EDF34001D31C1 /* motion_password */ = {
+			isa = PBXGroup;
+			children = (
+				7DE69C4A1C8EDF34001D31C1 /* motion_background.png */,
+				7DE69C4B1C8EDF34001D31C1 /* motion_circle_correct-667@2x.png */,
+				7DE69C4C1C8EDF34001D31C1 /* motion_circle_correct@2x.png */,
+				7DE69C4D1C8EDF34001D31C1 /* motion_circle_correct@3x.png */,
+				7DE69C4E1C8EDF34001D31C1 /* motion_circle_default-667@2x.png */,
+				7DE69C4F1C8EDF34001D31C1 /* motion_circle_default@2x.png */,
+				7DE69C501C8EDF34001D31C1 /* motion_circle_default@3x.png */,
+				7DE69C511C8EDF34001D31C1 /* motion_circle_error-667@2x.png */,
+				7DE69C521C8EDF34001D31C1 /* motion_circle_error@2x.png */,
+				7DE69C531C8EDF34001D31C1 /* motion_circle_error@3x.png */,
+			);
+			path = motion_password;
+			sourceTree = "<group>";
+		};
+		7DE69C5E1C8F0224001D31C1 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7DE69C691C8F04DB001D31C1 /* SSJMotionPasswordViewController.h */,
+				7DE69C6A1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		7DE69C631C8F0224001D31C1 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				7DE69C661C8F023B001D31C1 /* SSJMotionPasswordHelper.h */,
+				7DE69C671C8F023B001D31C1 /* SSJMotionPasswordHelper.m */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		7DE6E8651C55DB54001C9138 /* SSJBaselineTextField */ = {
@@ -2146,6 +2250,7 @@
 		BD0433A11C1A9DFB0051E7AB /* Mine */ = {
 			isa = PBXGroup;
 			children = (
+				7DE69C3F1C8ED674001D31C1 /* MotionPassword */,
 				BD0433B21C1AA2A40051E7AB /* MineHome */,
 			);
 			name = Mine;
@@ -3031,6 +3136,7 @@
 				BDFBDAC51C7EB0E80049F179 /* bt_baby@2x.png in Resources */,
 				7DF8DEDA1C59BFE700CC5DFA /* guide_2@3x.png in Resources */,
 				BD37D2DA1C523AE00050BDAA /* bt_calender@3x.png in Resources */,
+				7DE69C571C8EDF34001D31C1 /* motion_circle_correct@3x.png in Resources */,
 				7DD7D6B91C4C8E6A00ACE71A /* bt_jiayong@3x.png in Resources */,
 				7DD7D6EB1C4C8E6A00ACE71A /* bt_youfei@3x.png in Resources */,
 				7DD7D6CA1C4C8E6A00ACE71A /* bt_recharge@2x.png in Resources */,
@@ -3091,6 +3197,7 @@
 				7DD7D6D71C4C8E6A00ACE71A /* bt_snack@3x.png in Resources */,
 				BDA3FDF01C58CAC400FB57B1 /* ft_chongzhika@3x.png in Resources */,
 				7DD7D6F41C4C8E6A00ACE71A /* close@2x.png in Resources */,
+				7DE69C5A1C8EDF34001D31C1 /* motion_circle_default@3x.png in Resources */,
 				BD37D2D41C5231D60050BDAA /* bt_delete@2x.png in Resources */,
 				7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */,
 				7DD7D6AE1C4C8E6A00ACE71A /* bt_house@2x.png in Resources */,
@@ -3108,6 +3215,7 @@
 				BDA3FDFE1C58CAC400FB57B1 /* ft_wangluochongzhi@3x.png in Resources */,
 				7DD7D69F1C4C8E6A00ACE71A /* bt_entertainment@3x.png in Resources */,
 				7DD7D6C31C4C8E6A00ACE71A /* bt_pet@3x.png in Resources */,
+				7DE69C5B1C8EDF34001D31C1 /* motion_circle_error-667@2x.png in Resources */,
 				7DD7D6EE1C4C8E6A00ACE71A /* bt_zhuanru@2x.png in Resources */,
 				7DD7D6D51C4C8E6A00ACE71A /* bt_shouzhai@3x.png in Resources */,
 				BD976FC41C4F57FB00B0E26D /* solid_circle@3x.png in Resources */,
@@ -3116,6 +3224,7 @@
 				7DD7D6A11C4C8E6A00ACE71A /* bt_food@3x.png in Resources */,
 				BDA3FDF71C58CAC400FB57B1 /* ft_huobijijin@2x.png in Resources */,
 				7DD7D6DB1C4C8E6A00ACE71A /* bt_tobacco@3x.png in Resources */,
+				7DE69C5D1C8EDF34001D31C1 /* motion_circle_error@3x.png in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7DD7D68D1C4C8E6A00ACE71A /* bt_bouns@3x.png in Resources */,
 				7DD7D6AC1C4C8E6A00ACE71A /* bt_hongbao@2x.png in Resources */,
@@ -3127,6 +3236,7 @@
 				7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */,
 				7DD7D6851C4C8E6A00ACE71A /* back@3x.png in Resources */,
 				7DD7D6A01C4C8E6A00ACE71A /* bt_food@2x.png in Resources */,
+				7DE69C5C1C8EDF34001D31C1 /* motion_circle_error@2x.png in Resources */,
 				7DD7D6DA1C4C8E6A00ACE71A /* bt_tobacco@2x.png in Resources */,
 				BDA3FDF61C58CAC400FB57B1 /* ft_house@3x.png in Resources */,
 				7DD7D6961C4C8E6A00ACE71A /* bt_daikuan@2x.png in Resources */,
@@ -3159,6 +3269,7 @@
 				7DD7D6C81C4C8E6A00ACE71A /* bt_purchase@2x.png in Resources */,
 				BDA3FDFA1C58CAC400FB57B1 /* ft_invest@3x.png in Resources */,
 				7DD7D7331C4CA8BD00ACE71A /* reportForms_expenses@2x.png in Resources */,
+				7DE69C591C8EDF34001D31C1 /* motion_circle_default@2x.png in Resources */,
 				BDA2EEFF1C8D6C1F007DD45F /* home_background@2x.png in Resources */,
 				7DF8DED91C59BFE700CC5DFA /* guide_2-667@2x.png in Resources */,
 				7DD7D6A21C4C8E6A00ACE71A /* bt_fruit@2x.png in Resources */,
@@ -3168,6 +3279,7 @@
 				7DF8DED81C59BFE700CC5DFA /* guide_2-568@2x.png in Resources */,
 				7DD7D6B81C4C8E6A00ACE71A /* bt_jiayong@2x.png in Resources */,
 				7DD7D6BF1C4C8E6A00ACE71A /* bt_meirong@3x.png in Resources */,
+				7DE69C541C8EDF34001D31C1 /* motion_background.png in Resources */,
 				7DD7D72E1C4C90E400ACE71A /* reportForms_filter@3x.png in Resources */,
 				BDF504911C868A8200DCFA99 /* save@3x.png in Resources */,
 				BD4934361C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib in Resources */,
@@ -3177,11 +3289,13 @@
 				BDF504961C868A8200DCFA99 /* xunhuan_sel@3x.png in Resources */,
 				7DD7D6BE1C4C8E6A00ACE71A /* bt_meirong@2x.png in Resources */,
 				7DD7D6C51C4C8E6A00ACE71A /* bt_pignzhangshouru@3x.png in Resources */,
+				7DE69C551C8EDF34001D31C1 /* motion_circle_correct-667@2x.png in Resources */,
 				BDEA87361C50D0D7002681BD /* delete@3x.png in Resources */,
 				BDA3FDF91C58CAC400FB57B1 /* ft_invest@2x.png in Resources */,
 				7DD7D6B01C4C8E6A00ACE71A /* bt_interest@2x.png in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				BDA3FE0C1C5904C900FB57B1 /* home_tankuang_close@2x.png in Resources */,
+				7DE69C561C8EDF34001D31C1 /* motion_circle_correct@2x.png in Resources */,
 				7DD7D6A81C4C8E6A00ACE71A /* bt_gift@2x.png in Resources */,
 				7DD7D6E91C4C8E6A00ACE71A /* bt_yiwai@3x.png in Resources */,
 				7DD7D7341C4CA8BD00ACE71A /* reportForms_expenses@3x.png in Resources */,
@@ -3243,6 +3357,7 @@
 				BD37D2D61C52327D0050BDAA /* bt_delete@3x.png in Resources */,
 				7DD7D6CF1C4C8E6A00ACE71A /* bt_service@3x.png in Resources */,
 				7DD7D6E71C4C8E6A00ACE71A /* bt_yingye@3x.png in Resources */,
+				7DE69C581C8EDF34001D31C1 /* motion_circle_default-667@2x.png in Resources */,
 				BDF318701C5F0A9400302DD6 /* record_ok@3x.png in Resources */,
 				7DD7D6D11C4C8E6A00ACE71A /* bt_shebao@3x.png in Resources */,
 				7DD7D6AA1C4C8E6A00ACE71A /* bt_gongjijin@2x.png in Resources */,
@@ -3350,6 +3465,7 @@
 				BDA2EF0A1C8D9B50007DD45F /* SSJHomeBudgetButton.m in Sources */,
 				7DEF54771C7C63F700A90153 /* SSJBudgetDetailViewController.m in Sources */,
 				7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */,
+				7DE69C6B1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m in Sources */,
 				BDF503891C80018C00DCFA99 /* SSJCustomTextView.m in Sources */,
 				7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */,
 				BD0214481C3E87AE000E944E /* SSJFundingTypeSelectViewController.m in Sources */,
@@ -3374,7 +3490,9 @@
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
 				7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */,
 				7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */,
+				7DE69C391C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m in Sources */,
 				7D6AAB6E1C3146500007C0A3 /* SSJReportFormsUtil.m in Sources */,
+				7DE69C3C1C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m in Sources */,
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
@@ -3503,6 +3621,7 @@
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
 				BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */,
+				7DE69C3D1C8EC401001D31C1 /* SCYMotionEncryptionView.m in Sources */,
 				BD70DF5F1C4751EA000E6CC9 /* SSJGuideLastContentView.m in Sources */,
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */,
@@ -3510,6 +3629,7 @@
 				7DEF55251C7DAEA300A90153 /* SSJBudgetWaveScaleView.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */,
+				7DE69C3A1C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
 				BD774A971C88348B001E11FB /* SSJBookkeepingRiminderCell.m in Sources */,
@@ -3524,9 +3644,11 @@
 				7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
 				7DEF55551C7EFCF500A90153 /* SSJBudgetCalendarHelper.m in Sources */,
+				7DE69C3B1C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */,
 				7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7DEF55281C7DAEDE00A90153 /* WaveLoadingIndicator.swift in Sources */,
+				7DE69C681C8F023B001D31C1 /* SSJMotionPasswordHelper.m in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,

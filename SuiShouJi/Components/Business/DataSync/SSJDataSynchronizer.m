@@ -131,6 +131,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         });
         
         self.dataSyncTask = nil;
+        [self.userIdsForSyncData removeObjectAtIndex:0];
         [self startSyncDataWithSuccessIfNeeded:success failure:failure];
     }];
 }

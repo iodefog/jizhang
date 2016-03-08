@@ -96,7 +96,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
             
             if (error) {
                 if (failure) {
-                    failure(tError);
+                    failure(error);
                 }
                 return;
             }
