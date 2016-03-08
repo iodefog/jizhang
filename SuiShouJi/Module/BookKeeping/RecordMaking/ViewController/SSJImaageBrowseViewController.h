@@ -7,9 +7,12 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJImaageBrowseViewController : SSJBaseViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (nonatomic,strong) UIImage *image;
+
+@property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
 
 /**

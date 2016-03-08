@@ -16,6 +16,7 @@
 #import "UMSocialWechatHandler.h"
 #import "UMSocialSinaSSOHandler.h"
 #import "UMSocialQQHandler.h"
+#import <TencentOpenAPI/TencentOAuth.h>
 
 #import "SSJUserDefaultDataCreater.h"
 #import "MobClick.h"
@@ -193,5 +194,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                                          RedirectURL:SSJAppStoreAddress];
     [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:SSJAppStoreAddress];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账——省钱必备，剁掉买买买～";
+}
+
+#pragma mark - qq快登
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    return [TencentOAuth HandleOpenURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    return [TencentOAuth HandleOpenURL:url];
 }
 @end

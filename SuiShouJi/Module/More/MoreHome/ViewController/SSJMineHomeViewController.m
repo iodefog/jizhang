@@ -196,11 +196,11 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         return;
     }
 
-    //  用户协议与隐私说明
+    //  把APP推荐给好友
     if ([title isEqualToString:kTitle4]) {
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUMAppKey
-                                          shareText:@"养鱼要蓄水，致富要积累"
+                                          shareText:@"养鱼要蓄水，致富要积累。---让9188记账当你的资金管理小能手。"
                                          shareImage:[UIImage imageNamed:@"icon"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                            delegate:self];

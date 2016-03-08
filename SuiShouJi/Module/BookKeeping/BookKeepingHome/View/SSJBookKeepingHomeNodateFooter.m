@@ -20,67 +20,58 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.arrowImage];
-        [self addSubview:self.firstLineLabel];
         [self addSubview:self.bearImage];
-        [self addSubview:self.secondLineLabel];
     }
     return self;
 }
 
 -(void)layoutSubviews{
-    self.arrowImage.size = CGSizeMake(23, 48);
-    self.arrowImage.top = 10;
-    self.arrowImage.centerX = self.width / 2;
-    self.firstLineLabel.top = self.arrowImage.bottom + 5;
-    self.firstLineLabel.centerX = self.width / 2;
-    self.bearImage.size = CGSizeMake(130, 98);
-    self.bearImage.top = self.firstLineLabel.bottom + 20;
+    self.bearImage.size = CGSizeMake(320, 233);
+    self.bearImage.top = 10;
     self.bearImage.centerX = self.width / 2;
-    self.secondLineLabel.top = self.bearImage.bottom + 5;
-    self.secondLineLabel.centerX = self.width / 2;
+
 }
 
 -(UIImageView *)bearImage{
     if (!_bearImage) {
         _bearImage = [[UIImageView alloc]init];
-        _bearImage.image = [UIImage imageNamed:@"home_bear"];
+        _bearImage.image = [UIImage imageNamed:@"home_none"];
     }
     return _bearImage;
 }
 
--(UIImageView *)arrowImage{
-    if (!_arrowImage) {
-        _arrowImage = [[UIImageView alloc]init];
-        _arrowImage.image = [UIImage imageNamed:@"home_jiantou"];
-    }
-    return _arrowImage;
-}
-
--(UILabel *)firstLineLabel{
-    if (!_firstLineLabel) {
-        _firstLineLabel = [[UILabel alloc]init];
-        _firstLineLabel.font = [UIFont systemFontOfSize:18];
-        _firstLineLabel.textColor = [UIColor ssj_colorWithHex:@"47cfbe"];
-        _firstLineLabel.textAlignment = NSTextAlignmentCenter;
-        _firstLineLabel.text = @"现在就踏出第一步吧";
-        [_firstLineLabel sizeToFit];
-    }
-    return _firstLineLabel;
-}
-
--(UILabel *)secondLineLabel{
-    if (!_secondLineLabel) {
-        _secondLineLabel = [[UILabel alloc]init];
-        _secondLineLabel.font = [UIFont systemFontOfSize:18];
-        _secondLineLabel.textColor = [UIColor ssj_colorWithHex:@"cccccc"];
-        _secondLineLabel.textAlignment = NSTextAlignmentCenter;
-        _secondLineLabel.text = @"小处不省钱袋空";
-        [_secondLineLabel sizeToFit];
-
-    }
-    return _secondLineLabel;
-}
+//-(UIImageView *)arrowImage{
+//    if (!_arrowImage) {
+//        _arrowImage = [[UIImageView alloc]init];
+//        _arrowImage.image = [UIImage imageNamed:@"home_jiantou"];
+//    }
+//    return _arrowImage;
+//}
+//
+//-(UILabel *)firstLineLabel{
+//    if (!_firstLineLabel) {
+//        _firstLineLabel = [[UILabel alloc]init];
+//        _firstLineLabel.font = [UIFont systemFontOfSize:18];
+//        _firstLineLabel.textColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+//        _firstLineLabel.textAlignment = NSTextAlignmentCenter;
+//        _firstLineLabel.text = @"现在就踏出第一步吧";
+//        [_firstLineLabel sizeToFit];
+//    }
+//    return _firstLineLabel;
+//}
+//
+//-(UILabel *)secondLineLabel{
+//    if (!_secondLineLabel) {
+//        _secondLineLabel = [[UILabel alloc]init];
+//        _secondLineLabel.font = [UIFont systemFontOfSize:18];
+//        _secondLineLabel.textColor = [UIColor ssj_colorWithHex:@"cccccc"];
+//        _secondLineLabel.textAlignment = NSTextAlignmentCenter;
+//        _secondLineLabel.text = @"小处不省钱袋空";
+//        [_secondLineLabel sizeToFit];
+//
+//    }
+//    return _secondLineLabel;
+//}
 
 /*
 // Only override drawRect: if you perform custom drawing.

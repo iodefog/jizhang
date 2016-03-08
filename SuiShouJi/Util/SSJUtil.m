@@ -255,7 +255,7 @@ BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
 }
 
 NSString *SSJImagePath(NSString *imageName){
-    NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+    NSString *fullImageName = [NSString stringWithFormat:@"%@",imageName];
     NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return fullPath;
 };

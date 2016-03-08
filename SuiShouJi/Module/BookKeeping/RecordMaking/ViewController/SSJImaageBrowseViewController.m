@@ -15,6 +15,9 @@
 @property (nonatomic,strong) UIButton *comfirmButton;
 @property (nonatomic,strong) UIView *bottomBackGroundView;
 @property (nonatomic,strong) UIImageView *imageBrowser;
+@property (nonatomic,strong) UILabel *moneyLabel;
+@property (nonatomic,strong) UILabel *memoLabel;
+@property (nonatomic,strong) UILabel *dateLabel;
 @end
 
 @implementation SSJImaageBrowseViewController{
@@ -39,6 +42,9 @@
     [self.view addSubview:self.comfirmButton];
     [self.view addSubview:self.deleteButton];
     [self.view addSubview:self.changeImageButton];
+    [self.view addSubview:self.moneyLabel];
+    [self.view addSubview:self.memoLabel];
+    [self.view addSubview:self.dateLabel];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -72,6 +78,9 @@
     self.deleteButton.size = CGSizeMake(45, 70);
     self.deleteButton.top = self.bottomBackGroundView.top + 10;
     self.deleteButton.centerX = self.comfirmButton.right + (self.view.width - self.comfirmButton.right) / 2;
+    self.moneyLabel.leftTop = CGPointMake(10, self.bottomBackGroundView.top + 10);
+    self.memoLabel.leftTop = CGPointMake(10, self.moneyLabel.bottom + 10);
+    self.dateLabel.rightTop = CGPointMake(self.view.width - 10, self.bottomBackGroundView.top + 10);
 }
 
 #pragma mark - Getter
@@ -141,6 +150,36 @@
     [self ssj_backOffAction];
 }
 
+-(UILabel *)moneyLabel{
+    if (!_moneyLabel) {
+        _moneyLabel = [[UILabel alloc]init];
+        _moneyLabel.textColor = [UIColor whiteColor];
+        _moneyLabel.font = [UIFont systemFontOfSize:15];
+        _moneyLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    return _moneyLabel;
+}
+
+-(UILabel *)memoLabel{
+    if (!_memoLabel) {
+        _memoLabel = [[UILabel alloc]init];
+        _memoLabel.textColor = [UIColor whiteColor];
+        _memoLabel.font = [UIFont systemFontOfSize:15];
+        _memoLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    return _memoLabel;
+}
+
+-(UILabel *)dateLabel{
+    if (!_dateLabel) {
+        _dateLabel = [[UILabel alloc]init];
+        _dateLabel.textColor = [UIColor whiteColor];
+        _dateLabel.font = [UIFont systemFontOfSize:15];
+        _dateLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    return _dateLabel;
+}
+
 #pragma mark - Setter
 -(void)setImage:(UIImage *)image{
     _image = image;
@@ -151,6 +190,47 @@
         self.imageBrowser.size = image.size;
     }
     self.imageBrowser.image = image;
+}
+
+-(void)setItem:(SSJBillingChargeCellItem *)item{
+    _item = item;
+    self.deleteButton.hidden = YES;
+    self.changeImageButton.hidden = YES;
+    self.comfirmButton.hidden = YES;
+    if (item.incomeOrExpence) {
+        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : -%.2f",_item.typeName,[_item.money doubleValue]];
+    }else{
+        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : +%.2f",_item.typeName,[_item.money doubleValue]];
+
+    }
+    [self.moneyLabel sizeToFit];
+    if (_item.chargeMemo != nil && ![item.chargeMemo isEqualToString:@""]) {
+        self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];
+        [self.memoLabel sizeToFit];
+    }
+    self.dateLabel.text = _item.billDate;
+    [self.dateLabel sizeToFit];
+    if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+            UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+            if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
+                self.imageBrowser.width = self.view.width;
+                self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
+            }else{
+                self.imageBrowser.size = image.size;
+            }
+            self.imageBrowser.image = image;
+        }else{
+            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
+                    self.imageBrowser.width = self.view.width;
+                    self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
+                }else{
+                    self.imageBrowser.size = image.size;
+                }
+            }];
+        }
+    }
 }
 
 #pragma mark - UIActionSheetDelegate
