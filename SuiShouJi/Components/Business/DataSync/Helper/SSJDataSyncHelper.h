@@ -8,6 +8,48 @@
 
 #import <Foundation/Foundation.h>
 
-BOOL SSJSetCurrentSyncUserId(NSString *userid);
+//  加密密钥字符串
+extern NSString *const kSignKey;
 
-NSString *SSJCurrentSyncUserId();
+/**
+ *  设置当前用户数据同步的用户编号
+ *
+ *  @param userid 当前用户的用户编号
+ *
+ *  @return (BOOL) 是否保存成功
+ */
+BOOL SSJSetCurrentSyncDataUserId(NSString *userid);
+
+/**
+ *  返回当前用户数据同步的用户编号
+ *
+ *  @return (NSString *) 当前用户数据同步的用户编号
+ */
+NSString *SSJCurrentSyncDataUserId();
+
+/**
+ *  设置当前用户图片同步的用户编号
+ *
+ *  @param userid 当前用户的用户编号
+ *
+ *  @return (BOOL) 是否保存成功
+ */
+BOOL SSJSetCurrentSyncImageUserId(NSString *userid);
+
+/**
+ *  返回当前用户图片同步的用户编号
+ *
+ *  @return (NSString *) 当前用户图片同步的用户编号
+ */
+NSString *SSJCurrentSyncImageUserId();
+
+
+
+@interface SSJDataSyncHelper : NSObject
+
++ (void)uploadBodyData:(NSData *)data
+          headerParams:(NSDictionary *)prarms
+             toUrlPath:(NSString *)path
+     completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
+
+@end

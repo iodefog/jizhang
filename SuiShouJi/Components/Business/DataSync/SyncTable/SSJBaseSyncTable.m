@@ -46,7 +46,7 @@
         return nil;
     }
     
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, SSJCurrentSyncUserId()];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, SSJCurrentSyncDataUserId()];
     
     NSString *additionalCondition = [self queryRecordsForSyncAdditionalCondition];
     if (additionalCondition.length) {
@@ -88,7 +88,7 @@
         return NO;
     }
     
-    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], newVersion, version + 1, SSJCurrentSyncUserId()];
+    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], newVersion, version + 1, SSJCurrentSyncDataUserId()];
     NSString *additionalCondition = [self updateSyncVersionAdditionalCondition];
     if (additionalCondition.length) {
         [update appendFormat:@" and %@", additionalCondition];
