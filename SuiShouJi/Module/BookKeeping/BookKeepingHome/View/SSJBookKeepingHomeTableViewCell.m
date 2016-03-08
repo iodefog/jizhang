@@ -17,19 +17,29 @@
 @property (nonatomic,strong) UIButton *deleteButton;
 @property (nonatomic,strong) UILabel *incomeLabel;
 @property (nonatomic,strong) UILabel *expenditureLabel;
-@property (nonatomic,strong) UIView *lineView;
+@property (nonatomic,strong) UIView *toplineView;
+@property (nonatomic,strong) UILabel *incomeMemoLabel;
+@property (nonatomic,strong) UILabel *expentureMemoLabel;
+@property (nonatomic,strong) UIImageView *IncomeImage;
+@property (nonatomic,strong) UIImageView *expentureImage;
+
 @end
 
 @implementation SSJBookKeepingHomeTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self addSubview:self.toplineView];
+        [self addSubview:self.bottomlineView];
         [self addSubview:self.categoryImageButton];
         [self addSubview:self.expenditureLabel];
         [self addSubview:self.incomeLabel];
         [self addSubview:self.editeButton];
         [self addSubview:self.deleteButton];
-        [self addSubview:self.lineView];
+        [self addSubview:self.incomeMemoLabel];
+        [self addSubview:self.IncomeImage];
+        [self addSubview:self.expentureMemoLabel];
+        [self addSubview:self.expentureImage];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
@@ -37,21 +47,36 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.categoryImageButton.bottom = self.height;
+    self.categoryImageButton.centerY = self.height * 0.5;
     self.categoryImageButton.centerX = self.width * 0.5;
     self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
-    self.incomeLabel.centerY = self.categoryImageButton.centerY;
+    self.incomeLabel.centerY = self.height / 2;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
-    self.expenditureLabel.centerY = self.categoryImageButton.centerY;
-    self.lineView.size = CGSizeMake(1, self.height - self.categoryImageButton.height);
-    self.lineView.centerX = self.centerX;
+    self.expenditureLabel.centerY = self.height / 2;
+    self.toplineView.size = CGSizeMake(1, self.height - self.categoryImageButton.bottom);
+    self.toplineView.centerX = self.centerX;
+    self.bottomlineView.top = self.categoryImageButton.bottom;
+    self.bottomlineView.size = CGSizeMake(1, self.height - self.categoryImageButton.bottom);
+    self.bottomlineView.centerX = self.centerX;
+    self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
+    self.expentureMemoLabel.leftTop = CGPointMake(self.expenditureLabel.left, self.expenditureLabel.bottom + 5);
+    self.IncomeImage.left = self.categoryImageButton.right + 10;
+    self.IncomeImage.size =CGSizeMake(35, 35);
+    self.IncomeImage.centerY = self.height / 2;
+    self.expentureImage.right = self.categoryImageButton.left - 10;
+    self.expentureImage.size =CGSizeMake(35, 35);
+    self.expentureImage.centerY = self.height / 2;
     if (_isEdite == YES) {
         self.editeButton.frame = self.categoryImageButton.frame;
         self.deleteButton.frame = self.categoryImageButton.frame;
         self.editeButton.hidden = NO;
         self.deleteButton.hidden = NO;
         self.incomeLabel.hidden = YES;
+        self.incomeMemoLabel.hidden = YES;
         self.expenditureLabel.hidden = YES;
+        self.expentureMemoLabel.hidden = YES;
+        self.IncomeImage.hidden = YES;
+        self.expentureImage.hidden = YES;
         [UIView animateWithDuration:0.2 animations:^{
             self.deleteButton.centerX = 40;
             self.editeButton.centerX = self.width - 40;
@@ -65,6 +90,10 @@
             self.deleteButton.hidden = YES;
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
+            self.expentureMemoLabel.hidden = NO;
+            self.incomeMemoLabel.hidden = NO;
+            self.IncomeImage.hidden = NO;
+            self.expentureImage.hidden = NO;
         }];
     }
 
@@ -93,6 +122,7 @@
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
         _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 38, 38)];
+        _categoryImageButton.backgroundColor = [UIColor whiteColor];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageButton.layer.cornerRadius = 19;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -122,12 +152,55 @@
     return _deleteButton;
 }
 
--(UIView *)lineView{
-    if (!_lineView) {
-        _lineView = [[UIView alloc]init];
-        _lineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+-(UIView *)toplineView{
+    if (!_toplineView) {
+        _toplineView = [[UIView alloc]init];
+        _toplineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
-    return _lineView;
+    return _toplineView;
+}
+
+-(UIView *)bottomlineView{
+    if (!_bottomlineView) {
+        _bottomlineView = [[UIView alloc]init];
+        _bottomlineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _bottomlineView;
+}
+
+-(UILabel *)incomeMemoLabel{
+    if (!_incomeMemoLabel) {
+        _incomeMemoLabel = [[UILabel alloc]init];
+        _incomeMemoLabel.textAlignment = NSTextAlignmentLeft;
+        _incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _incomeMemoLabel.font = [UIFont systemFontOfSize:12];
+    }
+    return _incomeMemoLabel;
+}
+
+-(UILabel *)expentureMemoLabel{
+    if (!_expentureMemoLabel) {
+        _expentureMemoLabel = [[UILabel alloc]init];
+        _expentureMemoLabel.textAlignment = NSTextAlignmentLeft;
+
+        _expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _expentureMemoLabel.font = [UIFont systemFontOfSize:12];
+    }
+    return _expentureMemoLabel;
+}
+
+-(UIImageView *)IncomeImage{
+    if (!_IncomeImage) {
+        _IncomeImage = [[UIImageView alloc]init];
+    }
+    return _IncomeImage;
+}
+
+-(UIImageView *)expentureImage{
+    if (!_expentureImage) {
+        _expentureImage = [[UIImageView alloc]init];
+    }
+    return _expentureImage;
 }
 
 -(void)buttonClicked{
@@ -172,7 +245,7 @@
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.expenditureLabel.text = item.money;
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",[item.money doubleValue]];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             if (month == currentMonth) {
@@ -184,7 +257,7 @@
 
         }else{
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.incomeLabel.text = [NSString stringWithFormat:@"+%@",item.money];
+            self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.incomeLabel sizeToFit];
             if (month == currentMonth) {
@@ -197,15 +270,21 @@
         }
     }else{
         if (!item.incomeOrExpence) {
-            self.incomeLabel.text = [NSString stringWithFormat:@"%@%@",item.typeName,item.money];
+            self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",item.typeName,[item.money doubleValue]];
             [self.incomeLabel sizeToFit];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             self.expenditureLabel.text = @"";
+            self.incomeMemoLabel.text = self.item.chargeMemo;
+            [self.incomeMemoLabel sizeToFit];
+            self.expentureMemoLabel.text = @"";
         }else{
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%@",item.typeName,item.money];
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",item.typeName,[item.money doubleValue]];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.text = @"";
+            self.expentureMemoLabel.text = self.item.chargeMemo;
+            [self.expentureMemoLabel sizeToFit];
+            self.incomeMemoLabel.text = @"";
         }
         UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:item.imageName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
         _categoryImageButton.contentMode = UIViewContentModeCenter;
@@ -215,9 +294,31 @@
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
         [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
-        [self setNeedsLayout];
-    }
+        if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                if (self.item.incomeOrExpence) {
+                    self.expentureImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    self.IncomeImage.image = nil;
+                }else{
+                    self.IncomeImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    self.expentureImage.image = nil;
+                }
+            }else{
+                if (self.item.incomeOrExpence) {
+                    [self.expentureImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
+                    self.IncomeImage.image = nil;
+                }else{
+                    [self.IncomeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
+                    self.expentureImage.image = nil;
+                }
+            }
+        }else{
+            self.expentureImage.image = nil;
+            self.IncomeImage.image = nil;
+        }
     [self setNeedsLayout];
+    }
+    
 }
 
 -(void)setIsEdite:(BOOL)isEdite{
@@ -262,6 +363,11 @@
             
         }];
     }
+}
+
+-(void)setIsLastRowOrNot:(BOOL)isLastRowOrNot{
+    _isLastRowOrNot = isLastRowOrNot;
+    self.bottomlineView.hidden = !_isLastRowOrNot;
 }
 
 @end

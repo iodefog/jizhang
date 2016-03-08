@@ -20,7 +20,6 @@ typedef void(^BtnClickBlock)();
 //本月收入
 @property(nonatomic,strong)NSString *income;
 
-
 + (id)BookKeepingHeader;
 
 + (CGFloat)viewHeight;
