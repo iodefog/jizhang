@@ -26,4 +26,9 @@ typedef void(^deleteButtonClickBlock)();
 @property (nonatomic, copy) deleteButtonClickBlock deleteButtonClickBlock;
 
 @property (nonatomic) BOOL isEdite;
+
+@property (nonatomic,strong) UIView *bottomlineView;
+
+@property (nonatomic) BOOL isLastRowOrNot;
+
 @end
