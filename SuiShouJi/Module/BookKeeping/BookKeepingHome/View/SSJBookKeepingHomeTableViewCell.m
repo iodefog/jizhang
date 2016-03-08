@@ -192,6 +192,11 @@
 -(UIImageView *)IncomeImage{
     if (!_IncomeImage) {
         _IncomeImage = [[UIImageView alloc]init];
+        _IncomeImage.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTap =
+        [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
+         singleTap.numberOfTapsRequired = 1;
+         [_IncomeImage addGestureRecognizer:singleTap];
     }
     return _IncomeImage;
 }
@@ -199,6 +204,11 @@
 -(UIImageView *)expentureImage{
     if (!_expentureImage) {
         _expentureImage = [[UIImageView alloc]init];
+        _expentureImage.userInteractionEnabled = YES;
+        UITapGestureRecognizer *singleTap =
+        [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick: )];
+        singleTap.numberOfTapsRequired = 1;
+        [_expentureImage addGestureRecognizer:singleTap];
     }
     return _expentureImage;
 }
@@ -362,6 +372,12 @@
         }failure:^(NSError *error) {
             
         }];
+    }
+}
+
+-(void)imageClick:(UITapGestureRecognizer *)sender{
+    if (self.imageClickBlock) {
+        self.imageClickBlock(self.item);
     }
 }
 

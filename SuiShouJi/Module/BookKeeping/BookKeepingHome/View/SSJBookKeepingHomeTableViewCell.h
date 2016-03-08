@@ -25,6 +25,10 @@ typedef void(^deleteButtonClickBlock)();
 
 @property (nonatomic, copy) deleteButtonClickBlock deleteButtonClickBlock;
 
+typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
+
+@property (nonatomic, copy) imageClickBlock imageClickBlock;
+
 @property (nonatomic) BOOL isEdite;
 
 @property (nonatomic,strong) UIView *bottomlineView;

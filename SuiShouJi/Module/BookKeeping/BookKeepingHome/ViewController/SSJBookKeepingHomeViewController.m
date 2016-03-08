@@ -19,6 +19,7 @@
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetDatabaseHelper.h"
+#import "SSJImaageBrowseViewController.h"
 #import "SSJBudgetModel.h"
 #import "SSJBillingChargeCellItem.h"
 #import "SSJCustomNavigationBarView.h"
@@ -193,6 +194,11 @@
         SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
         recordMakingVc.item = cell.item;
         [weakSelf.navigationController pushViewController:recordMakingVc animated:YES];
+    };
+    bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
+        SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
+        imageBrowserVC.item = item;
+        [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
     };
     bookKeepingCell.deleteButtonClickBlock = ^{
         _selectIndex = nil;
