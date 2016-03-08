@@ -55,14 +55,23 @@
             return NO;
         }
         
-        //  根据定期配置表中的有效时间，判断如果流水在有效时间外，就不合并
-//        if (![db boolForQuery:@"select count(*) from bk_user_charge where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncDataUserId()]) {
-//            
-//        }
-        
-        //  如果当前用户已经有了相同的定期记账流水，将其operatortype改为2
-        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where iconfigid = ? and cbilldate = ? and cuserid = ?", configId, record[@"cbilldate"], SSJCurrentSyncDataUserId()]) {
+        //  查询本地是否有相同configid和billdate的流水
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ?", record[@"cbilldate"], record[@"iconfigid"], SSJCurrentSyncDataUserId()];
+        if (!resultSet) {
             return NO;
+        }
+        
+        //  本地有相同configid和billdate的流水
+        while ([resultSet next]) {
+            //  如果本地流水已经删除，则忽略将要合并的流水
+            if ([resultSet intForColumn:@"operatortype"] == 2) {
+                return NO;
+            }
+            
+            //  如果将要合并的流水的operatortype是2，就将本地流水的operatortype改为2
+            if ([record[@"operatortype"] intValue] == 2) {
+                [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
+            }
         }
     }
     

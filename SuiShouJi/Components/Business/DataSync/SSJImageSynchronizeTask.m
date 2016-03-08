@@ -41,9 +41,8 @@
     for (int i = 0; i < imageNames.count; i++) {
         NSString *imageName = imageNames[i];
         NSString *userId = SSJCurrentSyncImageUserId();
-        NSNumber *syncType = @0;
         NSString *thumbImgName = [NSString stringWithFormat:@"%@-thumb", [imageName stringByDeletingPathExtension]];
-        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, kSignKey] ssj_md5HexDigest];
+        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@", userId, imageName, thumbImgName, kSignKey] ssj_md5HexDigest];
         
         NSMutableData *imageData = [NSMutableData data];
         [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
@@ -52,7 +51,6 @@
         NSDictionary *params = @{@"cuserId":userId,
                                  @"imageName":imageName,
                                  @"thumbName":thumbImgName,
-                                 @"syncType":syncType,
                                  @"sign":sign};
         
         [SSJDataSyncHelper uploadBodyData:imageData headerParams:params toUrlPath:@"/sync/syncimg.go" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
