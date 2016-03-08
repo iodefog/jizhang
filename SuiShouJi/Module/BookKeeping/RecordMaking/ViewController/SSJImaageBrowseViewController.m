@@ -197,7 +197,12 @@
     self.deleteButton.hidden = YES;
     self.changeImageButton.hidden = YES;
     self.comfirmButton.hidden = YES;
-    self.moneyLabel.text = [NSString stringWithFormat:@"%@ : %.2f",_item.typeName,[_item.money doubleValue]];
+    if (item.incomeOrExpence) {
+        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : -%.2f",_item.typeName,[_item.money doubleValue]];
+    }else{
+        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : +%.2f",_item.typeName,[_item.money doubleValue]];
+
+    }
     [self.moneyLabel sizeToFit];
     if (_item.chargeMemo != nil && ![item.chargeMemo isEqualToString:@""]) {
         self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];

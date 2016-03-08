@@ -35,7 +35,10 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.textView.frame = self.view.frame;
+    self.imageView.size = CGSizeMake(50, 50);
+    self.imageView.leftTop = CGPointMake(0, 10);
+    self.textView.size = CGSizeMake(self.view.width - self.imageView.width , self.view.height);
+    self.textView.leftTop = CGPointMake(self.imageView.right, 0);
 }
 
 #pragma mark - Getter
@@ -66,6 +69,8 @@
 -(UIImageView *)imageView{
     if (!_imageView) {
         _imageView = [[UIImageView alloc]init];
+        _imageView.image = [UIImage imageNamed:@"home_pen"];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _imageView;
 }
