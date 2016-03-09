@@ -187,25 +187,21 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *recentEndDate = [NSDate dateWithString:[resultSet stringForColumn:@"max(cedate)"] formatString:@"yyyy-MM-dd"];
         
         
-        if ([recentEndDate compare:currentDate] == NSOrderedAscending) {
+        int itype = [resultSet intForColumn:@"itype"];
+        NSString *imoney = [resultSet stringForColumn:@"imoney"];
+        NSString *iremindmoney = [resultSet stringForColumn:@"iremindmoney"];
+        NSString *cbilltype = [resultSet stringForColumn:@"cbilltype"];
+        int iremind = [resultSet intForColumn:@"iremind"];
+        NSString *currentDateStr = [tDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
+        for (SSJDatePeriod *period in periodArr) {
+            NSString *beginDate = [period.startDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+            NSString *endDate = [period.endDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
             
-            int itype = [resultSet intForColumn:@"itype"];
-            NSString *imoney = [resultSet stringForColumn:@"imoney"];
-            NSString *iremindmoney = [resultSet stringForColumn:@"iremindmoney"];
-            NSString *cbilltype = [resultSet stringForColumn:@"cbilltype"];
-            int iremind = [resultSet intForColumn:@"iremind"];
-            NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            
-            NSArray *periodArr = [self periodArrayForType:[self periodTypeForItype:itype] sinceDate:recentEndDate];
-            
-            for (SSJDatePeriod *period in periodArr) {
-                NSString *beginDate = [period.startDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-                NSString *endDate = [period.endDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-                
-                if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDate, cbilltype, @(iremind), currentDate, @(SSJSyncVersion())]) {
-                    *rollback = YES;
-                    return NO;
-                }
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
+                *rollback = YES;
+                return NO;
             }
         }
     }
@@ -228,22 +224,6 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         default:
             return SSJDatePeriodTypeWeek;
     }
-}
-
-+ (NSArray *)periodArrayForType:(SSJDatePeriodType)type sinceDate:(NSDate *)date {
-    NSMutableArray *periodArr = [NSMutableArray array];
-    
-    NSDate *tDate = [NSDate dateWithTimeInterval:(24 * 60 * 60) sinceDate:date];
-    SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:type date:tDate];
-    
-    if ([period.endDate compare:[NSDate date]] == NSOrderedAscending) {
-        NSArray *anotherPeriod = [self periodArrayForType:type sinceDate:period.endDate];
-        [periodArr addObjectsFromArray:anotherPeriod];
-    }
-    
-    [periodArr addObject:period];
-    
-    return periodArr;
 }
 
 + (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType {
@@ -290,7 +270,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每周
         case 3: {
-            NSInteger weekCount = [[NSDate date] weeksFrom:date];
+            NSInteger weekCount = [SSJDatePeriod periodCountFromDate:date toDate:[NSDate date] periodType:SSJDatePeriodTypeWeek];
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:weekCount];
             for (int i = 1; i <= weekCount; i ++) {
                 [billDates addObject:[date dateByAddingWeeks:i]];
@@ -301,7 +281,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每月
         case 4: {
-            NSInteger monthCount = [[NSDate date] monthsFrom:date];
+            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:[NSDate date] periodType:SSJDatePeriodTypeMonth];
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = 1; i <= monthCount; i ++) {
                 [billDates addObject:[date dateByAddingMonths:i]];
@@ -312,7 +292,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每年
         case 5: {
-            NSInteger yearCount = [[NSDate date] yearsFrom:date];
+            NSInteger yearCount = [SSJDatePeriod periodCountFromDate:date toDate:[NSDate date] periodType:SSJDatePeriodTypeYear];
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:yearCount];
             for (int i = 1; i <= yearCount; i ++) {
                 [billDates addObject:[date dateByAddingYears:i]];
@@ -323,7 +303,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
             // 每月最后一天
         case 6: {
-            NSInteger monthCount = [[NSDate date] monthsFrom:date];
+            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:[NSDate date] periodType:SSJDatePeriodTypeMonth];
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = 1; i <= monthCount; i ++) {
                 NSDate *tDate = [date dateByAddingMonths:i];

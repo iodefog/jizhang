@@ -8,6 +8,8 @@
 
 #import "SSJDatePeriod.h"
 
+static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalendarUnitQuarter | NSCalendarUnitMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitWeekOfMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitEra | NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal | NSCalendarUnitWeekOfYear;
+
 @interface SSJDatePeriod ()
 
 @property (nonatomic, strong) NSDate *startDate;
@@ -42,9 +44,27 @@
     return calendar;
 }
 
-+ (instancetype)datePeriodWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date {
-    SSJDatePeriod *period = [[SSJDatePeriod alloc] init];
+- (instancetype)init {
+    return [super init];
+}
+
+- (instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {
+    if ([startDate compare:endDate] == NSOrderedDescending) {
+        return nil;
+    }
     
+    if (self = [super init]) {
+        self.startDate = startDate;
+        self.endDate = endDate;
+    }
+    return self;
+}
+
++ (instancetype)datePeriodWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {
+    return [[self alloc] initWithStartDate:startDate endDate:endDate];
+}
+
++ (instancetype)datePeriodWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date {
     NSTimeInterval interval = 0;
     NSDate *startDate = nil;
     NSDate *endDate = nil;
@@ -52,26 +72,15 @@
     [calendar setFirstWeekday:2];//设定周一为周首日
     if ([calendar rangeOfUnit:(NSCalendarUnit)type startDate:&startDate interval:&interval forDate:date]) {
         endDate = [startDate dateByAddingTimeInterval:interval-1];
-        
-        period.startDate = startDate;
-        period.endDate = endDate;
+        return [self datePeriodWithStartDate:startDate endDate:endDate];
     }
-    
-    return period;
-}
-
-+ (SSJDatePeriodComparisonResult)comparePeriod:(SSJDatePeriod *)period withAnotherPeriod:(SSJDatePeriod *)anotherPeriod {
-    if (period.periodType != anotherPeriod.periodType) {
-        return SSJDatePeriodComparisonResultUnknown;
-    }
-    
-    return (SSJDatePeriodComparisonResult)[period.startDate compare:anotherPeriod.startDate];
+    return nil;
 }
 
 + (SSJDatePeriodComparisonResult)compareDate:(NSDate *)date withAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type {
     SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:type date:date];
     SSJDatePeriod *anotherPeriod = [SSJDatePeriod datePeriodWithPeriodType:type date:anotherDate];
-    return [self comparePeriod:period withAnotherPeriod:anotherPeriod];
+    return [period compareWithPeriod:anotherPeriod];
 }
 
 - (SSJDatePeriodComparisonResult)compareWithPeriod:(SSJDatePeriod *)period {
@@ -87,10 +96,6 @@
     return [self compareWithPeriod:period];
 }
 
-+ (NSArray *)periodsBetweenPeriod:(SSJDatePeriod *)period andAnotherPeriod:(SSJDatePeriod *)anotherPeriod {
-    return [period periodsFromPeriod:anotherPeriod];
-}
-
 + (NSArray *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type {
     SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:type date:date];
     SSJDatePeriod *anotherPeriod = [SSJDatePeriod datePeriodWithPeriodType:type date:anotherDate];
@@ -102,38 +107,44 @@
         return nil;
     }
     
-//    SSJDatePeriod *earlierPeriod = [self earlierPeriod:period];
-//    SSJDatePeriod *latestPeriod = self == earlierPeriod ? period : self;
-//    switch (period.periodType) {
-//        case SSJDatePeriodTypeWeek: {
-//            NSDateComponents *components = [[[self class] calendar] components:NSCalendarUnitYear fromDate:earlierPeriod.endDate toDate:latestPeriod.startDate options:0];
-//            components.year;
-//        }
-//            
-//            break;
-//            
-//        case SSJDatePeriodTypeMonth: {
-//            NSDateComponents *components = [[[self class] calendar] components:NSCalendarUnitYear fromDate:earlierPeriod.endDate toDate:latestPeriod.startDate options:0];
-//            components.year;
-//        }
-//            
-//            break;
-//            
-//        case SSJDatePeriodTypeYear: {
-//            NSDateComponents *components = [[[self class] calendar] components:NSCalendarUnitYear fromDate:earlierPeriod.endDate toDate:latestPeriod.startDate options:0];
-//            for (int i = 0; i < components.year; <#increment#>) {
-//                <#statements#>
-//            }
-//            ;
-//        }
-//            
-//            break;
-//    }
-    return nil;
+    NSMutableArray *periods = [NSMutableArray array];
+    NSCalendar *calendar = [[self class] calendar];
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    
+    SSJDatePeriod *earlierPeriod = [self earlierPeriod:period];
+    SSJDatePeriod *latestPeriod = self == earlierPeriod ? period : self;
+    
+    
+    NSInteger periodCount = [latestPeriod periodCountFromPeriod:earlierPeriod];
+    for (NSInteger i = 0; i < periodCount; i++) {
+        switch (period.periodType) {
+            case SSJDatePeriodTypeWeek: {
+                [components setWeekOfYear:i];
+            }
+                break;
+                
+            case SSJDatePeriodTypeMonth: {
+                [components setMonth:i];
+            }
+                break;
+                
+            case SSJDatePeriodTypeYear: {
+                [components setYear:i];
+            }
+                break;
+        }
+        NSDate *startDate = [calendar dateByAddingComponents:components toDate:earlierPeriod.startDate options:0];
+        NSDate *endDate = [calendar dateByAddingComponents:components toDate:earlierPeriod.endDate options:0];
+        SSJDatePeriod *period = [SSJDatePeriod datePeriodWithStartDate:startDate endDate:endDate];
+        [periods addObject:period];
+    }
+    
+    return periods;
 }
 
 - (NSArray *)periodsFromDate:(NSDate *)date {
-    return nil;
+    SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:self.periodType date:date];
+    return [self periodsFromPeriod:period];
 }
 
 - (SSJDatePeriod *)earlierPeriod:(SSJDatePeriod *)period {
@@ -154,6 +165,44 @@
             return period;
             break;
     }
+}
+
++ (NSInteger)periodCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate periodType:(SSJDatePeriodType)type {
+    SSJDatePeriod *fromPeriod = [SSJDatePeriod datePeriodWithPeriodType:type date:fromDate];
+    SSJDatePeriod *toPeriod = [SSJDatePeriod datePeriodWithPeriodType:type date:toDate];
+    return [toPeriod periodCountFromPeriod:fromPeriod];
+}
+
+- (NSInteger)periodCountFromPeriod:(SSJDatePeriod *)period {
+    if (self.periodType != period.periodType) {
+        SSJPRINT(@">>> SSJ Warning:周期类型不匹配");
+        return 0;
+    }
+    
+    switch (period.periodType) {
+        case SSJDatePeriodTypeWeek: {
+            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitWeekOfYear fromDate:period.endDate toDate:self.startDate options:0];
+            return tComponents.weekOfYear;
+        }
+            break;
+            
+        case SSJDatePeriodTypeMonth: {
+            NSDateComponents *tComponents = [[[self class] calendar] components:kAllCalendarUnitFlags fromDate:period.endDate toDate:self.startDate options:0];
+            return tComponents.month + 12 * tComponents.year;
+        }
+            break;
+            
+        case SSJDatePeriodTypeYear: {
+            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitYear fromDate:period.endDate toDate:self.startDate options:0];
+            return tComponents.year;
+        }
+            break;
+    }
+}
+
+- (NSInteger)periodCountFromDate:(NSDate *)date {
+    SSJDatePeriod *fromPeriod = [SSJDatePeriod datePeriodWithPeriodType:self.periodType date:date];
+    return [self periodCountFromPeriod:fromPeriod];
 }
 
 @end

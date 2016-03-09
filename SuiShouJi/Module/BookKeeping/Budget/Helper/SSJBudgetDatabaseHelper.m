@@ -10,7 +10,6 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJPercentCircleViewItem.h"
 #import "MJExtension.h"
-#import "SSJBudgetCalendarHelper.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
@@ -70,6 +69,8 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         return;
     }
     
+    NSString *userid = SSJUSERID();
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind from bk_user_budget where ibid = ?", ID];
         if (!resultSet) {
@@ -101,16 +102,16 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         NSMutableArray *circleItemArr = [NSMutableArray array];
         NSMutableArray *moneyArr = [NSMutableArray array];
         while ([resultSet next]) {
-            SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-            circleItem.colorValue = [resultSet stringForColumn:@"ccolor"];
-            circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
-            circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", circleItem.scale * 100];
-            
             double money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             double scale = money / budgetModel.payMoney;
             if (scale >= 0.01) {
                 amount += money;
                 [moneyArr addObject:@(money)];
+                
+                SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
+                circleItem.colorValue = [resultSet stringForColumn:@"ccolor"];
+                circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
+                circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", scale * 100];
                 [circleItemArr addObject:circleItem];
             }
         }
@@ -251,7 +252,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
-            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
+            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, hasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -271,7 +272,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
-            if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :cwritedate, :iversion, 0)" withParameterDictionary:parametersInfo]) {
+            if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, hasremind, cwritedate, iversion, operatortype) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :isAlreadyReminded, :cwritedate, :iversion, 0)" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();

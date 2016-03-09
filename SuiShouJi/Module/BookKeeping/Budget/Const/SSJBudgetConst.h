@@ -12,12 +12,9 @@
 //  预算周期
 typedef NS_ENUM(NSUInteger, SSJBudgetPeriodType) {
     SSJBudgetPeriodTypeWeek = 0,    //  每周
-    SSJBudgetPeriodTypeMonth,       //  每月
-    SSJBudgetPeriodTypeYear         //  每年
+    SSJBudgetPeriodTypeMonth = 1,       //  每月
+    SSJBudgetPeriodTypeYear = 2         //  每年
 };
-
-extern NSString *const SSJBudgetPeriodBeginDateKey;
-extern NSString *const SSJBudgetPeriodEndDateKey;
 
 
 #endif /* SSJBudgetConst_h */

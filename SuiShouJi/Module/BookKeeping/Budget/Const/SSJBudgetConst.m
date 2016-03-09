@@ -7,6 +7,3 @@
 //
 
 #import "SSJBudgetConst.h"
-
-NSString *const SSJBudgetPeriodBeginDateKey = @"SSJBudgetPeriodBeginDateKey";
-NSString *const SSJBudgetPeriodEndDateKey = @"SSJBudgetPeriodEndDateKey";
