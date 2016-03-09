@@ -54,6 +54,16 @@
 			<key>tencent1105133385</key>
 			<string></string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>qqlogin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tencent1105133385</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

@@ -7,8 +7,9 @@
 //
 
 #import "SSJBaseViewController.h"
+#import <TencentOpenAPI/TencentOAuth.h>
 
-@interface SSJLoginViewController : SSJBaseViewController
+@interface SSJLoginViewController : SSJBaseViewController<TencentSessionDelegate>
 
 // 从外部指定的返回按钮点击事件
 - (void)backOffAction;

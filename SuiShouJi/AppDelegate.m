@@ -17,6 +17,7 @@
 #import "UMSocialSinaSSOHandler.h"
 #import "UMSocialQQHandler.h"
 #import <TencentOpenAPI/TencentOAuth.h>
+#import "UMFeedback.h"
 
 #import "SSJUserDefaultDataCreater.h"
 #import "MobClick.h"
@@ -52,8 +53,11 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     //  添加友盟统计
     [self umengTrack];
     
+    //  添加友盟分享
     [self umengShare];
     
+    //   添加友盟反馈
+    [self umengFeedBack];
     //  初始化数据库
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -72,7 +76,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  请求启动接口，检测是否有更新、苹果是否正在审核
     [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
-    
+
     return YES;
 }
 
@@ -184,6 +188,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [MobClick startWithAppkey:kUMAppKey reportPolicy:(ReportPolicy)BATCH channelId:SSJDefaultSource()];
 }
 
+/* 友盟分享 */
 -(void)umengShare{
     [UMSocialData setAppKey:kUMAppKey];
     [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:SSJAppStoreAddress];
@@ -195,6 +200,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:SSJAppStoreAddress];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账——省钱必备，剁掉买买买～";
 }
+
+/* 友盟意见反馈 */
+-(void)umengFeedBack{
+    [UMFeedback setAppkey:kUMAppKey];
+}
+
 
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{

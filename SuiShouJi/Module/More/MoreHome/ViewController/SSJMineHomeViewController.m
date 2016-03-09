@@ -22,6 +22,8 @@
 #import "SSJBookkeepingReminderViewController.h"
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJMotionPasswordViewController.h"
+#import "UMFeedback.h"
+
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -79,9 +81,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         if (SSJIsUserLogined()) {
-            NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            weakSelf.header.nicknameLabel.text = phoneNum;
-            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
+                weakSelf.header.nicknameLabel.text = item.realName;
+                [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:item.cicon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            }else{
+                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                weakSelf.header.nicknameLabel.text = phoneNum;
+                [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            }
         } else {
             weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";
@@ -206,6 +213,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                                            delegate:self];
 
     }
+    
+    //意见反馈
+    if ([title isEqualToString:kTitle5]) {
+        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
+                                             animated:YES];
+    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -305,6 +318,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
             item.cuserid = [rs stringForColumn:@"CUSERID"];
             item.cmobileno = [rs stringForColumn:@"CMOBILENO"];
             item.cicon = [rs stringForColumn:@"CICONS"];
+            item.realName = [rs stringForColumn:@"CREALNAME"];
         }
         SSJDispatch_main_async_safe(^(){
             UserInfo(item);
@@ -316,9 +330,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         if (SSJIsUserLogined()) {
-            NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            weakSelf.header.nicknameLabel.text = phoneNum;
-            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
+                weakSelf.header.nicknameLabel.text = item.realName;
+                [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:item.cicon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            }else{
+                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                weakSelf.header.nicknameLabel.text = phoneNum;
+                [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            }
         } else {
             weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";

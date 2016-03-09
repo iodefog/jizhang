@@ -39,6 +39,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>UMengFeedback.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>iOS-WebP.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,11 +57,6 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>08B4CC82BC907661376809AB763CC898</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>244DBBC06C16F20F37139BF9B0FC01B7</key>
 		<dict>
 			<key>primary</key>
@@ -77,7 +77,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>467F49CC28941D869E51AE892B855172</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>66060A4BD8F2389C19413E54928FC271</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>9F12FB4A63E20F601CFB2E64A65B57C1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A8B35ECF6BB02E75100BCA7095C87A94</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -87,12 +102,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D0B2926551CD289A047D2E0B7D3DD838</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FFF3B0F598D28164C27721C2DB1DB6BB</key>
+		<key>D0D7B7B362D77DD624C1447ECDDD53C8</key>
 		<dict>
 			<key>primary</key>
 			<true/>

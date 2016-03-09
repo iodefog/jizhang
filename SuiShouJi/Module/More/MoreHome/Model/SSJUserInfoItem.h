@@ -14,5 +14,6 @@
 @property (nonatomic,strong) NSString *cicon;
 @property (nonatomic,strong) NSString *isource;
 @property (nonatomic,strong) NSString *cimei;
+@property (nonatomic,strong) NSString *realName;
 
 @end

@@ -251,6 +251,10 @@
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
         _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _IncomeImage.image = nil;
+        _expentureImage.image = nil;
+        _incomeMemoLabel.text = @"";
+        _expentureMemoLabel.text = @"";
         if ([item.money doubleValue] < 0) {
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
