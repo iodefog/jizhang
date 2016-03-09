@@ -19,8 +19,12 @@
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserItem.h"
 #import "SSJUserDefaultDataCreater.h"
+#import "SSJQQLoginService.h"
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
+
+static NSString *const KQQAppKey = @"1105133385";
+
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -34,7 +38,10 @@
 @property (nonatomic,strong)UIButton *loginButton;
 @property (nonatomic,strong)UIButton *registerButton;
 @property (nonatomic,strong)UIButton *forgetButton;
-
+@property (nonatomic,strong)TencentOAuth *tencentOAuth;
+@property (nonatomic,strong)UIButton *tencentLoginButton;
+@property (nonatomic,strong)SSJQQLoginService *qqLoginService;
+@property (nonatomic,strong)UIImageView *backGroundImage;
 @end
 
 @implementation SSJLoginViewController
@@ -63,7 +70,10 @@
     [scrollView addSubview:self.loginButton];
     [scrollView addSubview:self.forgetButton];
     [scrollView addSubview:self.registerButton];
+    [scrollView addSubview:self.tencentLoginButton];
     [self.view addSubview:scrollView];
+    [self.view addSubview:self.backGroundImage];
+    self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:KQQAppKey andDelegate:self];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -80,6 +90,10 @@
     self.loginButton.centerX = self.view.width / 2;
     self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 10);
     self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.loginButton.bottom + 10);
+    self.tencentLoginButton.centerX = self.view.width / 2;
+    self.tencentLoginButton.bottom = self.view.height;
+    self.tencentLoginButton.size = CGSizeMake(100, 30);
+    self.backGroundImage.frame = self.view.frame;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -95,6 +109,42 @@
         [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
     }
     return true;
+}
+
+#pragma mark - TencentSessionDelegate
+//登陆完成调用
+- (void)tencentDidLogin
+{
+    if (self.tencentOAuth.accessToken && 0 != [self.tencentOAuth.accessToken length])
+    {
+        //  记录登录用户的OpenID、Token以及过期时间
+        [self.tencentOAuth getUserInfo];
+    }
+    else
+    {
+        NSLog(@"登录不成功 没有获取accesstoken");
+    }
+}
+
+//非网络错误导致登录失败：
+-(void)tencentDidNotLogin:(BOOL)cancelled
+{
+    [CDAutoHideMessageHUD showMessage:@"登录失败"];
+}
+
+// 网络错误导致登录失败：
+-(void)tencentDidNotNetWork
+{
+    [CDAutoHideMessageHUD showMessage:@"无网络连接，请设置网络"];
+}
+
+-(void)getUserInfoResponse:(APIResponse *)response
+{
+    NSLog(@"respons:%@",response.jsonResponse);
+    NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
+    NSString *realName = [response.jsonResponse objectForKey:@"nickname"];
+    NSString *openId = [self.tencentOAuth openId];
+    [self.qqLoginService loadLoginModelWithopenID:openId realName:realName icon:icon];
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -221,6 +271,12 @@
     }
 }
 
+-(void)qqLoginButtonClicked:(id)sender{
+    NSArray *permissions= [NSArray arrayWithObjects:@"get_user_info",@"get_simple_userinfo",@"add_t",nil];
+    [self.tencentOAuth authorize:permissions inSafari:NO];
+    [self.tencentOAuth getUserInfo];
+}
+
 #pragma mark - Getter
 - (SSJLoginService *)loginService{
     if (_loginService==nil) {
@@ -228,6 +284,14 @@
         _loginService.showLodingIndicator = YES;
     }
     return _loginService;
+}
+
+-(SSJQQLoginService *)qqLoginService{
+    if (_qqLoginService==nil) {
+        _qqLoginService=[[SSJQQLoginService alloc]initWithDelegate:self];
+        _qqLoginService.showLodingIndicator = YES;
+    }
+    return _qqLoginService;
 }
 
 //-(UIView*)loginView{
@@ -241,6 +305,14 @@
 //    }
 //    return _loginView;
 //}
+
+-(UIImageView *)backGroundImage{
+    if (!_backGroundImage) {
+        _backGroundImage = [[UIImageView alloc]init];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
+    }
+    return _backGroundImage;
+}
 
 -(SSJBaselineTextField*)tfPhoneNum{
     if (!_tfPhoneNum) {
@@ -325,6 +397,15 @@
         _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
     }
     return _forgetButton;
+}
+
+-(UIButton *)tencentLoginButton{
+    if (!_tencentLoginButton) {
+        _tencentLoginButton = [[UIButton alloc]init];
+        [_tencentLoginButton setTitle:@"QQ登录" forState:UIControlStateNormal];
+        [_tencentLoginButton addTarget:self action:@selector(qqLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _tencentLoginButton;
 }
 
 @end

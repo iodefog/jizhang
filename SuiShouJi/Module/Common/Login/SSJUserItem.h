@@ -22,6 +22,8 @@
 
 @property (nonatomic,strong) NSString *operatortype;
 
+@property (nonatomic,strong) NSString *realName;
+
 //  手机号码
 @property (nonatomic, copy) NSString *cmobileno;
 
