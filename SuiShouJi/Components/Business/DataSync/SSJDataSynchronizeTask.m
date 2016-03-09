@@ -137,8 +137,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
                     //  合并数据完成后
-                    [SSJRegularManager supplementBookkeepingIfNeeded];
-                    [SSJRegularManager supplementBudgetIfNeeded];
+                    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJCurrentSyncDataUserId()];
+                    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJCurrentSyncDataUserId()];
                     if (success) {
                         success();
                     }
@@ -255,7 +255,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                                  @"source":source,
                                  @"iversion":iversion,
                                  @"md5Code":data.md5Hash,
-                                 @"sign":signStr};
+                                 @"sign":signStr,
+                                 @"appVersion":SSJAppVersion()};
     
     [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [request setValue:obj forHTTPHeaderField:key];

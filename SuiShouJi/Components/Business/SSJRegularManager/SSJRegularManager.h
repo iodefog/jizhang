@@ -25,32 +25,40 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)performRegularTaskWithLocalNotification:(UILocalNotification *)notification;
 
 /**
- *  异步补充记账流水
- */
-+ (BOOL)supplementBookkeepingIfNeeded;
-
-/**
- *  异步补充预算流水
- */
-+ (BOOL)supplementBudgetIfNeeded;
-
-/**
- *  异步补充记账流水
+ *  补充相应用户的记账流水
  *
+ *  @param BOOL 是否补充成功
+ */
++ (BOOL)supplementBookkeepingIfNeededForUserId:(NSString *)userId;
+
+/**
+ *  补充相应用户的预算流水
+ *
+ *  @param BOOL 是否补充成功
+ */
++ (BOOL)supplementBudgetIfNeededForUserId:(NSString *)userId;
+
+/**
+ *  异步补充相应用户的记账流水
+ *
+ *  @param userId 用户id
  *  @param success 成功的回调
  *  @param failure 失败的回调
  */
-+ (void)supplementBookkeepingIfNeededWithSuccess:(nullable void(^)())success
-                                         failure:(nullable void (^)(NSError *error))failure;
++ (void)supplementBookkeepingIfNeededForUserId:(NSString *)userId
+                                   withSuccess:(nullable void(^)())success
+                                       failure:(nullable void (^)(NSError *error))failure;
 
 /**
- *  异步补充预算流水
+ *  异步补充相应用户的预算流水
  *
+ *  @param userId 用户id
  *  @param success 成功的回调
  *  @param failure 失败的回调
  */
-+ (void)supplementBudgetIfNeededWithSuccess:(nullable void(^)())success
-                                    failure:(nullable void (^)(NSError *error))failure;
++ (void)supplementBudgetIfNeededForUserId:(NSString *)userId
+                              withSuccess:(nullable void(^)())success
+                                  failure:(nullable void (^)(NSError *error))failure;
 
 @end
 

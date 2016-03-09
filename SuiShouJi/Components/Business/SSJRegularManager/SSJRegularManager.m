@@ -38,33 +38,33 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 + (void)performRegularTaskWithLocalNotification:(UILocalNotification *)notification {
     NSString *notificationId = notification.userInfo[SSJRegularManagerNotificationIdKey];
     if ([notificationId isEqualToString:SSJRegularManagerNotificationIdValue]) {
-        [self supplementBookkeepingIfNeededWithSuccess:NULL failure:NULL];
-        [self supplementBudgetIfNeededWithSuccess:NULL failure:NULL];
+        [self supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+        [self supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
     }
 }
 
-+ (BOOL)supplementBookkeepingIfNeeded {
++ (BOOL)supplementBookkeepingIfNeededForUserId:(NSString *)userId {
     __block BOOL successfull = YES;
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        successfull = [self supplementBookkeepingForUserId:SSJUSERID() inDatabase:db rollback:rollback];
+        successfull = [self supplementBookkeepingForUserId:userId inDatabase:db rollback:rollback];
     }];
     return successfull;
 }
 
-+ (BOOL)supplementBudgetIfNeeded {
++ (BOOL)supplementBudgetIfNeededForUserId:(NSString *)userId {
     __block BOOL successfull = YES;
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        successfull = [self supplementBudgetForUserId:SSJUSERID() inDatabase:db rollback:rollback];
+        successfull = [self supplementBudgetForUserId:userId inDatabase:db rollback:rollback];
     }];
     return successfull;
     
 }
 
-+ (void)supplementBookkeepingIfNeededWithSuccess:(void(^)())success
-                                         failure:(void (^)(NSError *error))failure {
-    NSString *userid = SSJUSERID();
++ (void)supplementBookkeepingIfNeededForUserId:(NSString *)userId
+                                   withSuccess:(void(^)())success
+                                       failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if ([self supplementBookkeepingForUserId:userid inDatabase:db rollback:rollback]) {
+        if ([self supplementBookkeepingForUserId:userId inDatabase:db rollback:rollback]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -80,9 +80,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }];
 }
 
-+ (void)supplementBudgetIfNeededWithSuccess:(void(^)())success
-                                    failure:(void (^)(NSError *error))failure {
-    NSString *userId = SSJUSERID();
++ (void)supplementBudgetIfNeededForUserId:(NSString *)userId
+                              withSuccess:(void(^)())success
+                                  failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         if ([self supplementBudgetForUserId:userId inDatabase:db rollback:rollback]) {
             if (success) {
@@ -101,6 +101,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 }
 
 + (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
+    
+    if (!userId || !userId.length) {
+        SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
+        return NO;
+    }
     
     //  查询当前用户所有定期记账最近一次的billdate
     FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 group by b.iconfigid", userId, userId];
@@ -170,18 +175,19 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 }
 
 + (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
+    //  根据周期类型、支出类型分类，查询离今天最近的一次预算
     FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate) from bk_user_budget where cuserid = ? and operatortype <> 2 and istate = 1 group by itype, cbilltype", userId];
     if (!resultSet) {
         return NO;
     }
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    
     while ([resultSet next]) {
-        NSDate *recentEndDate = [formatter dateFromString:[resultSet stringForColumn:@"max(cedate)"]];
+        NSDate *tDate = [NSDate date];
+        NSDate *currentDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate day]];
+        NSDate *recentEndDate = [NSDate dateWithString:[resultSet stringForColumn:@"max(cedate)"] formatString:@"yyyy-MM-dd"];
         
-        if ([recentEndDate compare:[NSDate date]] == NSOrderedAscending) {
+        
+        if ([recentEndDate compare:currentDate] == NSOrderedAscending) {
             
             int itype = [resultSet intForColumn:@"itype"];
             NSString *imoney = [resultSet stringForColumn:@"imoney"];
