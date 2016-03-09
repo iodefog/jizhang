@@ -19,6 +19,7 @@
         error = [self crateImageSyncTableWithDatabase:db];
         error = [self crateChargePeriodConfigTableWithDatabase:db];
         error = [self crateChargeReminderTableWithDatabase:db];
+        error = [self upgradeUserTableWithDatabase:db];
     }];
     return error;
 }
@@ -88,6 +89,21 @@
         return [db lastError];
     }
     return nil;
+}
+
++ (NSError *)upgradeUserTableWithDatabase:(FMDatabase *)db {
+    NSError *error = nil;
+    if (![db columnExists:@"cmotionpwd" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cmotionpwd text"]) {
+            error = [db lastError];
+        }
+    }
+    if (![db columnExists:@"cmotionpwdstate" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cmotionpwdstate text"]) {
+            error = [db lastError];
+        }
+    }
+    return error;
 }
 
 @end
