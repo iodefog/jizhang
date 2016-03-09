@@ -61,6 +61,7 @@ PODS:
     - SDWebImage/Core
   - SSZipArchive (1.0.1)
   - UMengAnalytics-NO-IDFA (3.6.7)
+  - UMengFeedback (2.3.4)
   - UMengSocial (5.0)
 
 DEPENDENCIES:
@@ -73,6 +74,7 @@ DEPENDENCIES:
   - SDWebImage/WebP
   - SSZipArchive
   - UMengAnalytics-NO-IDFA
+  - UMengFeedback (~> 2.3.4)
   - UMengSocial (~> 5.0)
 
 SPEC CHECKSUMS:
@@ -85,6 +87,7 @@ SPEC CHECKSUMS:
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
   SSZipArchive: 5f30a0af2cb3d48c0ff83b1e18029f7041ac3c38
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
+  UMengFeedback: 5283cc0e324dffca4dd54c4abb3cbded56487817
   UMengSocial: 48b67179c492a8cf7803fbb0438b8f55432e2fc1
 
 COCOAPODS: 0.39.0

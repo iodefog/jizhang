@@ -22,6 +22,8 @@
 #import "SSJBookkeepingReminderViewController.h"
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJMotionPasswordViewController.h"
+#import "UMFeedback.h"
+
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -210,6 +212,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                            delegate:self];
 
+    }
+    
+    //意见反馈
+    if ([title isEqualToString:kTitle5]) {
+        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
+                                             animated:YES];
     }
 }
 #pragma mark - UITableViewDataSource
