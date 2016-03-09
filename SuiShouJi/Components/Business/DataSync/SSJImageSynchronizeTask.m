@@ -51,7 +51,8 @@
         NSDictionary *params = @{@"cuserId":userId,
                                  @"imageName":imageName,
                                  @"thumbName":thumbImgName,
-                                 @"sign":sign};
+                                 @"sign":sign,
+                                 @"appVersion":SSJAppVersion()};
         
         [SSJDataSyncHelper uploadBodyData:imageData headerParams:params toUrlPath:@"/sync/syncimg.go" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             dispatch_async(self.syncQueue, ^{

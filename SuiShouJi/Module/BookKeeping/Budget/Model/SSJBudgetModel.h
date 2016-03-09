@@ -44,4 +44,7 @@
 //  是否开启预算提醒
 @property (nonatomic) BOOL isRemind;
 
+//  是否已经提醒过
+@property (nonatomic) BOOL isAlreadyReminded;
+
 @end

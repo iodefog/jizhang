@@ -64,7 +64,7 @@
 }
 
 + (NSError *)createUserBudgetTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists bk_user_budget (ibid text not null, cuserid text not null, itype integer not null, imoney real not null, iremindmoney real not null, csdate text not null, cedate text not null, istate integer not null, ccadddate text not null, cbilltype text not null, iremind integer not null, cwritedate text not null, iversion integer not null, operatortype integer not null, primary key(ibid))"]) {
+    if (![db executeUpdate:@"create table if not exists bk_user_budget (ibid text not null, cuserid text not null, itype integer not null, imoney real not null, iremindmoney real not null, csdate text not null, cedate text not null, istate integer not null, ccadddate text not null, cbilltype text not null, iremind integer not null, hasremind integer not null, cwritedate text not null, iversion integer not null, operatortype integer not null, primary key(ibid))"]) {
         return [db lastError];
     }
     return nil;
