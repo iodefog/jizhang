@@ -12,6 +12,8 @@
 NSString *const SSJUserIdKey = @"SSJUserIdKey";
 NSString *const SSJUserMobileNoKey = @"SSJUserMobileNoKey";
 NSString *const SSJUserIconKey = @"SSJUserIconKey";
+NSString *const SSJRealNameKey = @"SSJRealNameKey";
+
 
 @implementation SSJUserTableManager
 
@@ -163,18 +165,47 @@ NSString *const SSJUserIconKey = @"SSJUserIconKey";
     
     NSString *mobileNo = userInfo[SSJUserMobileNoKey];
     NSString *icon = userInfo[SSJUserIconKey];
+    NSString *realName = userInfo[SSJRealNameKey];
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
-            if (![db executeUpdate:@"insert into BK_USER (cuserid, cmobileno, cicons, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ?, 1, 0)", userId, mobileNo, icon]) {
-                if (error) {
-                    *error = [db lastError];
+            if (realName == nil) {
+                if (![db executeUpdate:@"insert into BK_USER (cuserid, cmobileno, cicons, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ?, 1, 0)", userId, mobileNo, icon]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
+                }
+            }else if(mobileNo == nil){
+                if (![db executeUpdate:@"insert into BK_USER (cuserid, crealname, cicons, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ?, 1, 0)", userId, realName, icon]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
+                }
+            }else{
+                if (![db executeUpdate:@"insert into BK_USER (cuserid, crealname, cicons, cmobileno , CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ? ,? , 1, 0)", userId, realName, icon,realName]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
                 }
             }
         } else {
-            if (![db executeUpdate:@"update bk_user set cmobileno = ?, cicons = ? where cuserid = ?", mobileNo, icon, userId]) {
-                if (error) {
-                    *error = [db lastError];
+            if (realName == nil) {
+                if (![db executeUpdate:@"update bk_user set cmobileno = ?, cicons = ? where cuserid = ?", mobileNo, icon, userId]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
+                }
+            }else if(mobileNo == nil){
+                if (![db executeUpdate:@"update bk_user set crealname = ?, cicons = ? where cuserid = ?", realName, icon, userId]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
+                }
+            }else{
+                if (![db executeUpdate:@"update bk_user set crealname = ?, cicons = ? , cmobileno = ? where cuserid = ?", realName, icon, userId , mobileNo]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
                 }
             }
         }

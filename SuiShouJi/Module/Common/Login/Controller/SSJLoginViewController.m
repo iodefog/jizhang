@@ -34,7 +34,6 @@ static NSString *const KQQAppKey = @"1105133385";
 @property (nonatomic,strong)SSJBaselineTextField *tfPassword;
 @property (nonatomic,copy)NSString *strUserAccount;
 @property (nonatomic,copy)NSString *strUserPassword;
-@property (nonatomic,strong)UIView *loginView;
 @property (nonatomic,strong)UIButton *loginButton;
 @property (nonatomic,strong)UIButton *registerButton;
 @property (nonatomic,strong)UIButton *forgetButton;
@@ -42,6 +41,10 @@ static NSString *const KQQAppKey = @"1105133385";
 @property (nonatomic,strong)UIButton *tencentLoginButton;
 @property (nonatomic,strong)SSJQQLoginService *qqLoginService;
 @property (nonatomic,strong)UIImageView *backGroundImage;
+@property (nonatomic,strong)UIView *leftSeperatorLine;
+@property (nonatomic,strong)UIView *rightSeperatorLine;
+@property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
+@property (nonatomic,strong)UIButton *backButton;
 @end
 
 @implementation SSJLoginViewController
@@ -65,14 +68,19 @@ static NSString *const KQQAppKey = @"1105133385";
 - (void)viewDidLoad {
     [super viewDidLoad];
     TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+    [self.view addSubview:self.backGroundImage];
     [scrollView addSubview:self.tfPhoneNum];
     [scrollView addSubview:self.tfPassword];
     [scrollView addSubview:self.loginButton];
     [scrollView addSubview:self.forgetButton];
     [scrollView addSubview:self.registerButton];
     [scrollView addSubview:self.tencentLoginButton];
+    [scrollView addSubview:self.thirdPartyLoginLabel];
+    [scrollView addSubview:self.leftSeperatorLine];
+    [scrollView addSubview:self.rightSeperatorLine];
+    [scrollView addSubview:self.tencentLoginButton];
+    [scrollView addSubview:self.backButton];
     [self.view addSubview:scrollView];
-    [self.view addSubview:self.backGroundImage];
     self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:KQQAppKey andDelegate:self];
 }
 
@@ -80,25 +88,42 @@ static NSString *const KQQAppKey = @"1105133385";
     [super viewWillAppear:animated];
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController setNavigationBarHidden:YES];
 }
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.tfPhoneNum.top = 40;
+    self.tfPhoneNum.top = 65;
     self.tfPassword.top = self.tfPhoneNum.bottom + 10;
     self.loginButton.top = self.tfPassword.bottom + 40;
     self.loginButton.centerX = self.view.width / 2;
     self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 10);
-    self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.loginButton.bottom + 10);
-    self.tencentLoginButton.centerX = self.view.width / 2;
-    self.tencentLoginButton.bottom = self.view.height;
-    self.tencentLoginButton.size = CGSizeMake(100, 30);
+    self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 10);
     self.backGroundImage.frame = self.view.frame;
+    self.thirdPartyLoginLabel.centerX = self.view.width / 2;
+    self.thirdPartyLoginLabel.bottom = self.view.height - 110;
+    self.tencentLoginButton.centerX = self.view.width / 2;
+    self.tencentLoginButton.centerY = self.view.height - 55;
+    self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
+    self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+    self.leftSeperatorLine.left = 0;
+    self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
+    self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+    self.rightSeperatorLine.right = self.view.width;
+    self.backButton.size = CGSizeMake(20, 20);
+    self.backButton.leftTop = CGPointMake(10, 10);
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.loginService cancel];
+    [self.qqLoginService cancel];
+    [self.navigationController setNavigationBarHidden:NO];
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -129,7 +154,12 @@ static NSString *const KQQAppKey = @"1105133385";
 //非网络错误导致登录失败：
 -(void)tencentDidNotLogin:(BOOL)cancelled
 {
-    [CDAutoHideMessageHUD showMessage:@"登录失败"];
+    if (cancelled)
+    {
+        [CDAutoHideMessageHUD showMessage:@"登录取消"];
+    }else{
+        [CDAutoHideMessageHUD showMessage:@"登录失败"];
+    }
 }
 
 // 网络错误导致登录失败：
@@ -138,6 +168,7 @@ static NSString *const KQQAppKey = @"1105133385";
     [CDAutoHideMessageHUD showMessage:@"无网络连接，请设置网络"];
 }
 
+//获取用户信息
 -(void)getUserInfoResponse:(APIResponse *)response
 {
     NSLog(@"respons:%@",response.jsonResponse);
@@ -168,12 +199,10 @@ static NSString *const KQQAppKey = @"1105133385";
         
         //  merge成功后才算登陆成功
         if (userBillSuccess && fundInfoSuccess) {
-            
             SSJSaveAppId(self.loginService.appid);
             SSJSaveAccessToken(self.loginService.accesstoken);
             SSJSaveUserLogined(YES);
             SSJSetUserId(self.loginService.item.cuserid);
-            
             NSString *userId = SSJUSERID();
             NSString *mobileNo = self.loginService.item.cmobileno;
             NSString *icon = self.loginService.item.cicon;
@@ -213,6 +242,73 @@ static NSString *const KQQAppKey = @"1105133385";
             //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
             [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+            [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+            if (self.finishHandle) {
+                self.finishHandle(self);
+            } else {
+                [self ssj_backOffAction];
+            }
+        }
+    }
+    if ([self.qqLoginService.returnCode isEqualToString:@"1"]) {
+        __block NSError *error = nil;
+        __block BOOL fundInfoSuccess = true;
+        __block BOOL userBillSuccess = true;
+        [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
+            userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
+            if (!userBillSuccess || !fundInfoSuccess) {
+                *rollback = YES;
+                return;
+            }
+        }];
+        
+        //  merge成功后才算登陆成功
+        if (userBillSuccess && fundInfoSuccess) {
+            SSJSaveAppId(self.qqLoginService.appid);
+            SSJSaveAccessToken(self.qqLoginService.accesstoken);
+            SSJSaveUserLogined(YES);
+            SSJSetUserId(self.qqLoginService.item.cuserid);
+            NSString *userId = SSJUSERID();
+            NSString *realName = self.qqLoginService.item.crealname;
+            NSString *icon = self.loginService.item.cicon;
+            [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(userId ?: @""),
+                                                SSJRealNameKey:(realName ?: @""),
+                                                SSJUserIconKey:icon ?: @""} error:nil];
+            
+            //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
+            if (self.qqLoginService.userBillArray.count == 0) {
+                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+                [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
+            }
+            
+            //  如果是9188帐户，则将当前的userid标记为已注册
+            if ([self.qqLoginService.item.cuserid isEqualToString:SSJUSERID()])
+            {
+                [SSJUserTableManager registerUserIdWithSuccess:NULL failure:^(NSError *error){
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [CDAutoHideMessageHUD showMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
+                    });
+                }];
+            }
+            
+            //  登陆成功后强制同步一次
+            //            [self.syncLoadingView show];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+                //                [self.syncLoadingView dismissWithSuccess:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+                [CDAutoHideMessageHUD showMessage:@"同步成功"];
+            } failure:^(NSError *error) {
+                //                [self.syncLoadingView dismissWithSuccess:NO];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+                [CDAutoHideMessageHUD showMessage:@"同步失败"];
+            }];
+            
+            //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
+            [CDAutoHideMessageHUD showMessage:@"qq登录成功"];
             [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
             [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
             if (self.finishHandle) {
@@ -309,7 +405,7 @@ static NSString *const KQQAppKey = @"1105133385";
 -(UIImageView *)backGroundImage{
     if (!_backGroundImage) {
         _backGroundImage = [[UIImageView alloc]init];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
     }
     return _backGroundImage;
 }
@@ -322,8 +418,10 @@ static NSString *const KQQAppKey = @"1105133385";
         image.center = CGPointMake(20, 23);
         
         _tfPhoneNum = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47) contentHeight:34];
+        _tfPhoneNum.textColor = [UIColor whiteColor];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
+        [_tfPhoneNum setValue:[UIColor colorWithWhite:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
@@ -340,8 +438,11 @@ static NSString *const KQQAppKey = @"1105133385";
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         _tfPassword = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47) contentHeight:34];
+        _tfPassword.textColor = [UIColor whiteColor];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
+        [_tfPassword setValue:[UIColor colorWithWhite:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
+
         _tfPassword.font = [UIFont systemFontOfSize:16];
         _tfPassword.secureTextEntry = YES;
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
@@ -355,14 +456,14 @@ static NSString *const KQQAppKey = @"1105133385";
 -(UIButton*)loginButton{
     if (!_loginButton) {
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _loginButton.frame = CGRectMake(11, self.loginView.bottom + 26, self.view.width - 22 , 47);
+        _loginButton.size = CGSizeMake(self.view.width - 22, 47);
         _loginButton.enabled = NO;
         _loginButton.clipsToBounds = YES;
         _loginButton.layer.cornerRadius = 3;
         _loginButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_loginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_loginButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _loginButton;
@@ -371,15 +472,16 @@ static NSString *const KQQAppKey = @"1105133385";
 -(UIButton*)registerButton{
     if (!_registerButton) {
         _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_registerButton setLeft:self.loginButton.left];
-        [_registerButton setTitle:@"立刻注册" forState:UIControlStateNormal];
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:18];
-
-        [_registerButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        _registerButton.size = CGSizeMake(self.view.width - 22, 47);
+        _registerButton.clipsToBounds = YES;
+        _registerButton.layer.cornerRadius = 3;
+        _registerButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        _registerButton.layer.borderWidth = 1.0f;
+        _registerButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
+        [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_registerButton ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_registerButton sizeToFit];
-        _registerButton.leftTop = CGPointMake(14, self.loginButton.bottom + 15);
     }
     return _registerButton;
 }
@@ -390,7 +492,7 @@ static NSString *const KQQAppKey = @"1105133385";
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_forgetButton setRight:self.loginButton.right];
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_forgetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_forgetButton sizeToFit];
@@ -399,13 +501,55 @@ static NSString *const KQQAppKey = @"1105133385";
     return _forgetButton;
 }
 
+-(UIButton *)backButton{
+    if (!_backButton) {
+        _backButton = [[UIButton alloc]init];
+        [_backButton setBackgroundImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _backButton.tintColor = [UIColor whiteColor];
+        [_backButton addTarget:self action:@selector(backOffAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _backButton;
+}
+
 -(UIButton *)tencentLoginButton{
     if (!_tencentLoginButton) {
-        _tencentLoginButton = [[UIButton alloc]init];
-        [_tencentLoginButton setTitle:@"QQ登录" forState:UIControlStateNormal];
+        _tencentLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
+        [_tencentLoginButton setImage:[UIImage imageNamed:@"more_qq"] forState:UIControlStateNormal];
+        [_tencentLoginButton setTitle:@"腾讯QQ" forState:UIControlStateNormal];
+        _tencentLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _tencentLoginButton.spaceBetweenImageAndTitle = 12;
+        _tencentLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
+        _tencentLoginButton.contentMode = UIViewContentModeCenter;
         [_tencentLoginButton addTarget:self action:@selector(qqLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _tencentLoginButton;
+}
+
+-(UIView *)leftSeperatorLine{
+    if (!_leftSeperatorLine) {
+        _leftSeperatorLine = [[UIView alloc]init];
+        _leftSeperatorLine.backgroundColor = [UIColor whiteColor];
+    }
+    return _leftSeperatorLine;
+}
+
+-(UIView *)rightSeperatorLine{
+    if (!_rightSeperatorLine) {
+        _rightSeperatorLine = [[UIView alloc]init];
+        _rightSeperatorLine.backgroundColor = [UIColor whiteColor];
+    }
+    return _rightSeperatorLine;
+}
+
+-(UILabel *)thirdPartyLoginLabel{
+    if (!_thirdPartyLoginLabel) {
+        _thirdPartyLoginLabel = [[UILabel alloc]init];
+        _thirdPartyLoginLabel.text = @"使用第三方登录";
+        [_thirdPartyLoginLabel sizeToFit];
+        _thirdPartyLoginLabel.textColor = [UIColor whiteColor];
+        _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
+    }
+    return _thirdPartyLoginLabel;
 }
 
 @end

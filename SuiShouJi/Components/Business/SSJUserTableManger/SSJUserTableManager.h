@@ -11,6 +11,8 @@
 extern NSString *const SSJUserIdKey;
 extern NSString *const SSJUserMobileNoKey;
 extern NSString *const SSJUserIconKey;
+extern NSString *const SSJRealNameKey;
+
 
 @class FMDatabase;
 

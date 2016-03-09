@@ -30,7 +30,7 @@
 
     notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
     // 通知被触发时播放的声音
-    notification.soundName = UILocalNotificationDefaultSoundName;
+    notification.soundName = @"pushsound.mp3";
     // 通知参数
     NSDictionary *userDict = [NSDictionary dictionaryWithObject:notificationKey forKey:@"key"];
     notification.userInfo = userDict;

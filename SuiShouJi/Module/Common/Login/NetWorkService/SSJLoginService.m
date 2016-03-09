@@ -25,7 +25,7 @@
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";
     NSString *strKey=@"A9FK25RHT487ULMI";
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [@"88888888" stringByAppendingString:@"http://www.9188.com/"];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&mobileNo=%@&pwd=%@&key=%@",strSignType,strAcctID,useraccount,encryptPassword,strKey];
     NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];

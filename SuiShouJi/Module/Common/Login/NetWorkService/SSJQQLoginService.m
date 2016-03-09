@@ -14,7 +14,7 @@
     self.showLodingIndicator = YES;
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";
-    NSString *strKey=@"accountbook";
+    NSString *strKey=@"iwannapie";
     NSString *type = @"qq";
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&auth_token=%@&key=%@",strSignType,strAcctID,openID,strKey];
     NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
@@ -27,7 +27,6 @@
     [dict setObject:icon forKey:@"cicon"];
     [dict setObject:type forKey:@"type"];
     [dict setObject:realName forKey:@"crealname"];
-    
     [self request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict];
 }
 
