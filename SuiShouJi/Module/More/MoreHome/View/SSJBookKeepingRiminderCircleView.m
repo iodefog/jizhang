@@ -53,14 +53,13 @@
     return 45;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJFundingTypeTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (cell.selectedOrNot) {
-        [_selectWeekdayArray removeObject:[NSString stringWithFormat:@"%ld",indexPath.row + 1]];
+        [_selectWeekdayArray removeObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row + 1]];
     }else{
-        [_selectWeekdayArray addObject:[NSString stringWithFormat:@"%ld",indexPath.row + 1]];
+        [_selectWeekdayArray addObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row + 1]];
     }
     [self.tableView reloadData];
 }
@@ -76,7 +75,7 @@
     if (!RiminderCircleCell) {
         RiminderCircleCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    if ([_selectWeekdayArray containsObject:[NSString stringWithFormat:@"%ld",indexPath.row + 1]]) {
+    if ([_selectWeekdayArray containsObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row + 1]]) {
         RiminderCircleCell.selectedOrNot = YES;
     }else{
         RiminderCircleCell.selectedOrNot = NO;

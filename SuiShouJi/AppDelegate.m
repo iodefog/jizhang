@@ -78,9 +78,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  请求启动接口，检测是否有更新、苹果是否正在审核
     [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
-    
 
-    
     return YES;
 }
 

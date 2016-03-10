@@ -13,8 +13,8 @@
 #import "SSJBudgetEditTextFieldCell.h"
 #import "SSJBudgetEditSwitchCtrlCell.h"
 #import "SSJBudgetDatabaseHelper.h"
-#import "SSJBudgetCalendarHelper.h"
 #import "SSJCustomKeyboard.h"
+#import "SSJDatePeriod.h"
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
 static NSString *const kBudgetEditTextFieldCellId = @"kBudgetEditTextFieldCellId";
@@ -196,25 +196,28 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)periodSelectionViewAction {
+    SSJDatePeriodType periodType = SSJDatePeriodTypeWeek;
     switch (self.periodSelectionView.periodType) {
         case SSJBudgetPeriodTypeWeek:
-            self.model.type = 0;
-            self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentWeek];
-            self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentWeek];
+            periodType = SSJDatePeriodTypeWeek;
             break;
             
         case SSJBudgetPeriodTypeMonth:
-            self.model.type = 1;
-            self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentMonth];
-            self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentMonth];
+            periodType = SSJDatePeriodTypeMonth;
             break;
             
         case SSJBudgetPeriodTypeYear:
-            self.model.type = 2;
-            self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentYear];
-            self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentYear];
+            periodType = SSJDatePeriodTypeYear;
+            
             break;
     }
+    
+    SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:periodType date:[NSDate date]];
+    
+    self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    self.model.type = self.periodSelectionView.periodType;
+    
     [self.tableView reloadData];
 }
 
@@ -270,6 +273,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)initBudgetModel {
+    SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
     self.model = [[SSJBudgetModel alloc] init];
     self.model.ID = SSJUUID();
     self.model.userId = SSJUSERID();
@@ -277,10 +281,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.type = 1;
     self.model.budgetMoney = 3000;
     self.model.remindMoney = 300;
-    self.model.beginDate = [SSJBudgetCalendarHelper getFirstDayOfCurrentMonth];
-    self.model.endDate = [SSJBudgetCalendarHelper getLastDayOfCurrentMonth];
+    self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.isAutoContinued = YES;
     self.model.isRemind = YES;
+    self.model.isAlreadyReminded = NO;
 }
 
 - (NSString *)reuseCellIdForIndexPath:(NSIndexPath *)indexPath {

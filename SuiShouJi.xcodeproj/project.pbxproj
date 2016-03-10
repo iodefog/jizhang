@@ -241,7 +241,6 @@
 		7DEF55451C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55411C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m */; };
 		7DEF55461C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55431C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m */; };
 		7DEF55521C7EEB3300A90153 /* SSJBudgetTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55511C7EEB3300A90153 /* SSJBudgetTypeModel.m */; };
-		7DEF55551C7EFCF500A90153 /* SSJBudgetCalendarHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */; };
 		7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */; };
 		7DEF555C1C808B4800A90153 /* SSJBudgetConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF555B1C808B4800A90153 /* SSJBudgetConst.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
@@ -828,8 +827,6 @@
 		7DEF55431C7ED4A600A90153 /* SSJBudgetEditSwitchCtrlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditSwitchCtrlCell.m; sourceTree = "<group>"; };
 		7DEF55501C7EEB3300A90153 /* SSJBudgetTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetTypeModel.h; sourceTree = "<group>"; };
 		7DEF55511C7EEB3300A90153 /* SSJBudgetTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetTypeModel.m; sourceTree = "<group>"; };
-		7DEF55531C7EFCF500A90153 /* SSJBudgetCalendarHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetCalendarHelper.h; sourceTree = "<group>"; };
-		7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetCalendarHelper.m; sourceTree = "<group>"; };
 		7DEF55561C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditPeriodSelectionView.h; sourceTree = "<group>"; };
 		7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditPeriodSelectionView.m; sourceTree = "<group>"; };
 		7DEF555A1C7F23E500A90153 /* SSJBudgetConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSJBudgetConst.h; sourceTree = "<group>"; };
@@ -1940,8 +1937,6 @@
 			children = (
 				7DEF546F1C7BF47100A90153 /* SSJBudgetDatabaseHelper.h */,
 				7DEF54701C7BF47100A90153 /* SSJBudgetDatabaseHelper.m */,
-				7DEF55531C7EFCF500A90153 /* SSJBudgetCalendarHelper.h */,
-				7DEF55541C7EFCF500A90153 /* SSJBudgetCalendarHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -3693,7 +3688,6 @@
 				7DEF552E1C7DB43400A90153 /* SSJBudgetListCellItem.m in Sources */,
 				7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
-				7DEF55551C7EFCF500A90153 /* SSJBudgetCalendarHelper.m in Sources */,
 				7DE69C3B1C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */,
 				7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */,

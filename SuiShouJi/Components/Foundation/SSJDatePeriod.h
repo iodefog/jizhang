@@ -31,11 +31,11 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
 
 @property (nonatomic, readonly) SSJDatePeriodType periodType;
 
+- (nullable instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+
++ (nullable instancetype)datePeriodWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+
 + (instancetype)datePeriodWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date;
-
-+ (instancetype)datePeriodWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date format:(NSString *)format;
-
-+ (SSJDatePeriodComparisonResult)comparePeriod:(SSJDatePeriod *)period withAnotherPeriod:(SSJDatePeriod *)anotherPeriod;
 
 + (SSJDatePeriodComparisonResult)compareDate:(NSDate *)date withAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type;
 
@@ -43,13 +43,17 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
 
 - (SSJDatePeriodComparisonResult)compareWithDate:(NSDate *)date;
 
-+ (NSArray *)periodsBetweenPeriod:(SSJDatePeriod *)period andAnotherPeriod:(SSJDatePeriod *)anotherPeriod;
++ (nullable NSArray *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type;
 
-+ (NSArray *)periodsBetweenDate:(NSDate *)date andAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type;
+- (nullable NSArray *)periodsFromPeriod:(SSJDatePeriod *)period;
 
-- (NSArray *)periodsFromPeriod:(SSJDatePeriod *)period;
+- (nullable NSArray *)periodsFromDate:(NSDate *)date;
 
-- (NSArray *)periodsFromDate:(NSDate *)date;
++ (NSInteger)periodCountFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate periodType:(SSJDatePeriodType)type;
+
+- (NSInteger)periodCountFromPeriod:(SSJDatePeriod *)period;
+
+- (NSInteger)periodCountFromDate:(NSDate *)date;
 
 @end
 
