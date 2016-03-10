@@ -162,11 +162,15 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 //  获取要上传的数据
 - (NSData *)getDataToSyncWithError:(NSError * __autoreleasing *)error {
-    __block NSArray *userChargeRecords = nil;
-    __block NSArray *fundInfoRecords = nil;
-    __block NSArray *userBillRecords = nil;
-    __block NSString *userId = nil;
+    NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
     
+    NSArray *syncTableClasses = @[[SSJUserBillSyncTable class],
+                                  [SSJFundInfoSyncTable class],
+                                  [SSJUserChargeSyncTable class],
+                                  [SSJUserBudgetSyncTable class],
+                                  [SSJUserChargePeriodConfigSyncTable class]];
+    
+    //  查询要同步的表中的数据
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
         //  把当前同步的版本号插入到BK_SYNC表中
@@ -175,36 +179,27 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
             return;
         }
         
+        //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
-        //  查询需要同步的表中 版本号（IVERSION）大于上次同步成功版本号（lastSyncVersion）的记录，
-        userBillRecords = [SSJUserBillSyncTable queryRecordsNeedToSyncInDatabase:db error:error];
-        fundInfoRecords = [SSJFundInfoSyncTable queryRecordsNeedToSyncInDatabase:db error:error];
-        userChargeRecords = [SSJUserChargeSyncTable queryRecordsNeedToSyncInDatabase:db error:error];
-        userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
+        for (Class syncTable in syncTableClasses) {
+            NSArray *syncRecords = [syncTable queryRecordsNeedToSyncInDatabase:db error:error];
+            if (syncRecords.count) {
+                [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
+            }
+        }
+        
+        NSString *userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
+        if (userId.length && !SSJIsUserLogined()) {
+            [jsonObject setObject:@[@{@"cuserid":userId,
+                                      @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                      @"isource":SSJDefaultSource()}] forKey:@"bk_user"];
+        }
     }];
     
     if (*error) {
         return nil;
     }
-    
-    NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-    if (userBillRecords.count) {
-        [jsonObject setObject:userBillRecords forKey:@"bk_user_bill"];
-    }
-    if (fundInfoRecords.count) {
-        [jsonObject setObject:fundInfoRecords forKey:@"bk_fund_info"];
-    }
-    if (userChargeRecords.count) {
-        [jsonObject setObject:userChargeRecords forKey:@"bk_user_charge"];
-    }
-    if (userId.length && !SSJIsUserLogined()) {
-        [jsonObject setObject:@[@{@"cuserid":userId,
-                                  @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                                  @"isource":SSJDefaultSource()}] forKey:@"bk_user"];
-    }
-    
-    //    SSJPRINT(@">>> sync upload data:%@", jsonObject);
     
     //  将查询得到的结果放入字典中，转换成json数据
     NSData *syncData = [NSJSONSerialization dataWithJSONObject:jsonObject

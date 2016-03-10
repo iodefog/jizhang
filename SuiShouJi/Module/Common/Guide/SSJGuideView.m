@@ -14,9 +14,14 @@
 @interface SSJGuideView () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *contentViews;
+
 @property (nonatomic, strong) UIScrollView *scrollView;
+
 @property (nonatomic, strong) SSJPageControl *pageControl;
+
 @property (nonatomic, strong) UIButton *beginButton;
+
+@property (nonatomic, copy) void (^finishHandle)();
 
 @end
 
@@ -48,12 +53,17 @@
 
 - (void)showIfNeeded {
     if (!self.superview && SSJIsFirstLaunchForCurrentVersion()) {
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-        [UIView transitionWithView:window duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [window addSubview:self];
-        } completion:NULL];
+        [self showWithFinish:NULL];
     }
+}
+
+- (void)showWithFinish:(void (^)())finish {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
+    [UIView transitionWithView:window duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [window addSubview:self];
+    } completion:NULL];
+    self.finishHandle = finish;
 }
 
 - (void)dismiss:(BOOL)animated {
@@ -100,9 +110,10 @@
 - (void)beginButtonAciton {
     [self dismiss:YES];
     SSJAddLaunchTimesForCurrentVersion();
-//    if (self.beginHandle) {
-//        self.beginHandle(self);
-//    }
+    if (self.finishHandle) {
+        self.finishHandle();
+        self.finishHandle = nil;
+    }
 }
 
 - (UIScrollView *)scrollView {

@@ -7,8 +7,9 @@
 //
 
 #import "SSJMotionPasswordViewController.h"
+#import "SSJLoginViewController.h"
 #import "SCYMotionEncryptionView.h"
-#import "SSJMotionPasswordHelper.h"
+#import "SSJUserTableManager.h"
 
 //  验证密码最多错误次数
 static const int kVerifyFailureTimesLimit = 5;
@@ -54,23 +55,34 @@ static const int kVerifyFailureTimesLimit = 5;
     [self.view addSubview:self.motionView];
     
     switch (self.type) {
-        case SSJMotionPasswordViewControllerTypeSetting:
+        case SSJMotionPasswordViewControllerTypeSetting: {
             [self.view addSubview:self.miniMotionView];
             self.remindLab.text = @"绘制解锁图案";
-            break;
+        }   break;
             
-        case SSJMotionPasswordViewControllerTypeVerification:
+        case SSJMotionPasswordViewControllerTypeVerification: {
+            //  查询手势密码
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD"] forUserId:SSJUSERID()];
+            self.keypads = [userItem.motionPWD componentsSeparatedByString:@","];
+            
             [self.view addSubview:self.portraitView];
             [self.view addSubview:self.forgetPwdBtn];
             [self.view addSubview:self.changeAccountBtn];
             self.remindLab.text = @"请输入手势密码";
-            break;
+        }   break;
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    //  禁用手势返回
+    self.navigationController.interactivePopGestureRecognizer.enabled=NO;
+    self.navigationController.interactivePopGestureRecognizer.delegate = nil;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -115,8 +127,17 @@ static const int kVerifyFailureTimesLimit = 5;
             if (self.keypads) {
                 //  设置成功
                 if ([self.keypads isEqualToArray:keypads]) {
-                    [SSJMotionPasswordHelper saveMotionPassword:keypads];
-                    [self ssj_backOffAction];
+                    //  保存手势密码
+                    SSJUserItem *userItem = [[SSJUserItem alloc] init];
+                    userItem.userId = SSJUSERID();
+                    userItem.motionPWD = [keypads componentsJoinedByString:@","];
+                    [SSJUserTableManager saveUserItem:userItem];
+                    
+                    if (self.finishHandle) {
+                        self.finishHandle(self);
+                    } else {
+                        [self ssj_backOffAction];
+                    }
                     return SCYMotionEncryptionCircleLayerStatusCorrect;
                 }
                 
@@ -153,13 +174,22 @@ static const int kVerifyFailureTimesLimit = 5;
         //  验证手势密码
         case SSJMotionPasswordViewControllerTypeVerification: {
             if ([self.keypads isEqualToArray:keypads]) {
+                //  验证成功
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                } else {
+                    [self ssj_backOffAction];
+                }
                 return SCYMotionEncryptionCircleLayerStatusCorrect;
             } else {
+                //  验证失败
                 self.verifyFailureTimes --;
                 self.remindLab.textColor = [UIColor redColor];
                 self.remindLab.text = [NSString stringWithFormat:@"密码错误，您还可以输入%d次", self.verifyFailureTimes];
+                
+                //  验证失败次数达到最大限制
                 if (self.verifyFailureTimes <= 0) {
-                    //  清空用户的手势密码，并跳转至登录页面
+                    [self forgetPasswordAction];
                 }
                 
                 return SCYMotionEncryptionCircleLayerStatusError;
@@ -170,18 +200,43 @@ static const int kVerifyFailureTimesLimit = 5;
 }
 
 #pragma mark - Event
+//  忘记手势密码
 - (void)forgetPasswordAction {
+    // 注销登录状态、清空用户的手势密码，并跳转至登录页面
+    SSJClearLoginInfo();
+    SSJUserItem *userItem = [[SSJUserItem alloc] init];
+    userItem.userId = SSJUSERID();
+    userItem.motionPWD = @"";
+    [SSJUserTableManager saveUserItem:userItem];
     
+    userItem = [SSJUserTableManager queryProperty:@[@"mobileNo"] forUserId:SSJUSERID()];
+    
+    UIViewController *previousVC = [self ssj_previousViewController];
+    if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
+        SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
+        loginVC.mobileNo = userItem.mobileNo;
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+        loginVC.mobileNo = userItem.mobileNo;
+        [self.navigationController setViewControllers:@[loginVC] animated:YES];
+    }
 }
 
+//  切换账号
 - (void)changeAccountAction {
-    
+    if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginViewController class]]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+        [self.navigationController setViewControllers:@[loginVC] animated:YES];
+    }
 }
 
 #pragma mark - Getter
 - (UIImageView *)backgroundView {
     if (!_backgroundView) {
-        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"motion_background"]];
+        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"motion_background.jpg"]];
         _backgroundView.frame = self.view.bounds;
     }
     return _backgroundView;

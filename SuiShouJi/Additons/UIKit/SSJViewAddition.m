@@ -213,15 +213,55 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 @implementation UIView (SSJWatermark)
 
 - (void)ssj_showWatermarkWithImageName:(NSString *)imageName animated:(BOOL)animated target:(id)target action:(SEL)action {
-    UIImageView *watermark = [self watermark:imageName];
+    UIImageView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
+    
+    if (![watermark isKindOfClass:[UIImageView class]]) {
+        [watermark removeFromSuperview];
+        watermark = [[UIImageView alloc] init];
+        objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
     if (!watermark.superview) {
-        if (action) {
+        [self addSubview:watermark];
+        
+        if ([target respondsToSelector:action]) {
             watermark.userInteractionEnabled = YES;
             UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
             [watermark addGestureRecognizer:tapGesture];
         }
-        [self addSubview:watermark];
+        
+        UIImage *image = [UIImage imageNamed:imageName];
+        watermark.image = image;
+        watermark.size = image.size;
+        watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
         watermark.alpha = 0;
+        
+        [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
+            watermark.alpha = 1;
+        } completion:nil];
+    }
+}
+
+- (void)ssj_showWatermarkWithCustomView:(UIView *)view animated:(BOOL)animated target:(id)target action:(SEL)action {
+    UIView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
+    
+    if (watermark != view) {
+        [watermark removeFromSuperview];
+        watermark = view;
+        objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    if (!watermark.superview) {
+        [self addSubview:watermark];
+        
+        if ([target respondsToSelector:action]) {
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
+            [watermark addGestureRecognizer:tapGesture];
+        }
+        
+        watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+        watermark.alpha = 0;
+        
         [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
             watermark.alpha = 1;
         } completion:nil];
@@ -229,7 +269,8 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 - (void)ssj_hideWatermark:(BOOL)animated {
-    UIImageView *watermark = [self watermark:nil];
+    UIView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
+    
     if (watermark && watermark.superview) {
         [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
             watermark.alpha = 0;
@@ -243,23 +284,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
             }
         }];
     }
-}
-
-- (UIImageView *)watermark:(NSString *)name {
-    UIImageView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
-    if (watermark) {
-        return watermark;
-    }
-    
-    if (!watermark && name.length) {
-        UIImage *image = [UIImage imageNamed:name];
-        watermark = [[UIImageView alloc] initWithImage:image];
-        watermark.size = image.size;
-        watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
-        objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        return watermark;
-    }
-    return nil;
 }
 
 @end

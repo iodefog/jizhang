@@ -11,6 +11,9 @@
 
 @interface SSJLoginViewController : SSJBaseViewController<TencentSessionDelegate>
 
+//  手机号码
+@property (nonatomic, copy) NSString *mobileNo;
+
 // 从外部指定的返回按钮点击事件
 - (void)backOffAction;
 

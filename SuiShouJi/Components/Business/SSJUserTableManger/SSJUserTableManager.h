@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "SSJUserItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class FMDatabase;
 
 @interface SSJUserTableManager : NSObject
@@ -32,12 +34,19 @@
 + (NSString *)unregisteredUserIdInDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
- *  将当前用户编号的注册状态设置为已注册
+ *  查询用户所有信息
  *
- *  @param success 成功的回调
- *  @param failure 失败的回调
+ *  @return (SSJUserItem *) 用户信息模型
  */
-+ (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
++ (SSJUserItem *)queryUserItemForID:(NSString *)userID;
+
+/**
+ *  查询指定的用户信息
+ *
+ *  @param propertyName 查询的属性
+ *  @return (SSJUserItem *) 用户信息模型
+ */
++ (SSJUserItem *)queryProperty:(NSArray<NSString *> *)propertyNames forUserId:(NSString *)userId;
 
 /**
  *  保存用户信息
@@ -47,3 +56,5 @@
 + (BOOL)saveUserItem:(SSJUserItem *)userItem;
 
 @end
+
+NS_ASSUME_NONNULL_END

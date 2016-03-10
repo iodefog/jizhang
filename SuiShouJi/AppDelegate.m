@@ -11,40 +11,52 @@
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
-#import "SSJDatabaseQueue.h"
+#import "SSJMotionPasswordViewController.h"
+#import "SSJGuideView.h"
+
 #import "SSJLocalNotificationHelper.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJUserDefaultDataCreater.h"
+#import "SSJUserTableManager.h"
+#import "SSJDataSynchronizer.h"
+#import "SSJStartChecker.h"
+#import "SSJDatabaseUpgrader.h"
+#import "SSJRegularManager.h"
+
 #import "UMSocialWechatHandler.h"
 #import "UMSocialSinaSSOHandler.h"
 #import "UMSocialQQHandler.h"
 #import "UMSocialSinaSSOHandler.h"
-
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "UMFeedback.h"
-
-#import "SSJUserDefaultDataCreater.h"
 #import "MobClick.h"
-#import "FMDB.h"
-#import "SSJUserTableManager.h"
-#import "SSJDataSynchronizer.h"
-#import "SSJGuideView.h"
-#import "SSJStartChecker.h"
-#import "SSJDatabaseUpgrader.h"
 
-@implementation AppDelegate
+//  进入后台超过的时限后进入锁屏
+static const NSTimeInterval kLockScreenDelay = 60;
 
 //  友盟key
 static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
-//- (void)applicationWillEnterForeground:(UIApplication *)application {
-//    
-//}
+static NSString *const kEnterBackgroundTimeKey = @"kEnterBackgroundTimeKey";
 
+void SCYSaveEnterBackgroundTime() {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kEnterBackgroundTimeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+NSDate *SCYEnterBackgroundTime() {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kEnterBackgroundTimeKey];
+}
+
+@implementation AppDelegate
+
+#pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
@@ -52,6 +64,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
         [self setLocalNotification];
     }
+    
     //  添加友盟统计
     [self umengTrack];
     
@@ -60,6 +73,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //   添加友盟反馈
     [self umengFeedBack];
+    
     //  初始化数据库
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -73,8 +87,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [self setRootViewController];
     
     //  当前版本第一次启动显示引导页
-    SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    [guideView showIfNeeded];
+    if (SSJIsFirstLaunchForCurrentVersion()) {
+        SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [guideView showWithFinish:^{
+            [self showMotionPasswordIfNeeded];
+        }];
+    } else {
+        [self showMotionPasswordIfNeeded];
+    }
     
     //  请求启动接口，检测是否有更新、苹果是否正在审核
     [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
@@ -82,24 +102,33 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     return YES;
 }
 
-- (void)registerRegularTask {
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
-        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeNone categories:nil]];
-    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    NSDate *date = [NSDate date];
-    notification.fireDate = [NSDate dateWithYear:[date year] month:[date month] day:[date day]];
-    notification.repeatInterval = NSCalendarUnitDay;
-    notification.repeatCalendar = [NSCalendar currentCalendar];
-    
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    
+    //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
+    [SSJRegularManager performRegularTaskWithLocalNotification:notification];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    SCYSaveEnterBackgroundTime();
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    //  当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
+    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJUSERID() withSuccess:NULL failure:NULL];
+    
+    NSDate *backgroundTime = SCYEnterBackgroundTime();
+    NSTimeInterval interval = [backgroundTime timeIntervalSinceDate:[NSDate date]];
+    interval = ABS(interval);
+    if (interval >= kLockScreenDelay) {
+        [self showMotionPasswordIfNeeded];
+    }
+}
+
+#pragma mark - Private
 //  设置根控制器
 - (void)setRootViewController {
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
@@ -165,7 +194,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     });
 }
 
-
 //注册通知
 -(void)setLocalNotification{
     NSString *baseDateStr = [NSString stringWithFormat:@"%@ 20:00:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
@@ -175,6 +203,32 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
     [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
+}
+
+//  如果手势密码开启，进入手势密码页面
+- (void)showMotionPasswordIfNeeded {
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+    if ([userItem.motionPWDState boolValue]) {
+        if (userItem.motionPWD.length) {
+            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+            [self.window.rootViewController presentViewController:motionVC animated:YES completion:NULL];
+        } else {
+            SSJAlertViewAction *nextAction = [SSJAlertViewAction actionWithTitle:@"下次再说" handler:^(SSJAlertViewAction *action) {
+                //  关闭手势密码
+                SSJUserItem *userItem = [[SSJUserItem alloc] init];
+                userItem.userId = SSJUSERID();
+                userItem.motionPWDState = @"0";
+                [SSJUserTableManager saveUserItem:userItem];
+            }];
+            SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"去设置" handler:^(SSJAlertViewAction *action) {
+                SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                [self.window.rootViewController presentViewController:motionVC animated:YES completion:NULL];
+            }];
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"" action:nextAction, sureAction, nil];
+        }
+    }
 }
 
 #pragma mark - 友盟
@@ -207,7 +261,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 -(void)umengFeedBack{
     [UMFeedback setAppkey:kUMAppKey];
 }
-
 
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{

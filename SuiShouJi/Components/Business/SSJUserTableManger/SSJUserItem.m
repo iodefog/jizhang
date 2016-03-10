@@ -11,4 +11,23 @@
 
 @implementation SSJUserItem
 
++ (NSDictionary *)propertyMapping {
+    static NSDictionary *mapping = nil;
+    if (!mapping) {
+        mapping = @{@"userId":@"cuserid",
+                    @"loginPWD":@"cpwd",
+                    @"fundPWD":@"cfpwd",
+                    @"motionPWD":@"cmotionpwd",
+                    @"motionPWDState":@"cmotionpwdstate",
+                    @"nickName":@"cnickid",
+                    @"mobileNo":@"cmobileno",
+                    @"realName":@"crealname",
+                    @"idCardNo":@"cidcard",
+                    @"registerState":@"cregisterstate",
+                    @"defaultFundAcctState":@"cdefaultfundacctstate",
+                    @"icon":@"cicons"};
+    }
+    return mapping;
+}
+
 @end

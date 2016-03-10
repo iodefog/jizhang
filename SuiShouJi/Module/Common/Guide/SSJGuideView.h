@@ -23,4 +23,6 @@ typedef void(^SSJGuideViewBeginBlock)(SSJGuideView *guideView);
 
 - (void)showIfNeeded;
 
+- (void)showWithFinish:(void (^)())finish;
+
 @end

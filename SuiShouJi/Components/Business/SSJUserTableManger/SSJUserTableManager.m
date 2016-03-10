@@ -70,24 +70,52 @@
     return userId;
 }
 
-+ (void)registerUserIdWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    if (!SSJUSERID().length) {
-        SSJPRINT(@">>>SSJ warning:invalid user id");
-        return;
++ (SSJUserItem *)queryUserItemForID:(NSString *)userID {
+    return [self queryProperty:@[@"*"] forUserId:userID];
+}
+
++ (SSJUserItem *)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId {
+    SSJUserItem *item = [[SSJUserItem alloc] init];
+    
+    if (!userId || !userId.length) {
+        SSJPRINT(@">>> SSJ Warning:userid不能为空");
+        return item;
     }
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([db executeUpdate:@"update BK_USER set CREGISTERSTATE = 1 where CUSERID = ?", SSJUSERID()]) {
-            if (success) {
-                success();
-            }
+    NSDictionary *mapping = [SSJUserItem propertyMapping];
+    NSMutableArray *fieldArr = [NSMutableArray arrayWithCapacity:propertyNames.count];
+    for (NSString *property in propertyNames) {
+        NSString *fieldName = [mapping objectForKey:property];
+        [fieldArr addObject:fieldName];
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *queryStr = [NSString stringWithFormat:@"select %@ from bk_user where cuserid = ?", [fieldArr componentsJoinedByString:@", "]];
+        FMResultSet *resultSet = [db executeQuery:queryStr, userId];
+        if (!resultSet) {
             return;
         }
         
-        if (failure) {
-            failure([db lastError]);
-        }
+        [[SSJUserItem propertyMapping] enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            NSString *propertyName = key;
+            NSMutableString *setter = [NSMutableString stringWithString:@"set"];
+            [setter appendString:[[propertyName substringToIndex:1] uppercaseString]];
+            if (propertyName.length > 1) {
+                [setter appendString:[propertyName substringFromIndex:1]];
+            }
+            SEL setterSel = NSSelectorFromString(setter);
+            if ([item respondsToSelector:setterSel]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+                [item performSelector:setterSel withObject:[resultSet stringForColumn:obj]];
+#pragma clang diagnostic pop
+                
+            }
+        }];
+        [resultSet close];
     }];
+    
+    return item;
 }
 
 + (BOOL)saveUserItem:(SSJUserItem *)userItem {
@@ -97,11 +125,10 @@
         return NO;
     }
     
-    NSDictionary *userInfo = [self fieldMapWithUserItem:userItem];
-    
     __block BOOL success = YES;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *statment = nil;
+        NSDictionary *userInfo = [self fieldMapWithUserItem:userItem];
         if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
             statment = [self inertSQLStatementWithUserInfo:userInfo];
         } else {
@@ -116,18 +143,7 @@
 
 + (NSDictionary *)fieldMapWithUserItem:(SSJUserItem *)userItem {
     [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
-        return @{@"userId":@"cuserid",
-                 @"loginPWD":@"cpwd",
-                 @"fundPWD":@"cfpwd",
-                 @"motionPWD":@"cmotionpwd",
-                 @"motionPWDState":@"cmotionpwdstate",
-                 @"nickName":@"cnickid",
-                 @"mobileNo":@"cmobileno",
-                 @"realName":@"crealname",
-                 @"idCardNo":@"cidcard",
-                 @"registerState":@"cregisterstate",
-                 @"defaultFundAcctState":@"cdefaultfundacctstate",
-                 @"icon":@"cicons"};
+        return [SSJUserItem propertyMapping];
     }];
     return userItem.mj_keyValues;
 }
@@ -148,7 +164,7 @@
         [keyValues addObject:[NSString stringWithFormat:@"%@ =:%@", key, key]];
     }
     
-    return [NSString stringWithFormat:@"update BK_USER set %@ where cuserid = ?", [keyValues componentsJoinedByString:@", "]];
+    return [NSString stringWithFormat:@"update BK_USER set %@ where cuserid = :cuserid", [keyValues componentsJoinedByString:@", "]];
 }
 
 @end
