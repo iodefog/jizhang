@@ -201,7 +201,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if ([title isEqualToString:kTitle4]) {
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUMAppKey
-                                          shareText:@""
+                                          shareText:@"财务管理第一步，从记录消费生活开始!"
                                          shareImage:[UIImage imageNamed:@"icon"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                            delegate:self];
@@ -253,14 +253,13 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
 }
 
-#warning test
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
 {
     if (platformName == UMShareToSina) {
-        socialData.shareText = @"1111";
+        socialData.shareText = @"9188记账----财务管理第一步，从记录消费生活开始!";
     }
     else{
-        socialData.shareText = @"分享到其他平台的文字内容";
+        socialData.shareText = @"财务管理第一步，从记录消费生活开始!";
     }
 }
 

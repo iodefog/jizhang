@@ -193,13 +193,13 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 /* 友盟分享 */
 -(void)umengShare{
     [UMSocialData setAppKey:kUMAppKey];
-    [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:SSJAppStoreAddress];
+    [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:@"http://1.9188.com/h5/jizhangApp/"];
 //    [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账——省钱必备，剁掉买买买～";
     [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"";
 //    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
 //                                              
 //                                         RedirectURL:SSJAppStoreAddress];
-    [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:SSJAppStoreAddress];
+    [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://1.9188.com/h5/jizhangApp/"];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账——省钱必备，剁掉买买买～";
 }
 
