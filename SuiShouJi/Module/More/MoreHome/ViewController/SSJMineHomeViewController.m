@@ -23,7 +23,7 @@
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "UMFeedback.h"
-
+#import "SSJSettingViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -154,17 +154,11 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-        return self.loggedFooterView;
-    }
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
     return footerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-        return 80;
-    }
     return 0.1f;
 }
 
@@ -207,17 +201,21 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if ([title isEqualToString:kTitle4]) {
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUMAppKey
-                                          shareText:@"养鱼要蓄水，致富要积累。---让9188记账当你的资金管理小能手。"
+                                          shareText:@""
                                          shareImage:[UIImage imageNamed:@"icon"]
                                     shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                            delegate:self];
-
     }
     
     //意见反馈
     if ([title isEqualToString:kTitle5]) {
         [self.navigationController pushViewController:[UMFeedback feedbackViewController]
                                              animated:YES];
+    }
+    
+    if ([title isEqualToString:kTitle7]) {
+        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]init];
+        [self.navigationController pushViewController:settingVC animated:YES];
     }
 }
 #pragma mark - UITableViewDataSource
@@ -237,7 +235,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
-    
+
     return mineHomeCell;
 }
 
@@ -247,10 +245,22 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     //根据`responseCode`得到发送结果,如果分享成功
     if(response.responseCode == UMSResponseCodeSuccess)
     {
-        //得到分享到的微博平台名
-        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]]delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alert show];
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享失败"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+    }
+}
+
+#warning test
+-(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
+{
+    if (platformName == UMShareToSina) {
+        socialData.shareText = @"1111";
+    }
+    else{
+        socialData.shareText = @"分享到其他平台的文字内容";
     }
 }
 

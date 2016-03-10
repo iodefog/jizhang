@@ -16,6 +16,8 @@
 #import "UMSocialWechatHandler.h"
 #import "UMSocialSinaSSOHandler.h"
 #import "UMSocialQQHandler.h"
+#import "UMSocialSinaSSOHandler.h"
+
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "UMFeedback.h"
 
@@ -194,11 +196,11 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 -(void)umengShare{
     [UMSocialData setAppKey:kUMAppKey];
     [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:SSJAppStoreAddress];
-    [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账——省钱必备，剁掉买买买～";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账——省钱必备，剁掉买买买～";
-    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
-                                              secret:@"b0584e24371e5ad6118dfa0e3de3197c"
-                                         RedirectURL:SSJAppStoreAddress];
+//    [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账——省钱必备，剁掉买买买～";
+    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"";
+//    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
+//                                              
+//                                         RedirectURL:SSJAppStoreAddress];
     [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:SSJAppStoreAddress];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账——省钱必备，剁掉买买买～";
 }
