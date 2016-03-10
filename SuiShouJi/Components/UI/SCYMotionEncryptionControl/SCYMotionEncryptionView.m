@@ -112,9 +112,9 @@
 }
 
 - (NSArray *)allKeypads {
-    int count = _layout.numberOfRows * _layout.numberOfColumns;
+    NSInteger count = _layout.numberOfRows * _layout.numberOfColumns;
     NSMutableArray *keypads = [NSMutableArray arrayWithCapacity:count];
-    for (int i = 0; i < _layout.numberOfRows * _layout.numberOfColumns; i ++) {
+    for (NSInteger i = 0; i < _layout.numberOfRows * _layout.numberOfColumns; i ++) {
         [keypads addObject:@(i)];
     }
     return [keypads copy];

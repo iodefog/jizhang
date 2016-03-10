@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, SSJDatePeriodType) {
+    SSJDatePeriodTypeUnknown = 0,
     SSJDatePeriodTypeWeek = NSCalendarUnitWeekOfYear,
     SSJDatePeriodTypeMonth = NSCalendarUnitMonth,
     SSJDatePeriodTypeYear = NSCalendarUnitYear
@@ -31,9 +32,7 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
 
 @property (nonatomic, readonly) SSJDatePeriodType periodType;
 
-- (nullable instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
-
-+ (nullable instancetype)datePeriodWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+- (instancetype)initWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date;
 
 + (instancetype)datePeriodWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date;
 

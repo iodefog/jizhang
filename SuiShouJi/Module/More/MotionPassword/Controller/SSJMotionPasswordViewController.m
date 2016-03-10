@@ -10,6 +10,7 @@
 #import "SCYMotionEncryptionView.h"
 #import "SSJMotionPasswordHelper.h"
 
+//  验证密码最多错误次数
 static const int kVerifyFailureTimesLimit = 5;
 
 @interface SSJMotionPasswordViewController () <SCYMotionEncryptionViewDelegate>

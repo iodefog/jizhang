@@ -46,28 +46,6 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     
     [self.view ssj_showLoadingIndicator];
     
-//    [SSJBudgetDatabaseHelper supplementBudgetRecordWithSuccess:^{
-//        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-//            [self.view ssj_hideLoadingIndicator];
-//            self.dataList = result;
-//            [self.tableView reloadData];
-//        } failure:^(NSError * _Nullable error) {
-//            [self.view ssj_hideLoadingIndicator];
-//            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-//            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-//        }];
-//    } failure:^(NSError * _Nonnull error) {
-//        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-//            [self.view ssj_hideLoadingIndicator];
-//            self.dataList = result;
-//            [self.tableView reloadData];
-//        } failure:^(NSError * _Nullable error) {
-//            [self.view ssj_hideLoadingIndicator];
-//            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-//            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-//        }];
-//    }];
-    
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
         self.dataList = result;
@@ -148,7 +126,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 }
 
 - (void)setupAddBarButtonItem {
-    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(addNewBudgetAction)];
+    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_add"] style:UIBarButtonItemStylePlain target:self action:@selector(addNewBudgetAction)];
     self.navigationItem.rightBarButtonItem = addItem;
 }
 
