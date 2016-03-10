@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,26 +11,32 @@
             <rect key="frame" x="0.0" y="0.0" width="329" height="148"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QON-Pc-Fhx">
-                    <rect key="frame" x="135" y="82" width="60" height="60"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_record_bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="GLf-Wa-7Ut">
+                    <rect key="frame" x="0.0" y="0.0" width="329" height="146"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="60" id="GqK-pg-v3C"/>
-                        <constraint firstAttribute="width" constant="60" id="q7u-ez-Sto"/>
+                        <constraint firstAttribute="height" constant="146" id="wLZ-sc-4CE"/>
                     </constraints>
-                    <state key="normal" title="Button" image="recording.png"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QON-Pc-Fhx">
+                    <rect key="frame" x="116.5" y="10" width="95" height="95"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="95" id="GqK-pg-v3C"/>
+                        <constraint firstAttribute="width" constant="95" id="q7u-ez-Sto"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="no_record_bt.png"/>
                     <connections>
                         <action selector="recordButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="HZ7-dR-oAM"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="还没有任何记账记录哦" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k8A-pM-VIT">
-                    <rect key="frame" x="74" y="20" width="180" height="21.5"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <rect key="frame" x="89" y="156" width="150" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="赶紧来记一笔吧" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYL-uI-mCs">
-                    <rect key="frame" x="101" y="51" width="126" height="21.5"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <rect key="frame" x="112" y="184" width="105" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -38,17 +44,27 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="QON-Pc-Fhx" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="4mI-dF-it7"/>
-                <constraint firstItem="k8A-pM-VIT" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="5EX-US-a6N"/>
+                <constraint firstItem="k8A-pM-VIT" firstAttribute="top" secondItem="GLf-Wa-7Ut" secondAttribute="bottom" constant="10" id="Cx8-Nh-z8l"/>
+                <constraint firstItem="GLf-Wa-7Ut" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Gsi-fE-3YM"/>
+                <constraint firstItem="QON-Pc-Fhx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="HBg-eF-sgA"/>
+                <constraint firstItem="GLf-Wa-7Ut" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="NaZ-iR-e5o"/>
                 <constraint firstItem="hYL-uI-mCs" firstAttribute="top" secondItem="k8A-pM-VIT" secondAttribute="bottom" constant="10" id="PMF-5J-7NK"/>
+                <constraint firstItem="GLf-Wa-7Ut" firstAttribute="bottom" secondItem="QON-Pc-Fhx" secondAttribute="bottom" constant="20" id="Qr5-Yw-zdO"/>
                 <constraint firstItem="hYL-uI-mCs" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="TZa-Gg-SYk"/>
                 <constraint firstItem="k8A-pM-VIT" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="ZTx-s7-be9"/>
-                <constraint firstItem="QON-Pc-Fhx" firstAttribute="top" secondItem="hYL-uI-mCs" secondAttribute="bottom" constant="10" id="bbP-lc-gdI"/>
+                <constraint firstItem="GLf-Wa-7Ut" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="uBz-I1-P2C"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="Qr5-Yw-zdO"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="-81.5" y="-47"/>
         </view>
     </objects>
     <resources>
-        <image name="recording.png" width="95" height="95"/>
+        <image name="no_record_bg.png" width="240" height="146"/>
+        <image name="no_record_bt.png" width="95" height="95"/>
     </resources>
 </document>
