@@ -38,6 +38,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //  倒计时
 @property (nonatomic) NSInteger countdown;
 
+//背景图片
+@property (nonatomic,strong)UIImageView *backGroundImage;
+
 @end
 
 @implementation SSJRegistCheckAuthCodeViewController
@@ -58,6 +61,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.authCodeTextField];
@@ -75,11 +79,18 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+
     [self.networkService cancel];
     if ([self isBeingPresented] || [self isMovingFromParentViewController]) {
         [self.countdownTimer invalidate];
     }
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -177,6 +188,15 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _networkService;
 }
 
+-(UIImageView *)backGroundImage{
+    if (!_backGroundImage) {
+        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+    }
+    return _backGroundImage;
+}
+
+
 - (TPKeyboardAvoidingScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
@@ -186,14 +206,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (SSJRegistOrderView *)stepView {
     if (!_stepView) {
-        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 0, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputAuthCode];
+        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputAuthCode];
     }
     return _stepView;
 }
 
 - (SSJBaselineTextField *)authCodeTextField {
     if (!_authCodeTextField) {
-        _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:34];
+        _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 124, self.view.width - 50, 50) contentHeight:34];
         _authCodeTextField.font = [UIFont systemFontOfSize:15];
         _authCodeTextField.placeholder = @"请输入验证码";
         _authCodeTextField.delegate = self;

@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UIButton *agreeButton;
 @property (nonatomic, strong) UIButton *protocolButton;
 @property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic,strong)UIImageView *backGroundImage;
 
 @property (nonatomic, strong) SSJRegistNetworkService *getVerCodeService;
 
@@ -46,7 +47,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.tfPhoneNum];
@@ -61,6 +62,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.tfPhoneNum becomeFirstResponder];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -70,7 +72,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -161,16 +163,25 @@
     return _scrollView;
 }
 
+-(UIImageView *)backGroundImage{
+    if (!_backGroundImage) {
+        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+    }
+    return _backGroundImage;
+}
+
+
 - (SSJRegistOrderView *)stepView {
     if (!_stepView) {
-        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 0, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputPhoneNo];
+        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputPhoneNo];
     }
     return _stepView;
 }
 
 - (SSJBaselineTextField *)tfPhoneNum {
     if (!_tfPhoneNum) {
-        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:34];
+        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 124, self.view.width - 50, 50) contentHeight:34];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.placeholder = @"请输入您的手机号";
         _tfPhoneNum.delegate = self;

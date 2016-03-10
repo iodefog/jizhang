@@ -26,6 +26,9 @@
 @property (nonatomic, strong) UIButton *finishBtn;
 @property (nonatomic, strong) SSJRegistNetworkService *registCompleteService;
 
+//背景图片
+@property (nonatomic,strong)UIImageView *backGroundImage;
+
 @end
 
 @implementation SSJRegistCompleteViewController
@@ -46,7 +49,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.passwordField];
@@ -57,6 +60,12 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.passwordField becomeFirstResponder];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -169,16 +178,24 @@
     return _scrollView;
 }
 
+-(UIImageView *)backGroundImage{
+    if (!_backGroundImage) {
+        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+    }
+    return _backGroundImage;
+}
+
 - (SSJRegistOrderView *)stepView {
     if (!_stepView) {
-        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 0, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeSetPassword];
+        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeSetPassword];
     }
     return _stepView;
 }
 
 - (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
-        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 60, self.view.width - 50, 50) contentHeight:34];
+        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 124, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
         _passwordField.placeholder = @"请输入6-15位字母、数字组合";
