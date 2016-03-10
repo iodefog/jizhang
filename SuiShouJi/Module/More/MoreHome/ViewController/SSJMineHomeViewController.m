@@ -24,6 +24,9 @@
 #import "SSJMotionPasswordViewController.h"
 #import "UMFeedback.h"
 #import "SSJSettingViewController.h"
+#import "SSJRegistGetVerViewController.h"
+#import "SSJRegistCompleteViewController.h"
+#import "SSJForgetPasswordSecondStepViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -47,6 +50,9 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 @property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSArray *titles;
+
+//  手势密码开关
+@property (nonatomic, strong) UISwitch *motionSwitch;
 
 @end
 
@@ -95,6 +101,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         }
         [weakSelf.tableView reloadData];
     }];
+    
+    //  查询手势密码是否开启
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWDState"] forUserId:SSJUSERID()];
+    [self.motionSwitch setOn:[userItem.motionPWDState boolValue]];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -222,6 +232,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
+    
+    if ([mineHomeCell.cellTitle isEqualToString:kTitle1]) {
+        mineHomeCell.accessoryView = self.motionSwitch;
+    } else {
+        mineHomeCell.accessoryView = nil;
+    }
 
     return mineHomeCell;
 }
@@ -341,6 +357,44 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }];
 }
 
+- (void)motionSwitchAction {
+    if (self.motionSwitch.isOn) {
+        if (!SSJIsUserLogined()) {
+            [self.motionSwitch setOn:NO animated:YES];
+            
+            __weak typeof(self) weakSelf = self;
+            SSJAlertViewAction *registAction = [SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
+                SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
+                registerVc.finishHandle = ^(UIViewController *controller){
+                    if ([controller isKindOfClass:[SSJRegistCompleteViewController class]]) {
+                        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+                    } else if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
+                        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                        [weakSelf.navigationController setViewControllers:@[weakSelf, loginVC] animated:YES];
+                    }
+                };
+                [self.navigationController pushViewController:registerVc animated:YES];
+            }];
+            SSJAlertViewAction *loginAction = [SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }];
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"开启手势密码，需要您登录后方可使用哦！" action:registAction, loginAction, nil];
+        } else {
+            SSJUserItem *item = [[SSJUserItem alloc] init];
+            item.userId = SSJUSERID();
+            item.motionPWDState = @"1";
+            [SSJUserTableManager saveUserItem:item];
+        }
+    } else {
+        
+        SSJUserItem *item = [[SSJUserItem alloc] init];
+        item.userId = SSJUSERID();
+        item.motionPWDState = @"0";
+        [SSJUserTableManager saveUserItem:item];
+    }
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -357,6 +411,15 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         userItem.icon = icon;
         [SSJUserTableManager saveUserItem:userItem];
     }];
+}
+
+#pragma mark - Getter
+- (UISwitch *)motionSwitch {
+    if (!_motionSwitch) {
+        _motionSwitch = [[UISwitch alloc] init];
+        [_motionSwitch addTarget:self action:@selector(motionSwitchAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _motionSwitch;
 }
 
 @end

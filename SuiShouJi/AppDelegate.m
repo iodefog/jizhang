@@ -212,7 +212,8 @@ NSDate *SCYEnterBackgroundTime() {
         if (userItem.motionPWD.length) {
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-            [self.window.rootViewController presentViewController:motionVC animated:YES completion:NULL];
+            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+            [self.window.rootViewController presentViewController:naviVC animated:YES completion:NULL];
         } else {
             SSJAlertViewAction *nextAction = [SSJAlertViewAction actionWithTitle:@"下次再说" handler:^(SSJAlertViewAction *action) {
                 //  关闭手势密码
@@ -224,7 +225,8 @@ NSDate *SCYEnterBackgroundTime() {
             SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"去设置" handler:^(SSJAlertViewAction *action) {
                 SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
                 motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-                [self.window.rootViewController presentViewController:motionVC animated:YES completion:NULL];
+                UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+                [self.window.rootViewController presentViewController:naviVC animated:YES completion:NULL];
             }];
             [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"" action:nextAction, sureAction, nil];
         }
