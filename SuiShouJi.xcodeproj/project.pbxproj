@@ -326,7 +326,6 @@
 		BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */; };
 		BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2C1C4B2E4C006A6942 /* SSJAlertViewDelegator.m */; };
 		BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD361C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m */; };
-		BD33FD3B1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD33FD3A1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib */; };
 		BD37D2D21C5216130050BDAA /* SSJSyncSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2D11C5216130050BDAA /* SSJSyncSettingTableViewCell.m */; };
 		BD37D2D41C5231D60050BDAA /* bt_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2D31C5231D60050BDAA /* bt_delete@2x.png */; };
 		BD37D2D61C52327D0050BDAA /* bt_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD37D2D51C52327D0050BDAA /* bt_delete@3x.png */; };
@@ -398,6 +397,7 @@
 		BD8C7F941C914CA900A70100 /* no_record_bt@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD8C7F931C914CA900A70100 /* no_record_bt@3x.png */; };
 		BD8C7F961C914CB600A70100 /* no_record_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD8C7F951C914CB600A70100 /* no_record_bg@2x.png */; };
 		BD8C7F981C914CC400A70100 /* no_record_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD8C7F971C914CC400A70100 /* no_record_bg@3x.png */; };
+		BD8C7F9A1C916ED400A70100 /* SSJCalenderTableViewNoDataHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD8C7F991C916ED400A70100 /* SSJCalenderTableViewNoDataHeader.xib */; };
 		BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */; };
 		BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD8FD8331C34DA1F00B7AABA /* SSJADDNewTypeViewController.m */; };
 		BD976F9E1C4E044500B0E26D /* tab_mine_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976F9D1C4E044500B0E26D /* tab_mine_nor@2x.png */; };
@@ -984,7 +984,6 @@
 		BD33FD2C1C4B2E4C006A6942 /* SSJAlertViewDelegator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAlertViewDelegator.m; sourceTree = "<group>"; };
 		BD33FD351C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderTableViewNoDataHeader.h; sourceTree = "<group>"; };
 		BD33FD361C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderTableViewNoDataHeader.m; sourceTree = "<group>"; };
-		BD33FD3A1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJCalenderTableViewNoDataHeader.xib; sourceTree = "<group>"; };
 		BD37D2D01C5216130050BDAA /* SSJSyncSettingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSyncSettingTableViewCell.h; sourceTree = "<group>"; };
 		BD37D2D11C5216130050BDAA /* SSJSyncSettingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncSettingTableViewCell.m; sourceTree = "<group>"; };
 		BD37D2D31C5231D60050BDAA /* bt_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_delete@2x.png"; sourceTree = "<group>"; };
@@ -1103,6 +1102,7 @@
 		BD8C7F931C914CA900A70100 /* no_record_bt@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_record_bt@3x.png"; sourceTree = "<group>"; };
 		BD8C7F951C914CB600A70100 /* no_record_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_record_bg@2x.png"; sourceTree = "<group>"; };
 		BD8C7F971C914CC400A70100 /* no_record_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_record_bg@3x.png"; sourceTree = "<group>"; };
+		BD8C7F991C916ED400A70100 /* SSJCalenderTableViewNoDataHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJCalenderTableViewNoDataHeader.xib; sourceTree = "<group>"; };
 		BD8FD8291C3266CD00B7AABA /* SSJRecordMakingCategoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingCategoryItem.h; sourceTree = "<group>"; };
 		BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingCategoryItem.m; sourceTree = "<group>"; };
 		BD8FD8321C34DA1F00B7AABA /* SSJADDNewTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJADDNewTypeViewController.h; sourceTree = "<group>"; };
@@ -3041,8 +3041,8 @@
 				BDD78AFE1C1FA4E100C7EE0E /* SSJCalendarView.h */,
 				BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */,
 				BD33FD351C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.h */,
+				BD8C7F991C916ED400A70100 /* SSJCalenderTableViewNoDataHeader.xib */,
 				BD33FD361C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m */,
-				BD33FD3A1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib */,
 				BD976FB21C4F246900B0E26D /* SSJCalenderDetailCell.h */,
 				BD976FB31C4F246900B0E26D /* SSJCalenderDetailCell.m */,
 				BDAB44941C58777E004289BA /* SSJCalenderTableViewCell.h */,
@@ -3270,6 +3270,7 @@
 				BDA2EF021C8D6F1A007DD45F /* home_pen@3x.png in Resources */,
 				7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */,
 				BDF5049A1C86EC8200DCFA99 /* more_background@3x.png in Resources */,
+				BD8C7F9A1C916ED400A70100 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7DD7D6DF1C4C8E6A00ACE71A /* bt_traffic@3x.png in Resources */,
 				7D893F311C91144D00886995 /* budget_right_diable@3x.png in Resources */,
 				BD37D2E01C55BD610050BDAA /* login_username@2x.png in Resources */,
@@ -3406,7 +3407,6 @@
 				7DD7D6B11C4C8E6A00ACE71A /* bt_interest@3x.png in Resources */,
 				7DD7D71B1C4C8E6A00ACE71A /* reportForm_empty@2x.png in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
-				BD33FD3B1C4BAF16006A6942 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				BDA3FDF31C58CAC400FB57B1 /* ft_creditcard@2x.png in Resources */,
 				BD8C7F921C914CA400A70100 /* no_record_bt@2x.png in Resources */,
 				7DD7D6E11C4C8E6A00ACE71A /* bt_tuikuan@3x.png in Resources */,
