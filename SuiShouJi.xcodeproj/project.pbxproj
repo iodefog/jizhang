@@ -353,6 +353,7 @@
 		BD543C5A1C1A6DBC00910D61 /* SuiShouJiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C591C1A6DBC00910D61 /* SuiShouJiTests.m */; };
 		BD543C651C1A6DBC00910D61 /* SuiShouJiUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C641C1A6DBC00910D61 /* SuiShouJiUITests.m */; };
 		BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */; };
+		BD6C388F1C910A8F000E2E42 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */; };
 		BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DED31C46496E000E6CC9 /* SSJNewFundingTypeCell.m */; };
 		BD70DF5A1C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF361C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m */; };
@@ -380,7 +381,7 @@
 		BD78E4A81C8FCF9D003A1EE1 /* login_bg@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD78E4A61C8FCF9D003A1EE1 /* login_bg@3x.jpg */; };
 		BD78E4AA1C8FE952003A1EE1 /* more_qq@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD78E4A91C8FE952003A1EE1 /* more_qq@3x.png */; };
 		BD78E4AC1C8FE959003A1EE1 /* more_qq@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD78E4AB1C8FE959003A1EE1 /* more_qq@2x.png */; };
-		BD78E4B21C8FF8C7003A1EE1 /* pushsound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BD78E4B11C8FF8C7003A1EE1 /* pushsound.mp3 */; };
+		BD78E4B51C905584003A1EE1 /* SSJSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD78E4B41C905584003A1EE1 /* SSJSettingViewController.m */; };
 		BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8241C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m */; };
 		BD7BC8341C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC8281C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.m */; };
 		BD7BC8351C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7BC82B1C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m */; };
@@ -1020,6 +1021,7 @@
 		BD543C661C1A6DBC00910D61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionView.h; sourceTree = "<group>"; };
 		BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionView.m; sourceTree = "<group>"; };
+		BD6C388E1C910A8F000E2E42 /* pushsound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pushsound.wav; sourceTree = "<group>"; };
 		BD70DECF1C46321B000E6CC9 /* SSJNewFundingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewFundingViewController.h; sourceTree = "<group>"; };
 		BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewFundingViewController.m; sourceTree = "<group>"; };
 		BD70DED21C46496E000E6CC9 /* SSJNewFundingTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewFundingTypeCell.h; sourceTree = "<group>"; };
@@ -1068,7 +1070,8 @@
 		BD78E4A61C8FCF9D003A1EE1 /* login_bg@3x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "login_bg@3x.jpg"; sourceTree = "<group>"; };
 		BD78E4A91C8FE952003A1EE1 /* more_qq@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_qq@3x.png"; sourceTree = "<group>"; };
 		BD78E4AB1C8FE959003A1EE1 /* more_qq@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_qq@2x.png"; sourceTree = "<group>"; };
-		BD78E4B11C8FF8C7003A1EE1 /* pushsound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pushsound.mp3; sourceTree = "<group>"; };
+		BD78E4B31C905584003A1EE1 /* SSJSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSettingViewController.h; sourceTree = "<group>"; };
+		BD78E4B41C905584003A1EE1 /* SSJSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSettingViewController.m; sourceTree = "<group>"; };
 		BD7BC8231C3A1A0F001DE5D8 /* SSJFinancingHomeitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeitem.h; sourceTree = "<group>"; };
 		BD7BC8241C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeitem.m; sourceTree = "<group>"; };
 		BD7BC8271C3A1A0F001DE5D8 /* SSJFinancingHomeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeCollectionViewCell.h; sourceTree = "<group>"; };
@@ -2464,6 +2467,8 @@
 				BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */,
 				BDF5038D1C85924200DCFA99 /* SSJCircleChargeSettingViewController.h */,
 				BDF5038E1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m */,
+				BD78E4B31C905584003A1EE1 /* SSJSettingViewController.h */,
+				BD78E4B41C905584003A1EE1 /* SSJSettingViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -2794,7 +2799,7 @@
 		BD78E4B01C8FF8C7003A1EE1 /* sound */ = {
 			isa = PBXGroup;
 			children = (
-				BD78E4B11C8FF8C7003A1EE1 /* pushsound.mp3 */,
+				BD6C388E1C910A8F000E2E42 /* pushsound.wav */,
 			);
 			path = sound;
 			sourceTree = "<group>";
@@ -3223,6 +3228,7 @@
 				7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */,
 				BDA2EF101C8E7B8C007DD45F /* home_none@3x.png in Resources */,
 				7DD7D6B51C4C8E6A00ACE71A /* bt_jianzhi@3x.png in Resources */,
+				BD6C388F1C910A8F000E2E42 /* pushsound.wav in Resources */,
 				BDF5048B1C868A8200DCFA99 /* calender@3x.png in Resources */,
 				7DD7D69C1C4C8E6A00ACE71A /* bt_education@2x.png in Resources */,
 				7DD7D6A31C4C8E6A00ACE71A /* bt_fruit@3x.png in Resources */,
@@ -3403,7 +3409,6 @@
 				7DD7D6CC1C4C8E6A00ACE71A /* bt_repair@2x.png in Resources */,
 				7DD7D6B21C4C8E6A00ACE71A /* bt_investment@2x.png in Resources */,
 				7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */,
-				BD78E4B21C8FF8C7003A1EE1 /* pushsound.mp3 in Resources */,
 				7DD7D6A41C4C8E6A00ACE71A /* bt_fuli@2x.png in Resources */,
 				7DD7D7131C4C8E6A00ACE71A /* home_delet@2x.png in Resources */,
 				7DD7D6C41C4C8E6A00ACE71A /* bt_pignzhangshouru@2x.png in Resources */,
@@ -3613,6 +3618,7 @@
 				BD04339B1C1A8DA50051E7AB /* SSJNormalWebViewController.m in Sources */,
 				BD7BC83E1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m in Sources */,
 				BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */,
+				BD78E4B51C905584003A1EE1 /* SSJSettingViewController.m in Sources */,
 				BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */,
 				BD7BC8481C3A63A5001DE5D8 /* SSJFundingDetailItem.m in Sources */,
 				BDF5038F1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m in Sources */,

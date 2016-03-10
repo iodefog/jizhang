@@ -548,6 +548,7 @@ static NSString *const KQQAppKey = @"1105133385";
         [_thirdPartyLoginLabel sizeToFit];
         _thirdPartyLoginLabel.textColor = [UIColor whiteColor];
         _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
+        _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _thirdPartyLoginLabel;
 }

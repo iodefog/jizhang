@@ -157,7 +157,7 @@ static NSString *const kTitle3 = @"定期提醒";
 
 #pragma mark - Private
 -(void)switchButtonChange:(id)sender{
-    
+    self.item.isOnOrNot = ((UISwitch *)sender).isOn;
 }
 
 -(void)getDataFromDB{
@@ -252,6 +252,13 @@ static NSString *const kTitle3 = @"定期提醒";
             }
         }
     }
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        [db executeUpdate:@"update BK_CHARGE_REMINDER set ISONORNOT = ? ,TIME = ?, CIRCLE = ?",[NSNumber numberWithBool:weakSelf.item.isOnOrNot],weakSelf.selectTime,weakSelf.selectNumCircle];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        });
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

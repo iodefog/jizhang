@@ -80,13 +80,14 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
 }
 
 
+
 - (id)init {
     self = [super init];
     if (self) {
         self.title = UM_Local(@"Feedback");
         _feedback = [UMFeedback sharedInstance];
         _delegate = (id<ChatViewDelegate>)self.feedback;
-        
+        self.hidesBottomBarWhenPushed = YES;
         needNavButton = NO;
     }
     return self;

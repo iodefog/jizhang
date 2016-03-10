@@ -62,7 +62,7 @@ PODS:
   - SSZipArchive (1.0.1)
   - UMengAnalytics-NO-IDFA (3.6.7)
   - UMengFeedback (2.3.4)
-  - UMengSocial (5.0)
+  - UMengSocial (4.4)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.5)
@@ -75,7 +75,7 @@ DEPENDENCIES:
   - SSZipArchive
   - UMengAnalytics-NO-IDFA
   - UMengFeedback (~> 2.3.4)
-  - UMengSocial (~> 5.0)
+  - UMengSocial (~> 4.3)
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
@@ -88,6 +88,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 5f30a0af2cb3d48c0ff83b1e18029f7041ac3c38
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
   UMengFeedback: 5283cc0e324dffca4dd54c4abb3cbded56487817
-  UMengSocial: 48b67179c492a8cf7803fbb0438b8f55432e2fc1
+  UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
 
 COCOAPODS: 0.39.0
