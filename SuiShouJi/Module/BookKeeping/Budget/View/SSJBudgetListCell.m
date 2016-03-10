@@ -78,12 +78,12 @@
     
     if (item.payment <= item.budget) {
         [self.waveView setScale:((item.budget - item.payment) / item.budget)];
-        [self.waveView setTopTitle:@"剩余"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", item.budget - item.payment]];
+        [self.waveView setTitle:@"剩余"];
+        [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", item.budget - item.payment]];
     } else {
         [self.waveView setScale:1];
-        [self.waveView setTopTitle:@"超支"];
-        [self.waveView setBottomTitle:[NSString stringWithFormat:@"%.2f", item.payment - item.budget]];
+        [self.waveView setTitle:@"超支"];
+        [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", item.payment - item.budget]];
     }
 }
 

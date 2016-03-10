@@ -106,7 +106,8 @@
 - (UIButton *)preButton {
     if (!_preButton) {
         _preButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_preButton setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
+        [_preButton setImage:[UIImage imageNamed:@"budget_left"] forState:UIControlStateNormal];
+        [_preButton setImage:[UIImage imageNamed:@"budget_left_disable"] forState:UIControlStateDisabled];
         [_preButton addTarget:self action:@selector(preButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_preButton sizeToFit];
     }
@@ -116,7 +117,8 @@
 - (UIButton *)nextButton {
     if (!_nextButton) {
         _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_nextButton setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
+        [_nextButton setImage:[UIImage imageNamed:@"budget_right"] forState:UIControlStateNormal];
+        [_nextButton setImage:[UIImage imageNamed:@"budget_right_diable"] forState:UIControlStateDisabled];
         [_nextButton addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_nextButton sizeToFit];
     }

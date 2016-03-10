@@ -45,7 +45,7 @@
     // 执行通知注册
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     NSArray *localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    NSLog(@"-----------%lu",localNotifications.count);
+    NSLog(@"-----------%lu",(unsigned long)localNotifications.count);
 }
 
 +(void)cancelLocalNotificationWithKey:(NSString *)key{
@@ -66,7 +66,7 @@
     }
     NSArray *NewlocalNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
 
-    NSLog(@"-----------%lu",NewlocalNotifications.count);
+    NSLog(@"-----------%lu",(unsigned long)NewlocalNotifications.count);
 }
 
 

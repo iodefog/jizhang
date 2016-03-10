@@ -19,7 +19,6 @@
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserItem.h"
 #import "SSJUserDefaultDataCreater.h"
-#import "SSJQQLoginService.h"
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
 
@@ -39,7 +38,6 @@ static NSString *const KQQAppKey = @"1105133385";
 @property (nonatomic,strong)UIButton *forgetButton;
 @property (nonatomic,strong)TencentOAuth *tencentOAuth;
 @property (nonatomic,strong)UIButton *tencentLoginButton;
-@property (nonatomic,strong)SSJQQLoginService *qqLoginService;
 @property (nonatomic,strong)UIImageView *backGroundImage;
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
@@ -117,7 +115,6 @@ static NSString *const KQQAppKey = @"1105133385";
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.loginService cancel];
-    [self.qqLoginService cancel];
     [self.navigationController setNavigationBarHidden:NO];
 }
 
@@ -175,147 +172,74 @@ static NSString *const KQQAppKey = @"1105133385";
     NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
     NSString *realName = [response.jsonResponse objectForKey:@"nickname"];
     NSString *openId = [self.tencentOAuth openId];
-    [self.qqLoginService loadLoginModelWithopenID:openId realName:realName icon:icon];
+    [self.loginService loadLoginModelWithopenID:openId realName:realName icon:icon];
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
     
-    if ([self.loginService.returnCode isEqualToString:@"1"]) {
-        __block NSError *error = nil;
-        __block BOOL fundInfoSuccess = true;
-        __block BOOL userBillSuccess = true;
-        
-        //  merge登陆接口返回的收支类型和资金帐户
-        [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
-            userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
-            if (!userBillSuccess || !fundInfoSuccess) {
-                *rollback = YES;
-                return;
-            }
-        }];
-        
-        //  merge成功后才算登陆成功
-        if (userBillSuccess && fundInfoSuccess) {
-            SSJSaveAppId(self.loginService.appid);
-            SSJSaveAccessToken(self.loginService.accesstoken);
-            SSJSaveUserLogined(YES);
-            SSJSetUserId(self.loginService.item.cuserid);
-            NSString *userId = SSJUSERID();
-            NSString *mobileNo = self.loginService.item.cmobileno;
-            NSString *icon = self.loginService.item.cicon;
-            [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(userId ?: @""),
-                                                SSJUserMobileNoKey:(mobileNo ?: @""),
-                                                SSJUserIconKey:icon ?: @""} error:nil];
-            
-            //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
-            if (self.loginService.userBillArray.count == 0) {
-                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
-                [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-            }
-            
-            //  如果是9188帐户，则将当前的userid标记为已注册
-            if ([self.loginService.item.cuserid isEqualToString:SSJUSERID()])
-            {
-                [SSJUserTableManager registerUserIdWithSuccess:NULL failure:^(NSError *error){
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [CDAutoHideMessageHUD showMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
-                    });
-                }];
-            }
-            
-            //  登陆成功后强制同步一次
-//            [self.syncLoadingView show];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
-            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-//                [self.syncLoadingView dismissWithSuccess:YES];
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-                [CDAutoHideMessageHUD showMessage:@"同步成功"];
-            } failure:^(NSError *error) {
-//                [self.syncLoadingView dismissWithSuccess:NO];
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-                [CDAutoHideMessageHUD showMessage:@"同步失败"];
-            }];
-            
-            //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
-            [CDAutoHideMessageHUD showMessage:@"登录成功"];
-            [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-            [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
-            if (self.finishHandle) {
-                self.finishHandle(self);
-            } else {
-                [self ssj_backOffAction];
-            }
-        }
+    if (![service.returnCode isEqualToString:@"1"]) {
+        return;
     }
-    if ([self.qqLoginService.returnCode isEqualToString:@"1"]) {
-        __block NSError *error = nil;
-        __block BOOL fundInfoSuccess = true;
-        __block BOOL userBillSuccess = true;
-        [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-            fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
-            userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
-            if (!userBillSuccess || !fundInfoSuccess) {
-                *rollback = YES;
-                return;
-            }
+    
+    __block NSError *error = nil;
+    __block BOOL fundInfoSuccess = YES;
+    __block BOOL userBillSuccess = YES;
+    
+    //  merge登陆接口返回的收支类型和资金帐户
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
+        userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
+        if (!userBillSuccess || !fundInfoSuccess) {
+            *rollback = YES;
+            return;
+        }
+    }];
+    
+    //  merge成功后保存用户登录信息，保存成功后才算登录成功
+    if (userBillSuccess && fundInfoSuccess) {
+        //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
+        self.loginService.item.registerState = @"1";
+        
+        if (![SSJUserTableManager saveUserItem:self.loginService.item]
+            || !SSJSaveAppId(self.loginService.appid)
+            || !SSJSaveAccessToken(self.loginService.accesstoken)
+            || !SSJSetUserId(self.loginService.item.userId)
+            || !SSJSaveUserLogined(YES)) {
+            
+            [CDAutoHideMessageHUD showMessage:(SSJ_ERROR_MESSAGE)];
+            return;
+        }
+        
+        //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
+        if (self.loginService.userBillArray.count == 0) {
+            [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+            [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
+        }
+        
+        //  登陆成功后强制同步一次
+        //            [self.syncLoadingView show];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+            //                [self.syncLoadingView dismissWithSuccess:YES];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+            [CDAutoHideMessageHUD showMessage:@"同步成功"];
+        } failure:^(NSError *error) {
+            //                [self.syncLoadingView dismissWithSuccess:NO];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+            [CDAutoHideMessageHUD showMessage:@"同步失败"];
         }];
         
-        //  merge成功后才算登陆成功
-        if (userBillSuccess && fundInfoSuccess) {
-            SSJSaveAppId(self.qqLoginService.appid);
-            SSJSaveAccessToken(self.qqLoginService.accesstoken);
-            SSJSaveUserLogined(YES);
-            SSJSetUserId(self.qqLoginService.item.cuserid);
-            NSString *userId = SSJUSERID();
-            NSString *realName = self.qqLoginService.item.crealname;
-            NSString *icon = self.loginService.item.cicon;
-            [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(userId ?: @""),
-                                                SSJRealNameKey:(realName ?: @""),
-                                                SSJUserIconKey:icon ?: @""} error:nil];
-            
-            //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
-            if (self.qqLoginService.userBillArray.count == 0) {
-                [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
-                [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-            }
-            
-            //  如果是9188帐户，则将当前的userid标记为已注册
-            if ([self.qqLoginService.item.cuserid isEqualToString:SSJUSERID()])
-            {
-                [SSJUserTableManager registerUserIdWithSuccess:NULL failure:^(NSError *error){
-                    dispatch_sync(dispatch_get_main_queue(), ^{
-                        [CDAutoHideMessageHUD showMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
-                    });
-                }];
-            }
-            
-            //  登陆成功后强制同步一次
-            //            [self.syncLoadingView show];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
-            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-                //                [self.syncLoadingView dismissWithSuccess:YES];
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-                [CDAutoHideMessageHUD showMessage:@"同步成功"];
-            } failure:^(NSError *error) {
-                //                [self.syncLoadingView dismissWithSuccess:NO];
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-                [CDAutoHideMessageHUD showMessage:@"同步失败"];
-            }];
-            
-            //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
-            [CDAutoHideMessageHUD showMessage:@"qq登录成功"];
-            [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-            [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
-            if (self.finishHandle) {
-                self.finishHandle(self);
-            } else {
-                [self ssj_backOffAction];
-            }
+        //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+        [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
+        [CDAutoHideMessageHUD showMessage:@"登录成功"];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+        [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+        if (self.finishHandle) {
+            self.finishHandle(self);
+        } else {
+            [self ssj_backOffAction];
         }
     }
 }
@@ -380,14 +304,6 @@ static NSString *const KQQAppKey = @"1105133385";
         _loginService.showLodingIndicator = YES;
     }
     return _loginService;
-}
-
--(SSJQQLoginService *)qqLoginService{
-    if (_qqLoginService==nil) {
-        _qqLoginService=[[SSJQQLoginService alloc]initWithDelegate:self];
-        _qqLoginService.showLodingIndicator = YES;
-    }
-    return _qqLoginService;
 }
 
 //-(UIView*)loginView{

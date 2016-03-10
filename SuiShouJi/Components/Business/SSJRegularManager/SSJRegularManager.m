@@ -222,7 +222,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             break;
             
         default:
-            return SSJDatePeriodTypeWeek;
+            return SSJDatePeriodTypeUnknown;
     }
 }
 

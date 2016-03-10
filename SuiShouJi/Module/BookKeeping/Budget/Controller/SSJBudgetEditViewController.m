@@ -196,7 +196,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)periodSelectionViewAction {
-    SSJDatePeriodType periodType = SSJDatePeriodTypeWeek;
+    SSJDatePeriodType periodType = SSJDatePeriodTypeUnknown;
     switch (self.periodSelectionView.periodType) {
         case SSJBudgetPeriodTypeWeek:
             periodType = SSJDatePeriodTypeWeek;

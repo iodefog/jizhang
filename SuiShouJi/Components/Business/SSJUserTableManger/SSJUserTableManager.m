@@ -9,22 +9,7 @@
 #import "SSJUserTableManager.h"
 #import "SSJDatabaseQueue.h"
 
-NSString *const SSJUserIdKey = @"SSJUserIdKey";
-NSString *const SSJUserMobileNoKey = @"SSJUserMobileNoKey";
-NSString *const SSJUserIconKey = @"SSJUserIconKey";
-NSString *const SSJRealNameKey = @"SSJRealNameKey";
-
-
 @implementation SSJUserTableManager
-
-//+ (NSCache *)memCache {
-//    static NSCache *cache = nil;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        cache = [[NSCache alloc] init];
-//    });
-//    return cache;
-//}
 
 + (void)reloadUserIdWithError:(NSError **)error {
     __block NSError *tError = nil;
@@ -105,111 +90,65 @@ NSString *const SSJRealNameKey = @"SSJRealNameKey";
     }];
 }
 
-+ (void)saveUserId:(NSString *)userId withError:(NSError **)error {
-    if (!userId) {
-        if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userId user id must not be nil"}];
-        }
-        return;
-    }
-    
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
-            if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, 1, 0)", SSJUSERID()]) {
-                if (error) {
-                    *error = [db lastError];
-                }
-            }
-        }
-    }];
-}
-
-+ (void)asyncSaveMobileNo:(NSString *)mobileNo success:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([db executeUpdate:@"update bk_user set cmobileno = ? where cuserid = ?", mobileNo, SSJUSERID()]) {
-            if (success) {
-                success();
-            }
-            return;
-        }
-        
-        if (failure) {
-            failure([db lastError]);
-        }
-    }];
-}
-
-+ (void)asyncSaveIcon:(NSString *)icon success:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([db executeUpdate:@"update bk_user set cicons = ? where cuserid = ?", icon, SSJUSERID()]) {
-            if (success) {
-                success();
-            }
-            return;
-        }
-        
-        if (failure) {
-            failure([db lastError]);
-        }
-    }];
-}
-
-+ (void)saveUserInfo:(NSDictionary *)userInfo error:(NSError **)error {
-    NSString *userId = userInfo[SSJUserIdKey];
++ (BOOL)saveUserItem:(SSJUserItem *)userItem {
+    NSString *userId = userItem.userId;
     if (!userId || !userId.length) {
-        if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"userId user id must not be nil"}];
-        }
-        return;
+        SSJPRINT(@"SSJ Warning:userid不能为空!!!");
+        return NO;
     }
     
-    NSString *mobileNo = userInfo[SSJUserMobileNoKey];
-    NSString *icon = userInfo[SSJUserIconKey];
-    NSString *realName = userInfo[SSJRealNameKey];
+    NSDictionary *userInfo = [self fieldMapWithUserItem:userItem];
     
+    __block BOOL success = YES;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *statment = nil;
         if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
-            if (realName == nil) {
-                if (![db executeUpdate:@"insert into BK_USER (cuserid, cmobileno, cicons, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ?, 1, 0)", userId, mobileNo, icon]) {
-                    if (error) {
-                        *error = [db lastError];
-                    }
-                }
-            }else if(mobileNo == nil){
-                if (![db executeUpdate:@"insert into BK_USER (cuserid, crealname, cicons, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ?, 1, 0)", userId, realName, icon]) {
-                    if (error) {
-                        *error = [db lastError];
-                    }
-                }
-            }else{
-                if (![db executeUpdate:@"insert into BK_USER (cuserid, crealname, cicons, cmobileno , CREGISTERSTATE, CDEFAULTFUNDACCTSTATE) values (?, ?, ? ,? , 1, 0)", userId, realName, icon,realName]) {
-                    if (error) {
-                        *error = [db lastError];
-                    }
-                }
-            }
+            statment = [self inertSQLStatementWithUserInfo:userInfo];
         } else {
-            if (realName == nil) {
-                if (![db executeUpdate:@"update bk_user set cmobileno = ?, cicons = ? where cuserid = ?", mobileNo, icon, userId]) {
-                    if (error) {
-                        *error = [db lastError];
-                    }
-                }
-            }else if(mobileNo == nil){
-                if (![db executeUpdate:@"update bk_user set crealname = ?, cicons = ? where cuserid = ?", realName, icon, userId]) {
-                    if (error) {
-                        *error = [db lastError];
-                    }
-                }
-            }else{
-                if (![db executeUpdate:@"update bk_user set crealname = ?, cicons = ? , cmobileno = ? where cuserid = ?", realName, icon, userId , mobileNo]) {
-                    if (error) {
-                        *error = [db lastError];
-                    }
-                }
-            }
+            statment = [self updateSQLStatementWithUserInfo:userInfo];
         }
+        
+        success = [db executeUpdate:statment withParameterDictionary:userInfo];
     }];
+    
+    return success;
+}
+
++ (NSDictionary *)fieldMapWithUserItem:(SSJUserItem *)userItem {
+    [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return @{@"userId":@"cuserid",
+                 @"loginPWD":@"cpwd",
+                 @"fundPWD":@"cfpwd",
+                 @"motionPWD":@"cmotionpwd",
+                 @"motionPWDState":@"cmotionpwdstate",
+                 @"nickName":@"cnickid",
+                 @"mobileNo":@"cmobileno",
+                 @"realName":@"crealname",
+                 @"idCardNo":@"cidcard",
+                 @"registerState":@"cregisterstate",
+                 @"defaultFundAcctState":@"cdefaultfundacctstate",
+                 @"icon":@"cicons"};
+    }];
+    return userItem.mj_keyValues;
+}
+
++ (NSString *)inertSQLStatementWithUserInfo:(NSDictionary *)userInfo {
+    NSArray *keys = [userInfo allKeys];
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[keys count]];
+    for (NSString *key in keys) {
+        [values addObject:[NSString stringWithFormat:@":%@", key]];
+    }
+    
+    return [NSString stringWithFormat:@"insert into BK_USER (%@) values (%@)", [keys componentsJoinedByString:@","], [values componentsJoinedByString:@","]];
+}
+
++ (NSString *)updateSQLStatementWithUserInfo:(NSDictionary *)userInfo {
+    NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:[userInfo count]];
+    for (NSString *key in [userInfo allKeys]) {
+        [keyValues addObject:[NSString stringWithFormat:@"%@ =:%@", key, key]];
+    }
+    
+    return [NSString stringWithFormat:@"update BK_USER set %@ where cuserid = ?", [keyValues componentsJoinedByString:@", "]];
 }
 
 @end

@@ -24,11 +24,12 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor whiteColor];
-        self.layer.borderColor = [UIColor ssj_colorWithHex:@"e9e9e9"].CGColor;
         self.layer.borderWidth = 4;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:@"e9e9e9"].CGColor;
         
         self.waveIndicator = [[WaveLoadingIndicator alloc] init];
         self.waveIndicator.isShowProgressText = NO;
+        self.waveIndicator.waveAmplitude = 1;
         [self addSubview:self.waveIndicator];
         
         self.topLabel = [[UILabel alloc] init];
@@ -66,23 +67,39 @@
 }
 
 - (void)setScale:(CGFloat)scale {
-    self.waveIndicator.progress = scale;
+    if (_scale != scale) {
+        _scale = scale;
+        self.waveIndicator.progress = scale;
+    }
 }
 
 - (void)setTopTitle:(NSString *)title {
-    if (![self.topLabel.text isEqualToString:title]) {
+    if (![_title isEqualToString:title]) {
+        _title = title;
         self.topLabel.text = title;
         [self.topLabel sizeToFit];
         [self setNeedsLayout];
     }
 }
 
-- (void)setBottomTitle:(NSString *)title {
-    if (![self.bottomLabel.text isEqualToString:title]) {
-        self.bottomLabel.text = title;
+- (void)setSubtitlle:(NSString *)subtitlle {
+    if (![_subtitlle isEqualToString:subtitlle]) {
+        _subtitlle = subtitlle;
+        self.bottomLabel.text = subtitlle;
         [self.bottomLabel sizeToFit];
         [self setNeedsLayout];
     }
+}
+
+- (void)setBorderWidth:(CGFloat)borderWidth {
+    if (self.layer.borderWidth != borderWidth) {
+        self.layer.borderWidth = borderWidth;
+        [self setNeedsLayout];
+    }
+}
+
+- (void)setBorderColor:(UIColor *)borderColor {
+    self.layer.borderColor = borderColor.CGColor;
 }
 
 @end

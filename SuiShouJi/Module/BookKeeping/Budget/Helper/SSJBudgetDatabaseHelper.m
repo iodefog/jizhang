@@ -72,7 +72,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind from bk_user_budget where ibid = ?", ID];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, hasremind from bk_user_budget where ibid = ?", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -87,7 +87,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
         NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in %@ group by a.ibillid", [self queryStringForBillIds:budgetModel.billIds]];
-        resultSet = [db executeQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
+        resultSet = [db executeQuery:query, userid, budgetModel.beginDate, budgetModel.endDate];
         
         if (!resultSet) {
             if (failure) {
@@ -134,8 +134,9 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 }
 
 + (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSDictionary *> *result))success failure:(void (^)(NSError *error))failure {
+    NSString *userid = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1", SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1", userid];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
