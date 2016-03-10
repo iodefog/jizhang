@@ -299,11 +299,13 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         if (![userId isEqualToString:SSJCurrentSyncDataUserId()]) {
             continue;
         }
-        NSString *mobileNo = userInfo[@"cmobileno"];
-        NSString *icon = userInfo[@"cicon"];
-        [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:userId ?: @"",
-                                            SSJUserMobileNoKey:mobileNo ?: @"",
-                                            SSJUserIconKey:icon ?: @""} error:nil];
+        
+        SSJUserItem *userItem = [[SSJUserItem alloc] init];
+        userItem.userId = userId;
+        userItem.mobileNo = userInfo[@"cmobileno"];
+        userItem.nickName = userInfo[@"crealname"]; // 第三方登录时，服务器返回的crealname就是用户昵称
+        userItem.icon = userInfo[@"cicon"];
+        [SSJUserTableManager saveUserItem:userItem];
     }
     
     //  合并顺序：1.收支类型 2.资金帐户 3.定期记账 4.记账流水 5.预算

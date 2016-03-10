@@ -11,9 +11,9 @@
 
 static NSString *const kAppIdKey = @"kAppIdKey";
 
-void SSJSaveAppId(NSString *appId) {
+BOOL SSJSaveAppId(NSString *appId) {
     [[NSUserDefaults standardUserDefaults] setObject:appId forKey:kAppIdKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 NSString *SSJAppId() {
@@ -22,10 +22,10 @@ NSString *SSJAppId() {
 
 static NSString *const AccessTokenKey = @"AccessTokenKey";
 
-void SSJSaveAccessToken(NSString *token) {
+BOOL SSJSaveAccessToken(NSString *token) {
     //    NSString *escapedToken = [token stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:AccessTokenKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 NSString *SSJAccessToken() {

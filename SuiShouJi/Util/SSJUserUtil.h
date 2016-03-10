@@ -13,7 +13,7 @@
  *
  *  @param id appid
  */
-void SSJSaveAppId(NSString *appId);
+BOOL SSJSaveAppId(NSString *appId);
 
 /**
  *  返回appid
@@ -27,7 +27,7 @@ NSString *SSJAppId();
  *
  *  @param token token字符串
  */
-void SSJSaveAccessToken(NSString *token);
+BOOL SSJSaveAccessToken(NSString *token);
 
 /**
  *  获取token

@@ -365,8 +365,11 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         self.header.headPotraitImage.image = image;
         [self.tableView reloadData];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
-        [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(SSJUSERID() ?: @""),
-                                            SSJUserIconKey:(icon ?: @"")} error:nil];
+        
+        SSJUserItem *userItem = [[SSJUserItem alloc] init];
+        userItem.userId = SSJUSERID();
+        userItem.icon = icon;
+        [SSJUserTableManager saveUserItem:userItem];
     }];
 }
 

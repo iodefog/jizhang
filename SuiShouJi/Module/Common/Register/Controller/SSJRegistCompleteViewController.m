@@ -24,9 +24,10 @@
 
 //  完成注册按钮
 @property (nonatomic, strong) UIButton *finishBtn;
+
 @property (nonatomic, strong) SSJRegistNetworkService *registCompleteService;
 
-//背景图片
+//  背景图片
 @property (nonatomic,strong)UIImageView *backGroundImage;
 
 @end
@@ -95,36 +96,40 @@
     
     if ([self.registCompleteService.returnCode isEqualToString:@"1"]) {
         
-        //  更新当前用户的注册状态，只有成功才按照注册成功处理，反之败则按照注册失败处理
-        [SSJUserTableManager registerUserIdWithSuccess:^{
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
-                if (resultInfo) {
-                    SSJSaveAppId(resultInfo[@"appId"] ?: @"");
-                    SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"");
-                    SSJSaveUserLogined(YES);
-                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
-                    [SSJUserTableManager saveUserInfo:@{SSJUserIdKey:(SSJUSERID() ?: @""),
-                                                        SSJUserMobileNoKey:(self.mobileNo ?: @"")} error:nil];
-                }
+        NSDictionary *resultInfo = [service.rootElement objectForKey:@"results"];
+        
+        if (resultInfo) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+            userItem.userId = SSJUSERID();
+            userItem.mobileNo = self.registCompleteService.mobileNo;
+            userItem.registerState = @"1";
+            
+            //  只有保存用户登录信息成功后才算登录成功
+            if ([SSJUserTableManager saveUserItem:userItem]
+                && SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                && SSJSaveUserLogined(YES)) {
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                 
                 [self.passwordField resignFirstResponder];
                 [self showSuccessMessage];
-            });
-            
-        } failure:^(NSError *error) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.passwordField becomeFirstResponder];
-                [self showErrorMessage:([error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE)];
-            });
-        }];
-        
-    } else {
-        [self.passwordField becomeFirstResponder];
-        [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
+                
+                [CDAutoHideMessageHUD showMessage:@"注册成功"];
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                }
+                
+                return;
+            }
+        }
     }
+    
+    [self.passwordField becomeFirstResponder];
+    [self showErrorMessage:(self.registCompleteService.desc.length ? self.registCompleteService.desc : SSJ_ERROR_MESSAGE)];
 }
 
 #pragma mark - Notification
@@ -148,13 +153,7 @@
 
 #pragma mark - Private
 - (void)showSuccessMessage {
-    __weak typeof(self) weakSelf = self;
-    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
-        if (weakSelf.finishHandle) {
-            weakSelf.finishHandle(weakSelf);
-        }
-    }];
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"注册成功" action:sureAction, nil];
+    
 }
 
 - (void)showErrorMessage:(NSString *)message {
