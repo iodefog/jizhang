@@ -8,6 +8,7 @@
 
 #import "SSJCalendarCollectionViewCell.h"
 @interface SSJCalendarCollectionViewCell()
+@property (nonatomic,strong) UIImageView *starImage;
 @end
 @implementation SSJCalendarCollectionViewCell
 
@@ -47,6 +48,28 @@
         self.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         self.layer.cornerRadius = self.height / 2;
     }else{
+        if (self.iscurrentDay) {
+            self.dateLabel.textColor = [UIColor whiteColor];
+            self.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        }else{
+            self.backgroundColor = [UIColor whiteColor];
+        }
+        if (self.selectable) {
+            self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        }else{
+            self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+            
+        }
+    }
+}
+
+-(void)setIscurrentDay:(BOOL)iscurrentDay{
+    _iscurrentDay = iscurrentDay;
+    if (_iscurrentDay) {
+        self.dateLabel.textColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"e7e7e7"];
+        self.layer.cornerRadius = self.height / 2;
+    }else{
         self.backgroundColor = [UIColor whiteColor];
         if (self.selectable) {
             self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
@@ -64,7 +87,13 @@
         if (self.isSelected) {
             self.dateLabel.textColor = [UIColor whiteColor];
         }else{
-            self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+            if (self.iscurrentDay) {
+                self.dateLabel.textColor = [UIColor whiteColor];
+                self.backgroundColor = [UIColor ssj_colorWithHex:@"e7e7e7"];
+
+            }else{
+                self.dateLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+            }
         }
     }else if (_selectable == NO){
         self.userInteractionEnabled = NO;

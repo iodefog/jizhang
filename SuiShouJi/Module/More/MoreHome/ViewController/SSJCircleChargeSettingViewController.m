@@ -12,12 +12,13 @@
 #import "SSJBillingChargeCellItem.h"
 #import "SSJCircleChargeCell.h"
 #import "SSJRecordMakingViewController.h"
-
+#import "SSJNoneCircleChargeView.h"
 #import "FMDB.h"
 
 
 @interface SSJCircleChargeSettingViewController ()
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) SSJNoneCircleChargeView *nodataView;
 @end
 
 @implementation SSJCircleChargeSettingViewController
@@ -54,6 +55,10 @@
     return 10;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return nil;
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
@@ -67,7 +72,14 @@
     SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     [self.items removeObjectAtIndex:indexPath.section];
     [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
-    [self deleteConfigWithConfigId:item.configId];  
+    [self deleteConfigWithConfigId:item.configId];
+    if (self.items.count == 0) {
+        self.tableView.tableHeaderView = self.nodataView;
+    }else{
+        self.tableView.tableHeaderView = nil;
+    }
+
+    [self.tableView reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -86,6 +98,14 @@
     SSJRecordMakingViewController *RecordMakingVC = [[SSJRecordMakingViewController alloc]init];
     RecordMakingVC.item = item;
     [self.navigationController pushViewController:RecordMakingVC animated:YES];
+}
+
+#pragma mark - Getter
+-(SSJNoneCircleChargeView *)nodataView{
+    if (!_nodataView) {
+        _nodataView = [[SSJNoneCircleChargeView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 10)];
+    }
+    return _nodataView;
 }
 
 #pragma mark - Private
@@ -116,6 +136,11 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
             [weakSelf.tableView reloadData];
+            if (weakSelf.items.count == 0) {
+                weakSelf.tableView.tableHeaderView = weakSelf.nodataView;
+            }else{
+                weakSelf.tableView.tableHeaderView = nil;
+            }
             [weakSelf.tableView ssj_hideLoadingIndicator];
         });
     }];

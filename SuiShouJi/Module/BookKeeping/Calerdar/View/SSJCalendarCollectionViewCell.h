@@ -12,5 +12,6 @@
 @property(nonatomic,strong)NSString *currentDay;
 @property(nonatomic,strong)UILabel *dateLabel;
 @property (nonatomic) BOOL isSelected;
+@property (nonatomic) BOOL iscurrentDay;
 @property(nonatomic) BOOL selectable;
 @end

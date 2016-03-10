@@ -130,19 +130,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     return _header;
 }
 
--(UIView *)loggedFooterView{
-    if (_loggedFooterView == nil) {
-        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 260, 40)];
-        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
-        [quitLogButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        quitLogButton.backgroundColor = [UIColor whiteColor];
-        [_loggedFooterView addSubview:quitLogButton];
-        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
-    }
-    return _loggedFooterView;
-}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -256,7 +243,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
 {
     if (platformName == UMShareToSina) {
-        socialData.shareText = @"9188记账----财务管理第一步，从记录消费生活开始!";
+        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://1.9188.com/h5/jizhangApp/";
     }
     else{
         socialData.shareText = @"财务管理第一步，从记录消费生活开始!";
