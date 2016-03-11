@@ -890,7 +890,7 @@
 		BD0432E21C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
 		BD0432E31C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
 		BD0432E41C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
-		BD0432E51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TPKeyboardAvoidingScrollView.m; path = ../TPKeyboardAvoiding/TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		BD0432E51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		BD0432E61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
 		BD0432E71C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		BD0432E81C1A77BB0051E7AB /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
@@ -2111,7 +2111,6 @@
 		BD0432D61C1A77BB0051E7AB /* CDPointActivityIndicator */ = {
 			isa = PBXGroup;
 			children = (
-				BD0432E51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m */,
 				BD0432D71C1A77BB0051E7AB /* CDPointActivityIndicator.h */,
 				BD0432D81C1A77BB0051E7AB /* CDPointActivityIndicator.m */,
 			);
@@ -2138,6 +2137,7 @@
 				BD0432E21C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.h */,
 				BD0432E31C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.m */,
 				BD0432E41C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.h */,
+				BD0432E51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m */,
 				BD0432E61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.h */,
 				BD0432E71C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m */,
 				BD0432E81C1A77BB0051E7AB /* UIScrollView+TPKeyboardAvoidingAdditions.h */,

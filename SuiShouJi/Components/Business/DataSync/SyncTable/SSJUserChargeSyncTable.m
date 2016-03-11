@@ -56,7 +56,7 @@
         }
         
         //  查询本地是否有相同configid和billdate的流水
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ?", record[@"cbilldate"], record[@"iconfigid"], SSJCurrentSyncDataUserId()];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ?", record[@"cbilldate"], record[@"iconfigid"], SSJCurrentSyncDataUserId()];
         if (!resultSet) {
             return NO;
         }
@@ -71,7 +71,18 @@
             //  如果将要合并的流水的operatortype是2，就将本地流水的operatortype改为2
             if ([record[@"operatortype"] intValue] == 2) {
                 [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
+                return NO;
             }
+            
+            //  本地记录修改时间晚于将要合并数据的修改时间，保留本地记录，忽略合并记录
+            NSDate *localDate = [resultSet dateForColumn:@"cwritedate"];
+            NSDate *mergeDate = [NSDate dateWithString:record[@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            if ([mergeDate compare:localDate] == NSOrderedAscending) {
+                return NO;
+            }
+            
+            //  合并数据的修改时间更晚，合并此记录，删除本地记录
+            [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
         }
     }
     
