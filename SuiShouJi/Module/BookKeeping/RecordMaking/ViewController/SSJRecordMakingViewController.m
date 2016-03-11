@@ -46,7 +46,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) UIButton *datePickerButton;
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 @property (nonatomic,strong) UIButton *fundingTypeButton;
-@property (nonatomic,strong) UIView *rightbuttonView;
 @property (nonatomic,strong) SSJSmallCalendarView *calendarView;
 @property (nonatomic,strong) SSJChargeCircleSelectView *ChargeCircleSelectView;
 @property (nonatomic) NSInteger selectChargeCircleType;
@@ -91,8 +90,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [super viewDidLoad];
     [self.textInput becomeFirstResponder];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
     _numkeyHavePressed = NO;
     [self getCurrentDate];
     if (self.item == nil) {
@@ -422,17 +419,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         };
     }
     return _FundingTypeSelectView;
-}
-
--(UIView *)rightbuttonView{
-    if (!_rightbuttonView) {
-        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-        UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"record_ok"] forState:UIControlStateNormal];
-        [_rightbuttonView addSubview:comfirmButton];
-    }
-    return _rightbuttonView;
 }
 
 -(SSJSmallCalendarView *)calendarView{
