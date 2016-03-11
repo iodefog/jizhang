@@ -22,6 +22,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
+#import "SSJBorderButton.h"
 
 static NSString *const KQQAppKey = @"1105133385";
 
@@ -34,8 +35,8 @@ static NSString *const KQQAppKey = @"1105133385";
 @property (nonatomic,strong)SSJBaselineTextField *tfPassword;
 @property (nonatomic,copy)NSString *strUserAccount;
 @property (nonatomic,copy)NSString *strUserPassword;
-@property (nonatomic,strong)UIButton *loginButton;
-@property (nonatomic,strong)UIButton *registerButton;
+@property (nonatomic,strong)SSJBorderButton *loginButton;
+@property (nonatomic,strong)SSJBorderButton *registerButton;
 @property (nonatomic,strong)UIButton *forgetButton;
 @property (nonatomic,strong)TencentOAuth *tencentOAuth;
 @property (nonatomic,strong)UIButton *tencentLoginButton;
@@ -389,18 +390,15 @@ static NSString *const KQQAppKey = @"1105133385";
     return _tfPassword;
 }
 
--(UIButton*)loginButton{
+-(SSJBorderButton*)loginButton{
     if (!_loginButton) {
-        _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _loginButton = [[SSJBorderButton alloc]init];
         _loginButton.size = CGSizeMake(self.view.width - 22, 47);
-        _loginButton.enabled = NO;
         _loginButton.clipsToBounds = YES;
         _loginButton.layer.cornerRadius = 3;
-        _loginButton.titleLabel.font = [UIFont systemFontOfSize:16];
-        [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_loginButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_loginButton setTitle:@"登录"];
+        [_loginButton setColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
+        [_loginButton addTarget:self action:@selector(loginButtonClicked:)];
     }
     return _loginButton;
 }
