@@ -149,7 +149,7 @@ NSDate *SCYEnterBackgroundTime() {
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"更多";
-    moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_mine_nor"];
+    moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_more_nor"];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];

@@ -37,7 +37,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 3;
         self.layer.borderWidth = 1;
-        
         self.titleLabel = [[UILabel alloc] init];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.titleLabel];
