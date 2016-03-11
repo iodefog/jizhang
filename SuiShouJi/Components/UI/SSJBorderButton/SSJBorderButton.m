@@ -37,7 +37,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         self.clipsToBounds = YES;
         self.layer.cornerRadius = 3;
         self.layer.borderWidth = 1;
-        
         self.titleLabel = [[UILabel alloc] init];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.titleLabel];
@@ -152,7 +151,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     
     if (self.state != SSJBorderButtonStateDisable) {
         if ([self.target respondsToSelector:self.action]) {
-//            [self.target performSelector:self.action withObject:nil afterDelay:0.0];
+            [self.target performSelector:self.action withObject:nil afterDelay:0.0];
         }
     }
 }

@@ -265,13 +265,13 @@ static NSString *const KQQAppKey = @"1105133385";
 
 #pragma mark - Notification
 -(void)updatetextfield:(id)sender{
-    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
-        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
-            self.loginButton.enabled = YES;
-        }else{
-        self.loginButton.enabled = NO;
-        }
-    }
+//    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
+//        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
+//            self.loginButton.enabled = YES;
+//        }else{
+//        self.loginButton.enabled = NO;
+//        }
+//    }
 }
 
 #pragma mark - Event
@@ -394,29 +394,32 @@ static NSString *const KQQAppKey = @"1105133385";
         _loginButton.size = CGSizeMake(self.view.width - 22, 47);
         _loginButton.clipsToBounds = YES;
         _loginButton.layer.cornerRadius = 3;
-        [_loginButton setTitle:@"登录"];
-        [_loginButton setColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
+        _loginButton.borderWidth = 0;
+//        _loginButton.enabled = NO;
+        [_loginButton setTitle:@"登录" forState:SSJBorderButtonStateNormal];
+        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:SSJBorderButtonStateNormal];
+        [_loginButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
         [_loginButton addTarget:self action:@selector(loginButtonClicked:)];
     }
     return _loginButton;
 }
 
--(UIButton*)registerButton{
-    if (!_registerButton) {
-        _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _registerButton.size = CGSizeMake(self.view.width - 22, 47);
-        _registerButton.clipsToBounds = YES;
-        _registerButton.layer.cornerRadius = 3;
-        _registerButton.layer.borderColor = [UIColor whiteColor].CGColor;
-        _registerButton.layer.borderWidth = 1.0f;
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:16];
-        [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
-        [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_registerButton ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
-        [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _registerButton;
-}
+//-(UIButton*)registerButton{
+//    if (!_registerButton) {
+//        _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        _registerButton.size = CGSizeMake(self.view.width - 22, 47);
+//        _registerButton.clipsToBounds = YES;
+//        _registerButton.layer.cornerRadius = 3;
+//        _registerButton.layer.borderColor = [UIColor whiteColor].CGColor;
+//        _registerButton.layer.borderWidth = 1.0f;
+//        _registerButton.titleLabel.font = [UIFont systemFontOfSize:16];
+//        [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
+//        [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [_registerButton ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+//        [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _registerButton;
+//}
 
 -(UIButton*)forgetButton{
     if (!_forgetButton) {
