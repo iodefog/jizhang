@@ -14,6 +14,7 @@
 #import "SSJRegistOrderView.h"
 #import "SSJBaselineTextField.h"
 #import "SSJRegistNetworkService.h"
+#import "SSJBorderButton.h"
 
 @interface SSJRegistGetVerViewController () <UITextFieldDelegate>
 
@@ -22,7 +23,7 @@
 @property (nonatomic, strong) SSJBaselineTextField *tfPhoneNum;
 @property (nonatomic, strong) UIButton *agreeButton;
 @property (nonatomic, strong) UIButton *protocolButton;
-@property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) SSJBorderButton *nextButton;
 @property (nonatomic,strong)UIImageView *backGroundImage;
 
 @property (nonatomic, strong) SSJRegistNetworkService *getVerCodeService;
@@ -73,6 +74,9 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 #pragma mark - UITextFieldDelegate
@@ -191,18 +195,17 @@
     return _tfPhoneNum;
 }
 
-- (UIButton *)nextButton {
+- (SSJBorderButton *)nextButton {
     if (!_nextButton) {
-        _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _nextButton.frame = CGRectMake(25, self.tfPhoneNum.bottom + 40, self.view.width - 50, 40);
-        _nextButton.layer.cornerRadius = 3;
-        _nextButton.clipsToBounds = YES;
-        _nextButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_nextButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
-        [_nextButton addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
+        _nextButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.tfPhoneNum.bottom + 40, self.view.width - 50, 40)];
+        [_nextButton setFontSize:20];
+        [_nextButton setTitle:@"获取验证码" forState:SSJBorderButtonStateNormal];
+        [_nextButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setTitleColor:[UIColor clearColor] forState:SSJBorderButtonStateHighlighted];
+        [_nextButton setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
+        [_nextButton setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton addTarget:self action:@selector(getAuthCodeAction)];
     }
     return _nextButton;
 }
