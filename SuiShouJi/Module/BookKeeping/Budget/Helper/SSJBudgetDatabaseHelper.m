@@ -133,7 +133,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     }];
 }
 
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSDictionary *> *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1", userid];
@@ -149,17 +149,11 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd";
         
-        NSMutableArray *result = [NSMutableArray array];
+        NSMutableDictionary *result = [NSMutableDictionary dictionary];
         while ([resultSet next]) {
             NSString *budgetId = [resultSet stringForColumn:@"ibid"];
-            
             NSString *beginDateStr = [resultSet stringForColumn:@"csdate"];
-            NSDate *beginDate = [formatter dateFromString:beginDateStr];
-            NSDateComponents *dateComponent = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:beginDate];
-            NSString *title = [self titleForMonth:[dateComponent month]];
-            
-            [result addObject:@{SSJBudgetMonthIDKey:(budgetId ?: @""),
-                                SSJBudgetMonthTitleKey:(title ?: @"")}];
+            [result setObject:budgetId forKey:beginDateStr];
         }
         
         if (success) {

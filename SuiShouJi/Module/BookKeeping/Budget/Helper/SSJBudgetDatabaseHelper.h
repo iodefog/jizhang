@@ -54,7 +54,7 @@ extern NSString *const SSJBudgetMonthTitleKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSArray<NSDictionary *> *result))success
++ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success
                                      failure:(void (^)(NSError * _Nullable error))failure;
 
 /**

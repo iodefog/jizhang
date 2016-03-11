@@ -112,6 +112,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 NSString *desc = responseInfo[@"desc"];
                 tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                 
+                SSJPRINT(@">>> SSJ Wanings:同步失败-----code:%d desc:%@", code, desc);
                 //                SSJPRINT(@">>> SSJ sync response data:%@", responseObject);
                 if (failure) {
                     failure(tError);
