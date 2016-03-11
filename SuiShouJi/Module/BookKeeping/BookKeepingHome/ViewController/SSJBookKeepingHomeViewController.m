@@ -26,7 +26,7 @@
 #import "SSJBudgetModel.h"
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
-
+#import "SSJHomeReminderView.h"
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -36,6 +36,7 @@
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
 @property (nonatomic,strong) SSJBudgetModel *lastBudgetModel;
 @property (nonatomic,strong) SSJCustomNavigationBarView *customNavigationBar;
+@property (nonatomic,strong) SSJHomeReminderView *remindView;
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
 @property (nonatomic) long currentYear;
@@ -93,6 +94,13 @@
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
         if (result.count != 0) {
             self.customNavigationBar.model = [result objectAtIndex:0];
+            for (int i = 0; i < result.count; i++) {
+                if ([result objectAtIndex:i].remindMoney < [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
+                    self.remindView.model = [result objectAtIndex:i];
+                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+                    break;
+                }
+            }
         }
     } failure:^(NSError * _Nullable error) {
         NSLog(@"%@",error.localizedDescription);
@@ -217,6 +225,13 @@
         _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];
     }
     return _rightBarButton;
+}
+
+-(SSJHomeReminderView *)remindView{
+    if (!_remindView) {
+        _remindView = [[SSJHomeReminderView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    }
+    return _remindView;
 }
 
 -(SSJBookKeepingHeader *)bookKeepingHeader{
