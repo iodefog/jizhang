@@ -43,7 +43,6 @@ static NSString *const KQQAppKey = @"1105133385";
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
-@property (nonatomic,strong)UIButton *backButton;
 @end
 
 @implementation SSJLoginViewController
@@ -78,7 +77,6 @@ static NSString *const KQQAppKey = @"1105133385";
     [scrollView addSubview:self.leftSeperatorLine];
     [scrollView addSubview:self.rightSeperatorLine];
     [scrollView addSubview:self.tencentLoginButton];
-    [scrollView addSubview:self.backButton];
     [self.view addSubview:scrollView];
     self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:KQQAppKey andDelegate:self];
 }
@@ -86,8 +84,10 @@ static NSString *const KQQAppKey = @"1105133385";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.tfPhoneNum becomeFirstResponder];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController setNavigationBarHidden:YES];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 -(void)viewDidLayoutSubviews{
@@ -109,8 +109,6 @@ static NSString *const KQQAppKey = @"1105133385";
     self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
     self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
     self.rightSeperatorLine.right = self.view.width;
-    self.backButton.size = CGSizeMake(20, 20);
-    self.backButton.leftTop = CGPointMake(10, 10);
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -119,10 +117,10 @@ static NSString *const KQQAppKey = @"1105133385";
     [self.navigationController setNavigationBarHidden:NO];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return YES;
+//}
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -435,16 +433,6 @@ static NSString *const KQQAppKey = @"1105133385";
         _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
     }
     return _forgetButton;
-}
-
--(UIButton *)backButton{
-    if (!_backButton) {
-        _backButton = [[UIButton alloc] init];
-        [_backButton setBackgroundImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        _backButton.tintColor = [UIColor whiteColor];
-        [_backButton addTarget:self action:@selector(backOffAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _backButton;
 }
 
 -(UIButton *)tencentLoginButton{

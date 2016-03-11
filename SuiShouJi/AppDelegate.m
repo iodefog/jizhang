@@ -207,6 +207,11 @@ NSDate *SCYEnterBackgroundTime() {
 
 //  如果手势密码开启，进入手势密码页面
 - (void)showMotionPasswordIfNeeded {
+    //  如果当前页面已经是手势密码，直接返回
+    if ([SSJVisibalController() isKindOfClass:[SSJMotionPasswordViewController class]]) {
+        return;
+    }
+    
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
     if ([userItem.motionPWDState boolValue]) {
         if (userItem.motionPWD.length) {
