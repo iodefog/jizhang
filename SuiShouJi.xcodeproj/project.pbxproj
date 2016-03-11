@@ -506,6 +506,7 @@
 		BDF5109C1C925E5C00A49D74 /* home_remind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF5109B1C925E5C00A49D74 /* home_remind@3x.png */; };
 		BDF5109E1C92602A00A49D74 /* remind_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF5109D1C92602A00A49D74 /* remind_close@2x.png */; };
 		BDF510A01C92604500A49D74 /* remind_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF5109F1C92604500A49D74 /* remind_close@3x.png */; };
+		BDF510AC1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF510AB1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.m */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
@@ -1247,6 +1248,8 @@
 		BDF5109B1C925E5C00A49D74 /* home_remind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_remind@3x.png"; sourceTree = "<group>"; };
 		BDF5109D1C92602A00A49D74 /* remind_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remind_close@2x.png"; sourceTree = "<group>"; };
 		BDF5109F1C92604500A49D74 /* remind_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remind_close@3x.png"; sourceTree = "<group>"; };
+		BDF510AA1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderCollectionCellItem.h; sourceTree = "<group>"; };
+		BDF510AB1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderCollectionCellItem.m; sourceTree = "<group>"; };
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
@@ -3018,6 +3021,8 @@
 		BDD78AF11C1EE71700C7EE0E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BDF510AA1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.h */,
+				BDF510AB1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3649,6 +3654,7 @@
 				7D893F351C91335600886995 /* SSJUserItem.m in Sources */,
 				7DEF54711C7BF47100A90153 /* SSJBudgetDatabaseHelper.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
+				BDF510AC1C92BBB400A49D74 /* SSJCalenderCollectionCellItem.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */,
