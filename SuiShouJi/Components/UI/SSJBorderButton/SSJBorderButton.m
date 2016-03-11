@@ -61,6 +61,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     }
 }
 
+- (void)setBorderWidth:(CGFloat)borderWidth {
+    self.layer.borderWidth = borderWidth;
+}
+
 - (void)setState:(SSJBorderButtonState)state {
     if (_state != state) {
         _state = state;
@@ -150,9 +154,9 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 //        self.titleLabel.textColor = self.color;
 //    } completion:NULL];
     
-    if (self.state != SSJBorderButtonStateDisable) {
+    if (self.enabled) {
         if ([self.target respondsToSelector:self.action]) {
-//            [self.target performSelector:self.action withObject:nil afterDelay:0.0];
+            [self.target performSelector:self.action withObject:nil afterDelay:0.0];
         }
     }
 }
