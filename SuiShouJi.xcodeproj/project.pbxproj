@@ -3233,11 +3233,8 @@
 				7DD7D6C01C4C8E6A00ACE71A /* bt_others@2x.png in Resources */,
 				7D893F2F1C91144D00886995 /* budget_right@2x.png in Resources */,
 				7DD7D6A61C4C8E6A00ACE71A /* bt_furniture@2x.png in Resources */,
-<<<<<<< HEAD
-=======
 				BD8C7F8E1C9122FF00A70100 /* home_back@3x.png in Resources */,
 				7D893F391C914CDF00886995 /* motion_background.jpg in Resources */,
->>>>>>> 7ebb0a5f7408df5adf4dea438c4e3184f235e804
 				BDA3FDFF1C58CAC400FB57B1 /* ft_yingshouqian@2x.png in Resources */,
 				BD37D2D81C523ABB0050BDAA /* bt_calender@2x.png in Resources */,
 				BDA3FE001C58CAC400FB57B1 /* ft_yingshouqian@3x.png in Resources */,
@@ -3422,11 +3419,8 @@
 				7DE69C561C8EDF34001D31C1 /* motion_circle_correct@2x.png in Resources */,
 				7DD7D6A81C4C8E6A00ACE71A /* bt_gift@2x.png in Resources */,
 				7DD7D6E91C4C8E6A00ACE71A /* bt_yiwai@3x.png in Resources */,
-<<<<<<< HEAD
 				BDF5108E1C925BB500A49D74 /* home_pen@2x.png in Resources */,
-=======
 				7DA4ACB21C918F57004E39E8 /* budget_no_data@3x.png in Resources */,
->>>>>>> 7ebb0a5f7408df5adf4dea438c4e3184f235e804
 				7DD7D7341C4CA8BD00ACE71A /* reportForms_expenses@3x.png in Resources */,
 				7DD7D6A71C4C8E6A00ACE71A /* bt_furniture@3x.png in Resources */,
 				7DD7D6FA1C4C8E6A00ACE71A /* founds_exchange@2x.png in Resources */,
