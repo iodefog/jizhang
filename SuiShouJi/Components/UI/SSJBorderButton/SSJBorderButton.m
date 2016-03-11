@@ -138,7 +138,12 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
     
-    self.state = SSJBorderButtonStateNormal;
+    double delayInSeconds = 0.1;
+    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds*NSEC_PER_SEC));
+    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+        self.state = SSJBorderButtonStateNormal;
+    });
+//    self.state = SSJBorderButtonStateNormal;
     
 //    [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
 //        self.backgroundColor = DEFAULT_BACKGROUND_COLOR;
@@ -155,11 +160,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesCancelled:touches withEvent:event];
     
-    double delayInSeconds = 0.5;
-    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds*NSEC_PER_SEC));
-    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-        self.state = SSJBorderButtonStateNormal;
-    });
+    self.state = SSJBorderButtonStateNormal;
     
     
 //    [UIView animateWithDuration:kAnimationDuration delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
