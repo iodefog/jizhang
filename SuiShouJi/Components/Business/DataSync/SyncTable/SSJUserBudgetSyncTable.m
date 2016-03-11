@@ -69,6 +69,8 @@
         return NO;
     }
     
+    [resultSet close];
+    
     return YES;
 }
 

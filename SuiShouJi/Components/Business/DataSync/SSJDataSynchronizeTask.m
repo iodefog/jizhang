@@ -141,6 +141,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                     [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJCurrentSyncDataUserId()];
                     [SSJRegularManager supplementBudgetIfNeededForUserId:SSJCurrentSyncDataUserId()];
                     if (success) {
+                        SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
                         success();
                     }
                 } else {

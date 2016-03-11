@@ -177,6 +177,8 @@
     while ([resultSet next]) {
         isExisted = YES;
         int localOperatorType = [resultSet intForColumn:@"operatortype"];
+        [resultSet close];
+        
         if (localOperatorType == 0 || localOperatorType == 1) {
             //  如果将要合并的记录操作类型是删除，就不需要根据操作时间决定保留哪条记录，直接合并
             NSMutableString *condition = [necessaryCondition mutableCopy];

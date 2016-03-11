@@ -84,10 +84,12 @@
                 //  上传完最后一组图片后根据过程中是否有错误，调用响应的回调
                 if (i == imageNames.count - 1) {
                     if (tError) {
+                        SSJPRINT(@"<<< ------- 图片同步失败! ------- >>>");
                         if (failure) {
                             failure(tError);
                         }
                     } else {
+                        SSJPRINT(@"<<< ------- 图片同步成功！------- >>>");
                         if (success) {
                             success();
                         }
