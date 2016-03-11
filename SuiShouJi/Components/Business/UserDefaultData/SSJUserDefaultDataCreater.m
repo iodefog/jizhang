@@ -63,7 +63,7 @@
 
 + (void)createDefaultBillTypesIfNeededWithError:(NSError **)error {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSError *tError = [self createDefaultBillTypesIfNeededInDatabase:db];
+        NSError *tError = [self createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
         if (error) {
             *error = tError;
         }
@@ -71,8 +71,9 @@
 }
 
 + (void)asyncCreateDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    NSString *userId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultBillTypesIfNeededInDatabase:db];
+        NSError *error = [self createDefaultBillTypesIfNeededForUserId:userId inDatabase:db];
         if (error) {
             if (failure) {
                 failure(error);
@@ -86,6 +87,7 @@
 }
 
 + (void)asyncCreateAllDefaultDataWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    NSString *userId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSError *error = [self createDefaultSyncRecordInDatabase:db];
         if (error) {
@@ -103,7 +105,7 @@
             return;
         }
         
-        error = [self createDefaultBillTypesIfNeededInDatabase:db];
+        error = [self createDefaultBillTypesIfNeededForUserId:userId inDatabase:db];
         if (error) {
             if (failure) {
                 failure(error);
@@ -182,13 +184,13 @@
 }
 
 //  如果当前用户的收支类型小于公共收支类型，则创建缺少的收支类型
-+ (NSError *)createDefaultBillTypesIfNeededInDatabase:(FMDatabase *)db {
-    if (!SSJUSERID().length) {
++ (NSError *)createDefaultBillTypesIfNeededForUserId:(NSString *)userID inDatabase:(FMDatabase *)db {
+    if (!userID.length) {
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
     
     FMResultSet *result1 = [db executeQuery:@"select count(*) from BK_BILL_TYPE where istate <> 2"];
-    FMResultSet *result2 = [db executeQuery:@"select count(*) from BK_USER_BILL where CUSERID = ?", SSJUSERID()];
+    FMResultSet *result2 = [db executeQuery:@"select count(*) from BK_USER_BILL where CUSERID = ?", userID];
     
     if (!result1 || !result2) {
         [result1 close];
@@ -220,7 +222,7 @@
         NSString *billId = [billTypeResult stringForColumn:@"id"];
         int state = [billTypeResult intForColumn:@"istate"];
         
-        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", SSJUSERID(), billId, @(state), date, @(SSJSyncVersion()), billId, SSJUSERID()];
+        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", userID, billId, @(state), date, @(SSJSyncVersion()), billId, userID];
         successfull = successfull && executeSuccessfull;
     }
     

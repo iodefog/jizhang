@@ -201,7 +201,6 @@ static NSString *const KQQAppKey = @"1105133385";
     if (userBillSuccess && fundInfoSuccess) {
         //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
         self.loginService.item.registerState = @"1";
-        
         if (![SSJUserTableManager saveUserItem:self.loginService.item]
             || !SSJSaveAppId(self.loginService.appid)
             || !SSJSaveAccessToken(self.loginService.accesstoken)
@@ -212,9 +211,10 @@ static NSString *const KQQAppKey = @"1105133385";
             return;
         }
         
-        //  如果没有返回当前用户的收支类型，则创建默认的收支类型和资金帐户
-        if (self.loginService.userBillArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+        //  检测缺少哪个收支类型就创建
+        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+        //  如果登录没有返回任何资金帐户，就给用户创建默认的
+        if (self.loginService.fundInfoArray.count == 0) {
             [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
         }
         
