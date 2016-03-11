@@ -13,6 +13,7 @@
 #import "SSJForgetPasswordFirstStepViewController.h"
 #import "SSJRegistCompleteViewController.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
+#import "SSJMotionPasswordViewController.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJUserBillSyncTable.h"
@@ -236,6 +237,25 @@ static NSString *const KQQAppKey = @"1105133385";
         [CDAutoHideMessageHUD showMessage:@"登录成功"];
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+        
+        //  如果用户手势密码开启，进入手势密码页面
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+        if ([userItem.motionPWDState boolValue]) {
+            
+            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+            motionVC.finishHandle = self.finishHandle;
+            motionVC.backController = self.backController;
+            if (userItem.motionPWD.length) {
+                motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+            } else {
+                motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+            }
+            [self.navigationController pushViewController:motionVC animated:YES];
+            
+            return;
+        }
+        
+        //
         if (self.finishHandle) {
             self.finishHandle(self);
         } else {
@@ -419,7 +439,7 @@ static NSString *const KQQAppKey = @"1105133385";
 
 -(UIButton *)backButton{
     if (!_backButton) {
-        _backButton = [[UIButton alloc]init];
+        _backButton = [[UIButton alloc] init];
         [_backButton setBackgroundImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _backButton.tintColor = [UIColor whiteColor];
         [_backButton addTarget:self action:@selector(backOffAction) forControlEvents:UIControlEventTouchUpInside];

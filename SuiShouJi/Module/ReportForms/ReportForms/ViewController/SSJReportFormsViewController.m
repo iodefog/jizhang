@@ -44,6 +44,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 //  结余金额视图
 @property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
 
+//  没有流水的提示视图
+@property (nonatomic, strong) UIImageView *noDataRemindView;
+
 //
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -358,7 +361,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         
         if (!self.datas.count) {
             self.tableView.hidden = YES;
-            [self.view ssj_showWatermarkWithImageName:@"reportForm_empty" animated:YES target:nil action:nil];
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         } else {
             self.tableView.hidden = NO;
             [self.view ssj_hideWatermark:YES];
@@ -454,6 +457,20 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _tableView.tableFooterView = [[UIView alloc] init];
     }
     return _tableView;
+}
+
+- (UIImageView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_no_data"]];
+        UILabel *noDataLab = [[UILabel alloc] init];
+        noDataLab.textColor = [UIColor whiteColor];
+        noDataLab.font = [UIFont systemFontOfSize:18];
+        noDataLab.text = @"报表空空如也";
+        [noDataLab sizeToFit];
+        noDataLab.center = CGPointMake(_noDataRemindView.width * 0.5, _noDataRemindView.height * 0.737);
+        [_noDataRemindView addSubview:noDataLab];
+    }
+    return _noDataRemindView;
 }
 
 @end

@@ -41,6 +41,9 @@ static const CGFloat kBottomViewHeight = 466;
 //  包含预算消费明细图表、编辑按钮
 @property (nonatomic, strong) SSJBudgetDetailBottomView *bottomView;
 
+//  没有消费记录的提示视图
+@property (nonatomic, strong) UIImageView *noDataRemindView;
+
 //  预算数据模型
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
@@ -194,9 +197,14 @@ static const CGFloat kBottomViewHeight = 466;
     
     [self.headerView setBudgetModel:self.budgetModel];
     [self.bottomView.circleView reloadData];
+    if (self.circleItems.count > 0) {
+        [self.bottomView.circleView ssj_hideWatermark:YES];
+    } else {
+        [self.bottomView.circleView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
+    }
     
-    NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-dd"];
-    NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-dd"];
+    NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-d"];
+    NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-d"];
     [self.middleView setTitle:[NSString stringWithFormat:@"%@预算消费明细", tStr]];
     [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
 }
@@ -241,6 +249,20 @@ static const CGFloat kBottomViewHeight = 466;
         [_bottomView.button addTarget:self action:@selector(editButtonAction)];
     }
     return _bottomView;
+}
+
+- (UIImageView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_no_data"]];
+        UILabel *noDataLab = [[UILabel alloc] init];
+        noDataLab.textColor = [UIColor whiteColor];
+        noDataLab.font = [UIFont systemFontOfSize:18];
+        noDataLab.text = @"NO，小主居然忘记记账了！";
+        [noDataLab sizeToFit];
+        noDataLab.center = CGPointMake(_noDataRemindView.width * 0.5, _noDataRemindView.height * 0.737);
+        [_noDataRemindView addSubview:noDataLab];
+    }
+    return _noDataRemindView;
 }
 
 @end

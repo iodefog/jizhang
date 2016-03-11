@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 @interface SSJForgetPasswordSecondStepViewController : SSJBaseViewController
 

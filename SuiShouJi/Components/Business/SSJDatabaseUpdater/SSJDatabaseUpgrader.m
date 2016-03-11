@@ -99,7 +99,7 @@
         }
     }
     if (![db columnExists:@"cmotionpwdstate" inTableWithName:@"bk_user"]) {
-        if (![db executeUpdate:@"alter table bk_user add cmotionpwdstate text"]) {
+        if (![db executeUpdate:@"alter table bk_user add cmotionpwdstate text default 1"]) {
             error = [db lastError];
         }
     }

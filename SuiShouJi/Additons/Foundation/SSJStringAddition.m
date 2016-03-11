@@ -10,7 +10,7 @@
 #import "SSJDataAddition.h"
 #import <CommonCrypto/CommonDigest.h>
 
-@implementation NSString (SSJCategory)
+@implementation NSString (SSJEncryption)
 
 - (NSString *)ssj_urlPath {
     NSURL *url = [NSURL URLWithString:self];
@@ -53,40 +53,40 @@
     return output;
 }
 
++ (NSDateFormatter *)ssj_dateFormat {
+    static NSDateFormatter *format = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        format = [[NSDateFormatter alloc] init];
+    });
+    
+    format.dateStyle = NSDateFormatterNoStyle;
+    format.timeStyle = NSDateFormatterNoStyle;
+    format.timeZone = [NSTimeZone localTimeZone];
+    return format;
+}
+
+@end
+
+@implementation NSString (SSJDate)
+
 - (NSDate *)ssj_dateWithFormat:(NSString *)format {
     if (!format) {
         format = @"YYYY-MM-dd HH:mm:ss";
     }
-    NSDateFormatter *tempFormat = [[NSDateFormatter alloc] init];
-    [tempFormat setDateFormat:format];
-    NSDate *date = [tempFormat dateFromString:self];
+    
+    NSDateFormatter *dateFormat = [[self class] ssj_dateFormat];
+    [dateFormat setDateFormat:format];
+    NSDate *date = [dateFormat dateFromString:self];
     return date;
 }
 
 - (NSString *)ssj_dateStringFromFormat:(NSString *)fromFormat toFormat:(NSString *)toFormat {
-    NSDateFormatter *tempFormat = [[NSDateFormatter alloc] init];
-    [tempFormat setDateFormat:fromFormat];
-    NSDate *date = [tempFormat dateFromString:self];
-    [tempFormat setDateFormat:toFormat];
-    return [tempFormat stringFromDate:date];
-}
-
-
-- (int)ssj_countWord
-{
-    int length = 0;
-    NSString *regex = @"[\u4E00-\u9FA5]";
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    for (int i = 0; i < self.length; i++) {
-        NSRange range = NSMakeRange(i, 1);
-        NSString *tempstr = [self substringWithRange:range];
-        if ([predicate evaluateWithObject:tempstr]) {
-            length += 2;
-        }else{
-            length += 1;
-        }
-    }
-    return length;
+    NSDateFormatter *format = [[self class] ssj_dateFormat];
+    [format setDateFormat:fromFormat];
+    NSDate *date = [format dateFromString:self];
+    [format setDateFormat:toFormat];
+    return [format stringFromDate:date];
 }
 
 @end

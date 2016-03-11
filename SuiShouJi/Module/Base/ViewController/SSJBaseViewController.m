@@ -10,6 +10,7 @@
 #import "UIViewController+SSJPageFlow.h"
 #import "MobClick.h"
 #import "SSJLoginViewController.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -120,6 +121,7 @@
         || codeint == 9009) {
         
         SSJClearLoginInfo();
+        [SSJUserTableManager reloadUserIdWithError:nil];
         
         if (service.showLoginControllerIfTokenInvalid
             && ![SSJVisibalController() isKindOfClass:[SSJLoginViewController class]]) {

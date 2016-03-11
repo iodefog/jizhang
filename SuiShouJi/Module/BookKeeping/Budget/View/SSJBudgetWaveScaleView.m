@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) WaveLoadingIndicator *waveIndicator;
 
+@property (nonatomic, strong) UIImageView *fullView;
+
 @property (nonatomic, strong) UILabel *topLabel;
 
 @property (nonatomic, strong) UILabel *bottomLabel;
@@ -32,6 +34,9 @@
         self.waveIndicator.waveAmplitude = 1;
         [self addSubview:self.waveIndicator];
         
+        self.fullView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_wave_full"]];
+        [self addSubview:self.fullView];
+        
         self.topLabel = [[UILabel alloc] init];
         self.topLabel.backgroundColor = [UIColor clearColor];
         self.topLabel.textColor = [UIColor blackColor];
@@ -49,7 +54,7 @@
 
 - (void)layoutSubviews {
     self.layer.cornerRadius = self.width * 0.5;
-    self.waveIndicator.frame = CGRectInset(self.bounds, self.layer.borderWidth * 0.5, self.layer.borderWidth * 0.5);
+    self.waveIndicator.frame = self.fullView.frame = CGRectInset(self.bounds, self.layer.borderWidth * 0.5, self.layer.borderWidth * 0.5);
     
     self.topLabel.width = MIN(self.topLabel.width, self.waveIndicator.width);
     self.bottomLabel.width = MIN(self.bottomLabel.width, self.waveIndicator.width);
@@ -69,7 +74,12 @@
 - (void)setScale:(CGFloat)scale {
     if (_scale != scale) {
         _scale = scale;
-        self.waveIndicator.progress = scale;
+        
+        self.fullView.hidden = _scale < 1;
+        self.waveIndicator.hidden = _scale >= 1;
+        if (!self.waveIndicator.hidden) {
+            self.waveIndicator.progress = scale;
+        }
     }
 }
 
