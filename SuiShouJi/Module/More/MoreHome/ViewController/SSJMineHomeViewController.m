@@ -333,7 +333,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
             item.cuserid = [rs stringForColumn:@"CUSERID"];
             item.cmobileno = [rs stringForColumn:@"CMOBILENO"];
             item.cicon = [rs stringForColumn:@"CICONS"];
-            item.realName = [rs stringForColumn:@"CREALNAME"];
+            item.realName = [rs stringForColumn:@"CNICKID"];
         }
         SSJDispatch_main_async_safe(^(){
             UserInfo(item);
