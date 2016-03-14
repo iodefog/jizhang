@@ -47,9 +47,11 @@ NSString *SSJCurrentSyncImageUserId();
 
 @interface SSJDataSyncHelper : NSObject
 
-+ (void)uploadBodyData:(NSData *)data
-          headerParams:(NSDictionary *)prarms
-             toUrlPath:(NSString *)path
-     completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
++ (NSURLSessionUploadTask *)uploadBodyData:(NSData *)data
+                              headerParams:(NSDictionary *)prarms
+                                 toUrlPath:(NSString *)path
+                                  fileName:(NSString *)fileName
+                                  mimeType:(NSString *)mimeType
+                         completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
 
 @end

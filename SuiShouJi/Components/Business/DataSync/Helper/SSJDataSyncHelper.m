@@ -36,21 +36,21 @@ NSString *SSJCurrentSyncImageUserId() {
 
 @implementation SSJDataSyncHelper
 
-+ (void)uploadBodyData:(NSData *)data headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
++ (NSURLSessionUploadTask *)uploadBodyData:(NSData *)data headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path fileName:(NSString *)fileName mimeType:(NSString *)mimeType completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     //  创建请求
     NSString *urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
     
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
-        [formData appendPartWithFileData:data name:@"zip" fileName:fileName mimeType:@"application/zip"];
+//        NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%ld.zip", (long)[NSDate date].timeIntervalSince1970];
+        [formData appendPartWithFileData:data name:fileName fileName:fileName mimeType:mimeType];
     } error:&tError];
     
     if (tError) {
         if (completionHandler) {
             completionHandler(nil, nil, tError);
         }
-        return;
+        return nil;
     }
     
     [prarms enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -62,9 +62,9 @@ NSString *SSJCurrentSyncImageUserId() {
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     
     //    NSProgress *progress = nil;
-//    self.task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
-//    
-//    [self.task resume];
+    NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
+    [task resume];
+    return task;
 }
 
 @end

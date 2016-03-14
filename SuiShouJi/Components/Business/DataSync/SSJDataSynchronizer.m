@@ -102,6 +102,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     SSJSetCurrentSyncDataUserId([self.userIdsForSyncData firstObject]);
+    
     self.dataSyncTask = [[SSJDataSynchronizeTask alloc] init];
     self.dataSyncTask.syncQueue = self.syncQueue;
     [self.dataSyncTask startSyncWithSuccess:^{
@@ -112,7 +113,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
 #ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:@"同步成功"];
+            [CDAutoHideMessageHUD showMessage:@"数据同步成功"];
 #endif
         });
         
@@ -126,7 +127,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 failure(error);
             }
 #ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:@"同步失败"];
+            [CDAutoHideMessageHUD showMessage:@"数据同步失败"];
 #endif
         });
         
@@ -146,6 +147,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
     
     SSJSetCurrentSyncImageUserId([self.userIdsForSyncImage firstObject]);
+    
     self.imageSyncTask = [[SSJImageSynchronizeTask alloc] init];
     self.imageSyncTask.syncQueue = self.syncQueue;
     [self.imageSyncTask startSyncWithSuccess:^{
@@ -156,7 +158,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncImageSuccessNotification object:self];
 #ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:@"同步成功"];
+            [CDAutoHideMessageHUD showMessage:@"图片同步成功"];
 #endif
         });
         
@@ -170,7 +172,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 failure(error);
             }
 #ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:@"同步失败"];
+            [CDAutoHideMessageHUD showMessage:@"图片同步失败"];
 #endif
         });
         
