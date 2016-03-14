@@ -16,6 +16,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJCalenderTableViewCell.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJCalenderHelper.h"
 #import "FMDB.h"
 
 
@@ -32,6 +33,7 @@
 @property (nonatomic,strong) UIButton *recordMakingButton;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) NSString *selectDate;
+@property (nonatomic,strong) NSMutableDictionary *data;
 
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
@@ -65,13 +67,16 @@
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self getCurrentDate];
+    self.selectedYear = _currentYear;
+    self.selectedMonth = _currentMonth;
+    self.selectedDay = _currentDay;
     [self getDataFromDateBase];
 }
 

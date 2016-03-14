@@ -8,10 +8,12 @@
 
 #import "SSJCalendarView.h"
 #import "SSJCalendarCollectionViewCell.h"
-
+#import "SSJCalenderHelper.h"
 
 @interface SSJCalendarView()
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) NSMutableDictionary *data;
+
 @end
 
 @implementation SSJCalendarView{
@@ -38,7 +40,12 @@
             _year = _currentYear;
             _month = _currentMonth;
         }
-        [self getItems];
+        [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
+            self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
+            [self getItems];
+        } failure:^(NSError *error) {
+            
+        }];
     }
     return self;
 }
@@ -157,7 +164,7 @@
     SSJCalendarCollectionViewCell *cell = (SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     self.selectDateStr = cell.item.dateStr;
     if (self.DateSelectedBlock) {
-        self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).currentDay integerValue],cell.item.dateStr);
+        self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).dateLabel.text integerValue],cell.item.dateStr);
     }
     [self reloadCalender];
 //    if (cell.isSelected == NO) {
@@ -296,6 +303,11 @@
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else{
+                if ([self.data objectForKey:item.dateStr] != nil) {
+                    item.haveDataOrNot = YES;
+                }else{
+                    item.haveDataOrNot = NO;
+                }
                 if ([item.dateStr isEqualToString:self.selectDateStr]) {
                     if ([item.dateStr isEqualToString:currentDateStr]) {
                         item.backGroundColor = @"47cfbe";
@@ -328,8 +340,13 @@
 
 -(void)reloadCalender{
     [self getCurrentDate];
-    [self getItems];
-    [self.calendar reloadData];
+    [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
+        self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
+        [self getItems];
+        [self.calendar reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 /*
