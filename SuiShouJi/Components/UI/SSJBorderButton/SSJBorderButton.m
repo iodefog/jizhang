@@ -41,6 +41,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.titleLabel];
         
+        _enabled = YES;
         self.titleInfo = [NSMutableDictionary dictionary];
         self.titleColorInfo = [NSMutableDictionary dictionary];
         self.borderColorInfo = [NSMutableDictionary dictionary];

@@ -8,7 +8,7 @@
 
 #import "SSJBudgetDetailViewController.h"
 #import "SSJBudgetEditViewController.h"
-#import "SSJBudgetDetailNavigationTitleView.h"
+#import "SSJBudgetDetailPeriodSwitchControl.h"
 #import "SSJBudgetDetailHeaderView.h"
 #import "SSJBudgetDetailBottomView.h"
 #import "SSJBudgetDetailMiddleTitleView.h"
@@ -24,10 +24,12 @@ static const CGFloat kbudgetTitleLabelHeight = 40;
 
 static const CGFloat kBottomViewHeight = 466;
 
+static NSString *const kDateFomat = @"yyyy-MM-dd";
+
 @interface SSJBudgetDetailViewController () <SSJReportFormsPercentCircleDataSource>
 
 //  导航栏标题视图
-@property (nonatomic, strong) SSJBudgetDetailNavigationTitleView *titleView;
+@property (nonatomic, strong) SSJBudgetDetailPeriodSwitchControl *titleView;
 
 //  底层滚动视图
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -50,11 +52,8 @@ static const CGFloat kBottomViewHeight = 466;
 //  预算消费明细图表的数据源
 @property (nonatomic, strong) NSArray *circleItems;
 
-//  月预算历史id列表
-@property (nonatomic, strong) NSArray *monthBudgetIdList;
-
-//  月预算标题
-@property (nonatomic, strong) NSArray *monthTitles;
+//  月预算历史id、日期映射表
+@property (nonatomic, strong) NSDictionary *monthBudgetIdMap;
 
 @end
 
@@ -108,15 +107,19 @@ static const CGFloat kBottomViewHeight = 466;
 }
 
 - (void)changeSelectedMonth {
-    [self.view ssj_showLoadingIndicator];
-    NSString *budgetId = [self.monthBudgetIdList ssj_safeObjectAtIndex:self.titleView.currentIndex];
+    NSString *budgetId = [self.monthBudgetIdMap objectForKey:[self.titleView.currentDate formattedDateWithFormat:@"yyy-MM-dd"]];
+    if (!budgetId.length) {
+        self.budgetModel = nil;
+        self.circleItems = nil;
+        [self updateView];
+        return;
+    }
     
+    [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
-        
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
-        
         [self updateView];
         
     } failure:^(NSError * _Nullable error) {
@@ -129,19 +132,29 @@ static const CGFloat kBottomViewHeight = 466;
 #pragma mark - Private
 - (void)loadAllData {
     [self.view ssj_showLoadingIndicator];
-    
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:self.budgetId success:^(NSDictionary * _Nonnull result) {
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
+        self.titleView.periodType = self.budgetModel.type;
+        self.titleView.currentDate = [NSDate dateWithString:self.budgetModel.beginDate formatString:kDateFomat];
         
         //  如果是月预算，需要再查询历史月预算id；否则直接刷新页面
         if (self.budgetModel.type == 1) {
-            [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSArray<NSString *> * _Nonnull result) {
+            [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSDictionary * _Nonnull result) {
                 [self.view ssj_hideLoadingIndicator];
                 
-                self.monthTitles = [result valueForKeyPath:SSJBudgetMonthTitleKey];
-                self.monthBudgetIdList = [result valueForKeyPath:SSJBudgetMonthIDKey];
-                if ([self.monthBudgetIdList indexOfObject:self.budgetId] == NSNotFound) {
+                self.monthBudgetIdMap = result;
+                
+                //  对日期进行生序排序
+                NSArray *sortedDates = [[self.monthBudgetIdMap allKeys] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+                    NSDate *date1 = [NSDate dateWithString:obj1 formatString:kDateFomat];
+                    NSDate *date2 = [NSDate dateWithString:obj2 formatString:kDateFomat];
+                    return [date1 compare:date2];
+                }];
+                
+                self.titleView.lastDate = [NSDate dateWithString:[sortedDates lastObject] formatString:kDateFomat];
+                
+                if (![[self.monthBudgetIdMap allValues] containsObject:self.budgetId]) {
                     SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                     [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
                     return;
@@ -150,7 +163,6 @@ static const CGFloat kBottomViewHeight = 466;
                 [self updateView];
                 
             } failure:^(NSError * _Nullable error) {
-                
                 [self.view ssj_hideLoadingIndicator];
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
@@ -171,29 +183,30 @@ static const CGFloat kBottomViewHeight = 466;
 }
 
 - (void)updateView {
+    if (!self.budgetModel) {
+        self.scrollView.hidden = YES;
+        [self.bottomView.circleView ssj_hideWatermark:YES];
+        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        return;
+    }
+    
     self.scrollView.hidden = NO;
+    [self.view ssj_hideWatermark:YES];
     
     NSString *tStr = nil;
     switch (self.budgetModel.type) {
         case 0:
             tStr = @"周";
-            [self.titleView setTitles:@[@"周预算"]];
-            [self.titleView setButtonShowed:NO];
             break;
             
         case 1:
             tStr = @"月";
-            [self.titleView setTitles:self.monthTitles];
-            [self.titleView setButtonShowed:YES];
             break;
             
         case 2:
             tStr = @"年";
-            [self.titleView setTitles:@[@"年预算"]];
-            [self.titleView setButtonShowed:NO];
             break;
     }
-    self.titleView.currentIndex = [self.monthBudgetIdList indexOfObject:self.budgetId];
     
     [self.headerView setBudgetModel:self.budgetModel];
     [self.bottomView.circleView reloadData];
@@ -210,9 +223,9 @@ static const CGFloat kBottomViewHeight = 466;
 }
 
 #pragma mark - Getter
-- (SSJBudgetDetailNavigationTitleView *)titleView {
+- (SSJBudgetDetailPeriodSwitchControl *)titleView {
     if (!_titleView) {
-        _titleView = [[SSJBudgetDetailNavigationTitleView alloc] init];
+        _titleView = [[SSJBudgetDetailPeriodSwitchControl alloc] init];
         [_titleView addTarget:self action:@selector(changeSelectedMonth) forControlEvents:UIControlEventValueChanged];
     }
     return _titleView;

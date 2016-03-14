@@ -84,6 +84,8 @@
             //  合并数据的修改时间更晚，合并此记录，删除本地记录
             [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
         }
+        
+        [resultSet close];
     }
     
     return YES;

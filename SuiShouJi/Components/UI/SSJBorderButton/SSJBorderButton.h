@@ -23,8 +23,10 @@ typedef NS_ENUM(NSUInteger, SSJBorderButtonState) {
 //  default 1
 @property (nonatomic) CGFloat borderWidth;
 
+//  default SSJBorderButtonStateNormal
 @property (readonly, nonatomic) SSJBorderButtonState state;
 
+//  default YES
 @property (nonatomic) BOOL enabled;
 
 - (void)setTitle:(NSString *)title forState:(SSJBorderButtonState)state;
