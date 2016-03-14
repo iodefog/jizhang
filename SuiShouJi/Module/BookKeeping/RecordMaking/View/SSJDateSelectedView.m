@@ -56,12 +56,15 @@
 
 -(SSJCalendarView*)calendarView{
     if (!_calendarView) {
+        NSString *dateStr = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.width, 270)];
         _calendarView.selectedYear = self.selectedYear;
         _calendarView.selectedMonth = self.selectedMonth;
         _calendarView.year = self.selectedYear;
         _calendarView.month = self.selectedMonth;
         _calendarView.day = self.selectedDay;
+        _calendarView.selectDateStr =  dateStr;
+        [_calendarView reloadCalender];
     }
     return _calendarView;
 }
@@ -126,7 +129,7 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
-    [self.calendarView.calendar reloadData];
+    [self.calendarView reloadCalender];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -139,7 +142,7 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
-    [self.calendarView.calendar reloadData];
+    [self.calendarView reloadCalender];
 }
 
 -(void)closeButtonClicked:(UIButton*)button{

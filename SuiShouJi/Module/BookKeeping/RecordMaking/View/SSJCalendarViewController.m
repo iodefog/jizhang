@@ -63,6 +63,7 @@
     self.selectedYear = _currentYear;
     self.selectedMonth = _currentMonth;
     self.selectedDay = _currentDay;
+    self.selectDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     [self getDataFromDateBase];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
