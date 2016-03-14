@@ -12,4 +12,5 @@
 @property (nonatomic,strong) NSString *backGroundColor;
 @property (nonatomic,strong) NSString *titleColor;
 @property (nonatomic,strong) NSString *dateStr;
+@property (nonatomic) BOOL isSelectable;
 @end

@@ -154,6 +154,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCalendarCollectionViewCell *cell = (SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     self.selectDateStr = cell.item.dateStr;
+    if (self.DateSelectedBlock) {
+        self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).currentDay integerValue],cell.item.dateStr);
+    }
     [self reloadCalender];
 //    if (cell.isSelected == NO) {
 //        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
@@ -258,16 +261,19 @@
             item.dateStr = [_weekArray objectAtIndex:i];
             item.backGroundColor = @"FFFFFF";
             item.titleColor = @"e7e7e7";
+            item.isSelectable = NO;
             [self.items addObject:item];
         }else if (i < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1){
             item.dateStr = @"";
             item.backGroundColor = @"FFFFFF";
             item.titleColor = @"e7e7e7";
+            item.isSelectable = NO;
             [self.items addObject:item];
         }else if(i > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5){
             item.dateStr = @"";
             item.backGroundColor = @"FFFFFF";
             item.titleColor = @"e7e7e7";
+            item.isSelectable = NO;
             [self.items addObject:item];
         }else{
             NSString *cellDay = [[NSString alloc] initWithFormat:@"%ld",i - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
@@ -275,34 +281,41 @@
             if (_year > _currentYear) {
                 item.backGroundColor = @"FFFFFF";
                 item.titleColor = @"e7e7e7";
+                item.isSelectable = NO;
                 [self.items addObject:item];
             }else if (_year == _currentYear && _month > _currentMonth){
                 item.backGroundColor = @"FFFFFF";
                 item.titleColor = @"e7e7e7";
+                item.isSelectable = NO;
                 [self.items addObject:item];
             }else if ([cellDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
                 item.backGroundColor = @"FFFFFF";
                 item.titleColor = @"e7e7e7";
+                item.isSelectable = NO;
                 [self.items addObject:item];
             }else{
                 if ([item.dateStr isEqualToString:self.selectDateStr]) {
                     if ([item.dateStr isEqualToString:currentDateStr]) {
                         item.backGroundColor = @"47cfbe";
                         item.titleColor = @"FFFFFF";
+                        item.isSelectable = YES;
                         [self.items addObject:item];
                     }else{
                         item.backGroundColor = @"cccccc";
                         item.titleColor = @"FFFFFF";
+                        item.isSelectable = YES;
                         [self.items addObject:item];
                     }
                 }else{
                     if ([item.dateStr isEqualToString:currentDateStr]) {
                         item.backGroundColor = @"FFFFFF";
                         item.titleColor = @"47cfbe";
+                        item.isSelectable = YES;
                         [self.items addObject:item];
                     }else{
                         item.backGroundColor = @"FFFFFF";
                         item.titleColor = @"393939";
+                        item.isSelectable = YES;
                         [self.items addObject:item];
                     }
                 }

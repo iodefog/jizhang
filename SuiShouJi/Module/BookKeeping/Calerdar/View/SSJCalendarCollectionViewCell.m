@@ -18,6 +18,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self.contentView addSubview:self.dateLabel];
+        [self.contentView addSubview:self.starImage];
         self.isSelected = NO;
         self.layer.cornerRadius = self.height / 2;
     }
@@ -28,6 +29,9 @@
     [super layoutSubviews];
     self.dateLabel.frame = CGRectMake(0, 0, self.width - 10, 30);
     self.dateLabel.center = CGPointMake(self.width / 2, self.height / 2);
+    self.starImage.size = CGSizeMake(8, 8);
+    self.starImage.bottom = self.dateLabel.bottom;
+    self.starImage.centerX = self.width / 2;
 }
 
 -(UILabel*)dateLabel{
@@ -100,17 +104,21 @@
     _item = item;
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.backGroundColor];
     self.dateLabel.textColor = [UIColor ssj_colorWithHex:_item.titleColor];
-    if ([_item.backGroundColor isEqualToString:@"a7a7a7"] || [_item.backGroundColor isEqualToString:@"47cfbe"]) {
-        self.starImage.tintColor = [UIColor whiteColor];
+    if (_item.isSelectable) {
+        self.userInteractionEnabled = YES;
     }else{
-        self.starImage.tintColor = [UIColor ssj_colorWithHex:@""];
+        self.userInteractionEnabled = NO;
     }
     if (self.item.dateStr.length != 10) {
         self.dateLabel.text = self.item.dateStr;
     }else{
         self.dateLabel.text = [NSString stringWithFormat:@"%d",[[[self.item.dateStr componentsSeparatedByString:@"-"] lastObject] intValue]];
     }
-    [self getHaveRecordOrNot];
+    if ([_item.backGroundColor isEqualToString:@"cccccc"] || [_item.backGroundColor isEqualToString:@"47cfbe"]) {
+        self.starImage.tintColor = [UIColor whiteColor];
+    }else{
+        self.starImage.tintColor = [UIColor orangeColor];
+    }
 }
 
 -(void)getHaveRecordOrNot{
@@ -118,7 +126,12 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         BOOL haveRecordOrNot = [db intForQuery:@"select * from BK_USER_CHARGE where CBILLDATE = ? and CUSERID = ? and OPERATORTYPE <> 2",weakSelf.item.dateStr,SSJUSERID()];
         dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.starImage.hidden = haveRecordOrNot;
+            
+            if (haveRecordOrNot) {
+                weakSelf.starImage.hidden = YES;
+            }else{
+                weakSelf.starImage.hidden = NO;
+            }
         });
     }];
 }
