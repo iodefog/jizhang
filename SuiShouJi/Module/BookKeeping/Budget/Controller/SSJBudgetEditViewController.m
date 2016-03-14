@@ -7,6 +7,7 @@
 //
 
 #import "SSJBudgetEditViewController.h"
+#import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditPeriodSelectionView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJBudgetEditLabelCell.h"
@@ -63,6 +64,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (self.model) {
+        UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteBudgetAction)];
+        self.navigationItem.rightBarButtonItem = deleteItem;
+    }
     [self queryBillTypeList];
     [self.view addSubview:self.tableView];
 }
@@ -183,6 +188,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 #pragma mark - Event
+- (void)deleteBudgetAction {
+    __weak typeof(self) weakSelf = self;
+    SSJAlertViewAction *cancel = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+    SSJAlertViewAction *sure = [SSJAlertViewAction actionWithTitle:@"确认" handler:^(SSJAlertViewAction *action) {
+        [weakSelf deleteBudget];
+    }];
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您确认删除该预算" action:cancel, sure, nil];
+}
+
 - (void)autoContinueSwitchCtrlAction:(UISwitch *)switchCtrl {
     self.model.isAutoContinued = switchCtrl.isOn;
 }
@@ -254,6 +268,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
         [self.view ssj_hideLoadingIndicator];
         self.budgetTypeMap = billTypeMap;
+        //  如果是新建预算，需要重新创建个预算模型
         if (!self.model) {
             [self initBudgetModel];
         }
@@ -448,6 +463,20 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self.saveBtn ssj_hideLoadingIndicator];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
     }
+}
+
+- (void)deleteBudget {
+    [self.view ssj_showLoadingIndicator];
+    [SSJBudgetDatabaseHelper deleteBudgetWithID:self.model.ID success:^{
+        [self.view ssj_hideLoadingIndicator];
+        SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
+        if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {
+            [self.navigationController popToViewController:budgetListVC animated:YES];
+        }
+    } failure:^(NSError * _Nullable error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:SSJ_ERROR_MESSAGE action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+    }];
 }
 
 #pragma mark - Getter

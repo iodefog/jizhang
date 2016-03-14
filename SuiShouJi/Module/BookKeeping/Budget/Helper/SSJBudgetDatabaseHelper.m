@@ -133,6 +133,24 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     }];
 }
 
++ (void)deleteBudgetWithID:(NSString *)ID success:(void(^)())success failure:(void (^)(NSError * _Nullable error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:@"update bk_user_budget set operatortype = 2 where ibid = ?", ID]) {
+            SSJDispatch_main_async_safe(^{
+                if (success) {
+                    success();
+                }
+            });
+        } else {
+            SSJDispatch_main_async_safe(^{
+                if (failure) {
+                    failure([db lastError]);
+                }
+            });
+        }
+    }];
+}
+
 + (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {

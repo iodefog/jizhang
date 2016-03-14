@@ -92,14 +92,12 @@
     [self getCurrentDate];
     [self getDateFromDatebase];
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        if (result.count != 0) {
-            self.customNavigationBar.model = [result objectAtIndex:0];
-            for (int i = 0; i < result.count; i++) {
-                if ([result objectAtIndex:i].remindMoney < [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
-                    self.remindView.model = [result objectAtIndex:i];
-                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
-                    break;
-                }
+        self.customNavigationBar.model = [result firstObject];
+        for (int i = 0; i < result.count; i++) {
+            if ([result objectAtIndex:i].remindMoney < [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
+                self.remindView.model = [result objectAtIndex:i];
+                [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+                break;
             }
         }
     } failure:^(NSError * _Nullable error) {

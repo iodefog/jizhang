@@ -65,6 +65,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     self.layer.borderWidth = borderWidth;
 }
 
+- (void)setCornerRadius:(CGFloat)cornerRadius {
+    self.layer.cornerRadius = cornerRadius;
+}
+
 - (void)setState:(SSJBorderButtonState)state {
     if (_state != state) {
         _state = state;
