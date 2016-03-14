@@ -370,7 +370,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if (self.motionSwitch.isOn) {
         if (!SSJIsUserLogined()) {
             [self.motionSwitch setOn:NO animated:YES];
-            
             __weak typeof(self) weakSelf = self;
             SSJAlertViewAction *registAction = [SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
                 SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
