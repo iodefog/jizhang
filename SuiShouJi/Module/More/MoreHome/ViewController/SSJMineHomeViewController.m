@@ -89,14 +89,21 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         if (SSJIsUserLogined()) {
-            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
-                weakSelf.header.nicknameLabel.text = item.realName;
-                [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:item.cicon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            NSString *iconStr;
+            if ([item.cicon hasPrefix:@"http"]) {
+                iconStr = item.cicon;
             }else{
+                iconStr = SSJImageURLWithAPI(item.cicon);
+            }
+            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
+                //三方登录
+                weakSelf.header.nicknameLabel.text = item.realName;
+            }else{
+                //手机号登陆
                 NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
                 weakSelf.header.nicknameLabel.text = phoneNum;
-                [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
             }
+            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
             weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";
