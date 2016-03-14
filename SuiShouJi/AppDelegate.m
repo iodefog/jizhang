@@ -256,7 +256,8 @@ NSDate *SCYEnterBackgroundTime() {
     [UMSocialData setAppKey:kUMAppKey];
     [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:@"http://1.9188.com/h5/jizhangApp/"];
     [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账，一种快速实现财务自由的方式～";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"";
+    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账，一种快速实现财务自由的方式～";
+    [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://1.9188.com/h5/jizhangApp/";
 //    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
 //                                              
 //                                         RedirectURL:SSJAppStoreAddress];
