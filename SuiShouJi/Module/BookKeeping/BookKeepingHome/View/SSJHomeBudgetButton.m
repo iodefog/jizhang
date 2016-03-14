@@ -77,6 +77,7 @@
     _model = model;
     if (_model == nil) {
         self.budgetWaveScaleView.hidden = YES;
+        self.addBudgetView.hidden = NO;
         self.budgetLabel.text = @"预算";
         [self.budgetLabel sizeToFit];
     }else{

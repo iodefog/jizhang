@@ -103,8 +103,6 @@
     } failure:^(NSError * _Nullable error) {
         NSLog(@"%@",error.localizedDescription);
     }];
-    self.navigationItem.rightBarButtonItem = self.rightBarButton;
-
 }
 
 - (void)viewDidLoad {
