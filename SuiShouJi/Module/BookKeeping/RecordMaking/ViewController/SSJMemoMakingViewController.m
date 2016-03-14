@@ -56,10 +56,10 @@
 
 -(UIView *)rightbuttonView{
     if (!_rightbuttonView) {
-        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
         UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        comfirmButton.frame = CGRectMake(0, 0, 22, 22);
+        [comfirmButton setBackgroundImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_rightbuttonView addSubview:comfirmButton];
     }
