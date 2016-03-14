@@ -26,7 +26,7 @@
 }
 
 -(void)layoutSubviews{
-    self.bearImage.size = CGSizeMake(320, 233);
+    self.bearImage.size = CGSizeMake(320, 284);
     self.bearImage.top = 10;
     self.bearImage.centerX = self.width / 2;
 
