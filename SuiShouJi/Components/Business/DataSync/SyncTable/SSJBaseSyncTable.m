@@ -35,18 +35,18 @@
     return nil;
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     return YES;
 }
 
-+ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db error:(NSError **)error {
-    int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
++ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
         *error = [db lastError];
         return nil;
     }
     
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, SSJCurrentSyncDataUserId()];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, userId];
     
     NSString *additionalCondition = [self queryRecordsForSyncAdditionalCondition];
     if (additionalCondition.length) {
@@ -75,8 +75,8 @@
     return syncRecords;
 }
 
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db error:(NSError **)error {
-    int64_t version = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
         *error = [db lastError];
         SSJPRINT(@">>>SSJ warning: invalid sync version");
@@ -88,7 +88,7 @@
         return NO;
     }
     
-    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], newVersion, version + 1, SSJCurrentSyncDataUserId()];
+    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], newVersion, version + 1, userId];
     NSString *additionalCondition = [self updateSyncVersionAdditionalCondition];
     if (additionalCondition.length) {
         [update appendFormat:@" and %@", additionalCondition];
@@ -103,7 +103,7 @@
     return success;
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db error:(NSError **)error {
++ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         if (![recordInfo isKindOfClass:[NSDictionary class]]) {
             *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
@@ -111,7 +111,7 @@
             return NO;
         }
         
-        if (![self shouldMergeRecord:recordInfo inDatabase:db error:error]) {
+        if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
             continue;
         }
         

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */; };
 		7D1D7F3A1C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */; };
 		7D1D7F401C85638A0001F72A /* SSJBudgetEditUnitTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F3F1C85638A0001F72A /* SSJBudgetEditUnitTextField.m */; };
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
@@ -45,6 +44,8 @@
 		7D768A761C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A751C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m */; };
 		7D768A791C96A1A900CB75B0 /* budget_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D768A771C96A1A900CB75B0 /* budget_delete@2x.png */; };
 		7D768A7A1C96A1A900CB75B0 /* budget_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */; };
+		7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
+		7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */; };
 		7D893F291C91144D00886995 /* budget_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F1F1C91144D00886995 /* budget_add@2x.png */; };
 		7D893F2A1C91144D00886995 /* budget_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F201C91144D00886995 /* budget_add@3x.png */; };
 		7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F211C91144D00886995 /* budget_left@2x.png */; };
@@ -541,8 +542,6 @@
 
 /* Begin PBXFileReference section */
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		7D09ECAD1C5B0FA200C85D8E /* SSJDataSyncHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSyncHelper.h; sourceTree = "<group>"; };
-		7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSyncHelper.m; sourceTree = "<group>"; };
 		7D1D7F381C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailMiddleTitleView.h; sourceTree = "<group>"; };
 		7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailMiddleTitleView.m; sourceTree = "<group>"; };
 		7D1D7F3E1C85638A0001F72A /* SSJBudgetEditUnitTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditUnitTextField.h; sourceTree = "<group>"; };
@@ -612,6 +611,10 @@
 		7D768A751C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailPeriodSwitchControl.m; sourceTree = "<group>"; };
 		7D768A771C96A1A900CB75B0 /* budget_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_delete@2x.png"; sourceTree = "<group>"; };
 		7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_delete@3x.png"; sourceTree = "<group>"; };
+		7D768A7B1C96C93A00CB75B0 /* SSJSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJSynchronizeTask.h; path = OtherTable/SSJSynchronizeTask.h; sourceTree = "<group>"; };
+		7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJSynchronizeTask.m; path = OtherTable/SSJSynchronizeTask.m; sourceTree = "<group>"; };
+		7D768A7E1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSynchronizeTaskQueue.h; sourceTree = "<group>"; };
+		7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSynchronizeTaskQueue.m; sourceTree = "<group>"; };
 		7D893F1F1C91144D00886995 /* budget_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@2x.png"; sourceTree = "<group>"; };
 		7D893F201C91144D00886995 /* budget_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@3x.png"; sourceTree = "<group>"; };
 		7D893F211C91144D00886995 /* budget_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_left@2x.png"; sourceTree = "<group>"; };
@@ -782,7 +785,6 @@
 		7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizeTask.m; sourceTree = "<group>"; };
 		7DE69B5F1C8D26E7001D31C1 /* SSJImageSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJImageSynchronizeTask.h; sourceTree = "<group>"; };
 		7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJImageSynchronizeTask.m; sourceTree = "<group>"; };
-		7DE69C231C8D698D001D31C1 /* SSJSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSynchronizeTask.h; sourceTree = "<group>"; };
 		7DE69C2B1C8EA84A001D31C1 /* SSJDatabaseUpgrader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseUpgrader.h; sourceTree = "<group>"; };
 		7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseUpgrader.m; sourceTree = "<group>"; };
 		7DE69C2F1C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYMotionEncryptionCircleLayer.h; sourceTree = "<group>"; };
@@ -1321,15 +1323,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7D09ECAC1C5B0F8300C85D8E /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				7D09ECAD1C5B0FA200C85D8E /* SSJDataSyncHelper.h */,
-				7D09ECAE1C5B0FA200C85D8E /* SSJDataSyncHelper.m */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
 		7D1D7F471C87EC550001F72A /* SSJRegularManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1391,16 +1384,18 @@
 		7D2B24011C3AA3AD009A74A8 /* DataSync */ = {
 			isa = PBXGroup;
 			children = (
-				7D09ECAC1C5B0F8300C85D8E /* Helper */,
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
-				7DE69C231C8D698D001D31C1 /* SSJSynchronizeTask.h */,
 				7D2B241A1C3E091B009A74A8 /* SSJDataSynchronizer.h */,
 				7D2B241B1C3E091B009A74A8 /* SSJDataSynchronizer.m */,
+				7D768A7B1C96C93A00CB75B0 /* SSJSynchronizeTask.h */,
+				7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */,
 				7DE3AD741C5F26D5009B2131 /* SSJDataSynchronizeTask.h */,
 				7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */,
 				7DE69B5F1C8D26E7001D31C1 /* SSJImageSynchronizeTask.h */,
 				7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */,
+				7D768A7E1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.h */,
+				7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */,
 			);
 			path = DataSync;
 			sourceTree = "<group>";
@@ -3706,6 +3701,7 @@
 				BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */,
 				BD78E4B51C905584003A1EE1 /* SSJSettingViewController.m in Sources */,
 				BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */,
+				7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */,
 				BD7BC8481C3A63A5001DE5D8 /* SSJFundingDetailItem.m in Sources */,
 				BDF5038F1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m in Sources */,
 				BD0433261C1A78B40051E7AB /* SSJScrollViewAddition.m in Sources */,
@@ -3720,6 +3716,7 @@
 				7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */,
 				7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */,
 				7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */,
+				7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */,
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
 				7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */,
 				7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
@@ -3774,7 +3771,6 @@
 				7DEF555C1C808B4800A90153 /* SSJBudgetConst.m in Sources */,
 				7DEF55451C7ED4A600A90153 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */,
-				7D09ECAF1C5B0FA200C85D8E /* SSJDataSyncHelper.m in Sources */,
 				7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,
 				BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarView.m in Sources */,

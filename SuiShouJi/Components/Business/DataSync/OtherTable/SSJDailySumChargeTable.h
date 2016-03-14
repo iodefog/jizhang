@@ -18,6 +18,6 @@
  *  @param db FMDatabase实例
  *  @return 是否更新成功
  */
-+ (BOOL)updateDailySumChargeInDatabase:(FMDatabase *)db;
++ (BOOL)updateDailySumChargeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 @end

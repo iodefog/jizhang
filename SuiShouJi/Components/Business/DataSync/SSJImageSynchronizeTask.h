@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "SSJSynchronizeTask.h"
 
-@interface SSJImageSynchronizeTask : NSObject <SSJSynchronizeTask>
+@interface SSJImageSynchronizeTask : SSJSynchronizeTask
 
 @end

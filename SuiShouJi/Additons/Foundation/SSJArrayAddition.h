@@ -16,3 +16,9 @@
 - (id)ssj_safeObjectAtIndex:(NSUInteger)index;
 
 @end
+
+@interface NSMutableArray (SSJCategory)
+
+- (void)ssj_removeFirstObject;
+
+@end

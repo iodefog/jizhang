@@ -56,6 +56,10 @@ extern NSString *const SSJErrorDomain;
 //  appstore地址
 extern NSString *const SSJAppStoreAddress;
 
+//  同步加密密钥字符串
+extern NSString *const SSJSyncPrivateKey;
+
+
 /** -------------------- KEY -------------------- */
 //上一次选择的资金账户类型
 extern NSString *const SSJLastSelectFundItemKey;
@@ -68,6 +72,7 @@ extern NSString *const SSJHaveLoginOrRegistKey;
 
 //是否进入过资金账户首页
 extern NSString *const SSJHaveEnterFundingHomeKey;
+
 
 /** --------------- Notification --------------- */
 //  数据同步成功通知

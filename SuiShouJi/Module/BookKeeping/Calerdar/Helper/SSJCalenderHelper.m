@@ -21,7 +21,7 @@
         failure(nil);
         return;
     }
-    NSString *dateStr = [NSString stringWithFormat:@"%04ld-%02ld-__",year,month];
+    NSString *dateStr = [NSString stringWithFormat:@"%04ld-%02ld-__",(long)year,(long)month];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         FMResultSet *resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", dateStr,userid];

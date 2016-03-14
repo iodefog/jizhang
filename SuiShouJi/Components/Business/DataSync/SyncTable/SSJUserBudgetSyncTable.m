@@ -22,9 +22,9 @@
     return @[@"ibid"];
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     //  查询当前用户的普通支出类型
-    FMResultSet *resultSet = [db executeQuery:@"select a.cbillid from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and b.istate <> 2 order by a.cbillid asc", SSJCurrentSyncDataUserId()];
+    FMResultSet *resultSet = [db executeQuery:@"select a.cbillid from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and b.istate <> 2 order by a.cbillid asc", userId];
     if (!resultSet) {
         *error = [db lastError];
         return NO;
@@ -50,7 +50,7 @@
     [resultSet close];
     
     //  查询本地是否有和预算类别、周期相同的记录，有的话保留修改时间较晚的
-    resultSet = [db executeQuery:@"select ibid, cwritedate from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbilltype = ?", SSJCurrentSyncDataUserId(), record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbilltype"]];
+    resultSet = [db executeQuery:@"select ibid, cwritedate from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbilltype = ?", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbilltype"]];
     if (!resultSet) {
         *error = [db lastError];
         return NO;

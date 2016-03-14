@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "SSJSynchronizeTask.h"
 
-@interface SSJDataSynchronizeTask : NSObject <SSJSynchronizeTask>
+@interface SSJDataSynchronizeTask : SSJSynchronizeTask
 
 @end

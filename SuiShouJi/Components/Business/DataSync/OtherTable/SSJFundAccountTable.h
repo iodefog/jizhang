@@ -18,6 +18,6 @@
  *  @param db FMDatabase实例
  *  @return 是否更新成功
  */
-+ (BOOL)updateBalanceInDatabase:(FMDatabase *)db;
++ (BOOL)updateBalanceForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 @end

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-#import "SSJDataSyncHelper.h"
 
 @interface SSJBaseSyncTable : NSObject
 
@@ -68,7 +67,7 @@
  *  @param record 要合并的记录数据
  *  @return (NSString *) 合并记录的其它条件
  */
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error;
++ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 ///----------------------------------
 /// @name 只能调用，子类不可覆写！！！
@@ -80,7 +79,7 @@
  *  @param db FMDatabase实例
  *  @return 需要同步的记录
  */
-+ (NSArray *)queryRecordsNeedToSyncInDatabase:(FMDatabase *)db error:(NSError **)error;
++ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  *  更新表中版本号大于当前同步版本号的记录的版本号
@@ -90,7 +89,7 @@
  *  @param db FMDatabase实例
  *  @return 是否更新成功
  */
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion inDatabase:(FMDatabase *)db error:(NSError **)error;
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  *  合并记录到相应的表中
@@ -98,6 +97,6 @@
  *  @param db FMDatabase实例
  *  @return 是否合并成功
  */
-+ (BOOL)mergeRecords:(NSArray *)records inDatabase:(FMDatabase *)db error:(NSError **)error;
++ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 @end

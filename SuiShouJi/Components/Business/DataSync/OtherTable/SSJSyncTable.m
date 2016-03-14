@@ -8,38 +8,21 @@
 
 #import "SSJSyncTable.h"
 #import "FMDB.h"
-#import "SSJDataSyncHelper.h"
 
 static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
 
 @implementation SSJSyncTable
 
-//+ (NSCache *)memoryCache {
-//    static NSCache *memoryCache = nil;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        if (!memoryCache) {
-//            memoryCache = [[NSCache alloc] init];
-//        }
-//    });
-//    return memoryCache;
-//}
-
-+ (int64_t)lastSuccessSyncVersionInDatabase:(FMDatabase *)db {
-    
-//    NSNumber *versionObj = [[self memoryCache] objectForKey:kSSJSuccessSyncVersionKey];
-//    if (versionObj) {
-//        return [versionObj longLongValue];
-//    }
++ (int64_t)lastSuccessSyncVersionForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     
     //  查询同步表中是否有当前用户的记录，没有就返回默认的版本号
-    if (![db intForQuery:@"select count(*) from BK_SYNC where type = 0 and cuserid = ?", SSJCurrentSyncDataUserId()]) {
+    if (![db intForQuery:@"select count(*) from BK_SYNC where type = 0 and cuserid = ?", userId]) {
 //        [[self memoryCache] setObject:@(SSJDefaultSyncVersion) forKey:kSSJSuccessSyncVersionKey];
         return SSJDefaultSyncVersion;
     }
     
     //  查询同步表中最大的同步成功版本号
-    FMResultSet *result = [db executeQuery:@"select max(VERSION) from BK_SYNC where TYPE = 0 and CUSERID = ?", SSJCurrentSyncDataUserId()];
+    FMResultSet *result = [db executeQuery:@"select max(VERSION) from BK_SYNC where TYPE = 0 and CUSERID = ?", userId];
     
     if (!result) {
         SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
@@ -55,8 +38,8 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     return version;
 }
 
-+ (BOOL)insertUnderwaySyncVersion:(int64_t)version inDatabase:(FMDatabase *)db {
-    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(version), SSJCurrentSyncDataUserId()]) {
++ (BOOL)insertUnderwaySyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(version), userId]) {
         return YES;
     }
     
@@ -64,8 +47,8 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     return NO;
 }
 
-+ (BOOL)insertSuccessSyncVersion:(int64_t)version inDatabase:(FMDatabase *)db {
-    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 0, ?)", @(version), SSJCurrentSyncDataUserId()]) {
++ (BOOL)insertSuccessSyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 0, ?)", @(version), userId]) {
 //        [[self memoryCache] setObject:@(version) forKey:kSSJSuccessSyncVersionKey];
         return YES;
     }

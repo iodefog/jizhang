@@ -40,14 +40,12 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 @implementation SSJDataSynchronizeTask
 
-@synthesize syncQueue;
-
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
     
     //  获取上次同步成功的版本号
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        self.lastSuccessSyncVersion = [SSJSyncTable lastSuccessSyncVersionInDatabase:db];
+        self.lastSuccessSyncVersion = [SSJSyncTable lastSuccessSyncVersionForUserId:self.userId inDatabase:db];
         if (self.lastSuccessSyncVersion == SSJ_INVALID_SYNC_VERSION) {
             tError = [db lastError];
         }
@@ -138,9 +136,10 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
                     //  合并数据完成后
-                    [SSJRegularManager supplementBookkeepingIfNeededForUserId:SSJCurrentSyncDataUserId()];
-                    [SSJRegularManager supplementBudgetIfNeededForUserId:SSJCurrentSyncDataUserId()];
+                    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
+                    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
                     if (success) {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
                         SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
                         success();
                     }
@@ -176,7 +175,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
         //  把当前同步的版本号插入到BK_SYNC表中
-        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) inDatabase:db]) {
+        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
             *error = [db lastError];
             return;
         }
@@ -185,7 +184,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
         for (Class syncTable in syncTableClasses) {
-            NSArray *syncRecords = [syncTable queryRecordsNeedToSyncInDatabase:db error:error];
+            NSArray *syncRecords = [syncTable queryRecordsNeedToSyncWithUserId:self.userId inDatabase:db error:error];
             if (syncRecords.count) {
                 [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
             }
@@ -239,12 +238,12 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }
     
     //  封装参数，传入请求头
-    NSString *userId = SSJCurrentSyncDataUserId();
+    NSString *userId = self.userId;
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     NSString *timestamp = [NSString stringWithFormat:@"%f", [NSDate date].timeIntervalSince1970];
     NSString *source = SSJDefaultSource();
     NSString *iversion = [NSString stringWithFormat:@"%lld", self.lastSuccessSyncVersion];
-    NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, timestamp, source, iversion, kSignKey] ssj_md5HexDigest];
+    NSString *signStr = [[NSString stringWithFormat:@"%@%@%@%@%@%@", userId, imei, timestamp, source, iversion, SSJSyncPrivateKey] ssj_md5HexDigest];
     
     NSDictionary *parameters = @{@"cuserId":userId,
                                  @"imei":imei,
@@ -293,7 +292,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     NSArray *userArr = tableInfo[@"bk_user"];
     for (NSDictionary *userInfo in userArr) {
         NSString *userId = userInfo[@"cuserid"];
-        if (![userId isEqualToString:SSJCurrentSyncDataUserId()]) {
+        if (![userId isEqualToString:self.userId]) {
             continue;
         }
         
@@ -311,13 +310,13 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     //  收支类型
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] inDatabase:db error:error]) {
+        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] forUserId:self.userId inDatabase:db error:error]) {
             *rollback = YES;
             mergeSuccess = NO;
             return;
         }
         
-        if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+        if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
             updateVersionSuccess = NO;
         }
     }];
@@ -328,13 +327,13 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     //  资金帐户
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] inDatabase:db error:error]) {
+        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] forUserId:self.userId inDatabase:db error:error]) {
             *rollback = YES;
             mergeSuccess = NO;
             return;
         }
         
-        if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+        if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
             updateVersionSuccess = NO;
         }
     }];
@@ -345,13 +344,13 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     //  定期记账
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_charge_period_config"] inDatabase:db error:error]) {
+        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_charge_period_config"] forUserId:self.userId inDatabase:db error:error]) {
             *rollback = YES;
             mergeSuccess = NO;
             return;
         }
         
-        if ([versinStr length] && ![SSJUserChargePeriodConfigSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+        if ([versinStr length] && ![SSJUserChargePeriodConfigSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
             updateVersionSuccess = NO;
         }
     }];
@@ -362,22 +361,22 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     //  记账流水
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"bk_user_charge"] inDatabase:db error:error]) {
+        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"bk_user_charge"] forUserId:self.userId inDatabase:db error:error]) {
             *rollback = YES;
             mergeSuccess = NO;
             return;
         }
         
         //  根据流水表计算资金帐户余额表和每日流水统计表
-        if (![SSJFundAccountTable updateBalanceInDatabase:db]
-            || ![SSJDailySumChargeTable updateDailySumChargeInDatabase:db]) {
+        if (![SSJFundAccountTable updateBalanceForUserId:self.userId inDatabase:db]
+            || ![SSJDailySumChargeTable updateDailySumChargeForUserId:self.userId inDatabase:db]) {
             *rollback = YES;
             mergeSuccess = NO;
             *error = [db lastError];
             return;
         }
         
-        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
             updateVersionSuccess = NO;
         }
     }];
@@ -388,13 +387,13 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     
     //  预算
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserBudgetSyncTable mergeRecords:tableInfo[@"bk_user_budget"] inDatabase:db error:error]) {
+        if (![SSJUserBudgetSyncTable mergeRecords:tableInfo[@"bk_user_budget"] forUserId:self.userId inDatabase:db error:error]) {
             *rollback = YES;
             mergeSuccess = NO;
             return;
         }
         
-        if ([versinStr length] && ![SSJUserBudgetSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] inDatabase:db error:error]) {
+        if ([versinStr length] && ![SSJUserBudgetSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
             updateVersionSuccess = NO;
         }
     }];
@@ -407,7 +406,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     if (updateVersionSuccess) {
         __block BOOL tSuccess = YES;
         [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-            tSuccess = [SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] inDatabase:db];
+            tSuccess = [SSJSyncTable insertSuccessSyncVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db];
         }];
         
         if (tSuccess) {

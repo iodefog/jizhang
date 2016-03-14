@@ -10,26 +10,72 @@
 #import "AFNetworking.h"
 #import "SSJDataSynchronizeTask.h"
 #import "SSJImageSynchronizeTask.h"
-#import "SSJDataSyncHelper.h"
+#import "SSJSynchronizeTaskQueue.h"
+
+@interface SSJSynchronizeBlock : NSObject
+
+@property (nonatomic, strong) NSMutableArray *blocks;
+
+- (void)addBlock:(nullable id)block;
+
+- (void)removeBlock;
+
+@end
+
+@implementation SSJSynchronizeBlock
+
++ (instancetype)block {
+    return [[self alloc] init];
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        self.blocks = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+- (void)addBlock:(nullable id)block {
+    if (!block) {
+        [self.blocks addObject:[NSNull null]];
+        return;
+    }
+    [self.blocks addObject:block];
+}
+
+- (nullable id)block {
+    if ([[self.blocks firstObject] isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
+    return [self.blocks firstObject];
+}
+
+- (void)removeBlock {
+    [self.blocks ssj_removeFirstObject];
+}
+
+@end
 
 //  定时同步时间间隔
 static NSTimeInterval kSyncInterval = 60 * 60;
 
 static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpecificKey;
 
-@interface SSJDataSynchronizer ()
-
-@property (nonatomic, strong) dispatch_queue_t syncQueue;
+@interface SSJDataSynchronizer () <SSJSynchronizeTaskQueueDelegate>
 
 @property (nonatomic, strong) NSTimer *timer;
 
-@property (nonatomic, strong) NSMutableArray *userIdsForSyncData;
+@property (nonatomic, strong) SSJSynchronizeTaskQueue *dataSyncQueue;
 
-@property (nonatomic, strong) NSMutableArray *userIdsForSyncImage;
+@property (nonatomic, strong) SSJSynchronizeTaskQueue *imageSyncQueue;
 
-@property (nonatomic, strong) SSJDataSynchronizeTask *dataSyncTask;
+@property (nonatomic, strong) SSJSynchronizeBlock *dataSuccessBlocks;
 
-@property (nonatomic, strong) SSJImageSynchronizeTask *imageSyncTask;
+@property (nonatomic, strong) SSJSynchronizeBlock *dataFailureBlocks;
+
+@property (nonatomic, strong) SSJSynchronizeBlock *imageSuccessBlocks;
+
+@property (nonatomic, strong) SSJSynchronizeBlock *imageFailureBlocks;
 
 @end
 
@@ -48,10 +94,17 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.userIdsForSyncData = [NSMutableArray array];
-        self.userIdsForSyncImage = [NSMutableArray array];
-        self.syncQueue = dispatch_queue_create("com.ShuiShouJi.SSJDataSync", DISPATCH_QUEUE_CONCURRENT);
-        dispatch_queue_set_specific(self.syncQueue, kSSJDataSynchronizerSpecificKey, (__bridge void *)self, NULL);
+        self.dataSuccessBlocks = [[SSJSynchronizeBlock alloc] init];
+        self.dataFailureBlocks = [[SSJSynchronizeBlock alloc] init];
+        
+        self.imageSuccessBlocks = [[SSJSynchronizeBlock alloc] init];
+        self.imageFailureBlocks = [[SSJSynchronizeBlock alloc] init];
+        
+        self.dataSyncQueue = [[SSJSynchronizeTaskQueue alloc] initWithLabel:"com.9188.jizhang.dataSyncQueue"];
+        self.dataSyncQueue.delegate = self;
+        
+        self.imageSyncQueue = [[SSJSynchronizeTaskQueue alloc] initWithLabel:"com.9188.jizhang.imageSyncQueue"];
+        self.imageSyncQueue.delegate = self;
     }
     return self;
 }
@@ -76,109 +129,81 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    //  开始同步前保存当前的用户id，防止同步过程中userid被修改导致同步数据错乱
-    [self.userIdsForSyncData addObject:SSJUSERID()];
-    [self.userIdsForSyncImage addObject:SSJUSERID()];
+    [self.dataSuccessBlocks addBlock:success];
+    [self.dataFailureBlocks addBlock:failure];
     
-    SSJDataSynchronizer *currentSynchronizer = (__bridge id)dispatch_get_specific(kSSJDataSynchronizerSpecificKey);
-    if (currentSynchronizer == self) {
-        [self startSyncDataWithSuccessIfNeeded:success failure:failure];
-        [self startSyncImageWithSuccessIfNeeded:success failure:failure];
-    } else {
-        dispatch_async(self.syncQueue, ^{
-            [self startSyncDataWithSuccessIfNeeded:success failure:failure];
-            [self startSyncImageWithSuccessIfNeeded:success failure:failure];
-        });
-    }
+    [self.imageSuccessBlocks addBlock:success];
+    [self.imageFailureBlocks addBlock:failure];
+    
+    [self.dataSyncQueue addTask:[SSJDataSynchronizeTask task]];
+    [self.imageSyncQueue addTask:[SSJImageSynchronizeTask task]];
 }
 
-- (void)startSyncDataWithSuccessIfNeeded:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    if (self.userIdsForSyncData.count == 0) {
-        return;
-    }
-    
-    if (self.dataSyncTask) {
-        return;
-    }
-    
-    SSJSetCurrentSyncDataUserId([self.userIdsForSyncData firstObject]);
-    
-    self.dataSyncTask = [[SSJDataSynchronizeTask alloc] init];
-    self.dataSyncTask.syncQueue = self.syncQueue;
-    [self.dataSyncTask startSyncWithSuccess:^{
-        
+#pragma mark - SSJSynchronizeTaskQueueDelegate
+- (void)synchronizeTaskQueue:(SSJSynchronizeTaskQueue *)queue successToFinishTask:(SSJSynchronizeTask *)task {
+    //  数据同步成功
+    if (self.dataSyncQueue == queue) {
         SSJDispatch_main_async_safe(^{
+            void (^success)() = [self.dataSuccessBlocks block];
             if (success) {
                 success();
             }
+            [self.dataSuccessBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
 #ifdef DEBUG
             [CDAutoHideMessageHUD showMessage:@"数据同步成功"];
 #endif
         });
         
-        self.dataSyncTask = nil;
-        [self.userIdsForSyncData removeObjectAtIndex:0];
-        [self startSyncDataWithSuccessIfNeeded:success failure:failure];
-    } failure:^(NSError *error) {
-        
-        SSJDispatch_main_async_safe(^{
-            if (failure) {
-                failure(error);
-            }
-#ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:@"数据同步失败"];
-#endif
-        });
-        
-        self.dataSyncTask = nil;
-        [self.userIdsForSyncData removeObjectAtIndex:0];
-        [self startSyncDataWithSuccessIfNeeded:success failure:failure];
-    }];
-}
-
-- (void)startSyncImageWithSuccessIfNeeded:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    if (self.userIdsForSyncImage.count == 0) {
         return;
     }
     
-    if (self.imageSyncTask) {
-        return;
-    }
-    
-    SSJSetCurrentSyncImageUserId([self.userIdsForSyncImage firstObject]);
-    
-    self.imageSyncTask = [[SSJImageSynchronizeTask alloc] init];
-    self.imageSyncTask.syncQueue = self.syncQueue;
-    [self.imageSyncTask startSyncWithSuccess:^{
-        
+    //  图片同步成功
+    if (self.imageSyncQueue == queue) {
         SSJDispatch_main_async_safe(^{
+            void (^success)() = [self.imageSuccessBlocks block];
             if (success) {
                 success();
             }
+            [self.imageSuccessBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncImageSuccessNotification object:self];
 #ifdef DEBUG
             [CDAutoHideMessageHUD showMessage:@"图片同步成功"];
 #endif
         });
-        
-        self.imageSyncTask = nil;
-        [self.userIdsForSyncImage removeObjectAtIndex:0];
-        [self startSyncImageWithSuccessIfNeeded:success failure:failure];
-    } failure:^(NSError *error) {
-        
-        SSJDispatch_main_async_safe(^{
+    }
+}
+
+- (void)synchronizeTaskQueue:(SSJSynchronizeTaskQueue *)queue failToFinishTask:(SSJSynchronizeTask *)task error:(NSError *)error {
+    //  数据同步失败
+    if (self.dataSyncQueue == queue) {
+        SSJDispatchMainAsync(^{
+            void (^failure)() = [self.dataFailureBlocks block];
             if (failure) {
                 failure(error);
             }
+            [self.dataFailureBlocks removeBlock];
+            
 #ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:@"图片同步失败"];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
 #endif
         });
-        
-        self.imageSyncTask = nil;
-        [self startSyncImageWithSuccessIfNeeded:success failure:failure];
-    }];
+        return;
+    }
+    
+    //  图片同步失败
+    if (self.imageSyncQueue == queue) {
+        SSJDispatchMainAsync(^{
+            void (^failure)() = [self.imageFailureBlocks block];
+            if (failure) {
+                failure(error);
+            }
+            [self.imageFailureBlocks removeBlock];
+#ifdef DEBUG
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"图片同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+#endif
+        });
+    }
 }
 
 @end

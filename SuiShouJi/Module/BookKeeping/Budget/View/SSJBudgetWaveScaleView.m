@@ -31,7 +31,7 @@
         
         self.waveIndicator = [[WaveLoadingIndicator alloc] init];
         self.waveIndicator.isShowProgressText = NO;
-        self.waveIndicator.waveAmplitude = 1;
+        self.waveIndicator.waveAmplitude = 10;
         [self addSubview:self.waveIndicator];
         
         self.fullView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_wave_full"]];

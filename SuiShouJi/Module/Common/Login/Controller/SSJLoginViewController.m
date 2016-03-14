@@ -189,8 +189,8 @@ static NSString *const KQQAppKey = @"1105133385";
     
     //  merge登陆接口返回的收支类型和资金帐户
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray inDatabase:db error:&error];
-        userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray inDatabase:db error:&error];
+        fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:&error];
+        userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:&error];
         if (!userBillSuccess || !fundInfoSuccess) {
             *rollback = YES;
             return;

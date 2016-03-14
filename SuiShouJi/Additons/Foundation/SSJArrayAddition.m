@@ -31,3 +31,13 @@
 }
 
 @end
+
+@implementation NSMutableArray (SSJCategory)
+
+- (void)ssj_removeFirstObject {
+    if (self.count > 0) {
+        [self removeObjectAtIndex:0];
+    }
+}
+
+@end
