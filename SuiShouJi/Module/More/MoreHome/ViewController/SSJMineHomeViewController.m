@@ -165,14 +165,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
-    //  手势密码
-    if ([title isEqualToString:kTitle1]) {
-        SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-        [self.navigationController pushViewController:motionVC animated:YES];
-        return;
-    }
-    
     //  给个好评
     if ([title isEqualToString:kTitle6]) {
         NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];

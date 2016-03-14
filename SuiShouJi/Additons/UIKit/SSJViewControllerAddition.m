@@ -120,4 +120,28 @@ static const void *kBackControllerKey = &kBackControllerKey;
     return nil;
 }
 
+- (UIViewController *)ssj_previousViewControllerBySubtractingIndex:(NSInteger)index {
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    if (viewControllers.count > 1) {
+        NSUInteger currentIndex = [viewControllers indexOfObject:self];
+        if (currentIndex != NSNotFound && currentIndex >= index) {
+            return [viewControllers objectAtIndex:(currentIndex - index)];
+        }
+    }
+    
+    return nil;
+}
+
+- (UIViewController *)ssj_nextViewControllerByAddingIndex:(NSInteger)index {
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    if (viewControllers.count > 1) {
+        NSUInteger currentIndex = [viewControllers indexOfObject:self];
+        if (currentIndex != NSNotFound && currentIndex + index < viewControllers.count) {
+            return [viewControllers objectAtIndex:(currentIndex + index)];
+        }
+    }
+    
+    return nil;
+}
+
 @end

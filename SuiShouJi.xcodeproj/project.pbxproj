@@ -43,6 +43,8 @@
 		7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */; };
 		7D768A731C926B6600CB75B0 /* SSJBorderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A721C926B6600CB75B0 /* SSJBorderButton.m */; };
 		7D768A761C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A751C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m */; };
+		7D768A791C96A1A900CB75B0 /* budget_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D768A771C96A1A900CB75B0 /* budget_delete@2x.png */; };
+		7D768A7A1C96A1A900CB75B0 /* budget_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */; };
 		7D893F291C91144D00886995 /* budget_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F1F1C91144D00886995 /* budget_add@2x.png */; };
 		7D893F2A1C91144D00886995 /* budget_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F201C91144D00886995 /* budget_add@3x.png */; };
 		7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F211C91144D00886995 /* budget_left@2x.png */; };
@@ -608,6 +610,8 @@
 		7D768A721C926B6600CB75B0 /* SSJBorderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBorderButton.m; sourceTree = "<group>"; };
 		7D768A741C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailPeriodSwitchControl.h; sourceTree = "<group>"; };
 		7D768A751C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailPeriodSwitchControl.m; sourceTree = "<group>"; };
+		7D768A771C96A1A900CB75B0 /* budget_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_delete@2x.png"; sourceTree = "<group>"; };
+		7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_delete@3x.png"; sourceTree = "<group>"; };
 		7D893F1F1C91144D00886995 /* budget_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@2x.png"; sourceTree = "<group>"; };
 		7D893F201C91144D00886995 /* budget_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@3x.png"; sourceTree = "<group>"; };
 		7D893F211C91144D00886995 /* budget_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_left@2x.png"; sourceTree = "<group>"; };
@@ -1578,6 +1582,8 @@
 		7D893F1E1C91144D00886995 /* budget */ = {
 			isa = PBXGroup;
 			children = (
+				7D768A771C96A1A900CB75B0 /* budget_delete@2x.png */,
+				7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */,
 				7DA4ACB31C919F38004E39E8 /* budget_wave_full@2x.png */,
 				7DA4ACB41C919F38004E39E8 /* budget_wave_full@3x.png */,
 				7DA4ACAF1C918F57004E39E8 /* budget_no_data@2x.png */,
@@ -3274,6 +3280,7 @@
 				BDFBDAC51C7EB0E80049F179 /* bt_baby@2x.png in Resources */,
 				7DF8DEDA1C59BFE700CC5DFA /* guide_2@3x.png in Resources */,
 				BD37D2DA1C523AE00050BDAA /* bt_calender@3x.png in Resources */,
+				7D768A791C96A1A900CB75B0 /* budget_delete@2x.png in Resources */,
 				BDF5109C1C925E5C00A49D74 /* home_remind@3x.png in Resources */,
 				BD78E4AA1C8FE952003A1EE1 /* more_qq@3x.png in Resources */,
 				7DE69C571C8EDF34001D31C1 /* motion_circle_correct@3x.png in Resources */,
@@ -3535,6 +3542,7 @@
 				7DD7D6C61C4C8E6A00ACE71A /* bt_pingzhangzhichu@2x.png in Resources */,
 				7DD7D7261C4C8E6A00ACE71A /* tab_founds_nor@2x.png in Resources */,
 				7DD7D6971C4C8E6A00ACE71A /* bt_daikuan@3x.png in Resources */,
+				7D768A7A1C96A1A900CB75B0 /* budget_delete@3x.png in Resources */,
 				BDF510941C925BB500A49D74 /* homesaperater@2x.png in Resources */,
 				7DD7D6F81C4C8E6A00ACE71A /* edit@2x.png in Resources */,
 				7DD7D6D61C4C8E6A00ACE71A /* bt_snack@2x.png in Resources */,

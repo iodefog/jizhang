@@ -18,10 +18,14 @@ typedef NS_ENUM(NSUInteger, SSJBorderButtonState) {
 
 @interface SSJBorderButton : UIView
 
+//  title字体大小
 @property (nonatomic) CGFloat fontSize;
 
 //  default 1
 @property (nonatomic) CGFloat borderWidth;
+
+//  圆角弧度半径
+@property (nonatomic) CGFloat cornerRadius;
 
 //  default SSJBorderButtonStateNormal
 @property (readonly, nonatomic) SSJBorderButtonState state;

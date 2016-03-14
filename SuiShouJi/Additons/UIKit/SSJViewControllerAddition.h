@@ -36,11 +36,15 @@
 /**
  *  导航栏栈中的下一个控制器
  */
-- (UIViewController *)ssj_nextViewController;
+- (__kindof UIViewController *)ssj_nextViewController;
 
 /**
  *  导航栏栈中的上一个控制器
  */
-- (UIViewController *)ssj_previousViewController;
+- (__kindof UIViewController *)ssj_previousViewController;
+
+- (__kindof UIViewController *)ssj_previousViewControllerBySubtractingIndex:(NSInteger)index;
+
+- (__kindof UIViewController *)ssj_nextViewControllerByAddingIndex:(NSInteger)index;
 
 @end
