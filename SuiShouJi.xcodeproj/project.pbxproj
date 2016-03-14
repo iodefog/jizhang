@@ -317,6 +317,7 @@
 		BD0E43F71C21365100F9179D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FD1C216C7600F9179D /* SSJRecordMakingViewController.m */; };
+		BD1EE5EE1C965B0F00814A05 /* SSJCalenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */; };
 		BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */; };
 		BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */; };
@@ -979,6 +980,8 @@
 		BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		BD0E43FC1C216C7600F9179D /* SSJRecordMakingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingViewController.h; sourceTree = "<group>"; };
 		BD0E43FD1C216C7600F9179D /* SSJRecordMakingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingViewController.m; sourceTree = "<group>"; };
+		BD1EE5EC1C965B0F00814A05 /* SSJCalenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderHelper.h; sourceTree = "<group>"; };
+		BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderHelper.m; sourceTree = "<group>"; };
 		BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
 		BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHeader.m; sourceTree = "<group>"; };
 		BD33FD271C4B2E4C006A6942 /* SSJAlertViewAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewAction.h; sourceTree = "<group>"; };
@@ -2597,6 +2600,15 @@
 			path = security;
 			sourceTree = "<group>";
 		};
+		BD1EE5E81C965ACC00814A05 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				BD1EE5EC1C965B0F00814A05 /* SSJCalenderHelper.h */,
+				BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		BD33FD261C4B2E4C006A6942 /* SSJAlertViewAdapter */ = {
 			isa = PBXGroup;
 			children = (
@@ -3021,6 +3033,7 @@
 		BDD78AF01C1EE71700C7EE0E /* Calerdar */ = {
 			isa = PBXGroup;
 			children = (
+				BD1EE5E81C965ACC00814A05 /* Helper */,
 				BDD78AF11C1EE71700C7EE0E /* Model */,
 				BDD78AF21C1EE71700C7EE0E /* Network */,
 				BDD78AF31C1EE71700C7EE0E /* View */,
@@ -3804,6 +3817,7 @@
 				BD37D2D21C5216130050BDAA /* SSJSyncSettingTableViewCell.m in Sources */,
 				BD4934341C34F86700300D43 /* SSJMineHomeTableViewHeader.m in Sources */,
 				BD976FB41C4F246900B0E26D /* SSJCalenderDetailCell.m in Sources */,
+				BD1EE5EE1C965B0F00814A05 /* SSJCalenderHelper.m in Sources */,
 				9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				BDF510AF1C92DA8500A49D74 /* SSJCalenderCellItem.m in Sources */,

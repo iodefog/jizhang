@@ -31,11 +31,13 @@
         _marginForvertical = (self.height - 35*7) / 14;
         _weekArray = [NSArray arrayWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六",  nil];
         [self addSubview:self.calendar];
+        [self getCurrentDate];
         [self.calendar registerClass:[SSJCalendarCollectionViewCell class] forCellWithReuseIdentifier:@"NormalCell"];
         if ([self.selectDateStr isEqualToString:@""] || self.selectDateStr == nil) {
             self.selectDateStr = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+            _year = _currentYear;
+            _month = _currentMonth;
         }
-        [self getCurrentDate];
         [self getItems];
     }
     return self;

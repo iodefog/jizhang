@@ -18,7 +18,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self.contentView addSubview:self.dateLabel];
-        [self.contentView addSubview:self.starImage];
+//        [self.contentView addSubview:self.starImage];
         self.isSelected = NO;
         self.layer.cornerRadius = self.height / 2;
     }
@@ -121,20 +121,6 @@
     }
 }
 
--(void)getHaveRecordOrNot{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        BOOL haveRecordOrNot = [db intForQuery:@"select * from BK_USER_CHARGE where CBILLDATE = ? and CUSERID = ? and OPERATORTYPE <> 2",weakSelf.item.dateStr,SSJUSERID()];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (haveRecordOrNot) {
-                weakSelf.starImage.hidden = YES;
-            }else{
-                weakSelf.starImage.hidden = NO;
-            }
-        });
-    }];
-}
 
 
 @end

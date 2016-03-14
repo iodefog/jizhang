@@ -284,6 +284,18 @@
     }];
 }
 
+//-(void)getHaveRecordOrNotForDate:(NSString *)date WithSuccess:(void(^)(bool result))success
+//                         failure:(void (^)(NSError * _Nullable error))failure{
+//    __weak typeof(self) weakSelf = self;
+//    [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db) {
+//        BOOL haveRecordOrNot = [db intForQuery:@"select * from BK_USER_CHARGE where CBILLDATE = ? and CUSERID = ? and OPERATORTYPE <> 2",date,SSJUSERID()];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            
+//        });
+//    }];
+//}
+
+
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];
 }
