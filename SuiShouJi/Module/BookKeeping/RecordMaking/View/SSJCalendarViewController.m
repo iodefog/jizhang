@@ -31,6 +31,7 @@
 @property (nonatomic,strong) UILabel *secondLineLabel;
 @property (nonatomic,strong) UIButton *recordMakingButton;
 @property (nonatomic,strong) NSMutableArray *items;
+@property (nonatomic,strong) NSString *selectDate;
 
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
@@ -164,11 +165,13 @@
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
+        [_calendarView reloadCalender];
         __weak typeof(self) weakSelf = self;
-        _calendarView.DateSelectedBlock = ^(long year , long month ,long day){
+        _calendarView.DateSelectedBlock = ^(long year , long month ,long day ,  NSString *selectDate){
             weakSelf.selectedYear = year;
             weakSelf.selectedMonth = month ;
             weakSelf.selectedDay = day;
+            weakSelf.selectDate = selectDate;
             [weakSelf getDataFromDateBase];
             [weakSelf.view setNeedsLayout];
         };
@@ -227,7 +230,7 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView.calendar reloadData];
+    [self.calendarView reloadCalender];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -241,12 +244,12 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView.calendar reloadData];
+    [self.calendarView reloadCalender];
 }
 
 -(void)getDataFromDateBase{
     __weak typeof(self) weakSelf = self;
-     __block NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+     __block NSString *selectDate = self.selectDate;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
         FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
@@ -280,6 +283,18 @@
         });
     }];
 }
+
+//-(void)getHaveRecordOrNotForDate:(NSString *)date WithSuccess:(void(^)(bool result))success
+//                         failure:(void (^)(NSError * _Nullable error))failure{
+//    __weak typeof(self) weakSelf = self;
+//    [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db) {
+//        BOOL haveRecordOrNot = [db intForQuery:@"select * from BK_USER_CHARGE where CBILLDATE = ? and CUSERID = ? and OPERATORTYPE <> 2",date,SSJUSERID()];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            
+//        });
+//    }];
+//}
+
 
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];

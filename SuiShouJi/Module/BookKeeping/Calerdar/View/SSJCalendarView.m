@@ -9,8 +9,9 @@
 #import "SSJCalendarView.h"
 #import "SSJCalendarCollectionViewCell.h"
 
-@interface SSJCalendarView()
 
+@interface SSJCalendarView()
+@property (nonatomic,strong) NSMutableArray *items;
 @end
 
 @implementation SSJCalendarView{
@@ -30,8 +31,14 @@
         _marginForvertical = (self.height - 35*7) / 14;
         _weekArray = [NSArray arrayWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六",  nil];
         [self addSubview:self.calendar];
-        [self.calendar registerClass:[SSJCalendarCollectionViewCell class] forCellWithReuseIdentifier:@"NormalCell"];
         [self getCurrentDate];
+        [self.calendar registerClass:[SSJCalendarCollectionViewCell class] forCellWithReuseIdentifier:@"NormalCell"];
+        if ([self.selectDateStr isEqualToString:@""] || self.selectDateStr == nil) {
+            self.selectDateStr = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+            _year = _currentYear;
+            _month = _currentMonth;
+        }
+        [self getItems];
     }
     return self;
 }
@@ -77,58 +84,61 @@
 
 //返回cell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < 7) {
-        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-        cell.currentDay = [_weekArray objectAtIndex:indexPath.row];
-        cell.selectable = NO;
-        cell.isSelected = NO;
-        return cell;
-    }
-    if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
-        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-        cell.currentDay = @"";
-        cell.selectable = NO;
-        cell.isSelected = NO;
-        return cell;
-    }else{
-        if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
-            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-            cell.currentDay = @"";
-            cell.selectable = NO;
-            cell.isSelected = NO;
-            return cell;
-        }else{
-            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-            cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
-            if (_year > _currentYear) {
-                cell.selectable = NO;
-                cell.iscurrentDay = NO;
-                cell.isSelected = NO;
-            }else if (_year == _currentYear && _month > _currentMonth){
-                cell.selectable = NO;
-                cell.iscurrentDay = NO;
-                cell.isSelected = NO;
-            }else if ([cell.currentDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
-                cell.selectable = NO;
-                cell.iscurrentDay = NO;
-                cell.isSelected = NO;
-            }else{
-                if ([cell.currentDay integerValue] == _currentDay && _year == _currentYear && _month == _currentMonth) {
-                    cell.selectable = YES;
-                    cell.iscurrentDay = YES;
-                }else if([cell.currentDay integerValue] == self.day && _year == self.selectedYear && _month == self.selectedMonth){
-                    cell.selectable = YES;
-                    cell.iscurrentDay = NO;
-                    cell.isSelected = YES;
-                }else{
-                    cell.selectable = YES;
-                    cell.iscurrentDay = NO;
-                    cell.isSelected = NO;
-                }
-            }
-            return cell;
-        }
-    }
+    SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+    cell.item = [self.items objectAtIndex:indexPath.row];
+//    if (indexPath.row < 7) {
+//        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+//        cell.currentDay = [_weekArray objectAtIndex:indexPath.row];
+//        cell.selectable = NO;
+//        cell.isSelected = NO;
+//        return cell;
+//    }
+//    if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
+//        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+//        cell.currentDay = @"";
+//        cell.selectable = NO;
+//        cell.isSelected = NO;
+//        return cell;
+//    }else{
+//        if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
+//            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+//            cell.currentDay = @"";
+//            cell.selectable = NO;
+//            cell.isSelected = NO;
+//            return cell;
+//        }else{
+//            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
+//            cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
+//            if (_year > _currentYear) {
+//                cell.selectable = NO;
+//                cell.iscurrentDay = NO;
+//                cell.isSelected = NO;
+//            }else if (_year == _currentYear && _month > _currentMonth){
+//                cell.selectable = NO;
+//                cell.iscurrentDay = NO;
+//                cell.isSelected = NO;
+//            }else if ([cell.currentDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
+//                cell.selectable = NO;
+//                cell.iscurrentDay = NO;
+//                cell.isSelected = NO;
+//            }else{
+//                if ([cell.currentDay integerValue] == _currentDay && _year == _currentYear && _month == _currentMonth) {
+//                    cell.selectable = YES;
+//                    cell.iscurrentDay = YES;
+//                }else if([cell.currentDay integerValue] == self.day && _year == self.selectedYear && _month == self.selectedMonth){
+//                    cell.selectable = YES;
+//                    cell.iscurrentDay = NO;
+//                    cell.isSelected = YES;
+//                }else{
+//                    cell.selectable = YES;
+//                    cell.iscurrentDay = NO;
+//                    cell.isSelected = NO;
+//                }
+//            }
+//            return cell;
+//        }
+//    }
+    return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -145,19 +155,24 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCalendarCollectionViewCell *cell = (SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-    if (cell.isSelected == NO) {
-        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
-            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
-        }
-        cell.isSelected = YES;
-        if (self.DateSelectedBlock) {
-            self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).currentDay integerValue]);
-        }
-    }else{
-        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
-            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
-        }
+    self.selectDateStr = cell.item.dateStr;
+    if (self.DateSelectedBlock) {
+        self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).currentDay integerValue],cell.item.dateStr);
     }
+    [self reloadCalender];
+//    if (cell.isSelected == NO) {
+//        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
+//            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
+//        }
+//        cell.isSelected = YES;
+//        if (self.DateSelectedBlock) {
+//            self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).currentDay integerValue]);
+//        }
+//    }else{
+//        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
+//            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
+//        }
+//    }
 }
 
 #pragma mark - Private
@@ -239,6 +254,83 @@
     _currentMonth = [dateComponent month];
 }
 
+-(void)getItems{
+    self.items = [[NSMutableArray alloc]initWithCapacity:0];
+    NSString *currentDateStr = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+    for (int i = 0; i < 49; i++) {
+        SSJCalenderCellItem *item = [[SSJCalenderCellItem alloc]init];
+        if (i < 7) {
+            item.dateStr = [_weekArray objectAtIndex:i];
+            item.backGroundColor = @"FFFFFF";
+            item.titleColor = @"e7e7e7";
+            item.isSelectable = NO;
+            [self.items addObject:item];
+        }else if (i < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1){
+            item.dateStr = @"";
+            item.backGroundColor = @"FFFFFF";
+            item.titleColor = @"e7e7e7";
+            item.isSelectable = NO;
+            [self.items addObject:item];
+        }else if(i > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5){
+            item.dateStr = @"";
+            item.backGroundColor = @"FFFFFF";
+            item.titleColor = @"e7e7e7";
+            item.isSelectable = NO;
+            [self.items addObject:item];
+        }else{
+            NSString *cellDay = [[NSString alloc] initWithFormat:@"%ld",i - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
+            item.dateStr = [NSString stringWithFormat:@"%ld-%02ld-%02d",self.year,self.month,[cellDay intValue]];
+            if (_year > _currentYear) {
+                item.backGroundColor = @"FFFFFF";
+                item.titleColor = @"e7e7e7";
+                item.isSelectable = NO;
+                [self.items addObject:item];
+            }else if (_year == _currentYear && _month > _currentMonth){
+                item.backGroundColor = @"FFFFFF";
+                item.titleColor = @"e7e7e7";
+                item.isSelectable = NO;
+                [self.items addObject:item];
+            }else if ([cellDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
+                item.backGroundColor = @"FFFFFF";
+                item.titleColor = @"e7e7e7";
+                item.isSelectable = NO;
+                [self.items addObject:item];
+            }else{
+                if ([item.dateStr isEqualToString:self.selectDateStr]) {
+                    if ([item.dateStr isEqualToString:currentDateStr]) {
+                        item.backGroundColor = @"47cfbe";
+                        item.titleColor = @"FFFFFF";
+                        item.isSelectable = YES;
+                        [self.items addObject:item];
+                    }else{
+                        item.backGroundColor = @"cccccc";
+                        item.titleColor = @"FFFFFF";
+                        item.isSelectable = YES;
+                        [self.items addObject:item];
+                    }
+                }else{
+                    if ([item.dateStr isEqualToString:currentDateStr]) {
+                        item.backGroundColor = @"FFFFFF";
+                        item.titleColor = @"47cfbe";
+                        item.isSelectable = YES;
+                        [self.items addObject:item];
+                    }else{
+                        item.backGroundColor = @"FFFFFF";
+                        item.titleColor = @"393939";
+                        item.isSelectable = YES;
+                        [self.items addObject:item];
+                    }
+                }
+            }
+        }
+    }
+}
+
+-(void)reloadCalender{
+    [self getCurrentDate];
+    [self getItems];
+    [self.calendar reloadData];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

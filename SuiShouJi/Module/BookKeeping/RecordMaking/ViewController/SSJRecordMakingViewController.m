@@ -365,7 +365,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
         __weak typeof(self) weakSelf = self;
-        _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day){
+        _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
             weakSelf.selectedDay = day;
             weakSelf.selectedMonth = month;
             weakSelf.selectedYear = year;

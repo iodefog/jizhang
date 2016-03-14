@@ -104,9 +104,17 @@
     return 50;
 }
 
--(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return [_titleArray objectAtIndex:row];
+//-(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+//{
+//    return [_titleArray objectAtIndex:row];
+//}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel *label = [[UILabel alloc]init];
+    label.text = [_titleArray objectAtIndex:row];
+    label.font = [UIFont systemFontOfSize:18];
+    [label sizeToFit];
+    return label;
 }
 
 -(void)closeButtonClicked:(id)sender{
