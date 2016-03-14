@@ -16,6 +16,7 @@
 @property (nonatomic) long day;
 @property (nonatomic)long selectedYear;
 @property (nonatomic)long selectedMonth;
+@property (nonatomic,strong) NSString *selectDateStr;
 @property (nonatomic,strong)UICollectionView *calendar;
 
 //选中日期的回调
@@ -25,4 +26,5 @@ typedef void (^DateSelectedBlock)(long year , long month ,long day);
 
 - (CGFloat)viewHeight;
 
+-(void)reloadCalender;
 @end

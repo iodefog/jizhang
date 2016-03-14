@@ -60,11 +60,11 @@
     self.bottomlineView.centerX = self.centerX;
     self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
     self.expentureMemoLabel.leftTop = CGPointMake(self.expenditureLabel.left, self.expenditureLabel.bottom + 5);
-    self.IncomeImage.left = self.categoryImageButton.right + 10;
     self.IncomeImage.size =CGSizeMake(35, 35);
+    self.IncomeImage.left = self.categoryImageButton.right + 10;
     self.IncomeImage.centerY = self.height / 2;
-    self.expentureImage.right = self.categoryImageButton.left - 10;
     self.expentureImage.size =CGSizeMake(35, 35);
+    self.expentureImage.right = self.categoryImageButton.left - 10;
     self.expentureImage.centerY = self.height / 2;
     if (_isEdite == YES) {
         self.editeButton.frame = self.categoryImageButton.frame;

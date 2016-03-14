@@ -164,6 +164,7 @@
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
+        [_calendarView reloadCalender];
         __weak typeof(self) weakSelf = self;
         _calendarView.DateSelectedBlock = ^(long year , long month ,long day){
             weakSelf.selectedYear = year;
@@ -227,7 +228,7 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView.calendar reloadData];
+    [self.calendarView reloadCalender];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -241,7 +242,7 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView.calendar reloadData];
+    [self.calendarView reloadCalender];
 }
 
 -(void)getDataFromDateBase{

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJCalenderCellItem.h"
 
 @interface SSJCalendarCollectionViewCell : UICollectionViewCell
 @property(nonatomic,strong)NSString *currentDay;
@@ -14,4 +15,5 @@
 @property (nonatomic) BOOL isSelected;
 @property (nonatomic) BOOL iscurrentDay;
 @property(nonatomic) BOOL selectable;
+@property (nonatomic,strong) SSJCalenderCellItem *item;
 @end

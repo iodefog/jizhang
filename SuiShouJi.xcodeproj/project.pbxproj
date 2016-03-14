@@ -506,6 +506,9 @@
 		BDF5109C1C925E5C00A49D74 /* home_remind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF5109B1C925E5C00A49D74 /* home_remind@3x.png */; };
 		BDF5109E1C92602A00A49D74 /* remind_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF5109D1C92602A00A49D74 /* remind_close@2x.png */; };
 		BDF510A01C92604500A49D74 /* remind_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF5109F1C92604500A49D74 /* remind_close@3x.png */; };
+		BDF510AF1C92DA8500A49D74 /* SSJCalenderCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF510AE1C92DA8500A49D74 /* SSJCalenderCellItem.m */; };
+		BDF510B11C92E78C00A49D74 /* calender_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF510B01C92E78C00A49D74 /* calender_star@2x.png */; };
+		BDF510B31C92E7B200A49D74 /* calender_star@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF510B21C92E7B200A49D74 /* calender_star@3x.png */; };
 		BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */; };
 		BDFBDAAF1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */; };
 		BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDFBDAB11C7DA9240049F179 /* SSJImaageBrowseViewController.m */; };
@@ -1247,6 +1250,10 @@
 		BDF5109B1C925E5C00A49D74 /* home_remind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_remind@3x.png"; sourceTree = "<group>"; };
 		BDF5109D1C92602A00A49D74 /* remind_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remind_close@2x.png"; sourceTree = "<group>"; };
 		BDF5109F1C92604500A49D74 /* remind_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "remind_close@3x.png"; sourceTree = "<group>"; };
+		BDF510AD1C92DA8500A49D74 /* SSJCalenderCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderCellItem.h; sourceTree = "<group>"; };
+		BDF510AE1C92DA8500A49D74 /* SSJCalenderCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderCellItem.m; sourceTree = "<group>"; };
+		BDF510B01C92E78C00A49D74 /* calender_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calender_star@2x.png"; sourceTree = "<group>"; };
+		BDF510B21C92E7B200A49D74 /* calender_star@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calender_star@3x.png"; sourceTree = "<group>"; };
 		BDFBDAAB1C7D57590049F179 /* SSJRecordMakingAdditionalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingAdditionalView.h; sourceTree = "<group>"; };
 		BDFBDAAC1C7D57590049F179 /* SSJRecordMakingAdditionalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingAdditionalView.m; sourceTree = "<group>"; };
 		BDFBDAAE1C7D5A030049F179 /* SSJRecordMakingAdditionalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJRecordMakingAdditionalView.xib; sourceTree = "<group>"; };
@@ -1630,6 +1637,8 @@
 				BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */,
 				BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */,
 				BDF318711C5F0AA800302DD6 /* record_ok@2x.png */,
+				BDF510B01C92E78C00A49D74 /* calender_star@2x.png */,
+				BDF510B21C92E7B200A49D74 /* calender_star@3x.png */,
 				7DD7D6551C4C8E6A00ACE71A /* fundTypeImage */,
 				BDA2EF111C8EAE27007DD45F /* more_background@2x.png */,
 				BDF504991C86EC8200DCFA99 /* more_background@3x.png */,
@@ -3018,6 +3027,8 @@
 		BDD78AF11C1EE71700C7EE0E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BDF510AD1C92DA8500A49D74 /* SSJCalenderCellItem.h */,
+				BDF510AE1C92DA8500A49D74 /* SSJCalenderCellItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3306,6 +3317,7 @@
 				7DD7D6CD1C4C8E6A00ACE71A /* bt_repair@3x.png in Resources */,
 				7DD7D6D71C4C8E6A00ACE71A /* bt_snack@3x.png in Resources */,
 				BDA3FDF01C58CAC400FB57B1 /* ft_chongzhika@3x.png in Resources */,
+				BDF510B11C92E78C00A49D74 /* calender_star@2x.png in Resources */,
 				7DD7D6F41C4C8E6A00ACE71A /* close@2x.png in Resources */,
 				7DE69C5A1C8EDF34001D31C1 /* motion_circle_default@3x.png in Resources */,
 				BD37D2D41C5231D60050BDAA /* bt_delete@2x.png in Resources */,
@@ -3497,6 +3509,7 @@
 				7DD7D6D01C4C8E6A00ACE71A /* bt_shebao@2x.png in Resources */,
 				BDA3FDF21C58CAC400FB57B1 /* ft_chuxuka@3x.png in Resources */,
 				7DD7D6FF1C4C8E6A00ACE71A /* founds_zhuanru@3x.png in Resources */,
+				BDF510B31C92E7B200A49D74 /* calender_star@3x.png in Resources */,
 				7DD7D7231C4C8E6A00ACE71A /* tab_accounte_nor@3x.png in Resources */,
 				BDA3FDFC1C58CAC400FB57B1 /* ft_shiwuka@3x.png in Resources */,
 				7DD7D7241C4C8E6A00ACE71A /* tab_form_nor@2x.png in Resources */,
@@ -3787,6 +3800,7 @@
 				BD976FB41C4F246900B0E26D /* SSJCalenderDetailCell.m in Sources */,
 				9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
+				BDF510AF1C92DA8500A49D74 /* SSJCalenderCellItem.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 				7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */,
 			);
