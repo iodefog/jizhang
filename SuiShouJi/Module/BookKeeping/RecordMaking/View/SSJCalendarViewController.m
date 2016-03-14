@@ -258,19 +258,24 @@
      __block NSString *selectDate = self.selectDate;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-        FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
-        while ([rs next]) {
+        FMResultSet *resultSet = [db executeQuery:@"SELECT A.* , B.* , C.CFUNDID , C.CPARENT FROM BK_BILL_TYPE B, BK_USER_CHARGE A , BK_FUND_INFO C WHERE A.CUSERID = ? AND A.CBILLDATE = ? AND A.IBILLID = B.ID AND A.OPERATORTYPE <> 2 AND A.IFUNSID = C.CFUNDID AND B.ISTATE <> 2",SSJUSERID(),selectDate];
+        while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
-            item.imageName = [rs stringForColumn:@"CCOIN"];
-            item.typeName = [rs stringForColumn:@"CNAME"];
-            item.money = [rs stringForColumn:@"IMONEY"];
-            item.colorValue = [rs stringForColumn:@"CCOLOR"];
-            item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
-            item.ID = [rs stringForColumn:@"ICHARGEID"];
-            item.fundId = [rs stringForColumn:@"IFUNSID"];
-            item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
-            item.billId = [rs stringForColumn:@"IBILLID"];
+            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.typeName = [resultSet stringForColumn:@"CNAME"];
+            item.money = [resultSet stringForColumn:@"IMONEY"];
+            item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
+            item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
+            item.ID = [resultSet stringForColumn:@"ICHARGEID"];
+            item.fundId = [resultSet stringForColumn:@"IFUNSID"];
+            item.billDate = [resultSet stringForColumn:@"CBILLDATE"];
+            item.editeDate = [resultSet stringForColumn:@"CWRITEDATE"];
+            item.billId = [resultSet stringForColumn:@"IBILLID"];
+            item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
+            item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
+            item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
+            item.configId = [resultSet stringForColumn:@"iconfigid"];
+            item.money = [resultSet stringForColumn:@"IMONEY"];
             [tempArray addObject:item];
         }
         SSJDispatch_main_async_safe(^(){
