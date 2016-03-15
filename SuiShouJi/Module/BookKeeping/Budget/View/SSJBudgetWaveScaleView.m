@@ -25,6 +25,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        _scale = -1;
+        
         self.backgroundColor = [UIColor whiteColor];
         self.layer.borderWidth = 4;
         self.layer.borderColor = [UIColor ssj_colorWithHex:@"e9e9e9"].CGColor;
@@ -82,15 +84,20 @@
     if (_scale != scale) {
         _scale = scale;
         
-        self.fullView.hidden = _scale < 1;
-        self.waveIndicator.hidden = _scale >= 1;
+        if (scale == 0) {
+            self.fullView.hidden = self.waveIndicator.hidden = YES;
+            return;
+        }
+        
+        self.fullView.hidden = _scale <= 1;
+        self.waveIndicator.hidden = _scale > 1;
         if (!self.waveIndicator.hidden) {
             self.waveIndicator.progress = scale;
         }
     }
 }
 
-- (void)setTopTitle:(NSString *)title {
+- (void)setTitle:(NSString *)title {
     if (![_title isEqualToString:title]) {
         _title = title;
         self.topLabel.text = title;

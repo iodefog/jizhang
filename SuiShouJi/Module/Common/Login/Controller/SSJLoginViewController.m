@@ -204,7 +204,7 @@ static NSString *const KQQAppKey = @"1105133385";
     //  检测缺少哪个收支类型就创建
     [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
     
-    //  如果登录没有返回任何资金帐户，就给用户创建默认的
+    //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
     if (self.loginService.fundInfoArray.count == 0) {
         [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
     }

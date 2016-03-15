@@ -101,14 +101,13 @@
     self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
     [self.intervalLab sizeToFit];
     
+    [self.waveView setScale:(model.payMoney / model.budgetMoney)];
     if (model.payMoney <= model.budgetMoney) {
-        [self.waveView setScale:((model.budgetMoney - model.payMoney) / model.budgetMoney)];
         [self.waveView setTitle:@"剩余"];
         [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
     } else {
-        [self.waveView setScale:1];
         [self.waveView setTitle:@"超支"];
-        [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
+        [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", model.payMoney - model.budgetMoney]];
     }
     
     self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
