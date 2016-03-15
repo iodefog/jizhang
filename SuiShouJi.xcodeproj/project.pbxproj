@@ -46,6 +46,7 @@
 		7D768A7A1C96A1A900CB75B0 /* budget_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */; };
 		7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
 		7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */; };
+		7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */; };
 		7D893F291C91144D00886995 /* budget_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F1F1C91144D00886995 /* budget_add@2x.png */; };
 		7D893F2A1C91144D00886995 /* budget_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F201C91144D00886995 /* budget_add@3x.png */; };
 		7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F211C91144D00886995 /* budget_left@2x.png */; };
@@ -615,6 +616,9 @@
 		7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJSynchronizeTask.m; path = OtherTable/SSJSynchronizeTask.m; sourceTree = "<group>"; };
 		7D768A7E1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSynchronizeTaskQueue.h; sourceTree = "<group>"; };
 		7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSynchronizeTaskQueue.m; sourceTree = "<group>"; };
+		7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion1.h; sourceTree = "<group>"; };
+		7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion1.m; sourceTree = "<group>"; };
+		7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersionProtocol.h; sourceTree = "<group>"; };
 		7D893F1F1C91144D00886995 /* budget_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@2x.png"; sourceTree = "<group>"; };
 		7D893F201C91144D00886995 /* budget_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@3x.png"; sourceTree = "<group>"; };
 		7D893F211C91144D00886995 /* budget_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_left@2x.png"; sourceTree = "<group>"; };
@@ -1877,6 +1881,9 @@
 			children = (
 				7DE69C2B1C8EA84A001D31C1 /* SSJDatabaseUpgrader.h */,
 				7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */,
+				7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */,
+				7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */,
+				7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */,
 			);
 			path = SSJDatabaseUpdater;
 			sourceTree = "<group>";
@@ -3652,6 +3659,7 @@
 				BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */,
 				BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
+				7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */,
 				7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */,
 				7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */,
 				7DE69C391C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m in Sources */,
