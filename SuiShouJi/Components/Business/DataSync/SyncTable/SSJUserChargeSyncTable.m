@@ -68,7 +68,7 @@
                 return NO;
             }
             
-            //  如果将要合并的流水的operatortype是2，就将本地流水的operatortype改为2
+            //  如果将要合并的流水的operatortype是2，就将本地流水的operatortype改为2，并且忽略这条记录
             if ([record[@"operatortype"] intValue] == 2) {
                 [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
                 return NO;

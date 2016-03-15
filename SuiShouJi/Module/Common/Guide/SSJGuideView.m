@@ -149,6 +149,7 @@
         [_beginButton setFontSize:18];
         [_beginButton setTitle:@"立即体验" forState:SSJBorderButtonStateNormal];
         [_beginButton setTitleColor:[UIColor ssj_colorWithHex:@"#0ccdb5"] forState:SSJBorderButtonStateNormal];
+        [_beginButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
         [_beginButton setBorderColor:[UIColor ssj_colorWithHex:@"#0ccdb5"] forState:SSJBorderButtonStateNormal];
         [_beginButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
         [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#0ccdb5"] forState:SSJBorderButtonStateHighlighted];
