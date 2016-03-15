@@ -787,7 +787,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.USERID = ?",self.item.fundId,userid];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.CUSERID = ?",self.item.fundId,userid];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
             weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
