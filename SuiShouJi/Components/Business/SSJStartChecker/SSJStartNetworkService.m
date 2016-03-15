@@ -14,6 +14,8 @@
 @property (readwrite, nonatomic, copy) NSString *appversion;
 @property (readwrite, nonatomic, copy) NSString *url;
 @property (readwrite, nonatomic, copy) NSString *type;
+@property (readwrite, nonatomic, copy) NSString *remindMassage;
+@property (readwrite, nonatomic, copy) NSString *startImage;
 @property (readwrite, nonatomic) BOOL isInReview;
 
 @end
@@ -29,6 +31,7 @@
     self.appversion = nil;
     self.url = nil;
     self.type = nil;
+    self.remindMassage = nil;
     
     NSDictionary *results = [rootElement objectForKey:@"results"];
     
@@ -40,9 +43,9 @@
         self.url = [appInfo objectForKey:@"url"];
         self.type = [appInfo objectForKey:@"type"];
     }
-    
     //  解析审核配置
     self.isInReview = [[results objectForKey:@"review"] boolValue];
+    self.remindMassage = [results objectForKey:@"remind"];
 }
 
 @end

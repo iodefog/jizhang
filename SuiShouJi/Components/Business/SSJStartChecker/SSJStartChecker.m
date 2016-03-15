@@ -52,6 +52,14 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
     return self.networkService.isInReview;
 }
 
+- (NSString *)remindMassage{
+    return self.networkService.remindMassage;
+}
+
+-(NSString *)startImageUrl{
+    return self.networkService.startImage;
+}
+
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == alertView.firstOtherButtonIndex) {

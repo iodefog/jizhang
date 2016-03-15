@@ -109,7 +109,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         self.selectedMonth = _originaldMonth;
         self.selectedDay = _originaldDay;
         self.categoryID = self.item.billId;
-        if ([self.item.configId isEqualToString:@""]) {
+        if ([self.item.configId isEqualToString:@""] || ![self.item.billDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {
             self.selectChargeCircleType = -1;
         }else{
             self.selectChargeCircleType = self.item.chargeCircleType;
@@ -563,6 +563,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             return;
         }
     }
+    if (self.selectItem.fundingID == nil) {
+        [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
+        return;
+    }
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         double chargeMoney = [self.textInput.text doubleValue];
         NSString *operationTime = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -782,7 +786,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(void)getSelectedFundingType{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ?",self.item.fundId];
+        NSString *userid = SSJUSERID();
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.USERID = ?",self.item.fundId,userid];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
             weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
