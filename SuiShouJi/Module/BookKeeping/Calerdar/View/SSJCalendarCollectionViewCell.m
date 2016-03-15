@@ -66,7 +66,7 @@
     }else{
         self.dateLabel.text = [NSString stringWithFormat:@"%d",[[[self.item.dateStr componentsSeparatedByString:@"-"] lastObject] intValue]];
     }
-    if ([_item.backGroundColor isEqualToString:@"cccccc"] || [_item.backGroundColor isEqualToString:@"47cfbe"]) {
+    if ([_item.backGroundColor isEqualToString:@"47cfbe"]) {
         self.starImage.tintColor = [UIColor whiteColor];
     }else{
         self.starImage.tintColor = [UIColor ssj_colorWithHex:@"ffa81c"];

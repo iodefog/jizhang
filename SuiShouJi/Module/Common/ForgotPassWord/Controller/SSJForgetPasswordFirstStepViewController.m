@@ -28,6 +28,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 
+@property (nonatomic,strong) UIImageView *backGroundImage;
+
 //  倒计时定时器
 @property (nonatomic, strong) NSTimer *countdownTimer;
 
@@ -53,7 +55,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.phoneNoField];
     [self.scrollView addSubview:self.authCodeField];
@@ -69,6 +71,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     } else {
         [self.phoneNoField becomeFirstResponder];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 #pragma mark - UITextFieldDelegate
@@ -192,7 +202,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (SSJBaselineTextField *)phoneNoField {
     if (!_phoneNoField) {
-        _phoneNoField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 30, self.view.width - 50, 50) contentHeight:34];
+        _phoneNoField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 74, self.view.width - 50, 50) contentHeight:34];
         _phoneNoField.font = [UIFont systemFontOfSize:15];
         _phoneNoField.placeholder = @"请输入您的手机号";
         _phoneNoField.text = self.mobileNo.length ? self.mobileNo : @"";
@@ -261,6 +271,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         [_nextButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nextButton;
+}
+
+- (UIImageView *)backGroundImage{
+    if (!_backGroundImage) {
+        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+    }
+    return _backGroundImage;
 }
 
 @end
