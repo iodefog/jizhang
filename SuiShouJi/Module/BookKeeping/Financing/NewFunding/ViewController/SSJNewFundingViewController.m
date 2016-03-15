@@ -232,7 +232,6 @@
         [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];
         return;
     }
-    
     NSString *fundId = SSJUUID();
     NSString *fundName = _nameTextField.text;
     double fundAmount = [_amountTextField.text doubleValue];

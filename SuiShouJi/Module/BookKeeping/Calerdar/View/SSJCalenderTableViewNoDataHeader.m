@@ -7,13 +7,23 @@
 //
 
 #import "SSJCalenderTableViewNoDataHeader.h"
+@interface SSJCalenderTableViewNoDataHeader()
+@property (weak, nonatomic) IBOutlet UIButton *recordMakingButton;
 
+@end
 @implementation SSJCalenderTableViewNoDataHeader
 
 + (id)CalenderTableViewNoDataHeader {
     NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"SSJCalenderTableViewNoDataHeader" owner:nil options:nil];
     return array[0];
 }
+
+-(void)awakeFromNib{
+    self.recordMakingButton.layer.cornerRadius = 20;
+    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+    self.recordMakingButton.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+}
+
 - (IBAction)recordButtonClicked:(id)sender {
     if (self.RecordMakingButtonBlock) {
         self.RecordMakingButtonBlock();

@@ -135,8 +135,9 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     __weak typeof(self) weakSelf = self;
     __block NSString *titleStr;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        _totalIncome = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFUNSID = ? AND A.OPERATORTYPE != 2 and cuserid = ?",[NSNumber numberWithInt:0],self.item.fundingID, SSJUSERID()];
-        _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFUNSID = ? AND A.OPERATORTYPE != 2 and cuserid = ?",[NSNumber numberWithInt:1],self.item.fundingID, SSJUSERID()];
+        NSString *userid = SSJUSERID();
+        _totalIncome = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFUNSID = ? AND A.OPERATORTYPE != 2 and cuserid = ?",[NSNumber numberWithInt:0],self.item.fundingID, userid];
+        _totalExpence = [db doubleForQuery:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = ? AND A.IFUNSID = ? AND A.OPERATORTYPE != 2 and cuserid = ?",[NSNumber numberWithInt:1],self.item.fundingID, userid];
         weakSelf.item.fundingColor = [db stringForQuery:@"SELECT CCOLOR FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];
         titleStr = [db stringForQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",weakSelf.item.fundingID];
         dispatch_async(dispatch_get_main_queue(), ^(){
