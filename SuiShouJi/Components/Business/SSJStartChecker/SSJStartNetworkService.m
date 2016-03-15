@@ -46,6 +46,7 @@
     //  解析审核配置
     self.isInReview = [[results objectForKey:@"review"] boolValue];
     self.remindMassage = [results objectForKey:@"remind"];
+    self.startImage = [results objectForKey:@"homeheaderbg"];
 }
 
 @end

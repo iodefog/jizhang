@@ -48,4 +48,8 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
  */
 - (BOOL)isInReview;
 
+- (NSString *)remindMassage;
+
+-(NSString *)startImageUrl;
+
 @end
