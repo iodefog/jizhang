@@ -8,12 +8,11 @@
 
 #import "SSJFundAccountTable.h"
 #import "FMDB.h"
-#import "SSJDataSyncHelper.h"
 
 @implementation SSJFundAccountTable
 
-+ (BOOL)updateBalanceInDatabase:(FMDatabase *)db {
-    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFUNSID, B.ITYPE order by A.IFUNSID", SSJCurrentSyncDataUserId()];
++ (BOOL)updateBalanceForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFUNSID, B.ITYPE order by A.IFUNSID", userId];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -56,7 +55,7 @@
     
     //  遍历moneyInfo，根据key（资金帐户id）查询BK_FUNS_ACCT表中是否存在相应的记录，存在就修改为最新的金额，反之则新建个记录
     [moneyInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        result = [db executeQuery:@"select count(*) from BK_FUNS_ACCT where CFUNDID = ? and CUSERID = ?", key, SSJCurrentSyncDataUserId()];
+        result = [db executeQuery:@"select count(*) from BK_FUNS_ACCT where CFUNDID = ? and CUSERID = ?", key, userId];
         if (!result) {
             success = NO;
             *stop = YES;
@@ -65,13 +64,13 @@
         
         [result next];
         if ([result intForColumnIndex:0] > 0) {
-            if (![db executeUpdate:@"update BK_FUNS_ACCT set IBALANCE = ? where CFUNDID = ? and CUSERID = ?", obj, key, SSJCurrentSyncDataUserId()]) {
+            if (![db executeUpdate:@"update BK_FUNS_ACCT set IBALANCE = ? where CFUNDID = ? and CUSERID = ?", obj, key, userId]) {
                 SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                 success = NO;
                 *stop = YES;
             }
         } else {
-            if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CUSERID, CFUNDID, IBALANCE) values (?, ?, ?)", SSJCurrentSyncDataUserId(), key, obj]) {
+            if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CUSERID, CFUNDID, IBALANCE) values (?, ?, ?)", userId, key, obj]) {
                 SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
                 success = NO;
                 *stop = YES;
@@ -80,7 +79,7 @@
     }];
     
     //
-    result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ? ", SSJCurrentSyncDataUserId()];
+    result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ? ", userId];
     while ([result next]) {
         NSString *fundId = [result stringForColumn:@"cfundid"];
         NSString *cuserId = [result stringForColumn:@"cuserid"];

@@ -8,30 +8,17 @@
 
 #import "SSJImageSynchronizeTask.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJDataSyncHelper.h"
 
 static NSString *const kImageNameKey = @"kImageNameKey";
 static NSString *const kSyncTypeKey = @"kSyncTypeKey";
 
 @interface SSJImageSynchronizeTask ()
 
-@property (nonatomic, strong) NSMutableArray *uploadTasks;
-
-@property (nonatomic, strong) NSMutableArray *failureTasks;
+@property (nonatomic) NSInteger uploadCounter;
 
 @end
 
 @implementation SSJImageSynchronizeTask
-
-@synthesize syncQueue;
-
-- (instancetype)init {
-    if (self = [super init]) {
-        self.uploadTasks = [[NSMutableArray alloc] init];
-        self.failureTasks = [[NSMutableArray alloc] init];
-    }
-    return self;
-}
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
@@ -40,7 +27,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
         //  查询当前用户没有同步的图片
-        FMResultSet *resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_user_charge as b where a.rid = b.ichargeid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", SSJCurrentSyncImageUserId()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_user_charge as b where a.rid = b.ichargeid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
         if (!resultSet) {
             if (failure) {
                 failure([db lastError]);
@@ -66,15 +53,17 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         return;
     }
     
+    self.uploadCounter = imageInfoArr.count;
+    
     //  遍历未同步的图片名称，并上传
     for (int i = 0; i < imageInfoArr.count; i++) {
         NSDictionary *imageInfo = imageInfoArr[i];
         
         NSString *imageName = imageInfo[kImageNameKey];
         NSString *syncType = imageInfo[kSyncTypeKey];
-        NSString *userId = SSJCurrentSyncImageUserId();
+        NSString *userId = self.userId;
         NSString *thumbImgName = [NSString stringWithFormat:@"%@-thumb", [imageName stringByDeletingPathExtension]];
-        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, kSignKey] ssj_md5HexDigest];
+        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, SSJSyncPrivateKey] ssj_md5HexDigest];
         
         NSMutableData *imageData = [NSMutableData data];
         [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
@@ -88,10 +77,17 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                                  @"appVersion":SSJAppVersion()};
         
         SSJPRINT(@"<<< ------- 图片同步开始! ------- >>>");
-        NSURLSessionUploadTask *task = [SSJDataSyncHelper uploadBodyData:imageData headerParams:params toUrlPath:@"/sync/syncimg.go" fileName:imageName mimeType:@"image/jpeg" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        [self uploadBodyData:imageData headerParams:params toUrlPath:@"/sync/syncimg.go" fileName:imageName mimeType:@"image/jpeg" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             dispatch_async(self.syncQueue, ^{
+                
+                self.uploadCounter --;
+                
                 if (tError) {
-                    tError = error;
+                    if (self.uploadCounter == 0) {
+                        if (failure) {
+                            failure(tError);
+                        }
+                    }
                     return;
                 }
                 
@@ -99,12 +95,22 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                 NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:&tError];
                 if (tError) {
                     SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
+                    if (self.uploadCounter == 0) {
+                        if (failure) {
+                            failure(tError);
+                        }
+                    }
                     return;
                 }
                 
                 if ([resultInfo[@"code"] intValue] != 1) {
                     NSString *desc = resultInfo[@"desc"];
                     tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:desc ?: @""}];
+                    if (self.uploadCounter == 0) {
+                        if (failure) {
+                            failure(tError);
+                        }
+                    }
                     return;
                 }
                 
@@ -122,25 +128,23 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                 if (i == imageInfoArr.count - 1) {
                     if (tError) {
                         SSJPRINT(@"<<< ------- 图片同步失败! ------- >>>");
-                        if (failure) {
-                            failure(tError);
+                        if (self.uploadCounter == 0) {
+                            if (failure) {
+                                failure(tError);
+                            }
                         }
                     } else {
                         SSJPRINT(@"<<< ------- 图片同步成功！------- >>>");
-                        if (success) {
-                            success();
+                        if (self.uploadCounter == 0) {
+                            if (success) {
+                                success();
+                            }
                         }
                     }
                 }
             });
         }];
-        
-        [self.uploadTasks addObject:task];
     }
-}
-
-- (void)finishWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    
 }
 
 @end

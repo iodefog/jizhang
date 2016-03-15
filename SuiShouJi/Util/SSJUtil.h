@@ -186,4 +186,8 @@ NSString *SSJImagePath(NSString *imageName);
  */
 NSString *SSJGetChargeImageUrl(NSString *imageName);
 
+void SSJDispatchMainSync(void (^block)(void));
+
+void SSJDispatchMainAsync(void (^block)(void));
+
 

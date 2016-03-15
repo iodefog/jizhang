@@ -22,7 +22,7 @@
     return @[@"cbillid", @"cuserid"];
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     return [db boolForQuery:@"select count(*) from BK_BILL_TYPE where ID = ?", record[@"cbillid"]];
 }
 

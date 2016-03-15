@@ -267,3 +267,23 @@ NSString *SSJGetChargeImageUrl(NSString *imageName){
     return imageURL;
 }
 
+void SSJDispatchMainSync(void (^block)(void)) {
+    if ([NSThread isMainThread]) {
+        if (block) {
+            block();
+        }
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), block);
+    }
+}
+
+void SSJDispatchMainAsync(void (^block)(void)) {
+    if ([NSThread isMainThread]) {
+        if (block) {
+            block();
+        }
+    } else {
+        dispatch_async(dispatch_get_main_queue(), block);
+    }
+}
+

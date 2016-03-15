@@ -26,7 +26,7 @@
     return @[@"iconfigid", @"cimgurl", @"thumburl", @"cmemo"];
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record inDatabase:(FMDatabase *)db error:(NSError **)error {
++ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
     NSString *configId = record[@"iconfigid"];  //  定期记账配置id可已为空（仅一次）
@@ -38,25 +38,25 @@
     
     //  如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
     if ([db intForQuery:@"select istate from bk_bill_type where id = ?", billId] != 2) {
-        if (![db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", SSJCurrentSyncDataUserId(), billId]) {
+        if (![db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", userId, billId]) {
             return NO;
         }
     }
     
     //  查询fund_info中是否有对应的资金帐户
-    if (![db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", SSJCurrentSyncDataUserId(), fundId]) {
+    if (![db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", userId, fundId]) {
         return NO;
     }
     
     //  如果返回了定期配置id，就查询定期配置表中是否有这个id
     if (configId.length) {
         //  定期配置表中没有对应id的记录
-        if (![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, SSJCurrentSyncDataUserId()]) {
+        if (![db boolForQuery:@"select count(*) from bk_charge_period_config where iconfigid = ? and cuserid = ?", configId, userId]) {
             return NO;
         }
         
         //  查询本地是否有相同configid和billdate的流水
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ?", record[@"cbilldate"], record[@"iconfigid"], SSJCurrentSyncDataUserId()];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ?", record[@"cbilldate"], record[@"iconfigid"], userId];
         if (!resultSet) {
             return NO;
         }
