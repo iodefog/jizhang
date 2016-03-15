@@ -20,4 +20,7 @@
 
 @property (nonatomic, strong) UIColor *borderColor;
 
+//  波动速度
+@property (nonatomic) CGFloat waveAmplitude;
+
 @end
