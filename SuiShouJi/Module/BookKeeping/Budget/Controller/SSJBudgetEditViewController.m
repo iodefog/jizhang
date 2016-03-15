@@ -431,14 +431,18 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)budgetTypeNames {
-    NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:5];
-    for (NSString *typeId in self.model.billIds) {
-        [typeNameArr addObject:self.budgetTypeMap[typeId]];
-        if (typeNameArr.count == 5) {
-            break;
+    if (self.model.billIds.count < self.budgetTypeMap.count) {
+        NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:5];
+        for (NSString *typeId in self.model.billIds) {
+            [typeNameArr addObject:self.budgetTypeMap[typeId]];
+            if (typeNameArr.count == 5) {
+                break;
+            }
         }
+        return [typeNameArr componentsJoinedByString:@","];
     }
-    return [typeNameArr componentsJoinedByString:@","];
+    
+    return @"所有支出类目";
 }
 
 //  已有冲突预算配置的提示信息

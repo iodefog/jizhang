@@ -100,15 +100,6 @@ extern NSString *const SSJBudgetMonthTitleKey;
                 success:(void(^)())success
                 failure:(void (^)(NSError *error))failure;
 
-/**
- *  补充自动续用的预算记录
- *
- *  @param success   成功的回调
- *  @param failure   失败的回调
- */
-//+ (void)supplementBudgetRecordWithSuccess:(void(^)())success
-//                                  failure:(void (^)(NSError *error))failure;
-
 @end
 
 NS_ASSUME_NONNULL_END

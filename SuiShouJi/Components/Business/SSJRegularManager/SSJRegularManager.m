@@ -180,6 +180,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     //  根据周期类型、支出类型分类，查询离今天最近的一次预算
     FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate) from bk_user_budget where cuserid = ? and operatortype <> 2 and istate = 1 group by itype, cbilltype", userId];
     if (!resultSet) {
+        [resultSet close];
         return NO;
     }
     
@@ -201,12 +202,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *beginDate = [period.startDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
             NSString *endDate = [period.endDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
             
-            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, hasremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;
+                [resultSet close];
                 return NO;
             }
         }
     }
+    
+    [resultSet close];
     
     return YES;
 }

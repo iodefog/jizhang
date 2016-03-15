@@ -76,14 +76,9 @@
     self.budgetLab.text = [NSString stringWithFormat:@"计划：%.2f", item.budget];
     [self.budgetLab sizeToFit];
     
+    self.waveView.title = item.payment <= item.budget ? @"剩余" : @"超支";
     [self.waveView setScale:(item.payment / item.budget)];
-    if (item.payment <= item.budget) {
-        [self.waveView setTitle:@"剩余"];
-        [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", item.budget - item.payment]];
-    } else {
-        [self.waveView setTitle:@"超支"];
-        [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", item.payment - item.budget]];
-    }
+    [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", item.budget - item.payment]];
 }
 
 - (UILabel *)typeLab {
