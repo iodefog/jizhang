@@ -62,7 +62,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"个人中心";
+        self.title = @"更多";
         self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
