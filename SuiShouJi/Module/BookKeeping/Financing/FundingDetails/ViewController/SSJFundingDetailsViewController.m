@@ -102,9 +102,9 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     headerView.dateLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailDateKey]];
     [headerView.dateLabel sizeToFit];
     if ([sectionInfo[SSJFundingDetailSumKey] doubleValue] > 0) {
-        headerView.balanceLabel.text = [NSString stringWithFormat:@"+%@",sectionInfo[SSJFundingDetailSumKey]];
+        headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",[sectionInfo[SSJFundingDetailSumKey] doubleValue]];
     }else{
-        headerView.balanceLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailSumKey]];
+        headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",[sectionInfo[SSJFundingDetailSumKey] doubleValue]];
     }
     [headerView.balanceLabel sizeToFit];
     return headerView;

@@ -21,6 +21,8 @@
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 
+@property (nonatomic,strong) UIImageView *backGroundImage;
+
 @end
 
 @implementation SSJForgetPasswordSecondStepViewController
@@ -40,7 +42,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.passwordField];
     [self.scrollView addSubview:self.nextButton];
@@ -51,6 +53,15 @@
     
     [self.passwordField becomeFirstResponder];
 }
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
+}
+
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -123,7 +134,7 @@
 
 - (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
-        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 30, self.view.width - 50, 50) contentHeight:34];
+        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 94, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
         _passwordField.placeholder = @"请输入新密码";
@@ -155,6 +166,14 @@
         [_nextButton addTarget:self action:@selector(finishBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nextButton;
+}
+
+- (UIImageView *)backGroundImage{
+    if (!_backGroundImage) {
+        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+    }
+    return _backGroundImage;
 }
 
 @end

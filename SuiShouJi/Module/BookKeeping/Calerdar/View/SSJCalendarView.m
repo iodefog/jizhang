@@ -269,19 +269,19 @@
         if (i < 7) {
             item.dateStr = [_weekArray objectAtIndex:i];
             item.backGroundColor = @"FFFFFF";
-            item.titleColor = @"e7e7e7";
+            item.titleColor = @"a7a7a7";
             item.isSelectable = NO;
             [self.items addObject:item];
         }else if (i < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1){
             item.dateStr = @"";
             item.backGroundColor = @"FFFFFF";
-            item.titleColor = @"e7e7e7";
+            item.titleColor = @"a7a7a7";
             item.isSelectable = NO;
             [self.items addObject:item];
         }else if(i > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5){
             item.dateStr = @"";
             item.backGroundColor = @"FFFFFF";
-            item.titleColor = @"e7e7e7";
+            item.titleColor = @"a7a7a7";
             item.isSelectable = NO;
             [self.items addObject:item];
         }else{
@@ -289,17 +289,17 @@
             item.dateStr = [NSString stringWithFormat:@"%ld-%02ld-%02d",self.year,self.month,[cellDay intValue]];
             if (_year > _currentYear) {
                 item.backGroundColor = @"FFFFFF";
-                item.titleColor = @"e7e7e7";
+                item.titleColor = @"a7a7a7";
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else if (_year == _currentYear && _month > _currentMonth){
                 item.backGroundColor = @"FFFFFF";
-                item.titleColor = @"e7e7e7";
+                item.titleColor = @"a7a7a7";
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else if ([cellDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
                 item.backGroundColor = @"FFFFFF";
-                item.titleColor = @"e7e7e7";
+                item.titleColor = @"a7a7a7";
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else{
