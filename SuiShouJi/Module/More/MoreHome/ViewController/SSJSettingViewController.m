@@ -142,13 +142,13 @@ static NSString *const kTitle4 = @"关于我们";
 -(UIView *)loggedFooterView{
     if (_loggedFooterView == nil) {
         _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 260, 40)];
+        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _loggedFooterView.width - 20, 40)];
         [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
-        [quitLogButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        quitLogButton.backgroundColor = [UIColor whiteColor];
-        [_loggedFooterView addSubview:quitLogButton];
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
+        [_loggedFooterView addSubview:quitLogButton];
     }
     return _loggedFooterView;
 }

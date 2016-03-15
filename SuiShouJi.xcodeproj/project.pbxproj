@@ -322,6 +322,8 @@
 		BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FD1C216C7600F9179D /* SSJRecordMakingViewController.m */; };
 		BD1EE5EE1C965B0F00814A05 /* SSJCalenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */; };
+		BD1EE5F01C9807CD00814A05 /* calendar_norecord@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */; };
+		BD1EE5F21C9807EF00814A05 /* calendar_norecord@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */; };
 		BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */; };
 		BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */; };
@@ -992,6 +994,8 @@
 		BD0E43FD1C216C7600F9179D /* SSJRecordMakingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingViewController.m; sourceTree = "<group>"; };
 		BD1EE5EC1C965B0F00814A05 /* SSJCalenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderHelper.h; sourceTree = "<group>"; };
 		BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderHelper.m; sourceTree = "<group>"; };
+		BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar_norecord@2x.png"; sourceTree = "<group>"; };
+		BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar_norecord@3x.png"; sourceTree = "<group>"; };
 		BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
 		BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHeader.m; sourceTree = "<group>"; };
 		BD33FD271C4B2E4C006A6942 /* SSJAlertViewAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewAction.h; sourceTree = "<group>"; };
@@ -1673,6 +1677,8 @@
 				BD8C7F931C914CA900A70100 /* no_record_bt@3x.png */,
 				BD8C7F951C914CB600A70100 /* no_record_bg@2x.png */,
 				BD8C7F971C914CC400A70100 /* no_record_bg@3x.png */,
+				BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */,
+				BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */,
 				BDF510721C925A6500A49D74 /* weibo_banner.png */,
 				7DD7D6731C4C8E6A00ACE71A /* ReportForms */,
 				7DD7D6791C4C8E6A00ACE71A /* tabbarimage */,
@@ -3379,6 +3385,7 @@
 				BDA3FDF71C58CAC400FB57B1 /* ft_huobijijin@2x.png in Resources */,
 				7DD7D6DB1C4C8E6A00ACE71A /* bt_tobacco@3x.png in Resources */,
 				7DE69C5D1C8EDF34001D31C1 /* motion_circle_error@3x.png in Resources */,
+				BD1EE5F21C9807EF00814A05 /* calendar_norecord@3x.png in Resources */,
 				BDF510901C925BB500A49D74 /* home_tankuang@2x.png in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7DD7D68D1C4C8E6A00ACE71A /* bt_bouns@3x.png in Resources */,
@@ -3414,6 +3421,7 @@
 				BDF504851C868A8200DCFA99 /* beizhu_nor@2x.png in Resources */,
 				BDF504941C868A8200DCFA99 /* xunhuan_nor@2x.png in Resources */,
 				7DD7D6C91C4C8E6A00ACE71A /* bt_purchase@3x.png in Resources */,
+				BD1EE5F01C9807CD00814A05 /* calendar_norecord@2x.png in Resources */,
 				7DD7D6F51C4C8E6A00ACE71A /* close@3x.png in Resources */,
 				7DD7D6EA1C4C8E6A00ACE71A /* bt_youfei@2x.png in Resources */,
 				7DD7D6981C4C8E6A00ACE71A /* bt_deficit@2x.png in Resources */,

@@ -48,4 +48,18 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
  */
 - (BOOL)isInReview;
 
+/**
+ *  推送提示文字
+ *
+ *  @return NSString 提示内容
+ */
+- (NSString *)remindMassage;
+
+/**
+ *  启动页图片地址
+ *
+ *  @return NSString 图片url(需要拼接)
+ */
+-(NSString *)startImageUrl;
+
 @end
