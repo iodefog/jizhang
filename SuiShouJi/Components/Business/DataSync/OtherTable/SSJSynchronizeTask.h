@@ -17,7 +17,7 @@
 @property (nonatomic, weak) dispatch_queue_t syncQueue;
 
 /**
- *  开始数据同步
+ *  开始数据同步，需要子类覆写，本类中什么也没做
  *
  *  @param success  同步成功回调
  *  @param failure  同步失败回调

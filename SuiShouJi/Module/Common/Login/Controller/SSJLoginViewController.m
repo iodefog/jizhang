@@ -183,83 +183,73 @@ static NSString *const KQQAppKey = @"1105133385";
         return;
     }
     
-    __block NSError *error = nil;
-    __block BOOL fundInfoSuccess = YES;
-    __block BOOL userBillSuccess = YES;
+    //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
+    self.loginService.item.registerState = @"1";
+    if (![SSJUserTableManager saveUserItem:self.loginService.item]
+        || !SSJSaveAppId(self.loginService.appid)
+        || !SSJSaveAccessToken(self.loginService.accesstoken)
+        || !SSJSetUserId(self.loginService.item.userId)
+        || !SSJSaveUserLogined(YES)) {
+        
+        [CDAutoHideMessageHUD showMessage:(SSJ_ERROR_MESSAGE)];
+        return;
+    }
     
     //  merge登陆接口返回的收支类型和资金帐户
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        fundInfoSuccess = [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:&error];
-        userBillSuccess = [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:&error];
-        if (!userBillSuccess || !fundInfoSuccess) {
-            *rollback = YES;
-            return;
-        }
+        [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
     }];
     
-    //  merge成功后保存用户登录信息，保存成功后才算登录成功
-    if (userBillSuccess && fundInfoSuccess) {
-        //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
-        self.loginService.item.registerState = @"1";
-        if (![SSJUserTableManager saveUserItem:self.loginService.item]
-            || !SSJSaveAppId(self.loginService.appid)
-            || !SSJSaveAccessToken(self.loginService.accesstoken)
-            || !SSJSetUserId(self.loginService.item.userId)
-            || !SSJSaveUserLogined(YES)) {
-            
-            [CDAutoHideMessageHUD showMessage:(SSJ_ERROR_MESSAGE)];
-            return;
-        }
+    //  检测缺少哪个收支类型就创建
+    [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+    
+    //  如果登录没有返回任何资金帐户，就给用户创建默认的
+    if (self.loginService.fundInfoArray.count == 0) {
+        [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
+    }
+    
+    //  登陆成功后强制同步一次
+    //            [self.syncLoadingView show];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+        //                [self.syncLoadingView dismissWithSuccess:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+        [CDAutoHideMessageHUD showMessage:@"同步成功"];
+    } failure:^(NSError *error) {
+        //                [self.syncLoadingView dismissWithSuccess:NO];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
+        [CDAutoHideMessageHUD showMessage:@"同步失败"];
+    }];
+    
+    //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
+    [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
+    [CDAutoHideMessageHUD showMessage:@"登录成功"];
+    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+    [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+    
+    //  如果用户手势密码开启，进入手势密码页面
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+    if ([userItem.motionPWDState boolValue]) {
         
-        //  检测缺少哪个收支类型就创建
-        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
-        //  如果登录没有返回任何资金帐户，就给用户创建默认的
-        if (self.loginService.fundInfoArray.count == 0) {
-            [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-        }
-        
-        //  登陆成功后强制同步一次
-        //            [self.syncLoadingView show];
-        [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-            //                [self.syncLoadingView dismissWithSuccess:YES];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-            [CDAutoHideMessageHUD showMessage:@"同步成功"];
-        } failure:^(NSError *error) {
-            //                [self.syncLoadingView dismissWithSuccess:NO];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
-            [CDAutoHideMessageHUD showMessage:@"同步失败"];
-        }];
-        
-        //  如果有finishHandle，就通过finishHandle来控制页面流程，否则走默认流程
-        [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
-        [CDAutoHideMessageHUD showMessage:@"登录成功"];
-        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-        [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
-        
-        //  如果用户手势密码开启，进入手势密码页面
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
-        if ([userItem.motionPWDState boolValue]) {
-            
-            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-            motionVC.finishHandle = self.finishHandle;
-            motionVC.backController = self.backController;
-            if (userItem.motionPWD.length) {
-                motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-            } else {
-                motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-            }
-            [self.navigationController pushViewController:motionVC animated:YES];
-            
-            return;
-        }
-        
-        //
-        if (self.finishHandle) {
-            self.finishHandle(self);
+        SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+        motionVC.finishHandle = self.finishHandle;
+        motionVC.backController = self.backController;
+        if (userItem.motionPWD.length) {
+            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
         } else {
-            [self ssj_backOffAction];
+            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
         }
+        [self.navigationController pushViewController:motionVC animated:YES];
+        
+        return;
+    }
+    
+    //
+    if (self.finishHandle) {
+        self.finishHandle(self);
+    } else {
+        [self ssj_backOffAction];
     }
 }
 

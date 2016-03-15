@@ -106,7 +106,9 @@
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         if (![recordInfo isKindOfClass:[NSDictionary class]]) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
+            if (error) {
+                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
+            }
             SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", recordInfo);
             return NO;
         }
@@ -116,8 +118,12 @@
         }
         
         //  根据合并记录返回相应的sql语句
-        NSMutableString *statement = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db error:error] mutableCopy];
-        if (*error) {
+        NSError *tError = nil;
+        NSMutableString *statement = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db error:&tError] mutableCopy];
+        if (tError) {
+            if (error) {
+                *error = tError;
+            }
             return NO;
         }
         
@@ -128,7 +134,9 @@
         
         BOOL success = [db executeUpdate:statement];
         if (!success) {
-            *error = [db lastError];
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
     }
@@ -142,7 +150,9 @@
     //  根据记录的操作类型，对记录进行相应的操作
     NSString *opertoryType = recordInfo[@"operatortype"];
     if (opertoryType.length == 0) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record is lack of column operatortype"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record is lack of column operatortype"}];
+        }
         SSJPRINT(@">>>SSJ warning: merge record lack of column 'OPERATORTYPE'\n record:%@", recordInfo);
         return nil;
     }
@@ -150,7 +160,9 @@
     //  0添加  1修改  2删除
     int opertoryValue = [opertoryType intValue];
     if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"record has unknown operatortype value %@", opertoryType]}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"record has unknown operatortype value %@", opertoryType]}];
+        }
         SSJPRINT(@">>>SSJ warning:unknown OPERATORTYPE value %d", opertoryValue);
         return nil;
     }
@@ -158,7 +170,9 @@
     //  根据表中的主键拼接合并条件
     NSString *necessaryCondition = [self spliceKeyAndValueForKeys:[self primaryKeys] record:recordInfo joinString:@" and "];
     if (!necessaryCondition.length) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"an error occured when splice record's keys and values"}];
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"an error occured when splice record's keys and values"}];
+        }
         SSJPRINT(@">>>SSJ warning:an error occured when splice record's keys and values");
         return nil;
     }
@@ -167,7 +181,10 @@
     FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [self tableName], necessaryCondition]];
     
     if (!resultSet) {
-        *error = [db lastError];
+        [resultSet close];
+        if (error) {
+            *error = [db lastError];
+        }
         return nil;
     }
     
@@ -177,7 +194,6 @@
     while ([resultSet next]) {
         isExisted = YES;
         int localOperatorType = [resultSet intForColumn:@"operatortype"];
-        [resultSet close];
         
         if (localOperatorType == 0 || localOperatorType == 1) {
             //  如果将要合并的记录操作类型是删除，就不需要根据操作时间决定保留哪条记录，直接合并
@@ -200,6 +216,8 @@
             return nil;
         }
     }
+    
+    [resultSet close];
     
     if (!isExisted) {
         statement = [self insertStatementForMergeRecord:recordInfo];

@@ -9,6 +9,8 @@
 #import "SSJImageSynchronizeTask.h"
 #import "SSJDatabaseQueue.h"
 
+static NSString *const kSyncImagePrivateKey = @"iwannapie?!";
+
 static NSString *const kImageNameKey = @"kImageNameKey";
 static NSString *const kSyncTypeKey = @"kSyncTypeKey";
 
@@ -63,7 +65,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         NSString *syncType = imageInfo[kSyncTypeKey];
         NSString *userId = self.userId;
         NSString *thumbImgName = [NSString stringWithFormat:@"%@-thumb", [imageName stringByDeletingPathExtension]];
-        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, SSJSyncPrivateKey] ssj_md5HexDigest];
+        NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, kSyncImagePrivateKey] ssj_md5HexDigest];
         
         NSMutableData *imageData = [NSMutableData data];
         [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
