@@ -71,6 +71,13 @@
     }
 }
 
+- (void)setWaveAmplitude:(CGFloat)waveAmplitude {
+    if (_waveAmplitude != waveAmplitude) {
+        _waveAmplitude = waveAmplitude;
+        self.waveIndicator.waveAmplitude = waveAmplitude;
+    }
+}
+
 - (void)setScale:(CGFloat)scale {
     if (_scale != scale) {
         _scale = scale;
