@@ -198,9 +198,9 @@
     self.changeImageButton.hidden = YES;
     self.comfirmButton.hidden = YES;
     if (item.incomeOrExpence) {
-        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : -%.2f",_item.typeName,[_item.money doubleValue]];
+        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
     }else{
-        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : +%.2f",_item.typeName,[_item.money doubleValue]];
+        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
 
     }
     [self.moneyLabel sizeToFit];

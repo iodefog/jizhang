@@ -25,6 +25,12 @@
 //  是否正在审核
 @property (readonly, nonatomic) BOOL isInReview;
 
+//  提醒文字
+@property (readonly, nonatomic, copy) NSString *remindMassage;
+
+//  启动页图片
+@property (readonly, nonatomic, copy) NSString *startImage;
+
 - (void)request;
 
 @end
