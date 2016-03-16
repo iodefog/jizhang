@@ -78,6 +78,8 @@
         }
     }];
     
+    [result close];
+    
     //
     result = [db executeQuery:@"select cfundid, cuserid from BK_FUND_INFO where cuserid = ? ", userId];
     while ([result next]) {

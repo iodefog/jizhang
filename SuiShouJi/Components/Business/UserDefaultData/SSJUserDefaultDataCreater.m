@@ -38,7 +38,7 @@
 + (void)createDefaultFundAccountsWithError:(NSError **)error {
     //  创建默认的资金帐户
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSError *tError = [self createDefaultFundAccountsInDatabase:db];
+        NSError *tError = [self createDefaultFundAccountsForUserId:SSJUSERID() inDatabase:db];
         if (error) {
             *error = tError;
         }
@@ -48,7 +48,7 @@
 + (void)asyncCreateDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     //  创建默认的资金帐户
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSError *error = [self createDefaultFundAccountsInDatabase:db];
+        NSError *error = [self createDefaultFundAccountsForUserId:SSJUSERID() inDatabase:db];
         if (error) {
             if (failure) {
                 failure(error);
@@ -97,7 +97,7 @@
             return;
         }
         
-        error = [self createDefaultFundAccountsInDatabase:db];
+        error = [self createDefaultFundAccountsForUserId:userId inDatabase:db];
         if (error) {
             if (failure) {
                 failure(error);
@@ -134,13 +134,13 @@
 }
 
 //  如果当前用户没有创建过默认的资金帐户，则创建默认资金帐户
-+ (NSError *)createDefaultFundAccountsInDatabase:(FMDatabase *)db {
-    if (!SSJUSERID().length) {
++ (NSError *)createDefaultFundAccountsForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if (!userId.length) {
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
     
     //  查询用户表中存储的默认资金帐户创建状态
-    FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTFUNDACCTSTATE from BK_USER where CUSERID = ?", SSJUSERID()];
+    FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTFUNDACCTSTATE from BK_USER where CUSERID = ?", userId];
     if (!reuslt) {
         return [db lastError];
     }
@@ -152,13 +152,6 @@
             return error;
         }
         return nil;
-        
-        //            if (error) {
-        //
-        //            } else {
-        //                //  用户表中没有创建该用户的记录
-        //
-        //            }
     }
     
     //  根据表中存储的状态判断是否需要创建以下默认资金帐户
@@ -174,11 +167,11 @@
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金', '1', '#fe8a65', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '储蓄卡', '2', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '信用卡', '3', '#8dc4fa', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3'", SSJUUID(), writeDate, @(SSJSyncVersion()), SSJUSERID()];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝', '7', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'", SSJUUID() , writeDate, @(SSJSyncVersion()), SSJUSERID()];
-    [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root' and cuserid = ?",SSJUSERID(), @0.00, SSJUSERID()];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金', '1', '#fe8a65', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", SSJUUID(), writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '储蓄卡', '2', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2'", SSJUUID(), writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '信用卡', '3', '#8dc4fa', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3'", SSJUUID(), writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝', '7', '#ffb944', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'", SSJUUID() , writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root' and cuserid = ?", userId, @0.00, userId];
     
     return nil;
 }

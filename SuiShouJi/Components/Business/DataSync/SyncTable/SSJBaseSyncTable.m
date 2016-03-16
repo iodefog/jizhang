@@ -181,7 +181,6 @@
     FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [self tableName], necessaryCondition]];
     
     if (!resultSet) {
-        [resultSet close];
         if (error) {
             *error = [db lastError];
         }
@@ -209,10 +208,12 @@
             }
         } else if (localOperatorType == 2) {
             //  如果本地记录已经删除，就直接忽略将要合并的记录
+            [resultSet close];
             return nil;
         } else {
 //            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"local record's operatortype value is error,undefined value %d", localOperatorType]}];
             SSJPRINT(@">>> SSJ Warning:local record's operatortype value is error,undefined value %d", localOperatorType);
+            [resultSet close];
             return nil;
         }
     }

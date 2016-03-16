@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class FMDatabase;
+
 @interface SSJUserDefaultDataCreater : NSObject
 
 /**
@@ -29,6 +31,14 @@
 + (void)asyncCreateDefaultSyncRecordWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 /**
+ *  创建当前用户默认的资金帐户
+ *
+ *  @param db 数据库对象
+ *  @return (NSError *)
+ */
++ (NSError *)createDefaultFundAccountsForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
+
+/**
  *  同步创建当前用户默认的资金帐户
  *
  *  @param success  成功的回调
@@ -47,6 +57,14 @@
 + (void)asyncCreateDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 /**
+ *  创建当前用户默认的收支类型
+ *
+ *  @param db
+ *  @return (NSError)
+ */
++ (NSError *)createDefaultBillTypesIfNeededForUserId:(NSString *)userID inDatabase:(FMDatabase *)db;
+
+/**
  *  同步创建当前用户默认的收支类型
  *
  *  @param success  成功的回调
@@ -63,7 +81,6 @@
  *  @return (void)
  */
 + (void)asyncCreateDefaultBillTypesIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
-
 
 /**
  *  异步创建当前用户默认的所有数据（同步表、资金帐户、收支类型）
