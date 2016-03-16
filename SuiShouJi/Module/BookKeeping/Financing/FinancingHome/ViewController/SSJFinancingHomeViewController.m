@@ -171,8 +171,9 @@
     __weak typeof(self) weakSelf = self;
     __block double profitAmount;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+        NSString *userid = SSJUSERID();
         NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? ORDER BY A.CPARENT ASC , A.CWRITEDATE DESC",SSJUSERID()];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? ORDER BY A.CPARENT ASC , A.CWRITEDATE DESC",userid];
         while ([rs next]) {
             SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
             item.fundingColor = [rs stringForColumn:@"CCOLOR"];

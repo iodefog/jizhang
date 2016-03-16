@@ -119,7 +119,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 self.selectedImage = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
             }else{
                 __weak typeof(self) weakSelf = self;
-                [self.additionalView.takePhotoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(weakSelf.item.chargeThumbImage)] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                [self.additionalView.takePhotoButton sd_setBackgroundImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(weakSelf.item.chargeImage)] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     weakSelf.selectedImage = image;
                 }];
             }
