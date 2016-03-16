@@ -90,7 +90,6 @@
         _backButton = [[UIButton alloc]init];
         [_backButton setImage:[UIImage imageNamed:@"home_back"] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_backButton ssj_setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5] forState:UIControlStateNormal];
     }
     return _backButton;
 }
