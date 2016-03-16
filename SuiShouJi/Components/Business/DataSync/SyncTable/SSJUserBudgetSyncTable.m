@@ -49,8 +49,8 @@
         }
     }
     
-    //  查询本地是否有预算类别、周期、支出类型都相同的记录，有的话保留修改时间较晚的
-    resultSet = [db executeQuery:@"select ibid, cwritedate from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbilltype = ?", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbilltype"]];
+    //  查询本地是否有预算类别、周期、支出类型都相同的其它记录，有的话保留修改时间较晚的
+    resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbilltype = ? and ibid <> ?", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbilltype"], record[@"ibid"]];
     if (!resultSet) {
         *error = [db lastError];
         return NO;
@@ -58,11 +58,25 @@
     
     NSDate *mergeDate = [NSDate dateWithString:record[@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
     while ([resultSet next]) {
+        //  如果本地流水已经删除，则忽略将要合并的流水
+        if ([resultSet intForColumn:@"operatortype"] == 2) {
+            [resultSet close];
+            return NO;
+        }
+        
+        //  如果将要合并的流水的operatortype是2，就将本地流水的operatortype改为2，并且忽略这条记录
+        if ([record[@"operatortype"] intValue] == 2) {
+            [db executeUpdate:@"update bk_user_budget set operatortype = 2 where ibid = ?", [resultSet stringForColumn:@"ibid"]];
+            [resultSet close];
+            return NO;
+        }
+        
         NSDate *localDate = [resultSet dateForColumn:@"cwritedate"];
         
         //  本地记录修改时间较晚，保留本地记录，忽略合并记录
         if ([mergeDate compare:localDate] == NSOrderedAscending) {
-            continue;
+            [resultSet close];
+            return NO;
         }
         
         //  合并记录修改时间较晚，删除本地记录，合并此记录
