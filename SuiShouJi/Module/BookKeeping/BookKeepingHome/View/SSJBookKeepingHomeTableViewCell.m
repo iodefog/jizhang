@@ -219,17 +219,17 @@
     }
 }
 
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextMoveToPoint(ctx, self.centerX, 0);
-    CGContextAddLineToPoint(ctx, self.centerX, self.categoryImageButton.top);
-    CGContextSetRGBStrokeColor(ctx, 204.0/225, 204.0/255, 204.0/255, 1.0);
-    CGContextSetLineWidth(ctx, 1);
-    CGContextSetLineCap(ctx, kCGLineCapRound);
-    CGContextStrokePath(ctx);
-    [self setNeedsDisplay];
-}
+//- (void)drawRect:(CGRect)rect {
+//    [super drawRect:rect];
+//    CGContextRef ctx = UIGraphicsGetCurrentContext();
+//    CGContextMoveToPoint(ctx, self.centerX, 0);
+//    CGContextAddLineToPoint(ctx, self.centerX, self.categoryImageButton.top);
+//    CGContextSetRGBStrokeColor(ctx, 204.0/225, 204.0/255, 204.0/255, 1.0);
+//    CGContextSetLineWidth(ctx, 1);
+//    CGContextSetLineCap(ctx, kCGLineCapRound);
+//    CGContextStrokePath(ctx);
+//    [self setNeedsDisplay];
+//}
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
@@ -244,6 +244,8 @@
     long month = [dateComponent month];
     long currentMonth = [currentdateComponent month];
     if ([item.billId isEqualToString:@"-1"]) {
+        _IncomeImage.userInteractionEnabled = NO;
+        _expentureImage.userInteractionEnabled = NO;
         _categoryImageButton.layer.borderWidth = 0;
         _categoryImageButton.userInteractionEnabled = NO;
         [_categoryImageButton setImage:nil forState:UIControlStateNormal];
@@ -309,12 +311,18 @@
         _categoryImageButton.userInteractionEnabled = YES;
         [_categoryImageButton setTitle:@"" forState:UIControlStateNormal];
         if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+            _IncomeImage.userInteractionEnabled = YES;
+            _expentureImage.userInteractionEnabled = YES;
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 if (self.item.incomeOrExpence) {
-                    self.expentureImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        self.expentureImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    });
                     self.IncomeImage.image = nil;
                 }else{
-                    self.IncomeImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        self.IncomeImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                    });
                     self.expentureImage.image = nil;
                 }
             }else{
@@ -327,6 +335,8 @@
                 }
             }
         }else{
+            _IncomeImage.userInteractionEnabled = NO;
+            _expentureImage.userInteractionEnabled = NO;
             self.expentureImage.image = nil;
             self.IncomeImage.image = nil;
         }
