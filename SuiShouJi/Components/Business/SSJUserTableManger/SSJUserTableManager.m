@@ -82,11 +82,21 @@
         return item;
     }
     
+    //  将属性名转换成字段名
     NSDictionary *mapping = [SSJUserItem propertyMapping];
     NSMutableArray *fieldArr = [NSMutableArray arrayWithCapacity:propertyNames.count];
+    NSMutableArray *filterPropertyArr = [NSMutableArray arrayWithCapacity:propertyNames.count];
     for (NSString *property in propertyNames) {
         NSString *fieldName = [mapping objectForKey:property];
-        [fieldArr addObject:fieldName];
+        if (fieldName && fieldName.length > 0) {
+            [fieldArr addObject:fieldName];
+            [filterPropertyArr addObject:property];
+        }
+    }
+    
+    if (fieldArr.count == 0) {
+        SSJPRINT(@">>> SSJ Warning:propertyNames中的属性名无效");
+        return item;
     }
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
@@ -96,22 +106,28 @@
             return;
         }
         
-        [[SSJUserItem propertyMapping] enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            NSString *propertyName = key;
+        [resultSet next];
+        
+        for (int i = 0; i < fieldArr.count; i ++) {
+            NSString *fieldName = [fieldArr ssj_safeObjectAtIndex:i];
+            NSString *propertyName = [filterPropertyArr ssj_safeObjectAtIndex:i];
+            
             NSMutableString *setter = [NSMutableString stringWithString:@"set"];
             [setter appendString:[[propertyName substringToIndex:1] uppercaseString]];
             if (propertyName.length > 1) {
                 [setter appendString:[propertyName substringFromIndex:1]];
+                [setter appendString:@":"];
             }
             SEL setterSel = NSSelectorFromString(setter);
             if ([item respondsToSelector:setterSel]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                [item performSelector:setterSel withObject:[resultSet stringForColumn:obj]];
+                [item performSelector:setterSel withObject:[resultSet stringForColumn:fieldName]];
 #pragma clang diagnostic pop
                 
             }
-        }];
+        }
+        
         [resultSet close];
     }];
     

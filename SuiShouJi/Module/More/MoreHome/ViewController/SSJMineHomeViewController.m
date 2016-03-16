@@ -112,8 +112,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }];
     
     //  查询手势密码是否开启
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWDState"] forUserId:SSJUSERID()];
-    [self.motionSwitch setOn:[userItem.motionPWDState boolValue]];
+    if (SSJIsUserLogined()) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWDState"] forUserId:SSJUSERID()];
+        [self.motionSwitch setOn:[userItem.motionPWDState boolValue]];
+    } else {
+        [self.motionSwitch setOn:NO];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -366,41 +370,62 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }];
 }
 
+//  手势密码开关
 - (void)motionSwitchAction {
     if (self.motionSwitch.isOn) {
         if (!SSJIsUserLogined()) {
-            [self.motionSwitch setOn:NO animated:YES];
-            __weak typeof(self) weakSelf = self;
-            SSJAlertViewAction *registAction = [SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
-                SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
-                registerVc.finishHandle = ^(UIViewController *controller){
-                    if ([controller isKindOfClass:[SSJRegistCompleteViewController class]]) {
-                        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-                    } else if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
-                        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-                        [weakSelf.navigationController setViewControllers:@[weakSelf, loginVC] animated:YES];
-                    }
-                };
-                [self.navigationController pushViewController:registerVc animated:YES];
-            }];
-            SSJAlertViewAction *loginAction = [SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }];
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"开启手势密码，需要您登录后方可使用哦！" action:registAction, loginAction, nil];
+            //  如果用户没有登录，提示用户登录或注册
+            [self alertUserToLoginOrRegister];
         } else {
-            SSJUserItem *item = [[SSJUserItem alloc] init];
-            item.userId = SSJUSERID();
-            item.motionPWDState = @"1";
-            [SSJUserTableManager saveUserItem:item];
+            //  如果保存了手势密码，就保存开启状态，反之进入设置手势密码页面
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD"] forUserId:SSJUSERID()];
+            if (userItem.motionPWD.length > 0) {
+                [self saveMotionPasswordState:YES];
+            } else {
+                SSJMotionPasswordViewController *motinoVC = [[SSJMotionPasswordViewController alloc] init];
+                motinoVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                [self.navigationController pushViewController:motinoVC animated:YES];
+            }
         }
     } else {
-        
-        SSJUserItem *item = [[SSJUserItem alloc] init];
-        item.userId = SSJUSERID();
-        item.motionPWDState = @"0";
-        [SSJUserTableManager saveUserItem:item];
+        [self saveMotionPasswordState:NO];
     }
+}
+
+#pragma mark - Private
+//  提示用户登录或注册
+- (void)alertUserToLoginOrRegister {
+    [self.motionSwitch setOn:NO animated:YES];
+    __weak typeof(self) weakSelf = self;
+    SSJAlertViewAction *registAction = [SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
+        SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
+        registerVc.finishHandle = ^(UIViewController *controller){
+            if ([controller isKindOfClass:[SSJRegistCompleteViewController class]]) {
+                //  注册完成后返回个人中心
+                [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+            } else if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
+                //  忘记密码完成后返回登录页面
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController setViewControllers:@[weakSelf, loginVC] animated:YES];
+            }
+        };
+        [weakSelf.navigationController pushViewController:registerVc animated:YES];
+    }];
+    SSJAlertViewAction *loginAction = [SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
+        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+        loginVC.backController = weakSelf;
+        [weakSelf.navigationController pushViewController:loginVC animated:YES];
+    }];
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"开启手势密码，需要您登录后方可使用哦！" action:registAction, loginAction, nil];
+}
+
+//  保存手势密码开启状态
+- (void)saveMotionPasswordState:(BOOL)state {
+    SSJUserItem *item = [[SSJUserItem alloc] init];
+    item.userId = SSJUSERID();
+    item.motionPWDState = state ? @"1" : @"0";
+    [SSJUserTableManager saveUserItem:item];
 }
 
 #pragma mark - UIImagePickerControllerDelegate

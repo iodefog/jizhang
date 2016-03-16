@@ -31,7 +31,7 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, strong) SCYMotionEncryptionView *motionView;
 
-@property (nonatomic, strong) NSArray *keypads;
+@property (nonatomic, copy) NSString *password;
 
 @property (nonatomic, copy) NSString *iconUrl;
 
@@ -66,7 +66,7 @@ static const int kVerifyFailureTimesLimit = 5;
         case SSJMotionPasswordViewControllerTypeVerification: {
             //  查询手势密码
             SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"icon"] forUserId:SSJUSERID()];
-            self.keypads = [userItem.motionPWD componentsSeparatedByString:@","];
+            self.password = userItem.motionPWD;
             self.iconUrl = userItem.icon;
             
             [self.view addSubview:self.portraitView];
@@ -128,13 +128,13 @@ static const int kVerifyFailureTimesLimit = 5;
         //  设置手势密码
         case SSJMotionPasswordViewControllerTypeSetting: {
             [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusCorrect];
-            if (self.keypads) {
+            if (self.password) {
                 //  设置成功
-                if ([self.keypads isEqualToArray:keypads]) {
+                if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
                     //  保存手势密码
                     SSJUserItem *userItem = [[SSJUserItem alloc] init];
                     userItem.userId = SSJUSERID();
-                    userItem.motionPWD = [keypads componentsJoinedByString:@","];
+                    userItem.motionPWD = self.password;
                     [SSJUserTableManager saveUserItem:userItem];
                     
                     if (self.finishHandle) {
@@ -153,7 +153,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                     [self.miniMotionView setKeypads:[self.miniMotionView allKeypads] toStatus:SCYMotionEncryptionCircleLayerStatusDefault];
                 });
-                self.keypads = nil;
+                self.password = nil;
                 return SCYMotionEncryptionCircleLayerStatusError;
             }
             
@@ -170,14 +170,14 @@ static const int kVerifyFailureTimesLimit = 5;
             }
             
             self.remindLab.text = @"请再次绘制解锁图案";
-            self.keypads = keypads;
+            self.password = [keypads componentsJoinedByString:@","];
             return SCYMotionEncryptionCircleLayerStatusCorrect;
         }
             break;
             
         //  验证手势密码
         case SSJMotionPasswordViewControllerTypeVerification: {
-            if ([self.keypads isEqualToArray:keypads]) {
+            if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
                 //  验证成功
                 if (self.finishHandle) {
                     self.finishHandle(self);
