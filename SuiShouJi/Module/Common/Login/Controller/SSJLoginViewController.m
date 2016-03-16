@@ -23,6 +23,7 @@
 #import "SSJUserTableManager.h"
 #import "SSJBaselineTextField.h"
 #import "SSJBorderButton.h"
+#import "SSJFundAccountTable.h"
 
 static NSString *const KQQAppKey = @"1105133385";
 
@@ -195,29 +196,29 @@ static NSString *const KQQAppKey = @"1105133385";
         return;
     }
     
-    //  merge登陆接口返回的收支类型和资金帐户
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        //  merge登陆接口返回的收支类型和资金帐户
         [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        
+        //  检测缺少哪个收支类型就创建
+        [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
+        
+        //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
+        if (self.loginService.fundInfoArray.count == 0) {
+            [SSJUserDefaultDataCreater createDefaultFundAccountsForUserId:SSJUSERID() inDatabase:db];
+        }
+        
+        //  更新资金帐户余额
+        [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];
     
-    //  检测缺少哪个收支类型就创建
-    [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
-    
-    //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
-    if (self.loginService.fundInfoArray.count == 0) {
-        [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-    }
-    
     //  登陆成功后强制同步一次
-    //            [self.syncLoadingView show];
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
     [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
-        //                [self.syncLoadingView dismissWithSuccess:YES];
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
         [CDAutoHideMessageHUD showMessage:@"同步成功"];
     } failure:^(NSError *error) {
-        //                [self.syncLoadingView dismissWithSuccess:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
         [CDAutoHideMessageHUD showMessage:@"同步失败"];
     }];

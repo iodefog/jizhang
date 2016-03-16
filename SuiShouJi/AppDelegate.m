@@ -160,6 +160,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 //  初始化数据库
 - (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
+    SSJPRINT(@"<<< 初始化数据库开始 >>>");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *dbDocumentPath = SSJSQLitePath();
         SSJPRINT(@"%@", dbDocumentPath);
@@ -191,6 +192,7 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
         finishHandler();
+        SSJPRINT(@"<<< 初始化数据库结束 >>>");
     });
 }
 

@@ -122,10 +122,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *funsid = [resultSet stringForColumn:@"ifunsid"];
         NSString *money = [resultSet stringForColumn:@"imoney"];
         NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
-#warning todo
-        NSString *thumbUrl = imgUrl;
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *imgExtension = [imgUrl pathExtension];
+        NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
+        NSString *thumbUrl = [imgName stringByAppendingPathComponent:imgExtension];
         
         [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
         
@@ -189,6 +190,10 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *currentDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate day]];
         NSDate *recentEndDate = [NSDate dateWithString:[resultSet stringForColumn:@"max(cedate)"] formatString:@"yyyy-MM-dd"];
         
+        //  如果最近的一次预算时间晚于或等于当前时间，就忽略
+        if ([recentEndDate compare:currentDate] != NSOrderedAscending) {
+            continue;
+        }
         
         int itype = [resultSet intForColumn:@"itype"];
         NSString *imoney = [resultSet stringForColumn:@"imoney"];
@@ -199,8 +204,8 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
         for (SSJDatePeriod *period in periodArr) {
-            NSString *beginDate = [period.startDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-            NSString *endDate = [period.endDate ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+            NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
             if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, hasremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;

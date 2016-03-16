@@ -66,5 +66,12 @@
  *  @return (UIImage *) 缩放后的图片
  */
 -(UIImage *)ssj_scaleImageWithSize:(CGSize)Size;
+
+@end
+
+@interface UIImage (SSJCache)
+
+- (UIImage *)ssj_imageWithFilePath:(NSString *)path;
+
 @end
 

@@ -17,7 +17,6 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     
     //  查询同步表中是否有当前用户的记录，没有就返回默认的版本号
     if (![db intForQuery:@"select count(*) from BK_SYNC where type = 0 and cuserid = ?", userId]) {
-//        [[self memoryCache] setObject:@(SSJDefaultSyncVersion) forKey:kSSJSuccessSyncVersionKey];
         return SSJDefaultSyncVersion;
     }
     
@@ -31,8 +30,6 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     
     [result next];
     int64_t version = [result longLongIntForColumnIndex:0];
-//    [[self memoryCache] setObject:@(version) forKey:kSSJSuccessSyncVersionKey];
-    
     [result close];
     
     return version;
@@ -49,7 +46,6 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
 
 + (BOOL)insertSuccessSyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 0, ?)", @(version), userId]) {
-//        [[self memoryCache] setObject:@(version) forKey:kSSJSuccessSyncVersionKey];
         return YES;
     }
     

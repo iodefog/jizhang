@@ -135,3 +135,15 @@
 }
 
 @end
+
+@implementation UIImage (SSJCache)
+
+//- (UIImage *)ssj_imageWithFilePath:(NSString *)path {
+//    NSData *imageData
+//}
+//
+//+ (NSCache *)imageCache {
+//    
+//}
+
+@end

@@ -27,12 +27,11 @@
 }
 
 - (NSString *)ssj_systemCurrentDateWithFormat:(NSString *)format{
-    NSDate *now = [NSDate date];
     if (!format || format.length == 0) {
         format = @"yyyy-MM-dd HH:mm:ss";
     }
     [[self ssj_formatter] setDateFormat:format];
-    NSString *systemTimeZoneStr = [[self ssj_formatter] stringFromDate:now];
+    NSString *systemTimeZoneStr = [[self ssj_formatter] stringFromDate:self];
     return systemTimeZoneStr;
 }
 

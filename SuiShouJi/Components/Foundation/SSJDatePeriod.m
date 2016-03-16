@@ -111,7 +111,7 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     SSJDatePeriod *latestPeriod = self == earlierPeriod ? period : self;
     
     NSInteger periodCount = [latestPeriod periodCountFromPeriod:earlierPeriod];
-    for (NSInteger i = 0; i < periodCount; i++) {
+    for (NSInteger i = 1; i <= periodCount; i++) {
         switch (period.periodType) {
             case SSJDatePeriodTypeWeek:
                 [components setWeekOfYear:i];
@@ -180,19 +180,19 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     
     switch (period.periodType) {
         case SSJDatePeriodTypeWeek: {
-            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitWeekOfYear fromDate:period.endDate toDate:self.startDate options:0];
+            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitWeekOfYear fromDate:period.startDate toDate:self.startDate options:0];
             return tComponents.weekOfYear;
         }
             break;
             
         case SSJDatePeriodTypeMonth: {
-            NSDateComponents *tComponents = [[[self class] calendar] components:kAllCalendarUnitFlags fromDate:period.endDate toDate:self.startDate options:0];
+            NSDateComponents *tComponents = [[[self class] calendar] components:kAllCalendarUnitFlags fromDate:period.startDate toDate:self.startDate options:0];
             return tComponents.month + 12 * tComponents.year;
         }
             break;
             
         case SSJDatePeriodTypeYear: {
-            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitYear fromDate:period.endDate toDate:self.startDate options:0];
+            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitYear fromDate:period.startDate toDate:self.startDate options:0];
             return tComponents.year;
         }
             break;
