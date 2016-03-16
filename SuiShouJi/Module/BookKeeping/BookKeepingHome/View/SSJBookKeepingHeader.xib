@@ -13,13 +13,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5tG-JH-8GJ">
-                    <rect key="frame" x="0.0" y="0.0" width="319" height="160"/>
+                    <rect key="frame" x="0.0" y="0.0" width="319" height="132"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="tye-cO-Mp7">
-                            <rect key="frame" x="0.0" y="0.0" width="319" height="160"/>
+                            <rect key="frame" x="0.0" y="0.0" width="319" height="132"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
-                            <rect key="frame" x="159" y="0.0" width="159.5" height="160"/>
+                            <rect key="frame" x="159" y="0.0" width="159.5" height="132"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="本月支出(元)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
                                     <rect key="frame" x="42" y="68" width="74.5" height="16"/>
@@ -43,7 +43,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
-                            <rect key="frame" x="0.0" y="0.0" width="159.5" height="160"/>
+                            <rect key="frame" x="0.0" y="0.0" width="159.5" height="132"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsL-w9-uFM">
                                     <rect key="frame" x="50" y="98" width="59.5" height="24"/>
@@ -79,7 +79,7 @@
                         <constraint firstAttribute="bottom" secondItem="ALN-pm-jUE" secondAttribute="bottom" id="pT2-gE-Tkv"/>
                         <constraint firstAttribute="trailing" secondItem="ALN-pm-jUE" secondAttribute="trailing" id="pe0-Wd-9lb"/>
                         <constraint firstAttribute="bottom" secondItem="tye-cO-Mp7" secondAttribute="bottom" id="sDB-jI-PA0"/>
-                        <constraint firstAttribute="height" constant="160" id="tYG-zn-aze"/>
+                        <constraint firstAttribute="height" constant="132" id="tYG-zn-aze"/>
                         <constraint firstItem="tye-cO-Mp7" firstAttribute="top" secondItem="5tG-JH-8GJ" secondAttribute="top" id="xH7-zW-CYq"/>
                         <constraint firstAttribute="trailing" secondItem="tye-cO-Mp7" secondAttribute="trailing" id="xiQ-qo-1ao"/>
                         <constraint firstAttribute="bottom" secondItem="3TJ-sV-M3Z" secondAttribute="bottom" id="yHO-xV-78e"/>
