@@ -124,18 +124,23 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSString *imgExtension = [imgUrl pathExtension];
-        NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
-        NSString *thumbUrl = [imgName stringByAppendingPathComponent:imgExtension];
+        NSString *thumbUrl = nil;
+        if (imgUrl) {
+            NSString *imgExtension = [imgUrl pathExtension];
+            NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
+            thumbUrl = [imgName stringByAppendingPathComponent:imgExtension];
+        }
         
         [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
         
         int periodType = [resultSet intForColumn:@"itype"];
-        NSDate *billDate = [resultSet dateForColumn:@"max(a.cbilldate)"];
+        NSString *billDateStr = [resultSet stringForColumn:@"max(a.cbilldate)"];
+        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
         NSArray *billDates = [self billDatesFromDate:billDate periodType:periodType];
         
-        for (NSString *billDate in billDates) {
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDate, memo, imgUrl, thumbUrl, @(SSJSyncVersion()), writeDate]) {
+        for (NSDate *billDate in billDates) {
+            NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, @(SSJSyncVersion()), writeDate]) {
                 *rollback = YES;
                 return NO;
             }
@@ -161,13 +166,21 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *thumbUrl = nil;
+        if (imgUrl) {
+            NSString *imgExtension = [imgUrl pathExtension];
+            NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
+            thumbUrl = [imgName stringByAppendingPathComponent:imgExtension];
+        }
         
         int periodType = [resultSet intForColumn:@"itype"];
-        NSDate *billDate = [resultSet dateForColumn:@"cbilldate"];
+        NSString *billDateStr = [resultSet stringForColumn:@"cbilldate"];
+        NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
         NSArray *billDates = [self billDatesFromDate:billDate periodType:periodType];
         
-        for (NSString *billDate in billDates) {
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, money, billId, funsid, configId, billDate, memo, imgUrl, @(SSJSyncVersion()), writeDate, @0]) {
+        for (NSDate *billDate in billDates) {
+            NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, @(SSJSyncVersion()), writeDate, @0]) {
                 *rollback = YES;
                 return NO;
             }
@@ -238,6 +251,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 }
 
 + (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType {
+    if (!date) {
+        return nil;
+    }
     
     switch (periodType) {
             // 每天

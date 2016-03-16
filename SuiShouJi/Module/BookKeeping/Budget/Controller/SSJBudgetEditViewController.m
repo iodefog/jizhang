@@ -16,6 +16,7 @@
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJDatePeriod.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
 static NSString *const kBudgetEditTextFieldCellId = @"kBudgetEditTextFieldCellId";
@@ -246,8 +247,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudget] action:action, nil];
         } else {
             [SSJBudgetDatabaseHelper saveBudgetModel:self.model success:^{
+                //  保存成功后自动同步
+                [self syncIfNeeded];
                 [self updateSaveButtonState:NO];
-                [CDAutoHideMessageHUD showMessage:@"保存成功"];
                 [self ssj_backOffAction];
             } failure:^(NSError * _Nonnull error) {
                 [self updateSaveButtonState:NO];
@@ -473,6 +475,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper deleteBudgetWithID:self.model.ID success:^{
         [self.view ssj_hideLoadingIndicator];
+        //  删除成功后自动同步
+        [self syncIfNeeded];
         SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
         if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {
             [self.navigationController popToViewController:budgetListVC animated:YES];
@@ -481,6 +485,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:SSJ_ERROR_MESSAGE action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
     }];
+}
+
+- (void)syncIfNeeded {
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+    }
 }
 
 #pragma mark - Getter

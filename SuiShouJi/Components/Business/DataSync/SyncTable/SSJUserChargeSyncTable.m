@@ -55,8 +55,8 @@
             return NO;
         }
         
-        //  查询本地是否有相同configid和billdate的流水
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ?", record[@"cbilldate"], record[@"iconfigid"], userId];
+        //  查询本地是否有相同configid和billdate的不同流水
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and iconfigid = ? and cuserid = ? and ichargeid <> ?", record[@"cbilldate"], record[@"iconfigid"], userId, record[@"ichargeid"]];
         if (!resultSet) {
             return NO;
         }

@@ -65,6 +65,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         NSString *syncType = imageInfo[kSyncTypeKey];
         NSString *userId = self.userId;
         NSString *thumbImgName = [NSString stringWithFormat:@"%@-thumb", [imageName stringByDeletingPathExtension]];
+        thumbImgName = [thumbImgName stringByAppendingPathExtension:imageName.pathExtension];
         NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, kSyncImagePrivateKey] ssj_md5HexDigest];
         
         NSMutableData *imageData = [NSMutableData data];
