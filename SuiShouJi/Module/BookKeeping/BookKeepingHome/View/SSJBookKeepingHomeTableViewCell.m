@@ -315,14 +315,10 @@
             _expentureImage.userInteractionEnabled = YES;
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 if (self.item.incomeOrExpence) {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        self.expentureImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-                    });
+                    [self.expentureImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)]];
                     self.IncomeImage.image = nil;
                 }else{
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        self.IncomeImage.image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-                    });
+                    [self.IncomeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)]];
                     self.expentureImage.image = nil;
                 }
             }else{
