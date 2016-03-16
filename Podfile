@@ -22,3 +22,7 @@ pod 'DateTools'
 pod 'UMengFeedback', '~> 2.3.4'
 
 pod 'ZYCornerRadius', '~> 0.5.1'
+
+pod 'YYWebImage'
+
+pod 'YYImage/WebP'
