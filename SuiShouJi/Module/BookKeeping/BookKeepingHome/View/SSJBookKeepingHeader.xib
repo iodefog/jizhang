@@ -16,7 +16,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="319" height="132"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
-                    <rect key="frame" x="159" y="0.0" width="159.5" height="132"/>
+                    <rect key="frame" x="0.0" y="0.0" width="159.5" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsL-w9-uFM">
                             <rect key="frame" x="50" y="98" width="59.5" height="24"/>
@@ -48,7 +48,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
-                    <rect key="frame" x="0.0" y="0.0" width="159.5" height="132"/>
+                    <rect key="frame" x="159.5" y="0.0" width="159.5" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="本月支出(元)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
                             <rect key="frame" x="42" y="68" width="74.5" height="16"/>
@@ -77,6 +77,7 @@
                 <constraint firstItem="vhJ-Pb-BeF" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="0De-C2-OVZ"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="6My-40-98I"/>
                 <constraint firstItem="ALN-pm-jUE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ATK-B2-MAU"/>
+                <constraint firstItem="3TJ-sV-M3Z" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CTg-x2-QiR"/>
                 <constraint firstItem="tye-cO-Mp7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="GDy-11-GRU"/>
                 <constraint firstAttribute="trailing" secondItem="3TJ-sV-M3Z" secondAttribute="trailing" id="IeK-9R-hY5"/>
                 <constraint firstItem="vsL-w9-uFM" firstAttribute="baseline" secondItem="GP4-fJ-L5y" secondAttribute="baseline" id="Mfi-9v-ggd"/>
@@ -85,6 +86,7 @@
                 <constraint firstItem="tye-cO-Mp7" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Y4D-oV-Zmk"/>
                 <constraint firstItem="ALN-pm-jUE" firstAttribute="bottom" secondItem="tye-cO-Mp7" secondAttribute="bottom" id="a6n-pj-iCq"/>
                 <constraint firstItem="DOH-yp-VH2" firstAttribute="top" secondItem="qoB-04-fHd" secondAttribute="top" id="bIu-M0-dLf"/>
+                <constraint firstAttribute="trailing" secondItem="ALN-pm-jUE" secondAttribute="trailing" id="h4R-aR-pU4"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="bottom" secondItem="tye-cO-Mp7" secondAttribute="bottom" id="khu-jn-NYt"/>
                 <constraint firstAttribute="trailing" secondItem="tye-cO-Mp7" secondAttribute="trailing" id="m2S-Nf-gzY"/>
                 <constraint firstAttribute="bottom" secondItem="vhJ-Pb-BeF" secondAttribute="bottom" id="qFA-RF-igA"/>
@@ -95,6 +97,8 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <variation key="default">
                 <mask key="constraints">
+                    <exclude reference="IeK-9R-hY5"/>
+                    <exclude reference="ATK-B2-MAU"/>
                     <exclude reference="bIu-M0-dLf"/>
                 </mask>
             </variation>
