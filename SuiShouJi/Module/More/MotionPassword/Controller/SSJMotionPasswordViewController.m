@@ -74,10 +74,11 @@ static const int kVerifyFailureTimesLimit = 5;
             [self.view addSubview:self.forgetPwdBtn];
             [self.view addSubview:self.changeAccountBtn];
             self.remindLab.text = @"请输入手势密码";
+            
+            [self verifyTouchIDIfNeeded];
+            
         }   break;
     }
-    
-//    LAContext
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -239,6 +240,23 @@ static const int kVerifyFailureTimesLimit = 5;
     } else {
         SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
+    }
+}
+
+- (void)verifyTouchIDIfNeeded {
+    LAContext *context = [[LAContext alloc] init];
+    context.localizedFallbackTitle = @"";
+    NSError *error = nil;
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
+            if (success) {
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                } else {
+                    [self ssj_backOffAction];
+                }
+            }
+        }];
     }
 }
 
