@@ -24,13 +24,32 @@
 }
 
 - (NSURLSessionUploadTask *)uploadBodyData:(NSData *)data headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path fileName:(NSString *)fileName mimeType:(NSString *)mimeType completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
+    
+    return [self constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:data name:fileName fileName:fileName mimeType:mimeType];
+    } headerParams:prarms toUrlPath:path completionHandler:completionHandler];
+}
+
+- (NSURLSessionUploadTask *)uploadBodyDataList:(NSArray<NSData *> *)dataList headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path fileNameList:(NSArray<NSString *> *)fileNameList mimeTypeList:(NSArray<NSString *> *)mimeTypeList completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
+    
+    return [self constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        for (int i = 0; i < dataList.count; i ++) {
+            NSData *data = [dataList ssj_safeObjectAtIndex:i];
+            NSString *fileName = [fileNameList ssj_safeObjectAtIndex:i];
+            NSString *mimeType = [mimeTypeList ssj_safeObjectAtIndex:i];
+            if (data && fileName && mimeType) {
+                [formData appendPartWithFileData:data name:fileName fileName:fileName mimeType:mimeType];
+            }
+        }
+    } headerParams:prarms toUrlPath:path completionHandler:completionHandler];
+}
+
+- (NSURLSessionUploadTask *)constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     //  创建请求
     NSString *urlString = [[NSURL URLWithString:path relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
     
     NSError *tError = nil;
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:fileName fileName:fileName mimeType:mimeType];
-    } error:&tError];
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:nil constructingBodyWithBlock:block error:&tError];
     
     if (tError) {
         if (completionHandler) {
@@ -50,6 +69,7 @@
     //    NSProgress *progress = nil;
     NSURLSessionUploadTask *task = [manager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     [task resume];
+    
     return task;
 }
 

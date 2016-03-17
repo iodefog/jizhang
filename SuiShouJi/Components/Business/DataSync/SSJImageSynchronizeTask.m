@@ -72,6 +72,10 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
         [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)]];
         
+        NSMutableArray *imageList = [NSMutableArray arrayWithCapacity:2];
+        [imageList addObject:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
+        [imageList addObject:[NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)]];
+        
         NSDictionary *params = @{@"cuserId":userId,
                                  @"imageName":imageName,
                                  @"thumbName":thumbImgName,
@@ -80,7 +84,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                                  @"appVersion":SSJAppVersion()};
         
         SSJPRINT(@"<<< ------- 图片同步开始! ------- >>>");
-        [self uploadBodyData:imageData headerParams:params toUrlPath:@"/sync/syncimg.go" fileName:imageName mimeType:@"image/jpeg" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        [self uploadBodyDataList:imageList headerParams:params toUrlPath:@"/sync/syncimg.go" fileNameList:@[imageName, thumbImgName] mimeTypeList:@[@"image/jpeg", @"image/jpeg"] completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             dispatch_async(self.syncQueue, ^{
                 
                 self.uploadCounter --;

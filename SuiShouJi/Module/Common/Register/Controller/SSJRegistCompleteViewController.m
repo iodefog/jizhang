@@ -12,6 +12,7 @@
 #import "SSJRegistOrderView.h"
 #import "SSJBaselineTextField.h"
 #import "SSJUserTableManager.h"
+#import "SSJMotionPasswordViewController.h"
 
 @interface SSJRegistCompleteViewController () <UITextFieldDelegate>
 
@@ -122,6 +123,24 @@
                 [self showSuccessMessage];
                 
                 [CDAutoHideMessageHUD showMessage:@"注册成功"];
+                
+                //  如果用户手势密码开启，进入手势密码页面
+                SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+                if ([userItem.motionPWDState boolValue]) {
+                    
+                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                    motionVC.finishHandle = self.finishHandle;
+                    motionVC.backController = self.backController;
+                    if (userItem.motionPWD.length) {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+                    } else {
+                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                    }
+                    [self.navigationController pushViewController:motionVC animated:YES];
+                    
+                    return;
+                }
+                
                 if (self.finishHandle) {
                     self.finishHandle(self);
                 }

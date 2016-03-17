@@ -31,4 +31,11 @@
                                   mimeType:(NSString *)mimeType
                          completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
 
+- (NSURLSessionUploadTask *)uploadBodyDataList:(NSArray<NSData *> *)dataList
+                                  headerParams:(NSDictionary *)prarms
+                                     toUrlPath:(NSString *)path
+                                  fileNameList:(NSArray<NSString *> *)fileNameList
+                                  mimeTypeList:(NSArray<NSString *> *)mimeTypeList
+                             completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
+
 @end
