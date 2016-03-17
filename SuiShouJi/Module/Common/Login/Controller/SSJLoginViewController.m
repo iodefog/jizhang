@@ -284,14 +284,15 @@ static NSString *const KQQAppKey = @"1105133385";
     __weak typeof(self) weakSelf = self;
     SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
     registerVc.finishHandle = ^(UIViewController *controller){
-        if ([controller isKindOfClass:[SSJRegistCompleteViewController class]]) {
+        //  如果是忘记密码，就返回到登录页面
+        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
+            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+        } else {
             if (weakSelf.finishHandle) {
                 weakSelf.finishHandle(weakSelf);
             } else {
                 [weakSelf ssj_backOffAction];
             }
-        } else if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
-            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
         }
     };
     [self.navigationController pushViewController:registerVc animated:YES];

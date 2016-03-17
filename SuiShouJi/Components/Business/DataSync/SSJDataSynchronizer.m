@@ -200,7 +200,11 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             [self.imageFailureBlocks removeBlock];
 #ifdef DEBUG
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"图片同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+            if (error.code == SSJErrorCodeImageSyncFailed) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"图片同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+            } else if (error.code == SSJErrorCodeNoImageSyncNeedToSync) {
+                [CDAutoHideMessageHUD showMessage:error.localizedDescription];
+            }
 #endif
         });
     }

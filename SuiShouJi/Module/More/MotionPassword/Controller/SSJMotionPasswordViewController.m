@@ -88,7 +88,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     //  禁用手势返回
-    self.navigationController.interactivePopGestureRecognizer.enabled=NO;
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
 }
 

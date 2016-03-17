@@ -153,7 +153,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
             
             //  返回未知数据
             SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
-            tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
+            tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
             if (failure) {
                 failure(tError);
             }

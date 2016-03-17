@@ -107,7 +107,7 @@
     for (NSDictionary *recordInfo in records) {
         if (![recordInfo isKindOfClass:[NSDictionary class]]) {
             if (error) {
-                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
+                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
             }
             SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", recordInfo);
             return NO;
@@ -151,7 +151,7 @@
     NSString *opertoryType = recordInfo[@"operatortype"];
     if (opertoryType.length == 0) {
         if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"record is lack of column operatortype"}];
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"record is lack of column operatortype"}];
         }
         SSJPRINT(@">>>SSJ warning: merge record lack of column 'OPERATORTYPE'\n record:%@", recordInfo);
         return nil;
@@ -161,7 +161,7 @@
     int opertoryValue = [opertoryType intValue];
     if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
         if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"record has unknown operatortype value %@", opertoryType]}];
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"record has unknown operatortype value %@", opertoryType]}];
         }
         SSJPRINT(@">>>SSJ warning:unknown OPERATORTYPE value %d", opertoryValue);
         return nil;
@@ -171,7 +171,7 @@
     NSString *necessaryCondition = [self spliceKeyAndValueForKeys:[self primaryKeys] record:recordInfo joinString:@" and "];
     if (!necessaryCondition.length) {
         if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"an error occured when splice record's keys and values"}];
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"an error occured when splice record's keys and values"}];
         }
         SSJPRINT(@">>>SSJ warning:an error occured when splice record's keys and values");
         return nil;
