@@ -125,7 +125,7 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 200);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 180);
     self.bookKeepingHeader.top = 0;
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.tableView.height = self.view.height - self.bookKeepingHeader.bottom - 49;
@@ -245,9 +245,7 @@
 -(SSJBookKeepingHeader *)bookKeepingHeader{
     if (!_bookKeepingHeader) {
         _bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
-        _bookKeepingHeader.income = @"4000.04";
-        _bookKeepingHeader.expenditure = @"5000.08";
-        _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 187);
+        _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 160);
         __weak typeof(self) weakSelf = self;
         _bookKeepingHeader.BtnClickBlock = ^{
             SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
@@ -341,7 +339,7 @@
     _currentDay = [dateComponent day];
     _currentMonth = [dateComponent month];
     self.customNavigationBar.currentDay = self.currentDay;
-
+    self.bookKeepingHeader.currentMonth = self.currentMonth;
 }
 
 -(void)reloadDataAfterSync{

@@ -63,15 +63,6 @@ PODS:
   - UMengAnalytics-NO-IDFA (3.6.7)
   - UMengFeedback (2.3.4)
   - UMengSocial (4.4)
-  - YYCache (1.0.1)
-  - YYImage (1.0.1):
-    - YYImage/Core (= 1.0.1)
-  - YYImage/Core (1.0.1)
-  - YYImage/WebP (1.0.1):
-    - YYImage/Core
-  - YYWebImage (1.0.1):
-    - YYCache
-    - YYImage
   - ZYCornerRadius (0.5.1)
 
 DEPENDENCIES:
@@ -86,8 +77,6 @@ DEPENDENCIES:
   - UMengAnalytics-NO-IDFA
   - UMengFeedback (~> 2.3.4)
   - UMengSocial (~> 4.3)
-  - YYImage/WebP
-  - YYWebImage
   - ZYCornerRadius (~> 0.5.1)
 
 SPEC CHECKSUMS:
@@ -102,9 +91,6 @@ SPEC CHECKSUMS:
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
   UMengFeedback: 5283cc0e324dffca4dd54c4abb3cbded56487817
   UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
-  YYCache: e0c7321955a0a112a7daaf7b3e42a8dd110bafab
-  YYImage: b41b45bc5f32bfcdf67bdfb9c09da9e9832357c0
-  YYWebImage: 8a22da9ec4d95064afa75a5c756c5d6f19d1b660
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
 COCOAPODS: 0.39.0
