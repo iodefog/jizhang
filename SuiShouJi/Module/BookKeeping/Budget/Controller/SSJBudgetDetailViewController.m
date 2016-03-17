@@ -147,7 +147,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         }
         
         //  如果是月预算，需要再查询历史月预算id；否则直接刷新页面
-        if (self.budgetModel.type == 1) {
+        if (self.budgetModel.type == SSJBudgetPeriodTypeMonth) {
             [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSDictionary * _Nonnull result) {
                 [self.view ssj_hideLoadingIndicator];
                 

@@ -122,8 +122,13 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         }
         
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:2];
-        [result setObject:budgetModel forKey:SSJBudgetModelKey];
-        [result setObject:circleItemArr forKey:SSJBudgetCircleItemsKey];
+        if (budgetModel) {
+            [result setObject:budgetModel forKey:SSJBudgetModelKey];
+        }
+        
+        if (circleItemArr) {
+            [result setObject:circleItemArr forKey:SSJBudgetCircleItemsKey];
+        }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -154,7 +159,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 + (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1", userid];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2", userid];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -265,7 +270,8 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
-            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, ihasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
+            //  如果此记录没有被删除，就保存
+            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, ihasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID and operatortype <> 2" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
