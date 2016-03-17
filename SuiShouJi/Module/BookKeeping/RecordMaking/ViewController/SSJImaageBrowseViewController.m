@@ -141,7 +141,7 @@
 
 -(UIImageView *)imageBrowser{
     if (!_imageBrowser) {
-        _imageBrowser = [[UIImageView alloc]init];
+        _imageBrowser = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
     }
     return _imageBrowser;
 }

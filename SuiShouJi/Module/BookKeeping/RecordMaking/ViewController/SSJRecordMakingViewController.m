@@ -639,6 +639,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }
         }else if (self.item.ID != nil){
             //修改流水
+            if ([db intForQuery:@"select operatortype from bk_user_charge where ichargeid = ?",weakSelf.item.ID] == 2) {
+                return;
+            }
             if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,userid]) {
                 if (weakSelf.selectChargeCircleType != weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1) {
                     if ([db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ? and cuserid = ?",weakSelf.item.configId,userid]) {
@@ -690,6 +693,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             
         }else{
             //修改循环记账配置
+            if ([db intForQuery:@"select operatortype from BK_CHARGE_PERIOD_CONFIG where ICONFIGID = ?",weakSelf.item.configId] == 2) {
+                return;
+            }
             if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1){
                 [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLID = ? , ITYPE = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , CBILLDATE = ? , IFUNSID = ? , CMEMO = ? where ICONFIGID = ? and CUSERID = ?",weakSelf.categoryID,[NSNumber numberWithInteger:weakSelf.selectChargeCircleType],[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],selectDate,fundingType.fundingID,weakSelf.chargeMemo,weakSelf.item.configId,userid];
                 if (weakSelf.selectedImage != nil) {
