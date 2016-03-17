@@ -46,6 +46,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 //  没有消费记录的提示视图
 @property (nonatomic, strong) UIImageView *noDataRemindView;
 
+@property (nonatomic, strong) UILabel *noDataRemindLab;
+
 //  预算数据模型
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
@@ -54,6 +56,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 //  月预算历史id、日期映射表
 @property (nonatomic, strong) NSDictionary *monthBudgetIdMap;
+
+@property (nonatomic) SSJBudgetPeriodType periodType;
 
 @end
 
@@ -138,6 +142,10 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         self.titleView.periodType = self.budgetModel.type;
         self.titleView.currentDate = [NSDate dateWithString:self.budgetModel.beginDate formatString:kDateFomat];
         
+        if (self.budgetModel) {
+            self.periodType = self.budgetModel.type;
+        }
+        
         //  如果是月预算，需要再查询历史月预算id；否则直接刷新页面
         if (self.budgetModel.type == 1) {
             [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSDictionary * _Nonnull result) {
@@ -166,7 +174,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
                 [self.view ssj_hideLoadingIndicator];
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-                
             }];
         } else {
             [self.view ssj_hideLoadingIndicator];
@@ -183,18 +190,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 }
 
 - (void)updateView {
-    if (!self.budgetModel) {
-        self.scrollView.hidden = YES;
-        [self.bottomView.circleView ssj_hideWatermark:YES];
-        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
-        return;
-    }
-    
-    self.scrollView.hidden = NO;
-    [self.view ssj_hideWatermark:YES];
-    
     NSString *tStr = nil;
-    switch (self.budgetModel.type) {
+    switch (self.periodType) {
         case 0:
             tStr = @"周";
             break;
@@ -208,11 +205,25 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
             break;
     }
     
+    if (!self.budgetModel) {
+        self.scrollView.hidden = YES;
+        self.noDataRemindLab.text = [NSString stringWithFormat:@"您在这个%@没有设置预算哦", tStr];
+        [self.noDataRemindLab sizeToFit];
+        self.noDataRemindLab.center = CGPointMake(self.noDataRemindView.width * 0.5, self.noDataRemindView.height * 0.737);
+        [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        return;
+    }
+    
+    self.scrollView.hidden = NO;
+    
     [self.headerView setBudgetModel:self.budgetModel];
     [self.bottomView.circleView reloadData];
     if (self.circleItems.count > 0) {
         [self.bottomView.circleView ssj_hideWatermark:YES];
     } else {
+        self.noDataRemindLab.text = @"NO，小主居然忘记记账了！";
+        [self.noDataRemindLab sizeToFit];
+        self.noDataRemindLab.center = CGPointMake(self.noDataRemindView.width * 0.5, self.noDataRemindView.height * 0.737);
         [self.bottomView.circleView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
     }
     
@@ -267,15 +278,18 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 - (UIImageView *)noDataRemindView {
     if (!_noDataRemindView) {
         _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_no_data"]];
-        UILabel *noDataLab = [[UILabel alloc] init];
-        noDataLab.textColor = [UIColor whiteColor];
-        noDataLab.font = [UIFont systemFontOfSize:18];
-        noDataLab.text = @"NO，小主居然忘记记账了！";
-        [noDataLab sizeToFit];
-        noDataLab.center = CGPointMake(_noDataRemindView.width * 0.5, _noDataRemindView.height * 0.737);
-        [_noDataRemindView addSubview:noDataLab];
+        [_noDataRemindView addSubview:self.noDataRemindLab];
     }
     return _noDataRemindView;
+}
+
+- (UILabel *)noDataRemindLab {
+    if (!_noDataRemindLab) {
+        _noDataRemindLab = [[UILabel alloc] init];
+        _noDataRemindLab.textColor = [UIColor whiteColor];
+        _noDataRemindLab.font = [UIFont systemFontOfSize:18];
+    }
+    return _noDataRemindLab;
 }
 
 @end

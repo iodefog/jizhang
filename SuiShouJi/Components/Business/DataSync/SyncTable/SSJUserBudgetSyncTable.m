@@ -15,7 +15,7 @@
 }
 
 + (NSArray *)columns {
-    return @[@"ibid", @"cuserid", @"itype", @"imoney", @"iremindmoney", @"csdate", @"cedate", @"istate", @"ccadddate", @"cbilltype", @"iremind", @"hasremind", @"iversion", @"cwritedate", @"operatortype"];
+    return @[@"ibid", @"cuserid", @"itype", @"imoney", @"iremindmoney", @"csdate", @"cedate", @"istate", @"ccadddate", @"cbilltype", @"iremind", @"ihasremind", @"iversion", @"cwritedate", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {

@@ -112,7 +112,7 @@
 
 -(void)setBudgetHasRemind{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update BK_USER_BUDGET set HASREMIND = 1 where IBID = ? and CUSERID = ?",self.model.ID,SSJUSERID()];
+        [db executeUpdate:@"update BK_USER_BUDGET set ihasremind = 1 where IBID = ? and CUSERID = ?",self.model.ID,SSJUSERID()];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeFromSuperview];
         });

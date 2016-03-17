@@ -23,7 +23,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *budgetList = [NSMutableArray array];
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, hasremind from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ?", SSJUSERID(), currentDate, currentDate];
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ?", SSJUSERID(), currentDate, currentDate];
         
         if (!budgetResult) {
             if (failure) {
@@ -72,7 +72,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, hasremind from bk_user_budget where ibid = ?", ID];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind from bk_user_budget where ibid = ? and operatortype <> 2", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -135,7 +135,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 
 + (void)deleteBudgetWithID:(NSString *)ID success:(void(^)())success failure:(void (^)(NSError * _Nullable error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([db executeUpdate:@"update bk_user_budget set operatortype = 2 where ibid = ?", ID]) {
+        if ([db executeUpdate:@"update bk_user_budget set operatortype = 2, iversion = ?, cwritedate = ? where ibid = ?", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], ID]) {
             SSJDispatch_main_async_safe(^{
                 if (success) {
                     success();
@@ -260,12 +260,12 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         
         BOOL isExisted = [db boolForQuery:@"select count(*) from bk_user_budget where ibid = ?", model.ID];
         if (isExisted) {
-            NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds"]] mutableCopy];
+            NSMutableDictionary *parametersInfo = [[model mj_keyValuesWithIgnoredKeys:@[@"payMoney", @"billIds", @"isDeleted"]] mutableCopy];
             [parametersInfo setObject:[self billTypeStringWithBillTypeArr:model.billIds] forKey:@"cbilltype"];
             [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
-            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, hasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
+            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, ihasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1 where ibid = :ID" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -285,7 +285,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
-            if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, hasremind, cwritedate, iversion, operatortype) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :isAlreadyReminded, :cwritedate, :iversion, 0)" withParameterDictionary:parametersInfo]) {
+            if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cwritedate, iversion, operatortype) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :isAlreadyReminded, :cwritedate, :iversion, 0)" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -313,7 +313,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     budgetModel.endDate = [set stringForColumn:@"cedate"];
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
     budgetModel.isRemind = [set boolForColumn:@"iremind"];
-    budgetModel.isAlreadyReminded = [set boolForColumn:@"hasremind"];
+    budgetModel.isAlreadyReminded = [set boolForColumn:@"ihasremind"];
     NSString *query = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and b.id in %@", [self queryStringForBillIds:budgetModel.billIds]];
     budgetModel.payMoney = [db doubleForQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
     

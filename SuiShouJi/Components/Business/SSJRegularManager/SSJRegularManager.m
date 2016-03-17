@@ -220,7 +220,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
-            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, hasremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;
                 [resultSet close];
                 return NO;

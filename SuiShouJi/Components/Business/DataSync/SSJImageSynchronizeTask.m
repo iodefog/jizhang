@@ -68,13 +68,24 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         thumbImgName = [thumbImgName stringByAppendingPathExtension:imageName.pathExtension];
         NSString *sign = [[NSString stringWithFormat:@"%@%@%@%@%@", userId, imageName, thumbImgName, syncType, kSyncImagePrivateKey] ssj_md5HexDigest];
         
-        NSMutableData *imageData = [NSMutableData data];
-        [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
-        [imageData appendData:[NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)]];
-        
         NSMutableArray *imageList = [NSMutableArray arrayWithCapacity:2];
-        [imageList addObject:[NSData dataWithContentsOfFile:SSJImagePath(imageName)]];
-        [imageList addObject:[NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)]];
+        NSData *imgData = [NSData dataWithContentsOfFile:SSJImagePath(imageName)];
+        NSData *thumbData = [NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)];
+        
+        if (imgData) {
+            [imageList addObject:[SSJSyncFileModel modelWithFileData:imgData fileName:imageName mimeType:@"image/jpeg"]];
+        }
+        
+        if (thumbData) {
+            [imageList addObject:[SSJSyncFileModel modelWithFileData:thumbData fileName:thumbImgName mimeType:@"image/jpeg"]];
+        }
+        
+        if (imageList.count == 0) {
+            if (failure) {
+                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeNoImageSyncNeedToSync userInfo:@{NSLocalizedDescriptionKey:@"找不到需要同步的图片"}]);
+            }
+            return;
+        }
         
         NSDictionary *params = @{@"cuserId":userId,
                                  @"imageName":imageName,
@@ -84,7 +95,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                                  @"appVersion":SSJAppVersion()};
         
         SSJPRINT(@"<<< ------- 图片同步开始! ------- >>>");
-        [self uploadBodyDataList:imageList headerParams:params toUrlPath:@"/sync/syncimg.go" fileNameList:@[imageName, thumbImgName] mimeTypeList:@[@"image/jpeg", @"image/jpeg"] completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        [self uploadModelList:imageList headerParams:params toUrlPath:@"/sync/syncimg.go" completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
             dispatch_async(self.syncQueue, ^{
                 
                 self.uploadCounter --;

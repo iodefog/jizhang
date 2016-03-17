@@ -139,6 +139,7 @@ static const int kVerifyFailureTimesLimit = 5;
                     SSJUserItem *userItem = [[SSJUserItem alloc] init];
                     userItem.userId = SSJUSERID();
                     userItem.motionPWD = self.password;
+                    userItem.motionPWDState = @"1";
                     [SSJUserTableManager saveUserItem:userItem];
                     
                     if (self.finishHandle) {
@@ -243,6 +244,7 @@ static const int kVerifyFailureTimesLimit = 5;
     }
 }
 
+//  验证touchID
 - (void)verifyTouchIDIfNeeded {
     LAContext *context = [[LAContext alloc] init];
     context.localizedFallbackTitle = @"";

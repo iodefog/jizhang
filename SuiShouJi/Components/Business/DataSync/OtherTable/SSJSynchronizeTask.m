@@ -30,15 +30,13 @@
     } headerParams:prarms toUrlPath:path completionHandler:completionHandler];
 }
 
-- (NSURLSessionUploadTask *)uploadBodyDataList:(NSArray<NSData *> *)dataList headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path fileNameList:(NSArray<NSString *> *)fileNameList mimeTypeList:(NSArray<NSString *> *)mimeTypeList completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
+- (NSURLSessionUploadTask *)uploadModelList:(NSArray<SSJSyncFileModel *> *)modelList headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
     
     return [self constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        for (int i = 0; i < dataList.count; i ++) {
-            NSData *data = [dataList ssj_safeObjectAtIndex:i];
-            NSString *fileName = [fileNameList ssj_safeObjectAtIndex:i];
-            NSString *mimeType = [mimeTypeList ssj_safeObjectAtIndex:i];
-            if (data && fileName && mimeType) {
-                [formData appendPartWithFileData:data name:fileName fileName:fileName mimeType:mimeType];
+        for (int i = 0; i < modelList.count; i ++) {
+            SSJSyncFileModel *model = [modelList ssj_safeObjectAtIndex:i];
+            if (model.fileData && model.fileName && model.mimeType) {
+                [formData appendPartWithFileData:model.fileData name:model.fileName fileName:model.fileName mimeType:model.mimeType];
             }
         }
     } headerParams:prarms toUrlPath:path completionHandler:completionHandler];
