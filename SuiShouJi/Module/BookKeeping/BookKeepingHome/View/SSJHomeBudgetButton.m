@@ -62,8 +62,8 @@
 -(SSJBudgetWaveScaleView *)budgetWaveScaleView{
     if (!_budgetWaveScaleView) {
         _budgetWaveScaleView = [[SSJBudgetWaveScaleView alloc]init];
-        _budgetWaveScaleView.borderWidth = 2;
-        _budgetWaveScaleView.waveAmplitude = 1;
+        _budgetWaveScaleView.borderWidth = 1;
+        _budgetWaveScaleView.waveAmplitude = 0.6;
     }
     return _budgetWaveScaleView;
 }

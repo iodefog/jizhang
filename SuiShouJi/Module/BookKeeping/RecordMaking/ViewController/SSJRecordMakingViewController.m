@@ -333,7 +333,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
         [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:14];
         self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
         [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputTopView addSubview:self.datePickerButton];
@@ -350,7 +350,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
         _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-        _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:14];
+        _fundingTypeButton.spaceBetweenImageAndTitle = 10;
         [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _fundingTypeButton;
