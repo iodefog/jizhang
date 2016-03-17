@@ -49,8 +49,8 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
     
     if (imageInfoArr.count == 0) {
         SSJPRINT(@"<<< ------- 没有要同步的图片 ------- >>>");
-        if (success) {
-            success();
+        if (failure) {
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeNoImageSyncNeedToSync userInfo:@{NSLocalizedDescriptionKey:@"没有需要同步的图片"}]);
         }
         return;
     }
@@ -89,10 +89,10 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                 
                 self.uploadCounter --;
                 
-                if (tError) {
+                if (error) {
                     if (self.uploadCounter == 0) {
                         if (failure) {
-                            failure(tError);
+                            failure(error);
                         }
                     }
                     return;

@@ -33,7 +33,9 @@ typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
 typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeUndefined = 10000,
     SSJErrorCodeDataSyncBusy = 10001,
-    SSJErrorCodeImageSyncFailed = 10002
+    SSJErrorCodeDataSyncFailed = 10002,
+    SSJErrorCodeImageSyncFailed = 10003,
+    SSJErrorCodeNoImageSyncNeedToSync = 10004,
 };
 
 ///------------------------------------------

@@ -29,7 +29,10 @@ static NSString *const kBudgetRemindTitle = @"预算提醒";
 static NSString *const kBudgetRemindScaleTitle = @"预算占比提醒";
 static NSString *const kBudgetPeriodTitle = @"周期";
 
+//  预算金额输入框
 static const NSInteger kBudgetMoneyTextFieldTag = 1000;
+
+//  预算提醒百分比输入框
 static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 @interface SSJBudgetEditViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
@@ -48,6 +51,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 @property (nonatomic, strong) NSDictionary *budgetTypeMap;
 
+//  提醒百分比
+@property (nonatomic) double remindPercent;
+
 @end
 
 @implementation SSJBudgetEditViewController
@@ -58,6 +64,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"编辑预算";
         self.hidesBottomBarWhenPushed = YES;
+        self.remindPercent = 0.1;
     }
     return self;
 }
@@ -150,7 +157,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         textField.text = [NSString stringWithFormat:@"￥%@", text];
         
         self.model.budgetMoney = [text doubleValue];
-        self.model.remindMoney = MIN(self.model.remindMoney, self.model.budgetMoney);
+        self.model.remindMoney = self.remindPercent * self.model.budgetMoney;
         
         SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:3]];
         if (cell) {
@@ -162,8 +169,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [text ssj_reserveDecimalDigits:1];
-        
-        self.model.remindMoney = MIN([textField.text doubleValue], 100) / 100 * self.model.budgetMoney;
+
+        self.remindPercent = MIN([textField.text doubleValue], 100) / 100;
+        self.model.remindMoney = self.remindPercent * self.model.budgetMoney;
         
         SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:3]];
         if (cell) {
@@ -297,7 +305,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.billIds = [self.budgetTypeMap allKeys];
     self.model.type = 1;
     self.model.budgetMoney = 3000;
-    self.model.remindMoney = 300;
+    self.model.remindMoney = self.model.budgetMoney * self.remindPercent;
     self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.isAutoContinued = YES;
