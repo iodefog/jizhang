@@ -8,6 +8,8 @@
 
 #import "SSJBudgetDetailPeriodSwitchControl.h"
 
+static CGSize kButtonSize = {36, 30};
+
 @interface SSJBudgetDetailPeriodSwitchControl ()
 
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -29,10 +31,14 @@
     return self;
 }
 
+- (CGSize)sizeThatFits:(CGSize)size {
+    return CGSizeMake(self.titleLabel.width + self.preButton.width + self.nextButton.width, MAX(self.titleLabel.height, kButtonSize.height));
+}
+
 - (void)layoutSubviews {
     self.titleLabel.centerX = self.width * 0.5;
-    self.preButton.right = self.titleLabel.left - 5;
-    self.nextButton.left = self.titleLabel.right + 5;
+    self.preButton.right = self.titleLabel.left;
+    self.nextButton.left = self.titleLabel.right;
     self.titleLabel.centerY = self.preButton.centerY = self.nextButton.centerY = self.height * 0.5;
 }
 
@@ -154,7 +160,7 @@
         [_preButton setImage:[UIImage imageNamed:@"budget_left"] forState:UIControlStateNormal];
         [_preButton setImage:[UIImage imageNamed:@"budget_left_disable"] forState:UIControlStateDisabled];
         [_preButton addTarget:self action:@selector(preButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [_preButton sizeToFit];
+        _preButton.size = kButtonSize;
     }
     return _preButton;
 }
@@ -165,7 +171,7 @@
         [_nextButton setImage:[UIImage imageNamed:@"budget_right"] forState:UIControlStateNormal];
         [_nextButton setImage:[UIImage imageNamed:@"budget_right_diable"] forState:UIControlStateDisabled];
         [_nextButton addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [_nextButton sizeToFit];
+        _nextButton.size = kButtonSize;
     }
     return _nextButton;
 }
