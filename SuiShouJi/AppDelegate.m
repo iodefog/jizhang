@@ -280,7 +280,7 @@ NSDate *SCYEnterBackgroundTime() {
 //    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
 //                                              
 //                                         RedirectURL:SSJAppStoreAddress];
-    [UMSocialQQHandler setQQWithAppId:@"1105133385" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://1.9188.com/h5/jizhangApp/"];
+    [UMSocialQQHandler setQQWithAppId:@"1105086761" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://1.9188.com/h5/jizhangApp/"];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账，一种快速实现财务自由的方式。";
 }
 

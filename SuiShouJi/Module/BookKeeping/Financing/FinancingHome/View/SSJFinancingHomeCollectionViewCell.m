@@ -77,7 +77,7 @@
     if (!_fundingBalanceLabel) {
         _fundingBalanceLabel = [[UILabel alloc]init];
         _fundingBalanceLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _fundingBalanceLabel.font = [UIFont systemFontOfSize:20];
+        _fundingBalanceLabel.font = [UIFont systemFontOfSize:18];
     }
     return _fundingBalanceLabel;
 }

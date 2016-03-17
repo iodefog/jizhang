@@ -82,6 +82,7 @@
     self.moneyLabel.leftTop = CGPointMake(10, self.bottomBackGroundView.top + 10);
     self.memoLabel.leftTop = CGPointMake(10, self.moneyLabel.bottom + 10);
     self.dateLabel.rightTop = CGPointMake(self.view.width - 10, self.bottomBackGroundView.top + 10);
+
 }
 
 #pragma mark - Getter

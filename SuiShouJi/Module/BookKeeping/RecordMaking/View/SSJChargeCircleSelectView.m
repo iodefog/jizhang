@@ -62,7 +62,6 @@
         _topView = [[UIView alloc]init];
         _topView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.text = @"定期收入/支出";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -124,6 +123,16 @@
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
     _selectCircleType = selectCircleType;
     [self.pickerView selectRow:_selectCircleType + 1 inComponent:0 animated:NO];
+}
+
+-(void)setIncomeOrExpenture:(BOOL)incomeOrExpenture{
+    _incomeOrExpenture = incomeOrExpenture;
+    if (!_incomeOrExpenture) {
+        self.titleLabel.text = @"周期支出";
+    }else{
+        self.titleLabel.text = @"周期收入";
+    }
+    [self.titleLabel sizeToFit];
 }
 
 -(void)comfirmButtonClicked:(id)sender{

@@ -30,20 +30,19 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.remindImage.size = CGSizeMake(320 , 328);
     self.remindImage.center = CGPointMake(self.width / 2, self.height / 2);
     self.remindLabel.width = self.remindImage.width - 70;
     self.remindLabel.bottom = self.remindImage.bottom - 40;
     self.remindLabel.centerX = self.width / 2;
     self.closeButton.size = CGSizeMake(27, 27);
-    self.closeButton.rightTop = CGPointMake(self.remindImage.right - 30, self.remindImage.top + 13);
+    self.closeButton.rightTop = CGPointMake(self.remindImage.right - 27, self.remindImage.top + 13);
 }
 
 -(UIImageView *)remindImage{
     if (!_remindImage) {
         _remindImage = [[UIImageView alloc]init];
+        _remindImage.size = CGSizeMake(320 , 328);
         _remindImage.image = [UIImage imageNamed:@"home_remind"];
-        _remindImage.contentMode = UIViewContentModeScaleToFill;
     }
     return _remindImage;
 }
@@ -63,6 +62,7 @@
 -(UIButton *)closeButton{
     if (!_closeButton) {
         _closeButton = [[UIButton alloc]init];
+        
         [_closeButton setImage:[UIImage imageNamed:@"remind_close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

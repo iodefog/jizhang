@@ -63,7 +63,7 @@
     if (!_budgetWaveScaleView) {
         _budgetWaveScaleView = [[SSJBudgetWaveScaleView alloc]init];
         _budgetWaveScaleView.borderWidth = 1;
-        _budgetWaveScaleView.waveAmplitude = 3;
+        _budgetWaveScaleView.waveAmplitude = 0.6;
     }
     return _budgetWaveScaleView;
 }
@@ -88,7 +88,7 @@
         if (model.budgetMoney < model.payMoney) {
             self.budgetLabel.text = [NSString stringWithFormat:@"超支%.2f",model.budgetMoney - model.payMoney];
             [self.budgetLabel sizeToFit];
-            [self.budgetWaveScaleView setScale:0];
+            [self.budgetWaveScaleView setScale:1.1];
         }else{
             self.budgetLabel.text = [NSString stringWithFormat:@"剩余%.2f",model.budgetMoney - model.payMoney];
             [self.budgetLabel sizeToFit];

@@ -36,7 +36,7 @@
     [super layoutSubviews];
     self.categoryImage.centerX = self.width / 2;
     self.categoryImage.top = 3;
-    self.categoryName.bottom = self.height;
+    self.categoryName.bottom = self.height - 5;
     self.categoryName.centerX = self.width / 2;
 }
 
@@ -54,8 +54,8 @@
     if (!_categoryName) {
         _categoryName = [[UILabel alloc]init];
         [_categoryName sizeToFit];
-        _categoryName.font = [UIFont systemFontOfSize:15];
-        _categoryName.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _categoryName.font = [UIFont systemFontOfSize:14];
+        _categoryName.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _categoryName.textAlignment = NSTextAlignmentCenter;        
     }
     return _categoryName;
