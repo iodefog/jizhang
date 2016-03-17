@@ -88,11 +88,11 @@
         if (model.budgetMoney < model.payMoney) {
             self.budgetLabel.text = [NSString stringWithFormat:@"超支%.2f",model.budgetMoney - model.payMoney];
             [self.budgetLabel sizeToFit];
-            [self.budgetWaveScaleView setScale:1];
+            [self.budgetWaveScaleView setScale:0];
         }else{
             self.budgetLabel.text = [NSString stringWithFormat:@"剩余%.2f",model.budgetMoney - model.payMoney];
             [self.budgetLabel sizeToFit];
-            [self.budgetWaveScaleView setScale:(model.budgetMoney - model.payMoney)/ model.budgetMoney];
+            [self.budgetWaveScaleView setScale:1 - (model.budgetMoney - model.payMoney)/ model.budgetMoney];
         }
     }
 }
