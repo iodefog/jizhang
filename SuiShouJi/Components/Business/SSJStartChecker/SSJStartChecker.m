@@ -104,6 +104,9 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
             NSString *errorMessage = message.length > 0 ? message : SSJ_ERROR_MESSAGE;
             self.failure(errorMessage);
         }
+        
+        self.success = nil;
+        self.failure = nil;
     }
 }
 
@@ -117,10 +120,11 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
     }
     
     if (self.success) {
-        if (self.success) {
-            self.success(NO, updateType);
-        }
+        self.success(NO, updateType);
     }
+    
+    self.success = nil;
+    self.failure = nil;
     
     if ([self isInReview]) {
         return;

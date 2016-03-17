@@ -13,6 +13,7 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSJGuideView.h"
+#import "SSJStartView.h"
 
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDatabaseQueue.h"
@@ -57,6 +58,8 @@ NSDate *SCYEnterBackgroundTime() {
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    [self setRootViewController];
+    
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
@@ -74,30 +77,14 @@ NSDate *SCYEnterBackgroundTime() {
     //  添加友盟反馈
     [self umengFeedBack];
     
-    //  初始化数据库
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-        
         //  开启定时同步
         [[SSJDataSynchronizer shareInstance] startTimingSync];
     }];
     
-    //  设置根控制器
-    [self setRootViewController];
-    
-    //  当前版本第一次启动显示引导页
-    if (SSJIsFirstLaunchForCurrentVersion()) {
-        SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        [guideView showWithFinish:^{
-            [self showMotionPasswordIfNeeded];
-        }];
-    } else {
-        [self showMotionPasswordIfNeeded];
-    }
-    
-    //  请求启动接口，检测是否有更新、苹果是否正在审核
-    [[SSJStartChecker sharedInstance] checkWithSuccess:NULL failure:NULL];
+    [self requestStartAPI];
 
     return YES;
 }
@@ -205,6 +192,33 @@ NSDate *SCYEnterBackgroundTime() {
     }
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
     [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
+}
+
+//  请求启动接口，检测是否有更新、苹果是否正在审核、加载下发启动页
+- (void)requestStartAPI {
+    SSJStartView *startView = [[SSJStartView alloc] initWithFrame:self.window.bounds];
+    [self.window addSubview:startView];
+    [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
+        //  如果有下发启动页，就显示
+        [startView showWithUrl:[NSURL URLWithString:SSJImageURLWithAPI([SSJStartChecker sharedInstance].startImageUrl)]
+                      duration:2
+                        finish:^{
+                            [startView removeFromSuperview];
+                            [self showGuideViewIfNeeded];
+                        }];
+    } failure:NULL];
+}
+
+//  当前版本第一次启动显示引导页
+- (void)showGuideViewIfNeeded {
+    if (SSJIsFirstLaunchForCurrentVersion()) {
+        SSJGuideView *guideView = [[SSJGuideView alloc] initWithFrame:self.window.bounds];
+        [guideView showWithFinish:^{
+            [self showMotionPasswordIfNeeded];
+        }];
+    } else {
+        [self showMotionPasswordIfNeeded];
+    }
 }
 
 //  如果手势密码开启，进入手势密码页面

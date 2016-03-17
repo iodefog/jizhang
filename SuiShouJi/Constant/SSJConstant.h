@@ -52,6 +52,9 @@ extern const int64_t SSJDefaultSyncVersion;
 //  接口地址
 extern NSString *const SSJBaseURLString;
 
+//  图片域名
+extern NSString *const SSJImageBaseUrlString;
+
 //
 extern NSString *const SSJErrorDomain;
 

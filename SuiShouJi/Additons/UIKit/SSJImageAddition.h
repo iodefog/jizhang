@@ -14,10 +14,10 @@
 
 /**
  *  返回用适配iphone5(5s)和iphone6的的UIImage对象，返回正确适配的图片，注意以下图片命名规则
- *  iphone4(4s) imageName@2x.png    （系统命名规则）
- *  iphone5(5s) imageName-568@2x.png（自定义命名规则）
- *  iphone6     imageName-667@2x.png（自定义命名规则）
- *  iphone6Plus imageName@3x.png    （系统命名规则）
+ *  iphone4(4s) 640 × 960   imageName@2x.png    （系统命名规则）
+ *  iphone5(5s) 640 × 1136  imageName-568@2x.png（自定义命名规则）
+ *  iphone6     750 × 1334  imageName-667@2x.png（自定义命名规则）
+ *  iphone6Plus 1242 × 2208 imageName@3x.png    （系统命名规则）
  *
  *  @param name 图片名称
  *

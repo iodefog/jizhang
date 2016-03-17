@@ -114,6 +114,9 @@
         }
         
         if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
+            if (error) {
+                return NO;
+            }
             continue;
         }
         

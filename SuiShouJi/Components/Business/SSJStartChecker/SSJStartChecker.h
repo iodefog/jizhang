@@ -60,6 +60,6 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
  *
  *  @return NSString 图片url(需要拼接)
  */
--(NSString *)startImageUrl;
+- (NSString *)startImageUrl;
 
 @end

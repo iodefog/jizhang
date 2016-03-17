@@ -228,6 +228,11 @@
 		7DE6E86E1C55E61F001C9138 /* register_agreement@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE6E86D1C55E61F001C9138 /* register_agreement@2x.png */; };
 		7DE6E8711C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7DE6E8741C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */; };
+		7DE74BD81C9AE9C600D27E7D /* default-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD41C9AE9C600D27E7D /* default-568@2x.png */; };
+		7DE74BD91C9AE9C600D27E7D /* default-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD51C9AE9C600D27E7D /* default-667@2x.png */; };
+		7DE74BDA1C9AE9C600D27E7D /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD61C9AE9C600D27E7D /* default@2x.png */; };
+		7DE74BDB1C9AE9C600D27E7D /* default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD71C9AE9C600D27E7D /* default@3x.png */; };
+		7DE74BDF1C9AF28F00D27E7D /* SSJStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */; };
 		7DEF54521C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */; };
 		7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
 		7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54511C75DEEC00A90153 /* SSJPercentCircleView.m */; };
@@ -825,6 +830,12 @@
 		7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJForgetPasswordFirstStepViewController.m; sourceTree = "<group>"; };
 		7DE6E8721C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJForgetPasswordSecondStepViewController.h; sourceTree = "<group>"; };
 		7DE6E8731C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJForgetPasswordSecondStepViewController.m; sourceTree = "<group>"; };
+		7DE74BD41C9AE9C600D27E7D /* default-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-568@2x.png"; sourceTree = "<group>"; };
+		7DE74BD51C9AE9C600D27E7D /* default-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-667@2x.png"; sourceTree = "<group>"; };
+		7DE74BD61C9AE9C600D27E7D /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
+		7DE74BD71C9AE9C600D27E7D /* default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@3x.png"; sourceTree = "<group>"; };
+		7DE74BDD1C9AF28F00D27E7D /* SSJStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartView.h; sourceTree = "<group>"; };
+		7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartView.m; sourceTree = "<group>"; };
 		7DEF544C1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNode.h; sourceTree = "<group>"; };
 		7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionNode.m; sourceTree = "<group>"; };
 		7DEF544E1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNodeItem.h; sourceTree = "<group>"; };
@@ -1529,6 +1540,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7DE74BDC1C9AF28200D27E7D /* StartView */,
 				7D768A701C926B6600CB75B0 /* SSJBorderButton */,
 				7DE69C2E1C8EC401001D31C1 /* SCYMotionEncryptionControl */,
 				7DEF544B1C75DEEC00A90153 /* SSJPercentCircleView */,
@@ -1621,6 +1633,7 @@
 		7DD7D5D51C4C8E6A00ACE71A /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				7DE74BD31C9AE9C600D27E7D /* Default */,
 				BDF510741C925BB500A49D74 /* homeImage */,
 				7D893F1E1C91144D00886995 /* budget */,
 				7DE69C491C8EDF34001D31C1 /* motion_password */,
@@ -1971,6 +1984,26 @@
 				7DE6E86B1C55DD9C001C9138 /* SSJRegistOrderView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		7DE74BD31C9AE9C600D27E7D /* Default */ = {
+			isa = PBXGroup;
+			children = (
+				7DE74BD41C9AE9C600D27E7D /* default-568@2x.png */,
+				7DE74BD51C9AE9C600D27E7D /* default-667@2x.png */,
+				7DE74BD61C9AE9C600D27E7D /* default@2x.png */,
+				7DE74BD71C9AE9C600D27E7D /* default@3x.png */,
+			);
+			path = Default;
+			sourceTree = "<group>";
+		};
+		7DE74BDC1C9AF28200D27E7D /* StartView */ = {
+			isa = PBXGroup;
+			children = (
+				7DE74BDD1C9AF28F00D27E7D /* SSJStartView.h */,
+				7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */,
+			);
+			path = StartView;
 			sourceTree = "<group>";
 		};
 		7DEF544B1C75DEEC00A90153 /* SSJPercentCircleView */ = {
@@ -3327,6 +3360,7 @@
 				BDF5048B1C868A8200DCFA99 /* calender@3x.png in Resources */,
 				7DD7D69C1C4C8E6A00ACE71A /* bt_education@2x.png in Resources */,
 				7DD7D6A31C4C8E6A00ACE71A /* bt_fruit@3x.png in Resources */,
+				7DE74BD91C9AE9C600D27E7D /* default-667@2x.png in Resources */,
 				7DD7D6CE1C4C8E6A00ACE71A /* bt_service@2x.png in Resources */,
 				7DE6E86E1C55E61F001C9138 /* register_agreement@2x.png in Resources */,
 				BDF5049C1C87CF6400DCFA99 /* white_delete@3x.png in Resources */,
@@ -3409,6 +3443,7 @@
 				7DD7D68C1C4C8E6A00ACE71A /* bt_bouns@2x.png in Resources */,
 				7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */,
 				7DD7D6EC1C4C8E6A00ACE71A /* bt_zhuanchu@2x.png in Resources */,
+				7DE74BD81C9AE9C600D27E7D /* default-568@2x.png in Resources */,
 				7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */,
 				BD8C7F961C914CB600A70100 /* no_record_bg@2x.png in Resources */,
 				7DD7D6A01C4C8E6A00ACE71A /* bt_food@2x.png in Resources */,
@@ -3549,6 +3584,7 @@
 				7DD7D6E71C4C8E6A00ACE71A /* bt_yingye@3x.png in Resources */,
 				BDF318701C5F0A9400302DD6 /* record_ok@3x.png in Resources */,
 				7DD7D6D11C4C8E6A00ACE71A /* bt_shebao@3x.png in Resources */,
+				7DE74BDA1C9AE9C600D27E7D /* default@2x.png in Resources */,
 				7DD7D6AA1C4C8E6A00ACE71A /* bt_gongjijin@2x.png in Resources */,
 				BDF510931C925BB500A49D74 /* home_tankuang_close@3x.png in Resources */,
 				7DF8DEDD1C59BFE700CC5DFA /* guide_3@3x.png in Resources */,
@@ -3559,6 +3595,7 @@
 				7DD7D6FF1C4C8E6A00ACE71A /* founds_zhuanru@3x.png in Resources */,
 				BDF510B31C92E7B200A49D74 /* calender_star@3x.png in Resources */,
 				7DD7D7231C4C8E6A00ACE71A /* tab_accounte_nor@3x.png in Resources */,
+				7DE74BDB1C9AE9C600D27E7D /* default@3x.png in Resources */,
 				BDA3FDFC1C58CAC400FB57B1 /* ft_shiwuka@3x.png in Resources */,
 				7DD7D7241C4C8E6A00ACE71A /* tab_form_nor@2x.png in Resources */,
 				7DD7D6B61C4C8E6A00ACE71A /* bt_jiaoshui@2x.png in Resources */,
@@ -3848,6 +3885,7 @@
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
+				7DE74BDF1C9AF28F00D27E7D /* SSJStartView.m in Sources */,
 				BD37D2D21C5216130050BDAA /* SSJSyncSettingTableViewCell.m in Sources */,
 				BD4934341C34F86700300D43 /* SSJMineHomeTableViewHeader.m in Sources */,
 				BD976FB41C4F246900B0E26D /* SSJCalenderDetailCell.m in Sources */,
