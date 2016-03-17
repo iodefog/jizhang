@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJSyncFileModel.h"
 
 @interface SSJSynchronizeTask : NSObject
 
@@ -31,11 +32,9 @@
                                   mimeType:(NSString *)mimeType
                          completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
 
-- (NSURLSessionUploadTask *)uploadBodyDataList:(NSArray<NSData *> *)dataList
-                                  headerParams:(NSDictionary *)prarms
-                                     toUrlPath:(NSString *)path
-                                  fileNameList:(NSArray<NSString *> *)fileNameList
-                                  mimeTypeList:(NSArray<NSString *> *)mimeTypeList
-                             completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
+- (NSURLSessionUploadTask *)uploadModelList:(NSArray<SSJSyncFileModel *> *)modelList
+                               headerParams:(NSDictionary *)prarms
+                                  toUrlPath:(NSString *)path
+                          completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
 
 @end

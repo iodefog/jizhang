@@ -221,7 +221,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
-    if (!watermark.superview) {
+    if (watermark.superview != self) {
         [self addSubview:watermark];
         
         if ([target respondsToSelector:action]) {
@@ -251,7 +251,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
-    if (!watermark.superview) {
+    if (watermark.superview != self) {
         [self addSubview:watermark];
         
         if ([target respondsToSelector:action]) {
@@ -271,7 +271,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)ssj_hideWatermark:(BOOL)animated {
     UIView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
     
-    if (watermark && watermark.superview) {
+    if (watermark.superview == self) {
         [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
             watermark.alpha = 0;
         } completion:^(BOOL finished) {
