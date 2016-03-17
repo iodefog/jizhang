@@ -11,6 +11,7 @@
 #import "SCYMotionEncryptionView.h"
 #import "SSJUserTableManager.h"
 #import "UIImageView+CornerRadius.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 
 //  验证密码最多错误次数
 static const int kVerifyFailureTimesLimit = 5;
@@ -75,6 +76,8 @@ static const int kVerifyFailureTimesLimit = 5;
             self.remindLab.text = @"请输入手势密码";
         }   break;
     }
+    
+//    LAContext
 }
 
 - (void)viewWillAppear:(BOOL)animated {

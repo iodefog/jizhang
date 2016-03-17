@@ -122,8 +122,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)timingSyncData {
-    if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWWAN
-        || [AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachableViaWiFi) {
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI
+        && [AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].isReachable) {
         [self startSyncWithSuccess:NULL failure:NULL];
     }
 }
