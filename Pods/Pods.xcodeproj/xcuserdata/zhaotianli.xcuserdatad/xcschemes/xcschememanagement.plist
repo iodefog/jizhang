@@ -44,21 +44,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>YYCache.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>YYImage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>YYWebImage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>ZYCornerRadius.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -77,12 +62,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>101DA376E1EC82276FB164E61608FAB2</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>1DEE762E69410CD9F2004976286E2218</key>
+		<key>1A914F079D3819BEE8F24B04DCC51943</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -107,12 +87,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>83BDC8EBD43A0FA334A4409D9B982EDC</key>
+		<key>792EE41DA19545F9D80B9A86AD68AF88</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9AB8B6DB3F9A8D9C4F8295DB8A322A2A</key>
+		<key>7C16441A02F1AB61362780503CDB0D6B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8A5F19BD7A3E32A2CD8939916EB9A017</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -122,27 +107,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A3C66238654C17108CFB1D73692AF827</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>A75F8198F7CB3C0E7C3334F1A78A5DCE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AA780FF3CFE5E9754BAEEB71CF09B275</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>B23B3D15FFC0FC9893968F478086D58D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DD7A6558640D5AE4731474FBFB2A0E7E</key>
+		<key>E94901DC03A8BC2C9C51DD518B18F9A0</key>
 		<dict>
 			<key>primary</key>
 			<true/>

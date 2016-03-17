@@ -39,6 +39,5 @@
 #import "SSJAlertViewAdapter.h"
 #import "UIImageView+WebCache.h"
 #import "NSDate+DateTools.h"
-#import "YYWebImage.h"
 
 #endif

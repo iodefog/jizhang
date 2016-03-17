@@ -20,6 +20,10 @@ typedef void(^BtnClickBlock)();
 //本月收入
 @property(nonatomic,strong)NSString *income;
 
+
+//当前月份
+@property (nonatomic)long currentMonth;
+
 + (id)BookKeepingHeader;
 
 + (CGFloat)viewHeight;

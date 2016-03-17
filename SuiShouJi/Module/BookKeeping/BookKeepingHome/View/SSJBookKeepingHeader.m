@@ -13,7 +13,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *expenditureLabel;
 @property (weak, nonatomic) IBOutlet UILabel *incomeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *profitLabel;
+@property (weak, nonatomic) IBOutlet UILabel *expentureTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *bookKeepingButton;
+@property (weak, nonatomic) IBOutlet UILabel *incomeTitleLabel;
 @property (weak, nonatomic) IBOutlet UIView *backgroudview;
 
 - (IBAction)bookKeeping:(id)sender;
@@ -48,6 +50,13 @@
     _expenditure = expenditure;
     self.expenditureLabel.text = _expenditure;
     self.profitLabel.text =[NSString stringWithFormat:@"%.2f",[self.income doubleValue] - [self.expenditure doubleValue]];
+}
+
+-(void)setCurrentMonth:(long )currentMonth{
+    _currentMonth = currentMonth;
+    self.incomeTitleLabel.text = [NSString stringWithFormat:@"%ld月收入(元)",_currentMonth];
+    self.expentureTitleLabel.text = [NSString stringWithFormat:@"%ld月支出(元)",_currentMonth];
+
 }
 
 - (IBAction)bookKeeping:(id)sender {

@@ -220,7 +220,7 @@
             }
             self.imageBrowser.image = image;
         }else{
-            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
                     self.imageBrowser.width = self.view.width;
                     self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
