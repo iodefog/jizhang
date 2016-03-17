@@ -25,7 +25,7 @@
 #import "SSJBorderButton.h"
 #import "SSJFundAccountTable.h"
 
-static NSString *const KQQAppKey = @"1105133385";
+static NSString *const KQQAppKey = @"1105086761";
 
 
 @interface SSJLoginViewController () <UITextFieldDelegate>

@@ -51,7 +51,7 @@
 			<array>
 				<string>QQ41deff49</string>
 			</array>
-			<key>tencent1105133385</key>
+			<key>tencent1105086761</key>
 			<string></string>
 		</dict>
 		<dict>
@@ -61,7 +61,7 @@
 			<string>qqlogin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tencent1105133385</string>
+				<string>tencent1105086761</string>
 			</array>
 		</dict>
 	</array>
