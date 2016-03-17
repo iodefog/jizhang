@@ -135,8 +135,8 @@
         _headerView.backgroundColor = [UIColor whiteColor];
         _profitLabel = [[UILabel alloc]init];
         _profitLabel.text = @"结余";
-        _profitLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _profitLabel.font = [UIFont systemFontOfSize:18];
+        _profitLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _profitLabel.font = [UIFont systemFontOfSize:15];
         [_profitLabel sizeToFit];
     }
     return _headerView;
