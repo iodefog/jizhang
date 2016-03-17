@@ -305,7 +305,7 @@ static id _instance;
         if (sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
-                    changeRange = NSMakeRange(0, selectedRange.length);
+                    changeRange = NSMakeRange(0, self.textField.text.length);
                 } else {
                     return;
                 }
@@ -313,7 +313,7 @@ static id _instance;
         }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
-                    changeRange = NSMakeRange(0, selectedRange.length);
+                    changeRange = NSMakeRange(0, self.textField.text.length);
                 } else {
                     return;
                 }
