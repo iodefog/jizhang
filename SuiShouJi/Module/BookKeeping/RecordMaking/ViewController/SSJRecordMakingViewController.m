@@ -434,6 +434,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_ChargeCircleSelectView) {
         _ChargeCircleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _ChargeCircleSelectView.selectCircleType = self.selectChargeCircleType;
+        _ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
         __weak typeof(self) weakSelf = self;
         _ChargeCircleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
             if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
@@ -735,6 +736,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.categoryListView.selectedId = self.defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
 }
 
 -(void)getDefualtColorAndDefualtId{
