@@ -163,6 +163,7 @@ static NSString *const kTitle4 = @"关于我们";
     [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
     [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
     [self.tableView reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
 //    self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
 //    self.header.nicknameLabel.text = @"待君登录";
 //    [self.tableView reloadData];
