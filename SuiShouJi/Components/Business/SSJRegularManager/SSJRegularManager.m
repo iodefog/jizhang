@@ -262,7 +262,8 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 }
 
 + (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType {
-    if (!date) {
+    //  如果date为空或晚于当前日期，就返回nil
+    if (!date || [[NSDate date] compare:date] == NSOrderedAscending) {
         return nil;
     }
     

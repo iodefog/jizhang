@@ -29,7 +29,7 @@
         
         self.backgroundColor = [UIColor whiteColor];
         self.layer.borderWidth = 4;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:@"e9e9e9"].CGColor;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:@"f4f4f4"].CGColor;
         
         self.waveIndicator = [[WaveLoadingIndicator alloc] init];
         self.waveIndicator.isShowProgressText = NO;
