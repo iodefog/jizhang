@@ -108,6 +108,7 @@
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _comfirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_topView addSubview:_comfirmButton];
     }
     return _topView;
