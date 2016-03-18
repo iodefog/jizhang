@@ -219,7 +219,10 @@ NSDate *SCYEnterBackgroundTime() {
                             [startView removeFromSuperview];
                             [self showGuideViewIfNeeded];
                         }];
-    } failure:NULL];
+    } failure:^(NSString *message) {
+        [startView removeFromSuperview];
+        [self showGuideViewIfNeeded];
+    }];
 }
 
 //  当前版本第一次启动显示引导页
