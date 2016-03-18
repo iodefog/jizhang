@@ -4076,9 +4076,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "14d03a4e-a7cc-480e-81e8-e3046628f89f";
+				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -4114,9 +4114,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
+				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
 			};
 			name = Release;
