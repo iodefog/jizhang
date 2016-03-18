@@ -326,8 +326,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_inputTopView ) {
         _inputTopView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _inputTopView.backgroundColor = [UIColor whiteColor];
-        [_inputTopView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-        [_inputTopView ssj_setBorderStyle:SSJBorderStyleTop];
         [_inputTopView addSubview:self.fundingTypeButton];
         self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
         _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
@@ -349,6 +347,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_fundingTypeButton) {
         _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
         _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _fundingTypeButton.spaceBetweenImageAndTitle = 10;
         [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:14];
         _fundingTypeButton.spaceBetweenImageAndTitle = 10;
