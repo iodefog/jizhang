@@ -19,7 +19,7 @@
 /**
  *  数据库是否完成初始化
  */
-@property (nonatomic, readonly) BOOL isInitDatabaseFinished;
+@property (nonatomic, readonly) BOOL isDatabaseInitFinished;
 
 /**
  *  同步成功后重载数据，子类根据情况重写，父类中没有做任何处理

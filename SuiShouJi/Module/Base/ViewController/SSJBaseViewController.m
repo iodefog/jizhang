@@ -16,7 +16,7 @@
 
 @property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
 
-@property (nonatomic) BOOL isInitDatabaseFinished;
+@property (nonatomic) BOOL isDatabaseInitFinished;
 
 @end
 
@@ -113,7 +113,7 @@
 }
 
 - (void)didFinishInitDatabase {
-    self.isInitDatabaseFinished = YES;
+    self.isDatabaseInitFinished = YES;
     if (SSJVisibalController() == self) {
         [self reloadDataAfterSync];
     }
