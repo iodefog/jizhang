@@ -45,6 +45,7 @@
 -(SSJCustomTextView *)textView{
     if (!_textView) {
         _textView = [[SSJCustomTextView alloc]init];
+        _textView.font = [UIFont systemFontOfSize:14];
         if ([self.oldMemo isEqualToString:@""] || self.oldMemo == nil) {
             _textView.placeholder = @"好记性不如烂笔头,备忘录开启~";
         }else{
