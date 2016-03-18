@@ -187,14 +187,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  记账提醒
     if ([title isEqualToString:kTitle2]) {
-        SSJBookkeepingReminderViewController *BookkeepingReminderVC = [[SSJBookkeepingReminderViewController alloc]init];
+        SSJBookkeepingReminderViewController *BookkeepingReminderVC = [[SSJBookkeepingReminderViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
     
     //  周期记账
     if ([title isEqualToString:kTitle3]) {
-        SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]init];
+        SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
@@ -216,7 +216,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     
     if ([title isEqualToString:kTitle7]) {
-        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]init];
+        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:settingVC animated:YES];
     }
 }

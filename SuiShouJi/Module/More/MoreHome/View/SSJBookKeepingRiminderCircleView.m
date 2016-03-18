@@ -28,6 +28,7 @@
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
         _weekdayArray = [[NSMutableArray alloc]initWithArray:@[@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"]];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         [self addSubview:self.tableView];
         [self addSubview:self.topView];
     }
@@ -43,9 +44,9 @@
     self.titleLabel.center = CGPointMake(self.topView.width / 2, self.topView.height / 2);
     self.closeButton.centerY = self.topView.height / 2;
     self.closeButton.left = 10;
+    self.comfirmButton.size = CGSizeMake(36, 21);
     self.comfirmButton.centerY = self.topView.height / 2;
-    self.comfirmButton.right = self.width - 40;
-    self.comfirmButton.size = CGSizeMake(40, 40);
+    self.comfirmButton.right = self.width - 20;
 }
 
 #pragma mark - UITableViewDelegate

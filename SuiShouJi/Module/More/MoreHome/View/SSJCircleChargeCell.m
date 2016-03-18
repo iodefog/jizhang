@@ -38,24 +38,19 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.categoryImage.size = CGSizeMake(46, 46);
-    self.categoryImage.bottom = self.contentView.height / 2;
     self.categoryImage.left = 10;
-    self.seperatorView.size = CGSizeMake(self.contentView.width - self.categoryImage.width - 20, 1 / [UIScreen mainScreen].scale);
-    self.seperatorView.center = self.contentView.center;
-    self.seperatorView.left = self.categoryImage.right + 5;
-    self.categoryLabel.left = self.seperatorView.left;
-    self.categoryLabel.centerY= self.categoryImage.centerY;
+    self.categoryImage.centerY = self.height / 2;
+    self.categoryLabel.left = self.categoryImage.right + 10;
+    self.categoryLabel.top= 25;
     self.moneyLabel.left = self.categoryLabel.right + 10;
     self.moneyLabel.centerY = self.categoryLabel.centerY;
     self.circleImage.size = CGSizeMake(20, 20);
-    self.circleImage.left = self.seperatorView.left;
-    self.circleImage.top = self.seperatorView.bottom + 15;
+    self.circleImage.left = self.categoryLabel.left;
+    self.circleImage.top = self.moneyLabel.bottom + 15;
     self.circleLabel.centerY = self.circleImage.centerY;
     self.circleLabel.left = self.circleImage.right + 10;
-    self.timeLabel.right = self.seperatorView.right;
-    self.timeLabel.centerY = self.circleImage.centerY;
-    self.switchButton.right = self.seperatorView.right;
-    self.switchButton.bottom = self.seperatorView.top - 10;
+    self.switchButton.right = self.width - 10;
+    self.switchButton.centerY = self.height / 2;
 }
 
 -(UIImageView *)categoryImage{
@@ -106,30 +101,13 @@
     return _circleLabel;
 }
 
--(UILabel *)timeLabel{
-    if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc]init];
-        _timeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _timeLabel.font = [UIFont systemFontOfSize:15];
-    }
-    return _timeLabel;
-}
-
 -(UISwitch *)switchButton{
     if (!_switchButton) {
         _switchButton = [[UISwitch alloc]init];
-        _switchButton.onTintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _switchButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
         [_switchButton addTarget:self action:@selector(switchButtonClicked:) forControlEvents:UIControlEventValueChanged];
     }
     return _switchButton;
-}
-
--(UIView *)seperatorView{
-    if (!_seperatorView) {
-        _seperatorView = [[UIView alloc]init];
-        _seperatorView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
-    }
-    return _seperatorView;
 }
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{

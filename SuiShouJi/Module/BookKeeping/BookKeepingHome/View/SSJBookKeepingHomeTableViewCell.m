@@ -242,7 +242,9 @@
     NSDateComponents *currentdateComponent = [calendar components:unitFlags fromDate:[NSDate date]];
     long day = [dateComponent day];
     long month = [dateComponent month];
+    long year = [dateComponent year];
     long currentMonth = [currentdateComponent month];
+    long currentYear = [currentdateComponent year];
     if ([item.billId isEqualToString:@"-1"]) {
         _IncomeImage.userInteractionEnabled = NO;
         _expentureImage.userInteractionEnabled = NO;
@@ -266,8 +268,10 @@
             [self.expenditureLabel sizeToFit];
             if (month == currentMonth) {
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
-            }else{
+            }else if(year == currentYear){
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld月%ld日",month,day];
+            }else{
+                self.incomeLabel.text = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
             }
             [self.incomeLabel sizeToFit];
 
@@ -278,10 +282,11 @@
             [self.incomeLabel sizeToFit];
             if (month == currentMonth) {
                 self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
+            }else if(year == currentYear){
+                self.expenditureLabel.text = [NSString stringWithFormat:@"%ld月%ld日",month,day];
             }else{
-                self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
+                self.expenditureLabel.text = [NSString stringWithFormat:@"%ld年%ld月%ld日",year,month,day];
             }
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
             [self.expenditureLabel sizeToFit];
         }
     }else{
