@@ -128,7 +128,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = nil;
-        if (imgUrl) {
+        if (imgUrl && imgUrl.length > 0) {
             NSString *imgExtension = [imgUrl pathExtension];
             NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
             thumbUrl = [imgName stringByAppendingPathComponent:imgExtension];
@@ -170,7 +170,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = nil;
-        if (imgUrl) {
+        if (imgUrl && imgUrl.length > 0) {
             NSString *imgExtension = [imgUrl pathExtension];
             NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
             thumbUrl = [imgName stringByAppendingPathComponent:imgExtension];

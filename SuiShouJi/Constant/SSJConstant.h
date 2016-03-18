@@ -95,7 +95,7 @@ extern NSString *const SSJShowSyncLoadingNotification;
 //  隐藏同步中通知
 extern NSString *const SSJHideSyncLoadingNotification;
 
-//记账提醒的通知
+//  记账提醒的通知
 extern NSString *const SSJChargeReminderNotification;
 
 //  初始化数据库开始的通知

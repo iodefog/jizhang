@@ -185,7 +185,9 @@ NSDate *SCYEnterBackgroundTime() {
         //  创建默认的收支类型
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:nil];
+        SSJDispatchMainSync(^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:nil];
+        });
         
         if (finishHandler) {
             finishHandler();

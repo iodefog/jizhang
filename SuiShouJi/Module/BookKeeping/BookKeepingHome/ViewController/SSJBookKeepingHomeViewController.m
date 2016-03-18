@@ -90,19 +90,23 @@
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
-    [self getDateFromDatebase];
-    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        self.customNavigationBar.model = [result firstObject];
-        for (int i = 0; i < result.count; i++) {
-            if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
-                self.remindView.model = [result objectAtIndex:i];
-                [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
-                break;
+    
+    //  数据库初始化完成后再查询数据
+    if (self.isDatabaseInitFinished) {
+        [self getDateFromDatebase];
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            self.customNavigationBar.model = [result firstObject];
+            for (int i = 0; i < result.count; i++) {
+                if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
+                    self.remindView.model = [result objectAtIndex:i];
+                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+                    break;
+                }
             }
-        }
-    } failure:^(NSError * _Nullable error) {
-        NSLog(@"%@",error.localizedDescription);
-    }];
+        } failure:^(NSError * _Nullable error) {
+            NSLog(@"%@",error.localizedDescription);
+        }];
+    }
 }
 
 - (void)viewDidLoad {
@@ -349,6 +353,22 @@
 
 -(void)reloadDataAfterSync{
     [self getDateFromDatebase];
+}
+
+- (void)reloadDataAfterInitDatabase {
+    [self getDateFromDatebase];
+    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+        self.customNavigationBar.model = [result firstObject];
+        for (int i = 0; i < result.count; i++) {
+            if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
+                self.remindView.model = [result objectAtIndex:i];
+                [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+                break;
+            }
+        }
+    } failure:^(NSError * _Nullable error) {
+        NSLog(@"%@",error.localizedDescription);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

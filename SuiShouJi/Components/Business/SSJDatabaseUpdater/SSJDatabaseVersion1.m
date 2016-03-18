@@ -35,6 +35,11 @@
             error = [db lastError];
         }
     }
+    if (![db columnExists:@"thumburl" inTableWithName:@"bk_user_charge"]) {
+        if (![db executeUpdate:@"alter table bk_user_charge add thumburl text"]) {
+            error = [db lastError];
+        }
+    }
     if (![db columnExists:@"cmemo" inTableWithName:@"bk_user_charge"]) {
         if (![db executeUpdate:@"alter table bk_user_charge add cmemo text"]) {
             error = [db lastError];

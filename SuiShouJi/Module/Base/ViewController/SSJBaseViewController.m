@@ -115,7 +115,7 @@
 - (void)didFinishInitDatabase {
     self.isDatabaseInitFinished = YES;
     if (SSJVisibalController() == self) {
-        [self reloadDataAfterSync];
+        [self reloadDataAfterInitDatabase];
     }
 }
 
