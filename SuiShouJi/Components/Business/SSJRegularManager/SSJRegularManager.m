@@ -22,6 +22,10 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 
 @implementation SSJRegularManager
 
++ (void)load {
+    [self registerRegularTaskNotification];
+}
+
 + (void)registerRegularTaskNotification {
     if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeNone categories:nil]];
