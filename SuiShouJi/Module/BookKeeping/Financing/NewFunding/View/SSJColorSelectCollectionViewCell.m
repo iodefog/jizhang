@@ -10,52 +10,51 @@
 
 
 @interface SSJColorSelectCollectionViewCell()
-@property (nonatomic,strong) UIImageView *checkMarkImage;
+@property (nonatomic,strong) UIView *smallCircleView;
 @end
 
 @implementation SSJColorSelectCollectionViewCell
-
-
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:self.itemColor];
-        [self addSubview:self.checkMarkImage];
-        self.checkMarkImage.hidden = YES;
+        self.layer.cornerRadius = self.height / 2;
+        [self addSubview:self.smallCircleView];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    _checkMarkImage.size = CGSizeMake(22, 22);
-    _checkMarkImage.center = CGPointMake(self.width / 2, self.height / 2);
+    self.smallCircleView.center = CGPointMake(self.width / 2, self.height / 2);
 }
 
--(UIImageView *)checkMarkImage{
-    if (!_checkMarkImage) {
-        _checkMarkImage = [[UIImageView alloc]init];
-        _checkMarkImage.tintColor = [UIColor whiteColor];
-        _checkMarkImage.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-
+-(UIView *)smallCircleView{
+    if (!_smallCircleView) {
+        _smallCircleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width / 2, self.height / 2)];
+        _smallCircleView.layer.cornerRadius = _smallCircleView.width / 2;
     }
-    return _checkMarkImage;
+    return _smallCircleView;
 }
 
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
-    if (_isSelected) {
-        self.checkMarkImage.hidden = NO;
+    if (_isSelected == YES) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.smallCircleView.transform = CGAffineTransformMakeScale(2, 2);
+        }completion:nil];
     }else{
-        self.checkMarkImage.hidden = YES;
+        self.smallCircleView.transform = CGAffineTransformMakeScale(1, 1);
     }
+
 }
 
 -(void)setItemColor:(NSString *)itemColor{
     _itemColor = itemColor;
-    self.backgroundColor = [UIColor ssj_colorWithHex:_itemColor];
+    self.smallCircleView.backgroundColor = [UIColor ssj_colorWithHex:_itemColor];
+    self.layer.borderColor = [UIColor ssj_colorWithHex:_itemColor].CGColor;
+    self.layer.borderWidth = 1.0f;
 }
 
 @end

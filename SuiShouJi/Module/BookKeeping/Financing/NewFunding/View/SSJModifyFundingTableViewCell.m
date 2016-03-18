@@ -32,6 +32,7 @@
     self.cellDetail.centerY = self.height / 2;
     self.colorView.size = CGSizeMake(30, 30);
     self.colorView.right = self.contentView.width - 10;
+    self.colorView.layer.cornerRadius = 15;
     self.colorView.centerY = self.height / 2;
     self.typeTitle.right = self.cellDetail.right;
     self.typeTitle.centerY = self.height / 2;

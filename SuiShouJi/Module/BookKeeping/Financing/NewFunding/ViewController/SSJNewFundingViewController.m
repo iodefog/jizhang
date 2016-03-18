@@ -37,6 +37,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"添加资金账户";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
