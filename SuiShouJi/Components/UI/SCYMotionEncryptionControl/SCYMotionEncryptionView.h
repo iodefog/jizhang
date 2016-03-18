@@ -46,6 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL showStroke;
 
 /**
+ *  手势密码连线各种状态的颜色
+ */
+@property (nonatomic, strong) NSDictionary<NSNumber *, UIColor *> *strokeColorInfo;
+
+/**
  *  密码按键的触发半径
  */
 @property (nonatomic) CGFloat circleRadius;

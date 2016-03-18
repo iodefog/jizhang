@@ -69,9 +69,3 @@
 
 @end
 
-@interface UIImage (SSJCache)
-
-- (UIImage *)ssj_imageWithFilePath:(NSString *)path;
-
-@end
-

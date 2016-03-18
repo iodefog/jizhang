@@ -64,8 +64,8 @@
 		7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
 		7DA4ACB11C918F57004E39E8 /* budget_no_data@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACAF1C918F57004E39E8 /* budget_no_data@2x.png */; };
 		7DA4ACB21C918F57004E39E8 /* budget_no_data@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */; };
-		7DA4ACB51C919F38004E39E8 /* budget_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB31C919F38004E39E8 /* budget_wave_full@2x.png */; };
-		7DA4ACB61C919F38004E39E8 /* budget_wave_full@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB41C919F38004E39E8 /* budget_wave_full@3x.png */; };
+		7DA4ACB51C919F38004E39E8 /* budget_red_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */; };
+		7DA4ACB61C919F38004E39E8 /* budget_red_wave_full@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB41C919F38004E39E8 /* budget_red_wave_full@3x.png */; };
 		7DAD4A5E1C4F552F004B7FF0 /* reportForms_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */; };
 		7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */; };
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
@@ -233,6 +233,8 @@
 		7DE74BDA1C9AE9C600D27E7D /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD61C9AE9C600D27E7D /* default@2x.png */; };
 		7DE74BDB1C9AE9C600D27E7D /* default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD71C9AE9C600D27E7D /* default@3x.png */; };
 		7DE74BDF1C9AF28F00D27E7D /* SSJStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */; };
+		7DE74BE21C9BB61700D27E7D /* budget_green_wave_full@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */; };
+		7DE74BE31C9BB61700D27E7D /* budget_green_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */; };
 		7DEF54521C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */; };
 		7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
 		7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54511C75DEEC00A90153 /* SSJPercentCircleView.m */; };
@@ -650,8 +652,8 @@
 		7D99D4641C357703006EB113 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
 		7DA4ACAF1C918F57004E39E8 /* budget_no_data@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_no_data@2x.png"; sourceTree = "<group>"; };
 		7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_no_data@3x.png"; sourceTree = "<group>"; };
-		7DA4ACB31C919F38004E39E8 /* budget_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_wave_full@2x.png"; sourceTree = "<group>"; };
-		7DA4ACB41C919F38004E39E8 /* budget_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_wave_full@3x.png"; sourceTree = "<group>"; };
+		7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_red_wave_full@2x.png"; sourceTree = "<group>"; };
+		7DA4ACB41C919F38004E39E8 /* budget_red_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_red_wave_full@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@2x.png"; sourceTree = "<group>"; };
 		7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@3x.png"; sourceTree = "<group>"; };
@@ -838,6 +840,8 @@
 		7DE74BD71C9AE9C600D27E7D /* default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@3x.png"; sourceTree = "<group>"; };
 		7DE74BDD1C9AF28F00D27E7D /* SSJStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartView.h; sourceTree = "<group>"; };
 		7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartView.m; sourceTree = "<group>"; };
+		7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_green_wave_full@3x.png"; sourceTree = "<group>"; };
+		7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_green_wave_full@2x.png"; sourceTree = "<group>"; };
 		7DEF544C1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNode.h; sourceTree = "<group>"; };
 		7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionNode.m; sourceTree = "<group>"; };
 		7DEF544E1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNodeItem.h; sourceTree = "<group>"; };
@@ -1607,8 +1611,10 @@
 			children = (
 				7D768A771C96A1A900CB75B0 /* budget_delete@2x.png */,
 				7D768A781C96A1A900CB75B0 /* budget_delete@3x.png */,
-				7DA4ACB31C919F38004E39E8 /* budget_wave_full@2x.png */,
-				7DA4ACB41C919F38004E39E8 /* budget_wave_full@3x.png */,
+				7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */,
+				7DA4ACB41C919F38004E39E8 /* budget_red_wave_full@3x.png */,
+				7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */,
+				7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */,
 				7DA4ACAF1C918F57004E39E8 /* budget_no_data@2x.png */,
 				7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */,
 				7D893F1F1C91144D00886995 /* budget_add@2x.png */,
@@ -3369,7 +3375,9 @@
 				7DE74BD91C9AE9C600D27E7D /* default-667@2x.png in Resources */,
 				7DD7D6CE1C4C8E6A00ACE71A /* bt_service@2x.png in Resources */,
 				7DE6E86E1C55E61F001C9138 /* register_agreement@2x.png in Resources */,
+				7DE74BE31C9BB61700D27E7D /* budget_green_wave_full@2x.png in Resources */,
 				BDF5049C1C87CF6400DCFA99 /* white_delete@3x.png in Resources */,
+				7DE74BE21C9BB61700D27E7D /* budget_green_wave_full@3x.png in Resources */,
 				7DD7D6B41C4C8E6A00ACE71A /* bt_jianzhi@2x.png in Resources */,
 				BD976FB11C4F1AC200B0E26D /* add@3x.png in Resources */,
 				7DD7D6A91C4C8E6A00ACE71A /* bt_gift@3x.png in Resources */,
@@ -3415,7 +3423,7 @@
 				7DD7D6BC1C4C8E6A00ACE71A /* bt_medicine@2x.png in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				7DD7D6951C4C8E6A00ACE71A /* bt_credit@3x.png in Resources */,
-				7DA4ACB61C919F38004E39E8 /* budget_wave_full@3x.png in Resources */,
+				7DA4ACB61C919F38004E39E8 /* budget_red_wave_full@3x.png in Resources */,
 				BD78E4AC1C8FE959003A1EE1 /* more_qq@2x.png in Resources */,
 				BDF5049E1C87D19000DCFA99 /* tihuan@2x.png in Resources */,
 				7DD7D6E81C4C8E6A00ACE71A /* bt_yiwai@2x.png in Resources */,
@@ -3578,7 +3586,7 @@
 				7DF8DEE21C59C47200CC5DFA /* guide_2@2x.png in Resources */,
 				BD71E6751C881CBE00796FF0 /* zhouqi_none@3x.png in Resources */,
 				BDA3FDEF1C58CAC400FB57B1 /* ft_chongzhika@2x.png in Resources */,
-				7DA4ACB51C919F38004E39E8 /* budget_wave_full@2x.png in Resources */,
+				7DA4ACB51C919F38004E39E8 /* budget_red_wave_full@2x.png in Resources */,
 				7DD7D6931C4C8E6A00ACE71A /* bt_clothes@3x.png in Resources */,
 				7DD7D6C21C4C8E6A00ACE71A /* bt_pet@2x.png in Resources */,
 				7DF8DEE31C59C47200CC5DFA /* guide_3@2x.png in Resources */,
@@ -4045,8 +4053,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4068,9 +4076,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
+				PROVISIONING_PROFILE = "14d03a4e-a7cc-480e-81e8-e3046628f89f";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -4106,7 +4114,7 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";

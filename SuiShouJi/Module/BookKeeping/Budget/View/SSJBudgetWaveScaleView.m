@@ -36,7 +36,7 @@
         self.waveIndicator.waveAmplitude = 10;
         [self addSubview:self.waveIndicator];
         
-        self.fullView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_wave_full"]];
+        self.fullView = [[UIImageView alloc] init];
         [self addSubview:self.fullView];
         
         self.topLabel = [[UILabel alloc] init];
@@ -86,13 +86,21 @@
         
         if (scale == 0) {
             self.fullView.hidden = self.waveIndicator.hidden = YES;
-            return;
-        }
-        
-        self.fullView.hidden = _scale <= 1;
-        self.waveIndicator.hidden = _scale > 1;
-        if (!self.waveIndicator.hidden) {
+        } else if (scale < 1 && scale > 0) {
+            self.fullView.hidden = YES;
+            self.waveIndicator.hidden = NO;
             self.waveIndicator.progress = scale;
+            self.topLabel.textColor = self.bottomLabel.textColor = [UIColor blackColor];
+        } else if (scale == 1) {
+            self.fullView.hidden = NO;
+            self.waveIndicator.hidden = YES;
+            self.topLabel.textColor = self.bottomLabel.textColor = [UIColor whiteColor];
+            [self.fullView setImage:[UIImage imageNamed:@"budget_green_wave_full"]];
+        } else {
+            self.fullView.hidden = NO;
+            self.waveIndicator.hidden = YES;
+            self.topLabel.textColor = self.bottomLabel.textColor = [UIColor whiteColor];
+            [self.fullView setImage:[UIImage imageNamed:@"budget_red_wave_full"]];
         }
     }
 }

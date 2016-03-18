@@ -62,7 +62,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.navigationItem.title = @"编辑预算";
         self.hidesBottomBarWhenPushed = YES;
         self.remindPercent = 0.1;
     }
@@ -73,9 +72,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [super viewDidLoad];
     
     if (self.model) {
+        self.navigationItem.title = @"编辑预算";
         UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteBudgetAction)];
         self.navigationItem.rightBarButtonItem = deleteItem;
+    } else {
+        self.navigationItem.title = @"添加预算";
     }
+    
     [self queryBillTypeList];
     [self.view addSubview:self.tableView];
 }

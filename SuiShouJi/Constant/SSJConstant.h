@@ -98,4 +98,10 @@ extern NSString *const SSJHideSyncLoadingNotification;
 //记账提醒的通知
 extern NSString *const SSJChargeReminderNotification;
 
+//  初始化数据库开始的通知
+extern NSString *const SSJInitDatabaseDidBeginNotification;
+
+//  初始化数据库完成的通知
+extern NSString *const SSJInitDatabaseDidFinishNotification;
+
 

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SCYMotionEncryptionStrokeLayer : CALayer
 
-@property (nonatomic, strong) NSDictionary *strokeColorInfo;
+@property (nonatomic, strong) NSDictionary<NSNumber *, UIColor *> *strokeColorInfo;
 
 @property (nullable, nonatomic, strong) NSMutableArray *pointsArray;
 
