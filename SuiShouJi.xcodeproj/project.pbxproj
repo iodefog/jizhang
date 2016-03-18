@@ -330,6 +330,8 @@
 		BD1EE5EE1C965B0F00814A05 /* SSJCalenderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */; };
 		BD1EE5F01C9807CD00814A05 /* calendar_norecord@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */; };
 		BD1EE5F21C9807EF00814A05 /* calendar_norecord@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */; };
+		BD1EE5FA1C9BD58300814A05 /* yindao@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD1EE5F91C9BD58300814A05 /* yindao@3x.jpg */; };
+		BD1EE5FC1C9BD58C00814A05 /* yindao@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD1EE5FB1C9BD58C00814A05 /* yindao@2x.jpg */; };
 		BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */; };
 		BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */; };
@@ -1010,6 +1012,8 @@
 		BD1EE5ED1C965B0F00814A05 /* SSJCalenderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderHelper.m; sourceTree = "<group>"; };
 		BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar_norecord@2x.png"; sourceTree = "<group>"; };
 		BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendar_norecord@3x.png"; sourceTree = "<group>"; };
+		BD1EE5F91C9BD58300814A05 /* yindao@3x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "yindao@3x.jpg"; sourceTree = "<group>"; };
+		BD1EE5FB1C9BD58C00814A05 /* yindao@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "yindao@2x.jpg"; sourceTree = "<group>"; };
 		BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHeader.h; sourceTree = "<group>"; };
 		BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHeader.m; sourceTree = "<group>"; };
 		BD33FD271C4B2E4C006A6942 /* SSJAlertViewAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewAction.h; sourceTree = "<group>"; };
@@ -1697,6 +1701,8 @@
 				BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */,
 				BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */,
 				BDF510721C925A6500A49D74 /* weibo_banner.png */,
+				BD1EE5FB1C9BD58C00814A05 /* yindao@2x.jpg */,
+				BD1EE5F91C9BD58300814A05 /* yindao@3x.jpg */,
 				7DD7D6731C4C8E6A00ACE71A /* ReportForms */,
 				7DD7D6791C4C8E6A00ACE71A /* tabbarimage */,
 			);
@@ -3425,6 +3431,7 @@
 				7DD7D6C31C4C8E6A00ACE71A /* bt_pet@3x.png in Resources */,
 				7DD7D6EE1C4C8E6A00ACE71A /* bt_zhuanru@2x.png in Resources */,
 				7DD7D6D51C4C8E6A00ACE71A /* bt_shouzhai@3x.png in Resources */,
+				BD1EE5FA1C9BD58300814A05 /* yindao@3x.jpg in Resources */,
 				BD976FC41C4F57FB00B0E26D /* solid_circle@3x.png in Resources */,
 				7DD7D6F91C4C8E6A00ACE71A /* edit@3x.png in Resources */,
 				BDF5048A1C868A8200DCFA99 /* calender@2x.png in Resources */,
@@ -3552,6 +3559,7 @@
 				7DD7D6CC1C4C8E6A00ACE71A /* bt_repair@2x.png in Resources */,
 				7DD7D6B21C4C8E6A00ACE71A /* bt_investment@2x.png in Resources */,
 				7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */,
+				BD1EE5FC1C9BD58C00814A05 /* yindao@2x.jpg in Resources */,
 				7DD7D6A41C4C8E6A00ACE71A /* bt_fuli@2x.png in Resources */,
 				7DD7D6C41C4C8E6A00ACE71A /* bt_pignzhangshouru@2x.png in Resources */,
 				7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */,

@@ -238,8 +238,19 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
+    NSInteger imageHeight = image.size.height;
+    NSInteger imageWidth = image.size.width;
+    if (imageHeight > 2500) {
+        imageHeight = 2500;
+        imageWidth = 2500*imageWidth/imageHeight;
+    }
+    if (imageWidth > 2500) {
+        imageWidth = 2500;
+        imageHeight = 2500*imageHeight/imageWidth;
+    }
+    UIImage *resizeImage = [image ssj_scaleImageWithSize:CGSizeMake(imageWidth, imageHeight)];
     NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+    NSData *imageData = UIImageJPEGRepresentation(resizeImage, 0.4);
     NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
 };
