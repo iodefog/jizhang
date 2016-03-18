@@ -53,12 +53,10 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    
-    [self setRootViewController];
     
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {
@@ -84,7 +82,13 @@ NSDate *SCYEnterBackgroundTime() {
         [[SSJDataSynchronizer shareInstance] startTimingSync];
     }];
     
+    [self setRootViewController];
+    
+    //  请求启动接口
     [self requestStartAPI];
+    
+    //  注册本地通知更新定期记账、定期预算
+    [SSJRegularManager registerRegularTaskNotification];
 
     return YES;
 }
@@ -143,12 +147,15 @@ NSDate *SCYEnterBackgroundTime() {
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     self.window.rootViewController = tabBarVC;
+    
+    SSJPRINT(@"设置根控制器完成");
 }
 
 //  初始化数据库
 - (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
-    SSJPRINT(@"<<< 初始化数据库开始 >>>");
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        SSJPRINT(@"<<< 初始化数据库开始 >>>");
         NSString *dbDocumentPath = SSJSQLitePath();
         SSJPRINT(@"%@", dbDocumentPath);
         
@@ -178,7 +185,11 @@ NSDate *SCYEnterBackgroundTime() {
         //  创建默认的收支类型
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
         
-        finishHandler();
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:nil];
+        
+        if (finishHandler) {
+            finishHandler();
+        }
         SSJPRINT(@"<<< 初始化数据库结束 >>>");
     });
 }

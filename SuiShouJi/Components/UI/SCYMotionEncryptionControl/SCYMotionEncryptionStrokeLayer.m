@@ -43,14 +43,6 @@ static const CGFloat kStrokeLineWidth = 2.0;
     
 }
 
-//+ (instancetype)layer {
-//    SCYMotionEncryptionStrokeLayer *layer = [super layer];
-//    layer.backgroundColor = [UIColor clearColor].CGColor;
-//    layer.contentsScale = [UIScreen mainScreen].scale;
-//    layer.drawsAsynchronously = YES;
-//    return layer;
-//}
-
 - (void)setStrokeColorInfo:(NSDictionary *)strokeColorInfo {
     self.defaultColor = strokeColorInfo[@(SCYMotionEncryptionCircleLayerStatusDefault)];
     self.correctColor = strokeColorInfo[@(SCYMotionEncryptionCircleLayerStatusCorrect)];

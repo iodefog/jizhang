@@ -11,6 +11,7 @@
 #import "SSJDatabaseVersionProtocol.h"
 #import "SSJDatabaseVersion1.h"
 
+// 数据库最新的版本
 static const int kDatabaseVersion = 1;
 
 @implementation SSJDatabaseUpgrader
@@ -44,18 +45,28 @@ static const int kDatabaseVersion = 1;
         return [db lastError];
     }
     
+    // 查询当前数据库的版本
+    int currentVersion = [db intForQuery:@"select max(version) from bk_db_version"];
+    
+    // 升级成功的版本
+    int upgradeVersion = currentVersion;
+    
     NSError *error = nil;
     
-    int version = [db intForQuery:@"select version from bk_db_version"];
-    for (int i = version + 1; i <= kDatabaseVersion; i ++) {
-        NSError *tError = nil;
-        Class dbVersionClass = [[self databaseVersionInfo] objectForKey:@(i)];
-        if ([self conformsToProtocol:@protocol(SSJDatabaseVersionProtocol)]) {
-            tError = [dbVersionClass startUpgradeInDatabase:db];
-            if (tError) {
-                error = tError;
+    for (int ver = currentVersion + 1; ver <= kDatabaseVersion; ver ++) {
+        Class dbVersionClass = [[self databaseVersionInfo] objectForKey:@(ver)];
+        if ([dbVersionClass conformsToProtocol:@protocol(SSJDatabaseVersionProtocol)]) {
+            error = [dbVersionClass startUpgradeInDatabase:db];
+            if (error) {
+                break;
             }
+            
+            upgradeVersion = ver;
         }
+    }
+    
+    if (upgradeVersion > currentVersion) {
+        [db executeUpdate:@"insert into bk_db_version (version) values (?)", @(upgradeVersion)];
     }
     
     return error;

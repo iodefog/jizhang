@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 #import "SSJDatabaseQueue.h"
 #import "SSJDatePeriod.h"
+#import "SSJFundAccountTable.h"
+#import "SSJDailySumChargeTable.h"
 
 static NSString *const SSJRegularManagerNotificationIdKey = @"SSJRegularManagerNotificationIdKey";
 static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManagerNotificationIdValue";
@@ -30,6 +32,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     notification.fireDate = [NSDate dateWithYear:[date year] month:[date month] day:[date day]];
     notification.repeatInterval = NSCalendarUnitDay;
     notification.repeatCalendar = [NSCalendar currentCalendar];
+    notification.timeZone = [NSTimeZone defaultTimeZone];
     notification.userInfo = @{SSJRegularManagerNotificationIdKey:SSJRegularManagerNotificationIdValue};
     
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -186,6 +189,14 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             }
         }
     }
+    
+    //  根据流水表更新资金帐户余额表和每日流水统计表
+    if (![SSJFundAccountTable updateBalanceForUserId:userId inDatabase:db]
+        || ![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+        *rollback = YES;
+        return NO;
+    }
+    
     
     return YES;
 }

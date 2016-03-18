@@ -82,6 +82,10 @@
 }
 
 #pragma mark - Public
+- (void)setStrokeColorInfo:(NSDictionary<NSNumber *,UIColor *> *)strokeColorInfo {
+    self.strokeLayer.strokeColorInfo = strokeColorInfo;
+}
+
 - (void)setCircleRadius:(CGFloat)circleRadius {
     if (_circleRadius != circleRadius) {
         _circleRadius = circleRadius;

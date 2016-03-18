@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
 
+@property (nonatomic) BOOL isInitDatabaseFinished;
+
 @end
 
 @implementation SSJBaseViewController
@@ -31,6 +33,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
     }
     return self;
 }
@@ -38,7 +42,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    [self addTapGestureRecognizerIfNeeded];
     
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
@@ -78,14 +81,42 @@
     }
 }
 
+#pragma mark - UIResponder
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
+    if (self.hideKeyboradWhenTouch) {
+        [self.view endEditing:YES];
+    }
+}
+
+- (void)touchesCancelled:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [super touchesCancelled:touches withEvent:event];
+    if (self.hideKeyboradWhenTouch) {
+        [self.view endEditing:YES];
+    }
+}
+
+#pragma mark - Public
+- (void)reloadDataAfterSync {
+    
+}
+
+- (void)reloadDataAfterInitDatabase {
+    
+}
+
+#pragma mark - Notification
 - (void)reloadDataIfNeeded {
     if (SSJVisibalController() == self) {
         [self reloadDataAfterSync];
     }
 }
 
-- (void)reloadDataAfterSync {
-    
+- (void)didFinishInitDatabase {
+    self.isInitDatabaseFinished = YES;
+    if (SSJVisibalController() == self) {
+        [self reloadDataAfterSync];
+    }
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -168,18 +199,6 @@
 }
 
 #pragma mark - Private
-- (void)addTapGestureRecognizerIfNeeded {
-    if (_hideKeyboradWhenTouch) {
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
-        tapGesture.delegate = self;
-        [self.view addGestureRecognizer:tapGesture];
-    }
-}
-
-- (void)hideKeyboard {
-    [self.view endEditing:YES];
-}
-
 - (UIBarButtonItem *)syncLoadingItem {
     if (!_syncLoadingItem) {
         UIView *syncLoadingView = [[UIView alloc] init];

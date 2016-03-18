@@ -47,3 +47,7 @@ NSString *const SSJHideSyncLoadingNotification = @"SSJHideSyncLoadingNotificatio
 
 NSString *const SSJChargeReminderNotification = @"SSJChargeReminderNotification";
 
+NSString *const SSJInitDatabaseDidBeginNotification = @"SSJInitDatabaseDidBeginNotification";
+
+NSString *const SSJInitDatabaseDidFinishNotification = @"SSJInitDatabaseDidFinishNotification";
+
