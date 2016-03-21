@@ -18,7 +18,6 @@
 #import "SSJDailySumChargeTable.h"
 
 #import "SSJDatabaseQueue.h"
-#import "SSZipArchive.h"
 #import "AFNetworking.h"
 
 #import "SSJUserTableManager.h"
