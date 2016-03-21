@@ -215,7 +215,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_phoneNoField) {
         _phoneNoField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 74, self.view.width - 50, 50) contentHeight:34];
         _phoneNoField.font = [UIFont systemFontOfSize:15];
-        _phoneNoField.placeholder = @"请输入您的手机号";
+        _phoneNoField.textColor = [UIColor whiteColor];
+        _phoneNoField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
         _phoneNoField.text = self.mobileNo.length ? self.mobileNo : @"";
         _phoneNoField.delegate = self;
         _phoneNoField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -235,7 +236,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_authCodeField) {
         _authCodeField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, self.phoneNoField.bottom, self.view.width - 50, 50) contentHeight:34];
         _authCodeField.font = [UIFont systemFontOfSize:15];
-        _authCodeField.placeholder = @"请输入验证码";
+        _authCodeField.textColor = [UIColor whiteColor];
+        _authCodeField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
         _authCodeField.delegate = self;
         _authCodeField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _authCodeField.keyboardType = UIKeyboardTypeNumberPad;

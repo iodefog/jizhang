@@ -192,7 +192,8 @@
     if (!_tfPhoneNum) {
         _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
-        _tfPhoneNum.placeholder = @"请输入您的手机号";
+        _tfPhoneNum.textColor = [UIColor whiteColor];
+        _tfPhoneNum.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;

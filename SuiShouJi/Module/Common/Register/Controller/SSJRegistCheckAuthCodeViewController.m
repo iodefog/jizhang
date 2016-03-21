@@ -224,7 +224,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_authCodeTextField) {
         _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _authCodeTextField.font = [UIFont systemFontOfSize:15];
-        _authCodeTextField.placeholder = @"请输入验证码";
+        _authCodeTextField.textColor = [UIColor whiteColor];
+        _authCodeTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
         _authCodeTextField.delegate = self;
         _authCodeTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _authCodeTextField.keyboardType = UIKeyboardTypeNumberPad;

@@ -143,7 +143,8 @@
         _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 94, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
-        _passwordField.placeholder = @"请输入新密码";
+        _passwordField.textColor = [UIColor whiteColor];
+        _passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入新密码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
         _passwordField.delegate = self;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
         
