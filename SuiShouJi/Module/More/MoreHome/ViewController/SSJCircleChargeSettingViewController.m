@@ -77,13 +77,10 @@
     [self.items removeObjectAtIndex:indexPath.section];
     [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
     [self deleteConfigWithConfigId:item.configId];
-//    if (self.items.count == 0) {
-//        self.tableView.tableHeaderView = self.nodataView;
-//    }else{
-//        self.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectZero];
-//    }
-
-    [self.tableView reloadData];
+    if (self.items.count == 0) {
+        [self.tableView ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+        
+    }    [self.tableView reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -139,11 +136,10 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
-//            if (weakSelf.items.count == 0) {
-//                weakSelf.tableView.tableHeaderView = weakSelf.nodataView;
-//            }else{
-//                weakSelf.tableView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectZero];
-//            }
+            if (self.items.count == 0) {
+                [self.tableView ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+
+            }
             [weakSelf.tableView ssj_hideLoadingIndicator];
             [weakSelf.tableView reloadData];
         });
