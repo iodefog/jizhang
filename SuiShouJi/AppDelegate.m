@@ -15,7 +15,6 @@
 #import "SSJGuideView.h"
 #import "SSJStartView.h"
 
-#import "SSJLocalNotificationHelper.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
@@ -24,13 +23,7 @@
 #import "SSJDatabaseUpgrader.h"
 #import "SSJRegularManager.h"
 
-#import "UMSocialWechatHandler.h"
-#import "UMSocialSinaSSOHandler.h"
-#import "UMSocialQQHandler.h"
-#import "UMSocialSinaSSOHandler.h"
 #import <TencentOpenAPI/TencentOAuth.h>
-#import "UMFeedback.h"
-#import "MobClick.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -53,27 +46,15 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    //如果第一次打开记录当前时间
-    if (SSJIsFirstLaunchForCurrentVersion()) {
-        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
-        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
-        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
-        [self setLocalNotification];
-    }
+    [self setRootViewController];
     
-    //  添加友盟统计
-    [self umengTrack];
-    
-    //  添加友盟分享
-    [self umengShare];
-    
-    //  添加友盟反馈
-    [self umengFeedBack];
+    //  请求启动接口
+    [self requestStartAPI];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -82,13 +63,12 @@ NSDate *SCYEnterBackgroundTime() {
         [[SSJDataSynchronizer shareInstance] startTimingSync];
     }];
     
-    [self setRootViewController];
-    
-    //  请求启动接口
-    [self requestStartAPI];
-    
-    //  注册本地通知更新定期记账、定期预算
-    [SSJRegularManager registerRegularTaskNotification];
+    //如果第一次打开记录当前时间
+    if (SSJIsFirstLaunchForCurrentVersion()) {
+        [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
+    }
 
     return YES;
 }
@@ -148,14 +128,14 @@ NSDate *SCYEnterBackgroundTime() {
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     self.window.rootViewController = tabBarVC;
     
-    SSJPRINT(@"设置根控制器完成");
+//    SSJPRINT(@"设置根控制器完成");
 }
 
 //  初始化数据库
 - (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidBeginNotification object:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        SSJPRINT(@"<<< 初始化数据库开始 >>>");
+//        SSJPRINT(@"<<< 初始化数据库开始 >>>");
         NSString *dbDocumentPath = SSJSQLitePath();
         SSJPRINT(@"%@", dbDocumentPath);
         
@@ -192,19 +172,8 @@ NSDate *SCYEnterBackgroundTime() {
         if (finishHandler) {
             finishHandler();
         }
-        SSJPRINT(@"<<< 初始化数据库结束 >>>");
+//        SSJPRINT(@"<<< 初始化数据库结束 >>>");
     });
-}
-
-//注册通知
--(void)setLocalNotification{
-    NSString *baseDateStr = [NSString stringWithFormat:@"%@ 20:00:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
-    NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
-    if ([baseDate isEarlierThan:[NSDate date]]) {
-        baseDate = [baseDate dateByAddingDays:1];
-    }
-    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
-    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
 }
 
 //  请求启动接口，检测是否有更新、苹果是否正在审核、加载下发启动页
@@ -287,6 +256,7 @@ NSDate *SCYEnterBackgroundTime() {
     }
 }
 
+<<<<<<< HEAD
 #pragma mark - 友盟
 /* 友盟统计 */
 - (void)umengTrack {
@@ -319,6 +289,8 @@ NSDate *SCYEnterBackgroundTime() {
     [UMFeedback setAppkey:kUMAppKey];
 }
 
+=======
+>>>>>>> f9b1dd7d418e1e58de89a5edd5025cfcd8e9e82c
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     return [TencentOAuth HandleOpenURL:url];
