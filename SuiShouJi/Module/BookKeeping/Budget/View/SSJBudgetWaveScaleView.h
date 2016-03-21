@@ -30,6 +30,8 @@
  */
 @property (nonatomic) CGFloat borderWidth;
 
+@property (nonatomic) CGFloat innerBorderWidth;
+
 /**
  *  边框颜色
  */

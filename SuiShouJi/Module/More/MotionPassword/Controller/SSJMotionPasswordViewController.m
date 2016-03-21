@@ -350,6 +350,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _motionView.delegate = self;
         _motionView.showStroke = YES;
         _motionView.strokeColorInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIColor ssj_colorWithHex:@"#ffdb01"],
+                                        @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIColor ssj_colorWithHex:@"#ffdb01"],
                                         @(SCYMotionEncryptionCircleLayerStatusError):[UIColor ssj_colorWithHex:@"#ff7139"]};
         _motionView.circleRadius = self.view.width * 0.1;
         _motionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_compatibleImageNamed:@"motion_circle_default"],

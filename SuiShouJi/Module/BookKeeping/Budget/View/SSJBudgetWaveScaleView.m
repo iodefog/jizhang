@@ -34,6 +34,7 @@
         self.waveIndicator = [[WaveLoadingIndicator alloc] init];
         self.waveIndicator.isShowProgressText = NO;
         self.waveIndicator.waveAmplitude = 10;
+        self.waveIndicator.borderWidth = 1.5;
         [self addSubview:self.waveIndicator];
         
         self.fullView = [[UIImageView alloc] init];
@@ -128,6 +129,10 @@
         self.layer.borderWidth = borderWidth;
         [self setNeedsLayout];
     }
+}
+
+- (void)setInnerBorderWidth:(CGFloat)innerBorderWidth {
+    self.waveIndicator.borderWidth = innerBorderWidth;
 }
 
 - (void)setBorderColor:(UIColor *)borderColor {
