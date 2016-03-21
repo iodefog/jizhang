@@ -256,41 +256,6 @@ NSDate *SCYEnterBackgroundTime() {
     }
 }
 
-<<<<<<< HEAD
-#pragma mark - 友盟
-/* 友盟统计 */
-- (void)umengTrack {
-    [MobClick setCrashReportEnabled:YES]; // 如果不需要捕捉异常，注释掉此行
-#ifdef DEBUG
-    //    [MobClick setLogEnabled:YES];
-#endif
-    [MobClick setAppVersion:SSJAppVersion()]; //参数为NSString * 类型,自定义app版本信息，如果不设置，默认从CFBundleVersion里取
-    //  reportPolicy为枚举类型,可以为 REALTIME, BATCH,SENDDAILY,SENDWIFIONLY几种
-    //  channelId 为NSString * 类型，channelId 为nil或@""时,默认会被被当作@"App Store"渠道
-    [MobClick startWithAppkey:kUMAppKey reportPolicy:(ReportPolicy)BATCH channelId:SSJDefaultSource()];
-}
-
-/* 友盟分享 */
--(void)umengShare{
-    [UMSocialData setAppKey:kUMAppKey];
-    [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:@"http://5.9188.com/note/d/"];
-    [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账，一种快速实现财务自由的方式。";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账，一种快速实现财务自由的方式。";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://1.9188.com/h5/jizhangApp/";
-//    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
-//                                              
-//                                         RedirectURL:SSJAppStoreAddress];
-    [UMSocialQQHandler setQQWithAppId:@"1105086761" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://5.9188.com/note/d/"];
-    [UMSocialData defaultData].extConfig.qqData.title = @"9188记账，一种快速实现财务自由的方式。";
-}
-
-/* 友盟意见反馈 */
--(void)umengFeedBack{
-    [UMFeedback setAppkey:kUMAppKey];
-}
-
-=======
->>>>>>> f9b1dd7d418e1e58de89a5edd5025cfcd8e9e82c
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     return [TencentOAuth HandleOpenURL:url];

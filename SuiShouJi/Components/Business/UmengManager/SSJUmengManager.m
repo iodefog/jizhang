@@ -45,14 +45,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 /* 友盟分享 */
 + (void)umengShare{
     [UMSocialData setAppKey:kUMAppKey];
-    [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:@"http://1.9188.com/h5/jizhangApp/"];
+    [UMSocialWechatHandler setWXAppId:@"wxf77f7a5867124dfd" appSecret:@"597d6402c3cd82ff12ba0e81abd34b1a" url:@"http://5.9188.com/note/d/"];
     [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账，一种快速实现财务自由的方式。";
     [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账，一种快速实现财务自由的方式。";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://1.9188.com/h5/jizhangApp/";
+    [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://5.9188.com/note/d/";
     //    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
     //
     //                                         RedirectURL:SSJAppStoreAddress];
-    [UMSocialQQHandler setQQWithAppId:@"1105086761" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://1.9188.com/h5/jizhangApp/"];
+    [UMSocialQQHandler setQQWithAppId:@"1105086761" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://5.9188.com/note/d/"];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账，一种快速实现财务自由的方式。";
 }
 
