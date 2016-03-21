@@ -20,5 +20,10 @@
                                repeatIterval:(NSCalendarUnit)repeatIterval
                              notificationKey:(NSString *)notificationKey;
 
+/**
+ *  取消本地通知
+ *
+ *  @param key 要取消的本地通知的key
+ */
 +(void)cancelLocalNotificationWithKey:(NSString *)key;
 @end
