@@ -11,6 +11,7 @@
 #import "SSJBaselineTextField.h"
 #import "SSJRegistNetworkService.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
+#import "SSJBorderButton.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
@@ -24,7 +25,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
-@property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) SSJBorderButton *nextButton;
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 
@@ -42,13 +43,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 #pragma mark - Lifecycle
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"忘记密码";
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -61,7 +62,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self.scrollView addSubview:self.authCodeField];
     [self.scrollView addSubview:self.nextButton];
     
-    [self upateNextButtonState];
+//    [self upateNextButtonState];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -135,11 +136,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 #pragma mark - Notification
-- (void)textDidChange {
-    if ([self.phoneNoField isFirstResponder] || [self.authCodeField isFirstResponder]) {
-        [self upateNextButtonState];
-    }
-}
+//- (void)textDidChange {
+//    if ([self.phoneNoField isFirstResponder] || [self.authCodeField isFirstResponder]) {
+//        [self upateNextButtonState];
+//    }
+//}
 
 #pragma mark - Event
 - (void)getAuthCodeAction {
@@ -155,6 +156,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 //  以一步按钮点击
 - (void)nextBtnAction {
+    if (!self.phoneNoField.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入您的手机号"];
+        return;
+    }
+    
+    if (!self.authCodeField.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
+        return;
+    }
+    
     [self.networkService checkAuthCodeWithMobileNo:self.phoneNoField.text authCode:self.authCodeField.text];
 }
 
@@ -180,9 +191,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     self.countdown --;
 }
 
-- (void)upateNextButtonState {
-    self.nextButton.enabled = self.phoneNoField.text.length >= 11 && self.authCodeField.text.length >= 6;
-}
+//- (void)upateNextButtonState {
+//    self.nextButton.enabled = self.phoneNoField.text.length >= 11 && self.authCodeField.text.length >= 6;
+//}
 
 #pragma mark - Getter
 - (SSJRegistNetworkService *)networkService {
@@ -257,18 +268,31 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _getAuthCodeBtn;
 }
 
-- (UIButton *)nextButton {
+//- (UIButton *)nextButton {
+//    if (!_nextButton) {
+//        _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        _nextButton.frame = CGRectMake(25, self.authCodeField.bottom + 40, self.view.width - 50, 40);
+//        _nextButton.layer.cornerRadius = 3;
+//        _nextButton.clipsToBounds = YES;
+//        _nextButton.titleLabel.font = [UIFont systemFontOfSize:20];
+//        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
+//        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+//        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
+//        [_nextButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _nextButton;
+//}
+
+- (SSJBorderButton *)nextButton {
     if (!_nextButton) {
-        _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _nextButton.frame = CGRectMake(25, self.authCodeField.bottom + 40, self.view.width - 50, 40);
-        _nextButton.layer.cornerRadius = 3;
-        _nextButton.clipsToBounds = YES;
-        _nextButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
-        [_nextButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _nextButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.authCodeField.bottom + 40, self.view.width - 50, 40)];
+        [_nextButton setFontSize:16];
+        [_nextButton setTitle:@"下一步" forState:SSJBorderButtonStateNormal];
+        [_nextButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton addTarget:self action:@selector(nextBtnAction)];
     }
     return _nextButton;
 }

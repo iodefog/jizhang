@@ -23,7 +23,8 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsIncomeOrPayType) {
 @interface SSJReportFormsDatabaseUtil : NSObject
 
 /**
- *  查询某个年份、月份的收入／支出／结余的收支类型数据；如果月份传0，则查询整年的数据；月份最大不能超过12，年份小于1，否则返回nil
+ *  查询某个年份、月份的收入／支出／结余的收支类型数据；如果月份传0，则查询整年的数据；月份最大不能超过12，年份小于1，否则返回nil；
+ *  如果是当前年或月，就查询截止到当天的数据
  *
  *  @param type      查询的类型
  *  @param inYear    查询的年份，必须大于0

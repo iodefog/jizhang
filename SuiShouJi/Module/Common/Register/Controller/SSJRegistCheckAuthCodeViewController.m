@@ -12,6 +12,7 @@
 #import "SSJRegistOrderView.h"
 #import "SSJBaselineTextField.h"
 #import "SSJRegistNetworkService.h"
+#import "SSJBorderButton.h"
 
 static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
@@ -19,7 +20,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
-@property (nonatomic, strong) SSJRegistOrderView *stepView;
+//@property (nonatomic, strong) SSJRegistOrderView *stepView;
 
 //  验证码输入框
 @property (nonatomic, strong) SSJBaselineTextField *authCodeTextField;
@@ -28,7 +29,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 @property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
 //  “下一步”按钮
-@property (nonatomic, strong) UIButton *nextBtn;
+@property (nonatomic, strong) SSJBorderButton *nextBtn;
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 
@@ -47,14 +48,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 #pragma mark - Lifecycle
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nil bundle:nil]) {
         self.title = @"注册";
         self.countdown = kCountdownLimit;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -63,12 +64,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [super viewDidLoad];
     [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.stepView];
+//    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.authCodeTextField];
     [self.scrollView addSubview:self.nextBtn];
     
     self.getAuthCodeBtn.enabled = NO;
-    self.nextBtn.enabled = NO;
+//    self.nextBtn.enabled = NO;
     [self beginCountdownIfNeeded];
 }
 
@@ -141,11 +142,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 }
 
 #pragma mark - Notification
-- (void)textDidChange {
-    if ([self.authCodeTextField isFirstResponder]) {
-        self.nextBtn.enabled = self.authCodeTextField.text.length >= 6;
-    }
-}
+//- (void)textDidChange {
+//    if ([self.authCodeTextField isFirstResponder]) {
+//        self.nextBtn.enabled = self.authCodeTextField.text.length >= 6;
+//    }
+//}
 
 #pragma mark - Event
 //  获取验证码
@@ -168,6 +169,11 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 //  以一步按钮点击
 - (void)nextBtnAction {
+    if (!self.authCodeTextField.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入验证码"];
+        return;
+    }
+    
     [self.networkService checkAuthCodeWithMobileNo:self.mobileNo authCode:self.authCodeTextField.text];
 }
 
@@ -207,16 +213,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _scrollView;
 }
 
-- (SSJRegistOrderView *)stepView {
-    if (!_stepView) {
-        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputAuthCode];
-    }
-    return _stepView;
-}
+//- (SSJRegistOrderView *)stepView {
+//    if (!_stepView) {
+//        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputAuthCode];
+//    }
+//    return _stepView;
+//}
 
 - (SSJBaselineTextField *)authCodeTextField {
     if (!_authCodeTextField) {
-        _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 124, self.view.width - 50, 50) contentHeight:34];
+        _authCodeTextField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _authCodeTextField.font = [UIFont systemFontOfSize:15];
         _authCodeTextField.placeholder = @"请输入验证码";
         _authCodeTextField.delegate = self;
@@ -244,18 +250,15 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     return _getAuthCodeBtn;
 }
 
-- (UIButton *)nextBtn {
+- (SSJBorderButton *)nextBtn {
     if (!_nextBtn) {
-        _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _nextBtn.frame = CGRectMake(25, self.authCodeTextField.bottom + 40, self.view.width - 50, 40);
-        _nextBtn.clipsToBounds = YES;
-        _nextBtn.layer.cornerRadius = 2;
-        _nextBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
-        [_nextBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_nextBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_nextBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
-        [_nextBtn addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _nextBtn = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.authCodeTextField.bottom + 40, self.view.width - 50, 40)];
+        [_nextBtn setFontSize:16];
+        [_nextBtn setTitle:@"下一步" forState:SSJBorderButtonStateNormal];
+        [_nextBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_nextBtn setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextBtn addTarget:self action:@selector(nextBtnAction)];
     }
     return _nextBtn;
 }

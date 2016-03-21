@@ -13,18 +13,19 @@
 #import "SSJBaselineTextField.h"
 #import "SSJUserTableManager.h"
 #import "SSJMotionPasswordViewController.h"
+#import "SSJBorderButton.h"
 
 @interface SSJRegistCompleteViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
-@property (nonatomic, strong) SSJRegistOrderView *stepView;
+//@property (nonatomic, strong) SSJRegistOrderView *stepView;
 
 //  密码输入框
 @property (nonatomic, strong) SSJBaselineTextField *passwordField;
 
 //  完成注册按钮
-@property (nonatomic, strong) UIButton *finishBtn;
+@property (nonatomic, strong) SSJBorderButton *finishBtn;
 
 @property (nonatomic, strong) SSJRegistNetworkService *registCompleteService;
 
@@ -37,14 +38,14 @@
 
 #pragma mark - Lifecycle
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nil bundle:nil]) {
         self.title = @"注册";
         self.hidesBottomBarWhenPushed = YES;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -53,10 +54,10 @@
     [super viewDidLoad];
     [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.stepView];
+//    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.passwordField];
     [self.scrollView addSubview:self.finishBtn];
-    self.finishBtn.enabled = NO;
+//    self.finishBtn.enabled = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -155,11 +156,11 @@
 }
 
 #pragma mark - Notification
-- (void)textDidChange {
-    if ([self.passwordField isFirstResponder]) {
-        self.finishBtn.enabled = self.passwordField.text.length >= 6;
-    }
-}
+//- (void)textDidChange {
+//    if ([self.passwordField isFirstResponder]) {
+//        self.finishBtn.enabled = self.passwordField.text.length >= 6;
+//    }
+//}
 
 #pragma mark - Event
 - (void)finishBtnAction {
@@ -207,16 +208,16 @@
     return _backGroundImage;
 }
 
-- (SSJRegistOrderView *)stepView {
-    if (!_stepView) {
-        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeSetPassword];
-    }
-    return _stepView;
-}
+//- (SSJRegistOrderView *)stepView {
+//    if (!_stepView) {
+//        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeSetPassword];
+//    }
+//    return _stepView;
+//}
 
 - (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
-        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 124, self.view.width - 50, 50) contentHeight:34];
+        _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
         _passwordField.placeholder = @"请输入6-15位字母、数字组合";
@@ -226,18 +227,15 @@
     return _passwordField;
 }
 
-- (UIButton *)finishBtn {
+- (SSJBorderButton *)finishBtn {
     if (!_finishBtn) {
-        _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _finishBtn.frame = CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40);
-        _finishBtn.clipsToBounds = YES;
-        _finishBtn.layer.cornerRadius = 2;
-        _finishBtn.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_finishBtn setTitle:@"完成注册" forState:UIControlStateNormal];
-        [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
-        [_finishBtn addTarget:self action:@selector(finishBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _finishBtn = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40)];
+        [_finishBtn setFontSize:16];
+        [_finishBtn setTitle:@"下一步" forState:SSJBorderButtonStateNormal];
+        [_finishBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_finishBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_finishBtn setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_finishBtn addTarget:self action:@selector(finishBtnAction)];
     }
     return _finishBtn;
 }
