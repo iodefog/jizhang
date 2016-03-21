@@ -258,7 +258,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _getAuthCodeBtn.size = CGSizeMake(85, 30);
         _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f6ff00"] forState:UIControlStateNormal];
         [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
         [_getAuthCodeBtn ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];

@@ -10,6 +10,12 @@
 
 @interface SSJBaselineTextField : UITextField
 
+//  为选中时底线的颜色，默认是白色
+@property (nonatomic, strong) UIColor *normalLineColor;
+
+//  选中时底线的颜色，默认是白色
+@property (nonatomic, strong) UIColor *highlightLineColor;
+
 - (instancetype)initWithFrame:(CGRect)frame contentHeight:(CGFloat)height;
 
 @end

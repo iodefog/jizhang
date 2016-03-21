@@ -23,6 +23,8 @@
 #import "SSJDatabaseUpgrader.h"
 #import "SSJRegularManager.h"
 
+#import "SSJLocalNotificationHelper.h"
+
 #import <TencentOpenAPI/TencentOAuth.h>
 
 //  进入后台超过的时限后进入锁屏
@@ -47,6 +49,8 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+//    NSDate *beginDate = [NSDate date];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -69,6 +73,20 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
+    
+    if (SSJIsFirstLaunchForCurrentVersion()) {
+        NSString *baseDateStr = [NSString stringWithFormat:@"%@ 20:00:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
+        if ([baseDate isEarlierThan:[NSDate date]]) {
+            baseDate = [baseDate dateByAddingDays:1];
+        }
+        [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
+        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
+    }
+    
+    [SSJRegularManager registerRegularTaskNotification];
+    
+//    NSLog(@">>> 启动时间：%f", [[NSDate date] timeIntervalSinceDate:beginDate]);
 
     return YES;
 }

@@ -24,9 +24,12 @@
     if (self = [super initWithFrame:frame]) {
         self.contentHeight = height;
         
+        self.normalLineColor = [UIColor whiteColor];
+        self.highlightLineColor = [UIColor whiteColor];
+        
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderWidth:2.0];
-        [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [self ssj_setBorderColor:self.normalLineColor];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(beginEditing) name:UITextFieldTextDidBeginEditingNotification object:self];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endEditing) name:UITextFieldTextDidEndEditingNotification object:self];
@@ -85,11 +88,11 @@
 }
 
 - (void)beginEditing {
-    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
+    [self ssj_setBorderColor:self.highlightLineColor];
 }
 
 - (void)endEditing {
-    [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+    [self ssj_setBorderColor:self.normalLineColor];
 }
 
 @end

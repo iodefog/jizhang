@@ -20,7 +20,7 @@
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor lightGrayColor];
+        self.textLabel.textColor = [UIColor blackColor];
         
         self.detailTextLabel.font = [UIFont systemFontOfSize:11];
         self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:@"999999"];

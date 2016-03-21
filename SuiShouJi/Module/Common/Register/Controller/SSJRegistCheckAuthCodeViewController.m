@@ -240,7 +240,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _getAuthCodeBtn.size = CGSizeMake(90, 30);
         _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [_getAuthCodeBtn setTitle:@"重新发送" forState:UIControlStateNormal];
-        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f6ff00"] forState:UIControlStateNormal];
         [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
         [_getAuthCodeBtn ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
