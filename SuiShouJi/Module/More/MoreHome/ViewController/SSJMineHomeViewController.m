@@ -264,7 +264,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
 {
     if (platformName == UMShareToSina) {
-        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://1.9188.com/h5/jizhangApp/";
+        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://5.9188.com/note/d/";
         socialData.shareImage = [UIImage imageNamed:@"weibo_banner"];
     }
     else{

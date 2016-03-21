@@ -52,7 +52,7 @@
 
 -(UIImageView *)checkMark{
     if (!_checkMark) {
-        _checkMark = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        _checkMark = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 17, 17)];
         _checkMark.image = [UIImage imageNamed:@"checkmark"];
         _checkMark.hidden = YES;
     }

@@ -48,15 +48,15 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 105;
+    return 100;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 10;
+    return 5;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    return nil;
+    return [[UIView alloc]initWithFrame:CGRectZero];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -78,12 +78,9 @@
     [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
     [self deleteConfigWithConfigId:item.configId];
     if (self.items.count == 0) {
-        self.tableView.tableHeaderView = self.nodataView;
-    }else{
-        self.tableView.tableHeaderView = nil;
-    }
-
-    [self.tableView reloadData];
+        [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+        
+    }    [self.tableView reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -139,13 +136,12 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
-            [weakSelf.tableView reloadData];
-            if (weakSelf.items.count == 0) {
-                weakSelf.tableView.tableHeaderView = weakSelf.nodataView;
-            }else{
-                weakSelf.tableView.tableHeaderView = nil;
+            if (self.items.count == 0) {
+                [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+
             }
             [weakSelf.tableView ssj_hideLoadingIndicator];
+            [weakSelf.tableView reloadData];
         });
     }];
     
