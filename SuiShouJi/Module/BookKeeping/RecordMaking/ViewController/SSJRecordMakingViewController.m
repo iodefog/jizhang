@@ -348,8 +348,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
         [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        _fundingTypeButton.spaceBetweenImageAndTitle = 10;
         _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _fundingTypeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
         [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _fundingTypeButton;
@@ -359,7 +359,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.fundingTypeButton setTitle:_selectItem.fundingName forState:UIControlStateNormal];
     [self.fundingTypeButton setImage:[UIImage imageNamed:_selectItem.fundingIcon] forState:UIControlStateNormal];
     self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
-    [self.fundingTypeButton ssj_layoutContent];
 }
 
 -(SSJDateSelectedView*)DateSelectedView{
@@ -410,7 +409,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [weakSelf.FundingTypeSelectView reloadDate];
                     [weakSelf.fundingTypeButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
                     [weakSelf.fundingTypeButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
-                    [weakSelf.fundingTypeButton ssj_layoutContent];
                     weakSelf.selectItem = newFundingItem;
                     [weakSelf updateFundingType];
                 };
