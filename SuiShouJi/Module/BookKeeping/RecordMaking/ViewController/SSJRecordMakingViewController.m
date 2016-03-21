@@ -159,7 +159,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(void)viewDidLayoutSubviews{
     self.selectedCategoryView.leftTop = CGPointMake(0, 0);
     self.selectedCategoryView.size = CGSizeMake(self.view.width, 71);
-    self.categoryImage.left = 12.0f;
+    self.categoryImage.left = 20.0f;
     _decimalCount = 0;
     self.categoryImage.centerY = self.selectedCategoryView.centerY;
     self.textInput.right = self.selectedCategoryView.right - 12;
@@ -250,7 +250,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(UIImageView*)categoryImage{
     if (!_categoryImage) {
-        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
+        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
         _categoryImage.layer.masksToBounds = YES;
         _categoryImage.tintColor = [UIColor whiteColor];
         _categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
