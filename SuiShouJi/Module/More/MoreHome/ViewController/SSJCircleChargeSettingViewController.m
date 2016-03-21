@@ -13,6 +13,7 @@
 #import "SSJCircleChargeCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJNoneCircleChargeView.h"
+#import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 
 
@@ -48,7 +49,7 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 100;
+    return 80;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -80,7 +81,8 @@
     if (self.items.count == 0) {
         [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
         
-    }    [self.tableView reloadData];
+    }
+    [self.tableView reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -160,6 +162,13 @@
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],configId];
     }];
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

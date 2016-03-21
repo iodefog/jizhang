@@ -36,7 +36,7 @@
     [super layoutSubviews];
     self.categoryImage.centerX = self.width / 2;
     self.categoryImage.top = 3;
-    self.categoryName.bottom = self.height - 2 ;
+    self.categoryName.bottom = self.height - 2;
     self.categoryName.centerX = self.width / 2;
 }
 

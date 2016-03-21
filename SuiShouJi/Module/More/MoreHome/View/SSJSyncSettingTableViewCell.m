@@ -27,7 +27,7 @@
     [super layoutSubviews];
     self.titleLabel.left = 10;
     self.titleLabel.centerY = self.height / 2;
-    self.checkMarkImage.size = CGSizeMake(30, 30);
+    self.checkMarkImage.size = CGSizeMake(17, 17);
     self.checkMarkImage.right = self.width - 10;
     self.checkMarkImage.centerY = self.height / 2;
 }

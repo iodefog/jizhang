@@ -18,8 +18,14 @@
                         <constraint firstAttribute="width" constant="154" id="gEy-Av-ebN"/>
                     </constraints>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您当天没有记账记录哦" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUr-iI-5nu">
+                    <rect key="frame" x="83" y="105" width="150" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X0u-UM-I4T">
-                    <rect key="frame" x="84" y="110" width="150" height="40"/>
+                    <rect key="frame" x="83" y="128" width="150" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="150" id="vDu-Gu-ocK"/>
                         <constraint firstAttribute="height" constant="40" id="x9o-tC-Nbo"/>
@@ -38,15 +44,21 @@
                 <constraint firstItem="X0u-UM-I4T" firstAttribute="top" secondItem="sTt-KS-Xge" secondAttribute="bottom" constant="10" id="1Kb-Zo-vD6"/>
                 <constraint firstItem="X0u-UM-I4T" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="C55-HJ-IdT"/>
                 <constraint firstItem="sTt-KS-Xge" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="NMO-6Y-yRU"/>
+                <constraint firstItem="sTt-KS-Xge" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="XB0-2r-gMe"/>
                 <constraint firstItem="sTt-KS-Xge" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="bU6-ZQ-r2u"/>
+                <constraint firstItem="X0u-UM-I4T" firstAttribute="top" secondItem="QUr-iI-5nu" secondAttribute="bottom" constant="5" id="coE-Fk-1LU"/>
+                <constraint firstItem="QUr-iI-5nu" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="djj-i8-s8z"/>
                 <constraint firstItem="sTt-KS-Xge" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="hQc-JO-PtY"/>
+                <constraint firstItem="QUr-iI-5nu" firstAttribute="top" secondItem="sTt-KS-Xge" secondAttribute="bottom" constant="5" id="ljU-RY-Gl2"/>
                 <constraint firstAttribute="trailing" secondItem="sTt-KS-Xge" secondAttribute="trailing" id="p9b-OR-6nc"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <variation key="default">
                 <mask key="constraints">
+                    <exclude reference="bU6-ZQ-r2u"/>
                     <exclude reference="hQc-JO-PtY"/>
                     <exclude reference="p9b-OR-6nc"/>
+                    <exclude reference="1Kb-Zo-vD6"/>
                 </mask>
             </variation>
             <connections>

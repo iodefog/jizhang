@@ -8,6 +8,7 @@
 
 #import "SSJCircleChargeCell.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJCircleChargeCell()
 @property (nonatomic,strong) UIImageView *categoryImage;
@@ -41,12 +42,12 @@
     self.categoryImage.left = 10;
     self.categoryImage.centerY = self.height / 2;
     self.categoryLabel.left = self.categoryImage.right + 10;
-    self.categoryLabel.top= 25;
+    self.categoryLabel.top= 13;
     self.moneyLabel.left = self.categoryLabel.right + 10;
     self.moneyLabel.centerY = self.categoryLabel.centerY;
     self.circleImage.size = CGSizeMake(20, 20);
     self.circleImage.left = self.categoryLabel.left;
-    self.circleImage.top = self.moneyLabel.bottom + 15;
+    self.circleImage.top = self.categoryLabel.bottom + 15;
     self.circleLabel.centerY = self.circleImage.centerY;
     self.circleLabel.left = self.circleImage.right + 10;
     self.switchButton.right = self.width - 10;
@@ -167,6 +168,13 @@
             [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 0 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.configId];
         }
     }];
+    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            
+        }failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 /*

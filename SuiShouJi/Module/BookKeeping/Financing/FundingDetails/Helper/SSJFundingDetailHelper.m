@@ -38,7 +38,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.IMONEY, a.CBILLDATE , a.ICHARGEID , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = ? and a.CBILLDATE like ? and a.operatortype != 2 order by a.cbilldate desc , a.cwritedate desc", ID, dateStr];
+        NSString *sql = [NSString stringWithFormat:@"select a.IMONEY, a.CBILLDATE , a.ICHARGEID , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.CBILLDATE like '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by a.cbilldate desc , a.cwritedate desc", ID, dateStr,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             SSJPRINT(@"class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
