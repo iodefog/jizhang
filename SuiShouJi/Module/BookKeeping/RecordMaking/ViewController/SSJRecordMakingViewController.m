@@ -332,7 +332,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
         [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
         self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 20);
+        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 30);
         [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_inputTopView addSubview:self.datePickerButton];
         self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];

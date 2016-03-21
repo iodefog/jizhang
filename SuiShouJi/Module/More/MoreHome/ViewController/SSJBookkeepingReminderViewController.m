@@ -35,6 +35,7 @@ static NSString *const kTitle3 = @"定期提醒";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.title = @"记账提醒";
     }
     return self;
 }
@@ -83,6 +84,7 @@ static NSString *const kTitle3 = @"定期提醒";
         comfirmButton.size = CGSizeMake(self.view.width - 40, 40);
         comfirmButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
         comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        comfirmButton.layer.cornerRadius = 4.0f;
         [comfirmButton setTitle:@"保存" forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_footerView addSubview:comfirmButton];
@@ -93,7 +95,7 @@ static NSString *const kTitle3 = @"定期提醒";
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 65;
+    return 55;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{

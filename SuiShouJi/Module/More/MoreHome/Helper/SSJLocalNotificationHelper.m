@@ -60,14 +60,15 @@
     }
     // 执行通知注册
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    NSArray *localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    NSArray *localNotifications = [[NSArray alloc]init];
+    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
     NSLog(@"-----------%lu",(unsigned long)localNotifications.count);
 }
 
 +(void)cancelLocalNotificationWithKey:(NSString *)key{
     // 获取所有本地通知数组
-    NSArray *localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    
+    NSArray *localNotifications = [[NSArray alloc]init];
+    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
     for (UILocalNotification *notification in localNotifications) {
         NSDictionary *userInfo = notification.userInfo;
         if (userInfo) {
