@@ -67,6 +67,7 @@
     [self getDataFromDateBase];
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
+    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
 }
 

@@ -53,10 +53,10 @@
     self.incomeLabel.centerY = self.height / 2;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
     self.expenditureLabel.centerY = self.height / 2;
-    self.toplineView.size = CGSizeMake(1, self.height - self.categoryImageButton.bottom);
+    self.toplineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
     self.toplineView.centerX = self.centerX;
     self.bottomlineView.top = self.categoryImageButton.bottom;
-    self.bottomlineView.size = CGSizeMake(1, self.height - self.categoryImageButton.bottom);
+    self.bottomlineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
     self.bottomlineView.centerX = self.centerX;
     self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
     self.expentureMemoLabel.leftTop = CGPointMake(self.expenditureLabel.left, self.expenditureLabel.bottom + 5);
