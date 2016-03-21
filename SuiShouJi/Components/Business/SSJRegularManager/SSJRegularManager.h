@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class FMDatabase;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJRegularManager : NSObject

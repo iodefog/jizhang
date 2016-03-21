@@ -36,9 +36,22 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 @property (nonatomic) int64_t lastSuccessSyncVersion;
 
+@property (nonatomic, strong) NSArray *syncTableClasses;
+
 @end
 
 @implementation SSJDataSynchronizeTask
+
+- (instancetype)init {
+    if (self = [super init]) {
+        self.syncTableClasses = @[[SSJUserBillSyncTable class],
+                                  [SSJFundInfoSyncTable class],
+                                  [SSJUserChargePeriodConfigSyncTable class],
+                                  [SSJUserChargeSyncTable class],
+                                  [SSJUserBudgetSyncTable class]];
+    }
+    return self;
+}
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
@@ -135,9 +148,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
-                    //  合并数据完成后
-                    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
-                    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
                     if (success) {
 //                        [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
                         SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
@@ -165,12 +175,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 - (NSData *)getDataToSyncWithError:(NSError * __autoreleasing *)error {
     NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
     
-    NSArray *syncTableClasses = @[[SSJUserBillSyncTable class],
-                                  [SSJFundInfoSyncTable class],
-                                  [SSJUserChargeSyncTable class],
-                                  [SSJUserBudgetSyncTable class],
-                                  [SSJUserChargePeriodConfigSyncTable class]];
-    
     //  查询要同步的表中的数据
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
@@ -183,7 +187,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
-        for (Class syncTable in syncTableClasses) {
+        for (Class syncTable in self.syncTableClasses) {
             NSArray *syncRecords = [syncTable queryRecordsNeedToSyncWithUserId:self.userId inDatabase:db error:error];
             if (syncRecords.count) {
                 [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
@@ -308,99 +312,29 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     __block BOOL mergeSuccess = YES;
     __block BOOL updateVersionSuccess = YES;
     
-    //  收支类型
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserBillSyncTable mergeRecords:tableInfo[@"bk_user_bill"] forUserId:self.userId inDatabase:db error:error]) {
-            *rollback = YES;
-            mergeSuccess = NO;
-            return;
-        }
+    for (Class syncTable in self.syncTableClasses) {
+        //  收支类型
+        [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+            if (![syncTable mergeRecords:tableInfo[[syncTable tableName]] forUserId:self.userId inDatabase:db error:error]) {
+                *rollback = YES;
+                mergeSuccess = NO;
+                return;
+            }
+            
+            if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
+                updateVersionSuccess = NO;
+            }
+        }];
         
-        if ([versinStr length] && ![SSJUserBillSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
-            updateVersionSuccess = NO;
+        if (!mergeSuccess) {
+            return NO;
         }
-    }];
-    
-    if (!mergeSuccess) {
-        return NO;
     }
     
-    //  资金帐户
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJFundInfoSyncTable mergeRecords:tableInfo[@"bk_fund_info"] forUserId:self.userId inDatabase:db error:error]) {
-            *rollback = YES;
-            mergeSuccess = NO;
-            return;
-        }
-        
-        if ([versinStr length] && ![SSJFundInfoSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
-            updateVersionSuccess = NO;
-        }
-    }];
+    //  合并数据完成后根据定期记账和定期预算进行补充；如果补充失败，也不影响同步，在其他时机可以再次补充
+    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
+    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
     
-    if (!mergeSuccess) {
-        return NO;
-    }
-    
-    //  定期记账
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargePeriodConfigSyncTable mergeRecords:tableInfo[@"bk_charge_period_config"] forUserId:self.userId inDatabase:db error:error]) {
-            *rollback = YES;
-            mergeSuccess = NO;
-            return;
-        }
-        
-        if ([versinStr length] && ![SSJUserChargePeriodConfigSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
-            updateVersionSuccess = NO;
-        }
-    }];
-    
-    if (!mergeSuccess) {
-        return NO;
-    }
-    
-    //  记账流水
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserChargeSyncTable mergeRecords:tableInfo[@"bk_user_charge"] forUserId:self.userId inDatabase:db error:error]) {
-            *rollback = YES;
-            mergeSuccess = NO;
-            return;
-        }
-        
-        //  根据流水表计算资金帐户余额表和每日流水统计表
-        if (![SSJFundAccountTable updateBalanceForUserId:self.userId inDatabase:db]
-            || ![SSJDailySumChargeTable updateDailySumChargeForUserId:self.userId inDatabase:db]) {
-            *rollback = YES;
-            mergeSuccess = NO;
-            *error = [db lastError];
-            return;
-        }
-        
-        if ([versinStr length] && ![SSJUserChargeSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
-            updateVersionSuccess = NO;
-        }
-    }];
-    
-    if (!mergeSuccess) {
-        return NO;
-    }
-    
-    //  预算
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![SSJUserBudgetSyncTable mergeRecords:tableInfo[@"bk_user_budget"] forUserId:self.userId inDatabase:db error:error]) {
-            *rollback = YES;
-            mergeSuccess = NO;
-            return;
-        }
-        
-        if ([versinStr length] && ![SSJUserBudgetSyncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
-            updateVersionSuccess = NO;
-        }
-    }];
-    
-    if (!mergeSuccess) {
-        return NO;
-    }
     
     //  所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
     if (updateVersionSuccess) {

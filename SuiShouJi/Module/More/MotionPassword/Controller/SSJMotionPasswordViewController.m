@@ -68,7 +68,7 @@ static const int kVerifyFailureTimesLimit = 5;
             //  查询手势密码
             SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"icon"] forUserId:SSJUSERID()];
             self.password = userItem.motionPWD;
-            self.iconUrl = userItem.icon;
+            self.iconUrl = [userItem.icon hasPrefix:@"http"] ? userItem.icon : SSJImageURLWithAPI(userItem.icon);
             
             [self.view addSubview:self.portraitView];
             [self.view addSubview:self.forgetPwdBtn];
@@ -193,7 +193,7 @@ static const int kVerifyFailureTimesLimit = 5;
             } else {
                 //  验证失败
                 self.verifyFailureTimes --;
-                self.remindLab.textColor = [UIColor redColor];
+                self.remindLab.textColor = [UIColor ssj_colorWithHex:@"#ff7139"];
                 self.remindLab.text = [NSString stringWithFormat:@"密码错误，您还可以输入%d次", self.verifyFailureTimes];
                 
                 //  验证失败次数达到最大限制
