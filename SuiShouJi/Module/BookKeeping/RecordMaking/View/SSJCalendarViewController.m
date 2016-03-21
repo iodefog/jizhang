@@ -169,6 +169,8 @@
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
+        [_calendarView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_calendarView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
