@@ -287,6 +287,8 @@ static const int kVerifyFailureTimesLimit = 5;
                 [UIView animateWithDuration:0.25 animations:^{
                     imageView.image = image;
                 }];
+            } else {
+                imageView.image = image;
             }
         }];
         [_portraitView addSubview:imageView];

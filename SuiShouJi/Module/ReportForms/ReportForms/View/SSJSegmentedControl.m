@@ -42,7 +42,7 @@
             [button addTarget:self action:@selector(buttonClickAction:) forControlEvents:UIControlEventTouchUpInside];
             if (i < items.count - 1) {
                 [button ssj_setBorderStyle:SSJBorderStyleRight];
-                [button ssj_setBorderWidth:1];
+                [button ssj_setBorderWidth:2];
             }
             [self addSubview:button];
             [self.buttons addObject:button];
