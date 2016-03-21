@@ -159,7 +159,7 @@
 
 -(void)deleteConfigWithConfigId:(NSString *)configId{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        BOOL success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],configId];
+        BOOL success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),configId];
         
         if (success && SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
