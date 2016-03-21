@@ -52,6 +52,7 @@ static NSString *const kTitle4 = @"关于我们";
         self.titles = @[@[kTitle1], @[kTitle2],@[kTitle3],@[kTitle4]];
     }
     [self.navigationController setNavigationBarHidden:NO];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
 }
 
 #pragma mark - UITableViewDelegate

@@ -47,7 +47,9 @@ static NSString *const kTitle3 = @"定期提醒";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
     [self getDataFromDB];
+
 }
 
 #pragma mark - Getter
@@ -127,7 +129,7 @@ static NSString *const kTitle3 = @"定期提醒";
     }
     UISwitch *switchButton = [[UISwitch alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
     switchButton.on = self.item.isOnOrNot;
-    switchButton.onTintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    switchButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
     [switchButton addTarget:self action:@selector(switchButtonChange:) forControlEvents:UIControlEventValueChanged];
     if (indexPath.section == 0) {
         mineHomeCell.accessoryView = switchButton;

@@ -26,6 +26,7 @@
     [super layoutSubviews];
     self.titleLabel.left = 10;
     self.titleLabel.centerY = self.height / 2;
+    self.detailLabel.width = 200;
     self.detailLabel.centerY = self.height / 2;
     self.detailLabel.right = self.width - 30;
 }

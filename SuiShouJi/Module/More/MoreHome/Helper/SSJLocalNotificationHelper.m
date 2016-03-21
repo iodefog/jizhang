@@ -82,7 +82,6 @@
         }  
     }
     NSArray *NewlocalNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-
     NSLog(@"-----------%lu",(unsigned long)NewlocalNotifications.count);
 }
 
