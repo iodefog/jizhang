@@ -19,7 +19,7 @@
 @interface SSJRegistGetVerViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
-@property (nonatomic, strong) SSJRegistOrderView *stepView;
+//@property (nonatomic, strong) SSJRegistOrderView *stepView;
 @property (nonatomic, strong) SSJBaselineTextField *tfPhoneNum;
 @property (nonatomic, strong) UIButton *agreeButton;
 @property (nonatomic, strong) UIButton *protocolButton;
@@ -34,14 +34,14 @@
 
 #pragma mark - Lifecycle
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nil bundle:nil]) {
         self.title = @"注册";
         self.hidesBottomBarWhenPushed = YES;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -50,14 +50,14 @@
     [super viewDidLoad];
     [self.view addSubview:self.backGroundImage];
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.stepView];
+//    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.tfPhoneNum];
     [self.scrollView addSubview:self.agreeButton];
     [self.scrollView addSubview:self.protocolButton];
     [self.scrollView addSubview:self.nextButton];
     
     self.agreeButton.selected = YES;
-    self.nextButton.enabled = self.tfPhoneNum.text.length >= 11;
+//    self.nextButton.enabled = self.tfPhoneNum.text.length >= 11;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -122,15 +122,20 @@
 }
 
 #pragma mark - Notification
-- (void)textDidChange {
-    if ([self.tfPhoneNum isFirstResponder]) {
-        self.nextButton.enabled = self.tfPhoneNum.text.length >= 11;
-    }
-}
+//- (void)textDidChange {
+//    if ([self.tfPhoneNum isFirstResponder]) {
+//        self.nextButton.enabled = self.tfPhoneNum.text.length >= 11;
+//    }
+//}
 
 #pragma mark - Event
 //  获取验证码
 - (void)getAuthCodeAction {
+    if (!self.tfPhoneNum.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入手机号"];
+        return;
+    }
+    
     if (!self.agreeButton.selected) {
         [CDAutoHideMessageHUD showMessage:@"请先同意用户协定"];
         return;
@@ -176,16 +181,16 @@
 }
 
 
-- (SSJRegistOrderView *)stepView {
-    if (!_stepView) {
-        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputPhoneNo];
-    }
-    return _stepView;
-}
+//- (SSJRegistOrderView *)stepView {
+//    if (!_stepView) {
+//        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputPhoneNo];
+//    }
+//    return _stepView;
+//}
 
 - (SSJBaselineTextField *)tfPhoneNum {
     if (!_tfPhoneNum) {
-        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 124, self.view.width - 50, 50) contentHeight:34];
+        _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.placeholder = @"请输入您的手机号";
         _tfPhoneNum.delegate = self;
@@ -198,12 +203,10 @@
 - (SSJBorderButton *)nextButton {
     if (!_nextButton) {
         _nextButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.tfPhoneNum.bottom + 40, self.view.width - 50, 40)];
-        [_nextButton setFontSize:20];
+        [_nextButton setFontSize:16];
         [_nextButton setTitle:@"获取验证码" forState:SSJBorderButtonStateNormal];
         [_nextButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
-        [_nextButton setTitleColor:[UIColor clearColor] forState:SSJBorderButtonStateHighlighted];
         [_nextButton setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [_nextButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
         [_nextButton setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
         [_nextButton addTarget:self action:@selector(getAuthCodeAction)];
     }

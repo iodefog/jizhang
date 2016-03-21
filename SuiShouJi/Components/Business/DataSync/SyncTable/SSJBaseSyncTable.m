@@ -114,19 +114,15 @@
         }
         
         if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
-            if (error) {
+            if (error && *error) {
                 return NO;
             }
             continue;
         }
         
         //  根据合并记录返回相应的sql语句
-        NSError *tError = nil;
-        NSMutableString *statement = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db error:&tError] mutableCopy];
-        if (tError) {
-            if (error) {
-                *error = tError;
-            }
+        NSMutableString *statement = [[self sqlStatementForMergeRecord:recordInfo inDatabase:db error:error] mutableCopy];
+        if (error && *error) {
             return NO;
         }
         

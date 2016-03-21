@@ -21,6 +21,7 @@ extern NSString *const SSJBillingChargeRecordKey;
 
 /**
  *  查询某个年份、月份的记账流水数据；如果月份传0，则查询整年的数据；月份最大不能超过12，年份小于1，否则返回nil
+ *  如果是当前年或月，就查询截止到当天的数据
  *
  *  @param inYear    查询的年份，如果传0，则查询所有年份的数据
  *  @param month     查询的月份，如果传0，则查询整年的数据，最大不能超过12

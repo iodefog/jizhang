@@ -10,6 +10,7 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJBaselineTextField.h"
 #import "SSJRegistNetworkService.h"
+#import "SSJBorderButton.h"
 
 @interface SSJForgetPasswordSecondStepViewController () <UITextFieldDelegate>
 
@@ -17,7 +18,7 @@
 
 @property (nonatomic, strong) SSJBaselineTextField *passwordField;
 
-@property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) SSJBorderButton *nextButton;
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 
@@ -29,13 +30,13 @@
 
 #pragma mark - Lifecycle
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"输入新密码";
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -98,14 +99,19 @@
 }
 
 #pragma mark - Notification
-- (void)textDidChange {
-    if ([self.passwordField isFirstResponder]) {
-        self.nextButton.enabled = self.passwordField.text.length >= 6;
-    }
-}
+//- (void)textDidChange {
+//    if ([self.passwordField isFirstResponder]) {
+//        self.nextButton.enabled = self.passwordField.text.length >= 6;
+//    }
+//}
 
 #pragma mark - Event
 - (void)finishBtnAction {
+    if (!self.passwordField.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请收入您的新密码"];
+        return;
+    }
+    
     NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL isMatch = [pred evaluateWithObject:self.passwordField.text];
@@ -151,19 +157,15 @@
     return _passwordField;
 }
 
-- (UIButton *)nextButton {
+- (SSJBorderButton *)nextButton {
     if (!_nextButton) {
-        _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _nextButton.enabled = NO;
-        _nextButton.frame = CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40);
-        _nextButton.layer.cornerRadius = 3;
-        _nextButton.clipsToBounds = YES;
-        _nextButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_nextButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
-        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
-        [_nextButton addTarget:self action:@selector(finishBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _nextButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40)];
+        [_nextButton setFontSize:16];
+        [_nextButton setTitle:@"确定" forState:SSJBorderButtonStateNormal];
+        [_nextButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton addTarget:self action:@selector(finishBtnAction)];
     }
     return _nextButton;
 }
