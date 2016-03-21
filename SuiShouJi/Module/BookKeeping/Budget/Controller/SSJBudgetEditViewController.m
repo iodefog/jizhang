@@ -351,6 +351,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         //  预算类别
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
         budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
+        budgetTypeCell.subtitleLab.textColor = [UIColor blackColor];
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
         budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -407,6 +408,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         //  周期
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
         budgetPeriodCell.subtitleLab.text = [self budgetPeriod];
+        budgetPeriodCell.subtitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

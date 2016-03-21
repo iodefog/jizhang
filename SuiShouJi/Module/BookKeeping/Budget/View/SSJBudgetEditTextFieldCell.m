@@ -28,6 +28,7 @@
         
         self.textField = [[UITextField alloc] init];
         self.textField.textAlignment = NSTextAlignmentRight;
+        self.textField.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         [self.contentView addSubview:self.textField];
     }
     return self;
