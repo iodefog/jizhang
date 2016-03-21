@@ -12,7 +12,8 @@
 @implementation SSJFundAccountTable
 
 + (BOOL)updateBalanceForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
-    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 group by A.IFUNSID, B.ITYPE order by A.IFUNSID", userId];
+    //  从截止到今天有效的记账流水中，查询各个资金帐户的总收入、总支出
+    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and a.cbilldate <= datetime('now') group by A.IFUNSID, B.ITYPE order by A.IFUNSID", userId];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
