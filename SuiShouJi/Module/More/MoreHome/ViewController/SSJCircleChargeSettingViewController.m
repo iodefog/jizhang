@@ -14,7 +14,6 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJNoneCircleChargeView.h"
 #import "SSJDataSynchronizer.h"
-#import "FMDB.h"
 
 
 @interface SSJCircleChargeSettingViewController ()
@@ -159,8 +158,12 @@
 }
 
 -(void)deleteConfigWithConfigId:(NSString *)configId{
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],configId];
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+        BOOL success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],configId];
+        
+        if (success && SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        }
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){

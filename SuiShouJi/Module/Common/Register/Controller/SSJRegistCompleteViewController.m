@@ -218,9 +218,10 @@
 - (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
         _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
+        _passwordField.textColor = [UIColor whiteColor];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
-        _passwordField.placeholder = @"请输入6-15位字母、数字组合";
+        _passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入6-15位字母、数字组合" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
         _passwordField.delegate = self;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }

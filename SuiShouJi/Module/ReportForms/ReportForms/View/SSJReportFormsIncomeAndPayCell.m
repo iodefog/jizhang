@@ -77,7 +77,7 @@
         _percentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _percentLabel.backgroundColor = [UIColor whiteColor];
         _percentLabel.font = [UIFont systemFontOfSize:18];
-        _percentLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        _percentLabel.textColor = [UIColor blackColor];
     }
     return _percentLabel;
 }
