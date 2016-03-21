@@ -66,7 +66,7 @@
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];
         NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
-        NSTimeInterval time=[lastPopTime timeIntervalSinceDate:currentDate];
+        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
         int days=((int)time)/(3600*24);
         if (days > 14) {
             SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
