@@ -116,7 +116,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         //  给圆环添加动画
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
         animation.toValue = @(item.endAngle / (M_PI * 2));
-        animation.duration = 0.7;
+        animation.duration = 0.4;
         animation.delegate = self;
         animation.removedOnCompletion = NO;
         animation.fillMode = kCAFillModeForwards;
