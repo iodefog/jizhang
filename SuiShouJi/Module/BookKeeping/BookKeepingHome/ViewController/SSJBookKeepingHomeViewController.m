@@ -359,10 +359,15 @@
 
 -(void)reloadDataAfterSync{
     [self getDateFromDatebase];
+    [self reloadBudgetData];
 }
 
 - (void)reloadDataAfterInitDatabase {
     [self getDateFromDatebase];
+    [self reloadBudgetData];
+}
+
+- (void)reloadBudgetData {
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
         self.customNavigationBar.model = [result firstObject];
         for (int i = 0; i < result.count; i++) {

@@ -43,7 +43,6 @@
     [self getDateFromDb];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
     self.navigationItem.rightBarButtonItem = rightBarButton;
-
 }
 
 -(void)viewDidLayoutSubviews{

@@ -17,6 +17,15 @@
  */
 void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector);
 
-@interface SSJDebugUtil : NSObject
+#ifdef DEBUG
+
+@interface SSJDebugTimer : NSObject
+
++ (void)markStartTime;
+
++ (void)logTimeInterval;
 
 @end
+
+#endif
+

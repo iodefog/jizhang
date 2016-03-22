@@ -15,25 +15,33 @@ void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector)
     method_exchangeImplementations(originalMethod, swizzledMethod);
 }
 
+#ifdef DEBUG
 
-@implementation SSJDebugUtil
+@interface SSJDebugTimer ()
+
+@property (nonatomic) CFAbsoluteTime startTime;
+
+@end
+
+@implementation SSJDebugTimer
+
++ (SSJDebugTimer *)shareInstance {
+    static SSJDebugTimer *timer = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        timer = [[SSJDebugTimer alloc] init];
+    });
+    return timer;
+}
+
++ (void)markStartTime {
+    [SSJDebugTimer shareInstance].startTime = CFAbsoluteTimeGetCurrent();
+}
+
++ (void)logTimeInterval {
+    NSLog(@"耗时：%f", CFAbsoluteTimeGetCurrent() - [SSJDebugTimer shareInstance].startTime);
+}
 
 @end
 
-@interface UITableView (debug)
-
-@end
-
-@implementation UITableView (debug)
-
-//+ (void)load {
-//    SSJSwizzleSelector([self class], @selector(setContentInset:), @selector(ssj_setContentInset:));
-//}
-//
-//- (void)ssj_setContentInset:(UIEdgeInsets)inset {
-//    [self ssj_setContentInset:inset];
-//    NSLog(@"<<< inset: %f >>>",inset.top);
-//    NSLog(@"<<< current inset top: %f >>>",self.contentInset.top);
-//}
-
-@end
+#endif

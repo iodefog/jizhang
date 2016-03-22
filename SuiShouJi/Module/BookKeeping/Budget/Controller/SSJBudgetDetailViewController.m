@@ -219,6 +219,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     self.bottomView.top = self.middleView.bottom;
     
     [self.bottomView.circleView reloadData];
+    self.bottomView.button.hidden = ![self.budgetModel.ID isEqualToString:self.budgetId];
     
     if (self.circleItems.count > 0) {
         [self.view ssj_hideWatermark:YES];
