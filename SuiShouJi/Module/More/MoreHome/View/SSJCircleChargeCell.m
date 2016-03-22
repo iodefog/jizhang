@@ -142,10 +142,10 @@
             self.circleLabel.text = @"每月";
             break;
         case 5:
-            self.circleLabel.text = @"每年";
+            self.circleLabel.text = @"每月最后一天";
             break;
         case 6:
-            self.circleLabel.text = @"每月最后一天";
+            self.circleLabel.text = @"每年";
             break;
         default:
             break;
