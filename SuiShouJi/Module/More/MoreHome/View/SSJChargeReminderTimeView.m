@@ -62,11 +62,11 @@
         [_topView ssj_setBorderWidth:1];
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
-        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
+        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
         [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
-        _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
+        _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
         [_comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_comfirmButton];

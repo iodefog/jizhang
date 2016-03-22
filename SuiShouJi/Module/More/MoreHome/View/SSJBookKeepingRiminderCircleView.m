@@ -46,7 +46,7 @@
     self.closeButton.left = 10;
     self.comfirmButton.size = CGSizeMake(36, 21);
     self.comfirmButton.centerY = self.topView.height / 2;
-    self.comfirmButton.right = self.width - 20;
+    self.comfirmButton.right = self.width - 10;
 }
 
 #pragma mark - UITableViewDelegate
@@ -105,6 +105,7 @@
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
         _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
+        _comfirmButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

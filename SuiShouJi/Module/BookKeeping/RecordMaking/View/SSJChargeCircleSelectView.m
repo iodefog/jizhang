@@ -26,7 +26,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-        _titleArray = @[@"仅一次",@"每天",@"每个工作日",@"每个周末(六、日)",@"每周",@"每月",@"每年",@"每月最后一天"];
+        _titleArray = @[@"仅一次",@"每天",@"每个工作日",@"每个周末(六、日)",@"每周",@"每月",@"每月最后一天",@"每年"];
         _selectCircleType = -1;
         [self addSubview:self.pickerView];
         [self addSubview:self.topView];
@@ -70,11 +70,11 @@
         [_topView ssj_setBorderWidth:1];
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
-        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
+        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
         [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
-        _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
+        _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
         [_comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_comfirmButton];
