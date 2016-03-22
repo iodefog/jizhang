@@ -11,4 +11,9 @@
 
 @interface SSJCircleChargeCell : SSJBaseTableViewCell
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
+
+typedef void (^openSpecialCircle)(SSJBillingChargeCellItem *item);
+
+@property (nonatomic,copy)openSpecialCircle openSpecialCircle;
+
 @end

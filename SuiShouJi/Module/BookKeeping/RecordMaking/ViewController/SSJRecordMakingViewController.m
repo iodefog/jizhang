@@ -716,7 +716,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                      [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",weakSelf.item.configId,[NSString stringWithFormat:@"%@.jpg",imageName],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
                     }else{
                     [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",weakSelf.item.configId,@"",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
-                        if ([db intForQuery:@"select * from BK_IMG_SYNC where CIMGNAME = ? and RID <> ?",weakSelf.item.chargeImage,weakSelf.item.configId]+[db intForQuery:@"select * from BK_USER_CHARGE where CIMGURL = ? and ICHARGEID <> ?",weakSelf.item.chargeImage] == 0) {
+                        if ([db intForQuery:@"select * from BK_IMG_SYNC where CIMGNAME = ? and RID <> ?",weakSelf.item.chargeImage,weakSelf.item.configId]+[db intForQuery:@"select * from BK_USER_CHARGE where CIMGURL = ? and ICHARGEID <> ?",weakSelf.item.chargeImage,weakSelf.item.ID] == 0) {
                             [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeImage) error:nil];
                             [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeThumbImage) error:nil];
                             [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",weakSelf.item.chargeImage];
@@ -800,7 +800,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.CUSERID = ?",self.item.fundId,userid];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.CUSERID = ? AND A.OPERATORTYPE != 2",self.item.fundId,userid];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
             weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
@@ -809,6 +809,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             weakSelf.defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
             weakSelf.defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
             weakSelf.defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+        }
+        if (weakSelf.defualtItem.fundingID == nil) {
+            [weakSelf getDefualtFudingItem];
+            return;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             weakSelf.selectItem = weakSelf.defualtItem;

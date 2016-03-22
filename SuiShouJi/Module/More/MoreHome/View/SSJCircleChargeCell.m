@@ -164,11 +164,19 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         BOOL success = YES;
         if (weakSelf.switchButton.isOn) {
-            success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 1 , CWRITEDATE = ? , CBILLDATE = ? , IVERSION = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],@(SSJSyncVersion()),weakSelf.item.configId];
+            if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = ?",weakSelf.item.fundId] == 2) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (weakSelf.openSpecialCircle) {
+                        weakSelf.openSpecialCircle(weakSelf.item);
+                    }
+                    return;
+                });
+            }else{
+                success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 1 , CWRITEDATE = ? , CBILLDATE = ? , IVERSION = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],@(SSJSyncVersion()),weakSelf.item.configId];
+            }
         }else{
             success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 0 , CWRITEDATE = ? , IVERSION = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.configId];
         }
-        
         if (success && SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         }
