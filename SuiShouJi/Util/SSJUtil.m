@@ -273,7 +273,10 @@ NSString *SSJImagePath(NSString *imageName){
 };
 
 NSString *SSJGetChargeImageUrl(NSString *imageName){
-    NSString *imageURL = [NSString stringWithFormat:@"http://account.gs.9188.com/image/sync/%@",imageName];
+    //测试环境
+//    NSString *imageURL = [NSString stringWithFormat:@"http://account.gs.9188.com/image/sync/%@",imageName];
+    //正式环境
+    NSString *imageURL = [NSString stringWithFormat:@"http://jz.9188.com/image/sync/%@",imageName];
     return imageURL;
 }
 
