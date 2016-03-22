@@ -106,15 +106,13 @@
 }
 
 - (void)setIsHistory:(BOOL)isHistory {
-    if (_isHistory != isHistory) {
-        _isHistory = isHistory;
-        
-        self.topView.hidden = isHistory;
-        self.estimateMoneyLab.hidden = !isHistory;
-        self.bottomLab.hidden = isHistory;
-        
-        [self sizeToFit];
-    }
+    _isHistory = isHistory;
+    
+    self.topView.hidden = isHistory;
+    self.estimateMoneyLab.hidden = !isHistory;
+    self.bottomLab.hidden = isHistory;
+    
+    [self sizeToFit];
 }
 
 - (void)setBudgetModel:(SSJBudgetModel *)model {

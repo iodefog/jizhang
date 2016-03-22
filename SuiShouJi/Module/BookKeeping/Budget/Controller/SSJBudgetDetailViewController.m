@@ -210,7 +210,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     }
     
     self.scrollView.hidden = NO;
-    self.headerView.isHistory = self.budgetModel.ID != self.budgetId;
+    self.headerView.isHistory = ![self.budgetModel.ID isEqualToString:self.budgetId];
     [self.headerView setBudgetModel:self.budgetModel];
     
     self.scrollView.contentSize = CGSizeMake(self.view.width, kHeaderMargin + self.headerView.height + self.middleView.height + self.bottomView.height);
