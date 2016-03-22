@@ -312,15 +312,43 @@
 }
 
 -(void)rightBarButtonClicked:(id)sender{
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"你确定要删除该资金账户吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    [alert show];
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
+        BOOL haveConfigOrNot;
+        if ([db intForQuery:@"select * from bk_charge_period_config where ifunsid = ? and cuserid = ? and operatortype != 2",weakSelf.item.fundingID,userid] > 0) {
+            haveConfigOrNot = YES;
+        }else{
+            haveConfigOrNot = NO;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (haveConfigOrNot) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"删除此资金账户，关联的周期记账将会被暂停哦，如需续用请至“更多”进行编辑。" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                alert.tag = 100;
+                [alert show];
+            }else{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"你确定要删除该资金账户吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                alert.tag = 101;
+                [alert show];
+            }
+        });
+    }];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        __weak typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
+    if (buttonIndex == 1 && alertView.tag == 101) {
         [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
             [db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.fundingID,SSJUSERID()];
+            SSJDispatch_main_async_safe(^(){
+                [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+            });
+        }];
+    }else if (buttonIndex == 1 && alertView.tag == 100){
+        [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db) {
+            if ([db executeUpdate:@"UPDATE BK_FUND_INFO SET OPERATORTYPE = 2 , IVERSION = ? , CWRITEDATE = ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithLongLong:SSJSyncVersion()],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.fundingID,SSJUSERID()]) {
+                [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set ISTATE = 0 where IFUNSID = ?",weakSelf.item.fundingID];
+            }
             SSJDispatch_main_async_safe(^(){
                 [weakSelf.navigationController popToRootViewControllerAnimated:YES];
             });
