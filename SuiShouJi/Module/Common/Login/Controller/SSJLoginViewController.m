@@ -92,6 +92,11 @@ static NSString *const KQQAppKey = @"1105086761";
                                                                     NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+}
+
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.tfPhoneNum.top = 65;

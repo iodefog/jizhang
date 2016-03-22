@@ -73,19 +73,20 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self beginCountdownIfNeeded];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.authCodeTextField becomeFirstResponder];
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    
     [self.networkService cancel];
     if ([self isBeingPresented] || [self isMovingFromParentViewController]) {
         [self.countdownTimer invalidate];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.authCodeTextField becomeFirstResponder];
 }
 
 -(void)viewWillAppear:(BOOL)animated{

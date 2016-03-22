@@ -60,11 +60,6 @@
 //    self.finishBtn.enabled = NO;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.passwordField becomeFirstResponder];
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -74,8 +69,14 @@
                                                                     NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.passwordField becomeFirstResponder];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self.registCompleteService cancel];
 }
 
