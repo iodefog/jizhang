@@ -10,6 +10,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJPercentCircleViewItem.h"
 #import "MJExtension.h"
+#import "SSJDatePeriod.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
@@ -159,7 +160,9 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 + (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2", userid];
+        SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
+        NSString *currentPeriodBeginDate = [currentPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2 and csdate <= ?", userid, currentPeriodBeginDate];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

@@ -102,9 +102,9 @@ static CGSize kButtonSize = {36, 30};
             if (self.currentDate) {
                 NSMutableString *title = [NSMutableString string];
                 if ([[NSDate date] year] != [self.currentDate year]) {
-                    [title appendFormat:@"%d年", [self.currentDate year]];
+                    [title appendFormat:@"%d年", (int)[self.currentDate year]];
                 }
-                [title appendFormat:@"%d月预算", [self.currentDate month]];
+                [title appendFormat:@"%d月预算", (int)[self.currentDate month]];
                 self.titleLabel.text = title;
                 self.preButton.hidden = NO;
                 self.nextButton.hidden = NO;

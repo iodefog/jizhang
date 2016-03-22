@@ -60,7 +60,7 @@ extern NSString *const SSJBudgetMonthTitleKey;
                    failure:(void (^)(NSError * _Nullable error))failure;
 
 /**
- *  查询月预算id列表
+ *  查询截止到当前周期的月预算id列表
  *
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调

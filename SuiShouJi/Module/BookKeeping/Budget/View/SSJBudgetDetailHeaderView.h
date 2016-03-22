@@ -12,6 +12,8 @@
 
 @interface SSJBudgetDetailHeaderView : UIView
 
+@property (nonatomic) BOOL isHistory;
+
 - (void)setBudgetModel:(SSJBudgetModel *)model;
 
 @end

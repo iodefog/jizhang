@@ -12,24 +12,37 @@
 
 @interface SSJBudgetDetailHeaderView ()
 
+//  包涵本周期预算金额、据结算日天数的视图
 @property (nonatomic, strong) UIView *topView;
 
+//  包涵waveView、payMoneyLab、estimateMoneyLab、bottomLab的视图
 @property (nonatomic, strong) UIView *bottomView;
 
+//  顶部的本月预算标题
 @property (nonatomic, strong) UILabel *budgetMoneyTitleLab;
 
+//  顶部的本月预算金额
 @property (nonatomic, strong) UILabel *budgetMoneyLab;
 
-@property (nonatomic, strong) SSJBudgetWaveScaleView *waveView;
-
+//  顶部的据结算日标题
 @property (nonatomic, strong) UILabel *intervalTitleLab;
 
+//  顶部的据结算日天数
 @property (nonatomic, strong) UILabel *intervalLab;
 
+//  波浪比例视图
+@property (nonatomic, strong) SSJBudgetWaveScaleView *waveView;
+
+//  已花费金额
 @property (nonatomic, strong) UILabel *payMoneyLab;
 
+//  预算金额（只在历史预算中显示）
+@property (nonatomic, strong) UILabel *estimateMoneyLab;
+
+//  每天可以花费金额、超支金额
 @property (nonatomic, strong) UILabel *bottomLab;
 
+//  时间格式
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
 @end
@@ -49,29 +62,59 @@
     return self;
 }
 
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGFloat width = CGRectGetWidth([UIScreen mainScreen].bounds);
+    CGFloat height = self.isHistory ? 152 : 295;
+    return CGSizeMake(width, height);
+}
+
 - (void)layoutSubviews {
-    self.topView.frame = CGRectMake(0, 0, self.width, 95);
-    self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, 200);
-    
     CGFloat gap = 10;
-    CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
-    
-    self.budgetMoneyLab.width = MIN(self.budgetMoneyLab.width, self.width * 0.5 - 20);
-    self.budgetMoneyTitleLab.top = top1;
-    self.budgetMoneyLab.top = self.budgetMoneyTitleLab.bottom + gap;
-    self.budgetMoneyTitleLab.centerX = self.budgetMoneyLab.centerX = self.width * 0.25;
-    
-    self.intervalTitleLab.top = top1;
-    self.intervalLab.top = self.intervalTitleLab.bottom + gap;
-    self.intervalTitleLab.centerX = self.intervalLab.centerX = self.width * 0.75;
-    
-    self.payMoneyLab.width = MIN(self.payMoneyLab.width, self.width - 20);
-    self.bottomLab.width = MIN(self.bottomLab.width, self.width - 20);
     
     self.waveView.top = 15;
-    self.payMoneyLab.top = self.waveView.bottom + 15;
-    self.bottomLab.top = self.payMoneyLab.bottom + 13;
-    self.waveView.centerX = self.payMoneyLab.centerX = self.bottomLab.centerX = self.width * 0.5;
+    self.waveView.centerX = self.width * 0.5;
+    
+    if (self.isHistory) {
+        self.bottomView.frame = CGRectMake(0, 0, self.width, 200);
+        
+        self.payMoneyLab.width = MIN(self.payMoneyLab.width, (self.width - 80) * 0.5);
+        self.estimateMoneyLab.width = MIN(self.estimateMoneyLab.width, (self.width - 80) * 0.5);
+        self.payMoneyLab.top = self.estimateMoneyLab.top = self.waveView.bottom + 15;
+        self.payMoneyLab.left = 30;
+        self.estimateMoneyLab.right = self.width - 30;
+    } else {
+        self.topView.frame = CGRectMake(0, 0, self.width, 95);
+        self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, 200);
+        
+        CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
+        
+        self.budgetMoneyLab.width = MIN(self.budgetMoneyLab.width, self.width * 0.5 - 20);
+        self.budgetMoneyTitleLab.top = top1;
+        self.budgetMoneyLab.top = self.budgetMoneyTitleLab.bottom + gap;
+        self.budgetMoneyTitleLab.centerX = self.budgetMoneyLab.centerX = self.width * 0.25;
+        
+        self.intervalTitleLab.top = top1;
+        self.intervalLab.top = self.intervalTitleLab.bottom + gap;
+        self.intervalTitleLab.centerX = self.intervalLab.centerX = self.width * 0.75;
+        
+        self.payMoneyLab.width = MIN(self.payMoneyLab.width, self.width - 20);
+        self.bottomLab.width = MIN(self.bottomLab.width, self.width - 20);
+        self.payMoneyLab.top = self.waveView.bottom + 15;
+        self.bottomLab.top = self.payMoneyLab.bottom + 13;
+        self.payMoneyLab.centerX = self.bottomLab.centerX = self.width * 0.5;
+    }
+}
+
+- (void)setIsHistory:(BOOL)isHistory {
+    if (_isHistory != isHistory) {
+        _isHistory = isHistory;
+        
+        self.topView.hidden = isHistory;
+        self.estimateMoneyLab.hidden = !isHistory;
+        self.bottomLab.hidden = isHistory;
+        
+        [self sizeToFit];
+    }
 }
 
 - (void)setBudgetModel:(SSJBudgetModel *)model {
@@ -108,6 +151,9 @@
     self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     [self.payMoneyLab sizeToFit];
     
+    self.estimateMoneyLab.text = [NSString stringWithFormat:@"预算：%.2f", model.budgetMoney];
+    [self.estimateMoneyLab sizeToFit];
+    
     double balance = model.budgetMoney - model.payMoney;
     if (balance >= 0) {
         NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
@@ -143,6 +189,7 @@
         [_bottomView addSubview:self.waveView];
         [_bottomView addSubview:self.payMoneyLab];
         [_bottomView addSubview:self.bottomLab];
+        [_bottomView addSubview:self.estimateMoneyLab];
     }
     return _bottomView;
 }
@@ -202,6 +249,16 @@
         _payMoneyLab.backgroundColor = [UIColor whiteColor];
         _payMoneyLab.textColor = [UIColor blackColor];
         _payMoneyLab.font = [UIFont systemFontOfSize:14];
+    }
+    return _payMoneyLab;
+}
+
+- (UILabel *)estimateMoneyLab {
+    if (!_estimateMoneyLab) {
+        _estimateMoneyLab = [[UILabel alloc] init];
+        _estimateMoneyLab.backgroundColor = [UIColor whiteColor];
+        _estimateMoneyLab.textColor = [UIColor blackColor];
+        _estimateMoneyLab.font = [UIFont systemFontOfSize:14];
     }
     return _payMoneyLab;
 }

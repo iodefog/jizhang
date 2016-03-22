@@ -18,12 +18,6 @@
 
 static const CGFloat kHeaderMargin = 8;
 
-static const CGFloat kHeaderViewHeight = 295;
-
-static const CGFloat kbudgetTitleLabelHeight = 40;
-
-static const CGFloat kBottomViewHeight = 466;
-
 static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 @interface SSJBudgetDetailViewController () <SSJReportFormsPercentCircleDataSource>
@@ -46,6 +40,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 //  没有消费记录的提示视图
 @property (nonatomic, strong) UIImageView *noDataRemindView;
 
+//  没有消费记录的提示
 @property (nonatomic, strong) UILabel *noDataRemindLab;
 
 //  预算数据模型
@@ -57,6 +52,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 //  月预算历史id、日期映射表
 @property (nonatomic, strong) NSDictionary *monthBudgetIdMap;
 
+//  周期类型
 @property (nonatomic) SSJBudgetPeriodType periodType;
 
 @end
@@ -125,7 +121,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
         [self updateView];
-        
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
@@ -215,10 +210,18 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     }
     
     self.scrollView.hidden = NO;
-    
+    self.headerView.isHistory = self.budgetModel.ID != self.budgetId;
     [self.headerView setBudgetModel:self.budgetModel];
+    
+    self.scrollView.contentSize = CGSizeMake(self.view.width, kHeaderMargin + self.headerView.height + self.middleView.height + self.bottomView.height);
+    self.headerView.top = kHeaderMargin;
+    self.middleView.top = self.headerView.bottom;
+    self.bottomView.top = self.middleView.bottom;
+    
     [self.bottomView.circleView reloadData];
+    
     if (self.circleItems.count > 0) {
+        [self.view ssj_hideWatermark:YES];
         [self.bottomView.circleView ssj_hideWatermark:YES];
     } else {
         self.noDataRemindLab.text = @"NO，小主居然忘记记账了！";
@@ -245,7 +248,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-        _scrollView.contentSize = CGSizeMake(self.view.width, kHeaderMargin + kHeaderViewHeight + kbudgetTitleLabelHeight + kBottomViewHeight);
         _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
         _scrollView.hidden = YES;
     }
@@ -254,21 +256,21 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (SSJBudgetDetailHeaderView *)headerView {
     if (!_headerView) {
-        _headerView = [[SSJBudgetDetailHeaderView alloc] initWithFrame:CGRectMake(0, kHeaderMargin, self.view.width, kHeaderViewHeight)];
+        _headerView = [[SSJBudgetDetailHeaderView alloc] init];
     }
     return _headerView;
 }
 
 - (SSJBudgetDetailMiddleTitleView *)middleView {
     if (!_middleView) {
-        _middleView = [[SSJBudgetDetailMiddleTitleView alloc] initWithFrame:CGRectMake(0, kHeaderMargin + kHeaderViewHeight, self.view.width, kbudgetTitleLabelHeight)];
+        _middleView = [[SSJBudgetDetailMiddleTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
     }
     return _middleView;
 }
 
 - (SSJBudgetDetailBottomView *)bottomView {
     if (!_bottomView) {
-        _bottomView = [[SSJBudgetDetailBottomView alloc] initWithFrame:CGRectMake(0, kHeaderMargin + kHeaderViewHeight + kbudgetTitleLabelHeight, self.view.width, kBottomViewHeight)];
+        _bottomView = [[SSJBudgetDetailBottomView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 466)];
         _bottomView.circleView.dataSource = self;
         [_bottomView.button addTarget:self action:@selector(editButtonAction)];
     }
