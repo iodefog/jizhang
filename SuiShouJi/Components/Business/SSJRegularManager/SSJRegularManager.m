@@ -336,12 +336,13 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
         }   break;
             
-            // 每年
+            // 每月最后一天
         case 5: {
-            NSInteger yearCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeYear];
-            NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:yearCount];
-            for (int i = 1; i <= yearCount; i ++) {
-                NSDate *newDate = [date dateByAddingYears:i];
+            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
+            NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
+            for (int i = 1; i <= monthCount; i ++) {
+                NSDate *tDate = [date dateByAddingMonths:i];
+                NSDate *newDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate daysInMonth]];
                 if ([newDate compare:nowDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }
@@ -350,13 +351,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             
         }   break;
             
-            // 每月最后一天
+            // 每年
         case 6: {
-            NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
-            NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
-            for (int i = 1; i <= monthCount; i ++) {
-                NSDate *tDate = [date dateByAddingMonths:i];
-                NSDate *newDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate daysInMonth]];
+            NSInteger yearCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeYear];
+            NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:yearCount];
+            for (int i = 1; i <= yearCount; i ++) {
+                NSDate *newDate = [date dateByAddingYears:i];
                 if ([newDate compare:nowDate] != NSOrderedDescending) {
                     [billDates addObject:newDate];
                 }

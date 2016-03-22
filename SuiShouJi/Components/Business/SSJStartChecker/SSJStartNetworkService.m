@@ -27,26 +27,28 @@
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement {
-    self.content = nil;
-    self.appversion = nil;
-    self.url = nil;
-    self.type = nil;
-    self.remindMassage = nil;
-    
-    NSDictionary *results = [rootElement objectForKey:@"results"];
-    
-    //  解析升级信息
-    NSDictionary *appInfo = [results objectForKey:@"app"];
-    if (appInfo) {
-        self.content = [appInfo objectForKey:@"content"];
-        self.appversion = [appInfo objectForKey:@"appversion"];
-        self.url = [appInfo objectForKey:@"url"];
-        self.type = [appInfo objectForKey:@"type"];
+    if ([_returnCode isEqualToString:@"1"]) {
+        self.content = nil;
+        self.appversion = nil;
+        self.url = nil;
+        self.type = nil;
+        self.remindMassage = nil;
+        
+        NSDictionary *results = [rootElement objectForKey:@"results"];
+        
+        //  解析升级信息
+        NSDictionary *appInfo = [results objectForKey:@"app"];
+        if (appInfo) {
+            self.content = [appInfo objectForKey:@"content"];
+            self.appversion = [appInfo objectForKey:@"appversion"];
+            self.url = [appInfo objectForKey:@"url"];
+            self.type = [appInfo objectForKey:@"type"];
+        }
+        //  解析审核配置
+        self.isInReview = [[results objectForKey:@"review"] boolValue];
+        self.remindMassage = [results objectForKey:@"remind"];
+        self.startImage = [results objectForKey:@"homeheaderbg"];
     }
-    //  解析审核配置
-    self.isInReview = [[results objectForKey:@"review"] boolValue];
-    self.remindMassage = [results objectForKey:@"remind"];
-    self.startImage = [results objectForKey:@"homeheaderbg"];
 }
 
 @end

@@ -200,12 +200,18 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window addSubview:startView];
     [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
         //  如果有下发启动页，就显示
-        [startView showWithUrl:[NSURL URLWithString:SSJImageURLWithAPI([SSJStartChecker sharedInstance].startImageUrl)]
-                      duration:2
-                        finish:^{
-                            [startView removeFromSuperview];
-                            [self showGuideViewIfNeeded];
-                        }];
+        NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
+        if (startImgUrl.length) {
+            [startView showWithUrl:[NSURL URLWithString:SSJImageURLWithAPI(startImgUrl)]
+                          duration:2
+                            finish:^{
+                                [startView removeFromSuperview];
+                                [self showGuideViewIfNeeded];
+                            }];
+        } else {
+            [startView removeFromSuperview];
+            [self showGuideViewIfNeeded];
+        }
     } failure:^(NSString *message) {
         [startView removeFromSuperview];
         [self showGuideViewIfNeeded];
