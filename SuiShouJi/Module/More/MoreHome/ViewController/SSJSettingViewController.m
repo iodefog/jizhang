@@ -91,7 +91,7 @@ static NSString *const kTitle4 = @"关于我们";
     
     //  用户协议与隐私说明
     if ([title isEqualToString:kTitle2]) {
-        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://1.9188.com/h5/about_shq/protocol.html"]];
+        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
         webVc.title = @"用户协议与隐私说明";
         [self.navigationController pushViewController:webVc animated:YES];
     }

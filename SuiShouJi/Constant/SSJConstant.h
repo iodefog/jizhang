@@ -64,6 +64,9 @@ extern NSString *const SSJAppStoreAddress;
 //  同步加密密钥字符串
 extern NSString *const SSJSyncPrivateKey;
 
+//  用户协议url
+extern NSString *const SSJUserProtocolUrl;
+
 
 /** -------------------- KEY -------------------- */
 //上一次选择的资金账户类型

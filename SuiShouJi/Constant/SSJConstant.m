@@ -31,6 +31,8 @@ NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/cn/app/9188ji-zh
 
 NSString *const SSJSyncPrivateKey = @"accountbook";
 
+NSString *const SSJUserProtocolUrl = @"http://1.9188.com/h5/about_shq/protocol.html";
+
 NSString *const SSJLastSelectFundItemKey = @"lastSelectFundKey";
 
 NSString *const SSJLastPopTimeKey = @"lastPopTimeKey";

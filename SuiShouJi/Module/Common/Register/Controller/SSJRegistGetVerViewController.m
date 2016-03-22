@@ -150,7 +150,7 @@
 
 //  查看协议
 - (void)checkProtocolAction {
-    SSJNormalWebViewController *userAgreementVC = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJURLWithAPI(@"h5/static/adbyhxy.html")]];
+    SSJNormalWebViewController *userAgreementVC = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
     userAgreementVC.title = @"用户协定";
     [self.navigationController pushViewController:userAgreementVC animated:YES];
 }
