@@ -169,8 +169,6 @@
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
-        [_calendarView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_calendarView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
@@ -191,8 +189,6 @@
 -(UIView *)dateChangeView{
     if (!_dateChangeView) {
         _dateChangeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 180, 45)];
-        [_dateChangeView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_dateChangeView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e8e8e8"]];
         _dateChangeView.backgroundColor = [UIColor whiteColor];
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];

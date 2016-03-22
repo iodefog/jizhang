@@ -50,6 +50,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 @property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSArray *titles;
+@property (nonatomic,strong) NSString *circleChargeState;
 
 //  手势密码开关
 @property (nonatomic, strong) UISwitch *motionSwitch;
@@ -118,6 +119,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     } else {
         [self.motionSwitch setOn:NO];
     }
+    [self getCircleChargeState];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -242,6 +244,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         mineHomeCell.accessoryView = self.motionSwitch;
     } else {
         mineHomeCell.accessoryView = nil;
+    }
+    if ([mineHomeCell.cellTitle isEqualToString:kTitle2]) {
+        mineHomeCell.detailLabel.text = self.circleChargeState;
+        [mineHomeCell.detailLabel sizeToFit];
+    }else{
+        mineHomeCell.detailLabel.text = @"";
     }
 
     return mineHomeCell;
@@ -426,6 +434,21 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     item.userId = SSJUSERID();
     item.motionPWDState = state ? @"1" : @"0";
     [SSJUserTableManager saveUserItem:item];
+}
+
+-(void)getCircleChargeState{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        BOOL isOnOrNot = [db intForQuery:@"select isonornot from BK_CHARGE_REMINDER"];
+        if (isOnOrNot) {
+            weakSelf.circleChargeState = @"开启";
+        }else{
+            weakSelf.circleChargeState = @"关闭";
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
+    }];
 }
 
 #pragma mark - UIImagePickerControllerDelegate

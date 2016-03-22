@@ -28,7 +28,11 @@
     self.titleLabel.centerY = self.height / 2;
     self.detailLabel.width = 200;
     self.detailLabel.centerY = self.height / 2;
-    self.detailLabel.right = self.width - 30;
+    if (self.contentView.width == self.width) {
+        self.detailLabel.right = self.width - 20;
+    }else{
+        self.detailLabel.right = self.contentView.width;
+    }
 }
 
 -(UILabel *)titleLabel{

@@ -38,9 +38,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
-    self.navigationItem.rightBarButtonItem = item;
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
     [self getDateFromDatebase];
 }
@@ -139,7 +136,11 @@
             weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
             if (self.items.count == 0) {
                 [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
-
+                self.navigationItem.rightBarButtonItem = nil;
+            }else{
+                UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
+                self.navigationItem.rightBarButtonItem = item;
+                self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
             }
             [weakSelf.tableView ssj_hideLoadingIndicator];
             [weakSelf.tableView reloadData];
