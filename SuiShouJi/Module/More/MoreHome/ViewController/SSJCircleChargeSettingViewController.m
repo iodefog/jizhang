@@ -89,6 +89,12 @@
         circleChargeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     circleChargeCell.item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    __weak typeof(self) weakSelf = self;
+    circleChargeCell.openSpecialCircle = ^(SSJBillingChargeCellItem *item){
+        SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
+        recordMakingVc.item = item;
+        [weakSelf.navigationController pushViewController:recordMakingVc animated:YES];
+    };
     return circleChargeCell;
 }
 

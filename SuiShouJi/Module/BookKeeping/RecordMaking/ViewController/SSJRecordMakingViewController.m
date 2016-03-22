@@ -800,7 +800,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.CUSERID = ?",self.item.fundId,userid];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.CUSERID = ? AND A.OPERATORTYPE != 2",self.item.fundId,userid];
         _defualtItem = [[SSJFundingItem alloc]init];
         while ([rs next]) {
             weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
@@ -809,6 +809,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             weakSelf.defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
             weakSelf.defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
             weakSelf.defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
+        }
+        if (weakSelf.defualtItem.fundingID == nil) {
+            [weakSelf getDefualtFudingItem];
+            return;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             weakSelf.selectItem = weakSelf.defualtItem;
