@@ -83,6 +83,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 - (void)reloadCircleLayers {
+    [self.circleLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    [self.circleLayers removeAllObjects];
+    
     [self.shootLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [self.shootLayers removeAllObjects];
     
