@@ -105,11 +105,17 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         self.selectChargeCircleType = -1;
     }else{
         [self getSelectedDateFromDate:self.item.billDate];
-        self.selectedYear = _originaldYear;
-        self.selectedMonth = _originaldMonth;
-        self.selectedDay = _originaldDay;
+        if (self.item.ID == nil) {
+            self.selectedYear = _currentYear;
+            self.selectedMonth = _currentMonth;
+            self.selectedDay = _currentDay;
+        }else{
+            self.selectedYear = _originaldYear;
+            self.selectedMonth = _originaldMonth;
+            self.selectedDay = _originaldDay;
+        }
         self.categoryID = self.item.billId;
-        if ([self.item.configId isEqualToString:@""] || ![self.item.billDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {
+        if ([self.item.configId isEqualToString:@""] || (![self.item.billDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]] && self.item.ID != nil)) {
             self.selectChargeCircleType = -1;
         }else{
             self.selectChargeCircleType = self.item.chargeCircleType;
