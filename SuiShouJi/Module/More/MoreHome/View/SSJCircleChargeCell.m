@@ -31,7 +31,6 @@
         [self.contentView addSubview:self.circleImage];
         [self.contentView addSubview:self.circleLabel];
         [self.contentView addSubview:self.switchButton];
-        [self.contentView addSubview:self.timeLabel];
     }
     return self;
 }
@@ -39,7 +38,7 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.categoryImage.size = CGSizeMake(46, 46);
-    self.categoryImage.left = 10;
+    self.categoryImage.left = self.contentView.left + 10;
     self.categoryImage.centerY = self.height / 2;
     self.categoryLabel.left = self.categoryImage.right + 10;
     self.categoryLabel.top= 13;
@@ -50,7 +49,7 @@
     self.circleImage.top = self.categoryLabel.bottom + 15;
     self.circleLabel.centerY = self.circleImage.centerY;
     self.circleLabel.left = self.circleImage.right + 10;
-    self.switchButton.right = self.width - 10;
+    self.switchButton.right = self.contentView.width - 10;
     self.switchButton.centerY = self.height / 2;
 }
 
