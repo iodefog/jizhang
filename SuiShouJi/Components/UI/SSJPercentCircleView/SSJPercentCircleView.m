@@ -123,6 +123,7 @@
     }
     
     self.circleNode.hidden = NO;
+//    [self.circleNode stopAnimation];
     [self.additionGroupNode cleanUpAdditionNodes];
     
     self.animateCounter ++;
