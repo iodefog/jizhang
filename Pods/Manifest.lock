@@ -59,7 +59,6 @@ PODS:
   - SDWebImage/WebP (3.7.3):
     - libwebp
     - SDWebImage/Core
-  - SSZipArchive (1.0.1)
   - UMengAnalytics-NO-IDFA (3.6.7)
   - UMengFeedback (2.3.4)
   - UMengSocial (4.4)
@@ -73,7 +72,6 @@ DEPENDENCIES:
   - MJExtension
   - SDWebImage (~> 3.7)
   - SDWebImage/WebP
-  - SSZipArchive
   - UMengAnalytics-NO-IDFA
   - UMengFeedback (~> 2.3.4)
   - UMengSocial (~> 4.3)
@@ -87,7 +85,6 @@ SPEC CHECKSUMS:
   libwebp: 7d74f1ab887df77f23493ce115c9424fad5411b5
   MJExtension: 290cc966f0f849b12b6391a38e296e0004ae8e5e
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
-  SSZipArchive: 5f30a0af2cb3d48c0ff83b1e18029f7041ac3c38
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
   UMengFeedback: 5283cc0e324dffca4dd54c4abb3cbded56487817
   UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0

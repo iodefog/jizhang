@@ -72,9 +72,13 @@
     return nil;
 }
 
-//  创建
+//  创建记账提醒表
 + (NSError *)crateChargeReminderTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"create table if not exists bk_charge_reminder (isonornot text not null, time text, circle text)"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"insert into bk_charge_reminder (isonornot, time, circle) values (1, '20:00', '1,2,3,4,5,6,7')"]) {
         return [db lastError];
     }
     return nil;

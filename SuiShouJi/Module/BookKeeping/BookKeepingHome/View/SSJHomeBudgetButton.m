@@ -64,6 +64,7 @@
         _budgetWaveScaleView = [[SSJBudgetWaveScaleView alloc]init];
         _budgetWaveScaleView.borderWidth = 1;
         _budgetWaveScaleView.waveAmplitude = 0.6;
+        _budgetWaveScaleView.innerBorderWidth = 0.5;
     }
     return _budgetWaveScaleView;
 }
