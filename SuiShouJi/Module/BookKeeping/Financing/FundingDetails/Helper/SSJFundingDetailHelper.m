@@ -19,18 +19,17 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 @implementation SSJFundingDetailHelper
 
 + (void)queryDataWithFundTypeID:(NSString *)ID
-                         InYear:(NSInteger)year
                           month:(NSInteger)month
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure {
     
-    if (year == 0 || month > 12) {
+    if (month > 12) {
         SSJPRINT(@"class:%@\n method:%@\n message:(year == 0 || month > 12)",NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         failure(nil);
         return;
     }
     
-    NSMutableString *dateStr = [NSMutableString stringWithFormat:@"%04d",(int)year];
+    NSMutableString *dateStr = [NSMutableString stringWithString:@"____"];
     if (month == 0) {
         [dateStr appendFormat:@"-__-__"];
     } else {

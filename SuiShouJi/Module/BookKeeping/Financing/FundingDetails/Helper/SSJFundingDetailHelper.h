@@ -29,9 +29,7 @@ extern NSString *const SSJFundingDetailSumKey;
  *  @param failure   查询失败的回调
  */
 + (void)queryDataWithFundTypeID:(NSString *)ID
-                         InYear:(NSInteger)year
                           month:(NSInteger)month
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure;
-
 @end
