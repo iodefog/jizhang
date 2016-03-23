@@ -51,7 +51,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     self.tableView.tableHeaderView = self.header;
     [self getTotalIcomeAndExpence];
     __weak typeof(self) weakSelf = self;
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID month:0 success:^(NSArray<NSDictionary *> *data) {
         weakSelf.datas = data;
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
@@ -68,7 +68,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     _header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
     [self getTotalIcomeAndExpence];
     __weak typeof(self) weakSelf = self;
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID month:0 success:^(NSArray<NSDictionary *> *data) {
         self.datas = data;
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
@@ -159,7 +159,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 
 -(void)reloadDataAfterSync{
     __weak typeof(self) weakSelf = self;
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID InYear:2016 month:0 success:^(NSArray<NSDictionary *> *data) {
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID month:0 success:^(NSArray<NSDictionary *> *data) {
         weakSelf.datas = data;
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
