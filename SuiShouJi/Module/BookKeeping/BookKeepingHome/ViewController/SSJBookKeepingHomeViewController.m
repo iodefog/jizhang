@@ -22,7 +22,7 @@
 #import "SSJImaageBrowseViewController.h"
 #import "SSJBudgetModel.h"
 #import "SSJBillingChargeCellItem.h"
-#import "SSJCustomNavigationBarView.h"
+#import "SSJHomeBudgetButton.h"
 #import "SSJBudgetModel.h"
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
@@ -35,7 +35,7 @@
 @property (nonatomic,strong) UIButton *button;
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
 @property (nonatomic,strong) SSJBudgetModel *lastBudgetModel;
-@property (nonatomic,strong) SSJCustomNavigationBarView *customNavigationBar;
+@property (nonatomic,strong) SSJHomeBudgetButton *budgetButton;
 @property (nonatomic,strong) SSJHomeReminderView *remindView;
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
@@ -53,7 +53,6 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.extendedLayoutIncludesOpaqueBars = YES;
-        self.title = @"个人账本";
         self.automaticallyAdjustsScrollViewInsets = NO;
         [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
@@ -62,7 +61,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[self navigationController] setNavigationBarHidden:YES animated:NO];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];
         NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
@@ -86,16 +84,23 @@
             [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
         }
     }
+    [self getCurrentDate];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"47cfbe"] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    [self getCurrentDate];
-    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
+    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+    rightSpace.width = -15;
+    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+    leftSpace.width = -10;
+//    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    self.navigationItem.leftBarButtonItems = @[leftSpace,leftBarButtonItem];
+    self.navigationItem.rightBarButtonItems = @[rightSpace,self.rightBarButton];
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.customNavigationBar.model = [result firstObject];
+            self.budgetButton.model = [result firstObject];
             for (int i = 0; i < result.count; i++) {
                 if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
                     self.remindView.model = [result objectAtIndex:i];
@@ -112,7 +117,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.bookKeepingHeader];
-    [self.view addSubview:self.customNavigationBar];
     self.tableView.frame = self.view.frame;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -133,8 +137,6 @@
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.tableView.height = self.view.height - self.bookKeepingHeader.bottom - 49;
     self.clearView.frame = self.view.frame;
-    self.customNavigationBar.size = CGSizeMake(self.view.width, 44);
-    self.customNavigationBar.leftTop = CGPointMake(0, 0);
 }
 
 -(BOOL)prefersStatusBarHidden{
@@ -212,7 +214,7 @@
         [weakSelf getDateFromDatebase];
         [weakSelf.tableView reloadData];
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.customNavigationBar.model = [result firstObject];
+            self.budgetButton.model = [result firstObject];
             for (int i = 0; i < result.count; i++) {
                 if ([result objectAtIndex:i].remindMoney < [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
                     self.remindView.model = [result objectAtIndex:i];
@@ -270,13 +272,11 @@
 //    return _clearView;
 //}
 
--(SSJCustomNavigationBarView *)customNavigationBar{
-    if (!_customNavigationBar) {
-        _customNavigationBar = [[SSJCustomNavigationBarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
-        [_customNavigationBar.calenderButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        _customNavigationBar.model = nil;
+-(SSJHomeBudgetButton *)budgetButton{
+    if (!_budgetButton) {
+        _budgetButton = [[SSJHomeBudgetButton alloc]initWithFrame:CGRectMake(0, 0, 100, 46)];
         __weak typeof(self) weakSelf = self;
-        _customNavigationBar.budgetButtonClickBlock = ^(SSJBudgetModel *model){
+        _budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
             if (model == nil) {
                 SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
                 [weakSelf.navigationController pushViewController:budgetEditVC animated:YES];
@@ -286,13 +286,23 @@
             }
         };
     }
-    return _customNavigationBar;
+    return _budgetButton;
 }
 
 #pragma mark - Private
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
+}
+
+-(void)budgetButtonClicked:(id)sender{
+    if (self.budgetButton.model == nil) {
+        SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
+        [self.navigationController pushViewController:budgetEditVC animated:YES];
+    }else{
+        SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
+        [self.navigationController pushViewController:budgetListVC animated:YES];
+    }
 }
 
 -(void)getDateFromDatebase{
@@ -353,7 +363,6 @@
     _currentYear= [dateComponent year];
     _currentDay = [dateComponent day];
     _currentMonth = [dateComponent month];
-    self.customNavigationBar.currentDay = self.currentDay;
     self.bookKeepingHeader.currentMonth = self.currentMonth;
 }
 
@@ -369,7 +378,7 @@
 
 - (void)reloadBudgetData {
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        self.customNavigationBar.model = [result firstObject];
+        self.budgetButton.model = [result firstObject];
         for (int i = 0; i < result.count; i++) {
             if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
                 self.remindView.model = [result objectAtIndex:i];

@@ -12,10 +12,10 @@
             <rect key="frame" x="0.0" y="0.0" width="319" height="200"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="tye-cO-Mp7">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="home_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="tye-cO-Mp7">
                     <rect key="frame" x="0.0" y="0.0" width="319" height="132"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
                     <rect key="frame" x="159" y="0.0" width="159.5" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
@@ -39,7 +39,7 @@
                         <constraint firstItem="qoB-04-fHd" firstAttribute="top" secondItem="ALN-pm-jUE" secondAttribute="top" constant="68" id="zyf-TD-IqD"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
                     <rect key="frame" x="0.0" y="0.0" width="159.5" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsL-w9-uFM">

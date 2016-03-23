@@ -44,7 +44,7 @@
                                 <constraint firstAttribute="width" constant="42" id="EMo-lY-COM"/>
                                 <constraint firstAttribute="height" constant="42" id="JV0-4v-Goh"/>
                             </constraints>
-                            <state key="normal" backgroundImage="paizhao.png"/>
+                            <state key="normal" backgroundImage="paizhao_nor.png"/>
                             <connections>
                                 <action selector="additionalButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZwY-Ne-Y7N"/>
                             </connections>
@@ -108,7 +108,7 @@
     <resources>
         <image name="beizhu_nor.png" width="41" height="41"/>
         <image name="beizhu_sel.png" width="41" height="41"/>
-        <image name="paizhao.png" width="41" height="41"/>
+        <image name="paizhao_nor.png" width="40" height="40"/>
         <image name="recordmaking_save.png" width="216" height="216"/>
         <image name="xuhuan_sel.png" width="41" height="41"/>
         <image name="xunhuan_nor.png" width="41" height="41"/>

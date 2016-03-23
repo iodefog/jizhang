@@ -30,7 +30,7 @@
     self.lineHeight.constant = 1.f / [UIScreen mainScreen].scale;
     self.takephotoLeading.constant = self.width / 2 / 2 - 21;
     self.circleButtonTrailing.constant = self.width / 2 / 2 - 21;
-    [self.takePhotoButton setBackgroundImage:[UIImage imageNamed:@"paizhao"] forState:UIControlStateNormal];
+    [self.takePhotoButton setBackgroundImage:[UIImage imageNamed:@"paizhao_nor"] forState:UIControlStateNormal];
 //    [self.]
 }
 
@@ -43,7 +43,7 @@
 -(void)setSelectedImage:(UIImage *)selectedImage{
     _selectedImage = selectedImage;
     if (_selectedImage == nil) {
-        [self.takePhotoButton setBackgroundImage:[UIImage imageNamed:@"paizhao"] forState:UIControlStateNormal];
+        [self.takePhotoButton setBackgroundImage:[UIImage imageNamed:@"paizhao_nor"] forState:UIControlStateNormal];
     }else{
         [self.takePhotoButton setBackgroundImage:selectedImage forState:UIControlStateNormal];
     }
