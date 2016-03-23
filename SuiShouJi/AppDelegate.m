@@ -86,7 +86,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJRegularManager registerRegularTaskNotification];
     
-    [SSJDebugTimer logTimeInterval];
+//    [SSJDebugTimer logTimeInterval];
 
     return YES;
 }
