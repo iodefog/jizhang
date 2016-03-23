@@ -644,6 +644,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         }else if (self.item.ID != nil){
             //修改流水
             if ([db intForQuery:@"select operatortype from bk_user_charge where ichargeid = ?",weakSelf.item.ID] == 2) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+
                 return;
             }
             if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,userid]) {
@@ -655,6 +657,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     }
                 }else if (weakSelf.selectChargeCircleType == weakSelf.item.chargeCircleType && weakSelf.selectChargeCircleType != -1){
                     [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set IBILLID = ? , CBILLDATE = ? , OPERATORTYPE = ? , IVERSION = ? , CWRITEDATE = ? , IMONEY = ? , IFUNSID = ? , CMEMO = ? , ISTATE = ? where iconfigid = ? and cuserid = ?",weakSelf.categoryID,selectDate,[NSNumber numberWithInt:1],@(SSJSyncVersion()),[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,weakSelf.chargeMemo,[NSNumber numberWithInt:1],weakSelf.item.configId,userid];
+                }else if (weakSelf.selectChargeCircleType == -1 && weakSelf.item.chargeCircleType != -1){
+                    if ([db executeUpdate:@"update bk_user_charge set iconfigid = '' where ichargeid = ?",weakSelf.item.ID]) {
+                        [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set operatortype = 2 where iconfigid = ?",weakSelf.item.configId];
+                    }
                 }
                 if (weakSelf.selectedImage != nil) {
                     if (SSJSaveImage(weakSelf.selectedImage, imageName)&&SSJSaveThumbImage(weakSelf.selectedImage, imageName)) {

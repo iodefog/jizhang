@@ -334,6 +334,9 @@
             }else{
                 item.chargeCircleType = [rs intForColumn:@"CHARGECIRCLE"];
             }
+            if ([item.configId isEqualToString:@""] || item.configId == nil) {
+                item.chargeCircleType = - 1;
+            }
             NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
             [formatter setDateFormat:@"yyyy-MM-dd"];
             NSDate *billDate = [formatter dateFromString:item.billDate];
