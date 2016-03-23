@@ -31,7 +31,8 @@
 @implementation SSJDailySumChargeTable
 
 + (BOOL)updateDailySumChargeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
-    __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and B.istate <> 2 group by A.CBILLDATE, B.ITYPE order by A.CBILLDATE", userId];
+    //  查询不同日期的收入、支出总金额
+    __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and B.istate <> 2 group by A.CBILLDATE, B.ITYPE", userId];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -67,6 +68,8 @@
     [result close];
     
     __block BOOL success = YES;
+    
+    //  如果有相同日期的每日流水，就修改，反之则创建新的纪录
     [dailyChargeInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         __SSJDailySumChargeTableModel *model = obj;
         result = [db executeQuery:@"select count(*) from BK_DAILYSUM_CHARGE where CBILLDATE = ? and CUSERID = ?", model.billDate, userId];
@@ -105,7 +108,9 @@
     }
     NSString *billDateStr = [billDateSet componentsJoinedByString:@", "];
     
-    return [db executeUpdate:[NSString stringWithFormat:@"delete from BK_DAILYSUM_CHARGE where cbilldate not in (%@)", billDateStr]];
+//    return [db executeUpdate:@"delete from BK_DAILYSUM_CHARGE where cbilldate not in ? and cuserid = ?", [NSString stringWithFormat:@"'%@'",billDateStr], userId];
+    
+    return [db executeUpdate:[NSString stringWithFormat:@"delete from BK_DAILYSUM_CHARGE where cbilldate not in (%@) and cuserid = '%@'", billDateStr, userId]];
 }
 
 @end
