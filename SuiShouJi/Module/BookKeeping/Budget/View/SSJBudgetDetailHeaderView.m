@@ -258,7 +258,7 @@
         _estimateMoneyLab.textColor = [UIColor blackColor];
         _estimateMoneyLab.font = [UIFont systemFontOfSize:14];
     }
-    return _payMoneyLab;
+    return _estimateMoneyLab;
 }
 
 - (UILabel *)bottomLab {

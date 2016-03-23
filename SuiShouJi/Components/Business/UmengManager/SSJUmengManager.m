@@ -20,6 +20,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 @implementation SSJUmengManager
 
 + (void)load {
+//    NSDate *beginDate = [NSDate date];
     //  添加友盟统计
     [self umengTrack];
     
@@ -28,6 +29,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  添加友盟反馈
     [self umengFeedBack];
+    
+//    NSLog(@">>> 友盟加载时间：%f", [[NSDate date] timeIntervalSinceDate:beginDate]);
 }
 
 /* 友盟统计 */

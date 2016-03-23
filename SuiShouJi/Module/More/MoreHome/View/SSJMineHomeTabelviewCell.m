@@ -46,8 +46,9 @@
 -(UILabel *)detailLabel{
     if (!_detailLabel) {
         _detailLabel = [[UILabel alloc]init];
-        _detailLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _detailLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         _detailLabel.textAlignment = NSTextAlignmentRight;
+        _detailLabel.font = [UIFont systemFontOfSize:15];
     }
     return _detailLabel;
 }

@@ -27,6 +27,8 @@
 
 #import <TencentOpenAPI/TencentOAuth.h>
 
+#import "SSJDebugUtil.h"
+
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -48,8 +50,6 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    NSDate *beginDate = [NSDate date];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -86,7 +86,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJRegularManager registerRegularTaskNotification];
     
-    NSLog(@">>> 启动时间：%f", [[NSDate date] timeIntervalSinceDate:beginDate]);
+    [SSJDebugTimer logTimeInterval];
 
     return YES;
 }
