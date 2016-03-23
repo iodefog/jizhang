@@ -356,8 +356,19 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         
         NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
         if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-            double pay = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:0]).money;
-            double income = ((SSJReportFormsItem *)[result ssj_safeObjectAtIndex:1]).money;
+            double pay = 0;
+            double income = 0;
+            for (SSJReportFormsItem *item in result) {
+                switch (item.type) {
+                    case SSJReportFormsTypeIncome:
+                        income = item.money;
+                        break;
+                        
+                    case SSJReportFormsTypePayment:
+                        pay = item.money;
+                        break;
+                }
+            }
             [self.surplusView setIncome:income pay:pay];
         }
         

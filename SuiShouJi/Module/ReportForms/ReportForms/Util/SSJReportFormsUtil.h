@@ -13,11 +13,11 @@
 /// ****  数据库查询工具类  **** //
 ///---------------------------------------------------------------------------------------------
 
-typedef NS_ENUM(NSUInteger, SSJReportFormsIncomeOrPayType) {
-    SSJReportFormsIncomeOrPayTypeUnknown,   // 未知
-    SSJReportFormsIncomeOrPayTypeIncome,    // 收入
-    SSJReportFormsIncomeOrPayTypePay,       // 支出
-    SSJReportFormsIncomeOrPayTypeSurplus    // 结余
+typedef NS_ENUM(NSInteger, SSJReportFormsIncomeOrPayType) {
+    SSJReportFormsIncomeOrPayTypeUnknown = -1,   // 未知
+    SSJReportFormsIncomeOrPayTypeIncome = 0,    // 收入
+    SSJReportFormsIncomeOrPayTypePay = 1,       // 支出
+    SSJReportFormsIncomeOrPayTypeSurplus = 2    // 结余
 };
 
 @interface SSJReportFormsDatabaseUtil : NSObject

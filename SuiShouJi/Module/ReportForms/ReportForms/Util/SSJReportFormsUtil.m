@@ -133,7 +133,7 @@
                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___')) group by ITYPE order by ITYPE desc", billDate, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___')) group by ITYPE order by ITYPE desc", billDate, SSJUSERID()];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -152,6 +152,7 @@
             int type = [resultSet intForColumn:@"ITYPE"];
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.type = type;
             item.money = [resultSet doubleForColumn:@"SUM(IMONEY)"];
             item.colorValue = type == 0 ? @"#64b3fe" : @"#fe7373";
             item.imageName = type == 0 ? @"reportForms_income" : @"reportForms_expenses";
