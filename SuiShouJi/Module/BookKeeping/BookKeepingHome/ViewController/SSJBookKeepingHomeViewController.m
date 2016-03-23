@@ -88,9 +88,14 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationItem.rightBarButtonItem = self.rightBarButton;
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
-    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+    rightSpace.width = -15;
+    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+    leftSpace.width = -10;
+//    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    self.navigationItem.leftBarButtonItems = @[leftSpace,leftBarButtonItem];
+    self.navigationItem.rightBarButtonItems = @[rightSpace,self.rightBarButton];
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];
