@@ -11,7 +11,7 @@
 #import "SSJHomeBudgetButton.h"
 #import "SSJHomeBarButton.h"
 
-@interface SSJCustomNavigationBarView : UIView
+@interface SSJCustomNavigationBarButton : UIView
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) SSJHomeBudgetButton *budgetButton;
 @property (nonatomic,strong) SSJHomeBarButton *calenderButton;

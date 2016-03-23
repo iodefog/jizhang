@@ -12,4 +12,8 @@
 @interface SSJHomeBudgetButton : UIView
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIButton *button;
+typedef void(^budgetButtonClickBlock)(SSJBudgetModel *model);
+
+@property (nonatomic, copy) budgetButtonClickBlock budgetButtonClickBlock;
+
 @end

@@ -420,7 +420,7 @@
 		BD976FC21C4F57F700B0E26D /* solid_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */; };
 		BD976FC41C4F57FB00B0E26D /* solid_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD976FC31C4F57FB00B0E26D /* solid_circle@3x.png */; };
 		BDA2EEFC1C8B16FB007DD45F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA2EEFB1C8B16FB007DD45F /* icon.png */; };
-		BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarView.m */; };
+		BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarButton.m */; };
 		BDA2EF0A1C8D9B50007DD45F /* SSJHomeBudgetButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA2EF091C8D9B50007DD45F /* SSJHomeBudgetButton.m */; };
 		BDA2EF121C8EAE27007DD45F /* more_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA2EF111C8EAE27007DD45F /* more_background@2x.png */; };
 		BDA2EF161C8EB89E007DD45F /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */; };
@@ -1164,8 +1164,8 @@
 		BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "solid_circle@2x.png"; sourceTree = "<group>"; };
 		BD976FC31C4F57FB00B0E26D /* solid_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "solid_circle@3x.png"; sourceTree = "<group>"; };
 		BDA2EEFB1C8B16FB007DD45F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		BDA2EF051C8D8A75007DD45F /* SSJCustomNavigationBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomNavigationBarView.h; sourceTree = "<group>"; };
-		BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomNavigationBarView.m; sourceTree = "<group>"; };
+		BDA2EF051C8D8A75007DD45F /* SSJCustomNavigationBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomNavigationBarButton.h; sourceTree = "<group>"; };
+		BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomNavigationBarButton.m; sourceTree = "<group>"; };
 		BDA2EF081C8D9B50007DD45F /* SSJHomeBudgetButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBudgetButton.h; sourceTree = "<group>"; };
 		BDA2EF091C8D9B50007DD45F /* SSJHomeBudgetButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBudgetButton.m; sourceTree = "<group>"; };
 		BDA2EF111C8EAE27007DD45F /* more_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_background@2x.png"; sourceTree = "<group>"; };
@@ -2471,8 +2471,8 @@
 				BDA3FE011C59032B00FB57B1 /* SSJBookKeepingHomePopView.h */,
 				BDA3FE021C59032B00FB57B1 /* SSJBookKeepingHomePopView.m */,
 				BDA3FE051C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib */,
-				BDA2EF051C8D8A75007DD45F /* SSJCustomNavigationBarView.h */,
-				BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarView.m */,
+				BDA2EF051C8D8A75007DD45F /* SSJCustomNavigationBarButton.h */,
+				BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarButton.m */,
 				BDA2EF081C8D9B50007DD45F /* SSJHomeBudgetButton.h */,
 				BDA2EF091C8D9B50007DD45F /* SSJHomeBudgetButton.m */,
 				BDF5106F1C925A3000A49D74 /* SSJHomeReminderView.h */,
@@ -3865,7 +3865,7 @@
 				BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */,
 				7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,
-				BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarView.m in Sources */,
+				BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarButton.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD70DF631C4751EA000E6CC9 /* SSJLoginService.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,

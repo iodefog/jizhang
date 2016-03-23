@@ -33,7 +33,7 @@
     self.button.size = self.size;
     self.button.leftTop = CGPointMake(0, 0);
     self.addBudgetView.size = CGSizeMake(30, 30);
-    self.addBudgetView.left = 10;
+    self.addBudgetView.left = 0;
     self.budgetWaveScaleView.frame = self.addBudgetView.frame;
     self.addBudgetView.centerY = self.height / 2;
     self.budgetLabel.left = self.addBudgetView.right + 10;
@@ -72,6 +72,7 @@
 -(UIButton *)button{
     if (!_button) {
         _button = [[UIButton alloc]init];
+        [_button addTarget:self action:@selector(budgetButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
 }
@@ -95,6 +96,12 @@
             [self.budgetLabel sizeToFit];
             [self.budgetWaveScaleView setScale:1 - (model.budgetMoney - model.payMoney)/ model.budgetMoney];
         }
+    }
+}
+
+-(void)budgetButtonClick:(id)sender{
+    if (self.budgetButtonClickBlock) {
+        self.budgetButtonClickBlock(self.model);
     }
 }
 
