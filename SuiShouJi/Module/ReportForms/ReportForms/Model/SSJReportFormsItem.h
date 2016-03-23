@@ -8,6 +8,11 @@
 
 #import "SSJBaseItem.h"
 
+typedef NS_ENUM(NSInteger, SSJReportFormsType) {
+    SSJReportFormsTypeIncome  = 0, // 收入
+    SSJReportFormsTypePayment = 1, // 支出
+};
+
 @interface SSJReportFormsItem : SSJBaseItem
 
 // 比例
@@ -15,6 +20,9 @@
 
 // 金额
 @property (nonatomic) double money;
+
+// 收支类型
+@property (nonatomic) SSJReportFormsType type;
 
 // 图片名称
 @property (nonatomic, copy) NSString *imageName;
