@@ -303,8 +303,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
                 }
             }else if (buttonTag == 4){
-                if ([weakSelf.textInput.text isEqualToString:@"0.00"] || [weakSelf.textInput.text isEqualToString:@""]) {
-                    [CDAutoHideMessageHUD showMessage:@"记账金额不能为0"];
+                if ([weakSelf.textInput.text doubleValue] <= 0 || [weakSelf.textInput.text isEqualToString:@""]) {
+                    [CDAutoHideMessageHUD showMessage:@"记账金额必须大于0"];
                     return;
                 }
                 [weakSelf makeArecord];
