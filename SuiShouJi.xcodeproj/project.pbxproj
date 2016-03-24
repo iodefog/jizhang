@@ -273,6 +273,7 @@
 		7DF8DEE11C59C47200CC5DFA /* guide_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEDE1C59C47200CC5DFA /* guide_1@2x.png */; };
 		7DF8DEE21C59C47200CC5DFA /* guide_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEDF1C59C47200CC5DFA /* guide_2@2x.png */; };
 		7DF8DEE31C59C47200CC5DFA /* guide_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEE01C59C47200CC5DFA /* guide_3@2x.png */; };
+		9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
@@ -908,6 +909,8 @@
 		7DF8DEDE1C59C47200CC5DFA /* guide_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@2x.png"; sourceTree = "<group>"; };
 		7DF8DEDF1C59C47200CC5DFA /* guide_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_2@2x.png"; sourceTree = "<group>"; };
 		7DF8DEE01C59C47200CC5DFA /* guide_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_3@2x.png"; sourceTree = "<group>"; };
+		9C392DFC1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeHelper.h; sourceTree = "<group>"; };
+		9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeHelper.m; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
 		9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectView.m; sourceTree = "<group>"; };
 		9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeTableViewCell.h; sourceTree = "<group>"; };
@@ -2178,6 +2181,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		9C392DFB1CA3C68F000A7030 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				9C392DFC1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.h */,
+				9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		BD0432CB1C1A772A0051E7AB /* Macro */ = {
 			isa = PBXGroup;
 			children = (
@@ -2438,6 +2450,7 @@
 		BD0433A31C1A9EBD0051E7AB /* BookKeepingHome */ = {
 			isa = PBXGroup;
 			children = (
+				9C392DFB1CA3C68F000A7030 /* Helper */,
 				BD0433A41C1A9EBD0051E7AB /* Model */,
 				BD0433A51C1A9EBD0051E7AB /* Network */,
 				BD0433A61C1A9EBD0051E7AB /* View */,
@@ -3862,6 +3875,7 @@
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,
 				7DE6E86C1C55DD9C001C9138 /* SSJRegistOrderView.m in Sources */,
+				9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
@@ -4096,7 +4110,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -4134,7 +4148,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "5abcbd66-559d-4506-a1b3-45e41003b6aa";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
 			};
 			name = Release;
