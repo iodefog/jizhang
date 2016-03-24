@@ -155,18 +155,11 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (self.items.count == 0) {
-        return 300;
-    }
     return 0.1;
 }
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (self.items.count == 0) {
-        SSJBookKeepingHomeNodateFooter *nodateFooter = [[SSJBookKeepingHomeNodateFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
-        return nodateFooter;
-    }
     return nil;
 }
 #pragma mark - UITableViewDataSource
@@ -317,6 +310,9 @@
     }];
     [SSJBookKeepingHomeHelper queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        if (result.count == 0) {
+            [weakSelf.view ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
+        }
         [weakSelf.tableView reloadData];
         [weakSelf.tableView ssj_hideLoadingIndicator];
     }failure:^(NSError *error) {
