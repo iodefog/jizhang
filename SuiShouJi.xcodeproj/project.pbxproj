@@ -4122,7 +4122,7 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
@@ -4160,7 +4160,7 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
