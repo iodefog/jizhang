@@ -12,7 +12,6 @@
 #import "SSJDebugUtil.h"
 
 int main(int argc, char * argv[]) {
-    [SSJDebugTimer markStartTime];
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
