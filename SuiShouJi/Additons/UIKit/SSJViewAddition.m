@@ -251,7 +251,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
-    if (watermark.superview != self) {
+    if (watermark.superview != self && watermark != self) {
         [self addSubview:watermark];
         
         if ([target respondsToSelector:action]) {
