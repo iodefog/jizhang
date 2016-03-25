@@ -27,6 +27,7 @@
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 #import "SSJHomeReminderView.h"
+#import "SSJBookKeepingHomeHelper.h"
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -154,18 +155,11 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (self.items.count == 0) {
-        return 300;
-    }
     return 0.1;
 }
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (self.items.count == 0) {
-        SSJBookKeepingHomeNodateFooter *nodateFooter = [[SSJBookKeepingHomeNodateFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
-        return nodateFooter;
-    }
     return nil;
 }
 #pragma mark - UITableViewDataSource
@@ -308,54 +302,24 @@
 -(void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-        NSString *userid = SSJUSERID();
-        FMResultSet *rs = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid];
-        while ([rs next]) {
-            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-            item.imageName = [rs stringForColumn:@"CCOIN"];
-            item.typeName = [rs stringForColumn:@"CNAME"];
-            item.money = [rs stringForColumn:@"IMONEY"];
-            item.colorValue = [rs stringForColumn:@"CCOLOR"];
-            item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
-            item.ID = [rs stringForColumn:@"ICHARGEID"];
-            item.fundId = [rs stringForColumn:@"IFUNSID"];
-            item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            item.editeDate = [rs stringForColumn:@"CWRITEDATE"];
-            item.billId = [rs stringForColumn:@"IBILLID"];
-            item.chargeImage = [rs stringForColumn:@"CIMGURL"];
-            item.chargeThumbImage = [rs stringForColumn:@"THUMBURL"];
-            item.chargeMemo = [rs stringForColumn:@"CMEMO"];
-            item.configId = [rs stringForColumn:@"ICONFIGID"];
-            int configOperatorType = [rs intForColumn:@"CONFIGOPERATORTYPE"];
-            if (configOperatorType == 2) {
-                item.chargeCircleType = - 1;
-            }else{
-                item.chargeCircleType = [rs intForColumn:@"CHARGECIRCLE"];
-            }
-            if ([item.configId isEqualToString:@""] || item.configId == nil) {
-                item.chargeCircleType = - 1;
-            }
-            NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-            [formatter setDateFormat:@"yyyy-MM-dd"];
-            NSDate *billDate = [formatter dateFromString:item.billDate];
-            NSDate *currentDate = [NSDate date];
-            if ([billDate isEarlierThanOrEqualTo:currentDate]) {
-                [tempArray addObject:item];
-            }
-        }
-        double income = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@'", _currentYear,_currentMonth,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
-        double expence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@'", _currentYear,_currentMonth,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",income];
-            weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",expence];
-            weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
-            [weakSelf.tableView reloadData];
-            [weakSelf.tableView ssj_hideLoadingIndicator];
-        });
+    [SSJBookKeepingHomeHelper queryForIncomeAndExpentureSumWithMonth:_currentMonth Year:_currentYear Success:^(NSDictionary *result) {
+        weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
+        weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+    } failure:^(NSError *error) {
+        
     }];
-
+    [SSJBookKeepingHomeHelper queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
+        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        if (result.count == 0) {
+            [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
+        }else{
+            [weakSelf.tableView ssj_hideWatermark:YES];
+        }
+        [weakSelf.tableView reloadData];
+        [weakSelf.tableView ssj_hideLoadingIndicator];
+    }failure:^(NSError *error) {
+        
+    }];
 }
 
 -(void)getCurrentDate{

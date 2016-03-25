@@ -47,11 +47,7 @@
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
-            item.configId = [resultSet stringForColumn:@"iconfigid"];           if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
-                item.money = [NSString stringWithFormat:@"-%@",[resultSet stringForColumn:@"IMONEY"]];
-            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
-                item.money = [NSString stringWithFormat:@"+%@",[resultSet stringForColumn:@"IMONEY"]];
-            }
+            item.configId = [resultSet stringForColumn:@"iconfigid"];
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
             if ([result objectForKey:billDate] == nil) {
                 NSMutableArray *items = [[NSMutableArray alloc]init];
@@ -63,9 +59,29 @@
                 [result setObject:items forKey:billDate];
             }
         }
-        
         SSJDispatch_main_async_safe(^{
             success(result);
+        });
+    }];
+}
+
++ (void)queryBalanceForDate:(NSString*)date
+             success:(void (^)(double data))success
+             failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        double dailySum = 0;
+        FMResultSet *result = [db executeQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",date,SSJUSERID()];
+        if (!result) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        while ([result next]) {
+            dailySum = [result doubleForColumn:@"SUMAMOUNT"];
+        }
+        SSJDispatch_main_async_safe(^{
+            success(dailySum);
         });
     }];
 }
