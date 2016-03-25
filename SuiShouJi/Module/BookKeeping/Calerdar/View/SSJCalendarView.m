@@ -12,7 +12,6 @@
 
 @interface SSJCalendarView()
 @property (nonatomic,strong) NSMutableArray *items;
-@property (nonatomic,strong) NSMutableDictionary *data;
 
 @end
 
@@ -340,10 +339,12 @@
 
 -(void)reloadCalender{
     [self getCurrentDate];
+    [self ssj_showLoadingIndicator];
     [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
         self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
         [self getItems];
         [self.calendar reloadData];
+        [self ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         
     }];
