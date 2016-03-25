@@ -11,15 +11,20 @@
 @implementation SSJFinancingHomeitem
 
 -(BOOL)isEqual:(id)object{
-    if (![object isKindOfClass:[SSJFinancingHomeitem class]]) {
-        return NO;
-    }else{
-        SSJFinancingHomeitem *anotherItem = (SSJFinancingHomeitem*)object;
-        if ([anotherItem.fundingID isEqualToString:self.fundingID] && [anotherItem.fundingIcon isEqualToString:self.fundingIcon] && [anotherItem.fundingMemo isEqualToString:self.fundingMemo] && [anotherItem.fundingName isEqualToString:self.fundingName] && [anotherItem.fundingColor isEqualToString:self.fundingColor] && anotherItem.fundingAmount == self.fundingAmount && [anotherItem.fundingParent isEqualToString:self.fundingParent]) {
-            return YES;
-        }
+    SSJFinancingHomeitem *anotherItem = (SSJFinancingHomeitem*)object;
+    
+    if ([anotherItem isKindOfClass:[SSJFinancingHomeitem class]]
+        && ([anotherItem.fundingID isEqualToString:self.fundingID] || anotherItem.fundingID == self.fundingID)
+        && ([anotherItem.fundingIcon isEqualToString:self.fundingIcon] || anotherItem.fundingIcon == self.fundingIcon)
+        && ([anotherItem.fundingMemo isEqualToString:self.fundingMemo] || anotherItem.fundingMemo == self.fundingMemo)
+        && ([anotherItem.fundingName isEqualToString:self.fundingName] || anotherItem.fundingName == self.fundingName)
+        && ([anotherItem.fundingColor isEqualToString:self.fundingColor] || anotherItem.fundingColor == self.fundingColor)
+        && ([anotherItem.fundingParent isEqualToString:self.fundingParent] || anotherItem.fundingParent == self.fundingParent)
+        && anotherItem.fundingAmount == self.fundingAmount) {
+        return YES;
     }
-    return NO;
+    
+    return [super isEqual:object];
 }
 
 @end
