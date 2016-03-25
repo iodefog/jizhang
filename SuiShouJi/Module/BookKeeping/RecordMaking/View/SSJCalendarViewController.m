@@ -76,9 +76,10 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
-    self.selectedMonth = _currentMonth;
+    self.selectedMonth = _currentMonth;	
     self.selectedDay = _currentDay;
     [self getDataFromDateBase];
+    [self.calendarView reloadCalender];
 }
 
 -(void)viewDidLayoutSubviews{

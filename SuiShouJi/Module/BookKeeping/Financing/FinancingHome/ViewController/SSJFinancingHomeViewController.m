@@ -180,8 +180,17 @@
     }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        [weakSelf.collectionView reloadData];
-        [weakSelf.collectionView ssj_hideLoadingIndicator];
+        [UIView transitionWithView: weakSelf.collectionView
+                          duration: 1.0f
+                           options: UIViewAnimationOptionTransitionCrossDissolve
+                        animations: ^(void)
+         {
+             [weakSelf.collectionView reloadData];
+         }
+                        completion: ^(BOOL isFinished)
+         {
+             [weakSelf.collectionView ssj_hideLoadingIndicator];
+         }];
     } failure:^(NSError *error) {
         
     }];
