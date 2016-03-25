@@ -79,6 +79,7 @@
     self.selectedMonth = _currentMonth;
     self.selectedDay = _currentDay;
     [self getDataFromDateBase];
+    [self.calendarView reloadCalender];
 }
 
 -(void)viewDidLayoutSubviews{
