@@ -7,7 +7,7 @@
 //
 
 #import "SSJFinancingHomeViewController.h"
-#import "SSJFinancingHomeCollectionViewCell.h"
+#import "SSJFinancingHomeTableViewCell.h"
 #import "SSJFinancingHomeitem.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
@@ -18,7 +18,7 @@
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
-@property (nonatomic,strong) UICollectionView *collectionView;
+@property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIView *headerView;
 @property (nonatomic,strong) UILabel *profitAmountLabel;
@@ -37,12 +37,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self getDateFromDateBase];
     [self.view addSubview:self.headerView];
     [self.headerView addSubview:self.profitLabel];
     [self.headerView addSubview:self.profitAmountLabel];
     [self.headerView addSubview:self.transferButton];
-    [self.view addSubview:self.collectionView];
+    [self.view addSubview:self.tableView];
+    [self.tableView registerClass:[SSJFinancingHomeTableViewCell class] forCellReuseIdentifier:@"FinancingHomeTableViewCell"];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -71,40 +71,19 @@
     self.transferButton.size = CGSizeMake(65, 30);
     self.transferButton.right = self.view.width - 15;
     self.transferButton.centerY = self.headerView.height / 2;
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 120);
-    self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 120);
+    self.tableView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 
-#pragma mark - UICollectionViewDataSource
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.items.count;
+#pragma mark - UITableViewDelegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 66;
 }
 
-- (NSInteger)numberOfSections{
-    return 1;
-}
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJFinancingHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"FinancingHomeCollectionViewCell" forIndexPath:indexPath];
-    cell.item = (SSJFinancingHomeitem*)[self.items objectAtIndex:indexPath.row];
-    return cell;
-}
-
-#pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(self.view.width - 20, 60);
-}
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout*)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(10, 10, 10, 10);
-}
-
-#pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    SSJFinancingHomeCollectionViewCell *cell = (SSJFinancingHomeCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SSJFinancingHomeTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if (![cell.item.fundingName isEqualToString:@"添加资金账户"]) {
         SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
         fundingDetailVC.item = cell.item;
@@ -115,19 +94,32 @@
     }
 }
 
+#pragma mark - UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.items.count;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SSJFinancingHomeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FinancingHomeTableViewCell" forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    return cell;
+}
+
 #pragma mark - Getter
--(UICollectionView *)collectionView{
-    if (_collectionView==nil) {
-        UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
-        [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-        flowLayout.minimumInteritemSpacing = 10;
-        _collectionView =[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
-        _collectionView.dataSource=self;
-        _collectionView.delegate=self;
-        [_collectionView registerClass:[SSJFinancingHomeCollectionViewCell class] forCellWithReuseIdentifier:@"FinancingHomeCollectionViewCell"];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+-(UITableView *)tableView{
+    if (_tableView==nil) {
+        _tableView =[[UITableView alloc]init];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.dataSource=self;
+        _tableView.delegate=self;
+        _tableView.backgroundColor = [UIColor whiteColor];
     }
-    return _collectionView;
+    return _tableView;
 }
 
 -(UIView *)headerView{
@@ -170,7 +162,7 @@
 #pragma mark - Private
 -(void)getDateFromDateBase{
     __weak typeof(self) weakSelf = self;
-    [self.collectionView ssj_showLoadingIndicator];
+    [self.tableView ssj_showLoadingIndicator];
     [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
         weakSelf.profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",result];
         [weakSelf.profitAmountLabel sizeToFit];
@@ -179,18 +171,11 @@
         
     }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
-        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        [UIView transitionWithView: weakSelf.collectionView
-                          duration: 1.0f
-                           options: UIViewAnimationOptionTransitionCrossDissolve
-                        animations: ^(void)
-         {
-             [weakSelf.collectionView reloadData];
-         }
-                        completion: ^(BOOL isFinished)
-         {
-             [weakSelf.collectionView ssj_hideLoadingIndicator];
-         }];
+        if (![result isEqualToArray:weakSelf.items]) {
+            weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        [weakSelf.tableView ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         
     }];

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJFinancingHomeitem.h"
 
-@interface SSJFinancingHomeCollectionViewCell : UICollectionViewCell
+@interface SSJFinancingHomeTableViewCell : UITableViewCell
 
 @property (nonatomic,strong) SSJFinancingHomeitem *item;
 

@@ -165,7 +165,6 @@
     if (self.DateSelectedBlock) {
         self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).dateLabel.text integerValue],cell.item.dateStr);
     }
-    [self reloadCalender];
 //    if (cell.isSelected == NO) {
 //        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
 //            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
@@ -337,18 +336,22 @@
     }
 }
 
--(void)reloadCalender{
-    [self getCurrentDate];
-    [self ssj_showLoadingIndicator];
-    [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
-        self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
-        [self getItems];
-        [self.calendar reloadData];
-        [self ssj_hideLoadingIndicator];
-    } failure:^(NSError *error) {
-        
-    }];
+-(void)setData:(NSMutableDictionary *)data{
+    _data = data;
+    [self getItems];
+    [self.calendar reloadData];
 }
+
+//-(void)reloadCalender{
+//    [self getCurrentDate];
+//    [self ssj_showLoadingIndicator];
+//    [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
+//        self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
+//
+//    } failure:^(NSError *error) {
+//        
+//    }];
+//}
 
 /*
 // Only override drawRect: if you perform custom drawing.

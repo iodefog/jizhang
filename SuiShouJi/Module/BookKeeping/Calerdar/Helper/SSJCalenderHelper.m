@@ -13,8 +13,9 @@
 @implementation SSJCalenderHelper
 + (void)queryDataInYear:(NSInteger)year
                           month:(NSInteger)month
-                        success:(void (^)(NSDictionary *data))success
+                        success:(void (^)(NSMutableDictionary *data))success
                         failure:(void (^)(NSError *error))failure {
+    
     if (year == 0 || month > 12) {
         SSJPRINT(@"class:%@\n method:%@\n message:(year == 0 || month > 12)",NSStringFromClass([self class]), NSStringFromSelector(_cmd));
         failure(nil);

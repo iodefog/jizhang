@@ -34,6 +34,7 @@
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) NSString *selectDate;
 @property (nonatomic,strong) NSMutableDictionary *data;
+@property(nonatomic, strong) SSJCalenderTableViewNoDataHeader *nodataHeader;
 
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
@@ -67,6 +68,7 @@
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
     self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
 }
 
@@ -75,11 +77,7 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
-    self.selectedYear = _currentYear;
-    self.selectedMonth = _currentMonth;	
-    self.selectedDay = _currentDay;
     [self getDataFromDateBase];
-    [self.calendarView reloadCalender];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -109,7 +107,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (self.items.count == 0) {
-        return self.view.height - 270;
+        return 0.1f;
     }
     return 44;
 }
@@ -130,33 +128,23 @@
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (self.items.count == 0) {
-        __weak typeof(self) weakSelf = self;
-        SSJCalenderTableViewNoDataHeader *noDateHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
-        noDateHeader.RecordMakingButtonBlock = ^(){
-            SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
-            recordMakingVC.selectedDay = self.selectedDay;
-            recordMakingVC.selectedMonth = self.selectedMonth;
-            recordMakingVC.selectedYear = self.selectedYear;
-            [weakSelf.navigationController pushViewController:recordMakingVC animated:YES];
-        };
-        return noDateHeader;
-    }else{
-        SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
-        headerView.dateLabel.text = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",self.selectedYear,self.selectedMonth,self.selectedDay];
-        [headerView.dateLabel sizeToFit];
-        [SSJCalenderHelper queryBalanceForDate:self.selectDate success:^(double data) {
-            if (data > 0) {
-                headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",data];
-                [headerView.balanceLabel sizeToFit];
-            }else{
-                headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",data];
-                [headerView.balanceLabel sizeToFit];
-            }
-        } failure:^(NSError *error) {
-            
-        }];
-        return headerView;
+        return nil;
     }
+    SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FundingDetailDateHeader"];
+    headerView.dateLabel.text = [NSString stringWithFormat:@"%ld年%02ld月%02ld日",self.selectedYear,self.selectedMonth,self.selectedDay];
+    [headerView.dateLabel sizeToFit];
+    [SSJCalenderHelper queryBalanceForDate:self.selectDate success:^(double data) {
+        if (data > 0) {
+            headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",data];
+            [headerView.balanceLabel sizeToFit];
+        }else{
+            headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",data];
+            [headerView.balanceLabel sizeToFit];
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+    return headerView;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -174,7 +162,7 @@
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
-        [_calendarView reloadCalender];
+        [self getDataFromDateBase];
         __weak typeof(self) weakSelf = self;
         _calendarView.DateSelectedBlock = ^(long year , long month ,long day ,  NSString *selectDate){
             weakSelf.selectedYear = year;
@@ -215,6 +203,21 @@
     return _dateChangeView;
 }
 
+-(SSJCalenderTableViewNoDataHeader *)nodataHeader{
+    if (!_nodataHeader) {
+        __weak typeof(self) weakSelf = self;
+        _nodataHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
+        _nodataHeader.RecordMakingButtonBlock = ^(){
+            SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
+            recordMakingVC.selectedDay = weakSelf.selectedDay;
+            recordMakingVC.selectedMonth = weakSelf.selectedMonth;
+            recordMakingVC.selectedYear = weakSelf.selectedYear;
+            [weakSelf.navigationController pushViewController:recordMakingVC animated:YES];
+        };
+    }
+    return _nodataHeader;
+}
+
 #pragma mark - private
 -(void)getCurrentDate{
     NSDate *now = [NSDate date];
@@ -237,7 +240,7 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView reloadCalender];
+    [self getDataFromDateBase];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -251,16 +254,22 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView reloadCalender];
+    [self getDataFromDateBase];
 }
 
 -(void)getDataFromDateBase{
     __weak typeof(self) weakSelf = self;
-    [self.tableView ssj_showLoadingIndicator];
-    [SSJCalenderHelper queryDataInYear:self.selectedYear month:self.selectedMonth success:^(NSDictionary *data) {
+    [self.view ssj_showLoadingIndicator];
+    [SSJCalenderHelper queryDataInYear:self.selectedYear month:self.selectedMonth success:^(NSMutableDictionary *data) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
         [weakSelf.tableView reloadData];
-        [weakSelf.tableView ssj_hideLoadingIndicator];
+        weakSelf.calendarView.data = data;
+        if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
+            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
+        }else{
+            [weakSelf.tableView ssj_hideWatermark:YES];
+        }
+        [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         
     }];
