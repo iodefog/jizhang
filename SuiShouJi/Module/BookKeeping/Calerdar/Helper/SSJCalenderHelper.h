@@ -20,7 +20,7 @@
  */
 + (void)queryDataInYear:(NSInteger)year
                   month:(NSInteger)month
-                success:(void (^)(NSDictionary *data))success
+                success:(void (^)(NSMutableDictionary *data))success
                 failure:(void (^)(NSError *error))failure;
 
 /**

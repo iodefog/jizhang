@@ -75,11 +75,7 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
-    self.selectedYear = _currentYear;
-    self.selectedMonth = _currentMonth;	
-    self.selectedDay = _currentDay;
     [self getDataFromDateBase];
-    [self.calendarView reloadCalender];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -174,7 +170,7 @@
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;
-        [_calendarView reloadCalender];
+        [self getDataFromDateBase];
         __weak typeof(self) weakSelf = self;
         _calendarView.DateSelectedBlock = ^(long year , long month ,long day ,  NSString *selectDate){
             weakSelf.selectedYear = year;
@@ -237,7 +233,7 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView reloadCalender];
+    [self getDataFromDateBase];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -251,16 +247,17 @@
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
     self.calendarView.day = 0;
-    [self.calendarView reloadCalender];
+    [self getDataFromDateBase];
 }
 
 -(void)getDataFromDateBase{
     __weak typeof(self) weakSelf = self;
-    [self.tableView ssj_showLoadingIndicator];
-    [SSJCalenderHelper queryDataInYear:self.selectedYear month:self.selectedMonth success:^(NSDictionary *data) {
+    [self.view ssj_showLoadingIndicator];
+    [SSJCalenderHelper queryDataInYear:self.selectedYear month:self.selectedMonth success:^(NSMutableDictionary *data) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
         [weakSelf.tableView reloadData];
-        [weakSelf.tableView ssj_hideLoadingIndicator];
+        weakSelf.calendarView.data = data;
+        [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         
     }];
