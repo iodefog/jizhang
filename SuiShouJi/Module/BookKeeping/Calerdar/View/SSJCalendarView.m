@@ -148,7 +148,6 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *weekOfFirstDayOfMonth = [dateFormatter dateFromString:firstWeekDayMonth];
     NSDateComponents *newCom = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:weekOfFirstDayOfMonth];
-    NSLog(@"%d",[newCom weekday]);
     return [newCom weekday];
 }
 
@@ -189,7 +188,12 @@
 
 //返回日历高度
 - (CGFloat)viewHeight{
-    NSInteger lineNum = ([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) / 7;
+    NSInteger lineNum = ([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 6) / 7;
+    if (([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 6) % 7 == 0) {
+        lineNum = lineNum;
+    }else{
+        lineNum = lineNum + 1;
+    }
     return lineNum * 36 + (lineNum + 1) * _marginForvertical;
 }
 
