@@ -88,6 +88,7 @@
     self.minusButton.centerY = self.dateChangeView.height / 2;
     self.calendarView.frame = CGRectMake(0, 64, self.view.width, 270);
     self.tableView.top = self.calendarView.bottom;
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.height - 64);
     _firstLineLabel.top = 20;
     _firstLineLabel.centerX = _noDateView.width / 2;
     _secondLineLabel.top = _firstLineLabel.bottom + 10;
