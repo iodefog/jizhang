@@ -26,6 +26,7 @@ typedef void (^ItemClickedBlock)(SSJRecordMakingCategoryItem *item);
 
 typedef void (^removeFromCategoryListBlock)();
 
+
 //删除记账类型回调
 @property(nonatomic, copy)removeFromCategoryListBlock removeFromCategoryListBlock;
 

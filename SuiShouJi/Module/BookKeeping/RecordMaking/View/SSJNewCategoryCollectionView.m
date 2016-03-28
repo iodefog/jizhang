@@ -30,9 +30,18 @@
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         self.pageContentInsets = UIEdgeInsetsMake(0, 4, 12, 4);
+        [self.collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
         [self addSubview:self.collectionView];
+        [self addSubview:self.pageControl];
     }
     return self;
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    self.pageControl.size = CGSizeMake(self.width, 15);
+    self.pageControl.bottom = self.height;
+    self.pageControl.centerX = self.width / 2;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -99,7 +108,7 @@
 
 -(SSJPageControl *)pageControl{
     if (_pageControl == nil) {
-        _pageControl = [[SSJPageControl alloc]initWithFrame:CGRectMake(0, self.height - 15, self.width, 15)];
+        _pageControl = [[SSJPageControl alloc]initWithFrame:CGRectZero];
         _pageControl.spaceBetweenPages = 10;
         _pageControl.pageImage = [UIImage imageNamed:@"circle"];
         _pageControl.currentPageImage = [UIImage imageNamed:@"solid_circle"];
@@ -114,25 +123,25 @@
     if (!_layout) {
         if (_screenWidth == 320) {
             if (_screenHeight == 568) {
-                _layout.itemSize = CGSizeMake((self.width - 80)/4, (self.height - 20) / 2);
-                _layout.columnNum = 4;
-                _layout.linesNum = 2;
+                _itemSize = CGSizeMake((self.width - 80)/4, (self.height - 20) / 2);
+                _columnCount = 4;
+                _lineCount = 2;
             }else{
-                _layout.itemSize = CGSizeMake((self.width - 80)/4, self.height - 5);
-                _layout.columnNum = 4;
-                _layout.linesNum = 1;
+                _itemSize = CGSizeMake((self.width - 80)/4, self.height - 5);
+                _columnCount = 4;
+                _lineCount = 1;
             }
         }else if(_screenWidth == 375){
-            _layout.itemSize = CGSizeMake((self.width - 80)/4, (self.height - 80) / 2);
-            _layout.columnNum = 4;
-            _layout.linesNum = 2;
+            _itemSize = CGSizeMake((self.width - 80)/4, (self.height - 80) / 2);
+            _columnCount = 4;
+            _lineCount = 2;
         }else{
-            _layout.itemSize = CGSizeMake((self.width - 80)/4, (self.height - 40) / 3);
-            _layout.columnNum = 4;
-            _layout.linesNum = 3;
+            _itemSize = CGSizeMake((self.width - 80)/4, (self.height - 40) / 3);
+            _columnCount = 4;
+            _lineCount = 3;
         }
         _layout = [[SSJCustomCollectionViewFlowLayout alloc]
-                   initWithTileSize:_itemSize
+                   initWithItem:_itemSize
                                                     linesNum:_lineCount
                                                                           columnNum:_columnCount
                                                                   pageContentInsets:_pageContentInsets];
@@ -168,16 +177,18 @@
     _items = items;
 }
 
+-(void)setSelectId:(NSString *)selectId{
+    _selectId = selectId;
+    [self reloadData];
+}
+
 - (void)checkIfIndexChanged:(UIScrollView *)scrollView
 {
     CGPoint contentOffset = [scrollView contentOffset];
     CGFloat page = contentOffset.x / scrollView.frame.size.width;
     
-    NSInteger section = [self.layout sectionFromPages:page];
-    NSInteger pagesBefore = [self.layout pagesNumberBeforeSection:section];
-    
-    self.pageControl.numberOfPages = [self.layout pagesNumberInSection:section];
-    self.pageControl.currentPage = page - pagesBefore;
+    self.pageControl.numberOfPages = [self.layout pagesNumberInSection:0];
+    self.pageControl.currentPage = page;
     
 }
 

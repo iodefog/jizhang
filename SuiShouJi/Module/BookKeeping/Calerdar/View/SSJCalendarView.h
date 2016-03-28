@@ -28,5 +28,4 @@ typedef void (^DateSelectedBlock)(long year , long month ,long day ,  NSString *
 
 - (CGFloat)viewHeight;
 
--(void)reloadCalender;
 @end

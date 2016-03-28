@@ -25,6 +25,7 @@
 #import "SSJImaageBrowseViewController.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJMemoMakingViewController.h"
+#import "SSJNewCategoryCollectionView.h"
 #import "SSJCategoryListHelper.h"
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
@@ -40,7 +41,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) UIImage *selectedImage;
 @property (nonatomic,strong) UILabel* categoryNameLabel;
 @property (nonatomic,strong) UIImageView* categoryImage;
-@property (nonatomic,strong) SSJCategoryListView* categoryListView;
+@property (nonatomic,strong) SSJNewCategoryCollectionView* categoryListView;
 @property (nonatomic,strong) SSJDateSelectedView *DateSelectedView;
 @property (nonatomic,strong) UIButton *datePickerButton;
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
@@ -157,8 +158,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [SSJCategoryListHelper queryForCategoryListWithCountForEachPage:4 IncomeOrExpenture:1 Success:^(NSDictionary *result) {
-
+    __weak typeof(self) weakSelf = self;
+    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:1 Success:^(NSMutableArray *result) {
+        weakSelf.categoryListView.items = result;
+        [weakSelf.categoryListView reloadData];
     } failure:^(NSError *error) {
         
     }];
@@ -197,19 +200,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     return _selectedCategoryView;
 }
 
--(SSJCategoryListView*)categoryListView{
+-(SSJNewCategoryCollectionView*)categoryListView{
     if (_categoryListView == nil) {
-        _categoryListView = [[SSJCategoryListView alloc]initWithFrame:CGRectZero];
-        _categoryListView.selectedId = self.defualtID;
-        [_categoryListView reloadData];
-        if (self.item == nil) {
-            _categoryListView.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
-        }else{
-            _categoryListView.incomeOrExpence = self.item.incomeOrExpence;
-        }
-        [_categoryListView reloadData];
+        _categoryListView = [[SSJNewCategoryCollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 395)];
+        _categoryListView.selectId = self.defualtID;
         __weak typeof(self) weakSelf = self;
-        _categoryListView.CategorySelectedBlock = ^(SSJRecordMakingCategoryItem *item){
+        _categoryListView.ItemClickedBlock = ^(SSJRecordMakingCategoryItem *item){
             weakSelf.categoryID = item.categoryTitle;
             if (![item.categoryTitle isEqualToString:@"添加"]) {
                 [UIView animateWithDuration:kAnimationDuration animations:^{
@@ -225,7 +221,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 addNewTypeVc.incomeOrExpence = !
                 weakSelf.titleSegment.selectedSegmentIndex;
                 addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
-                    weakSelf.categoryListView.selectedId = categoryID;
+                    weakSelf.categoryListView.selectId = categoryID;
                     weakSelf.categoryID = categoryID;
                     weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
@@ -745,10 +741,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 -(void)segmentPressed:(id)sender{
-    self.categoryListView.incomeOrExpence = !self.titleSegment.selectedSegmentIndex;
-    self.categoryListView.scrollView.contentOffset = CGPointMake(0, 0);
     [self getDefualtColorAndDefualtId];
-    self.categoryListView.selectedId = self.defualtID;
+    self.categoryListView.selectId = self.defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
@@ -775,7 +769,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
                 weakSelf.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }];
-            weakSelf.categoryListView.selectedId = _defualtID;
+            weakSelf.categoryListView.selectId = _defualtID;
             [weakSelf.categoryListView reloadData];
         });
     }];

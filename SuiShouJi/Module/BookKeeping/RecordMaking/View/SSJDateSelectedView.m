@@ -64,7 +64,6 @@
         _calendarView.month = self.selectedMonth;
         _calendarView.day = self.selectedDay;
         _calendarView.selectDateStr =  dateStr;
-        [_calendarView reloadCalender];
     }
     return _calendarView;
 }
@@ -129,7 +128,6 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
-    [self.calendarView reloadCalender];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -142,7 +140,6 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
-    [self.calendarView reloadCalender];
 }
 
 -(void)closeButtonClicked:(UIButton*)button{

@@ -11,6 +11,6 @@
 
 @interface SSJCategoryListHelper : NSObject
 
-+ (void)queryForCategoryListWithCountForEachPage:(int)count IncomeOrExpenture:(int)incomeOrExpenture Success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure;
++ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture Success:(void(^)(NSMutableArray *result))success failure:(void (^)(NSError *error))failure;
 
 @end

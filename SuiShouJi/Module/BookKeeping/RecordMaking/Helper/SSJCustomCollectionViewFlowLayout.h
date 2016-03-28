@@ -25,7 +25,7 @@
  *
  *  @return 
  */
-- (instancetype)initWithTileSize:(CGSize)itemSize
+- (instancetype)initWithItem:(CGSize)itemSize
                         linesNum:(NSInteger)linesNum
                        columnNum:(NSInteger)columnNum
                pageContentInsets:(UIEdgeInsets)pageContentInsets;

@@ -24,7 +24,7 @@
     return self;
 }
 
--(instancetype)initWithTileSize:(CGSize)itemSize linesNum:(NSInteger)linesNum columnNum:(NSInteger)columnNum pageContentInsets:(UIEdgeInsets)pageContentInsets
+-(instancetype)initWithItem:(CGSize)itemSize linesNum:(NSInteger)linesNum columnNum:(NSInteger)columnNum pageContentInsets:(UIEdgeInsets)pageContentInsets
 {
     if (self=[self init]) {
         _itemSize = itemSize;
