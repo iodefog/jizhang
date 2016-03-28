@@ -90,7 +90,7 @@
     self.minusButton.centerY = self.dateChangeView.height / 2;
     self.calendarView.frame = CGRectMake(0, 64, self.view.width, self.calendarView.viewHeight);
     self.tableView.top = self.calendarView.bottom;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.height);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.viewHeight);
     _firstLineLabel.top = 20;
     _firstLineLabel.centerX = _noDateView.width / 2;
     _secondLineLabel.top = _firstLineLabel.bottom + 10;
@@ -274,6 +274,7 @@
             [weakSelf.tableView ssj_hideWatermark:YES];
         }
         [weakSelf.view ssj_hideLoadingIndicator];
+        [weakSelf.view setNeedsLayout];
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
     }];
