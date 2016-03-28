@@ -37,7 +37,6 @@
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         _page = 0;
-        [self getPage];
         self.collectionViewArray = [[NSMutableArray alloc]init];
         [self addSubview:self.pageControl];
         [self addSubview:self.scrollView];
@@ -127,58 +126,69 @@
     self.pageControl.currentPage = page;
 }
 
--(void)reloadData{
-    [self getPage];
-    self.scrollView.contentSize = CGSizeMake(self.width * _page, 0);
-    for (int i = 0; i < _totalPage; i ++) {
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedId = self.selectedId;
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
-        _pageControl.numberOfPages = _page;
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
-        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
-        [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
-    }
-    [self setNeedsLayout];
-}
+//-(void)reloadData{
+//    self.scrollView.contentSize = CGSizeMake(self.width * _page, 0);
+//    for (int i = 0; i < _totalPage; i ++) {
+//        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).selectedId = self.selectedId;
+//        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).totalPage = _page;
+//        _pageControl.numberOfPages = _page;
+//        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).page = i;
+//        ((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).incomeOrExpence = self.incomeOrExpence;
+//        [((SSJCategoryCollectionView*)[self.collectionViewArray objectAtIndex:i]).collectionView reloadData];
+//    }
+//    [self setNeedsLayout];
+//}
 
-
-/**
- *  算出所有启用的记账类型所有的页数
- */
--(void)getPage{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ID = B.CBILLID AND A.ITYPE = ? AND B.ISTATE = 1 AND B.CUSERID = ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()] + 1;
-    if (_screenWidth == 320) {
-        if (_screenHeight == 568) {
-            if (count % 8 == 0) {
-                _page = count / 8;
-            }else{
-                _page = count / 8 + 1;
-            }
-        }else{
-            if (count % 4 == 0) {
-                _page = count / 4;
-            }else{
-                _page = count / 4 + 1;
-            }
-        }
-    }else if(_screenWidth == 375){
-        if (count % 8 == 0) {
-            _page = count / 8;
-        }else{
-            _page = count / 8 + 1;
+-(void)setData:(NSDictionary *)data{
+    _data = data;
+    NSInteger page = [data allKeys].count;
+    if (self.scrollView.subviews.count == page) {
+        for (int i = 0; i < page; i ++) {
+            
         }
     }else{
-        if (count % 12 == 0) {
-            _page = count / 12;
-        }else{
-            _page = count / 12 + 1;
-        }
+        
     }
-    [db close];
+
 }
+
+///**
+// *  算出所有启用的记账类型所有的页数
+// */
+//-(void)getPage{
+//    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+//    if (![db open]) {
+//        NSLog(@"Could not open db");
+//        return ;
+//    }
+//    NSUInteger count = [db intForQuery:@"SELECT COUNT(*) FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ID = B.CBILLID AND A.ITYPE = ? AND B.ISTATE = 1 AND B.CUSERID = ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()] + 1;
+//    if (_screenWidth == 320) {
+//        if (_screenHeight == 568) {
+//            if (count % 8 == 0) {
+//                _page = count / 8;
+//            }else{
+//                _page = count / 8 + 1;
+//            }
+//        }else{
+//            if (count % 4 == 0) {
+//                _page = count / 4;
+//            }else{
+//                _page = count / 4 + 1;
+//            }
+//        }
+//    }else if(_screenWidth == 375){
+//        if (count % 8 == 0) {
+//            _page = count / 8;
+//        }else{
+//            _page = count / 8 + 1;
+//        }
+//    }else{
+//        if (count % 12 == 0) {
+//            _page = count / 12;
+//        }else{
+//            _page = count / 12 + 1;
+//        }
+//    }
+//    [db close];
+//}
 @end

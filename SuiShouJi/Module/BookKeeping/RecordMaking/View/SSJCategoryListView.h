@@ -14,6 +14,7 @@
 
 typedef void (^CategorySelectedBlock)(SSJRecordMakingCategoryItem *item);
 
+@property(nonatomic, strong) NSDictionary *data;
 
 //收入或支出 1为支出,0为收入
 @property (nonatomic) BOOL incomeOrExpence;

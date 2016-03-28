@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJCategoryListHelper : NSObject
+
++ (void)queryForCategoryListWithCountForEachPage:(int)count IncomeOrExpenture:(int)incomeOrExpenture Success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure;
 
 @end

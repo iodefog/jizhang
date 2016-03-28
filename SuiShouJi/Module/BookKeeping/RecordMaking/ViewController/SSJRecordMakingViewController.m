@@ -8,7 +8,6 @@
 
 #import "SSJRecordMakingViewController.h"
 #import "SSJCustomKeyboard.h"
-#import "SSJCategoryCollectionView.h"
 #import "SSJCategoryListView.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
@@ -26,13 +25,13 @@
 #import "SSJImaageBrowseViewController.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJMemoMakingViewController.h"
+#import "SSJCategoryListHelper.h"
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
 
 static const NSTimeInterval kAnimationDuration = 0.2;
 
 @interface SSJRecordMakingViewController ()
-@property (nonatomic,strong) SSJCategoryCollectionView* collectionView;
 @property (nonatomic,strong) UIView* selectedCategoryView;
 @property (nonatomic,strong) SSJRecordMakingAdditionalView* additionalView;
 @property (nonatomic,strong) UIView* inputTopView;
@@ -54,7 +53,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) NSString *defualtID;
 @property (nonatomic,strong) SSJFundingItem *selectItem;
 @property (nonatomic,strong) SSJFundingItem *defualtItem;
-
 
 
 @property (nonatomic) long currentYear;
@@ -159,6 +157,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [SSJCategoryListHelper queryForCategoryListWithCountForEachPage:4 IncomeOrExpenture:1 Success:^(NSDictionary *result) {
+
+    } failure:^(NSError *error) {
+        
+    }];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
@@ -389,14 +392,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         };
     }
     return _DateSelectedView;
-}
-
--(SSJCategoryCollectionView*)collectionView{
-    if (!_collectionView) {
-        _collectionView = [[SSJCategoryCollectionView alloc]init];
-        _collectionView.frame = CGRectMake(0, 0, self.view.width, 230);
-    }
-    return _collectionView;
 }
 
 -(SSJFundingTypeSelectView *)FundingTypeSelectView{

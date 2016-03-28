@@ -14,7 +14,6 @@
 #import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJCategoryCollectionView()
-@property (nonatomic,strong) NSMutableArray *Items;
 @end
 
 @implementation SSJCategoryCollectionView{
@@ -28,7 +27,6 @@
     if (self) {
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
-        [self getDateFromDB];
         [self addSubview:self.collectionView];
     }
     return self;
@@ -40,7 +38,7 @@
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return self.Items.count;
+    return self.items.count;
 }
 
 - (NSInteger)numberOfSections{
@@ -49,7 +47,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
-    cell.item = (SSJRecordMakingCategoryItem*)[self.Items objectAtIndex:indexPath.row];
+    cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
     if ([cell.item.categoryID isEqualToString:self.selectedId]) {
         cell.categorySelected = YES;
     }else{
@@ -122,77 +120,82 @@
     return _collectionView;
 }
 
-//获取当前页的所有记账类型
--(void)getDateFromDB{
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return ;
-    }
-    self.Items = [[NSMutableArray alloc]init];
-    FMResultSet *rs;
-    if (self.page != self.totalPage - 1) {
-        if (_screenWidth == 320) {
-            if (_screenHeight == 568) {
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
-            }else{
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 4]];
-            }
-        }else if(_screenWidth == 375){
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
-        }else{
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 12]];
-        }
-        while ([rs next]) {
-            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-            item.categoryTitle = [rs stringForColumn:@"CNAME"];
-            item.categoryImage = [rs stringForColumn:@"CCOIN"];
-            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
-            item.categoryID = [rs stringForColumn:@"ID"];
-            [self.Items addObject:item];
-        }
-
-    }else{
-        if (_screenWidth == 320) {
-            if (_screenHeight == 568) {
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
-            }else{
-                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 3 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 4]];
-            }
-        }else if(_screenWidth == 375){
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
-        }else{
-            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 11 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 12]];
-        }
-        while ([rs next]) {
-            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-            item.categoryTitle = [rs stringForColumn:@"CNAME"];
-            item.categoryImage = [rs stringForColumn:@"CCOIN"];
-            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
-            item.categoryID = [rs stringForColumn:@"ID"];
-            [self.Items addObject:item];
-        }
-        SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-        item.categoryTitle = @"添加";
-        item.categoryImage = @"add";
-        [self.Items addObject:item];
-    }
-    [db close];
-}
-
--(void)setIncomeOrExpence:(BOOL)incomeOrExpence{
-    _incomeOrExpence = incomeOrExpence;
-//    [self.Items removeAllObjects];
-    [self getDateFromDB];
+-(void)setitems:(NSArray *)items{
+    _items = items;
     [self.collectionView reloadData];
 }
 
--(void)setPage:(int)page{
-    _page = page;
-//    [self.Items removeAllObjects];
-    [self getDateFromDB];
-    [self.collectionView reloadData];
-}
+////获取当前页的所有记账类型
+//-(void)getDateFromDB{
+//    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+//    if (![db open]) {
+//        NSLog(@"Could not open db");
+//        return ;
+//    }
+//    self.items = [[NSMutableArray alloc]init];
+//    FMResultSet *rs;
+//    if (self.page != self.totalPage - 1) {
+//        if (_screenWidth == 320) {
+//            if (_screenHeight == 568) {
+//                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
+//            }else{
+//                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 4 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 4]];
+//            }
+//        }else if(_screenWidth == 375){
+//            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 8 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
+//        }else{
+//            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 12 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 12]];
+//        }
+//        while ([rs next]) {
+//            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+//            item.categoryTitle = [rs stringForColumn:@"CNAME"];
+//            item.categoryImage = [rs stringForColumn:@"CCOIN"];
+//            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+//            item.categoryID = [rs stringForColumn:@"ID"];
+//            [self.Items addObject:item];
+//        }
+//
+//    }else{
+//        if (_screenWidth == 320) {
+//            if (_screenHeight == 568) {
+//                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
+//            }else{
+//                rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 3 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 4]];
+//            }
+//        }else if(_screenWidth == 375){
+//            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 7 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 8]];
+//        }else{
+//            rs = [db executeQuery:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = ? AND A.ID = B.CBILLID AND B.CUSERID = ? LIMIT 11 OFFSET ?",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID(),[NSNumber numberWithInt:self.page * 12]];
+//        }
+//        while ([rs next]) {
+//            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+//            item.categoryTitle = [rs stringForColumn:@"CNAME"];
+//            item.categoryImage = [rs stringForColumn:@"CCOIN"];
+//            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+//            item.categoryID = [rs stringForColumn:@"ID"];
+//            [self.Items addObject:item];
+//        }
+//        SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+//        item.categoryTitle = @"添加";
+//        item.categoryImage = @"add";
+//        [self.Items addObject:item];
+//    }
+//    [db close];
+//}
+
+//-(void)setIncomeOrExpence:(BOOL)incomeOrExpence{
+//    _incomeOrExpence = incomeOrExpence;
+////    [self.Items removeAllObjects];
+//    [self getDateFromDB];
+//    [self.collectionView reloadData];
+//}
+//
+//-(void)setPage:(int)page{
+//    _page = page;
+////    [self.Items removeAllObjects];
+//    [self getDateFromDB];
+//    [self.collectionView reloadData];
+//}
 
 /*
 // Only override drawRect: if you perform custom drawing.

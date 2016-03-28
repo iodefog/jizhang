@@ -24,6 +24,8 @@ typedef void (^removeFromCategoryListBlock)();
 
 @property (nonatomic, copy) ItemClickedBlock ItemClickedBlock;
 
+@property(nonatomic, strong) NSArray *items;
+
 //当前页数
 @property (nonatomic) int page;
 
