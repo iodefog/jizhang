@@ -39,7 +39,7 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.pageControl.size = CGSizeMake(self.width, 15);
+//    self.pageControl.size = CGSizeMake(self.width, 15);
     self.pageControl.bottom = self.height;
     self.pageControl.centerX = self.width / 2;
 }
