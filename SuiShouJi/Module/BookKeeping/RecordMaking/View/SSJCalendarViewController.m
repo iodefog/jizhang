@@ -59,16 +59,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
-    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
     self.selectedMonth = _currentMonth;
     self.selectedDay = _currentDay;
     self.selectDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     self.navigationItem.titleView = self.dateChangeView;
-    self.tableView.tableHeaderView = self.calendarView;
+    [self.view addSubview:self.calendarView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
+    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -86,6 +86,8 @@
     self.minusButton.right = self.dateLabel.left - 10;
     self.plusButton.centerY = self.dateChangeView.height / 2;
     self.minusButton.centerY = self.dateChangeView.height / 2;
+    self.calendarView.frame = CGRectMake(0, 64, self.view.width, 270);
+    self.tableView.top = self.calendarView.bottom;
     _firstLineLabel.top = 20;
     _firstLineLabel.centerX = _noDateView.width / 2;
     _secondLineLabel.top = _firstLineLabel.bottom + 10;
@@ -263,11 +265,11 @@
         weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
         [weakSelf.tableView reloadData];
         weakSelf.calendarView.data = data;
-        if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
-            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
-        }else{
-            [weakSelf.tableView ssj_hideWatermark:YES];
-        }
+//        if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
+//            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
+//        }else{
+//            [weakSelf.tableView ssj_hideWatermark:YES];
+//        }
         [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
