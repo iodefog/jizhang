@@ -17,6 +17,7 @@
 @property(nonatomic, assign) UIEdgeInsets pageContentInsets;
 @property(nonatomic, strong) NSString *pageContentInsetsString;
 @property (nonatomic,strong) NSString *selectedId;
+@property(nonatomic, strong) UICollectionView *collectionView;
 
 - (void)reloadData;
 

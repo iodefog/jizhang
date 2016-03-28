@@ -486,11 +486,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 #pragma mark - private
 -(void)getCategoryList{
     __weak typeof(self) weakSelf = self;
+    [self.view ssj_showLoadingIndicator];
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
         weakSelf.categoryListView.items = result;
         [weakSelf.categoryListView reloadData];
+        [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
-        
+        [self.view ssj_hideLoadingIndicator];
     }];
 }
 
@@ -751,6 +753,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(void)segmentPressed:(id)sender{
     [self getDefualtColorAndDefualtId];
     self.categoryListView.selectedId = self.defualtID;
+    self.categoryListView.collectionView.contentOffset = CGPointMake(0, 0);
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
@@ -761,7 +764,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         if (weakSelf.item == nil) {
-            FMResultSet *rs = [db executeQuery:@"SELECT ID , CCOLOR , CCOIN FROM BK_BILL_TYPE WHERE ITYPE = ? AND ISTATE = 1 LIMIT 1",[NSNumber numberWithDouble:!weakSelf.titleSegment.selectedSegmentIndex]];
+            NSString *userid = SSJUSERID();
+            FMResultSet *rs = [db executeQuery:@"SELECT A.ID , A.CCOLOR , A.CCOIN , B.* FROM BK_BILL_TYPE A, BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 1 AND CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.CWRITEDATE , B.CBILLID LIMIT 1",[NSNumber numberWithDouble:!weakSelf.titleSegment.selectedSegmentIndex],userid];
             while([rs next]) {
                 _defualtColor = [rs stringForColumn:@"CCOLOR"];
                 _defualtID = [rs stringForColumn:@"ID"];

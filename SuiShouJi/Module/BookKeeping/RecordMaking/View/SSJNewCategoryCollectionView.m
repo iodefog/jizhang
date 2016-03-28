@@ -13,7 +13,6 @@
 #import "SSJCategoryListHelper.h"
 
 @interface SSJNewCategoryCollectionView()
-@property(nonatomic, strong) UICollectionView *collectionView;
 @property(nonatomic, strong) SSJPageControl *pageControl;
 @property (nonatomic,strong) SSJCustomCollectionViewFlowLayout *layout;
 @end
