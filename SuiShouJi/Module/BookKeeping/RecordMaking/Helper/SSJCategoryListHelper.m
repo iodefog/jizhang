@@ -11,7 +11,9 @@
 
 @implementation SSJCategoryListHelper
 
-+ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture Success:(void(^)(NSMutableArray *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
+                                          Success:(void(^)(NSMutableArray *result))success
+                                          failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *categoryList =[NSMutableArray array];
@@ -24,6 +26,7 @@
             item.categoryTitle = @"添加";
             item.categoryImage = @"add";
             [categoryList addObject:item];
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(categoryList);
@@ -39,5 +42,24 @@
     item.categoryColor = [set stringForColumn:@"CCOLOR"];
     item.categoryID = [set stringForColumn:@"ID"];
     return item;
+}
+
++ (void)deleteCategoryWithCategoryId:(NSString *)categoryId
+                             Success:(void(^)(BOOL result))success
+                             failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
+        NSString *sql = [NSString stringWithFormat:@"update bk_user_bill set istate = 0 where cbillid = '%@' and cuserid = '%@'",categoryId,userid];
+        BOOL deletesucess = [db executeUpdate:sql];
+        if (failure) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+        }else{
+            SSJDispatch_main_async_safe(^{
+                success(deletesucess);
+            });
+        }
+    }];
 }
 @end

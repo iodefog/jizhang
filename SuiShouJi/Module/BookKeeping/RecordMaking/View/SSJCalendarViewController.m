@@ -68,7 +68,6 @@
     self.navigationItem.titleView = self.dateChangeView;
     self.tableView.tableHeaderView = self.calendarView;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
 }
 
@@ -271,7 +270,7 @@
         }
         [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
-        
+        [weakSelf.view ssj_hideLoadingIndicator];
     }];
 }
 

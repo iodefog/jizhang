@@ -11,12 +11,12 @@
 
 @interface SSJNewCategoryCollectionView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic,strong) NSMutableArray *items;
-@property(nonatomic, assign) CGSize                itemSize;
-@property(nonatomic, assign) NSUInteger            lineCount;
-@property(nonatomic, assign) NSUInteger            columnCount;
-@property(nonatomic, assign) UIEdgeInsets          pageContentInsets;
-@property(nonatomic, strong) NSString              *pageContentInsetsString;
-@property(nonatomic, strong)  NSString *selectId;
+@property(nonatomic, assign) CGSize itemSize;
+@property(nonatomic, assign) NSUInteger lineCount;
+@property(nonatomic, assign) NSUInteger columnCount;
+@property(nonatomic, assign) UIEdgeInsets pageContentInsets;
+@property(nonatomic, strong) NSString *pageContentInsetsString;
+@property (nonatomic,strong) NSString *selectedId;
 
 - (void)reloadData;
 

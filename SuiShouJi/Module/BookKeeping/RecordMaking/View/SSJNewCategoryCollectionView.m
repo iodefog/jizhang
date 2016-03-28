@@ -10,12 +10,12 @@
 #import "SSJPageControl.h"
 #import "SSJCustomCollectionViewFlowLayout.h"
 #import "SSJCategoryCollectionViewCell.h"
+#import "SSJCategoryListHelper.h"
 
 @interface SSJNewCategoryCollectionView()
 @property(nonatomic, strong) UICollectionView *collectionView;
 @property(nonatomic, strong) SSJPageControl *pageControl;
 @property (nonatomic,strong) SSJCustomCollectionViewFlowLayout *layout;
-@property (nonatomic,strong) NSString *selectedId;
 @end
 
 @implementation SSJNewCategoryCollectionView{
@@ -67,13 +67,14 @@
             weakSelf.removeFromCategoryListBlock();
         }
     };
-    cell.EditeModel = NO;
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCategoryCollectionViewCell *cell = (SSJCategoryCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPath];
+    self.selectedId = cell.item.categoryID;
+    [self.collectionView reloadData];
     if (self.ItemClickedBlock) {
         self.ItemClickedBlock(cell.item);
     }
@@ -177,8 +178,8 @@
     _items = items;
 }
 
--(void)setSelectId:(NSString *)selectId{
-    _selectId = selectId;
+-(void)setSelectedId:(NSString *)selectedId{
+    _selectedId = selectedId;
     [self reloadData];
 }
 

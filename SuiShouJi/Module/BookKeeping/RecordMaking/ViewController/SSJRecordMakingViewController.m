@@ -158,13 +158,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    __weak typeof(self) weakSelf = self;
-    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:1 Success:^(NSMutableArray *result) {
-        weakSelf.categoryListView.items = result;
-        [weakSelf.categoryListView reloadData];
-    } failure:^(NSError *error) {
-        
-    }];
+    [self getCategoryList];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
@@ -203,8 +197,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(SSJNewCategoryCollectionView*)categoryListView{
     if (_categoryListView == nil) {
         _categoryListView = [[SSJNewCategoryCollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 395)];
-        _categoryListView.selectId = self.defualtID;
+        _categoryListView.selectedId = self.defualtID;
         __weak typeof(self) weakSelf = self;
+        _categoryListView.removeFromCategoryListBlock = ^(){
+            [weakSelf getCategoryList];
+        };
         _categoryListView.ItemClickedBlock = ^(SSJRecordMakingCategoryItem *item){
             weakSelf.categoryID = item.categoryTitle;
             if (![item.categoryTitle isEqualToString:@"添加"]) {
@@ -221,7 +218,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 addNewTypeVc.incomeOrExpence = !
                 weakSelf.titleSegment.selectedSegmentIndex;
                 addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
-                    weakSelf.categoryListView.selectId = categoryID;
+                    weakSelf.categoryListView.selectedId = categoryID;
                     weakSelf.categoryID = categoryID;
                     weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
@@ -230,6 +227,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];
             }
         };
+        
     }
     return _categoryListView;
 }
@@ -486,6 +484,16 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 
 #pragma mark - private
+-(void)getCategoryList{
+    __weak typeof(self) weakSelf = self;
+    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
+        weakSelf.categoryListView.items = result;
+        [weakSelf.categoryListView reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
 -(void)takePhoto{
     UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
     if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
@@ -742,10 +750,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)segmentPressed:(id)sender{
     [self getDefualtColorAndDefualtId];
-    self.categoryListView.selectId = self.defualtID;
+    self.categoryListView.selectedId = self.defualtID;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
+    [self getCategoryList];
 }
 
 -(void)getDefualtColorAndDefualtId{
@@ -769,7 +778,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
                 weakSelf.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }];
-            weakSelf.categoryListView.selectId = _defualtID;
+            weakSelf.categoryListView.selectedId = _defualtID;
             [weakSelf.categoryListView reloadData];
         });
     }];
