@@ -92,58 +92,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
     cell.item = [self.items objectAtIndex:indexPath.row];
-//    if (indexPath.row < 7) {
-//        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-//        cell.currentDay = [_weekArray objectAtIndex:indexPath.row];
-//        cell.selectable = NO;
-//        cell.isSelected = NO;
-//        return cell;
-//    }
-//    if (indexPath.row < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1) {
-//        SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-//        cell.currentDay = @"";
-//        cell.selectable = NO;
-//        cell.isSelected = NO;
-//        return cell;
-//    }else{
-//        if (indexPath.row > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) {
-//            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-//            cell.currentDay = @"";
-//            cell.selectable = NO;
-//            cell.isSelected = NO;
-//            return cell;
-//        }else{
-//            SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-//            cell.currentDay = [[NSString alloc] initWithFormat:@"%ld",indexPath.row - [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] - 5];
-//            if (_year > _currentYear) {
-//                cell.selectable = NO;
-//                cell.iscurrentDay = NO;
-//                cell.isSelected = NO;
-//            }else if (_year == _currentYear && _month > _currentMonth){
-//                cell.selectable = NO;
-//                cell.iscurrentDay = NO;
-//                cell.isSelected = NO;
-//            }else if ([cell.currentDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
-//                cell.selectable = NO;
-//                cell.iscurrentDay = NO;
-//                cell.isSelected = NO;
-//            }else{
-//                if ([cell.currentDay integerValue] == _currentDay && _year == _currentYear && _month == _currentMonth) {
-//                    cell.selectable = YES;
-//                    cell.iscurrentDay = YES;
-//                }else if([cell.currentDay integerValue] == self.day && _year == self.selectedYear && _month == self.selectedMonth){
-//                    cell.selectable = YES;
-//                    cell.iscurrentDay = NO;
-//                    cell.isSelected = YES;
-//                }else{
-//                    cell.selectable = YES;
-//                    cell.iscurrentDay = NO;
-//                    cell.isSelected = NO;
-//                }
-//            }
-//            return cell;
-//        }
-//    }
     return cell;
 }
 
@@ -200,6 +148,7 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *weekOfFirstDayOfMonth = [dateFormatter dateFromString:firstWeekDayMonth];
     NSDateComponents *newCom = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:weekOfFirstDayOfMonth];
+    NSLog(@"%d",[newCom weekday]);
     return [newCom weekday];
 }
 
@@ -240,8 +189,8 @@
 
 //返回日历高度
 - (CGFloat)viewHeight{
-
-    return 315;
+    NSInteger lineNum = ([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) / 7;
+    return lineNum * 36 + (lineNum + 1) * _marginForvertical;
 }
 
 -(void)setMonth:(long)month{

@@ -52,6 +52,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
@@ -66,9 +67,10 @@
     self.selectDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = [UIColor redColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -86,9 +88,9 @@
     self.minusButton.right = self.dateLabel.left - 10;
     self.plusButton.centerY = self.dateChangeView.height / 2;
     self.minusButton.centerY = self.dateChangeView.height / 2;
-    self.calendarView.frame = CGRectMake(0, 64, self.view.width, 270);
+    self.calendarView.frame = CGRectMake(0, 64, self.view.width, self.calendarView.viewHeight);
     self.tableView.top = self.calendarView.bottom;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.height - 64);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.height);
     _firstLineLabel.top = 20;
     _firstLineLabel.centerX = _noDateView.width / 2;
     _secondLineLabel.top = _firstLineLabel.bottom + 10;
@@ -266,11 +268,11 @@
         weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
         [weakSelf.tableView reloadData];
         weakSelf.calendarView.data = data;
-//        if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
-//            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
-//        }else{
-//            [weakSelf.tableView ssj_hideWatermark:YES];
-//        }
+        if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
+            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
+        }else{
+            [weakSelf.tableView ssj_hideWatermark:YES];
+        }
         [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
