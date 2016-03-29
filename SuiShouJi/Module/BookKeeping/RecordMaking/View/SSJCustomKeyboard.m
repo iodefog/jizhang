@@ -17,7 +17,7 @@
 @property(nonatomic,strong)SSJCustomKeyBoardButton *DecimalButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *ZeroButton;
 @property(nonatomic,strong)NSMutableArray *numButtonArray;
-@property(nonatomic, strong)NSString *lastPressKey;
+
 @end
 
 @implementation SSJCustomKeyboard{
@@ -25,6 +25,7 @@
     CGFloat _buttonWight;
     BOOL _numkeyHavePressed;
     NSString *_caculationResult;
+    float _caculationValue;
     NSInteger _lastPressNum;
     NSString *_intPart;
     NSString *_decimalPart;
@@ -54,7 +55,6 @@ static id _instance;
         self.backgroundColor = [UIColor ssj_colorWithHex:@"f1f1f1"];
         _buttonHeight = self.height / 4;
         _buttonWight = self.width / 4;
-        self.caculationValue = 0;
         self.decimalModel = NO;
         self.numButtonArray = [[NSMutableArray alloc]init];
         self.backgroundColor = [UIColor clearColor];
@@ -185,7 +185,7 @@ static id _instance;
         [_MinusButton setTitle:@"-" forState:UIControlStateNormal];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_MinusButton setTintColor:[UIColor whiteColor]];
-        [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
+        [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];\
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:24];
         _MinusButton.backgroundColor = [UIColor whiteColor];
         _MinusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
@@ -231,6 +231,46 @@ static id _instance;
     return _ComfirmButton;
 }
 
+-(void)NumKeyClicked:(UIButton*)button{
+    [self.textField insertText:button.titleLabel.text];
+}
+
+-(void)BackspaceKeyClicked:(UIButton*)button{
+    [self.textField deleteBackward];
+}
+
+-(void)ClearKeyClicked:(UIButton*)button{
+    self.textField.text = @"";
+}
+
+-(void)DecimalKeyClicked:(UIButton*)button{
+    [self.textField insertText:@"."];
+}
+
+-(void)MinusKeyClicked:(UIButton*)button{
+    self.PlusOrMinusModel = NO;
+    if (_numkeyHavePressed == NO) {
+        _caculationValue = [self.textField.text floatValue];
+    }else{
+        _caculationValue = _caculationValue - [self.textField.text floatValue];
+    }
+    [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+    self.decimalModel = NO;
+    self.textField.text = @"0";
+}
+
+-(void)PlusKeyClicked:(UIButton*)button{
+    self.PlusOrMinusModel = YES;
+    _caculationValue =_caculationValue + [self.textField.text floatValue];
+    self.textField.text = @"0";
+    [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+    self.decimalModel = NO;
+}
+
+-(void)ComfirmKeyClicked:(UIButton*)button{
+    
+}
+
 /* 返回_textField的文本选择范围 */
 - (NSRange)selectedRange{
     UITextPosition *beginning = _textField.beginningOfDocument;
@@ -248,31 +288,12 @@ static id _instance;
     }
     BOOL shouldChangeText = YES;
     NSString *inputString;
-    if (sender.tag == 10 || sender.tag == 11) {
+    if (sender.tag == 10 || sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
         inputString = @"";
     }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
-        if (self.PlusOrMinusModel) {
-            _caculationValue = _caculationValue + [self.textField.text floatValue];
-        }else{
-            _caculationValue = _caculationValue - [self.textField.text floatValue];
-        }
-        NSNumber *caculationNum = [NSNumber numberWithFloat:_caculationValue];
-        inputString = [caculationNum stringValue];
-        inputString = [NSString stringWithFormat:@"%f",_caculationValue];
+        inputString = @"";
     }else if (sender.tag < 10 || sender.tag == 14){
         inputString = sender.titleLabel.text;
-    }else if (sender.tag == 12){
-        _caculationValue = _caculationValue + [self.textField.text floatValue];
-        NSNumber *caculationNum = [NSNumber numberWithFloat:_caculationValue];
-        self.PlusOrMinusModel = YES;
-        inputString = [caculationNum stringValue];
-        [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    }else if ( sender.tag == 13 ){
-        _caculationValue = _caculationValue - [self.textField.text floatValue];
-        NSNumber *caculationNum = [NSNumber numberWithFloat:_caculationValue];
-        inputString = [caculationNum stringValue];
-        self.PlusOrMinusModel = NO;
-        [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
@@ -281,7 +302,7 @@ static id _instance;
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
         NSRange selectedRange = [self selectedRange];
         NSRange changeRange = selectedRange;
-        if (sender.tag == 11 || sender.tag == 12 || sender.tag ==13) {
+        if (sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(0, self.textField.text.length);
@@ -311,34 +332,37 @@ static id _instance;
     if (shouldChangeText) {
         if (sender.tag == 11) {
             self.textField.text = @"";
-            self.caculationValue = 0;
-            [self viewWithTag:13].userInteractionEnabled = YES;
-            [self viewWithTag:12].userInteractionEnabled = YES;
         }else if (sender.tag == 15){
-            NSNumber *caculationNum = [NSNumber numberWithFloat:_caculationValue];
-            self.textField.text = [caculationNum stringValue];
+            if (self.PlusOrMinusModel == YES) {
+                _caculationValue = _caculationValue + [self.textField.text floatValue];
+                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+                _caculationValue = 0.0f;
+            }else{
+                _caculationValue = _caculationValue  - [self.textField.text floatValue];
+                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+                _caculationValue = 0.0f;
+            }
             [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
-            [self viewWithTag:13].userInteractionEnabled = YES;
-            [self viewWithTag:12].userInteractionEnabled = YES;
+        }else if (sender.tag == 12){
+            self.PlusOrMinusModel = YES;
+            _caculationValue =_caculationValue + [self.textField.text floatValue];
+            self.textField.text = @"0";
+            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+            self.decimalModel = NO;
+            self.textField.text = @"";
+        }else if (sender.tag == 13){
+            self.PlusOrMinusModel = NO;
+            if (_numkeyHavePressed == NO) {
+                _caculationValue = [self.textField.text floatValue];
+            }else{
+                _caculationValue = _caculationValue - [self.textField.text floatValue];
+            }
+            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+            self.textField.text = @"";
         }else if (sender.tag < 10 || sender.tag == 14){
             [self.textField insertText:sender.titleLabel.text];
-            [self viewWithTag:13].userInteractionEnabled = YES;
-            [self viewWithTag:12].userInteractionEnabled = YES;
         }else if (sender.tag == 10){
             [self.textField deleteBackward];
-            [self viewWithTag:13].userInteractionEnabled = YES;
-            [self viewWithTag:12].userInteractionEnabled = YES;
-        }else if (sender.tag == 12){
-            [self viewWithTag:12].userInteractionEnabled = NO;
-            [self viewWithTag:13].userInteractionEnabled = YES;
-
-            NSNumber *caculationNum = [NSNumber numberWithFloat:_caculationValue];
-            inputString = [caculationNum stringValue];
-        }else if (sender.tag == 13){
-            NSNumber *caculationNum = [NSNumber numberWithFloat:_caculationValue];
-            inputString = [caculationNum stringValue];
-            [self viewWithTag:13].userInteractionEnabled = NO;
-            [self viewWithTag:12].userInteractionEnabled = YES;
         }
     }
 }
@@ -355,10 +379,9 @@ static id _instance;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     SSJCustomKeyboard *customKeyboard = [SSJCustomKeyboard sharedInstance];
-    customKeyboard.caculationValue = 0;
+    if (textField.inputView == customKeyboard) {
+        customKeyboard.caculationValue = 0;
+    }
 }
-
-
-
 @end
 
