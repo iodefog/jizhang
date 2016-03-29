@@ -203,8 +203,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             [weakSelf getCategoryList];
         };
         _categoryListView.ItemClickedBlock = ^(SSJRecordMakingCategoryItem *item){
-            weakSelf.categoryID = item.categoryTitle;
             if (![item.categoryTitle isEqualToString:@"添加"]) {
+                weakSelf.categoryID = item.categoryTitle;
                 [UIView animateWithDuration:kAnimationDuration animations:^{
                     weakSelf.categoryNameLabel.text = item.categoryTitle;
                     [weakSelf.categoryNameLabel sizeToFit];

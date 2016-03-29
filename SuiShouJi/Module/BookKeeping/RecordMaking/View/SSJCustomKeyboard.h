@@ -24,7 +24,9 @@
 
 @property (nonatomic, weak) UITextField *textField;
 
-@property(nonatomic) float caculationValue;
+@property(nonatomic) float firstNum;
+
+@property(nonatomic) float secondNum;
 
 @end
 

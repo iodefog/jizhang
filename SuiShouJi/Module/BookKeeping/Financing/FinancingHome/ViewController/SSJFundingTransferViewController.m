@@ -181,7 +181,7 @@
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
-            [weakSelf.transferInFundingTypeSelect removeFromSuperview];
+            [weakSelf.transferInFundingTypeSelect dismiss];
         };
     }
     return _transferInFundingTypeSelect;
