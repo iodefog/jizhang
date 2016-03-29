@@ -117,8 +117,10 @@
 
 - (void)setMoney:(NSString *)money {
     _money = money;
-    _fullView.bottomTitle = _money;
-    _growingView.bottomTitle = _money;
+    if (self.showText) {
+        _fullView.bottomTitle = _money;
+        _growingView.bottomTitle = _money;
+    }
 }
 
 - (void)setPercent:(CGFloat)percent {
@@ -131,31 +133,42 @@
         for (SSJWaveWaterViewItem *item in self.growingView.items) {
             item.wavePercent = percent;
         }
-        self.growingView.topTitle = @"剩余";
-        self.growingView.bottomTitle = _money;
+        
+        if (self.showText) {
+            self.growingView.topTitle = @"剩余";
+            self.growingView.bottomTitle = _money;
+        }
+        
     } else if (percent == 1) {
         self.growingView.hidden = YES;
         self.fullView.hidden = NO;
         [self.growingView stopWave];
         [self.fullView startWave];
-        self.fullView.topTitle = @"剩余";
-        self.fullView.bottomTitle = _money;
         self.fullView.borderColor = [UIColor ssj_colorWithHex:@"0fceb6"];
         for (int i = 0; i < self.fullView.items.count; i ++) {
             SSJWaveWaterViewItem *item = self.fullView.items[i];
             item.waveColor = self.fullColors[i];
         }
+        
+        if (self.showText) {
+            self.fullView.topTitle = @"剩余";
+            self.fullView.bottomTitle = _money;
+        }
+        
     } else if (percent > 1) {
         self.growingView.hidden = YES;
         self.fullView.hidden = NO;
         [self.growingView stopWave];
         [self.fullView startWave];
-        self.fullView.topTitle = @"超支";
-        self.fullView.bottomTitle = _money;
         self.fullView.borderColor = [UIColor ssj_colorWithHex:@"ff654c"];
         for (int i = 0; i < self.fullView.items.count; i ++) {
             SSJWaveWaterViewItem *item = self.fullView.items[i];
             item.waveColor = self.overrunColors[i];
+        }
+        
+        if (self.showText) {
+            self.fullView.topTitle = @"超支";
+            self.fullView.bottomTitle = _money;
         }
     }
 }

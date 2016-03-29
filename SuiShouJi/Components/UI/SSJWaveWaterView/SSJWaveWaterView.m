@@ -53,7 +53,9 @@
         [path drawPath];
     }
     
-    [self drawText];
+    if (self.topTitle.length || self.bottomTitle.length) {
+        [self drawText];
+    }
 }
 
 - (void)setItems:(NSArray *)items {
@@ -121,7 +123,10 @@
     CGSize topTitleSize = [_topTitle sizeWithAttributes:@{NSFontAttributeName:topFont}];
     CGSize bottomTitleSize = [_bottomTitle sizeWithAttributes:@{NSFontAttributeName:bottomFont}];
     
-    CGFloat top = (self.height - topTitleSize.height - bottomTitleSize.height - _titleGap) * 0.5;
+    CGFloat top = (self.height - topTitleSize.height - bottomTitleSize.height) * 0.5;
+    if (!topTitleSize.height || !bottomTitleSize.height) {
+        top -= _titleGap * 0.5;
+    }
     
     CGPoint topTitlePoint = CGPointMake((self.width - topTitleSize.width) * 0.5, top);
     [_topTitle drawAtPoint:topTitlePoint withAttributes:@{NSFontAttributeName:topFont,

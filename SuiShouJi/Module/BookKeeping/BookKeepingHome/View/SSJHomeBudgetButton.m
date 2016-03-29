@@ -8,14 +8,18 @@
 //
 
 #import "SSJHomeBudgetButton.h"
-#import "SSJBudgetWaveScaleView.h"
+#import "SSJBudgetWaveWaterView.h"
 
 @interface SSJHomeBudgetButton()
 @property (nonatomic,strong) UIImageView *addBudgetView;
-@property (nonatomic,strong) SSJBudgetWaveScaleView *budgetWaveScaleView;
+@property (nonatomic,strong) SSJBudgetWaveWaterView *budgetWaveScaleView;
 @property (nonatomic,strong) UILabel *budgetLabel;
 @end
 @implementation SSJHomeBudgetButton
+
+- (void)dealloc {
+    [self.budgetWaveScaleView stopWave];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -59,11 +63,20 @@
     return _budgetLabel;
 }
 
--(SSJBudgetWaveScaleView *)budgetWaveScaleView{
+-(SSJBudgetWaveWaterView *)budgetWaveScaleView{
     if (!_budgetWaveScaleView) {
-        _budgetWaveScaleView = [[SSJBudgetWaveScaleView alloc]init];
-        _budgetWaveScaleView.borderWidth = 1;
-        _budgetWaveScaleView.waveAmplitude = 0.6;
+        _budgetWaveScaleView = [[SSJBudgetWaveWaterView alloc]init];
+        _budgetWaveScaleView.clipsToBounds = YES;
+        _budgetWaveScaleView.waveAmplitude = 2;
+        _budgetWaveScaleView.waveSpeed = 2;
+        _budgetWaveScaleView.waveCycle = 0.8;
+        _budgetWaveScaleView.waveGrowth = 1;
+        _budgetWaveScaleView.waveOffset = 10;
+        _budgetWaveScaleView.fullWaveAmplitude = 1;
+        _budgetWaveScaleView.fullWaveSpeed = 2;
+        _budgetWaveScaleView.fullWaveCycle = 4;
+        _budgetWaveScaleView.showText = NO;
+        _budgetWaveScaleView.outerBorderWidth = 1;
         _budgetWaveScaleView.innerBorderWidth = 0.5;
     }
     return _budgetWaveScaleView;
@@ -90,11 +103,11 @@
         if (model.budgetMoney < model.payMoney) {
             self.budgetLabel.text = [NSString stringWithFormat:@"超支%.2f",model.budgetMoney - model.payMoney];
             [self.budgetLabel sizeToFit];
-            [self.budgetWaveScaleView setScale:1.1];
+            self.budgetWaveScaleView.percent = 1.1;
         }else{
             self.budgetLabel.text = [NSString stringWithFormat:@"剩余%.2f",model.budgetMoney - model.payMoney];
             [self.budgetLabel sizeToFit];
-            [self.budgetWaveScaleView setScale:1 - (model.budgetMoney - model.payMoney)/ model.budgetMoney];
+            self.budgetWaveScaleView.percent = (1 - (model.budgetMoney - model.payMoney)/ model.budgetMoney);
         }
     }
 }

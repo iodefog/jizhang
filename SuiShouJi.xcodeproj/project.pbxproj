@@ -255,8 +255,6 @@
 		7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF547C1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m */; };
 		7DEF54861C7C83B200A90153 /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54851C7C83B200A90153 /* SSJBudgetDetailBottomView.m */; };
 		7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54881C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m */; };
-		7DEF55251C7DAEA300A90153 /* SSJBudgetWaveScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55241C7DAEA300A90153 /* SSJBudgetWaveScaleView.m */; };
-		7DEF55281C7DAEDE00A90153 /* WaveLoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55271C7DAEDE00A90153 /* WaveLoadingIndicator.swift */; };
 		7DEF552B1C7DB27600A90153 /* SSJBudgetListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF552A1C7DB27600A90153 /* SSJBudgetListCell.m */; };
 		7DEF552E1C7DB43400A90153 /* SSJBudgetListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF552D1C7DB43400A90153 /* SSJBudgetListCellItem.m */; };
 		7DEF55441C7ED4A600A90153 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF553F1C7ED4A600A90153 /* SSJBudgetEditLabelCell.m */; };
@@ -893,10 +891,6 @@
 		7DEF54851C7C83B200A90153 /* SSJBudgetDetailBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailBottomView.m; sourceTree = "<group>"; };
 		7DEF54871C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailNavigationTitleView.h; sourceTree = "<group>"; };
 		7DEF54881C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailNavigationTitleView.m; sourceTree = "<group>"; };
-		7DEF55231C7DAEA300A90153 /* SSJBudgetWaveScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetWaveScaleView.h; sourceTree = "<group>"; };
-		7DEF55241C7DAEA300A90153 /* SSJBudgetWaveScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetWaveScaleView.m; sourceTree = "<group>"; };
-		7DEF55261C7DAEDE00A90153 /* SuiShouJi-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SuiShouJi-Bridging-Header.h"; sourceTree = "<group>"; };
-		7DEF55271C7DAEDE00A90153 /* WaveLoadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveLoadingIndicator.swift; sourceTree = "<group>"; };
 		7DEF55291C7DB27600A90153 /* SSJBudgetListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetListCell.h; sourceTree = "<group>"; };
 		7DEF552A1C7DB27600A90153 /* SSJBudgetListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetListCell.m; sourceTree = "<group>"; };
 		7DEF552C1C7DB43400A90153 /* SSJBudgetListCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetListCellItem.h; sourceTree = "<group>"; };
@@ -2155,8 +2149,6 @@
 				7DEF54851C7C83B200A90153 /* SSJBudgetDetailBottomView.m */,
 				7D1D7F381C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.h */,
 				7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */,
-				7DEF55231C7DAEA300A90153 /* SSJBudgetWaveScaleView.h */,
-				7DEF55241C7DAEA300A90153 /* SSJBudgetWaveScaleView.m */,
 				7DC517351CA93D7100D23CF0 /* SSJBudgetWaveWaterView.h */,
 				7DC517361CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m */,
 				7DEF55291C7DB27600A90153 /* SSJBudgetListCell.h */,
@@ -2173,15 +2165,6 @@
 				7D1D7F3F1C85638A0001F72A /* SSJBudgetEditUnitTextField.m */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		7DEF55201C7DAE9900A90153 /* WaveLoadingIndicator */ = {
-			isa = PBXGroup;
-			children = (
-				7DEF55271C7DAEDE00A90153 /* WaveLoadingIndicator.swift */,
-				7DEF55261C7DAEDE00A90153 /* SuiShouJi-Bridging-Header.h */,
-			);
-			path = WaveLoadingIndicator;
 			sourceTree = "<group>";
 		};
 		7DEF55591C7F23BA00A90153 /* Const */ = {
@@ -2261,7 +2244,6 @@
 		BD0432CD1C1A77BB0051E7AB /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				7DEF55201C7DAE9900A90153 /* WaveLoadingIndicator */,
 				BDC01FF01C2D92E3008B1F75 /* CDAutoHideMessageHUD */,
 				BD0E43F81C21380F00F9179D /* SFHFKeychainUtils */,
 				BD0432CE1C1A77BB0051E7AB /* AlipayZF */,
@@ -3979,7 +3961,6 @@
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */,
 				7D2B242D1C439854009A74A8 /* SSJModifyFundingViewController.m in Sources */,
-				7DEF55251C7DAEA300A90153 /* SSJBudgetWaveScaleView.m in Sources */,
 				7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */,
@@ -4001,7 +3982,6 @@
 				7DE69C3B1C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */,
 				7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */,
-				7DEF55281C7DAEDE00A90153 /* WaveLoadingIndicator.swift in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
@@ -4183,7 +4163,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
-				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -4221,7 +4201,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
-				SWIFT_OBJC_BRIDGING_HEADER = "SuiShouJi/Vendor/WaveLoadingIndicator/SuiShouJi-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
