@@ -24,6 +24,8 @@
 
 @property (nonatomic, weak) UITextField *textField;
 
+@property(nonatomic) float caculationValue;
+
 @end
 
 
@@ -31,5 +33,7 @@
 @interface NSObject (SSJCustomKeyboard)
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField;
+
+- (void)textFieldDidEndEditing:(UITextField *)textField;
 
 @end

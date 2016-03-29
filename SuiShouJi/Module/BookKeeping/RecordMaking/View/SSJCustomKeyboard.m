@@ -25,7 +25,6 @@
     CGFloat _buttonWight;
     BOOL _numkeyHavePressed;
     NSString *_caculationResult;
-    float _caculationValue;
     NSInteger _lastPressNum;
     NSString *_intPart;
     NSString *_decimalPart;
@@ -58,6 +57,7 @@ static id _instance;
         self.decimalModel = NO;
         self.numButtonArray = [[NSMutableArray alloc]init];
         self.backgroundColor = [UIColor clearColor];
+        self.caculationValue = 0;
         [self setNumKey];
         [self addSubview:self.DecimalButton];
         [self addSubview:self.ZeroButton];
@@ -231,46 +231,6 @@ static id _instance;
     return _ComfirmButton;
 }
 
--(void)NumKeyClicked:(UIButton*)button{
-    [self.textField insertText:button.titleLabel.text];
-}
-
--(void)BackspaceKeyClicked:(UIButton*)button{
-    [self.textField deleteBackward];
-}
-
--(void)ClearKeyClicked:(UIButton*)button{
-    self.textField.text = @"";
-}
-
--(void)DecimalKeyClicked:(UIButton*)button{
-    [self.textField insertText:@"."];
-}
-
--(void)MinusKeyClicked:(UIButton*)button{
-    self.PlusOrMinusModel = NO;
-    if (_numkeyHavePressed == NO) {
-        _caculationValue = [self.textField.text floatValue];
-    }else{
-        _caculationValue = _caculationValue - [self.textField.text floatValue];
-    }
-    [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    self.decimalModel = NO;
-    self.textField.text = @"0";
-}
-
--(void)PlusKeyClicked:(UIButton*)button{
-    self.PlusOrMinusModel = YES;
-    _caculationValue =_caculationValue + [self.textField.text floatValue];
-    self.textField.text = @"0";
-    [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    self.decimalModel = NO;
-}
-
--(void)ComfirmKeyClicked:(UIButton*)button{
-    
-}
-
 /* 返回_textField的文本选择范围 */
 - (NSRange)selectedRange{
     UITextPosition *beginning = _textField.beginningOfDocument;
@@ -288,12 +248,25 @@ static id _instance;
     }
     BOOL shouldChangeText = YES;
     NSString *inputString;
-    if (sender.tag == 10 || sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
+    if (sender.tag == 10 || sender.tag == 11) {
         inputString = @"";
     }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
         inputString = @"";
     }else if (sender.tag < 10 || sender.tag == 14){
         inputString = sender.titleLabel.text;
+    }else if ( sender.tag == 12 ){
+        self.PlusOrMinusModel = YES;
+        _caculationValue =_caculationValue + [self.textField.text floatValue];
+        [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+        self.decimalModel = NO;
+        inputString = [NSString stringWithFormat:@"%.2f",_caculationValue];
+        self.textField.text =[NSString stringWithFormat:@"%.2f",_caculationValue];
+    }else if ( sender.tag == 13 ){
+        self.PlusOrMinusModel = NO;
+        _caculationValue = _caculationValue - [self.textField.text floatValue];
+        [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+        inputString = [NSString stringWithFormat:@"%.2f",_caculationValue];
+        self.textField.text =[NSString stringWithFormat:@"%.2f",_caculationValue];
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
@@ -302,7 +275,7 @@ static id _instance;
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
         NSRange selectedRange = [self selectedRange];
         NSRange changeRange = selectedRange;
-        if (sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
+        if (sender.tag == 11) {
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(0, self.textField.text.length);
@@ -329,25 +302,25 @@ static id _instance;
         }
         shouldChangeText = [_textField.delegate textField:_textField shouldChangeCharactersInRange:changeRange replacementString:inputString];
     }
-    if (sender.tag == 12 || sender.tag == 13) {
-        if (sender.tag == 12){
-            self.PlusOrMinusModel = YES;
-            _caculationValue =_caculationValue + [self.textField.text floatValue];
-            self.textField.text = @"0";
-            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-            self.decimalModel = NO;
-            self.textField.text = @"";
-        }else if (sender.tag == 13){
-            self.PlusOrMinusModel = NO;
-            if (_numkeyHavePressed == NO) {
-                _caculationValue = [self.textField.text floatValue];
-            }else{
-                _caculationValue = _caculationValue - [self.textField.text floatValue];
-            }
-            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-            self.textField.text = @"";
-        }
-    }
+//    if (sender.tag == 12 || sender.tag == 13) {
+//        if (sender.tag == 12){
+//            self.PlusOrMinusModel = YES;
+//            _caculationValue =_caculationValue + [self.textField.text floatValue];
+//            self.textField.text = @"0";
+//            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+//            self.decimalModel = NO;
+//            self.textField.text = @"";
+//        }else if (sender.tag == 13){
+//            self.PlusOrMinusModel = NO;
+//            if (_numkeyHavePressed == NO) {
+//                _caculationValue = [self.textField.text floatValue];
+//            }else{
+//                _caculationValue = _caculationValue - [self.textField.text floatValue];
+//            }
+//            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+//            self.textField.text = @"";
+//        }
+//    }
     if (shouldChangeText) {
         if (sender.tag == 11) {
             self.textField.text = @"";
@@ -362,22 +335,6 @@ static id _instance;
                 _caculationValue = 0.0f;
             }
             [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
-        }else if (sender.tag == 12){
-            self.PlusOrMinusModel = YES;
-            _caculationValue =_caculationValue + [self.textField.text floatValue];
-            self.textField.text = @"0";
-            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-            self.decimalModel = NO;
-            self.textField.text = @"";
-        }else if (sender.tag == 13){
-            self.PlusOrMinusModel = NO;
-            if (_numkeyHavePressed == NO) {
-                _caculationValue = [self.textField.text floatValue];
-            }else{
-                _caculationValue = _caculationValue - [self.textField.text floatValue];
-            }
-            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-            self.textField.text = @"";
         }else if (sender.tag < 10 || sender.tag == 14){
             [self.textField insertText:sender.titleLabel.text];
         }else if (sender.tag == 10){
@@ -395,6 +352,13 @@ static id _instance;
         customKeyboard.textField = textField;
     }
 }
+
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    SSJCustomKeyboard *customKeyboard = [SSJCustomKeyboard sharedInstance];
+    customKeyboard.caculationValue = 0;
+}
+
+
 
 @end
 
