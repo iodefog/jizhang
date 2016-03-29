@@ -53,7 +53,6 @@
     self.paymentLab.leftBottom = CGPointMake(10, self.contentView.height - 15);
     self.budgetLab.rightBottom = CGPointMake(self.contentView.width - 10, self.contentView.height - 15);
     self.waveView.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.56);
-//    self.waveView.frame = CGRectMake((self.contentView.width - 90) * 0.5, self.beginDateLab.bottom + 10, 90, 90);
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
@@ -79,9 +78,6 @@
     
     self.waveView.percent = (item.payment / item.budget);
     self.waveView.money = [NSString stringWithFormat:@"%.2f", item.budget - item.payment];
-//    self.waveView.title = item.payment <= item.budget ? @"剩余" : @"超支";
-//    [self.waveView setScale:(item.payment / item.budget)];
-//    [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", item.budget - item.payment]];
 }
 
 - (UILabel *)typeLab {
@@ -130,7 +126,7 @@
         _waveView.waveAmplitude = 8;
         _waveView.waveSpeed = 8;
         _waveView.waveCycle = 1;
-        _waveView.waveGrowth = 2;
+        _waveView.waveGrowth = 3;
         _waveView.waveOffset = 24;
         _waveView.fullWaveAmplitude = 5;
         _waveView.fullWaveSpeed = 5;

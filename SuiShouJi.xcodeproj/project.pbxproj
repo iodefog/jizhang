@@ -254,7 +254,6 @@
 		7DEF547A1C7C647200A90153 /* SSJBudgetEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54791C7C647200A90153 /* SSJBudgetEditViewController.m */; };
 		7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF547C1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m */; };
 		7DEF54861C7C83B200A90153 /* SSJBudgetDetailBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54851C7C83B200A90153 /* SSJBudgetDetailBottomView.m */; };
-		7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54881C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m */; };
 		7DEF552B1C7DB27600A90153 /* SSJBudgetListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF552A1C7DB27600A90153 /* SSJBudgetListCell.m */; };
 		7DEF552E1C7DB43400A90153 /* SSJBudgetListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF552D1C7DB43400A90153 /* SSJBudgetListCellItem.m */; };
 		7DEF55441C7ED4A600A90153 /* SSJBudgetEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF553F1C7ED4A600A90153 /* SSJBudgetEditLabelCell.m */; };
@@ -889,8 +888,6 @@
 		7DEF547C1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailHeaderView.m; sourceTree = "<group>"; };
 		7DEF54841C7C83B200A90153 /* SSJBudgetDetailBottomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailBottomView.h; sourceTree = "<group>"; };
 		7DEF54851C7C83B200A90153 /* SSJBudgetDetailBottomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailBottomView.m; sourceTree = "<group>"; };
-		7DEF54871C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailNavigationTitleView.h; sourceTree = "<group>"; };
-		7DEF54881C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetDetailNavigationTitleView.m; sourceTree = "<group>"; };
 		7DEF55291C7DB27600A90153 /* SSJBudgetListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetListCell.h; sourceTree = "<group>"; };
 		7DEF552A1C7DB27600A90153 /* SSJBudgetListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetListCell.m; sourceTree = "<group>"; };
 		7DEF552C1C7DB43400A90153 /* SSJBudgetListCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetListCellItem.h; sourceTree = "<group>"; };
@@ -2139,8 +2136,6 @@
 		7DEF546B1C7BF3C800A90153 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7DEF54871C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.h */,
-				7DEF54881C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m */,
 				7D768A741C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.h */,
 				7D768A751C92C82F00CB75B0 /* SSJBudgetDetailPeriodSwitchControl.m */,
 				7DEF547B1C7C65B200A90153 /* SSJBudgetDetailHeaderView.h */,
@@ -3849,7 +3844,6 @@
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
-				7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */,
 				BD0433951C1A8DA50051E7AB /* SSJBaseTableViewCell.m in Sources */,
 				7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */,
 				BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */,
@@ -4160,9 +4154,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -4175,8 +4169,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4198,9 +4192,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "fcae74cd-30fe-4bbc-afff-dd7056de98bb";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

@@ -217,7 +217,7 @@
         _waveView.waveAmplitude = 8;
         _waveView.waveSpeed = 8;
         _waveView.waveCycle = 1;
-        _waveView.waveGrowth = 2;
+        _waveView.waveGrowth = 3;
         _waveView.waveOffset = 24;
         _waveView.fullWaveAmplitude = 5;
         _waveView.fullWaveSpeed = 5;
