@@ -302,7 +302,7 @@ static const void *kSSJLoadingIndicatorKey = &kSSJLoadingIndicatorKey;
     }
     indicatorView.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     [indicatorView startAnimating];
-    
+
     [UIView transitionWithView:self duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self addSubview:indicatorView];
     } completion:NULL];
