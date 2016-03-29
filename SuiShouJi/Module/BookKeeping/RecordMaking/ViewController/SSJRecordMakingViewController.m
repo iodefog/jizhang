@@ -449,7 +449,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 #pragma mark - UITextFieldDelegate
 -(void)textFieldDidChange:(id)sender{
-    [self setupTextFiledNum:self.textInput num:2];
+//    [self setupTextFiledNum:self.textInput num:2];
 }
 
 #pragma mark - UIActionSheetDelegate

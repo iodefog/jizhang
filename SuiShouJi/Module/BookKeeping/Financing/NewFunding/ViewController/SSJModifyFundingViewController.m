@@ -102,7 +102,7 @@
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
-        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]init];
+        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         fundingTypeVC.selectFundID = _selectParent;
         __weak typeof(self) weakSelf = self;
         fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent,NSString *selectIcon){
