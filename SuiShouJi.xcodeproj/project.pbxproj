@@ -71,6 +71,12 @@
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
 		7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */; };
 		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
+		7DC517301CA93D3F00D23CF0 /* SSJFrameObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517271CA93D3F00D23CF0 /* SSJFrameObserver.m */; };
+		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
+		7DC517321CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172B1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m */; };
+		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
+		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
+		7DC517371CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517361CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m */; };
 		7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */; };
 		7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */; };
 		7DD7D6861C4C8E6A00ACE71A /* bt_alimoney@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5DB1C4C8E6A00ACE71A /* bt_alimoney@2x.png */; };
@@ -667,6 +673,18 @@
 		7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@2x.png"; sourceTree = "<group>"; };
 		7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZipZap.a; path = "ZipZap/build/Debug-iphoneos/libZipZap.a"; sourceTree = "<group>"; };
 		7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		7DC517261CA93D3F00D23CF0 /* SSJFrameObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFrameObserver.h; sourceTree = "<group>"; };
+		7DC517271CA93D3F00D23CF0 /* SSJFrameObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFrameObserver.m; sourceTree = "<group>"; };
+		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
+		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
+		7DC5172A1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterScaleView.h; sourceTree = "<group>"; };
+		7DC5172B1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterScaleView.m; sourceTree = "<group>"; };
+		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
+		7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterView.m; sourceTree = "<group>"; };
+		7DC5172E1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterViewItem.h; sourceTree = "<group>"; };
+		7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterViewItem.m; sourceTree = "<group>"; };
+		7DC517351CA93D7100D23CF0 /* SSJBudgetWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetWaveWaterView.h; sourceTree = "<group>"; };
+		7DC517361CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetWaveWaterView.m; sourceTree = "<group>"; };
 		7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodSelectionView.h; sourceTree = "<group>"; };
 		7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodSelectionView.m; sourceTree = "<group>"; };
 		7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
@@ -1569,6 +1587,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */,
 				7DE74BDC1C9AF28200D27E7D /* StartView */,
 				7D768A701C926B6600CB75B0 /* SSJBorderButton */,
 				7DE69C2E1C8EC401001D31C1 /* SCYMotionEncryptionControl */,
@@ -1659,6 +1678,23 @@
 				7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */ = {
+			isa = PBXGroup;
+			children = (
+				7DC517261CA93D3F00D23CF0 /* SSJFrameObserver.h */,
+				7DC517271CA93D3F00D23CF0 /* SSJFrameObserver.m */,
+				7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */,
+				7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */,
+				7DC5172A1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.h */,
+				7DC5172B1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m */,
+				7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */,
+				7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */,
+				7DC5172E1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.h */,
+				7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */,
+			);
+			path = SSJWaveWaterView;
 			sourceTree = "<group>";
 		};
 		7DD7D5D51C4C8E6A00ACE71A /* Image */ = {
@@ -2131,6 +2167,8 @@
 				7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */,
 				7DEF55231C7DAEA300A90153 /* SSJBudgetWaveScaleView.h */,
 				7DEF55241C7DAEA300A90153 /* SSJBudgetWaveScaleView.m */,
+				7DC517351CA93D7100D23CF0 /* SSJBudgetWaveWaterView.h */,
+				7DC517361CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m */,
 				7DEF55291C7DB27600A90153 /* SSJBudgetListCell.h */,
 				7DEF552A1C7DB27600A90153 /* SSJBudgetListCell.m */,
 				7DEF553E1C7ED4A600A90153 /* SSJBudgetEditLabelCell.h */,
@@ -3802,6 +3840,7 @@
 				BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
 				7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */,
+				7DC517371CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m in Sources */,
 				7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */,
 				7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */,
 				7DE69C391C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m in Sources */,
@@ -3809,6 +3848,7 @@
 				7DE69C3C1C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m in Sources */,
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
+				7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BD71E6711C881C8900796FF0 /* SSJNoneCircleChargeView.m in Sources */,
 				BD8BA8731CA6AFAC00D3DDF1 /* SSJNewCategoryCollectionView.m in Sources */,
@@ -3835,6 +3875,7 @@
 				7D893F351C91335600886995 /* SSJUserItem.m in Sources */,
 				7DEF54711C7BF47100A90153 /* SSJBudgetDatabaseHelper.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
+				7DC517301CA93D3F00D23CF0 /* SSJFrameObserver.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */,
@@ -3851,6 +3892,7 @@
 				BD04339B1C1A8DA50051E7AB /* SSJNormalWebViewController.m in Sources */,
 				BD7BC83E1C3A1DC7001DE5D8 /* SSJFundingDetailsViewController.m in Sources */,
 				BDDC5B8C1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m in Sources */,
+				7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */,
 				BD78E4B51C905584003A1EE1 /* SSJSettingViewController.m in Sources */,
 				BD7BC8331C3A1A0F001DE5D8 /* SSJFinancingHomeitem.m in Sources */,
 				7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */,
@@ -3884,6 +3926,7 @@
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,
 				BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */,
 				7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */,
+				7DC517321CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m in Sources */,
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
 				BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */,
@@ -3956,6 +3999,7 @@
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
 				BD774A971C88348B001E11FB /* SSJBookkeepingRiminderCell.m in Sources */,
+				7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */,
 				BDBA5CAA1C89C3FD00224AC6 /* SSJLocalNotificationHelper.m in Sources */,
 				7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */,
 				7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */,
