@@ -259,14 +259,12 @@ static id _instance;
         _caculationValue =_caculationValue + [self.textField.text floatValue];
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
         self.decimalModel = NO;
-        inputString = [NSString stringWithFormat:@"%.2f",_caculationValue];
-        self.textField.text =[NSString stringWithFormat:@"%.2f",_caculationValue];
+        inputString = [NSString stringWithFormat:@"%f",_caculationValue];
     }else if ( sender.tag == 13 ){
         self.PlusOrMinusModel = NO;
         _caculationValue = _caculationValue - [self.textField.text floatValue];
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-        inputString = [NSString stringWithFormat:@"%.2f",_caculationValue];
-        self.textField.text =[NSString stringWithFormat:@"%.2f",_caculationValue];
+        inputString = [NSString stringWithFormat:@"%f",_caculationValue];
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
@@ -275,7 +273,7 @@ static id _instance;
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
         NSRange selectedRange = [self selectedRange];
         NSRange changeRange = selectedRange;
-        if (sender.tag == 11) {
+        if (sender.tag == 11 || sender.tag == 12 || sender.tag ==13) {
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(0, self.textField.text.length);
@@ -327,11 +325,11 @@ static id _instance;
         }else if (sender.tag == 15){
             if (self.PlusOrMinusModel == YES) {
                 _caculationValue = _caculationValue + [self.textField.text floatValue];
-                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+                self.textField.text = [NSString stringWithFormat:@"%f",_caculationValue];
                 _caculationValue = 0.0f;
             }else{
                 _caculationValue = _caculationValue  - [self.textField.text floatValue];
-                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
+                self.textField.text = [NSString stringWithFormat:@"%f",_caculationValue];
                 _caculationValue = 0.0f;
             }
             [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
@@ -339,6 +337,8 @@ static id _instance;
             [self.textField insertText:sender.titleLabel.text];
         }else if (sender.tag == 10){
             [self.textField deleteBackward];
+        }else if (sender.tag == 12 || sender.tag == 13){
+            self.textField.text = [NSString stringWithFormat:@"%f",_caculationValue];
         }
     }
 }
