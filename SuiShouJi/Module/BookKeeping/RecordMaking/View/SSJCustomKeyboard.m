@@ -17,7 +17,7 @@
 @property(nonatomic,strong)SSJCustomKeyBoardButton *DecimalButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *ZeroButton;
 @property(nonatomic,strong)NSMutableArray *numButtonArray;
-
+@property(nonatomic, strong)NSString *lastPressKey;
 @end
 
 @implementation SSJCustomKeyboard{
@@ -54,10 +54,11 @@ static id _instance;
         self.backgroundColor = [UIColor ssj_colorWithHex:@"f1f1f1"];
         _buttonHeight = self.height / 4;
         _buttonWight = self.width / 4;
+        self.firstNum = 0;
+        self.secondNum = 0;
         self.decimalModel = NO;
         self.numButtonArray = [[NSMutableArray alloc]init];
         self.backgroundColor = [UIColor clearColor];
-        self.caculationValue = 0;
         [self setNumKey];
         [self addSubview:self.DecimalButton];
         [self addSubview:self.ZeroButton];
@@ -185,7 +186,7 @@ static id _instance;
         [_MinusButton setTitle:@"-" forState:UIControlStateNormal];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_MinusButton setTintColor:[UIColor whiteColor]];
-        [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];\
+        [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:24];
         _MinusButton.backgroundColor = [UIColor whiteColor];
         _MinusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
@@ -251,20 +252,27 @@ static id _instance;
     if (sender.tag == 10 || sender.tag == 11) {
         inputString = @"";
     }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
-        inputString = @"";
+        if (self.PlusOrMinusModel) {
+            inputString = [NSString stringWithFormat:@"%f",self.firstNum + self.secondNum];
+        }else{
+            inputString = [NSString stringWithFormat:@"%f",self.firstNum - self.secondNum];
+        }
     }else if (sender.tag < 10 || sender.tag == 14){
         inputString = sender.titleLabel.text;
-    }else if ( sender.tag == 12 ){
+    }else if (sender.tag == 12){
+        self.secondNum = [self.textField.text floatValue];
+        self.firstNum = self.firstNum + self.secondNum;
+        self.secondNum = 0;
+        inputString  = [NSString stringWithFormat:@"%f",self.firstNum];
         self.PlusOrMinusModel = YES;
-        _caculationValue =_caculationValue + [self.textField.text floatValue];
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-        self.decimalModel = NO;
-        inputString = [NSString stringWithFormat:@"%f",_caculationValue];
     }else if ( sender.tag == 13 ){
+        self.secondNum = [self.textField.text floatValue];
+        self.firstNum = self.firstNum - self.secondNum;
+        self.secondNum = 0;
+        inputString  = [NSString stringWithFormat:@"%f",self.firstNum];
         self.PlusOrMinusModel = NO;
-        _caculationValue = _caculationValue - [self.textField.text floatValue];
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-        inputString = [NSString stringWithFormat:@"%f",_caculationValue];
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
@@ -324,21 +332,18 @@ static id _instance;
             self.textField.text = @"";
         }else if (sender.tag == 15){
             if (self.PlusOrMinusModel == YES) {
-                _caculationValue = _caculationValue + [self.textField.text floatValue];
-                self.textField.text = [NSString stringWithFormat:@"%f",_caculationValue];
-                _caculationValue = 0.0f;
+                
             }else{
-                _caculationValue = _caculationValue  - [self.textField.text floatValue];
-                self.textField.text = [NSString stringWithFormat:@"%f",_caculationValue];
-                _caculationValue = 0.0f;
+                
             }
             [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
         }else if (sender.tag < 10 || sender.tag == 14){
             [self.textField insertText:sender.titleLabel.text];
+            self.lastPressKey = @"num";
         }else if (sender.tag == 10){
             [self.textField deleteBackward];
         }else if (sender.tag == 12 || sender.tag == 13){
-            self.textField.text = [NSString stringWithFormat:@"%f",_caculationValue];
+            self.lastPressKey = @"plusOrMinus";
         }
     }
 }
@@ -355,7 +360,8 @@ static id _instance;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     SSJCustomKeyboard *customKeyboard = [SSJCustomKeyboard sharedInstance];
-    customKeyboard.caculationValue = 0;
+    customKeyboard.firstNum = 0;
+    customKeyboard.secondNum = 0;
 }
 
 
