@@ -20,4 +20,8 @@ typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
 
 -(void)reloadDate;
 
+- (void)show;
+
+- (void)dismiss;
+
 @end

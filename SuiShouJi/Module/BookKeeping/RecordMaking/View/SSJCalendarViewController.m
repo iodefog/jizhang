@@ -67,7 +67,7 @@
     self.selectDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
-    self.tableView.backgroundColor = [UIColor redColor];
+    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
 
@@ -163,6 +163,7 @@
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
+        _calendarView.isSelectOnly = NO;
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
         _calendarView.day = _currentDay;

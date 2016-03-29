@@ -30,20 +30,50 @@
         _selectCircleType = -1;
         [self addSubview:self.pickerView];
         [self addSubview:self.topView];
+        [self sizeToFit];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.pickerView.bottom = self.height;
     self.topView.size = CGSizeMake(self.width, 50);
-    self.topView.leftTop = CGPointMake(0, self.pickerView.top);
+    self.topView.leftTop = CGPointMake(0, 0);
     self.titleLabel.center = CGPointMake(self.topView.width / 2, self.topView.height / 2);
     self.closeButton.centerY = self.topView.height / 2;
     self.closeButton.left = 10;
     self.comfirmButton.centerY = self.topView.height / 2;
     self.comfirmButton.right = self.width - 10;
+    self.pickerView.top = self.topView.bottom;
+}
+
+- (void)show {
+    if (self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    self.top = keyWindow.height;
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+        self.bottom = keyWindow.height;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
+- (void)dismiss {
+    if (!self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [self.superview ssj_hideBackViewForView:self animation:^{
+        self.top = keyWindow.bottom;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
+-(CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 350);
 }
 
 -(UIPickerView *)pickerView{
@@ -117,7 +147,7 @@
 }
 
 -(void)closeButtonClicked:(id)sender{
-    [self removeFromSuperview];
+    [self dismiss];
 }
 
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
@@ -139,7 +169,7 @@
     if (self.chargeCircleSelectBlock) {
         self.chargeCircleSelectBlock(_selectedCircle);
     }
-    [self removeFromSuperview];
+    [self dismiss];
 }
 
 /*

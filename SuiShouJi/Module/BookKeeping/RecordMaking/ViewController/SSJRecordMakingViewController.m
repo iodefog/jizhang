@@ -172,7 +172,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.textInput.centerY = self.categoryImage.centerY;
     self.additionalView.height = 200;
     self.additionalView.bottom = self.view.height;
-    self.categoryListView.top = self.selectedCategoryView.bottom;
+    self.categoryListView.top = self.selectedCategoryView.bottom + 5;
     self.inputTopView.bottom = self.additionalView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 260 - self.selectedCategoryView.bottom);
 }
@@ -196,7 +196,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(SSJNewCategoryCollectionView*)categoryListView{
     if (_categoryListView == nil) {
-        _categoryListView = [[SSJNewCategoryCollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 395)];
+        _categoryListView = [[SSJNewCategoryCollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 390)];
         _categoryListView.selectedId = self.defualtID;
         __weak typeof(self) weakSelf = self;
         _categoryListView.removeFromCategoryListBlock = ^(){
@@ -306,7 +306,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
                 [weakSelf makeArecord];
             }else if (buttonTag == 3){
-                [[UIApplication sharedApplication].keyWindow addSubview:weakSelf.ChargeCircleSelectView];
+                [weakSelf.ChargeCircleSelectView show];
             }else if (buttonTag == 2){
                 SSJMemoMakingViewController *memoMakingVC = [[SSJMemoMakingViewController alloc]init];
                 memoMakingVC.oldMemo = weakSelf.chargeMemo;
@@ -374,14 +374,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             weakSelf.selectedYear = year;
             [weakSelf.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
             weakSelf.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",weakSelf.selectedDay];
-            for (int i = 0; i < [self.DateSelectedView.calendarView.calendar.visibleCells count]; i ++) {
-                if ([((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == day && ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES) {
-                    ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;
-                }else{
-                    ((SSJCalendarCollectionViewCell*)[weakSelf.DateSelectedView.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = NO;
-                }
-            }
-            [weakSelf.DateSelectedView removeFromSuperview];
+            [weakSelf.DateSelectedView dismiss];
             [weakSelf.textInput becomeFirstResponder];
         };
     }
@@ -409,7 +402,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
-            [weakSelf.FundingTypeSelectView removeFromSuperview];
+            [weakSelf.FundingTypeSelectView dismiss];
             [weakSelf.textInput becomeFirstResponder];
         };
     }
@@ -539,12 +532,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 -(void)datePickerButtonClicked:(UIButton*)button{
-    [[UIApplication sharedApplication].keyWindow addSubview:self.DateSelectedView];
+    [self.DateSelectedView show];
     [self.textInput resignFirstResponder];
 }
 
 -(void)fundingTypeButtonClicked:(UIButton*)button{
-    [[UIApplication sharedApplication].keyWindow addSubview:self.FundingTypeSelectView];
+    [self.FundingTypeSelectView show];
     [self.textInput resignFirstResponder];
 }
 

@@ -34,19 +34,47 @@
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
 //        [self addSubview:self.addNewTypeButtonView];
         [self addSubview:self.titleView];
+        [self sizeToFit];
     }
     return self;
 }      
 
 -(void)layoutSubviews{
-    self.tableview.bottom = self.height;
-    self.titleView.bottom = self.tableview.top;
+    self.titleView.leftTop = CGPointMake(0, 0);
+    self.tableview.top = self.titleView.bottom;
     self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
     self.closeButton.centerY = self.titleView.height / 2;
     self.closeButton.left = 10;
-//    self.addNewTypeButton.center = CGPointMake(self.width / 2, self.height / 2);
 }
 
+- (void)show {
+    if (self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    self.top = keyWindow.height;
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+        self.bottom = keyWindow.height;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
+-(CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 245);
+}
+
+- (void)dismiss {
+    if (!self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [self.superview ssj_hideBackViewForView:self animation:^{
+        self.top = keyWindow.bottom;
+    } timeInterval:0.25 fininshed:NULL];
+}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -103,7 +131,7 @@
 
 -(UIView *)titleView{
     if (!_titleView) {
-        _titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 50)];
+        _titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 45)];
         _titleView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"选择资金账户";
@@ -123,13 +151,11 @@
     return _titleView;
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
-    [self removeFromSuperview];
-}
+
 
 #pragma mark - private
 -(void)closeButtonClicked:(UIButton*)button{
-    [self removeFromSuperview];
+    [self dismiss];
 }
 
 -(void)reloadSelectedStatusexceptIndexPath:(NSIndexPath*)selectedIndexpath{

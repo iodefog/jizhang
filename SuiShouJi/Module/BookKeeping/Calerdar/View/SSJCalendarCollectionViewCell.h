@@ -16,4 +16,5 @@
 @property (nonatomic) BOOL iscurrentDay;
 @property(nonatomic) BOOL selectable;
 @property (nonatomic,strong) SSJCalenderCellItem *item;
+@property(nonatomic) BOOL isSelectOnly;
 @end

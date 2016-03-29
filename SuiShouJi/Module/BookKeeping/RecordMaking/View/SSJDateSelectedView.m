@@ -35,35 +35,67 @@
         [self addSubview:self.calendarView];
         [self addSubview:self.titleView];
         [self addSubview:self.dateChangeView];
+        [self sizeToFit];
     }
     return self;
 }
 
 -(void)layoutSubviews{
-    self.calendarView.frame = CGRectMake(0, 0, self.width, 270);
-    self.calendarView.bottom = self.height;
-    self.dateChangeView.bottom = self.calendarView.top;
-    self.dateLabel.center = CGPointMake(self.dateChangeView.width / 2, self.dateChangeView.height / 2);
-    self.titleView.bottom = self.dateChangeView.top;
+    self.titleView.leftTop = CGPointMake(0, 0);
     self.closeButton.left = 10;
+    self.dateLabel.center = CGPointMake(self.dateChangeView.width / 2, self.dateChangeView.height / 2);
     self.plusButton.left = self.dateLabel.right + 10;
     self.minusButton.right = self.dateLabel.left - 10;
     self.plusButton.centerY = self.dateChangeView.height / 2;
     self.minusButton.centerY = self.dateChangeView.height / 2;
     self.closeButton.centerY = self.titleView.height / 2;
     self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
+    self.dateChangeView.top = self.titleView.bottom;
+    self.calendarView.size = CGSizeMake(self.width, 270);
+    self.calendarView.top = self.dateChangeView.bottom;
 }
+
+-(CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 360);
+}
+
+- (void)show {
+    if (self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    self.top = keyWindow.height;
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+        self.bottom = keyWindow.height;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
+- (void)dismiss {
+    if (!self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [self.superview ssj_hideBackViewForView:self animation:^{
+        self.top = keyWindow.bottom;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
 
 -(SSJCalendarView*)calendarView{
     if (!_calendarView) {
         NSString *dateStr = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.width, 270)];
+        _calendarView.isSelectOnly = YES;
         _calendarView.selectedYear = self.selectedYear;
         _calendarView.selectedMonth = self.selectedMonth;
         _calendarView.year = self.selectedYear;
         _calendarView.month = self.selectedMonth;
         _calendarView.day = self.selectedDay;
-        _calendarView.selectDateStr =  dateStr;
+        _calendarView.selectDateStr = dateStr;
     }
     return _calendarView;
 }
@@ -128,6 +160,7 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
+    [self.calendarView reloadCalender];
 }
 
 -(void)minusButtonClicked:(UIButton*)button{
@@ -140,19 +173,11 @@
     [self.dateLabel  sizeToFit];
     self.calendarView.year = self.selectedYear;
     self.calendarView.month = self.selectedMonth;
+    [self.calendarView reloadCalender];
 }
 
 -(void)closeButtonClicked:(UIButton*)button{
-    for (int i = 0; i < [self.calendarView.calendar.visibleCells count]; i ++) {
-        if ([((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == _currentDay && ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES) {
-            ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;
-        }else if([((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).currentDay integerValue] == self.selectedDay && self.calendarView.month == self.selectedMonth &&self.calendarView.year == self.selectedYear && ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).selectable == YES){
-            ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = YES;
-        }else{
-            ((SSJCalendarCollectionViewCell*)[self.calendarView.calendar.visibleCells objectAtIndex:i]).isSelected = NO;
-        }
-    }
-    [self removeFromSuperview];
+    [self dismiss];
 }
 
 -(void)getCurrentDate{
@@ -163,10 +188,6 @@
     _currentYear = [dateComponent year];
     _currentDay = [dateComponent day];
     _currentMonth = [dateComponent month];
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
-    [self removeFromSuperview];
 }
 
 

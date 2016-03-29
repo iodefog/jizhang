@@ -329,6 +329,25 @@ static id _instance;
         }
         shouldChangeText = [_textField.delegate textField:_textField shouldChangeCharactersInRange:changeRange replacementString:inputString];
     }
+    if (sender.tag == 12 || sender.tag == 13) {
+        if (sender.tag == 12){
+            self.PlusOrMinusModel = YES;
+            _caculationValue =_caculationValue + [self.textField.text floatValue];
+            self.textField.text = @"0";
+            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+            self.decimalModel = NO;
+            self.textField.text = @"";
+        }else if (sender.tag == 13){
+            self.PlusOrMinusModel = NO;
+            if (_numkeyHavePressed == NO) {
+                _caculationValue = [self.textField.text floatValue];
+            }else{
+                _caculationValue = _caculationValue - [self.textField.text floatValue];
+            }
+            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+            self.textField.text = @"";
+        }
+    }
     if (shouldChangeText) {
         if (sender.tag == 11) {
             self.textField.text = @"";
@@ -349,7 +368,7 @@ static id _instance;
             self.textField.text = @"0";
             [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
             self.decimalModel = NO;
-            self.textField.text = @"";  
+            self.textField.text = @"";
         }else if (sender.tag == 13){
             self.PlusOrMinusModel = NO;
             if (_numkeyHavePressed == NO) {

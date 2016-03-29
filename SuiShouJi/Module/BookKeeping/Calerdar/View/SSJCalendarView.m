@@ -92,6 +92,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
     cell.item = [self.items objectAtIndex:indexPath.row];
+    cell.isSelectOnly = self.isSelectOnly;
     return cell;
 }
 
@@ -111,8 +112,10 @@
     SSJCalendarCollectionViewCell *cell = (SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     self.selectDateStr = cell.item.dateStr;
     if (self.DateSelectedBlock) {
-        self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).dateLabel.text integerValue],cell.item.dateStr);
+        self.DateSelectedBlock(_year,_month,[cell.dateLabel.text integerValue],cell.item.dateStr);
     }
+    [self reloadCalender];
+
 //    if (cell.isSelected == NO) {
 //        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
 //            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
@@ -148,7 +151,6 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *weekOfFirstDayOfMonth = [dateFormatter dateFromString:firstWeekDayMonth];
     NSDateComponents *newCom = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:weekOfFirstDayOfMonth];
-    NSLog(@"%d",[newCom weekday]);
     return [newCom weekday];
 }
 
@@ -189,7 +191,12 @@
 
 //返回日历高度
 - (CGFloat)viewHeight{
-    NSInteger lineNum = ([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5) / 7;
+    NSInteger lineNum = ([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 6) / 7;
+    if (([self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 6) % 7 == 0) {
+        lineNum = lineNum;
+    }else{
+        lineNum = lineNum + 1;
+    }
     return lineNum * 36 + (lineNum + 1) * _marginForvertical;
 }
 
@@ -291,16 +298,16 @@
     [self.calendar reloadData];
 }
 
-//-(void)reloadCalender{
-//    [self getCurrentDate];
-//    [self ssj_showLoadingIndicator];
-//    [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
-//        self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
-//
-//    } failure:^(NSError *error) {
-//        
-//    }];
-//}
+-(void)setIsSelectOnly:(BOOL)isSelectOnly{
+    _isSelectOnly = isSelectOnly;
+    [self.calendar reloadData];
+}
+
+-(void)reloadCalender{
+    [self getCurrentDate];
+    [self getItems];
+    [self.calendar reloadData];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.
