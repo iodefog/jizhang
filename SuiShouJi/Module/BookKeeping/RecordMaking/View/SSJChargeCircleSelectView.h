@@ -20,4 +20,9 @@ typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType);
 
 @property(nonatomic, copy) chargeCircleSelectBlock chargeCircleSelectBlock;
 
+
+- (void)show;
+
+- (void)dismiss;
+
 @end

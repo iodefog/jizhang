@@ -203,11 +203,10 @@
                     [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
                     [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
                     _transferOutItem = newFundingItem;
-
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
-            [weakSelf.transferOutFundingTypeSelect removeFromSuperview];
+            [weakSelf.transferOutFundingTypeSelect dismiss];
         };
     }
     return _transferOutFundingTypeSelect;
@@ -293,13 +292,13 @@
 -(void)transferOutButtonClicked:(id)sender{
     [self.transferIntext resignFirstResponder];
     [self.transferOuttext resignFirstResponder];
-    [[UIApplication sharedApplication].keyWindow addSubview:self.transferOutFundingTypeSelect];
+    [self.transferOutFundingTypeSelect show];
 }
 
 -(void)transferInButtonClicked:(id)sender{
     [self.transferIntext resignFirstResponder];
     [self.transferOuttext resignFirstResponder];
-    [[UIApplication sharedApplication].keyWindow addSubview:self.transferInFundingTypeSelect];
+    [self.transferInFundingTypeSelect show];
 }
 
 

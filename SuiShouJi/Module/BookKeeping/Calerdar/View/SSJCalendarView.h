@@ -19,7 +19,7 @@
 @property (nonatomic,strong) NSString *selectDateStr;
 @property (nonatomic,strong)UICollectionView *calendar;
 @property (nonatomic,strong) NSMutableDictionary *data;
-
+@property(nonatomic) BOOL isSelectOnly;
 
 //选中日期的回调
 typedef void (^DateSelectedBlock)(long year , long month ,long day ,  NSString *selectDate);
@@ -28,4 +28,5 @@ typedef void (^DateSelectedBlock)(long year , long month ,long day ,  NSString *
 
 - (CGFloat)viewHeight;
 
+-(void)reloadCalender;
 @end

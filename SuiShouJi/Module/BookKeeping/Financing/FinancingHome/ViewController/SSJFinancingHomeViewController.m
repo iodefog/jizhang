@@ -173,7 +173,7 @@
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         if (![result isEqualToArray:weakSelf.items]) {
             weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationRight];
         }
         [weakSelf.tableView ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {

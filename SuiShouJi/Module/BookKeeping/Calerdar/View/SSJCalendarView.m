@@ -92,6 +92,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
     cell.item = [self.items objectAtIndex:indexPath.row];
+    cell.isSelectOnly = self.isSelectOnly;
     return cell;
 }
 
@@ -111,8 +112,10 @@
     SSJCalendarCollectionViewCell *cell = (SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     self.selectDateStr = cell.item.dateStr;
     if (self.DateSelectedBlock) {
-        self.DateSelectedBlock(_year,_month,[((SSJCalendarCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).dateLabel.text integerValue],cell.item.dateStr);
+        self.DateSelectedBlock(_year,_month,[cell.dateLabel.text integerValue],cell.item.dateStr);
     }
+    [self reloadCalender];
+
 //    if (cell.isSelected == NO) {
 //        for (int i = 0; i < [collectionView.visibleCells count]; i++) {
 //            ((SSJCalendarCollectionViewCell*)[collectionView.visibleCells objectAtIndex:i]).isSelected = NO;
@@ -295,16 +298,16 @@
     [self.calendar reloadData];
 }
 
-//-(void)reloadCalender{
-//    [self getCurrentDate];
-//    [self ssj_showLoadingIndicator];
-//    [SSJCalenderHelper queryDataInYear:_year month:_month success:^(NSDictionary *data) {
-//        self.data = [[NSMutableDictionary alloc]initWithDictionary:data];
-//
-//    } failure:^(NSError *error) {
-//        
-//    }];
-//}
+-(void)setIsSelectOnly:(BOOL)isSelectOnly{
+    _isSelectOnly = isSelectOnly;
+    [self.calendar reloadData];
+}
+
+-(void)reloadCalender{
+    [self getCurrentDate];
+    [self getItems];
+    [self.calendar reloadData];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

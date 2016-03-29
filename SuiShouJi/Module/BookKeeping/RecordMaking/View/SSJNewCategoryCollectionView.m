@@ -28,7 +28,7 @@
     if (self) {
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
-        self.pageContentInsets = UIEdgeInsetsMake(0, 4, 12, 4);
+        self.pageContentInsets = UIEdgeInsetsMake(6, 4, 12, 4);
         [self.collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
         [self addSubview:self.collectionView];
         [self addSubview:self.pageControl];

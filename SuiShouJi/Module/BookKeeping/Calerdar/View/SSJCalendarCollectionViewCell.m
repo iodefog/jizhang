@@ -78,6 +78,17 @@
     }
 }
 
+-(void)setIsSelectOnly:(BOOL)isSelectOnly{
+    if (isSelectOnly) {
+        self.starImage.hidden = YES;
+    }else{
+        if (_item.haveDataOrNot) {
+            self.starImage.hidden = NO;
+        }else{
+            self.starImage.hidden = YES;
+        }
+    }
+}
 
 
 @end
