@@ -7,7 +7,7 @@
 //
 
 #import "SSJBudgetDetailHeaderView.h"
-#import "SSJBudgetWaveScaleView.h"
+#import "SSJBudgetWaveWaterView.h"
 #import "SSJBudgetModel.h"
 
 @interface SSJBudgetDetailHeaderView ()
@@ -31,7 +31,7 @@
 @property (nonatomic, strong) UILabel *intervalLab;
 
 //  波浪比例视图
-@property (nonatomic, strong) SSJBudgetWaveScaleView *waveView;
+@property (nonatomic, strong) SSJBudgetWaveWaterView *waveView;
 
 //  已花费金额
 @property (nonatomic, strong) UILabel *payMoneyLab;
@@ -142,9 +142,8 @@
     self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
     [self.intervalLab sizeToFit];
     
-    self.waveView.title = model.payMoney <= model.budgetMoney ? @"剩余" : @"超支";
-    [self.waveView setScale:(model.payMoney / model.budgetMoney)];
-    [self.waveView setSubtitlle:[NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney]];
+    self.waveView.percent = (model.payMoney / model.budgetMoney);
+    self.waveView.money = [NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney];
     
     self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     [self.payMoneyLab sizeToFit];
@@ -212,9 +211,19 @@
     return _budgetMoneyLab;
 }
 
-- (SSJBudgetWaveScaleView *)waveView {
+- (SSJBudgetWaveWaterView *)waveView {
     if (!_waveView) {
-        _waveView = [[SSJBudgetWaveScaleView alloc] initWithFrame:CGRectMake(0, 0, 90, 90)];
+        _waveView = [[SSJBudgetWaveWaterView alloc] initWithRadius:90];
+        _waveView.waveAmplitude = 8;
+        _waveView.waveSpeed = 8;
+        _waveView.waveCycle = 1;
+        _waveView.waveGrowth = 2;
+        _waveView.waveOffset = 24;
+        _waveView.fullWaveAmplitude = 5;
+        _waveView.fullWaveSpeed = 5;
+        _waveView.fullWaveCycle = 4;
+        _waveView.outerBorderWidth = 5;
+        _waveView.showText = YES;
     }
     return _waveView;
 }

@@ -9,12 +9,6 @@
 #import "SSJWaveWaterView.h"
 #import "SSJWaveWaterPath.h"
 
-#warning test
-#import "SSJViewAddition.h"
-
-NSString *const SSJWaveWaterFirstColorKey = @"SSJWaveWaterFirstColorKey";
-NSString *const SSJWaveWaterSecondColorKey = @"SSJWaveWaterSecondColorKey";
-
 @interface SSJWaveWaterView ()
 
 // 定时器
@@ -32,8 +26,14 @@ NSString *const SSJWaveWaterSecondColorKey = @"SSJWaveWaterSecondColorKey";
     if (self = [super initWithFrame:CGRectMake(0, 0, radius, radius)]) {
         self.borderWidth = 1;
         self.borderColor = [UIColor orangeColor];
-        self.backgroundColor = [UIColor whiteColor];
+        
+        _topTitleFontSize = 12;
+        _bottomTitleFontSize = 18;
+        _topTitleColor = [UIColor whiteColor];
+        _bottomTitleColor = [UIColor whiteColor];
+        
         _wavePaths = [[NSMutableArray alloc] init];
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -51,8 +51,9 @@ NSString *const SSJWaveWaterSecondColorKey = @"SSJWaveWaterSecondColorKey";
     
     for (SSJWaveWaterPath *path in _wavePaths) {
         [path drawPath];
-//        [path drawWavePath];
     }
+    
+    [self drawText];
 }
 
 - (void)setItems:(NSArray *)items {
@@ -104,6 +105,33 @@ NSString *const SSJWaveWaterSecondColorKey = @"SSJWaveWaterSecondColorKey";
     [self setNeedsDisplay];
 }
 
+- (void)clipContext {
+    CGRect circleRect = CGRectInset(self.bounds, _borderWidth, _borderWidth);
+    UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:circleRect];
+    [_borderColor setStroke];
+    circlePath.lineWidth = _borderWidth;
+    [circlePath stroke];
+    [circlePath addClip];
+}
+
+- (void)drawText {
+    UIFont *topFont = [UIFont systemFontOfSize:_topTitleFontSize];
+    UIFont *bottomFont = [UIFont systemFontOfSize:_bottomTitleFontSize];
+    
+    CGSize topTitleSize = [_topTitle sizeWithAttributes:@{NSFontAttributeName:topFont}];
+    CGSize bottomTitleSize = [_bottomTitle sizeWithAttributes:@{NSFontAttributeName:bottomFont}];
+    
+    CGFloat top = (self.height - topTitleSize.height - bottomTitleSize.height - _titleGap) * 0.5;
+    
+    CGPoint topTitlePoint = CGPointMake((self.width - topTitleSize.width) * 0.5, top);
+    [_topTitle drawAtPoint:topTitlePoint withAttributes:@{NSFontAttributeName:topFont,
+                                                          NSForegroundColorAttributeName:_topTitleColor}];
+    
+    CGPoint bottomTitlePoint = CGPointMake((self.width - bottomTitleSize.width) * 0.5, topTitleSize.height + top + _titleGap);
+    [_bottomTitle drawAtPoint:bottomTitlePoint withAttributes:@{NSFontAttributeName:bottomFont,
+                                                                NSForegroundColorAttributeName:_bottomTitleColor}];
+}
+
 - (void)drawWave:(CADisplayLink *)displayLink {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (SSJWaveWaterPath *path in _wavePaths) {
@@ -113,15 +141,6 @@ NSString *const SSJWaveWaterSecondColorKey = @"SSJWaveWaterSecondColorKey";
             [self setNeedsDisplay];
         });
     });
-}
-
-- (void)clipContext {
-    CGRect circleRect = CGRectInset(self.bounds, _borderWidth, _borderWidth);
-    UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:circleRect];
-    [_borderColor setStroke];
-    circlePath.lineWidth = _borderWidth;
-    [circlePath stroke];
-    [circlePath addClip];
 }
 
 @end

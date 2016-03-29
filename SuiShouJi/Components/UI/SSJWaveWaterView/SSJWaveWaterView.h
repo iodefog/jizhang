@@ -22,6 +22,27 @@ NS_ASSUME_NONNULL_BEGIN
 // 边框宽度
 @property (nonatomic, strong) UIColor *borderColor;
 
+// 顶部标题
+@property (nonatomic, copy) NSString *topTitle;
+
+// 底部标题
+@property (nonatomic, copy) NSString *bottomTitle;
+
+// 顶部标题字体大小，default 12
+@property (nonatomic) CGFloat topTitleFontSize;
+
+// 底部标题字体大小，default 18
+@property (nonatomic) CGFloat bottomTitleFontSize;
+
+// 顶部标题字体大小，default white
+@property (nonatomic, strong) UIColor *topTitleColor;
+
+// 顶部标题字体大小，default white
+@property (nonatomic, strong) UIColor *bottomTitleColor;
+
+// 顶部标题与底部标题的间隙，default 0
+@property (nonatomic) CGFloat titleGap;
+
 - (instancetype)initWithRadius:(CGFloat)radius;
 
 - (void)startWave;

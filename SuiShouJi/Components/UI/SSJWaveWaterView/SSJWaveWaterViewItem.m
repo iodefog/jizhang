@@ -10,10 +10,6 @@
 
 @implementation SSJWaveWaterViewItem
 
-- (void)dealloc {
-    
-}
-
 + (instancetype)item {
     return [[self alloc] init];
 }

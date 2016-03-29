@@ -71,9 +71,7 @@
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
 		7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */; };
 		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
-		7DC517301CA93D3F00D23CF0 /* SSJFrameObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517271CA93D3F00D23CF0 /* SSJFrameObserver.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
-		7DC517321CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172B1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
 		7DC517371CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517361CA93D7100D23CF0 /* SSJBudgetWaveWaterView.m */; };
@@ -673,12 +671,8 @@
 		7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@2x.png"; sourceTree = "<group>"; };
 		7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZipZap.a; path = "ZipZap/build/Debug-iphoneos/libZipZap.a"; sourceTree = "<group>"; };
 		7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		7DC517261CA93D3F00D23CF0 /* SSJFrameObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFrameObserver.h; sourceTree = "<group>"; };
-		7DC517271CA93D3F00D23CF0 /* SSJFrameObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFrameObserver.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
-		7DC5172A1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterScaleView.h; sourceTree = "<group>"; };
-		7DC5172B1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterScaleView.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
 		7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterView.m; sourceTree = "<group>"; };
 		7DC5172E1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterViewItem.h; sourceTree = "<group>"; };
@@ -1683,12 +1677,8 @@
 		7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */ = {
 			isa = PBXGroup;
 			children = (
-				7DC517261CA93D3F00D23CF0 /* SSJFrameObserver.h */,
-				7DC517271CA93D3F00D23CF0 /* SSJFrameObserver.m */,
 				7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */,
 				7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */,
-				7DC5172A1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.h */,
-				7DC5172B1CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m */,
 				7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */,
 				7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */,
 				7DC5172E1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.h */,
@@ -3875,7 +3865,6 @@
 				7D893F351C91335600886995 /* SSJUserItem.m in Sources */,
 				7DEF54711C7BF47100A90153 /* SSJBudgetDatabaseHelper.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
-				7DC517301CA93D3F00D23CF0 /* SSJFrameObserver.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				7DEF54891C7D69F300A90153 /* SSJBudgetDetailNavigationTitleView.m in Sources */,
@@ -3926,7 +3915,6 @@
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,
 				BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */,
 				7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */,
-				7DC517321CA93D3F00D23CF0 /* SSJWaveWaterScaleView.m in Sources */,
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
 				BD28547A1C1EBCC20014C736 /* SSJBookKeepingHeader.m in Sources */,
