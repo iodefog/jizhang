@@ -77,7 +77,7 @@
     [self.budgetLab sizeToFit];
     
     self.waveView.percent = (item.payment / item.budget);
-    self.waveView.money = [NSString stringWithFormat:@"%.2f", item.budget - item.payment];
+    self.waveView.money = item.budget - item.payment;
 }
 
 - (UILabel *)typeLab {

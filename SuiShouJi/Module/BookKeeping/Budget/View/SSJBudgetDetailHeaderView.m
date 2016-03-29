@@ -143,7 +143,7 @@
     [self.intervalLab sizeToFit];
     
     self.waveView.percent = (model.payMoney / model.budgetMoney);
-    self.waveView.money = [NSString stringWithFormat:@"%.2f", model.budgetMoney - model.payMoney];
+    self.waveView.money = model.budgetMoney - model.payMoney;
     
     self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     [self.payMoneyLab sizeToFit];
