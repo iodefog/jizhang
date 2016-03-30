@@ -264,7 +264,15 @@ static id _instance;
     }else if (sender.tag == 11){
         inputString = @"";
     }else if (sender.tag == 16 && [sender.titleLabel.text isEqualToString: @"="]){
-
+        self.rightNum = [self.textField.text floatValue];
+        if (self.PlusOrMinusModel == YES) {
+            self.leftNum = self.leftNum + self.rightNum;
+        }else{
+            self.leftNum = self.leftNum - self.rightNum;
+        }
+        NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+        self.textField.text = [resultNum stringValue];
+        inputString = [resultNum stringValue];
     }else if (sender.tag <= 10 || sender.tag == 15){
         inputString = sender.titleLabel.text;
     }else if (sender.tag == 13){
@@ -347,6 +355,14 @@ static id _instance;
                     return;
                 }
             }
+        }else if (sender.tag <= 10 && (self.lastPressTag == 13 || self.lastPressTag == 14)){
+            if (selectedRange.length == 0) {
+                if (selectedRange.location >= 1) {
+                    changeRange = NSMakeRange(0, self.textField.text.length);
+                } else {
+                    return;
+                }
+            }
         }
         self.lastPressTag = sender.tag;
         shouldChangeText = [_textField.delegate textField:_textField shouldChangeCharactersInRange:changeRange replacementString:inputString];
@@ -384,12 +400,10 @@ static id _instance;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     SSJCustomKeyboard *customKeyboard = [SSJCustomKeyboard sharedInstance];
-    if (textField.inputView == customKeyboard) {
-        customKeyboard.leftNum = 0;
-        customKeyboard.rightNum = 0;
-        customKeyboard.lastPressTag = 0;
-        customKeyboard.plusOrMinusKeyHasPressed = NO;
-    }
+    customKeyboard.leftNum = 0;
+    customKeyboard.rightNum = 0;
+    customKeyboard.lastPressTag = 0;
+    customKeyboard.plusOrMinusKeyHasPressed = NO;
 }
 
 @end
