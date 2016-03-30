@@ -21,8 +21,8 @@
     if (self) {
         self.EditeModel = NO;
         self.categorySelected = NO;
-        [self.contentView addSubview:self.backView];
-        [self.backView addSubview:self.categoryImage];
+        //        self.backgroundColor = [UIColor redColor];
+        [self.contentView addSubview:self.categoryImage];
         [self.contentView addSubview:self.categoryName];
         [self addSubview:self.editButton];
         if (![self.item.categoryTitle isEqualToString:@"添加"]) {
@@ -34,16 +34,18 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.backView.centerX = self.width / 2;
-    self.backView.top = 3;
-    self.categoryImage.center = CGPointMake(self.backView.width / 2, self.backView.height / 2);
+    self.categoryImage.centerX = self.width / 2;
+    self.categoryImage.top = 3;
     self.categoryName.bottom = self.height - 2;
     self.categoryName.centerX = self.width / 2;
 }
 
 -(UIImageView*)categoryImage{
     if (!_categoryImage) {
-        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 34, 34)];
+        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
+        _categoryImage.layer.cornerRadius = 25;
+        _categoryImage.layer.masksToBounds = YES;
+        _categoryImage.contentMode = UIViewContentModeCenter;
     }
     return _categoryImage;
 }
@@ -54,7 +56,7 @@
         [_categoryName sizeToFit];
         _categoryName.font = [UIFont systemFontOfSize:14];
         _categoryName.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _categoryName.textAlignment = NSTextAlignmentCenter;
+        _categoryName.textAlignment = NSTextAlignmentCenter;        
     }
     return _categoryName;
 }
@@ -69,15 +71,6 @@
         [_editButton addTarget:self action:@selector(removeCategory:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _editButton;
-}
-
--(UIView *)backView{
-    if (!_backView) {
-        _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-        _backView.layer.cornerRadius = 25.f;
-        _backView.backgroundColor = [UIColor clearColor];
-    }
-    return _backView;
 }
 
 -(void)setItem:(SSJRecordMakingCategoryItem *)item{
@@ -117,19 +110,19 @@
             if (weakSelf.removeCategoryBlock) {
                 weakSelf.removeCategoryBlock();
             }
+            weakSelf.EditeModel = NO;
         });
     }];
 
 }
 
-
 -(void)setCategorySelected:(BOOL)categorySelected{
     _categorySelected = categorySelected;
     if (categorySelected == YES) {
-        self.backView.layer.borderWidth = 1;
-        self.backView.layer.borderColor = [UIColor ssj_colorWithHex:self.item.categoryColor].CGColor;
+        self.categoryImage.layer.borderWidth = 1;
+        self.categoryImage.layer.borderColor = [UIColor ssj_colorWithHex:self.item.categoryColor].CGColor;
     }else{
-        self.backView.layer.borderWidth = 0;
+        self.categoryImage.layer.borderWidth = 0;
     }
 }
 

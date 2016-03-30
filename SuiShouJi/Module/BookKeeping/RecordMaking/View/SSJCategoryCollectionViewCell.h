@@ -12,7 +12,6 @@
 @interface SSJCategoryCollectionViewCell : UICollectionViewCell
 @property (strong, nonatomic) UIImageView *categoryImage;
 @property (strong, nonatomic) UILabel *categoryName;
-@property(nonatomic, strong)  UIView *backView;
 
 //编辑模式
 @property (nonatomic) BOOL EditeModel;

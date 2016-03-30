@@ -68,9 +68,9 @@
     if ([cell.item.categoryID isEqualToString:_selectedItem.categoryID]) {
         cell.categoryImage.tintColor = [UIColor whiteColor];
         cell.categoryImage.image = [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.backView.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
+        cell.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
     }else{
-        cell.backView.backgroundColor = [UIColor clearColor];
+        cell.categoryImage.backgroundColor = [UIColor clearColor];
         [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
     
