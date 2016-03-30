@@ -348,10 +348,10 @@ static id _instance;
                 }
             }
         }
+        self.lastPressTag = sender.tag;
         shouldChangeText = [_textField.delegate textField:_textField shouldChangeCharactersInRange:changeRange replacementString:inputString];
     }
     if (shouldChangeText) {
-        self.lastPressTag = sender.tag;
         if (sender.tag == 12) {
             self.textField.text = @"";
         }else if (sender.tag == 16){
