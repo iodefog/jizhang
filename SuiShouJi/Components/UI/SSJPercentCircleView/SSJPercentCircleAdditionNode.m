@@ -77,7 +77,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     self.brokenLineLayer.path = path.CGPath;
     
     CABasicAnimation *lineAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    lineAnimation.duration = 0.2;
+    lineAnimation.duration = 0.1;
     lineAnimation.toValue = @(1);
     lineAnimation.delegate = self;
     lineAnimation.removedOnCompletion = NO;
