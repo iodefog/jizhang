@@ -276,6 +276,7 @@
 		7DF8DEE31C59C47200CC5DFA /* guide_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEE01C59C47200CC5DFA /* guide_3@2x.png */; };
 		9C0874F11CA5282A007A647E /* SSJCategoryListHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0874F01CA5282A007A647E /* SSJCategoryListHelper.m */; };
 		9C0874F41CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0874F31CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.m */; };
+		9C252BFA1CAB754100AE58D3 /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */; };
 		9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
@@ -330,7 +331,6 @@
 		BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433B81C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m */; };
 		BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433BB1C1AA3320051E7AB /* SSJReportFormsViewController.m */; };
 		BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */; };
-		BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */; };
 		BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */; };
 		BD0E43F71C21365100F9179D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -920,6 +920,8 @@
 		9C0874F01CA5282A007A647E /* SSJCategoryListHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryListHelper.m; sourceTree = "<group>"; };
 		9C0874F21CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomCollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		9C0874F31CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		9C252BF81CAB754100AE58D3 /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
+		9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		9C392DFC1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeHelper.h; sourceTree = "<group>"; };
 		9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeHelper.m; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
@@ -1023,8 +1025,6 @@
 		BD0433BB1C1AA3320051E7AB /* SSJReportFormsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsViewController.m; sourceTree = "<group>"; };
 		BD06AF641C44B98C0028B571 /* SSJFundingTransferViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferViewController.h; sourceTree = "<group>"; };
 		BD06AF651C44B98C0028B571 /* SSJFundingTransferViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferViewController.m; sourceTree = "<group>"; };
-		BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
-		BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
 		BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyBoardButton.m; sourceTree = "<group>"; };
 		BD0E43F61C21365100F9179D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -2673,8 +2673,8 @@
 		BD0E43E31C21009900F9179D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				BD0E43E51C2100BC00F9179D /* SSJCustomKeyboard.h */,
-				BD0E43E61C2100BC00F9179D /* SSJCustomKeyboard.m */,
+				9C252BF81CAB754100AE58D3 /* SSJCustomKeyboard.h */,
+				9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */,
 				BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */,
 				BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */,
 				BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */,
@@ -3803,7 +3803,6 @@
 				BD37D2EE1C56465F0050BDAA /* SSJUserInfoItem.m in Sources */,
 				BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
-				BD0E43E71C2100BC00F9179D /* SSJCustomKeyboard.m in Sources */,
 				BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
 				7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */,
@@ -3890,6 +3889,7 @@
 				BD0433231C1A78B40051E7AB /* SSJFontAddition.m in Sources */,
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,
 				BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */,
+				9C252BFA1CAB754100AE58D3 /* SSJCustomKeyboard.m in Sources */,
 				7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */,
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
@@ -4154,9 +4154,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -4192,9 +4192,9 @@
 					"$(PROJECT_DIR)/ZipZap/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_5.0",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "fcae74cd-30fe-4bbc-afff-dd7056de98bb";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
