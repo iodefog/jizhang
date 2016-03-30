@@ -50,4 +50,6 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField;
 
+- (void)textFieldDidEndEditing:(UITextField *)textField;
+
 @end
