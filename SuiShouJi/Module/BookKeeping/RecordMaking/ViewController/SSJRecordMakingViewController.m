@@ -162,6 +162,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.textInput resignFirstResponder];
+}
+
 -(void)viewDidLayoutSubviews{
     self.selectedCategoryView.leftTop = CGPointMake(0, 0);
     self.selectedCategoryView.size = CGSizeMake(self.view.width, 71);

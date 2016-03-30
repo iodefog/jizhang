@@ -58,6 +58,10 @@ static id _instance;
         self.decimalModel = NO;
         self.numButtonArray = [[NSMutableArray alloc]init];
         self.backgroundColor = [UIColor clearColor];
+        self.numKeyHasPressed = NO;
+        self.rightNum = 0;
+        self.leftNum = 0;
+        self.lastPressTag = 0;
         [self setNumKey];
         [self addSubview:self.DecimalButton];
         [self addSubview:self.ZeroButton];
@@ -120,7 +124,7 @@ static id _instance;
         _ZeroButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff"];
         _ZeroButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _ZeroButton.layer.borderWidth = 1.0f / 2;
-        _ZeroButton.tag = 0;
+        _ZeroButton.tag = 10;
     }
     return _ZeroButton;
 }
@@ -138,7 +142,7 @@ static id _instance;
         _BackspaceButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff"];
         _BackspaceButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _BackspaceButton.layer.borderWidth = 1.0f / 2;
-        _BackspaceButton.tag = 10;
+        _BackspaceButton.tag = 11;
     }
     return _BackspaceButton;
 }
@@ -155,7 +159,7 @@ static id _instance;
         _ClearButton.backgroundColor = [UIColor whiteColor];
         _ClearButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _ClearButton.layer.borderWidth = 1.0f / 2;
-        _ClearButton.tag = 11;
+        _ClearButton.tag = 12;
     }
     return _ClearButton;
 }
@@ -173,7 +177,7 @@ static id _instance;
         _PlusButton.backgroundColor = [UIColor whiteColor];
         _PlusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _PlusButton.layer.borderWidth = 1.0f / 2;
-        _PlusButton.tag = 12;
+        _PlusButton.tag = 13;
     }
     return _PlusButton;
 }
@@ -190,7 +194,7 @@ static id _instance;
         _MinusButton.backgroundColor = [UIColor whiteColor];
         _MinusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _MinusButton.layer.borderWidth = 1.0f / 2;
-        _MinusButton.tag = 13;
+        _MinusButton.tag = 14;
     }
     return _MinusButton;
 }
@@ -208,7 +212,7 @@ static id _instance;
         _DecimalButton.backgroundColor = [UIColor whiteColor];
         _DecimalButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _DecimalButton.layer.borderWidth = 1.0f / 2;
-        _DecimalButton.tag = 14;
+        _DecimalButton.tag = 15;
     }
     return _DecimalButton;
 }
@@ -226,49 +230,9 @@ static id _instance;
         _ComfirmButton.backgroundColor = [UIColor whiteColor];
         _ComfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
         _ComfirmButton.layer.borderWidth = 1.0f / 2;
-        _ComfirmButton.tag = 15;
+        _ComfirmButton.tag = 16;
     }
     return _ComfirmButton;
-}
-
--(void)NumKeyClicked:(UIButton*)button{
-    [self.textField insertText:button.titleLabel.text];
-}
-
--(void)BackspaceKeyClicked:(UIButton*)button{
-    [self.textField deleteBackward];
-}
-
--(void)ClearKeyClicked:(UIButton*)button{
-    self.textField.text = @"";
-}
-
--(void)DecimalKeyClicked:(UIButton*)button{
-    [self.textField insertText:@"."];
-}
-
--(void)MinusKeyClicked:(UIButton*)button{
-    self.PlusOrMinusModel = NO;
-    if (_numkeyHavePressed == NO) {
-        _caculationValue = [self.textField.text floatValue];
-    }else{
-        _caculationValue = _caculationValue - [self.textField.text floatValue];
-    }
-    [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    self.decimalModel = NO;
-    self.textField.text = @"0";
-}
-
--(void)PlusKeyClicked:(UIButton*)button{
-    self.PlusOrMinusModel = YES;
-    _caculationValue =_caculationValue + [self.textField.text floatValue];
-    self.textField.text = @"0";
-    [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-    self.decimalModel = NO;
-}
-
--(void)ComfirmKeyClicked:(UIButton*)button{
-    
 }
 
 /* 返回_textField的文本选择范围 */
@@ -286,14 +250,71 @@ static id _instance;
     if (self.textField==nil) {
         return;
     }
+    if (![self.textField.text isEqualToString: @""]) {
+        self.numKeyHasPressed = YES;
+    }
     BOOL shouldChangeText = YES;
     NSString *inputString;
-    if (sender.tag == 10 || sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
+    if (sender.tag == 12) {
         inputString = @"";
-    }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
+        self.leftNum = 0;
+        self.rightNum = 0;
+        self.plusOrMinusKeyHasPressed = NO;
+        self.lastPressTag = 12;
+    }else if (sender.tag == 11){
         inputString = @"";
-    }else if (sender.tag < 10 || sender.tag == 14){
+    }else if (sender.tag == 16 && [sender.titleLabel.text isEqualToString: @"="]){
+
+    }else if (sender.tag <= 10 || sender.tag == 15){
         inputString = sender.titleLabel.text;
+    }else if (sender.tag == 13){
+        if (self.lastPressTag != 13) {
+            if (self.plusOrMinusKeyHasPressed == NO) {
+                self.leftNum = [self.textField.text floatValue];
+            }else{
+                self.rightNum = [self.textField.text floatValue];
+            }
+        }
+        self.leftNum = self.leftNum + self.rightNum;
+        NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+        self.textField.text = [resultNum stringValue];
+        inputString = [resultNum stringValue];
+        self.rightNum = 0;
+        self.PlusOrMinusModel = YES;
+        self.plusOrMinusKeyHasPressed = YES;
+        [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+        self.lastPressTag = 13;
+    }else if (sender.tag == 14){
+        if (self.lastPressTag != 14) {
+            if (self.plusOrMinusKeyHasPressed == NO) {
+                self.leftNum = [self.textField.text floatValue];
+            }else{
+                self.rightNum = [self.textField.text floatValue];
+            }
+        }
+        self.leftNum = self.leftNum - self.rightNum;
+        NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+        self.textField.text = [resultNum stringValue];
+        inputString = [resultNum stringValue];
+        self.rightNum = 0;
+        self.PlusOrMinusModel = NO;
+        self.plusOrMinusKeyHasPressed = YES;
+        [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
+        self.lastPressTag = 14;
+    }else if ([sender.titleLabel.text isEqualToString:@"="]){
+        if (self.PlusOrMinusModel == YES) {
+            self.rightNum = [self.textField.text floatValue];
+            self.leftNum = self.leftNum + self.rightNum;
+            NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+            inputString = [resultNum stringValue];
+            self.rightNum = 0;
+        }else{
+            self.rightNum = [self.textField.text floatValue];
+            self.leftNum = self.leftNum - self.rightNum;
+            NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+            inputString = [resultNum stringValue];
+            self.rightNum = 0;
+        }
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
@@ -302,7 +323,7 @@ static id _instance;
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
         NSRange selectedRange = [self selectedRange];
         NSRange changeRange = selectedRange;
-        if (sender.tag == 11 || sender.tag == 12 || sender.tag == 13) {
+        if (sender.tag == 12 || sender.tag == 13 || sender.tag == 14) {
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(0, self.textField.text.length);
@@ -310,7 +331,7 @@ static id _instance;
                     return;
                 }
             }
-        }else if (sender.tag == 15 && [sender.titleLabel.text isEqualToString: @"="]){
+        }else if (sender.tag == 16 && [sender.titleLabel.text isEqualToString: @"="]){
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(0, self.textField.text.length);
@@ -318,7 +339,7 @@ static id _instance;
                     return;
                 }
             }
-        }else if (sender.tag == 10){
+        }else if (sender.tag == 11){
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(selectedRange.location - 1, 1);
@@ -330,39 +351,23 @@ static id _instance;
         shouldChangeText = [_textField.delegate textField:_textField shouldChangeCharactersInRange:changeRange replacementString:inputString];
     }
     if (shouldChangeText) {
-        if (sender.tag == 11) {
+        self.lastPressTag = sender.tag;
+        if (sender.tag == 12) {
             self.textField.text = @"";
-        }else if (sender.tag == 15){
-            if (self.PlusOrMinusModel == YES) {
-                _caculationValue = _caculationValue + [self.textField.text floatValue];
-                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-                _caculationValue = 0.0f;
-            }else{
-                _caculationValue = _caculationValue  - [self.textField.text floatValue];
-                self.textField.text = [NSString stringWithFormat:@"%.2f",_caculationValue];
-                _caculationValue = 0.0f;
-            }
+        }else if (sender.tag == 16){
+            self.textField.text = [[NSNumber numberWithFloat:self.left] stringValue];
             [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
-        }else if (sender.tag == 12){
-            self.PlusOrMinusModel = YES;
-            _caculationValue =_caculationValue + [self.textField.text floatValue];
-            self.textField.text = @"0";
-            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-            self.decimalModel = NO;
-            self.textField.text = @"";
-        }else if (sender.tag == 13){
-            self.PlusOrMinusModel = NO;
-            if (_numkeyHavePressed == NO) {
-                _caculationValue = [self.textField.text floatValue];
-            }else{
-                _caculationValue = _caculationValue - [self.textField.text floatValue];
-            }
-            [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
-            self.textField.text = @"";
-        }else if (sender.tag < 10 || sender.tag == 14){
+        }else if (sender.tag <= 10){
             [self.textField insertText:sender.titleLabel.text];
-        }else if (sender.tag == 10){
+            if (self.numKeyHasPressed == NO && sender.tag == 10) {
+                self.numKeyHasPressed = NO;
+            }else{
+                self.numKeyHasPressed = YES;
+            }
+        }else if (sender.tag == 11){
             [self.textField deleteBackward];
+        }else if (sender.tag == 15){
+            [self.textField insertText:sender.titleLabel.text];
         }
     }
 }
@@ -380,8 +385,12 @@ static id _instance;
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     SSJCustomKeyboard *customKeyboard = [SSJCustomKeyboard sharedInstance];
     if (textField.inputView == customKeyboard) {
-        customKeyboard.caculationValue = 0;
+        customKeyboard.leftNum = 0;
+        customKeyboard.rightNum = 0;
+        customKeyboard.lastPressTag = 0;
+        customKeyboard.plusOrMinusKeyHasPressed = NO;
     }
 }
+
 @end
 

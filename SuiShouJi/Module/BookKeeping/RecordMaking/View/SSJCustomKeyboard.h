@@ -24,7 +24,23 @@
 
 @property (nonatomic, weak) UITextField *textField;
 
-@property(nonatomic) float caculationValue;
+
+//右操作数
+@property (nonatomic) float rightNum;
+
+
+//左操作数
+@property (nonatomic) float leftNum;
+
+
+//是否点击过数字按钮
+@property (nonatomic) BOOL numKeyHasPressed;
+
+//加减键是否被按过
+@property (nonatomic) BOOL plusOrMinusKeyHasPressed;
+
+//上一次点击的按钮
+@property (nonatomic) NSInteger lastPressTag;
 
 @end
 
@@ -33,7 +49,5 @@
 @interface NSObject (SSJCustomKeyboard)
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField;
-
-- (void)textFieldDidEndEditing:(UITextField *)textField;
 
 @end
