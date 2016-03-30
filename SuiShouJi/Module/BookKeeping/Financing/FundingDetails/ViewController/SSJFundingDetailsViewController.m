@@ -55,6 +55,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
         weakSelf.datas = data;
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
+        
     }];
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
         
@@ -139,7 +140,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 -(void)getTotalIcomeAndExpence{
     __weak typeof(self) weakSelf = self;
     __block NSString *titleStr;
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
         NSString *userid = SSJUSERID();
         _totalIncome = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = 0 AND A.IFUNSID = '%@' AND A.OPERATORTYPE != 2 and A.cuserid = '%@' and A.CBILLDATE <= '%@'",weakSelf.item.fundingID,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
         _totalExpence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = 1 AND A.IFUNSID = '%@' AND A.OPERATORTYPE != 2 and A.cuserid = '%@' and A.CBILLDATE <= '%@'",weakSelf.item.fundingID,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
