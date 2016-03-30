@@ -79,7 +79,9 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJColorSelectCollectionViewCell *cell = (SSJColorSelectCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     _selectColor = cell.itemColor;
-    self.headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
+    }];
     [collectionView reloadData];
 }
 
