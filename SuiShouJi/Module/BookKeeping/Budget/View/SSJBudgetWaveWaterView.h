@@ -41,7 +41,7 @@
 @property (nonatomic) CGFloat outerBorderWidth;
 
 // 金额
-@property (nonatomic) NSString *money;
+@property (nonatomic) double money;
 
 // 百分比，最小为0，在0～1之间（不包括1），只显示两条波纹；等于1时，显示多条绿色波纹；大于1时，显示多条红色波纹
 @property (nonatomic) CGFloat percent;

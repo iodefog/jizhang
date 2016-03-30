@@ -86,6 +86,7 @@
         }
     }
     [self getCurrentDate];
+    
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor colorWithRed:85.0 / 255.0 green:72.0 / 255.0 blue:0 alpha:0.1] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -95,8 +96,9 @@
     UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     leftSpace.width = -10;
 //    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
-    self.navigationItem.leftBarButtonItems = @[leftSpace,leftBarButtonItem];
-    self.navigationItem.rightBarButtonItems = @[rightSpace,self.rightBarButton];
+    self.navigationItem.leftBarButtonItems = @[leftBarButtonItem];
+    self.navigationItem.rightBarButtonItems = @[rightSpace, self.rightBarButton];
+    
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];
@@ -226,7 +228,9 @@
 #pragma mark - Getter
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
-        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+//        buttonView.layer.borderColor = [UIColor redColor].CGColor;
+//        buttonView.layer.borderWidth = 1;
         buttonView.currentDay = _currentDay;
         [buttonView.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];

@@ -15,6 +15,8 @@
 
 @property (nonatomic, strong) SSJWaveWaterView *fullView;
 
+@property (nonatomic, strong) NSArray *growingItems;
+
 // 剩余0颜色
 @property (nonatomic, strong) NSArray *fullColors;
 
@@ -57,49 +59,73 @@
 }
 
 - (void)setWaveAmplitude:(CGFloat)waveAmplitude {
-    for (SSJWaveWaterViewItem *item in _growingView.items) {
-        item.waveAmplitude = waveAmplitude;
+    if (_waveAmplitude != waveAmplitude) {
+        _waveAmplitude = waveAmplitude;
+        for (SSJWaveWaterViewItem *item in _growingView.items) {
+            item.waveAmplitude = waveAmplitude;
+        }
     }
 }
 
 - (void)setWaveSpeed:(CGFloat)waveSpeed {
-    for (SSJWaveWaterViewItem *item in _growingView.items) {
-        item.waveSpeed = waveSpeed;
+    if (_waveSpeed != waveSpeed) {
+        _waveSpeed = waveSpeed;
+        for (SSJWaveWaterViewItem *item in _growingView.items) {
+            item.waveSpeed = waveSpeed;
+        }
     }
 }
 
 - (void)setWaveCycle:(CGFloat)waveCycle {
-    for (SSJWaveWaterViewItem *item in _growingView.items) {
-        item.waveCycle = waveCycle;
+    if (_waveCycle != waveCycle) {
+        _waveCycle = waveCycle;
+        for (SSJWaveWaterViewItem *item in _growingView.items) {
+            item.waveCycle = waveCycle;
+        }
     }
 }
 
 - (void)setWaveGrowth:(CGFloat)waveGrowth {
-    for (SSJWaveWaterViewItem *item in _growingView.items) {
-        item.waveGrowth = waveGrowth;
+    if (_waveGrowth != waveGrowth) {
+        _waveGrowth = waveGrowth;
+        for (SSJWaveWaterViewItem *item in _growingView.items) {
+            item.waveGrowth = waveGrowth;
+        }
     }
 }
 
 - (void)setWaveOffset:(CGFloat)waveOffset {
-    SSJWaveWaterViewItem *item = [_growingView.items lastObject];
-    item.waveOffset = waveOffset;
+    if (_waveOffset != waveOffset) {
+        _waveOffset = waveOffset;
+        SSJWaveWaterViewItem *item = [_growingView.items lastObject];
+        item.waveOffset = waveOffset;
+    }
 }
 
 - (void)setFullWaveAmplitude:(CGFloat)fullWaveAmplitude {
-    for (SSJWaveWaterViewItem *item in _fullView.items) {
-        item.waveAmplitude = fullWaveAmplitude;
+    if (_fullWaveAmplitude != fullWaveAmplitude) {
+        _fullWaveAmplitude = fullWaveAmplitude;
+        for (SSJWaveWaterViewItem *item in _fullView.items) {
+            item.waveAmplitude = fullWaveAmplitude;
+        }
     }
 }
 
 - (void)setFullWaveSpeed:(CGFloat)fullWaveSpeed {
-    for (SSJWaveWaterViewItem *item in _fullView.items) {
-        item.waveSpeed = fullWaveSpeed;
+    if (_fullWaveSpeed != fullWaveSpeed) {
+        _fullWaveSpeed = fullWaveSpeed;
+        for (SSJWaveWaterViewItem *item in _fullView.items) {
+            item.waveSpeed = fullWaveSpeed;
+        }
     }
 }
 
 - (void)setFullWaveCycle:(CGFloat)fullWaveCycle {
-    for (SSJWaveWaterViewItem *item in _fullView.items) {
-        item.waveCycle = fullWaveCycle;
+    if (_fullWaveCycle != fullWaveCycle) {
+        _fullWaveCycle = fullWaveCycle;
+        for (SSJWaveWaterViewItem *item in _fullView.items) {
+            item.waveCycle = fullWaveCycle;
+        }
     }
 }
 
@@ -115,20 +141,29 @@
     }
 }
 
-- (void)setMoney:(NSString *)money {
+- (void)setMoney:(double)money {
     _money = money;
     if (self.showText) {
-        _fullView.bottomTitle = _money;
-        _growingView.bottomTitle = _money;
+        _fullView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
+        _growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
     }
 }
 
 - (void)setPercent:(CGFloat)percent {
     _percent = percent;
-    if (percent < 1 && percent >= 0) {
-        self.growingView.hidden = percent == 0;
+    if (percent >= 0 && percent < 1) {
+        self.growingView.hidden = NO;
         self.fullView.hidden = YES;
-        [self.growingView startWave];
+        if (percent == 0) {
+            [self.growingView reset];
+        } else {
+            
+            if (!self.growingView.items) {
+                self.growingView.items = self.growingItems;
+            }
+            [self.growingView startWave];
+        }
+        
         [self.fullView stopWave];
         for (SSJWaveWaterViewItem *item in self.growingView.items) {
             item.wavePercent = percent;
@@ -136,7 +171,7 @@
         
         if (self.showText) {
             self.growingView.topTitle = @"剩余";
-            self.growingView.bottomTitle = _money;
+            self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
         }
         
     } else if (percent == 1) {
@@ -152,7 +187,7 @@
         
         if (self.showText) {
             self.fullView.topTitle = @"剩余";
-            self.fullView.bottomTitle = _money;
+            self.fullView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
         }
         
     } else if (percent > 1) {
@@ -168,7 +203,7 @@
         
         if (self.showText) {
             self.fullView.topTitle = @"超支";
-            self.fullView.bottomTitle = _money;
+            self.fullView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
         }
     }
 }
@@ -180,25 +215,9 @@
 
 - (SSJWaveWaterView *)growingView {
     if (!_growingView) {
-        SSJWaveWaterViewItem *lightItem = [SSJWaveWaterViewItem item];
-        lightItem.waveColor = RGBCOLOR(121, 248, 221);
-        lightItem.waveAmplitude = _waveAmplitude;
-        lightItem.waveSpeed = _waveSpeed;
-        lightItem.waveCycle = _waveCycle;
-        lightItem.waveGrowth = _waveGrowth;
-        
-        SSJWaveWaterViewItem *heavyItem = [SSJWaveWaterViewItem item];
-        heavyItem.waveColor = RGBCOLOR(38, 227, 198);
-        heavyItem.waveAmplitude = 5;
-        heavyItem.waveSpeed = 5;
-        heavyItem.waveCycle = _waveCycle;
-        heavyItem.waveGrowth = _waveGrowth;
-        heavyItem.waveOffset = _waveOffset;
-        
         _growingView = [[SSJWaveWaterView alloc] initWithRadius:40];
         _growingView.topTitleColor = [UIColor blackColor];
         _growingView.bottomTitleColor = [UIColor blackColor];
-        _growingView.items = @[lightItem,heavyItem];
         _growingView.titleGap = 2;
         _growingView.borderColor = RGBCOLOR(38, 227, 198);
     }
@@ -229,6 +248,28 @@
         _fullView.titleGap = 2;
     }
     return _fullView;
+}
+
+- (NSArray *)growingItems {
+    if (!_growingItems) {
+        SSJWaveWaterViewItem *lightItem = [SSJWaveWaterViewItem item];
+        lightItem.waveColor = RGBCOLOR(121, 248, 221);
+        lightItem.waveAmplitude = _waveAmplitude;
+        lightItem.waveSpeed = _waveSpeed;
+        lightItem.waveCycle = _waveCycle;
+        lightItem.waveGrowth = _waveGrowth;
+        
+        SSJWaveWaterViewItem *heavyItem = [SSJWaveWaterViewItem item];
+        heavyItem.waveColor = RGBCOLOR(38, 227, 198);
+        heavyItem.waveAmplitude = _waveAmplitude;
+        heavyItem.waveSpeed = _waveSpeed;
+        heavyItem.waveCycle = _waveCycle;
+        heavyItem.waveGrowth = _waveGrowth;
+        heavyItem.waveOffset = _waveOffset;
+        
+        _growingItems = [NSArray arrayWithObjects:lightItem, heavyItem, nil];
+    }
+    return _growingItems;
 }
 
 - (NSArray *)fullColors {
