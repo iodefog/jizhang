@@ -205,6 +205,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         __weak typeof(self) weakSelf = self;
         _categoryListView.removeFromCategoryListBlock = ^(){
             [weakSelf getCategoryList];
+            [weakSelf getDefualtColorAndDefualtId];
         };
         _categoryListView.ItemClickedBlock = ^(SSJRecordMakingCategoryItem *item){
             if (![item.categoryTitle isEqualToString:@"添加"]) {
@@ -784,6 +785,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 weakSelf.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }];
             weakSelf.categoryListView.selectedId = _defualtID;
+            weakSelf.categoryID = _defualtID;
             [weakSelf.categoryListView reloadData];
         });
     }];

@@ -15,6 +15,7 @@
 @interface SSJNewCategoryCollectionView()
 @property(nonatomic, strong) SSJPageControl *pageControl;
 @property (nonatomic,strong) SSJCustomCollectionViewFlowLayout *layout;
+@property(nonatomic, strong) UITapGestureRecognizer *singerTapGesture;
 @end
 
 @implementation SSJNewCategoryCollectionView{
@@ -64,8 +65,10 @@
     }
     __weak typeof(self) weakSelf = self;
     cell.longPressBlock = ^(){
-        self.EditeModel = !self.EditeModel;
+        self.EditeModel = YES;
         [self.collectionView reloadData];
+        self.singerTapGesture.enabled = YES;
+        self.selectedId = 0;
     };
     cell.removeCategoryBlock = ^(){
         self.EditeModel = NO;
@@ -108,6 +111,7 @@
         _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.backgroundColor = nil;
         _collectionView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleBottomMargin;
+        [_collectionView addGestureRecognizer:self.singerTapGesture];
     }
     return _collectionView;
 }
@@ -154,6 +158,15 @@
                                                                   pageContentInsets:_pageContentInsets];
     }
     return _layout;
+}
+
+-(UITapGestureRecognizer *)singerTapGesture{
+    if (!_singerTapGesture) {
+        _singerTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singerForCollectionView:)];
+        _singerTapGesture.numberOfTapsRequired = 1;
+        _singerTapGesture.enabled = NO;
+    }
+    return _singerTapGesture;
 }
 
 -(void)setColumnCount:(NSUInteger)columnCount
@@ -203,6 +216,12 @@
 {
     [self.collectionView reloadData];
     [self checkIfIndexChanged:self.collectionView];
+}
+
+-(void)singerForCollectionView:(id)sender{
+    self.EditeModel = NO;
+    [self.collectionView reloadData];
+    self.singerTapGesture.enabled = NO;
 }
 
 /*
