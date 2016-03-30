@@ -107,11 +107,58 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 }
 
 + (void)queryDataWithFundTypeID:(NSString *)ID
-                         success:(void (^)(NSMutableDictionary *data))success
+                         success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
                          failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *sql = [NSString stringWithFormat:@"select a.sub(cbilldate,0,7) as c , a.IMONEY , a.ICHARGEID , a.cwritedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by a.cbilldate desc , a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
-        FMResultSet *result = [db executeQuery:sql];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.IMONEY , a.cbilldate , a.ICHARGEID , a.cwritedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by cmonth desc , a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *resultSet = [db executeQuery:sql];
+        if (!resultSet) {
+            if (failure) {
+                failure([db lastError]);
+            }
+        }
+        NSMutableArray *result = [NSMutableArray array];
+        NSString *lastDate = @"";
+        while ([resultSet next]) {
+            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.typeName = [resultSet stringForColumn:@"CNAME"];
+            item.incomeOrExpence = [resultSet intForColumn:@"ITYPE"];
+            item.money = [resultSet stringForColumn:@"IMONEY"];
+            item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
+            item.ID = [resultSet stringForColumn:@"ICHARGEID"];
+            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
+                item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
+                item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+            }
+            NSString *month = [resultSet stringForColumn:@"cmonth"];
+            if ([month isEqualToString:lastDate]) {
+                SSJFundingDetailListItem *listItem = [result lastObject];
+                if (item.incomeOrExpence) {
+                    listItem.expenture = listItem.expenture - [item.money doubleValue];
+                }else{
+                    listItem.income = listItem.income + [item.money doubleValue]; 
+                }
+                [listItem.chargeArray addObject:item];
+            }else{
+                SSJFundingDetailListItem *listItem = [[SSJFundingDetailListItem alloc]init];
+                if (item.incomeOrExpence) {
+                    listItem.expenture = - [item.money doubleValue];
+                }else{
+                    listItem.income = [item.money doubleValue];
+                }
+                listItem.date = month;
+                NSMutableArray *tempArray = [NSMutableArray array];
+                [tempArray addObject:item];
+                listItem.chargeArray = [NSMutableArray arrayWithArray:tempArray];
+                lastDate = month;
+                [result addObject:listItem];
+            }
+        }
+        if (success) {
+            success(result);
+        }
     }];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJFundingDetailListItem.h"
 
 //  对应日期的key
 extern NSString *const SSJFundingDetailDateKey;
@@ -31,5 +32,9 @@ extern NSString *const SSJFundingDetailSumKey;
 + (void)queryDataWithFundTypeID:(NSString *)ID
                           month:(NSInteger)month
                         success:(void (^)(NSArray <NSDictionary *>*data))success
+                        failure:(void (^)(NSError *error))failure;
+
++ (void)queryDataWithFundTypeID:(NSString *)ID
+                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
                         failure:(void (^)(NSError *error))failure;
 @end

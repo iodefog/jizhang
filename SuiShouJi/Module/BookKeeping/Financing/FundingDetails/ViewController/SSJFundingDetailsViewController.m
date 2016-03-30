@@ -56,6 +56,11 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
     }];
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
+        
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 

@@ -7,7 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJFundingDetailListItem : NSObject
+
+//年和月
+@property(nonatomic, strong) NSString *date;
+
+//当月支出
+@property (nonatomic) double income;
+
+//当月收入
+@property(nonatomic) double expenture;
+
+//当月流水
+@property(nonatomic, strong) NSMutableArray <SSJBillingChargeCellItem *> *chargeArray;
 
 @end
