@@ -22,4 +22,9 @@
 typedef void (^removeCategoryBlock)();
 
 @property(nonatomic,copy) removeCategoryBlock removeCategoryBlock;
+
+//删除记账类型回调
+typedef void (^longPressBlock)();
+
+@property(nonatomic,copy) longPressBlock longPressBlock;
 @end

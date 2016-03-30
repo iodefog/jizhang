@@ -29,6 +29,7 @@
         _screenHeight = [UIScreen mainScreen].bounds.size.height;
         _screenWidth = [UIScreen mainScreen].bounds.size.width;
         self.pageContentInsets = UIEdgeInsetsMake(6, 4, 12, 4);
+        self.EditeModel = NO;
         [self.collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
         [self addSubview:self.collectionView];
         [self addSubview:self.pageControl];
@@ -55,13 +56,19 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
     cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
+    cell.EditeModel = self.EditeModel;
     if ([cell.item.categoryID isEqualToString:self.selectedId]) {
         cell.categorySelected = YES;
     }else{
         cell.categorySelected = NO;
     }
     __weak typeof(self) weakSelf = self;
+    cell.longPressBlock = ^(){
+        self.EditeModel = !self.EditeModel;
+        [self.collectionView reloadData];
+    };
     cell.removeCategoryBlock = ^(){
+        self.EditeModel = NO;
         if (weakSelf.removeFromCategoryListBlock) {
             weakSelf.removeFromCategoryListBlock();
         }

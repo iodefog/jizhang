@@ -88,7 +88,9 @@
 }
 
 -(void)longPressToDo:(UILongPressGestureRecognizer *)gesture{
-    self.EditeModel = YES;
+    if (self.longPressBlock) {
+        self.longPressBlock();
+    }
 }
 
 -(void)setEditeModel:(BOOL)EditeModel{
