@@ -277,6 +277,7 @@
 		9C0874F11CA5282A007A647E /* SSJCategoryListHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0874F01CA5282A007A647E /* SSJCategoryListHelper.m */; };
 		9C0874F41CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0874F31CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.m */; };
 		9C252BFA1CAB754100AE58D3 /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */; };
+		9C252BFD1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C252BFC1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m */; };
 		9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
@@ -922,6 +923,8 @@
 		9C0874F31CA56A55007A647E /* SSJCustomCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		9C252BF81CAB754100AE58D3 /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
 		9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
+		9C252BFB1CABDCDC00AE58D3 /* SSJFundingDetailListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailListItem.h; sourceTree = "<group>"; };
+		9C252BFC1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailListItem.m; sourceTree = "<group>"; };
 		9C392DFC1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeHelper.h; sourceTree = "<group>"; };
 		9C392DFD1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeHelper.m; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
@@ -3111,6 +3114,8 @@
 			children = (
 				BD7BC8461C3A63A5001DE5D8 /* SSJFundingDetailItem.h */,
 				BD7BC8471C3A63A5001DE5D8 /* SSJFundingDetailItem.m */,
+				9C252BFB1CABDCDC00AE58D3 /* SSJFundingDetailListItem.h */,
+				9C252BFC1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3952,6 +3957,7 @@
 				BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				7DE69C3D1C8EC401001D31C1 /* SCYMotionEncryptionView.m in Sources */,
 				BD70DF5F1C4751EA000E6CC9 /* SSJGuideLastContentView.m in Sources */,
+				9C252BFD1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m in Sources */,
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */,
 				7D2B242D1C439854009A74A8 /* SSJModifyFundingViewController.m in Sources */,

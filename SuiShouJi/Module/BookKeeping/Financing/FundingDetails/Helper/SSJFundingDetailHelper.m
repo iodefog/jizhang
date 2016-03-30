@@ -21,7 +21,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 + (void)queryDataWithFundTypeID:(NSString *)ID
                           month:(NSInteger)month
                         success:(void (^)(NSArray <NSDictionary *>*data))success
-                        failure:(void (^)(NSError *error))failure {
+                        failure:(void (^)(NSError *error))failure{
     
     if (month > 12) {
         SSJPRINT(@"class:%@\n method:%@\n message:(year == 0 || month > 12)",NSStringFromClass([self class]), NSStringFromSelector(_cmd));
@@ -105,6 +105,16 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         });
     }];
 }
+
++ (void)queryDataWithFundTypeID:(NSString *)ID
+                         success:(void (^)(NSMutableDictionary *data))success
+                         failure:(void (^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *sql = [NSString stringWithFormat:@"select a.sub(cbilldate,0,7) as c , a.IMONEY , a.ICHARGEID , a.cwritedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by a.cbilldate desc , a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *result = [db executeQuery:sql];
+    }];
+}
+
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
     switch (weekday) {
