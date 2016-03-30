@@ -84,7 +84,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self reloadSelectedStatusexceptIndexPath:indexPath];
+    if (indexPath.row != [self.tableView numberOfRowsInSection:0]) {
+        [self reloadSelectedStatusexceptIndexPath:indexPath];
+    }
     if (_fundingTypeSelectBlock) {
         self.fundingTypeSelectBlock(((SSJFundingTypeTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).item);
     }

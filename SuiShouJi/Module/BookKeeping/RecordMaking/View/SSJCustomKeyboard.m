@@ -323,6 +323,7 @@ static id _instance;
             inputString = [resultNum stringValue];
             self.rightNum = 0;
         }
+        [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
@@ -400,10 +401,12 @@ static id _instance;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     SSJCustomKeyboard *customKeyboard = [SSJCustomKeyboard sharedInstance];
-    customKeyboard.leftNum = 0;
-    customKeyboard.rightNum = 0;
-    customKeyboard.lastPressTag = 0;
-    customKeyboard.plusOrMinusKeyHasPressed = NO;
+    if (textField.inputView == customKeyboard) {
+        customKeyboard.leftNum = 0;
+        customKeyboard.rightNum = 0;
+        customKeyboard.lastPressTag = 0;
+        customKeyboard.plusOrMinusKeyHasPressed = NO;
+    }
 }
 
 @end

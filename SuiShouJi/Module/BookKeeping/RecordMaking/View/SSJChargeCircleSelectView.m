@@ -73,7 +73,7 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 350);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, self.pickerView.height + 50);
 }
 
 -(UIPickerView *)pickerView{

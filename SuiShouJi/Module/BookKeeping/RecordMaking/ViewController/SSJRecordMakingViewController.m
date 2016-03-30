@@ -153,7 +153,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.view addSubview:self.inputTopView];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.categoryListView];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -453,9 +452,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 #pragma mark - UITextFieldDelegate
--(void)textFieldDidChange:(id)sender{
-//    [self setupTextFiledNum:self.textInput num:2];
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    text = [text ssj_reserveDecimalDigits:2];
+    self.textInput.text = [NSString stringWithFormat:@"%@", text];
+    return NO;
 }
+
 
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -851,38 +854,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.categoryListView reloadData];
 }
 
-
-/**
- *   限制输入框小数点(输入框只改变时候调用valueChange)
- *
- *  @param TF  输入框
- *  @param num 小数点后限制位数
- */
--(void)setupTextFiledNum:(UITextField *)TF num:(int)num
-{
-    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
-    
-    if ([TF.text isEqualToString:@"0."] || [TF.text isEqualToString:@"."]) {
-        TF.text = @"0.";
-    }else if (TF.text.length == 2) {
-        if ([TF.text floatValue] == 0) {
-            TF.text = @"0";
-        }else if(arr.count < 2){
-            TF.text = [NSString stringWithFormat:@"%d",[TF.text intValue]];
-        }
-    }
-    
-    if (arr.count > 2) {
-        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
-    }
-    
-    if (arr.count == 2) {
-        NSString * lastStr = arr.lastObject;
-        if (lastStr.length > num) {
-            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
-        }
-    }
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
