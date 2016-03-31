@@ -36,14 +36,14 @@
     [super layoutSubviews];
     self.categoryImage.centerX = self.width / 2;
     self.categoryImage.top = 3;
-    self.categoryName.bottom = self.height - 2;
+    self.categoryName.top = self.categoryImage.bottom + 13;
     self.categoryName.centerX = self.width / 2;
 }
 
 -(UIImageView*)categoryImage{
     if (!_categoryImage) {
-        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 50, 50)];
-        _categoryImage.layer.cornerRadius = 25;
+        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 58, 58)];
+        _categoryImage.layer.cornerRadius = 29;
         _categoryImage.layer.masksToBounds = YES;
         _categoryImage.contentMode = UIViewContentModeCenter;
     }

@@ -178,7 +178,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.additionalView.bottom = self.view.height;
     self.categoryListView.top = self.selectedCategoryView.bottom + 5;
     self.inputTopView.bottom = self.additionalView.top;
-    self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 260 - self.selectedCategoryView.bottom);
+    self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 240 - self.selectedCategoryView.bottom);
+    
 }
 
 #pragma mark - Getter

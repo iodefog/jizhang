@@ -21,7 +21,7 @@
 @property(nonatomic) double expenture;
 
 //当月流水
-@property(nonatomic, strong) NSMutableArray <SSJBillingChargeCellItem *> *chargeArray;
+@property(nonatomic, strong) NSMutableArray *chargeArray;
 
 //此行是否展开
 @property(nonatomic) BOOL isExpand;
