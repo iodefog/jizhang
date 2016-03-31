@@ -10,16 +10,23 @@
 #import "SSJFundingDetailHeader.h"
 #import "SSJFundingDetailHelper.h"
 #import "SSJFundingDetailCell.h"
-#import "SSJFundingDetailDateHeader.h"
+#import "SSJFundingDetailListHeaderView.h"
 #import "SSJReportFormsUtil.h"
 #import "SSJModifyFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJFundingDetailListItem.h"
+#import "SSJBillingChargeCellItem.h"
+#import "SSJFundingDetailListFirstLineCell.h"
+#import "SSJFundingDailySumCell.h"
+#import "SSJCalenderDetailViewController.h"
 
 #import "FMDB.h"
 
 static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
-static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID";
+static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
+static NSString *const kFundingListDailySumCellID = @"kFundingListDailySumCellID";
+static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
+
 
 @interface SSJFundingDetailsViewController ()
 @property (nonatomic,strong) SSJFundingDetailHeader *header;
@@ -49,21 +56,19 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     self.tableView.rowHeight = 55;
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
-    [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:kFundingDetailHeaderViewID];
+    [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
+    [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
+    [self.tableView registerClass:[SSJFundingDetailListHeaderView class] forHeaderFooterViewReuseIdentifier:kFundingListHeaderViewID];
     self.tableView.tableHeaderView = self.header;
     [self getTotalIcomeAndExpence];
     __weak typeof(self) weakSelf = self;
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID month:0 success:^(NSArray<NSDictionary *> *data) {
-        weakSelf.datas = data;
-        [weakSelf.tableView reloadData];
-    } failure:^(NSError *error) {
-        
-    }];
-#warning test
+    [self.view ssj_showLoadingIndicator];
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
         weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+        [weakSelf.tableView reloadData];
+        [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
-        
+        [weakSelf.view ssj_hideLoadingIndicator];
     }];
 }
 
@@ -77,46 +82,83 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     _header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
     [self getTotalIcomeAndExpence];
     __weak typeof(self) weakSelf = self;
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID month:0 success:^(NSArray<NSDictionary *> *data) {
-        self.datas = data;
+    [self.view ssj_showLoadingIndicator];
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
+        weakSelf.listItems = [NSMutableArray arrayWithArray:data];
         [weakSelf.tableView reloadData];
+        [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
+        [weakSelf.view ssj_hideLoadingIndicator];
     }];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.datas count];
+    return [self.listItems count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
-    NSArray *datas = sectionInfo[SSJFundingDetailRecordKey];
-    return [datas count];
+    if ([self.listItems objectAtIndex:section].isExpand) {
+        return [[self.listItems objectAtIndex:section].chargeArray count] + 1;
+    }else{
+        return 0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
-    NSArray *datas = sectionInfo[SSJFundingDetailRecordKey];
-    [cell setCellItem:[datas ssj_safeObjectAtIndex:indexPath.row]];
-    return cell;
+    SSJBaseItem *item;
+    if (indexPath.row >= 1) {
+        item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+    }
+    if (indexPath.row == 0) {
+        SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListFirstLineCellID forIndexPath:indexPath];
+        cell.item = [self.listItems objectAtIndex:indexPath.section];
+        return cell;
+    }else if ([item isKindOfClass:[SSJFundingListDayItem class]]){
+        SSJFundingDailySumCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListDailySumCellID forIndexPath:indexPath];
+        cell.item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        return cell;
+    }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
+        SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
+        [cell setCellItem:[[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1]];
+        return cell;
+    }
+    return [UITableViewCell new];
 }
 
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
-    SSJFundingDetailDateHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingDetailHeaderViewID];
-    headerView.dateLabel.text = [NSString stringWithFormat:@"%@",sectionInfo[SSJFundingDetailDateKey]];
-    [headerView.dateLabel sizeToFit];
-    if ([sectionInfo[SSJFundingDetailSumKey] doubleValue] > 0) {
-        headerView.balanceLabel.text = [NSString stringWithFormat:@"+%.2f",[sectionInfo[SSJFundingDetailSumKey] doubleValue]];
-    }else{
-        headerView.balanceLabel.text = [NSString stringWithFormat:@"%.2f",[sectionInfo[SSJFundingDetailSumKey] doubleValue]];
-    }
-    [headerView.balanceLabel sizeToFit];
+    SSJFundingDetailListHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingListHeaderViewID];
+    headerView.item = [self.listItems objectAtIndex:section];
+    __weak typeof(self) weakSelf = self;
+    headerView.SectionHeaderClickedBlock = ^(){
+        [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
+        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+    };
     return headerView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row > 0) {
+        SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
+            return 60;
+        }else{
+            return 30;
+        }
+    }
+    return 35;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row > 0) {
+        SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
+            SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
+            calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+            [self.navigationController pushViewController:calenderDetailVC animated:YES];
+        }
+    }
 }
 
 #pragma mark - Getter
@@ -131,6 +173,11 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
     return _header;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 60;
+}
+
+#pragma mark - Getter
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"edit"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
@@ -168,10 +215,13 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 
 -(void)reloadDataAfterSync{
     __weak typeof(self) weakSelf = self;
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID month:0 success:^(NSArray<NSDictionary *> *data) {
-        weakSelf.datas = data;
+    [self.view ssj_showLoadingIndicator];
+    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
+        weakSelf.listItems = [NSMutableArray arrayWithArray:data];
         [weakSelf.tableView reloadData];
+        [weakSelf.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
+        [weakSelf.view ssj_hideLoadingIndicator];
     }];
     [self getTotalIcomeAndExpence];
 }

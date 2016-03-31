@@ -148,8 +148,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }else{
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
                     dayItem.date = item.billDate;
-                    NSString *incomeSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 0",ID];
-                    NSString *expenceSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 1",ID];
+                    NSString *incomeSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 0 and a.cbilldate = '%@'",ID,item.billDate];
+                    NSString *expenceSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 1 and a.cbilldate = '%@'",ID,item.billDate];
                     dayItem.income = [db doubleForQuery:incomeSql];
                     dayItem.expenture = [db doubleForQuery:expenceSql];
                     lastDetailDate = item.billDate;
@@ -171,8 +171,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }else{
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc]init];
                     dayItem.date = item.billDate;
-                    NSString *incomeSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 0",ID];
-                    NSString *expenceSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 1",ID];
+                    NSString *incomeSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 0 and a.cbilldate = '%@'",ID,item.billDate];
+                    NSString *expenceSql = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a , bk_bill_type as b where ifunsid = '%@' and a.ibillid = b.id and b.itype = 1 and a.cbilldate = '%@'",ID,item.billDate];
                     dayItem.income = [db doubleForQuery:incomeSql];
                     dayItem.expenture = [db doubleForQuery:expenceSql];
                     lastDetailDate = item.billDate;

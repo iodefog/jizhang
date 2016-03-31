@@ -17,6 +17,10 @@
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+        [self ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [self ssj_setBorderStyle:SSJBorderStyleBottom];
+        [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        self.contentView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.moneyLabel];
         [self.contentView addSubview:self.btn];
@@ -26,17 +30,18 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.dateLabel.left = 20;
+    self.dateLabel.left = 10;
     self.dateLabel.centerY = self.contentView.height / 2;
     self.btn.frame = self.contentView.frame;
-    self.moneyLabel.right = self.contentView.width - 20;
+    self.moneyLabel.right = self.contentView.width - 10;
     self.moneyLabel.centerY = self.contentView.height / 2;
+    [self ssj_relayoutBorder];
 }
 
 - (UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"a9a9a9"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _dateLabel.font = [UIFont systemFontOfSize:15];
     }
     return _dateLabel;
@@ -53,8 +58,8 @@
 - (UILabel *)moneyLabel{
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
-        _moneyLabel.textColor = [UIColor ssj_colorWithHex:@"a9a9a9"];
-        _moneyLabel.font = [UIFont systemFontOfSize:15];
+        _moneyLabel.font = [UIFont systemFontOfSize:18];
+        _moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
     }
     return _moneyLabel;
 }
@@ -72,7 +77,14 @@
     }
     self.dateLabel.text = dateStr;
     [self.dateLabel sizeToFit];
-    self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",_item.income - _item.expenture];
+    if (_item.income - _item.expenture > 0) {
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
+        self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",_item.income - _item.expenture];
+    }else if (_item.income - _item.expenture < 0){
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
+        self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",_item.income - _item.expenture];
+    }
+    [self.moneyLabel sizeToFit];
 }
 
 - (void)sectionHeaderClicked:(id)sender{

@@ -13,7 +13,7 @@
 
 @property(nonatomic, strong) SSJFundingDetailListItem *item;
 
-//点击记录按钮的回调
+//点击按钮的回调
 typedef void (^SectionHeaderClickedBlock)();
 
 @property (nonatomic, copy) SectionHeaderClickedBlock SectionHeaderClickedBlock;
