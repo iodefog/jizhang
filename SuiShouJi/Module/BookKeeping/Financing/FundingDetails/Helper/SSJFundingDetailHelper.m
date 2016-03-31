@@ -184,9 +184,13 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 [result addObject:listItem];
             }
         }
-        if (success) {
-            success(result);
-        }
+        
+        SSJDispatchMainAsync(^{
+            if (success) {
+                success(result);
+            }
+        });
+        
     }];
 }
 

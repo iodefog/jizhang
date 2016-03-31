@@ -60,16 +60,6 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
     [self.tableView registerClass:[SSJFundingDetailListHeaderView class] forHeaderFooterViewReuseIdentifier:kFundingListHeaderViewID];
     self.tableView.tableHeaderView = self.header;
-    [self getTotalIcomeAndExpence];
-    __weak typeof(self) weakSelf = self;
-    [self.view ssj_showLoadingIndicator];
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
-        weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-        [weakSelf.tableView reloadData];
-        [weakSelf.view ssj_hideLoadingIndicator];
-    } failure:^(NSError *error) {
-        [weakSelf.view ssj_hideLoadingIndicator];
-    }];
 }
 
 
@@ -80,6 +70,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     _header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+    
     [self getTotalIcomeAndExpence];
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
@@ -133,7 +124,9 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     __weak typeof(self) weakSelf = self;
     headerView.SectionHeaderClickedBlock = ^(){
         [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
+        [weakSelf.tableView beginUpdates];
         [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+        [weakSelf.tableView endUpdates];
     };
     return headerView;
 }
