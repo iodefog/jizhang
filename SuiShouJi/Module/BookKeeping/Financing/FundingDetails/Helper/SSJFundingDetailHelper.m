@@ -149,6 +149,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     listItem.income = [item.money doubleValue];
                 }
                 listItem.date = month;
+                listItem.isExpand = NO;
                 NSMutableArray *tempArray = [NSMutableArray array];
                 [tempArray addObject:item];
                 listItem.chargeArray = [NSMutableArray arrayWithArray:tempArray];

@@ -271,8 +271,9 @@ static id _instance;
             self.leftNum = self.leftNum - self.rightNum;
         }
         NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
-        self.textField.text = [resultNum stringValue];
+        _lastPressTag = 16;
         inputString = [resultNum stringValue];
+        [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
     }else if (sender.tag <= 10 || sender.tag == 15){
         inputString = sender.titleLabel.text;
     }else if (sender.tag == 13){
@@ -309,23 +310,8 @@ static id _instance;
         self.plusOrMinusKeyHasPressed = YES;
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
         self.lastPressTag = 14;
-    }else if ([sender.titleLabel.text isEqualToString:@"="]){
-        if (self.PlusOrMinusModel == YES) {
-            self.rightNum = [self.textField.text floatValue];
-            self.leftNum = self.leftNum + self.rightNum;
-            NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
-            inputString = [resultNum stringValue];
-            self.rightNum = 0;
-        }else{
-            self.rightNum = [self.textField.text floatValue];
-            self.leftNum = self.leftNum - self.rightNum;
-            NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
-            inputString = [resultNum stringValue];
-            self.rightNum = 0;
-        }
-        [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
     }
-    if ([sender.titleLabel.text isEqualToString:@"OK"]) {
+    if ([sender.titleLabel.text isEqualToString:@"OK"] && _lastPressTag != 16) {
         [self.textField resignFirstResponder];
         return;
     }
@@ -340,7 +326,7 @@ static id _instance;
                     return;
                 }
             }
-        }else if (sender.tag == 16 && [sender.titleLabel.text isEqualToString: @"="]){
+        }else if (sender == self.ComfirmButton){
             if (selectedRange.length == 0) {
                 if (selectedRange.location >= 1) {
                     changeRange = NSMakeRange(0, self.textField.text.length);
@@ -371,9 +357,6 @@ static id _instance;
     if (shouldChangeText) {
         if (sender.tag == 12) {
             self.textField.text = @"";
-        }else if (sender.tag == 16){
-            self.textField.text = [[NSNumber numberWithFloat:self.left] stringValue];
-            [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
         }else if (sender.tag <= 10){
             [self.textField insertText:sender.titleLabel.text];
             if (self.numKeyHasPressed == NO && sender.tag == 10) {

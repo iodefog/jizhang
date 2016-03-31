@@ -14,6 +14,7 @@
 #import "SSJReportFormsUtil.h"
 #import "SSJModifyFundingViewController.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJFundingDetailListItem.h"
 
 #import "FMDB.h"
 
@@ -24,6 +25,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
 @property (nonatomic,strong) SSJFundingDetailHeader *header;
 @property (nonatomic, strong) NSArray *datas;
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
+@property(nonatomic, strong)  NSMutableArray <SSJFundingDetailListItem *>  *listItems;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -58,7 +60,7 @@ static NSString *const kFundingDetailHeaderViewID = @"kFundingDetailHeaderViewID
         
     }];
     [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
-        
+        weakSelf.listItems = [NSMutableArray arrayWithArray:data];
     } failure:^(NSError *error) {
         
     }];
