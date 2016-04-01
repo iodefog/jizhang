@@ -41,8 +41,11 @@ static NSString *const kEnterBackgroundTimeKey = @"kEnterBackgroundTimeKey";
 //微信appid
 static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
 
+//微信desc
 static NSString *const kWeiXinDescription = @"weixinLogin";
 
+//微信secret
+static NSString *const kWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 
 
 void SCYSaveEnterBackgroundTime() {
@@ -290,24 +293,84 @@ NSDate *SCYEnterBackgroundTime() {
     }
 }
 
+/**
+ * onReq微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用
+ * sendRsp返回。在调用sendRsp返回时，会切回到微信终端程序界面。
+ */
+- (void)onReq:(BaseReq *)req {
+    
+}
+
 //授权后回调 WXApiDelegate
 -(void)onResp:(BaseReq *)resp
 {
+    SendAuthResp *aresp=(SendAuthResp *)resp;
+    if (aresp.errCode == 0)
+        {
+            NSLog(@"用户同意");
+            [self getAccessTokenWithCode:aresp.code];
+        }else if (aresp.errCode == -4){
+            NSLog(@"用户拒绝");
+        }else if (aresp.errCode == -2){
+            NSLog(@"用户取消");;
+        }
+}
+
+-(void)getAccessTokenWithCode:(NSString *)code{
+    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWeiXinAppKey,kWeiXinSecret,code];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *zoneUrl = [NSURL URLWithString:url];
+        NSString *zoneStr = [NSString stringWithContentsOfURL:zoneUrl encoding:NSUTF8StringEncoding error:nil];
+        NSData *data = [zoneStr dataUsingEncoding:NSUTF8StringEncoding];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (data) {
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                [self getUserInfoWithAccessToken:[dic objectForKey:@"access_token"] andOpenId:[dic objectForKey:@"openid"]];
+            }
+        });
+    });
+}
+
+- (void)getUserInfoWithAccessToken:(NSString *)accessToken andOpenId:(NSString *)openId
+{
+    NSString *urlString =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/userinfo?access_token=%@&openid=%@",accessToken,openId];
+    NSURL *url = [NSURL URLWithString:urlString];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *dataStr = [NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
+        NSData *data = [dataStr dataUsingEncoding:NSUTF8StringEncoding];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (data)
+            {
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                if ([dict objectForKey:@"errcode"])
+                {
+                    NSLog(@"%@",[dict objectForKey:@"errmsg"]);
+                }else{
+                    
+                }
+            }
+        });
+    });
     /*
-     ErrCode ERR_OK = 0(用户同意)
-     ERR_AUTH_DENIED = -4（用户拒绝授权）
-     ERR_USER_CANCEL = -2（用户取消）
-     code    用户换取access_token的code，仅在ErrCode为0时有效
-     state   第三方程序发送时用来标识其请求的唯一性的标志，由第三方程序调用sendReq时传入，由微信终端回传，state字符串长度不能超过1K
-     lang    微信客户端当前语言
-     country 微信用户当前国家信息
+     city = ****;
+     country = CN;
+     headimgurl = "http://wx.qlogo.cn/mmopen/q9UTH59ty0K1PRvIQkyydYMia4xN3gib2m2FGh0tiaMZrPS9t4yPJFKedOt5gDFUvM6GusdNGWOJVEqGcSsZjdQGKYm9gr60hibd/0";
+     language = "zh_CN";
+     nickname = “****";
+     openid = oo*********;
+     privilege =     (
+     );
+     province = *****;
+     sex = 1;
+     unionid = “o7VbZjg***JrExs";
      */
-    SendAuthResp *aresp = (SendAuthResp *)resp;
-    if (aresp.errCode== 0) {
-        NSString *code = aresp.code;
-        NSDictionary *dic = @{@"code":code};
-    }
-}    
+    /*
+     错误代码
+     errcode = 42001;
+     errmsg = "access_token expired";
+     */
+}
 
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
