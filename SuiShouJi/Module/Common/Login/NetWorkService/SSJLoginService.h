@@ -11,7 +11,8 @@
 
 typedef NS_ENUM(NSUInteger, SSJLoginType) {
     SSJLoginTypeNormal,
-    SSJLoginTypeQQ
+    SSJLoginTypeQQ,
+    SSJLoginTypeWeiXin
 };
 
 @interface SSJLoginService : SSJBaseNetworkService
@@ -42,13 +43,14 @@ typedef NS_ENUM(NSUInteger, SSJLoginType) {
 - (void)loadLoginModelWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount;
 
 /**
- *  qq登录
+ *  三防灯录登录
  *
+ *  @param openID    用户密码
  *  @param openID    用户密码
  *  @param realName 用户名
  *  @param icon 用户名
  */
-- (void)loadLoginModelWithopenID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon;
+- (void)loadLoginModelWithLoginType:(SSJLoginType)loginType openID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon;
 
 
 @end

@@ -55,8 +55,8 @@
     [self request:SSJURLWithAPI(@"/user/login.go") params:dict];
 }
 
-- (void)loadLoginModelWithopenID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon{
-    self.loginType = SSJLoginTypeQQ;
+- (void)loadLoginModelWithLoginType:(SSJLoginType)loginType openID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon{
+    self.loginType = loginType;
     self.showLodingIndicator = YES;
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";

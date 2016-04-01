@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <WeiboSDK.h>
 #import <WXApi.h>
+#import "SSJWeiXinLoginHelper.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property(nonatomic, strong) SSJWeiXinLoginHelper *weiXinLogin;
 
 @end
 
