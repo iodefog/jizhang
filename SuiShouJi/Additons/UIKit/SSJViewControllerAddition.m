@@ -9,12 +9,111 @@
 #import "SSJViewControllerAddition.h"
 #import <objc/runtime.h>
 
+@interface SSJNavigationControllerDelegator : NSObject <UINavigationControllerDelegate>
+
+@property (nonatomic, weak) id<UINavigationControllerDelegate> delegate;
+
+@end
+
+@implementation SSJNavigationControllerDelegator
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed];
+    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed animated:YES];
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:willShowViewController:animated:)]) {
+        [_delegate navigationController:navigationController willShowViewController:viewController animated:animated];
+    }
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:didShowViewController:animated:)]) {
+        [_delegate navigationController:navigationController didShowViewController:viewController animated:animated];
+    }
+}
+
+- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
+    if (_delegate && [_delegate respondsToSelector:@selector(navigationControllerSupportedInterfaceOrientations:)]) {
+        return [_delegate navigationControllerSupportedInterfaceOrientations:navigationController];
+    }
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)navigationControllerPreferredInterfaceOrientationForPresentation:(UINavigationController *)navigationController {
+    if (_delegate && [_delegate respondsToSelector:@selector(navigationControllerPreferredInterfaceOrientationForPresentation:)]) {
+        return [_delegate navigationControllerPreferredInterfaceOrientationForPresentation:navigationController];
+    }
+    return UIInterfaceOrientationPortrait;
+}
+
+- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
+    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:interactionControllerForAnimationController:)]) {
+        return [_delegate navigationController:navigationController interactionControllerForAnimationController:animationController];
+    }
+    return nil;
+}
+
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                         fromViewController:(UIViewController *)fromVC
+                                                           toViewController:(UIViewController *)toVC  {
+    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:animationControllerForOperation:fromViewController:toViewController:)]) {
+        return [_delegate navigationController:navigationController animationControllerForOperation:operation fromViewController:fromVC toViewController:toVC];
+    }
+    return nil;
+}
+
+@end
+
+@interface UINavigationController (SSJDelegateForward)
+
+@end
+
+static const void *kDelegatorKey = &kDelegatorKey;
+static const void *kForwardDelegatorKey = &kForwardDelegatorKey;
+
+@implementation UINavigationController (SSJDelegateForward)
+
++ (void)load {
+    Method originalMethod = class_getInstanceMethod([self class], @selector(setDelegate:));
+    Method swizzledMethod = class_getInstanceMethod([self class], @selector(ssj_setDelegate:));
+    method_exchangeImplementations(originalMethod, swizzledMethod);
+}
+
+- (void)ssj_setDelegate:(id<UINavigationControllerDelegate>)delegate {
+    [self delegator].delegate = delegate;
+    [self ssj_setDelegate:[self delegator]];
+    
+    objc_setAssociatedObject(self, kForwardDelegatorKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (SSJNavigationControllerDelegator *)delegator {
+    SSJNavigationControllerDelegator *delegator = objc_getAssociatedObject(self, kDelegatorKey);
+    if (!delegator) {
+        delegator = [[SSJNavigationControllerDelegator alloc] init];
+        objc_setAssociatedObject(self, kDelegatorKey, delegator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return delegator;
+}
+
+@end
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+static const void *kNavigationBarHiddenKey = &kNavigationBarHiddenKey;
 static const void *kBackControllerKey = &kBackControllerKey;
 
 @implementation UIViewController (SSJNavigationStack)
+
+- (void)setHidesNavigationBarWhenPushed:(BOOL)hidesNavigationBarWhenPushed {
+    objc_setAssociatedObject(self, kNavigationBarHiddenKey, @(hidesNavigationBarWhenPushed), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)hidesNavigationBarWhenPushed {
+    return [objc_getAssociatedObject(self, kNavigationBarHiddenKey) boolValue];
+}
 
 - (void)setBackController:(UIViewController *)backController {
     objc_setAssociatedObject(self, kBackControllerKey, backController, OBJC_ASSOCIATION_ASSIGN);
@@ -31,6 +130,9 @@ static const void *kBackControllerKey = &kBackControllerKey;
 - (void)ssj_showBackButtonWithImage:(UIImage *)image target:(id)target selector:(SEL)selector {
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:target action:selector];
     self.navigationItem.leftBarButtonItem = leftItem;
+    
+    id<UINavigationControllerDelegate> delegate = (id)self;
+    self.navigationController.delegate = delegate;
 }
 
 - (void)ssj_backOffAction {

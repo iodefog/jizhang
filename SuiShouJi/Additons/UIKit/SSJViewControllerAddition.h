@@ -13,6 +13,8 @@
 
 @interface UIViewController (SSJNavigationStack)
 
+@property (nonatomic) BOOL hidesNavigationBarWhenPushed;
+
 /**
  *  点击返回按钮返回到的控制器，如果backViewController为空，则直接返回到上一级页面
  */

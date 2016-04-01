@@ -75,7 +75,8 @@
 		7DB428FE1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB428FD1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m */; };
 		7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */; };
 		7DB4290C1CAE48BB00B46F32 /* SSJBookkeepingTreeCheckInService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB4290B1CAE48BB00B46F32 /* SSJBookkeepingTreeCheckInService.m */; };
-		7DB429101CAE4C1A00B46F32 /* SSJBookkeepingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB4290F1CAE4C1A00B46F32 /* SSJBookkeepingStore.m */; };
+		7DB429131CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429121CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.m */; };
+		7DB429161CAE5C7900B46F32 /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429151CAE5C7900B46F32 /* SSJBookkeepingTreeStore.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -687,8 +688,10 @@
 		7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion2.m; sourceTree = "<group>"; };
 		7DB4290A1CAE48BB00B46F32 /* SSJBookkeepingTreeCheckInService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeCheckInService.h; sourceTree = "<group>"; };
 		7DB4290B1CAE48BB00B46F32 /* SSJBookkeepingTreeCheckInService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeCheckInService.m; sourceTree = "<group>"; };
-		7DB4290E1CAE4C1A00B46F32 /* SSJBookkeepingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingStore.h; sourceTree = "<group>"; };
-		7DB4290F1CAE4C1A00B46F32 /* SSJBookkeepingStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingStore.m; sourceTree = "<group>"; };
+		7DB429111CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeCheckInModel.h; sourceTree = "<group>"; };
+		7DB429121CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeCheckInModel.m; sourceTree = "<group>"; };
+		7DB429141CAE5C7900B46F32 /* SSJBookkeepingTreeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeStore.h; sourceTree = "<group>"; };
+		7DB429151CAE5C7900B46F32 /* SSJBookkeepingTreeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeStore.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -1763,6 +1766,8 @@
 		7DB429041CAE483100B46F32 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7DB429111CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.h */,
+				7DB429121CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1786,8 +1791,8 @@
 		7DB4290D1CAE4A2900B46F32 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				7DB4290E1CAE4C1A00B46F32 /* SSJBookkeepingStore.h */,
-				7DB4290F1CAE4C1A00B46F32 /* SSJBookkeepingStore.m */,
+				7DB429141CAE5C7900B46F32 /* SSJBookkeepingTreeStore.h */,
+				7DB429151CAE5C7900B46F32 /* SSJBookkeepingTreeStore.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -3933,6 +3938,7 @@
 				7DEF54771C7C63F700A90153 /* SSJBudgetDetailViewController.m in Sources */,
 				7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */,
 				7DE69C6B1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m in Sources */,
+				7DB429131CAE5C6800B46F32 /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				BDF503891C80018C00DCFA99 /* SSJCustomTextView.m in Sources */,
 				9C2E026D1CAD04C600C5F764 /* SSJFundingDailySumCell.m in Sources */,
 				7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */,
@@ -3979,6 +3985,7 @@
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				BD70DF5D1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7DEF547A1C7C647200A90153 /* SSJBudgetEditViewController.m in Sources */,
+				7DB429161CAE5C7900B46F32 /* SSJBookkeepingTreeStore.m in Sources */,
 				9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */,
 				9CB85EA21CA3DB5D00715816 /* SSJFinancingHomeHelper.m in Sources */,
 				7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */,
@@ -4082,7 +4089,6 @@
 				9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
-				7DB429101CAE4C1A00B46F32 /* SSJBookkeepingStore.m in Sources */,
 				9C2E026A1CACFF7C00C5F764 /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
 				7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */,

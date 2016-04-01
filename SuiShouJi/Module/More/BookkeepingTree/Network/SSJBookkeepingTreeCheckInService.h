@@ -8,16 +8,12 @@
 
 #import "SSJBaseNetworkService.h"
 
+@class SSJBookkeepingTreeCheckInModel;
+
 @interface SSJBookkeepingTreeCheckInService : SSJBaseNetworkService
 
 // 签到次数
-@property (nonatomic, copy, readonly) NSString *checkInTimes;
-
-// 上次签到成功日期
-@property (nonatomic, copy, readonly) NSString *lastCheckInDate;
-
-// 签到的用户id
-@property (nonatomic, copy, readonly) NSString *userId;
+@property (nonatomic, strong, readonly) SSJBookkeepingTreeCheckInModel *checkInTimes;
 
 // 签到
 - (void)checkIn;

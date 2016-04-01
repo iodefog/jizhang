@@ -7,17 +7,11 @@
 //
 
 #import "SSJBookkeepingTreeCheckInService.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
 
 @interface SSJBookkeepingTreeCheckInService ()
 
-// 签到次数
-@property (nonatomic, copy) NSString *checkInTimes;
-
-// 上次签到成功日期
-@property (nonatomic, copy) NSString *lastCheckInDate;
-
-// 签到的用户id
-@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
 
 @end
 
@@ -34,10 +28,17 @@
         NSDictionary *result = [rootElement objectForKey:@"results"];
         NSDictionary *treeInfo = result[@"userTree"];
         
-        _checkInTimes = treeInfo[@"isignin"];
-        _lastCheckInDate = treeInfo[@"isignindate"];
-        _userId = treeInfo[@"cuserid"];
+        self.checkInModel.checkInTimes = [treeInfo[@"isignin"] integerValue];
+        self.checkInModel.lastCheckInDate = treeInfo[@"isignindate"];
+        self.checkInModel.userId = treeInfo[@"cuserid"];
     }
+}
+
+- (SSJBookkeepingTreeCheckInModel *)checkInModel {
+    if (!_checkInModel) {
+        _checkInModel = [[SSJBookkeepingTreeCheckInModel alloc] init];
+    }
+    return _checkInModel;
 }
 
 @end
