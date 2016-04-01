@@ -26,6 +26,7 @@
 #import "SSJFundAccountTable.h"
 
 static NSString *const KQQAppKey = @"1105086761";
+static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
 
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
@@ -378,7 +379,6 @@ static NSString *const KQQAppKey = @"1105086761";
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
         [_tfPassword setValue:[UIColor colorWithWhite:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
-
         _tfPassword.font = [UIFont systemFontOfSize:16];
         _tfPassword.secureTextEntry = YES;
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
