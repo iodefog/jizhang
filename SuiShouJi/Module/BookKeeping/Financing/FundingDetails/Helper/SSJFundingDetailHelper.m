@@ -190,7 +190,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 success(result);
             }
         });
-        
     }];
 }
 
