@@ -330,10 +330,9 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
-    SendAuthReq* req =[[SendAuthReq alloc ]init];
-    req.scope = @"snsapi_userinfo";
-    req.state = kWeiXinDescription;
-    [WXApi sendReq:req];
+    [self.weiXinLoginHelper weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
+    }];
 }
 
 #pragma mark - Getter
@@ -343,6 +342,13 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
         _loginService.showLodingIndicator = YES;
     }
     return _loginService;
+}
+
+-(SSJWeiXinLoginHelper *)weiXinLoginHelper{
+    if (!_weiXinLoginHelper) {
+        _weiXinLoginHelper = [[SSJWeiXinLoginHelper alloc]init];
+    }
+    return _weiXinLoginHelper;
 }
 
 //-(UIView*)loginView{

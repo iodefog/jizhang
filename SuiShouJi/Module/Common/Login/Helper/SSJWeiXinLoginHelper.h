@@ -10,9 +10,10 @@
 #import <WXApi.h>
 
 @interface SSJWeiXinLoginHelper : NSObject<WXApiDelegate>
-//点击头像回调
+//微信登陆成功的回调
 typedef void (^weiXinLoginSuccessBlock)(NSString *nickName , NSString *iconUrl , NSString *openId);
 
-@property (nonatomic, copy) weiXinLoginSuccessBlock weiXinLoginSuccessBlock;
+//微信登录的方法
+-(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock;
 
 @end
