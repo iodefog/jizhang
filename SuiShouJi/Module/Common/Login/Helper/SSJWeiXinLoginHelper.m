@@ -24,6 +24,17 @@ static NSString *const kWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 
 @implementation SSJWeiXinLoginHelper
 
++ (instancetype)shareInstance {
+    static SSJWeiXinLoginHelper *instance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (!instance) {
+            instance = [[SSJWeiXinLoginHelper alloc] init];
+        }
+    });
+    return instance;
+}
+
 -(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock{
     SendAuthReq* req =[[SendAuthReq alloc ]init];
     req.scope = @"snsapi_userinfo";

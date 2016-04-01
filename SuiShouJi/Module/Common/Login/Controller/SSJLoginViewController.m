@@ -330,7 +330,7 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
-    [self.weiXinLoginHelper weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+    [[SSJWeiXinLoginHelper shareInstance] weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
     }];
 }
@@ -344,12 +344,6 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
     return _loginService;
 }
 
--(SSJWeiXinLoginHelper *)weiXinLoginHelper{
-    if (!_weiXinLoginHelper) {
-        _weiXinLoginHelper = [[SSJWeiXinLoginHelper alloc]init];
-    }
-    return _weiXinLoginHelper;
-}
 
 //-(UIView*)loginView{
 //    if (!_loginView) {

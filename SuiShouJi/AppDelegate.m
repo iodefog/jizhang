@@ -289,21 +289,15 @@ NSDate *SCYEnterBackgroundTime() {
     }
 }
 
--(SSJWeiXinLoginHelper *)weiXinLogin{
-    if (_weiXinLogin == nil) {
-        _weiXinLogin = [[SSJWeiXinLoginHelper alloc]init];
-    }
-    return _weiXinLogin;
-}
 
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:self.weiXinLogin];
+    [WXApi handleOpenURL:url delegate:[SSJWeiXinLoginHelper shareInstance]];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:self.weiXinLogin];
+    [WXApi handleOpenURL:url delegate:[SSJWeiXinLoginHelper shareInstance]];
 }
 @end
