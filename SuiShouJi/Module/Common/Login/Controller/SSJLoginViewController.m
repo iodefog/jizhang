@@ -24,6 +24,7 @@
 #import "SSJBaselineTextField.h"
 #import "SSJBorderButton.h"
 #import "SSJFundAccountTable.h"
+#import "SSJWeiXinLoginHelper.h"
 #import <WXApi.h>
 
 //qq appkey
@@ -52,6 +53,7 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
+@property(nonatomic, strong)SSJWeiXinLoginHelper *weiXinLoginHelper;
 @end
 
 @implementation SSJLoginViewController
@@ -188,7 +190,7 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
     NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
     NSString *realName = [response.jsonResponse objectForKey:@"nickname"];
     NSString *openId = [self.tencentOAuth openId];
-    [self.loginService loadLoginModelWithopenID:openId realName:realName icon:icon];
+    [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:realName icon:icon];
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -470,7 +472,7 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
     if (!_weixinLoginButton) {
         _weixinLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
         [_weixinLoginButton setImage:[UIImage imageNamed:@"more_qq"] forState:UIControlStateNormal];
-        [_tencentLoginButton setTitle:@"微信" forState:UIControlStateNormal];
+        [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
         _weixinLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _weixinLoginButton.spaceBetweenImageAndTitle = 12;
         _weixinLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
