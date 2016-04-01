@@ -13,6 +13,9 @@
 
 @interface UIViewController (SSJNavigationStack)
 
+/**
+ *  当控制器被push到导航栏栈中时，是否隐藏导航栏
+ */
 @property (nonatomic) BOOL hidesNavigationBarWhenPushed;
 
 /**

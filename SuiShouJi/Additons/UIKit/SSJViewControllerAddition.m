@@ -18,8 +18,8 @@
 @implementation SSJNavigationControllerDelegator
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-//    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed];
-    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed animated:YES];
+    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed];
+//    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed animated:YES];
     
     if (_delegate && [_delegate respondsToSelector:@selector(navigationController:willShowViewController:animated:)]) {
         [_delegate navigationController:navigationController willShowViewController:viewController animated:animated];
