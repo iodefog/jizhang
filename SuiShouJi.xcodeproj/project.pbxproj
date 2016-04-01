@@ -71,6 +71,9 @@
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
 		7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */; };
 		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
+		7DB428FB1CAE0F5B00B46F32 /* SSJMagicExportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB428FA1CAE0F5B00B46F32 /* SSJMagicExportViewController.m */; };
+		7DB428FE1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB428FD1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m */; };
+		7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -674,6 +677,12 @@
 		7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@2x.png"; sourceTree = "<group>"; };
 		7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libZipZap.a; path = "ZipZap/build/Debug-iphoneos/libZipZap.a"; sourceTree = "<group>"; };
 		7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		7DB428F91CAE0F5B00B46F32 /* SSJMagicExportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportViewController.h; sourceTree = "<group>"; };
+		7DB428FA1CAE0F5B00B46F32 /* SSJMagicExportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportViewController.m; sourceTree = "<group>"; };
+		7DB428FC1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarViewController.h; sourceTree = "<group>"; };
+		7DB428FD1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarViewController.m; sourceTree = "<group>"; };
+		7DB428FF1CAE3E5000B46F32 /* SSJDatabaseVersion2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion2.h; sourceTree = "<group>"; };
+		7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion2.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -1683,6 +1692,49 @@
 			path = Store;
 			sourceTree = "<group>";
 		};
+		7DB428F41CAE0EE500B46F32 /* MagicExport */ = {
+			isa = PBXGroup;
+			children = (
+				7DB428F51CAE0F3F00B46F32 /* Controller */,
+				7DB428F61CAE0F3F00B46F32 /* Model */,
+				7DB428F71CAE0F3F00B46F32 /* Network */,
+				7DB428F81CAE0F3F00B46F32 /* View */,
+			);
+			path = MagicExport;
+			sourceTree = "<group>";
+		};
+		7DB428F51CAE0F3F00B46F32 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7DB428F91CAE0F5B00B46F32 /* SSJMagicExportViewController.h */,
+				7DB428FA1CAE0F5B00B46F32 /* SSJMagicExportViewController.m */,
+				7DB428FC1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.h */,
+				7DB428FD1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		7DB428F61CAE0F3F00B46F32 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7DB428F71CAE0F3F00B46F32 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		7DB428F81CAE0F3F00B46F32 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1993,6 +2045,8 @@
 				7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */,
 				7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */,
 				7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */,
+				7DB428FF1CAE3E5000B46F32 /* SSJDatabaseVersion2.h */,
+				7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */,
 			);
 			path = SSJDatabaseUpdater;
 			sourceTree = "<group>";
@@ -2504,6 +2558,7 @@
 		BD0433A11C1A9DFB0051E7AB /* Mine */ = {
 			isa = PBXGroup;
 			children = (
+				7DB428F41CAE0EE500B46F32 /* MagicExport */,
 				7DE69C3F1C8ED674001D31C1 /* MotionPassword */,
 				BD0433B21C1AA2A40051E7AB /* MineHome */,
 			);
@@ -3862,6 +3917,7 @@
 				BD70DF5A1C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9C2E02631CACEA3C00C5F764 /* SSJFundingListDayItem.m in Sources */,
 				BD70DF5C1C4751EA000E6CC9 /* SSJForgotPSWResetService.m in Sources */,
+				7DB428FE1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m in Sources */,
 				BD04339A1C1A8DA50051E7AB /* SSJNewBaseTableViewController.m in Sources */,
 				BD70DF5D1C4751EA000E6CC9 /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				7DEF547A1C7C647200A90153 /* SSJBudgetEditViewController.m in Sources */,
@@ -3882,6 +3938,7 @@
 				7DEF54711C7BF47100A90153 /* SSJBudgetDatabaseHelper.m in Sources */,
 				BD0433221C1A78B40051E7AB /* SSJColorAddition.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
+				7DB428FB1CAE0F5B00B46F32 /* SSJMagicExportViewController.m in Sources */,
 				BD0433251C1A78B40051E7AB /* SSJLayerAddition.m in Sources */,
 				BD0433951C1A8DA50051E7AB /* SSJBaseTableViewCell.m in Sources */,
 				7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */,
@@ -3992,6 +4049,7 @@
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
+				7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */,
 				BDF382441C3E151100955038 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				7DE69C3D1C8EC401001D31C1 /* SCYMotionEncryptionView.m in Sources */,
 				BD70DF5F1C4751EA000E6CC9 /* SSJGuideLastContentView.m in Sources */,

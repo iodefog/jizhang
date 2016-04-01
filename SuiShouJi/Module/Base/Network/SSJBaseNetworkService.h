@@ -37,6 +37,11 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 @property (nonatomic, assign) SSJBaseNetworkServiceHttpMethod httpMethod;
 
 /**
+ *  请求超时时间
+ */
+@property (nonatomic, assign) NSTimeInterval timeoutInterval;
+
+/**
  *  请求完成后收到的服务端返回的返回码，1为成功，其他均为失败
  */
 @property (nonatomic, copy, readonly) NSString *returnCode;

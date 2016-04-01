@@ -10,9 +10,10 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJDatabaseVersionProtocol.h"
 #import "SSJDatabaseVersion1.h"
+#import "SSJDatabaseVersion2.h"
 
 // 数据库最新的版本
-static const int kDatabaseVersion = 1;
+static const int kDatabaseVersion = 2;
 
 @implementation SSJDatabaseUpgrader
 
@@ -74,7 +75,8 @@ static const int kDatabaseVersion = 1;
 
 
 + (NSDictionary *)databaseVersionInfo {
-    return @{@1:[SSJDatabaseVersion1 class]};
+    return @{@1:[SSJDatabaseVersion1 class],
+             @1:[SSJDatabaseVersion2 class]};
 }
 
 @end

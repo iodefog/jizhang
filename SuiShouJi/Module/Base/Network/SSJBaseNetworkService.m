@@ -32,6 +32,7 @@
         _showLoginControllerIfTokenInvalid = YES;
         _delegate = delegate;
         _httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
+        _timeoutInterval = 60;
         _pinningMode = AFSSLPinningModePublicKey;
         _allowInvalidCertificates = YES;
         _validatesDomainName = YES;
@@ -138,6 +139,7 @@
 //    manager.allowInvalidCertificates = _allowInvalidCertificates;
 //    manager.validatesDomainName = _validatesDomainName;
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.session.configuration.timeoutIntervalForRequest = _timeoutInterval;
     return manager;
 }
 
