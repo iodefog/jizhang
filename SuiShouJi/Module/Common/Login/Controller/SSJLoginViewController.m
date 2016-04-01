@@ -24,10 +24,15 @@
 #import "SSJBaselineTextField.h"
 #import "SSJBorderButton.h"
 #import "SSJFundAccountTable.h"
+#import <WXApi.h>
 
+//qq appkey
 static NSString *const KQQAppKey = @"1105086761";
-static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
 
+//微信appkey
+static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
+//微信desc
+static NSString *const kWeiXinDescription = @"weixinLogin";
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -42,6 +47,7 @@ static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
 @property (nonatomic,strong)UIButton *forgetButton;
 @property (nonatomic,strong)TencentOAuth *tencentOAuth;
 @property (nonatomic,strong)UIButton *tencentLoginButton;
+@property (nonatomic,strong)UIButton *weixinLoginButton;
 @property (nonatomic,strong)UIImageView *backGroundImage;
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
@@ -80,6 +86,7 @@ static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
     [scrollView addSubview:self.leftSeperatorLine];
     [scrollView addSubview:self.rightSeperatorLine];
     [scrollView addSubview:self.tencentLoginButton];
+    [scrollView addSubview:self.weixinLoginButton];
     [self.view addSubview:scrollView];
     self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:KQQAppKey andDelegate:self];
 }
@@ -109,8 +116,10 @@ static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
     self.backGroundImage.frame = self.view.frame;
     self.thirdPartyLoginLabel.centerX = self.view.width / 2;
     self.thirdPartyLoginLabel.bottom = self.view.height - 110;
-    self.tencentLoginButton.centerX = self.view.width / 2;
+    self.tencentLoginButton.centerX = self.view.width / 2 / 2;
     self.tencentLoginButton.centerY = self.view.height - 55;
+    self.weixinLoginButton.centerX = self.view.width / 2 + self.view.width / 2 / 2;
+    self.weixinLoginButton.centerY = self.view.height - 55;
     self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
     self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
     self.leftSeperatorLine.left = 0;
@@ -318,6 +327,13 @@ static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
     [self.tencentOAuth getUserInfo];
 }
 
+-(void)weixinLoginButtonClicked:(id)sender{
+    SendAuthReq* req =[[SendAuthReq alloc ]init];
+    req.scope = @"snsapi_userinfo";
+    req.state = kWeiXinDescription;
+    [WXApi sendReq:req];
+}
+
 #pragma mark - Getter
 - (SSJLoginService *)loginService{
     if (_loginService==nil) {
@@ -448,6 +464,20 @@ static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
         [_tencentLoginButton addTarget:self action:@selector(qqLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _tencentLoginButton;
+}
+
+-(UIButton *)weixinLoginButton{
+    if (!_weixinLoginButton) {
+        _weixinLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
+        [_weixinLoginButton setImage:[UIImage imageNamed:@"more_qq"] forState:UIControlStateNormal];
+        [_tencentLoginButton setTitle:@"微信" forState:UIControlStateNormal];
+        _weixinLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _weixinLoginButton.spaceBetweenImageAndTitle = 12;
+        _weixinLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
+        _weixinLoginButton.contentMode = UIViewContentModeCenter;
+        [_weixinLoginButton addTarget:self action:@selector(weixinLoginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _weixinLoginButton;
 }
 
 -(UIView *)leftSeperatorLine{
