@@ -17,7 +17,21 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 //微信secret
 static NSString *const kWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 
+@interface SSJWeiXinLoginHelper()
+@property (nonatomic, strong) weiXinLoginSuccessBlock sucessBlock;
+@end
+
+
 @implementation SSJWeiXinLoginHelper
+
+-(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock{
+    SendAuthReq* req =[[SendAuthReq alloc ]init];
+    req.scope = @"snsapi_userinfo";
+    req.state = kWeiXinDescription;
+    [WXApi sendReq:req];
+    self.sucessBlock = sucessBlock;
+}
+
 /**
  * onReq微信终端向第三方程序发起请求，要求第三方程序响应。第三方程序响应完后必须调用
  * sendRsp返回。在调用sendRsp返回时，会切回到微信终端程序界面。
@@ -74,31 +88,13 @@ static NSString *const kWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
                 }else{
                     NSString *iconUrl = [dict objectForKey:@"headimgurl"];
                     NSString *nickName = [dict objectForKey:@"nickname"];
-                    if (self.weiXinLoginSuccessBlock) {
-                        self.weiXinLoginSuccessBlock(nickName,iconUrl,openId);
+                    if (self.sucessBlock) {
+                        self.sucessBlock(nickName,iconUrl,openId);
                     }
                 }
             }
         });
     });
-    /*
-     city = ****;
-     country = CN;
-     headimgurl = "http://wx.qlogo.cn/mmopen/q9UTH59ty0K1PRvIQkyydYMia4xN3gib2m2FGh0tiaMZrPS9t4yPJFKedOt5gDFUvM6GusdNGWOJVEqGcSsZjdQGKYm9gr60hibd/0";
-     language = "zh_CN";
-     nickname = “****";
-     openid = oo*********;
-     privilege =     (
-     );
-     province = *****;
-     sex = 1;
-     unionid = “o7VbZjg***JrExs";
-     */
-    /*
-     错误代码
-     errcode = 42001;
-     errmsg = "access_token expired";
-     */
 }
 
 @end

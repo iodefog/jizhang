@@ -61,7 +61,12 @@
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";
     NSString *strKey=@"iwannapie?!";
-    NSString *type = @"qq";
+    NSString *type;
+    if (self.loginType == SSJLoginTypeQQ) {
+        type = @"qq";
+    }else if (self.loginType == SSJLoginTypeWeiXin){
+        type = @"wechat";
+    }
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&auth_token=%@&key=%@",strSignType,strAcctID,openID,strKey];
     NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
