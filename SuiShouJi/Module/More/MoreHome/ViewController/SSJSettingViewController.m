@@ -71,17 +71,17 @@ static NSString *const kTitle6 = @"关于我们";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-        return self.loggedFooterView;
-    }
+//    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
+//        return self.loggedFooterView;
+//    }
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
     return footerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-        return 80;
-    }
+//    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
+//        return 80;
+//    }
     return 0.1f;
 }
 
@@ -156,21 +156,21 @@ static NSString *const kTitle6 = @"关于我们";
 }
 
 #pragma mark - Getter
--(UIView *)loggedFooterView{
-    if (_loggedFooterView == nil) {
-        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _loggedFooterView.width - 20, 40)];
-        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
-        quitLogButton.layer.cornerRadius = 3.f;
-        quitLogButton.layer.masksToBounds = YES;
-        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
-        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
-        [_loggedFooterView addSubview:quitLogButton];
-    }
-    return _loggedFooterView;
-}
+//-(UIView *)loggedFooterView{
+//    if (_loggedFooterView == nil) {
+//        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+//        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _loggedFooterView.width - 20, 40)];
+//        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
+//        quitLogButton.layer.cornerRadius = 3.f;
+//        quitLogButton.layer.masksToBounds = YES;
+//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+//        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+//        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
+//        [_loggedFooterView addSubview:quitLogButton];
+//    }
+//    return _loggedFooterView;
+//}
 
 -(void)quitLogButtonClicked:(id)sender {
     //  退出登陆后强制同步一次

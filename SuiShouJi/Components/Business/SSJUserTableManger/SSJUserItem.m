@@ -25,7 +25,8 @@
                     @"idCardNo":@"cidcard",
                     @"registerState":@"cregisterstate",
                     @"defaultFundAcctState":@"cdefaultfundacctstate",
-                    @"icon":@"cicons"};
+                    @"icon":@"cicons",
+                    @"signature":@"usersignature"};
     }
     return mapping;
 }

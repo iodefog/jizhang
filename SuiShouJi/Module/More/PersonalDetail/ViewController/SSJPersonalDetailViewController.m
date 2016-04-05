@@ -20,12 +20,15 @@ static NSString *const kTitle5 = @"修改密码";
 #import "SSJPortraitUploadNetworkService.h"
 #import "SSJUserItem.h"
 #import "SSJUserTableManager.h"
+#import "SSJDataSynchronizer.h"
+#import "SSJUserDefaultDataCreater.h"
+#import "SSJPasswordModifyViewController.h"
 
 @interface SSJPersonalDetailViewController ()
 @property (nonatomic, strong) NSArray *titles;
 @property(nonatomic, strong) SSJPersonalDetailItem *item;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
-
+@property(nonatomic, strong) UIView *loggedFooterView;
 @end
 
 @implementation SSJPersonalDetailViewController
@@ -75,11 +78,17 @@ static NSString *const kTitle5 = @"修改密码";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
+        return self.loggedFooterView;
+    }
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
     return footerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
+        return 80;
+    }
     return 0.1f;
 }
 
@@ -90,6 +99,10 @@ static NSString *const kTitle5 = @"修改密码";
         UIActionSheet *sheet;
         sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
         [sheet showInView:self.view];
+    }
+    if ([title isEqualToString:kTitle5]) {
+        SSJPasswordModifyViewController *passwordModifyVC = [[SSJPasswordModifyViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:passwordModifyVC animated:YES];
     }
 }
 #pragma mark - UITableViewDataSource
@@ -194,6 +207,33 @@ static NSString *const kTitle5 = @"修改密码";
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
+-(void)quitLogButtonClicked:(id)sender {
+    //  退出登陆后强制同步一次
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+    SSJClearLoginInfo();
+    [SSJUserTableManager reloadUserIdWithError:nil];
+    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+    [self.tableView reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Getter
+-(UIView *)loggedFooterView{
+    if (_loggedFooterView == nil) {
+        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _loggedFooterView.width - 20, 40)];
+        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
+        quitLogButton.layer.cornerRadius = 3.f;
+        quitLogButton.layer.masksToBounds = YES;
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
+        [_loggedFooterView addSubview:quitLogButton];
+    }
+    return _loggedFooterView;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
