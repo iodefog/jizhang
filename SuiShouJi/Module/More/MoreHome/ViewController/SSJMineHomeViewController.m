@@ -35,10 +35,11 @@
 static NSString *const kTitle1 = @"手势密码";
 static NSString *const kTitle2 = @"记账提醒";
 static NSString *const kTitle3 = @"周期记账";
-static NSString *const kTitle4 = @"把APP推荐给好友";
-static NSString *const kTitle5 = @"意见反馈";
-static NSString *const kTitle6 = @"给个好评";
-static NSString *const kTitle7 = @"设置";
+static NSString *const kTitle4 = @"记账树";
+static NSString *const kTitle5 = @"把APP推荐给好友";
+static NSString *const kTitle6 = @"意见反馈";
+static NSString *const kTitle7 = @"给个好评";
+static NSString *const kTitle8 = @"设置";
 
 static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
