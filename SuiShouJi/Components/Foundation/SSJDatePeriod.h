@@ -54,6 +54,8 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
 
 - (NSInteger)periodCountFromDate:(NSDate *)date;
 
+- (NSInteger)daysCount;
+
 @end
 
 NS_ASSUME_NONNULL_END

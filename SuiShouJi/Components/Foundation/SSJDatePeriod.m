@@ -135,6 +135,7 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
         SSJDatePeriod *period = [[SSJDatePeriod alloc] init];
         period.startDate = startDate;
         period.endDate = endDate;
+        period.periodType = _periodType;
         [periods addObject:period];
     }
     
@@ -207,6 +208,12 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
 - (NSInteger)periodCountFromDate:(NSDate *)date {
     SSJDatePeriod *fromPeriod = [SSJDatePeriod datePeriodWithPeriodType:self.periodType date:date];
     return [self periodCountFromPeriod:fromPeriod];
+}
+
+- (NSInteger)daysCount {
+    NSCalendar *calendar = [[self class] calendar];
+    NSRange daysRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:(NSCalendarUnit)_periodType forDate:_startDate];
+    return daysRange.length;
 }
 
 @end

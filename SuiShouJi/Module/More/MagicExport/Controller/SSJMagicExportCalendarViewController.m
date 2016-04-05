@@ -8,6 +8,21 @@
 
 #import "SSJMagicExportCalendarViewController.h"
 
+@interface SSJMagicExportCalendarViewController ()
+
+@end
+
 @implementation SSJMagicExportCalendarViewController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.navigationItem.title = @"选择导出时间";
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
 
 @end
