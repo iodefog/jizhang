@@ -14,14 +14,16 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
-#import "SSJMagicExportViewController.h"
 #import "SSJStartChecker.h"
+#import "UMFeedback.h"
+
 
 static NSString *const kTitle1 = @"同步设置";
-static NSString *const kTitle2 = @"用户协议与隐私说明";
-static NSString *const kTitle3 = @"检查更新";
-static NSString *const kTitle4 = @"关于我们";
-static NSString *const kTitle5 = @"数据文件导出";
+static NSString *const kTitle2 = @"意见反馈";
+static NSString *const kTitle3 = @"数据文件导出";
+static NSString *const kTitle4 = @"用户协议与隐私说明";
+static NSString *const kTitle5 = @"检查更新";
+static NSString *const kTitle6 = @"关于我们";
 
 
 @interface SSJSettingViewController ()
@@ -49,9 +51,9 @@ static NSString *const kTitle5 = @"数据文件导出";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle5], @[kTitle2] , @[kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle2] , @[kTitle3] , @[kTitle4] , @[kTitle6]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle5], @[kTitle2],@[kTitle3],@[kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle2] , @[kTitle3] , @[kTitle4] , @[kTitle5 , kTitle6]];
     }
     [self.navigationController setNavigationBarHidden:NO];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
@@ -91,21 +93,15 @@ static NSString *const kTitle5 = @"数据文件导出";
         [self.navigationController pushViewController:syncSettingVC animated:YES];
     }
     
-    //  数据文件导出
-    if ([title isEqualToString:kTitle5]) {
-        SSJMagicExportViewController *dataExportVC = [[SSJMagicExportViewController alloc] init];
-        [self.navigationController pushViewController:dataExportVC animated:YES];
-    }
-    
     //  用户协议与隐私说明
-    if ([title isEqualToString:kTitle2]) {
+    if ([title isEqualToString:kTitle4]) {
         SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
         webVc.title = @"用户协议与隐私说明";
         [self.navigationController pushViewController:webVc animated:YES];
     }
     
     //  检查更新
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle5]) {
         [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
             if (type == SSJAppUpdateTypeNone) {
                 [CDAutoHideMessageHUD showMessage:@"当前已经是最新版本,不需要更新"];
@@ -116,10 +112,16 @@ static NSString *const kTitle5 = @"数据文件导出";
     }
     
     //  关于我们
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle6]) {
         SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://1.9188.com/h5/about_shq/about.html"]];
         webVc.title = @"关于我们";
         [self.navigationController pushViewController:webVc animated:YES];
+    }
+    
+    //  意见反馈
+    if ([title isEqualToString:kTitle2]) {
+        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
+                                             animated:YES];
     }
     
 }

@@ -253,6 +253,10 @@ static id _instance;
     if (![self.textField.text isEqualToString: @""]) {
         self.numKeyHasPressed = YES;
     }
+    if ([sender.titleLabel.text isEqualToString:@"OK"]) {
+        [self.textField resignFirstResponder];
+        return;
+    }
     BOOL shouldChangeText = YES;
     NSString *inputString;
     if (sender.tag == 12) {
@@ -311,10 +315,7 @@ static id _instance;
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
         self.lastPressTag = 14;
     }
-    if ([sender.titleLabel.text isEqualToString:@"OK"] && _lastPressTag != 16) {
-        [self.textField resignFirstResponder];
-        return;
-    }
+
     if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
         NSRange selectedRange = [self selectedRange];
         NSRange changeRange = selectedRange;

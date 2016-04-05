@@ -10,7 +10,6 @@
 #import "SSJDatabaseQueue.h"
 
 @implementation SSJFinancingHomeHelper
-
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();

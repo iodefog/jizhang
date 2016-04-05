@@ -22,11 +22,12 @@
 #import "SSJBookkeepingReminderViewController.h"
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJMotionPasswordViewController.h"
-#import "UMFeedback.h"
 #import "SSJSettingViewController.h"
 #import "SSJRegistGetVerViewController.h"
 #import "SSJRegistCompleteViewController.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
+#import "SSJPersonalDetailViewController.h"
+
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -35,10 +36,9 @@
 static NSString *const kTitle1 = @"手势密码";
 static NSString *const kTitle2 = @"记账提醒";
 static NSString *const kTitle3 = @"周期记账";
-static NSString *const kTitle4 = @"把APP推荐给好友";
-static NSString *const kTitle5 = @"意见反馈";
+static NSString *const kTitle4 = @"记账树";
+static NSString *const kTitle5 = @"把APP推荐给好友";
 static NSString *const kTitle6 = @"给个好评";
-static NSString *const kTitle7 = @"设置";
 
 static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
@@ -51,6 +51,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSArray *titles;
 @property (nonatomic,strong) NSString *circleChargeState;
+@property(nonatomic, strong) UIView *rightbuttonView;
 
 //  手势密码开关
 @property (nonatomic, strong) UISwitch *motionSwitch;
@@ -73,6 +74,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
+    self.navigationItem.rightBarButtonItem = rightBarButton;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -80,9 +83,9 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2, kTitle3],@[kTitle4],@[kTitle5],@[kTitle7]];
+        self.titles = @[@[kTitle1], @[kTitle2, kTitle3],@[kTitle4],@[kTitle5],@[kTitle6]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2, kTitle3], @[kTitle4],@[kTitle5, kTitle6],@[kTitle7]];
+        self.titles = @[@[kTitle1], @[kTitle2, kTitle3], @[kTitle4],@[kTitle5],@[kTitle6]];
     }
     
     __weak typeof(self) weakSelf = self;
@@ -118,6 +121,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         [self.motionSwitch setOn:NO];
     }
     [self getCircleChargeState];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -133,9 +137,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         __weak typeof(self) weakSelf = self;
         _header.HeaderButtonClickedBlock = ^(){
             if (SSJIsUserLogined()) {
-                UIActionSheet *sheet;
-                sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
-                [sheet showInView:weakSelf.view];
+                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
             }else{
                 SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
                 loginVC.backController = weakSelf;
@@ -200,7 +203,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
 
     //  把APP推荐给好友
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle5]) {
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:kUMAppKey
                                           shareText:@"财务管理第一步，从记录消费生活开始!"
@@ -209,16 +212,16 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                                            delegate:self];
     }
     
-    //意见反馈
-    if ([title isEqualToString:kTitle5]) {
-        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
-                                             animated:YES];
-    }
+//    //意见反馈
+//    if ([title isEqualToString:kTitle6]) {
+//        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
+//                                             animated:YES];
+//    }
     
-    if ([title isEqualToString:kTitle7]) {
-        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        [self.navigationController pushViewController:settingVC animated:YES];
-    }
+//    if ([title isEqualToString:kTitle7]) {
+//        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+//        [self.navigationController pushViewController:settingVC animated:YES];
+//    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -278,19 +281,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
 }
 
-#pragma mark - UIActionSheetDelegate
--(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (buttonIndex)
-    {
-        case 0:  //打开照相机拍照
-            [self takePhoto];
-            break;
-        case 1:  //打开本地相册
-            [self localPhoto];
-            break;
-    }
-}
 
 #pragma mark - Event
 -(void)takePhoto{
@@ -434,6 +424,11 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [SSJUserTableManager saveUserItem:item];
 }
 
+- (void)setttingButtonClick:(id)sender{
+        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:settingVC animated:YES];
+}
+
 -(void)getCircleChargeState{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -455,10 +450,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [picker dismissViewControllerAnimated:YES completion:^{}];
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
+    __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        self.header.headPotraitImage.image = image;
-        [self.tableView reloadData];
-        [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+        weakSelf.header.headPotraitImage.image = image;
+        [weakSelf.tableView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
         userItem.userId = SSJUSERID();
@@ -474,6 +469,20 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         [_motionSwitch addTarget:self action:@selector(motionSwitchAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _motionSwitch;
+}
+
+-(UIView *)rightbuttonView{
+    if (!_rightbuttonView) {
+        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+        UIButton *comfirmButton = [[UIButton alloc]init];
+        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
+        [comfirmButton setTitle:@"设置" forState:UIControlStateNormal];
+//        [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [comfirmButton addTarget:self action:@selector(setttingButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_rightbuttonView addSubview:comfirmButton];
+    }
+    return _rightbuttonView;
 }
 
 @end

@@ -38,6 +38,13 @@ typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeNoImageSyncNeedToSync = 10004,
 };
 
+//  用户登录方式
+typedef NS_ENUM(NSUInteger, SSJLoginType) {
+    SSJLoginTypeNormal,
+    SSJLoginTypeQQ,
+    SSJLoginTypeWeiXin
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
@@ -80,6 +87,9 @@ extern NSString *const SSJHaveLoginOrRegistKey;
 
 //是否进入过资金账户首页
 extern NSString *const SSJHaveEnterFundingHomeKey;
+
+//用户的登录方式
+extern NSString *const SSJUserLoginTypeKey;
 
 
 /** --------------- Notification --------------- */

@@ -47,9 +47,16 @@ BOOL SSJSaveUserLogined(BOOL logined);
 /**
  *  返回用户是否登录
  *
- *  @return (NSString *)
+ *  @return (BOOL)
  */
 BOOL SSJIsUserLogined();
+
+/**
+ *  返回用户的登录方式
+ *
+ *  @return ()
+ */
+SSJLoginType SSJUserLoginType();
 
 /**
  *  清除用户登录信息
