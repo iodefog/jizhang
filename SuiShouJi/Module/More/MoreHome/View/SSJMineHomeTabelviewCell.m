@@ -18,6 +18,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.detailLabel];
+        [self.contentView addSubview:self.portraitImage];
     }
     return self;
 }
@@ -33,6 +34,8 @@
     }else{
         self.detailLabel.right = self.contentView.width;
     }
+    self.portraitImage.right = self.detailLabel.right;
+    self.portraitImage.centerY = self.height / 2;
 }
 
 -(UILabel *)titleLabel{
@@ -51,6 +54,14 @@
         _detailLabel.font = [UIFont systemFontOfSize:15];
     }
     return _detailLabel;
+}
+
+-(UIImageView *)portraitImage{
+    if (!_portraitImage) {
+        _portraitImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _portraitImage.layer.cornerRadius = 30.f;
+    }
+    return _portraitImage;
 }
 
 -(void)setCellTitle:(NSString *)cellTitle{

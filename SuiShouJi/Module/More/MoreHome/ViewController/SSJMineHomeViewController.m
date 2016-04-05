@@ -136,17 +136,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         _header.frame = CGRectMake(0, 0, self.view.width, 125);
         __weak typeof(self) weakSelf = self;
         _header.HeaderButtonClickedBlock = ^(){
-//            if (SSJIsUserLogined()) {
-//                UIActionSheet *sheet;
-//                sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
-//                [sheet showInView:weakSelf.view];
-//            }else{
-//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-//                loginVC.backController = weakSelf;
-//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-//            }
-            SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
-            [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+            if (SSJIsUserLogined()) {
+                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+            }else{
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }
         };
         _header.HeaderClickedBlock = ^(){
             if (!SSJIsUserLogined()) {
@@ -284,19 +281,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
 }
 
-#pragma mark - UIActionSheetDelegate
--(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (buttonIndex)
-    {
-        case 0:  //打开照相机拍照
-            [self takePhoto];
-            break;
-        case 1:  //打开本地相册
-            [self localPhoto];
-            break;
-    }
-}
 
 #pragma mark - Event
 -(void)takePhoto{
@@ -466,10 +450,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [picker dismissViewControllerAnimated:YES completion:^{}];
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
+    __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        self.header.headPotraitImage.image = image;
-        [self.tableView reloadData];
-        [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
+        weakSelf.header.headPotraitImage.image = image;
+        [weakSelf.tableView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
         userItem.userId = SSJUSERID();

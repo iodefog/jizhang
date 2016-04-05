@@ -19,7 +19,15 @@
                            failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select * from bk_user where cuserid = ?",userid];
+        NSString *sql = [NSString stringWithFormat:@"select * from bk_user where cuserid = '%@'",userid];
+        FMResultSet *result = [db executeQuery:sql];
+        SSJPersonalDetailItem *item = [[SSJPersonalDetailItem alloc] init];
+        while ([result next]) {
+            item.iconUrl = [result stringForColumn:@"CICONS"];
+            item.nickName = [result stringForColumn:@"CNICKID"];
+            item.signature = [result stringForColumn:@"USERSIGNAGUTURE"];
+            item.mobileNo = [result stringForColumn:@"CMOBILENO"];
+        }
         if (!result) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
@@ -27,7 +35,6 @@
             });
             return;
         }
-        SSJPersonalDetailItem *item = [self personalDetailItemWithResultSet:result inDatabase:db];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(item);
@@ -36,13 +43,10 @@
     }];
 }
 
-+ (SSJPersonalDetailItem *)personalDetailItemWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
-    SSJPersonalDetailItem *item = [[SSJPersonalDetailItem alloc] init];
-    item.iconUrl = [set stringForColumn:@"CICONS"];
-    item.nickName = [set stringForColumn:@"CNICKID"];
-    item.signature = [set stringForColumn:@"USERSIGNAGUTURE"];
-    item.mobileNo = [set stringForColumn:@"CMOBILENO"];
-    return item;
-}
+//+ (SSJPersonalDetailItem *)personalDetailItemWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
+//    SSJPersonalDetailItem *item = [[SSJPersonalDetailItem alloc] init];
+//
+//    return item;
+//}
 
 @end

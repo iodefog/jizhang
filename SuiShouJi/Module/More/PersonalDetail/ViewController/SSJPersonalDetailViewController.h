@@ -8,6 +8,6 @@
 
 #import "SSJNewBaseTableViewController.h"
 
-@interface SSJPersonalDetailViewController : SSJNewBaseTableViewController
+@interface SSJPersonalDetailViewController : SSJNewBaseTableViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @end
