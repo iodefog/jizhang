@@ -224,7 +224,7 @@ static NSString *const kTitle3 = @"定期提醒";
 
 -(void)saveButtonClicked:(id)sender{
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
-    if (self.item.isOn) {
+    if (self.item.isOnOrNot) {
         NSArray *tempArr = [self.selectNumCircle componentsSeparatedByString:@","];
         NSString *baseDateStr = [NSString stringWithFormat:@"%@ %@:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],self.selectTime];
         NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];

@@ -9,12 +9,6 @@
 #import "SSJBaseNetworkService.h"
 #import "SSJUserItem.h"
 
-typedef NS_ENUM(NSUInteger, SSJLoginType) {
-    SSJLoginTypeNormal,
-    SSJLoginTypeQQ,
-    SSJLoginTypeWeiXin
-};
-
 @interface SSJLoginService : SSJBaseNetworkService
 
 //  登录方式
@@ -43,7 +37,7 @@ typedef NS_ENUM(NSUInteger, SSJLoginType) {
 - (void)loadLoginModelWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount;
 
 /**
- *  三防灯录登录
+ *  三方登录
  *
  *  @param openID    用户密码
  *  @param openID    用户密码

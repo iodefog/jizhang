@@ -43,6 +43,10 @@ BOOL SSJIsUserLogined() {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kUserLoginedKey];
 }
 
+SSJLoginType SSJUserLoginType(){
+    return [[NSUserDefaults standardUserDefaults] integerForKey:SSJUserLoginTypeKey];
+}
+
 void SSJClearLoginInfo() {
     SSJSaveAppId(nil);
     SSJSaveAccessToken(nil);
