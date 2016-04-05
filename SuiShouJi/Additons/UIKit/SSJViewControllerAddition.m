@@ -9,62 +9,81 @@
 #import "SSJViewControllerAddition.h"
 #import <objc/runtime.h>
 
-@interface SSJNavigationControllerDelegator : NSObject <UINavigationControllerDelegate>
-
-@property (nonatomic, weak) id<UINavigationControllerDelegate> delegate;
-
-@end
-
-@implementation SSJNavigationControllerDelegator
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed];
-//    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed animated:YES];
-    
-    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:willShowViewController:animated:)]) {
-        [_delegate navigationController:navigationController willShowViewController:viewController animated:animated];
-    }
-}
-
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:didShowViewController:animated:)]) {
-        [_delegate navigationController:navigationController didShowViewController:viewController animated:animated];
-    }
-}
-
-- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
-    if (_delegate && [_delegate respondsToSelector:@selector(navigationControllerSupportedInterfaceOrientations:)]) {
-        return [_delegate navigationControllerSupportedInterfaceOrientations:navigationController];
-    }
-    return UIInterfaceOrientationMaskPortrait;
-}
-
-- (UIInterfaceOrientation)navigationControllerPreferredInterfaceOrientationForPresentation:(UINavigationController *)navigationController {
-    if (_delegate && [_delegate respondsToSelector:@selector(navigationControllerPreferredInterfaceOrientationForPresentation:)]) {
-        return [_delegate navigationControllerPreferredInterfaceOrientationForPresentation:navigationController];
-    }
-    return UIInterfaceOrientationPortrait;
-}
-
-- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
-                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
-    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:interactionControllerForAnimationController:)]) {
-        return [_delegate navigationController:navigationController interactionControllerForAnimationController:animationController];
-    }
-    return nil;
-}
-
-- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-                                            animationControllerForOperation:(UINavigationControllerOperation)operation
-                                                         fromViewController:(UIViewController *)fromVC
-                                                           toViewController:(UIViewController *)toVC  {
-    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:animationControllerForOperation:fromViewController:toViewController:)]) {
-        return [_delegate navigationController:navigationController animationControllerForOperation:operation fromViewController:fromVC toViewController:toVC];
-    }
-    return nil;
-}
-
-@end
+//@interface SSJNavigationControllerDelegator : NSObject <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+//
+//@property (nonatomic, weak) id<UINavigationControllerDelegate, UIImagePickerControllerDelegate> delegate;
+//
+//@end
+//
+//@implementation SSJNavigationControllerDelegator
+//
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed];
+////    [navigationController setNavigationBarHidden:viewController.hidesNavigationBarWhenPushed animated:YES];
+//    
+//    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:willShowViewController:animated:)]) {
+//        [_delegate navigationController:navigationController willShowViewController:viewController animated:animated];
+//    }
+//}
+//
+//- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:didShowViewController:animated:)]) {
+//        [_delegate navigationController:navigationController didShowViewController:viewController animated:animated];
+//    }
+//}
+//
+//- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
+//    if (_delegate && [_delegate respondsToSelector:@selector(navigationControllerSupportedInterfaceOrientations:)]) {
+//        return [_delegate navigationControllerSupportedInterfaceOrientations:navigationController];
+//    }
+//    return UIInterfaceOrientationMaskPortrait;
+//}
+//
+//- (UIInterfaceOrientation)navigationControllerPreferredInterfaceOrientationForPresentation:(UINavigationController *)navigationController {
+//    if (_delegate && [_delegate respondsToSelector:@selector(navigationControllerPreferredInterfaceOrientationForPresentation:)]) {
+//        return [_delegate navigationControllerPreferredInterfaceOrientationForPresentation:navigationController];
+//    }
+//    return UIInterfaceOrientationPortrait;
+//}
+//
+//- (nullable id <UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController
+//                                   interactionControllerForAnimationController:(id <UIViewControllerAnimatedTransitioning>) animationController {
+//    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:interactionControllerForAnimationController:)]) {
+//        return [_delegate navigationController:navigationController interactionControllerForAnimationController:animationController];
+//    }
+//    return nil;
+//}
+//
+//- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+//                                            animationControllerForOperation:(UINavigationControllerOperation)operation
+//                                                         fromViewController:(UIViewController *)fromVC
+//                                                           toViewController:(UIViewController *)toVC  {
+//    if (_delegate && [_delegate respondsToSelector:@selector(navigationController:animationControllerForOperation:fromViewController:toViewController:)]) {
+//        return [_delegate navigationController:navigationController animationControllerForOperation:operation fromViewController:fromVC toViewController:toVC];
+//    }
+//    return nil;
+//}
+//
+//#pragma mark - UIImagePickerControllerDelegate
+////- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(nullable NSDictionary<NSString *,id> *)editingInfo {
+////    if (_delegate && [_delegate respondsToSelector:@selector(imagePickerController:didFinishPickingImage:editingInfo:)]) {
+////        [_delegate imagePickerController:picker didFinishPickingImage:image editingInfo:editingInfo];
+////    }
+////}
+//
+//- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+//    if (_delegate && [_delegate respondsToSelector:@selector(imagePickerController:didFinishPickingMediaWithInfo:)]) {
+//        [_delegate imagePickerController:picker didFinishPickingMediaWithInfo:info];
+//    }
+//}
+//
+//- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+//    if (_delegate && [_delegate respondsToSelector:@selector(imagePickerControllerDidCancel:)]) {
+//        [_delegate imagePickerControllerDidCancel:picker];
+//    }
+//}
+//
+//@end
 
 @interface UINavigationController (SSJDelegateForward)
 
@@ -75,27 +94,27 @@ static const void *kForwardDelegatorKey = &kForwardDelegatorKey;
 
 @implementation UINavigationController (SSJDelegateForward)
 
-+ (void)load {
-    Method originalMethod = class_getInstanceMethod([self class], @selector(setDelegate:));
-    Method swizzledMethod = class_getInstanceMethod([self class], @selector(ssj_setDelegate:));
-    method_exchangeImplementations(originalMethod, swizzledMethod);
-}
+//+ (void)load {
+//    Method originalMethod = class_getInstanceMethod([self class], @selector(setDelegate:));
+//    Method swizzledMethod = class_getInstanceMethod([self class], @selector(ssj_setDelegate:));
+//    method_exchangeImplementations(originalMethod, swizzledMethod);
+//}
 
-- (void)ssj_setDelegate:(id<UINavigationControllerDelegate>)delegate {
-    [self delegator].delegate = delegate;
-    [self ssj_setDelegate:[self delegator]];
-    
-    objc_setAssociatedObject(self, kForwardDelegatorKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (SSJNavigationControllerDelegator *)delegator {
-    SSJNavigationControllerDelegator *delegator = objc_getAssociatedObject(self, kDelegatorKey);
-    if (!delegator) {
-        delegator = [[SSJNavigationControllerDelegator alloc] init];
-        objc_setAssociatedObject(self, kDelegatorKey, delegator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-    return delegator;
-}
+//- (void)ssj_setDelegate:(id<UINavigationControllerDelegate>)delegate {
+//    [self delegator].delegate = delegate;
+//    [self ssj_setDelegate:[self delegator]];
+//    
+//    objc_setAssociatedObject(self, kForwardDelegatorKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//}
+//
+//- (SSJNavigationControllerDelegator *)delegator {
+//    SSJNavigationControllerDelegator *delegator = objc_getAssociatedObject(self, kDelegatorKey);
+//    if (!delegator) {
+//        delegator = [[SSJNavigationControllerDelegator alloc] init];
+//        objc_setAssociatedObject(self, kDelegatorKey, delegator, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    }
+//    return delegator;
+//}
 
 @end
 

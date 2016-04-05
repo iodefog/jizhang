@@ -46,7 +46,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
-        self.hidesNavigationBarWhenPushed = YES;
+//        self.hidesNavigationBarWhenPushed = YES;
         self.verifyFailureTimes = kVerifyFailureTimesLimit;
     }
     return self;
