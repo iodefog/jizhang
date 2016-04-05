@@ -12,6 +12,9 @@
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
 		7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
+		7D21350F1CB3517C00D7E8D2 /* SSJMagicExportService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D21350E1CB3517C00D7E8D2 /* SSJMagicExportService.m */; };
+		7D2135121CB3594100D7E8D2 /* SSJMagicExportSelectDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2135111CB3594100D7E8D2 /* SSJMagicExportSelectDateView.m */; };
+		7D2135161CB38B0700D7E8D2 /* SSJMagicExportStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2135151CB38B0700D7E8D2 /* SSJMagicExportStore.m */; };
 		7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */; };
 		7D2B23F61C3A14D8009A74A8 /* SSJBillingChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F51C3A14D8009A74A8 /* SSJBillingChargeCell.m */; };
 		7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B23F81C3A18DF009A74A8 /* SSJBillingChargeCellItem.m */; };
@@ -585,6 +588,12 @@
 		7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserBudgetSyncTable.m; sourceTree = "<group>"; };
 		7D1D7F481C87EC660001F72A /* SSJRegularManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRegularManager.h; sourceTree = "<group>"; };
 		7D1D7F491C87EC660001F72A /* SSJRegularManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRegularManager.m; sourceTree = "<group>"; };
+		7D21350D1CB3517C00D7E8D2 /* SSJMagicExportService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportService.h; sourceTree = "<group>"; };
+		7D21350E1CB3517C00D7E8D2 /* SSJMagicExportService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportService.m; sourceTree = "<group>"; };
+		7D2135101CB3594100D7E8D2 /* SSJMagicExportSelectDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportSelectDateView.h; sourceTree = "<group>"; };
+		7D2135111CB3594100D7E8D2 /* SSJMagicExportSelectDateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportSelectDateView.m; sourceTree = "<group>"; };
+		7D2135141CB38B0700D7E8D2 /* SSJMagicExportStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportStore.h; sourceTree = "<group>"; };
+		7D2135151CB38B0700D7E8D2 /* SSJMagicExportStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportStore.m; sourceTree = "<group>"; };
 		7D2B23F11C3A1225009A74A8 /* SSJBillingChargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeViewController.h; sourceTree = "<group>"; };
 		7D2B23F21C3A1225009A74A8 /* SSJBillingChargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillingChargeViewController.m; sourceTree = "<group>"; };
 		7D2B23F41C3A14D8009A74A8 /* SSJBillingChargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillingChargeCell.h; sourceTree = "<group>"; };
@@ -1421,6 +1430,15 @@
 			path = SSJRegularManager;
 			sourceTree = "<group>";
 		};
+		7D2135131CB38AE400D7E8D2 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				7D2135141CB38B0700D7E8D2 /* SSJMagicExportStore.h */,
+				7D2135151CB38B0700D7E8D2 /* SSJMagicExportStore.m */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
 		7D2B23ED1C3A11EC009A74A8 /* BillingCharge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1704,6 +1722,7 @@
 		7DB428F41CAE0EE500B46F32 /* MagicExport */ = {
 			isa = PBXGroup;
 			children = (
+				7D2135131CB38AE400D7E8D2 /* Store */,
 				7DB428F51CAE0F3F00B46F32 /* Controller */,
 				7DB428F61CAE0F3F00B46F32 /* Model */,
 				7DB428F71CAE0F3F00B46F32 /* Network */,
@@ -1733,6 +1752,8 @@
 		7DB428F71CAE0F3F00B46F32 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				7D21350D1CB3517C00D7E8D2 /* SSJMagicExportService.h */,
+				7D21350E1CB3517C00D7E8D2 /* SSJMagicExportService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1740,6 +1761,8 @@
 		7DB428F81CAE0F3F00B46F32 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7D2135101CB3594100D7E8D2 /* SSJMagicExportSelectDateView.h */,
+				7D2135111CB3594100D7E8D2 /* SSJMagicExportSelectDateView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4010,6 +4033,7 @@
 				7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */,
 				BD0433411C1A82730051E7AB /* SSJUtil.m in Sources */,
 				BD7BC8571C3B6F6C001DE5D8 /* SSJModifyFundingTableViewCell.m in Sources */,
+				7D21350F1CB3517C00D7E8D2 /* SSJMagicExportService.m in Sources */,
 				BD8FD8341C34DA1F00B7AABA /* SSJADDNewTypeViewController.m in Sources */,
 				BD0432F41C1A77BB0051E7AB /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */,
@@ -4099,6 +4123,8 @@
 				BDFBDAAD1C7D57590049F179 /* SSJRecordMakingAdditionalView.m in Sources */,
 				7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */,
 				BD7BC8411C3A2633001DE5D8 /* SSJFundingItem.m in Sources */,
+				7D2135161CB38B0700D7E8D2 /* SSJMagicExportStore.m in Sources */,
+				7D2135121CB3594100D7E8D2 /* SSJMagicExportSelectDateView.m in Sources */,
 				BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarButton.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD70DF631C4751EA000E6CC9 /* SSJLoginService.m in Sources */,

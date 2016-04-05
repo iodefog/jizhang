@@ -14,12 +14,14 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
+#import "SSJMagicExportViewController.h"
 #import "SSJStartChecker.h"
 
 static NSString *const kTitle1 = @"同步设置";
 static NSString *const kTitle2 = @"用户协议与隐私说明";
 static NSString *const kTitle3 = @"检查更新";
 static NSString *const kTitle4 = @"关于我们";
+static NSString *const kTitle5 = @"数据文件导出";
 
 
 @interface SSJSettingViewController ()
@@ -47,9 +49,9 @@ static NSString *const kTitle4 = @"关于我们";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2] , @[kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle5], @[kTitle2] , @[kTitle4]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2],@[kTitle3],@[kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle5], @[kTitle2],@[kTitle3],@[kTitle4]];
     }
     [self.navigationController setNavigationBarHidden:NO];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
@@ -87,6 +89,12 @@ static NSString *const kTitle4 = @"关于我们";
     if ([title isEqualToString:kTitle1]) {
         SSJSyncSettingViewController *syncSettingVC = [[SSJSyncSettingViewController alloc]init];
         [self.navigationController pushViewController:syncSettingVC animated:YES];
+    }
+    
+    //  数据文件导出
+    if ([title isEqualToString:kTitle5]) {
+        SSJMagicExportViewController *dataExportVC = [[SSJMagicExportViewController alloc] init];
+        [self.navigationController pushViewController:dataExportVC animated:YES];
     }
     
     //  用户协议与隐私说明
