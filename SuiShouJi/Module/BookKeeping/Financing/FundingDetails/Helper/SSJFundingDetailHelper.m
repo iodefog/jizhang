@@ -42,6 +42,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];
             item.billDate = [resultSet stringForColumn:@"CBILLDATE"];
+            item.billId = [resultSet stringForColumn:@"ID"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){

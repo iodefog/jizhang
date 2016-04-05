@@ -139,7 +139,7 @@
                         motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
                     }
                     [self.navigationController pushViewController:motionVC animated:YES];
-                    
+        
                     return;
                 }
                 

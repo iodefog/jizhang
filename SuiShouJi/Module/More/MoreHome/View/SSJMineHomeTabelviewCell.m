@@ -60,6 +60,7 @@
     if (!_portraitImage) {
         _portraitImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
         _portraitImage.layer.cornerRadius = 30.f;
+        _portraitImage.layer.masksToBounds = YES;
     }
     return _portraitImage;
 }

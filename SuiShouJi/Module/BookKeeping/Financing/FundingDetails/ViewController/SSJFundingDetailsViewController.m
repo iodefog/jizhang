@@ -146,7 +146,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0) {
         SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
-        if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
+        if ([item isKindOfClass:[SSJBillingChargeCellItem class]] && [((SSJBillingChargeCellItem*)item).billId integerValue] >= 1000) {
             SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
             calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
             [self.navigationController pushViewController:calenderDetailVC animated:YES];
