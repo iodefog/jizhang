@@ -133,7 +133,7 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.loginService cancel];
-    [self.navigationController setNavigationBarHidden:NO];
+//    [self.navigationController setNavigationBarHidden:NO];
 }
 
 //- (BOOL)prefersStatusBarHidden

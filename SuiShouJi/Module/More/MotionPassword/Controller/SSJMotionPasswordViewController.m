@@ -46,6 +46,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.hidesNavigationBarWhenPushed = YES;
         self.verifyFailureTimes = kVerifyFailureTimesLimit;
     }
     return self;
@@ -252,11 +253,13 @@ static const int kVerifyFailureTimesLimit = 5;
     if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
         [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
             if (success) {
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                } else {
-                    [self ssj_backOffAction];
-                }
+                SSJDispatchMainSync(^{
+                    if (self.finishHandle) {
+                        self.finishHandle(self);
+                    } else {
+                        [self ssj_backOffAction];
+                    }
+                });
             }
         }];
     }
