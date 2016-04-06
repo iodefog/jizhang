@@ -43,10 +43,4 @@
     }];
 }
 
-//+ (SSJPersonalDetailItem *)personalDetailItemWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
-//    SSJPersonalDetailItem *item = [[SSJPersonalDetailItem alloc] init];
-//
-//    return item;
-//}
-
 @end
