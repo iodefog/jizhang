@@ -20,10 +20,6 @@
 
 @property (nonatomic, strong) UIButton *endDateBtn;
 
-@property (nonatomic, strong) UILabel *beginYearLab;
-
-@property (nonatomic, strong) UILabel *endYearLab;
-
 @property (nonatomic, strong) UIImageView *arrowView;
 
 @end
@@ -50,20 +46,18 @@
     self.titleLab.top = 14;
     self.titleLab.centerX = self.width * 0.5;
     
-    CGFloat leftGap = self.width * 0.087;
-    self.beginDateLab.leftTop = CGPointMake(leftGap, 94);
-    self.beginYearLab.frame = CGRectMake(0, self.beginDateLab.bottom + 5, leftGap, 20);
-    self.beginDateBtn.left = self.beginYearLab.right;
-    self.beginDateBtn.centerY = self.beginYearLab.centerY;
+//    [self.beginDateLab sizeToFit];
+//    [self.beginDateLab ssj_relayoutBorder];
     
     self.arrowView.center = CGPointMake(self.width * 0.5, self.beginDateBtn.centerY);
     
-    self.endDateLab.leftTop = CGPointMake(self.arrowView.right + leftGap, 94);
-    self.endYearLab.left = self.arrowView.right;
-    self.endYearLab.width = leftGap;
-    self.endYearLab.centerY = self.arrowView.centerY;
-    self.endDateBtn.left = self.endYearLab.right;
-    self.endDateBtn.centerY = self.endYearLab.centerY;
+    CGFloat beginLeft = (self.width - self.arrowView.left - self.beginDateBtn.width) * 0.5;
+    self.beginDateLab.leftTop = CGPointMake(beginLeft, 94);
+    self.beginDateBtn.leftTop = CGPointMake(beginLeft, 116);
+    
+    CGFloat endLeft = (self.width - self.arrowView.right - self.endDateBtn.width) * 0.5 + self.arrowView.right;
+    self.endDateLab.leftTop = CGPointMake(endLeft, 94);
+    self.endDateBtn.leftTop = CGPointMake(endLeft, 116);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -79,13 +73,11 @@
     self.titleLab.attributedText = title;
     [self.titleLab sizeToFit];
     
-    [self.beginDateBtn setTitle:[beginDate formattedDateWithFormat:@"M月d日"] forState:UIControlStateNormal];
-    self.beginYearLab.text = (beginDate.year == [NSDate date].year) ? @"" :  [NSString stringWithFormat:@"%d年", (int)beginDate.year];
+    [self.beginDateBtn setTitle:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
 }
 
 - (void)setEndDate:(NSDate *)endDate {
-    [self.endDateBtn setTitle:[endDate formattedDateWithFormat:@"M月d日"] forState:UIControlStateNormal];
-    self.endYearLab.text = (endDate.year == [NSDate date].year) ? @"" :  [NSString stringWithFormat:@"%d年", (int)endDate.year];
+    [self.endDateBtn setTitle:[endDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
 }
 
 - (UILabel *)titleLab {
@@ -120,9 +112,9 @@
 - (UIButton *)beginDateBtn {
     if (!_beginDateBtn) {
         _beginDateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _beginDateBtn.size = CGSizeMake(78, 30);
+        _beginDateBtn.size = CGSizeMake(120, 30);
         _beginDateBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_beginDateBtn setTitle:@"--月--日" forState:UIControlStateNormal];
+        [_beginDateBtn setTitle:@"--年--月--日" forState:UIControlStateNormal];
         [_beginDateBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_beginDateBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
         [_beginDateBtn ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -134,33 +126,15 @@
 - (UIButton *)endDateBtn {
     if (!_endDateBtn) {
         _endDateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _endDateBtn.size = CGSizeMake(78, 30);
+        _endDateBtn.size = CGSizeMake(120, 30);
         _endDateBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_endDateBtn setTitle:@"--月--日" forState:UIControlStateNormal];
+        [_endDateBtn setTitle:@"--年--月--日" forState:UIControlStateNormal];
         [_endDateBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_endDateBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
         [_endDateBtn ssj_setBorderStyle:SSJBorderStyleBottom];
         [_endDateBtn ssj_setBorderWidth:1];
     }
     return _endDateBtn;
-}
-
-- (UILabel *)beginYearLab {
-    if (!_beginYearLab) {
-        _beginYearLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
-        _beginYearLab.font = [UIFont systemFontOfSize:16];
-        _beginYearLab.textAlignment = NSTextAlignmentCenter;
-    }
-    return _beginYearLab;
-}
-
-- (UILabel *)endYearLab {
-    if (!_endYearLab) {
-        _endYearLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
-        _endYearLab.font = [UIFont systemFontOfSize:16];
-        _endYearLab.textAlignment = NSTextAlignmentCenter;
-    }
-    return _endYearLab;
 }
 
 - (UIImageView *)arrowView {
