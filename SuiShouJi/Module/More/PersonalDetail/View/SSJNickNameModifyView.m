@@ -201,11 +201,7 @@
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         _comfirmButton.layer.cornerRadius = 3.0f;
-<<<<<<< HEAD
         _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
-=======
-//        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@""];
->>>>>>> 3bb4375588f2b33bf3119130405e0306230c600f
         _comfirmButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchDragInside];
     }
@@ -218,11 +214,7 @@
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
         _cancelButton.layer.cornerRadius = 3.0f;
-<<<<<<< HEAD
         _cancelButton.layer.borderColor = [UIColor ssj_colorWithHex:@"cccccc"].CGColor;
-=======
-//        _cancelButton.layer.borderColor = [UIColor ssj_colorWithHex:@""];
->>>>>>> 3bb4375588f2b33bf3119130405e0306230c600f
         _cancelButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
