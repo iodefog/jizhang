@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJNickNameModifyView : UIView
+@interface SSJNickNameModifyView : UIView<UITextViewDelegate>
 @property(nonatomic, strong) NSString *originalText;
+- (instancetype)initWithFrame:(CGRect)frame maxTextLength:(int)maxTextLength title:(NSString *)title;
+- (void)show;
+- (void)dismiss;
 @end

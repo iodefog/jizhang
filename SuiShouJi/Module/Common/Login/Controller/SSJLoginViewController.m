@@ -327,7 +327,6 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 -(void)qqLoginButtonClicked:(id)sender{
     NSArray *permissions= [NSArray arrayWithObjects:@"get_user_info",@"get_simple_userinfo",@"add_t",nil];
     [self.tencentOAuth authorize:permissions inSafari:NO];
-    [self.tencentOAuth getUserInfo];
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{

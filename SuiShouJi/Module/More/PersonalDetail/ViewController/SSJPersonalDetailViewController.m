@@ -23,12 +23,14 @@ static NSString *const kTitle5 = @"修改密码";
 #import "SSJDataSynchronizer.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJPasswordModifyViewController.h"
+#import "SSJNickNameModifyView.h"
 
 @interface SSJPersonalDetailViewController ()
 @property (nonatomic, strong) NSArray *titles;
 @property(nonatomic, strong) SSJPersonalDetailItem *item;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property(nonatomic, strong) UIView *loggedFooterView;
+@property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
 @end
 
 @implementation SSJPersonalDetailViewController
@@ -103,6 +105,9 @@ static NSString *const kTitle5 = @"修改密码";
     if ([title isEqualToString:kTitle5]) {
         SSJPasswordModifyViewController *passwordModifyVC = [[SSJPasswordModifyViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:passwordModifyVC animated:YES];
+    }
+    if ([title isEqualToString:kTitle2]) {
+        [self.nickNameModifyView show];
     }
 }
 #pragma mark - UITableViewDataSource
@@ -233,6 +238,13 @@ static NSString *const kTitle5 = @"修改密码";
         [_loggedFooterView addSubview:quitLogButton];
     }
     return _loggedFooterView;
+}
+
+-(SSJNickNameModifyView *)nickNameModifyView{
+    if (!_nickNameModifyView) {
+        _nickNameModifyView = [[SSJNickNameModifyView alloc]initWithFrame:[UIScreen mainScreen].bounds maxTextLength:10 title:@"昵称"];
+    }
+    return _nickNameModifyView;
 }
 
 - (void)didReceiveMemoryWarning {
