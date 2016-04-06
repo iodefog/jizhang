@@ -34,12 +34,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SSZipArchive.xcscheme</key>
+		<key>UMengFeedback.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>UMengFeedback.xcscheme</key>
+		<key>YYKeyboardManager.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -62,7 +62,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1A914F079D3819BEE8F24B04DCC51943</key>
+		<key>12A7AB8997AF8DDDCD177C6C497039FC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -87,27 +87,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>566EE5FACEDDA69E6CC3E5D6AF8A008F</key>
+		<key>4B60C41D6A135B768749953715F1D1DC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>700510FDCEA90578965EB9040ABE6F56</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>792EE41DA19545F9D80B9A86AD68AF88</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7C16441A02F1AB61362780503CDB0D6B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>8A5F19BD7A3E32A2CD8939916EB9A017</key>
+		<key>95D79C91F9B17B82D0C9266E307BD0CE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -122,17 +107,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E94901DC03A8BC2C9C51DD518B18F9A0</key>
+		<key>E0D9A75325322E5CB0C85CA726D7FEE8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EC92141A1E78E3F2886B6BAEF84B5774</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FD7A5220FCA9C0695286E235FF8389D5</key>
+		<key>E6FF5E298E05FE552ACBBABEB4F0AA5B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

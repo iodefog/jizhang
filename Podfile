@@ -3,6 +3,7 @@ pod 'AFNetworking', '~> 2.5'
 
 pod 'UMengSocial', '~> 4.3'
 
+pod 'YYKeyboardManager'
 
 platform :ios, '6.1'
 pod 'SDWebImage', '~>3.7'
@@ -20,3 +21,4 @@ pod 'DateTools'
 pod 'UMengFeedback', '~> 2.3.4'
 
 pod 'ZYCornerRadius', '~> 0.5.1'
+
