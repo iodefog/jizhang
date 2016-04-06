@@ -14,6 +14,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
+#import "SSJMagicExportViewController.h"
 #import "SSJStartChecker.h"
 #import "UMFeedback.h"
 
@@ -39,6 +40,7 @@ static NSString *const kTitle6 = @"关于我们";
         self.title = @"设置";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.hidesBottomBarWhenPushed = YES;
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
@@ -124,6 +126,10 @@ static NSString *const kTitle6 = @"关于我们";
                                              animated:YES];
     }
     
+    if ([title isEqualToString:kTitle3]) {
+        SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
+        [self.navigationController pushViewController:magicExportVC animated:YES];
+    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
