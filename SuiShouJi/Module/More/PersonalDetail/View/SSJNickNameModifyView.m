@@ -7,8 +7,11 @@
 //
 
 #import "SSJNickNameModifyView.h"
+#import <YYKeyboardManager/YYKeyboardManager.h>
 
-@interface SSJNickNameModifyView()
+
+@interface SSJNickNameModifyView()<YYKeyboardObserver>
+@property(nonatomic, strong) UIView *popView;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic) int maxLength;
 @property(nonatomic, strong) UIView *titleView;
@@ -25,24 +28,117 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.layer.cornerRadius = 3.f;
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
         self.title = title;
         self.maxLength = maxTextLength;
-        [self addSubview:self.titleView];
-        [self addSubview:self.titleLabel];
-        [self addSubview:self.textInput];
-        [self addSubview:self.textLengthLabel];
-        [self addSubview:self.bottomView];
-        [self addSubview:self.comfirmButton];
-        [self addSubview:self.cancelButton];
+        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backViewClicked:)];
+        [self addGestureRecognizer:gesture];
+        [self addSubview:self.popView];
+        [self.popView addSubview:self.titleView];
+        [self.titleView addSubview:self.titleLabel];
+        [self.popView addSubview:self.textInput];
+        [self.popView addSubview:self.textLengthLabel];
+        [self.popView addSubview:self.bottomView];
+        [self.bottomView addSubview:self.comfirmButton];
+        [self.bottomView addSubview:self.cancelButton];
         [self.textInput becomeFirstResponder];
+        [[YYKeyboardManager defaultManager] addObserver:self];
+        [self sizeToFit];
     }
     return self;
 }
 
+-(void)dealloc{
+    [[YYKeyboardManager defaultManager] removeObserver:self];
+}
+
+-(CGSize)sizeThatFits:(CGSize)size{
+    return [UIScreen mainScreen].bounds.size;
+}
+
+- (void)show {
+    if (self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [keyWindow addSubview:self];
+    
+    [self.textInput becomeFirstResponder];
+}
+
+- (void)dismiss {
+    if (!self.superview) {
+        return;
+    }
+    
+    [self.textInput resignFirstResponder];
+    
+    [self removeFromSuperview];
+}
+
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.popView.size = CGSizeMake(self.width - 20, 200);
+    self.popView.bottom = self.height;
+    self.popView.centerX = self.width / 2;
+    self.titleView.size = CGSizeMake(self.popView.width, 49);
+    self.titleView.leftTop = CGPointMake(0, 0);
+    self.titleView.centerX = self.popView.width / 2;
+    self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
+    self.textInput.size = CGSizeMake(self.popView.width - 20, 49);
+    self.textInput.top = self.titleView.bottom + 10;
+    self.textInput.centerX = self.popView.width / 2;
+    self.textLengthLabel.right = self.textInput.right;
+    self.textLengthLabel.top = self.textInput.bottom + 15;
+    self.bottomView.size = CGSizeMake(self.popView.width, 50);
+    self.bottomView.rightBottom = CGPointMake(0, self.popView.height);
+    self.bottomView.centerX = self.popView.width / 2;
+    self.comfirmButton.size = CGSizeMake(55, 27);
+    self.comfirmButton.right = self.textInput.right;
+    self.comfirmButton.centerY = self.bottomView.height / 2;
+    self.cancelButton.size = CGSizeMake(55, 27);
+    self.cancelButton.right = self.comfirmButton.left - 20;
+    self.cancelButton.centerY = self.bottomView.height / 2;
+}
+
+#pragma mark - UITextViewDelegate
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    NSString *string = textView.text ? : @"";
+    string = [string stringByReplacingCharactersInRange:range withString:text];
+    if (string.length > self.maxLength) {
+        self.textLengthLabel.text = @"剩余0个字";
+        [self.textLengthLabel sizeToFit];
+        return NO;
+    }
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - string.length];
+    [self.textLengthLabel sizeToFit];
+    return YES;
+}
+
+
+#pragma mark - @protocol YYKeyboardObserver
+- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+    [UIView animateWithDuration:transition.animationCurve delay:0 options:transition.animationOption animations:^{
+        CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self];
+        CGRect popframe = self.popView.frame;
+        popframe.origin.y = kbFrame.origin.y - popframe.size.height - 20;
+        self.popView.frame = popframe;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+
+-(UIView *)popView{
+    if (!_popView) {
+        _popView = [[UIView alloc]init];
+        _popView.userInteractionEnabled = YES;
+        _popView.backgroundColor = [UIColor whiteColor];
+        _popView.layer.cornerRadius = 3.0f;
+    }
+    return _popView;
 }
 
 -(UILabel *)titleLabel{
@@ -61,6 +157,7 @@
         _textInput = [[UITextView alloc]init];
         _textInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _textInput.font = [UIFont systemFontOfSize:15];
+        _textInput.delegate = self;
     }
     return _textInput;
 }
@@ -71,6 +168,7 @@
         _textLengthLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         _textLengthLabel.font = [UIFont systemFontOfSize:12];
         _textLengthLabel.text = [NSString stringWithFormat:@"剩余%d个字",self.maxLength];
+        [_textLengthLabel sizeToFit];
     }
     return _textLengthLabel;
 }
@@ -103,7 +201,7 @@
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         _comfirmButton.layer.cornerRadius = 3.0f;
-        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@""];
+        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _comfirmButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchDragInside];
     }
@@ -116,17 +214,26 @@
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
         _cancelButton.layer.cornerRadius = 3.0f;
-        _cancelButton.layer.borderColor = [UIColor ssj_colorWithHex:@""];
+        _cancelButton.layer.borderColor = [UIColor ssj_colorWithHex:@"cccccc"].CGColor;
         _cancelButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
 }
 
--(void)cancelButtonClicked:(id)sender{
-    [self.textInput resignFirstResponder];
-    [self removeFromSuperview];
+-(void)backViewClicked:(id)sender{
+    [self dismiss];
 }
+
+-(void)cancelButtonClicked:(id)sender{
+    [self dismiss];
+}
+
+-(void)comfirmButtonClicked:(id)sender{
+    
+}
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
