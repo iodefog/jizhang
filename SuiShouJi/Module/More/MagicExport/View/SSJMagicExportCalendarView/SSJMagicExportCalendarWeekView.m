@@ -10,8 +10,6 @@
 
 @interface SSJMagicExportCalendarWeekView ()
 
-@property (nonatomic, strong) NSArray *weekArr;
-
 @property (nonatomic, strong) NSMutableArray *labelArr;
 
 @end
@@ -27,9 +25,11 @@
             UILabel *lab = [[UILabel alloc] init];
             lab.backgroundColor = [UIColor whiteColor];
             lab.font = [UIFont systemFontOfSize:13];
-            lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor ssj_colorWithHex:@"393939"];
+            lab.text = week;
             lab.textAlignment = NSTextAlignmentCenter;
+            lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor ssj_colorWithHex:@"393939"];
             [_labelArr addObject:lab];
+            [self addSubview:lab];
         }
     }
     return self;

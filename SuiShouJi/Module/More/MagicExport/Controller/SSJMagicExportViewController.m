@@ -9,8 +9,10 @@
 #import "SSJMagicExportViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMagicExportSelectDateView.h"
-#import "SSJMagicExportStore.h"
 #import "SSJMagicExportCalendarViewController.h"
+#import "SSJMagicExportResultViewController.h"
+#import "SSJMagicExportService.h"
+#import "SSJMagicExportStore.h"
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate>
 
@@ -26,10 +28,17 @@
 
 @property (nonatomic, strong) UIButton *commitBtn;
 
+@property (nonatomic, strong) NSDate *beginDate;
+
+@property (nonatomic, strong) NSDate *endDate;
+
+@property (nonatomic, strong) SSJMagicExportService *service;
+
 @end
 
 @implementation SSJMagicExportViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"数据导出";
@@ -40,15 +49,55 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view ssj_showLoadingIndicator];
+    [SSJMagicExportStore queryBillPeriodWithSuccess:^(NSDictionary<NSString *,NSDate *> *result) {
+        [self.view ssj_hideLoadingIndicator];
+        
+        self.beginDate = result[SSJMagicExportStoreBeginDateKey];
+        self.endDate = result[SSJMagicExportStoreEndDateKey];
+        
+        if (self.beginDate && self.endDate) {
+            [self setUpView];
+            [self updateBeginAndEndDate];
+        } else {
+            
+        }
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.service cancel];
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    [super serverDidFinished:service];
+    if ([service.returnCode isEqualToString:@"1"]) {
+        SSJMagicExportResultViewController *resultVC = [[SSJMagicExportResultViewController alloc] init];
+        [self.navigationController pushViewController:resultVC animated:YES];
+    }
+}
+
+#pragma mark - Private
+- (void)setUpView {
     TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:scrollView];
-    
     [scrollView addSubview:self.dateLabel];
     [scrollView addSubview:self.selectDateView];
     [scrollView addSubview:self.emailLabel];
     [scrollView addSubview:self.emailView];
     [self.emailView addSubview:self.emailTextField];
     [scrollView addSubview:self.commitBtn];
+}
+
+- (void)updateBeginAndEndDate {
+    [self.selectDateView.beginDateBtn setTitle:[self.beginDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
+    [self.selectDateView.endDateBtn setTitle:[self.endDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
 }
 
 #pragma mark - Event
@@ -58,7 +107,16 @@
 }
 
 - (void)commitButtonAction {
+    if (!self.emailTextField.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请先输入邮箱地址"];
+        return;
+    }
     
+    if (!_service) {
+        _service = [[SSJMagicExportService alloc] initWithDelegate:self];
+        _service.showLodingIndicator = YES;
+    }
+    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:self.emailTextField.text];
 }
 
 #pragma mark - Getter

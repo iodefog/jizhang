@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const SSJMagicExportStoreBeginDateKey;
+extern NSString *const SSJMagicExportStoreEndDateKey;
+
 @interface SSJMagicExportStore : NSObject
 
-+ (void)queryTheFirstBillDateWithSuccess:(void (^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure;
++ (void)queryBillPeriodWithSuccess:(void (^)(NSDictionary<NSString *, NSDate *> *result))success failure:(void (^)(NSError *error))failure;
+
++ (void)queryAllBillDateWithSuccess:(void (^)(NSArray<NSDate *> *result))success failure:(void (^)(NSError *error))failure;
 
 @end

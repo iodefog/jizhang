@@ -32,7 +32,6 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 
 @property (nonatomic, strong) NSMutableArray *items;
 
-
 @end
 
 @implementation SSJMagicExportCalendarView
@@ -68,8 +67,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     SSJMagicExportCalendarHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kCalendarHeaderId forIndexPath:indexPath];
-    SSJMagicExportCalendarViewCellItem *item = [_items ssj_objectAtIndexPath:indexPath];
-    headerView.title = [item.date formattedDateWithFormat:@"yyyy年M月"];
+    headerView.title = [[_startDate dateByAddingMonths:indexPath.section] formattedDateWithFormat:@"yyyy年M月"];
     return headerView;
 }
 
@@ -107,7 +105,13 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     }
     
     NSDate *now = [NSDate date];
-    NSArray *periods = [SSJDatePeriod periodsBetweenDate:_startDate andAnotherDate:_endDate periodType:SSJDatePeriodTypeMonth];
+    // 应为periodsBetweenDate方法返回的周期是从_startDate之后开始的，所以要加上_startDate的周期
+    NSMutableArray *periods = [[SSJDatePeriod periodsBetweenDate:_startDate andAnotherDate:_endDate periodType:SSJDatePeriodTypeMonth] mutableCopy];
+    if (!periods) {
+        periods = [[NSMutableArray alloc] init];
+    }
+    [periods addObject:[SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:_startDate]];
+    
     for (SSJDatePeriod *period in periods) {
         NSInteger firstDayIndex = [period.startDate weekday] - 1;
         NSInteger itemCount = firstDayIndex + [period daysCount];
@@ -144,12 +148,6 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 #pragma mark - Private
 - (BOOL)checkStartDate:(NSDate *)startDate {
     SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:startDate];
-//    SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-//    if ([startPeriod compareWithPeriod:currentPeriod] == SSJDatePeriodComparisonResultDescending) {
-//        NSLog(@">>> 错误，启始月大于当前月");
-//        return NO;
-//    }
-    
     if (_endDate) {
         SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:_endDate];
         if ([startPeriod compareWithPeriod:endPeriod] == SSJDatePeriodComparisonResultDescending) {
@@ -163,12 +161,6 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 
 - (BOOL)checkEndDate:(NSDate *)endDate {
     SSJDatePeriod *endPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:endDate];
-//    SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-//    if ([endPeriod compareWithPeriod:currentPeriod] == SSJDatePeriodComparisonResultAscending) {
-//        NSLog(@">>> 错误，启始月大于当前月");
-//        return NO;
-//    }
-    
     if (_startDate) {
         SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:_startDate];
         if ([startPeriod compareWithPeriod:endPeriod] == SSJDatePeriodComparisonResultDescending) {
@@ -208,6 +200,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         _layout.minimumInteritemSpacing = 0;
         _layout.itemSize = CGSizeMake(self.width / 7, 60);
         _layout.headerReferenceSize = CGSizeMake(self.width, 45);
+        _layout.sectionHeadersPinToVisibleBounds = YES;
     }
     return _layout;
 }

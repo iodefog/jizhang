@@ -8,6 +8,14 @@
 
 #import "SSJBaseViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SSJMagicExportCalendarViewController : SSJBaseViewController
 
+@property (nonatomic, strong) NSDate *beginDate;
+
+@property (nonatomic, strong) NSDate *endDate;
+
 @end
+
+NS_ASSUME_NONNULL_END

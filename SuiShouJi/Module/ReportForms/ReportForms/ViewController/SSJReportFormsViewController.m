@@ -92,10 +92,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    
     [self reloadDatas];
 }
 

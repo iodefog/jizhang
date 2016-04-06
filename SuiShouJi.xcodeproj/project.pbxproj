@@ -55,6 +55,7 @@
 		7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */; };
 		7D83081F1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D83081E1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m */; };
 		7D8308221CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8308211CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.m */; };
+		7D8308251CB4F66B004E48ED /* SSJMagicExportResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8308241CB4F66B004E48ED /* SSJMagicExportResultViewController.m */; };
 		7D893F291C91144D00886995 /* budget_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F1F1C91144D00886995 /* budget_add@2x.png */; };
 		7D893F2A1C91144D00886995 /* budget_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F201C91144D00886995 /* budget_add@3x.png */; };
 		7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F211C91144D00886995 /* budget_left@2x.png */; };
@@ -680,6 +681,8 @@
 		7D83081E1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarHeaderView.m; sourceTree = "<group>"; };
 		7D8308201CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarWeekView.h; sourceTree = "<group>"; };
 		7D8308211CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarWeekView.m; sourceTree = "<group>"; };
+		7D8308231CB4F66B004E48ED /* SSJMagicExportResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportResultViewController.h; sourceTree = "<group>"; };
+		7D8308241CB4F66B004E48ED /* SSJMagicExportResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportResultViewController.m; sourceTree = "<group>"; };
 		7D893F1F1C91144D00886995 /* budget_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@2x.png"; sourceTree = "<group>"; };
 		7D893F201C91144D00886995 /* budget_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@3x.png"; sourceTree = "<group>"; };
 		7D893F211C91144D00886995 /* budget_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_left@2x.png"; sourceTree = "<group>"; };
@@ -1785,6 +1788,8 @@
 				7DB428FA1CAE0F5B00B46F32 /* SSJMagicExportViewController.m */,
 				7DB428FC1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.h */,
 				7DB428FD1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m */,
+				7D8308231CB4F66B004E48ED /* SSJMagicExportResultViewController.h */,
+				7D8308241CB4F66B004E48ED /* SSJMagicExportResultViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4104,6 +4109,7 @@
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */,
+				7D8308251CB4F66B004E48ED /* SSJMagicExportResultViewController.m in Sources */,
 				9CD5C3951CB3DE2B004CC3FE /* SSJNickNameModifyView.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BD71E6711C881C8900796FF0 /* SSJNoneCircleChargeView.m in Sources */,

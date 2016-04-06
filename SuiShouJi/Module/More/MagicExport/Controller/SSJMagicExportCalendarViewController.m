@@ -8,10 +8,13 @@
 
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJMagicExportCalendarView.h"
+#import "SSJMagicExportStore.h"
 
 @interface SSJMagicExportCalendarViewController () <SSJMagicExportCalendarViewDelegate>
 
 @property (nonatomic, strong) SSJMagicExportCalendarView *calendarView;
+
+@property (nonatomic, strong) NSArray *billDates;
 
 @end
 
@@ -28,14 +31,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.calendarView];
-    [self.calendarView reload];
+    self.view.backgroundColor = [UIColor lightGrayColor];
+    [self.view ssj_showLoadingIndicator];
+    
+    [SSJMagicExportStore queryAllBillDateWithSuccess:^(NSArray<NSDate *> *result) {
+        [self.view ssj_hideLoadingIndicator];
+        self.billDates = result;
+        [self.view addSubview:self.calendarView];
+        [self.calendarView reload];
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.calendarView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
 }
 
 #pragma mark - SSJMagicExportCalendarViewDelegate
 - (NSDictionary<NSString *, NSDate *>*)periodForCalendarView:(SSJMagicExportCalendarView *)calendarView {
-    return @{SSJMagicExportCalendarViewBeginDateKey:[NSDate dateWithYear:2016 month:1 day:1],
-             SSJMagicExportCalendarViewEndDateKey:[NSDate dateWithYear:2016 month:2 day:1]};
+    return @{SSJMagicExportCalendarViewBeginDateKey:self.beginDate,
+             SSJMagicExportCalendarViewEndDateKey:self.endDate};
 }
 
 - (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView shouldShowMarkerForDate:(NSDate *)date {
