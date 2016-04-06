@@ -25,7 +25,7 @@
         while ([result next]) {
             item.iconUrl = [result stringForColumn:@"CICONS"];
             item.nickName = [result stringForColumn:@"CNICKID"];
-            item.signature = [result stringForColumn:@"USERSIGNAGUTURE"];
+            item.signature = [result stringForColumn:@"USERSIGNATURE"];
             item.mobileNo = [result stringForColumn:@"CMOBILENO"];
         }
         if (!result) {

@@ -25,12 +25,14 @@ static NSString *const kTitle5 = @"修改密码";
 #import "SSJPasswordModifyViewController.h"
 #import "SSJNickNameModifyView.h"
 
+
 @interface SSJPersonalDetailViewController ()
 @property (nonatomic, strong) NSArray *titles;
 @property(nonatomic, strong) SSJPersonalDetailItem *item;
 @property (nonatomic, strong) SSJPortraitUploadNetworkService *portraitUploadService;
 @property(nonatomic, strong) UIView *loggedFooterView;
 @property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
+@property(nonatomic, strong) SSJNickNameModifyView *signatureModifyView;
 @end
 
 @implementation SSJPersonalDetailViewController
@@ -109,6 +111,9 @@ static NSString *const kTitle5 = @"修改密码";
     if ([title isEqualToString:kTitle2]) {
         [self.nickNameModifyView show];
     }
+    if ([title isEqualToString:kTitle3]) {
+        [self.signatureModifyView show];
+    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -143,7 +148,7 @@ static NSString *const kTitle5 = @"修改密码";
         if ([self.item.signature isEqualToString:@""] || self.item.signature == nil) {
             mineHomeCell.cellDetail = @"啥也不留~";
         }else{
-            mineHomeCell.cellDetail = self.item.nickName;
+            mineHomeCell.cellDetail = self.item.signature;
         }
     }else if ([title isEqualToString:kTitle4]){
         mineHomeCell.cellDetail = self.item.mobileNo;
@@ -243,8 +248,39 @@ static NSString *const kTitle5 = @"修改密码";
 -(SSJNickNameModifyView *)nickNameModifyView{
     if (!_nickNameModifyView) {
         _nickNameModifyView = [[SSJNickNameModifyView alloc]initWithFrame:[UIScreen mainScreen].bounds maxTextLength:10 title:@"昵称"];
+        if (self.item.nickName != nil || ![self.item.nickName isEqualToString:@""]) {
+            _nickNameModifyView.originalText = self.item.nickName;
+        }
+        __weak typeof(self) weakSelf = self;
+        _nickNameModifyView.comfirmButtonClickedBlock = ^(NSString *textInputed){
+            weakSelf.item.nickName = textInputed;
+            [weakSelf.tableView reloadData];
+            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+            userItem.userId = SSJUSERID();
+            userItem.nickName = textInputed;
+            [SSJUserTableManager saveUserItem:userItem];
+        };
     }
     return _nickNameModifyView;
+}
+
+-(SSJNickNameModifyView *)signatureModifyView{
+    if (!_signatureModifyView) {
+        _signatureModifyView = [[SSJNickNameModifyView alloc]initWithFrame:[UIScreen mainScreen].bounds maxTextLength:20 title:@"个性签名"];
+        if (self.item.signature != nil || ![self.item.signature isEqualToString:@""]) {
+            _signatureModifyView.originalText = self.item.signature;
+        }
+        __weak typeof(self) weakSelf = self;
+        _signatureModifyView.comfirmButtonClickedBlock = ^(NSString *textInputed){
+            weakSelf.item.signature = textInputed;
+            [weakSelf.tableView reloadData];
+            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+            userItem.userId = SSJUSERID();
+            userItem.signature = textInputed;
+            [SSJUserTableManager saveUserItem:userItem];
+        };
+    }
+    return _signatureModifyView;
 }
 
 - (void)didReceiveMemoryWarning {

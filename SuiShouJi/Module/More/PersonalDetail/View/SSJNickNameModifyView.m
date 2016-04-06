@@ -9,7 +9,6 @@
 #import "SSJNickNameModifyView.h"
 #import <YYKeyboardManager/YYKeyboardManager.h>
 
-
 @interface SSJNickNameModifyView()<YYKeyboardObserver>
 @property(nonatomic, strong) UIView *popView;
 @property(nonatomic, strong) NSString *title;
@@ -230,7 +229,20 @@
 }
 
 -(void)comfirmButtonClicked:(id)sender{
-    
+    [self dismiss];
+    if (self.comfirmButtonClickedBlock) {
+        self.comfirmButtonClickedBlock(self.textInput.text);
+    }
+}
+
+-(void)setOriginalText:(NSString *)originalText{
+    _originalText = originalText;
+    if (_originalText.length > _maxLength) {
+        return;
+    }
+    self.textInput.text = originalText;
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - _originalText.length];
+    [self.textLengthLabel sizeToFit];
 }
 
 

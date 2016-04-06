@@ -11,6 +11,9 @@
 @interface SSJNickNameModifyView : UIView<UITextViewDelegate>
 @property(nonatomic, strong) NSString *originalText;
 - (instancetype)initWithFrame:(CGRect)frame maxTextLength:(int)maxTextLength title:(NSString *)title;
+typedef void (^comfirmButtonClickedBlock)(NSString *textInputed);
+
+@property(nonatomic,copy) comfirmButtonClickedBlock comfirmButtonClickedBlock;
 - (void)show;
 - (void)dismiss;
 @end
