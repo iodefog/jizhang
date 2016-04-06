@@ -8,13 +8,37 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSString *const SSJMagicExportCalendarViewBeginDateKey;
+extern NSString *const SSJMagicExportCalendarViewEndDateKey;
+
+@class SSJDatePeriod;
+@class SSJMagicExportCalendarView;
+
+@protocol SSJMagicExportCalendarViewDelegate <NSObject>
+
+- (NSDictionary<NSString *, NSDate *>*)periodForCalendarView:(SSJMagicExportCalendarView *)calendarView;
+
+- (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView shouldShowMarkerForDate:(NSDate *)date;
+
+- (NSString *)calendarView:(SSJMagicExportCalendarView *)calendarView descriptionForSelectedDate:(NSDate *)date;
+
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectedDate:(NSDate *)date;
+
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didDeselectedDate:(NSDate *)date;
+
+@end
+
 
 @interface SSJMagicExportCalendarView : UIView
 
-@property (nonatomic, strong) NSDate *selectedBeginDate;
+@property (nonatomic, weak) id<SSJMagicExportCalendarViewDelegate> delegate;
 
-@property (nonatomic, strong) NSDate *selectedEndDate;
+@property (nonatomic, strong) NSArray<NSDate *> *selectedDates;
 
-- (instancetype)initWithFrame:(CGRect)frame startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+- (void)reload;
 
 @end
+
+NS_ASSUME_NONNULL_END

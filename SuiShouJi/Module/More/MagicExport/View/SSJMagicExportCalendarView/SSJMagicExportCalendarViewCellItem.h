@@ -10,16 +10,18 @@
 
 @interface SSJMagicExportCalendarViewCellItem : NSObject
 
+@property (nonatomic) BOOL canSelect;
+
 @property (nonatomic) BOOL selected;
 
 @property (nonatomic) BOOL showMarker;
 
 @property (nonatomic) BOOL showContent;
 
-@property (nonatomic) BOOL canSelect;
-
 @property (nonatomic, strong) NSDate *date;
 
-@property (nonatomic, strong) UIColor *desc;
+@property (nonatomic, strong) UIColor *dateColor;
+
+@property (nonatomic, copy) NSString *desc;
 
 @end

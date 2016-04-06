@@ -10,6 +10,7 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMagicExportSelectDateView.h"
 #import "SSJMagicExportStore.h"
+#import "SSJMagicExportCalendarViewController.h"
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate>
 
@@ -51,12 +52,9 @@
 }
 
 #pragma mark - Event
-- (void)selectBeginDate {
-    
-}
-
-- (void)selectEndDate {
-    
+- (void)selectDateAction {
+    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+    [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
 - (void)commitButtonAction {
@@ -82,8 +80,8 @@
 - (SSJMagicExportSelectDateView *)selectDateView {
     if (!_selectDateView) {
         _selectDateView = [[SSJMagicExportSelectDateView alloc] initWithFrame:CGRectMake(0, self.dateLabel.bottom, self.view.width, 176)];
-        [_selectDateView.beginDateBtn addTarget:self action:@selector(selectBeginDate) forControlEvents:UIControlEventTouchUpInside];
-        [_selectDateView.endDateBtn addTarget:self action:@selector(selectEndDate) forControlEvents:UIControlEventTouchUpInside];
+        [_selectDateView.beginDateBtn addTarget:self action:@selector(selectDateAction) forControlEvents:UIControlEventTouchUpInside];
+        [_selectDateView.endDateBtn addTarget:self action:@selector(selectDateAction) forControlEvents:UIControlEventTouchUpInside];
         _selectDateView.beginDate = [NSDate date];
         _selectDateView.endDate = [NSDate date];
     }
