@@ -8,7 +8,6 @@
 
 #import "SSJRecordMakingViewController.h"
 #import "SSJCustomKeyboard.h"
-#import "SSJCategoryListView.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
 #import "SSJCalendarCollectionViewCell.h"

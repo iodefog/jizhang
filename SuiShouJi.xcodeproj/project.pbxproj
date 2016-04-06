@@ -309,6 +309,7 @@
 		9CD5C38D1CB3A427004CC3FE /* SSJPasswordModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3871CB3A427004CC3FE /* SSJPasswordModifyViewController.m */; };
 		9CD5C38E1CB3A427004CC3FE /* SSJPersonalDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3891CB3A427004CC3FE /* SSJPersonalDetailViewController.m */; };
 		9CD5C3911CB3B24D004CC3FE /* SSJPasswordModifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3901CB3B24D004CC3FE /* SSJPasswordModifyService.m */; };
+		9CD5C3951CB3DE2B004CC3FE /* SSJNickNameModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3941CB3DE2B004CC3FE /* SSJNickNameModifyView.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0214481C3E87AE000E944E /* SSJFundingTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0214471C3E87AE000E944E /* SSJFundingTypeSelectViewController.m */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
@@ -395,7 +396,6 @@
 		BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4D1C1A6DBC00910D61 /* LaunchScreen.storyboard */; };
 		BD543C5A1C1A6DBC00910D61 /* SuiShouJiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C591C1A6DBC00910D61 /* SuiShouJiTests.m */; };
 		BD543C651C1A6DBC00910D61 /* SuiShouJiUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C641C1A6DBC00910D61 /* SuiShouJiUITests.m */; };
-		BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */; };
 		BD6C388F1C910A8F000E2E42 /* pushsound.wav in Resources */ = {isa = PBXBuildFile; fileRef = BD6C388E1C910A8F000E2E42 /* pushsound.wav */; };
 		BD70DED11C46321B000E6CC9 /* SSJNewFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */; };
 		BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DED31C46496E000E6CC9 /* SSJNewFundingTypeCell.m */; };
@@ -416,7 +416,6 @@
 		BD71E66E1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD71E66D1C87DE7E00796FF0 /* SSJChargeReminderTimeView.m */; };
 		BD71E6711C881C8900796FF0 /* SSJNoneCircleChargeView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD71E6701C881C8900796FF0 /* SSJNoneCircleChargeView.m */; };
 		BD71E6781C88284100796FF0 /* SSJBookKeepingRiminderCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD71E6771C88284100796FF0 /* SSJBookKeepingRiminderCircleView.m */; };
-		BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */; };
 		BD774A971C88348B001E11FB /* SSJBookkeepingRiminderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD774A961C88348B001E11FB /* SSJBookkeepingRiminderCell.m */; };
 		BD78E4A71C8FCF9D003A1EE1 /* login_bg@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD78E4A51C8FCF9D003A1EE1 /* login_bg@2x.jpg */; };
 		BD78E4A81C8FCF9D003A1EE1 /* login_bg@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BD78E4A61C8FCF9D003A1EE1 /* login_bg@3x.jpg */; };
@@ -1012,6 +1011,8 @@
 		9CD5C3891CB3A427004CC3FE /* SSJPersonalDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPersonalDetailViewController.m; sourceTree = "<group>"; };
 		9CD5C38F1CB3B24D004CC3FE /* SSJPasswordModifyService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPasswordModifyService.h; sourceTree = "<group>"; };
 		9CD5C3901CB3B24D004CC3FE /* SSJPasswordModifyService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPasswordModifyService.m; sourceTree = "<group>"; };
+		9CD5C3931CB3DE2B004CC3FE /* SSJNickNameModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNickNameModifyView.h; sourceTree = "<group>"; };
+		9CD5C3941CB3DE2B004CC3FE /* SSJNickNameModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNickNameModifyView.m; sourceTree = "<group>"; };
 		BD0214461C3E87AE000E944E /* SSJFundingTypeSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectViewController.h; sourceTree = "<group>"; };
 		BD0214471C3E87AE000E944E /* SSJFundingTypeSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectViewController.m; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
@@ -1165,8 +1166,6 @@
 		BD543C601C1A6DBC00910D61 /* SuiShouJiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuiShouJiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD543C641C1A6DBC00910D61 /* SuiShouJiUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SuiShouJiUITests.m; sourceTree = "<group>"; };
 		BD543C661C1A6DBC00910D61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionView.h; sourceTree = "<group>"; };
-		BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionView.m; sourceTree = "<group>"; };
 		BD6C388E1C910A8F000E2E42 /* pushsound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pushsound.wav; sourceTree = "<group>"; };
 		BD70DECF1C46321B000E6CC9 /* SSJNewFundingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewFundingViewController.h; sourceTree = "<group>"; };
 		BD70DED01C46321B000E6CC9 /* SSJNewFundingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewFundingViewController.m; sourceTree = "<group>"; };
@@ -1206,8 +1205,6 @@
 		BD71E6701C881C8900796FF0 /* SSJNoneCircleChargeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNoneCircleChargeView.m; sourceTree = "<group>"; };
 		BD71E6761C88284100796FF0 /* SSJBookKeepingRiminderCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingRiminderCircleView.h; sourceTree = "<group>"; };
 		BD71E6771C88284100796FF0 /* SSJBookKeepingRiminderCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingRiminderCircleView.m; sourceTree = "<group>"; };
-		BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryListView.h; sourceTree = "<group>"; };
-		BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryListView.m; sourceTree = "<group>"; };
 		BD774A951C88348B001E11FB /* SSJBookkeepingRiminderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingRiminderCell.h; sourceTree = "<group>"; };
 		BD774A961C88348B001E11FB /* SSJBookkeepingRiminderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingRiminderCell.m; sourceTree = "<group>"; };
 		BD78E4A51C8FCF9D003A1EE1 /* login_bg@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "login_bg@2x.jpg"; sourceTree = "<group>"; };
@@ -2498,6 +2495,8 @@
 			children = (
 				9CD5C3831CB3A427004CC3FE /* SSJPasswordModifyCell.h */,
 				9CD5C3841CB3A427004CC3FE /* SSJPasswordModifyCell.m */,
+				9CD5C3931CB3DE2B004CC3FE /* SSJNickNameModifyView.h */,
+				9CD5C3941CB3DE2B004CC3FE /* SSJNickNameModifyView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2965,10 +2964,6 @@
 				9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */,
 				BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */,
 				BD0E43E91C21110B00F9179D /* SSJCustomKeyBoardButton.m */,
-				BD6B90DE1C23F51100032C8A /* SSJCategoryCollectionView.h */,
-				BD6B90DF1C23F51100032C8A /* SSJCategoryCollectionView.m */,
-				BD7676851C27D7A400CDD507 /* SSJCategoryListView.h */,
-				BD7676861C27D7A400CDD507 /* SSJCategoryListView.m */,
 				BDDC5B8A1C2850D500FC2887 /* SSJCategoryCollectionViewCell.h */,
 				BDDC5B8B1C2850D500FC2887 /* SSJCategoryCollectionViewCell.m */,
 				BDDC5B911C291ADF00FC2887 /* SSJDateSelectedView.h */,
@@ -4109,6 +4104,7 @@
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */,
+				9CD5C3951CB3DE2B004CC3FE /* SSJNickNameModifyView.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
 				BD71E6711C881C8900796FF0 /* SSJNoneCircleChargeView.m in Sources */,
 				BD8BA8731CA6AFAC00D3DDF1 /* SSJNewCategoryCollectionView.m in Sources */,
@@ -4257,7 +4253,6 @@
 				BD7BC84B1C3A6716001DE5D8 /* SSJFundingDetailHelper.m in Sources */,
 				BD7BC8541C3ADAAA001DE5D8 /* SSJFundingDetailDateHeader.m in Sources */,
 				7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */,
-				BD6B90E01C23F51100032C8A /* SSJCategoryCollectionView.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
@@ -4292,7 +4287,6 @@
 				9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */,
 				7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
-				BD7676871C27D7A400CDD507 /* SSJCategoryListView.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
 				7DE74BDF1C9AF28F00D27E7D /* SSJStartView.m in Sources */,
 				BD37D2D21C5216130050BDAA /* SSJSyncSettingTableViewCell.m in Sources */,

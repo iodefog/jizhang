@@ -11,6 +11,11 @@
 #import "SSJPasswordModifyViewController.h"
 #import "SSJPasswordModifyCell.h"
 #import "SSJPasswordModifyService.h"
+#import "SSJLoginViewController.h"
+
+#import "SSJDataSynchronizer.h"
+#import "SSJUserTableManager.h"
+#import "SSJUserDefaultDataCreater.h"
 
 @interface SSJPasswordModifyViewController ()
 @property(nonatomic, strong) UIView *comfirmView;
@@ -118,7 +123,7 @@
 
 -(SSJPasswordModifyService *)service{
     if (!_service) {
-        _service = [[SSJPasswordModifyService alloc]init];
+        _service = [[SSJPasswordModifyService alloc]initWithDelegate:self];
     }
     return _service;
 }
@@ -127,14 +132,11 @@
 - (void)comfirmButtonClicked:(id)sender{
     NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-    if (![pred evaluateWithObject:self.oldPasswordInput.text]) {
-        [CDAutoHideMessageHUD showMessage:@""];
-        return;
-    }else if (![pred evaluateWithObject:self.modifiedPasswordInput.text]){
-        [CDAutoHideMessageHUD showMessage:@""];
+    if (![pred evaluateWithObject:self.modifiedPasswordInput.text]){
+        [CDAutoHideMessageHUD showMessage:@"您的新密码不是由数字和密码组成的哦，请重新设置一个吧～"];
         return;
     }else if (![self.comfirmNewPasswordInput.text isEqualToString:self.modifiedPasswordInput.text]){
-        [CDAutoHideMessageHUD showMessage:@""];
+        [CDAutoHideMessageHUD showMessage:@"您两次输入的新密码不一致，请重新输入吧～"];
         return;
     }
     [self.service modifyPasswordWithOldPassword:self.oldPasswordInput.text newPassword:self.modifiedPasswordInput.text];
@@ -145,6 +147,14 @@
     [super serverDidFinished:service];
     if ([service.returnCode isEqualToString:@"1"]) {
         [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        SSJClearLoginInfo();
+        [SSJUserTableManager reloadUserIdWithError:nil];
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+        loginVc.backController = [self.navigationController.viewControllers firstObject];
+        [self.navigationController pushViewController:loginVc animated:YES];
     }else{
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:service.desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alert show];

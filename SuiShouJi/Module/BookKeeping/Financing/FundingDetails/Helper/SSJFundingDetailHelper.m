@@ -23,7 +23,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                          success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
                          failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.IMONEY , a.cbilldate , a.ICHARGEID , a.cwritedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -37,12 +37,17 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
             item.imageName = [resultSet stringForColumn:@"CCOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
-            item.incomeOrExpence = [resultSet intForColumn:@"ITYPE"];
-            item.money = [resultSet stringForColumn:@"IMONEY"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
+            item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];
+            item.fundId = [resultSet stringForColumn:@"IFUNSID"];
             item.billDate = [resultSet stringForColumn:@"CBILLDATE"];
-            item.billId = [resultSet stringForColumn:@"ID"];
+            item.editeDate = [resultSet stringForColumn:@"CWRITEDATE"];
+            item.billId = [resultSet stringForColumn:@"IBILLID"];
+            item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
+            item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
+            item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
+            item.configId = [resultSet stringForColumn:@"iconfigid"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
