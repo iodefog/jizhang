@@ -247,6 +247,7 @@ static id _instance;
 }
 
 - (void)keyboardBtnTouched:(UIButton *)sender{
+    NSCharacterSet *set=[NSCharacterSet characterSetWithCharactersInString:@"￥+-"];
     if (self.textField==nil) {
         return;
     }
@@ -268,7 +269,7 @@ static id _instance;
     }else if (sender.tag == 11){
         inputString = @"";
     }else if (sender.tag == 16 && [sender.titleLabel.text isEqualToString: @"="]){
-        self.rightNum = [self.textField.text floatValue];
+        self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
         if (self.PlusOrMinusModel == YES) {
             self.leftNum = self.leftNum + self.rightNum;
         }else{
@@ -283,9 +284,9 @@ static id _instance;
     }else if (sender.tag == 13){
         if (self.lastPressTag != 13) {
             if (self.plusOrMinusKeyHasPressed == NO) {
-                self.leftNum = [self.textField.text floatValue];
+                self.leftNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
             }else{
-                self.rightNum = [self.textField.text floatValue];
+                self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
             }
         }
         self.leftNum = self.leftNum + self.rightNum;
@@ -300,9 +301,9 @@ static id _instance;
     }else if (sender.tag == 14){
         if (self.lastPressTag != 14) {
             if (self.plusOrMinusKeyHasPressed == NO) {
-                self.leftNum = [self.textField.text floatValue];
+                self.leftNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
             }else{
-                self.rightNum = [self.textField.text floatValue];
+                self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
             }
         }
         self.leftNum = self.leftNum - self.rightNum;
