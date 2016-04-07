@@ -16,4 +16,6 @@
 
 @property (nonatomic, copy) void (^clickBlcok)(SSJMagicExportCalendarDateView *);
 
+- (void)update;
+
 @end
