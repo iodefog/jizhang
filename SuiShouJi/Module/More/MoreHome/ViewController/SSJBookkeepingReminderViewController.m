@@ -146,9 +146,9 @@ static NSString *const kTitle3 = @"定期提醒";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 1) {
-        [[UIApplication sharedApplication].keyWindow addSubview:self.chargeReminderTime];
+        [self.chargeReminderTime show];
     }else if (indexPath.section == 2){
-        [[UIApplication sharedApplication].keyWindow addSubview:self.chargeReminderCircle];
+        [self.chargeReminderCircle show];
     }
 }
 
