@@ -17,4 +17,9 @@ typedef void (^circleSelectBlock)(NSString *dateNumString , NSString *dateString
 
 @property (nonatomic, copy) circleSelectBlock circleSelectBlock;
 
+
+-(void)show;
+
+-(void)dismiss;
+
 @end

@@ -40,6 +40,9 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
 
 @implementation UMFeedbackViewController
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
 
 - (id)init {
     self = [super init];
@@ -205,6 +208,20 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidShow:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
 }
 
 

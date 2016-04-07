@@ -26,14 +26,44 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
         _weekdayArray = [[NSMutableArray alloc]initWithArray:@[@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"]];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         [self addSubview:self.tableView];
         [self addSubview:self.topView];
+        [self sizeToFit];
     }
     return self;
 }
+
+-(CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 370);
+}
+
+- (void)show {
+    if (self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    self.top = keyWindow.height;
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+        self.bottom = keyWindow.height;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
+- (void)dismiss {
+    if (!self.superview) {
+        return;
+    }
+    
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [self.superview ssj_hideBackViewForView:self animation:^{
+        self.top = keyWindow.bottom;
+    } timeInterval:0.25 fininshed:NULL];
+}
+
 
 -(void)layoutSubviews{
     [super layoutSubviews];
@@ -127,7 +157,7 @@
 }
 
 -(void)closeButtonClicked:(id)sender{
-    [self removeFromSuperview];
+    [self dismiss];
 }
 
 -(void)comfirmButtonClicked:(id)sender{
@@ -183,7 +213,7 @@
     if (self.circleSelectBlock) {
         self.circleSelectBlock(dateNumString,dateString);
     }
-    [self removeFromSuperview];
+    [self dismiss];
 }
 
 -(void)setSelectWeekStr:(NSString *)selectWeekStr{
