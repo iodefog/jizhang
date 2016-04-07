@@ -40,9 +40,13 @@
     
     [SSJMagicExportStore queryAllBillDateWithSuccess:^(NSArray<NSDate *> *result) {
         [self.view ssj_hideLoadingIndicator];
-        self.billDates = result;
-        [self.view addSubview:self.calendarView];
-        [self.calendarView reload];
+        _billDates = result;
+        if (_billDates) {
+            [self.view addSubview:self.calendarView];
+            [self.calendarView reload];
+        } else {
+            
+        }
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
@@ -56,16 +60,24 @@
 
 #pragma mark - SSJMagicExportCalendarViewDelegate
 - (NSDictionary<NSString *, NSDate *>*)periodForCalendarView:(SSJMagicExportCalendarView *)calendarView {
-    return @{SSJMagicExportCalendarViewBeginDateKey:self.beginDate,
-             SSJMagicExportCalendarViewEndDateKey:self.endDate};
+    return @{SSJMagicExportCalendarViewBeginDateKey:[_billDates firstObject],
+             SSJMagicExportCalendarViewEndDateKey:[_billDates lastObject]};
 }
 
 - (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView shouldShowMarkerForDate:(NSDate *)date {
-    return YES;
+    return [self.billDates containsObject:date];
 }
 
 - (NSString *)calendarView:(SSJMagicExportCalendarView *)calendarView descriptionForSelectedDate:(NSDate *)date {
-    return nil;
+    if ((_selectBeginDate && [date isSameDay:_selectBeginDate])
+        || (_beginDate && [date isSameDay:_beginDate])) {
+        return @"开始";
+    } else if ((_selectEndDate && [date isSameDay:_selectEndDate])
+               || (_endDate && [date isSameDay:_endDate])) {
+        return @"结束";
+    } else {
+        return nil;
+    }
 }
 
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date {
@@ -80,6 +92,7 @@
             if (_completion) {
                 _completion(_selectBeginDate, _selectEndDate);
             }
+            [self.navigationController popViewControllerAnimated:YES];
         }
     } else {
         // 第一次选择开始日期

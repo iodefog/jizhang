@@ -53,7 +53,7 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 
 + (void)queryAllBillDateWithSuccess:(void (^)(NSArray<NSDate *> *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select cbilldate from bk_user_charge where cuserid = ? and operatortype <> 2 order by cbilldate desc", SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select cbilldate from bk_user_charge where cuserid = ? and operatortype <> 2 order by cbilldate", SSJUSERID()];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{

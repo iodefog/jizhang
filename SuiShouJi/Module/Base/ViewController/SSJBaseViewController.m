@@ -46,7 +46,7 @@
     
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
-            [self ssj_showBackButtonWithTarget:self selector:@selector(ssj_backOffAction)];
+            [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
         }
     }
 }
@@ -99,6 +99,10 @@
 }
 
 #pragma mark - Public
+- (void)goBackAction {
+    [self ssj_backOffAction];
+}
+
 - (void)reloadDataAfterSync {
     
 }

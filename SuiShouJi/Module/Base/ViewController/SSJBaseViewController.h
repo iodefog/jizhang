@@ -22,6 +22,11 @@
 @property (nonatomic, readonly) BOOL isDatabaseInitFinished;
 
 /**
+ *  导航栏返回按钮点击事件
+ */
+- (void)goBackAction;
+
+/**
  *  同步成功后重载数据，子类根据情况重写，父类中没有做任何处理
  */
 - (void)reloadDataAfterSync;
