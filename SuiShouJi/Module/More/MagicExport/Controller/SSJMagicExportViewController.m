@@ -16,6 +16,8 @@
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate>
 
+@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+
 @property (nonatomic, strong) UILabel *dateLabel;
 
 @property (nonatomic, strong) UILabel *emailLabel;
@@ -28,8 +30,16 @@
 
 @property (nonatomic, strong) UIButton *commitBtn;
 
+// 第一次记账时间
+@property (nonatomic, strong) NSDate *firstRecordDate;
+
+// 最后一次记账时间
+@property (nonatomic, strong) NSDate *lastRecordDate;
+
+// 导出起始时间
 @property (nonatomic, strong) NSDate *beginDate;
 
+// 导出结束时间
 @property (nonatomic, strong) NSDate *endDate;
 
 @property (nonatomic, strong) SSJMagicExportService *service;
@@ -48,25 +58,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryBillPeriodWithSuccess:^(NSDictionary<NSString *,NSDate *> *result) {
-        [self.view ssj_hideLoadingIndicator];
-        
-        self.beginDate = result[SSJMagicExportStoreBeginDateKey];
-        self.endDate = result[SSJMagicExportStoreEndDateKey];
-        
-        if (self.beginDate && self.endDate) {
-            [self setUpView];
-            [self updateBeginAndEndDate];
-        } else {
-            
-        }
-        
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-    }];
+    [self setUpView];
+    // 现隐藏视图，等数据加载出来在显示
+    self.scrollView.hidden = YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self loadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -85,18 +84,46 @@
 }
 
 #pragma mark - Private
-- (void)setUpView {
-    TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:scrollView];
-    [scrollView addSubview:self.dateLabel];
-    [scrollView addSubview:self.selectDateView];
-    [scrollView addSubview:self.emailLabel];
-    [scrollView addSubview:self.emailView];
-    [self.emailView addSubview:self.emailTextField];
-    [scrollView addSubview:self.commitBtn];
+- (void)loadData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJMagicExportStore queryBillPeriodWithSuccess:^(NSDictionary<NSString *,NSDate *> *result) {
+        [self.view ssj_hideLoadingIndicator];
+        
+        _firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
+        _lastRecordDate = result[SSJMagicExportStoreEndDateKey];
+        
+        if (!_beginDate) {
+            _beginDate = _firstRecordDate;
+        }
+        if (!_endDate) {
+            _endDate = _lastRecordDate;
+        }
+        
+        if (_firstRecordDate && _lastRecordDate) {
+            self.scrollView.hidden = NO;
+            [self updateBeginAndEndButton];
+        } else {
+            // 没有记账流水
+            self.scrollView.hidden = YES;
+        }
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
-- (void)updateBeginAndEndDate {
+- (void)setUpView {
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.dateLabel];
+    [self.scrollView addSubview:self.selectDateView];
+    [self.scrollView addSubview:self.emailLabel];
+    [self.scrollView addSubview:self.emailView];
+    [self.scrollView addSubview:self.commitBtn];
+    [self.emailView addSubview:self.emailTextField];
+}
+
+- (void)updateBeginAndEndButton {
     [self.selectDateView.beginDateBtn setTitle:[self.beginDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
     [self.selectDateView.endDateBtn setTitle:[self.endDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
 }
@@ -104,8 +131,14 @@
 #pragma mark - Event
 - (void)selectDateAction {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.beginDate = self.beginDate;
-    calendarVC.endDate = self.endDate;
+    calendarVC.beginDate = _beginDate;
+    calendarVC.endDate = _endDate;
+    __weak typeof(self) weakSelf = self;
+    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+        weakSelf.beginDate = selectedBeginDate;
+        weakSelf.endDate = selectedEndDate;
+        [weakSelf updateBeginAndEndButton];
+    };
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
@@ -126,6 +159,13 @@
 }
 
 #pragma mark - Getter
+- (TPKeyboardAvoidingScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
+    }
+    return _scrollView;
+}
+
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];

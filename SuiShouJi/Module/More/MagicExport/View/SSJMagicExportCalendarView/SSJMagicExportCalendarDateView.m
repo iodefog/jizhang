@@ -49,6 +49,7 @@
     self.marker.hidden = (!_item.showMarker || !_item.showContent);
     self.dateLabel.hidden = self.descLabel.hidden = !_item.showContent;
     self.dateLabel.text = [NSString stringWithFormat:@"%d", _item.date.day];
+    self.descLabel.text = _item.selected ? _item.desc : nil;
     
     self.dateLabel.clipsToBounds = _item.selected;
     self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor whiteColor];
@@ -64,16 +65,21 @@
         return;
     }
     
+    if (_willSelectBlock) {
+        _willSelectBlock(self);
+    }
+    
     _item.selected = YES;
     self.dateLabel.clipsToBounds = _item.selected;
     self.marker.tintColor = _item.selected ? [UIColor whiteColor] : [UIColor ssj_colorWithHex:@"ffa81c"];
     [UIView transitionWithView:self duration:0.15 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor whiteColor];
         self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
+        self.descLabel.text = _item.desc;
     } completion:NULL];
     
-    if (_clickBlcok) {
-        _clickBlcok(self);
+    if (_didSelectBlock) {
+        _didSelectBlock(self);
     }
 }
 

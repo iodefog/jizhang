@@ -26,9 +26,14 @@
         for (int i = 0; i < 7; i ++) {
             SSJMagicExportCalendarDateView *dateView = [[SSJMagicExportCalendarDateView alloc] init];
             __weak typeof(self) weakSelf = self;
-            dateView.clickBlcok = ^(SSJMagicExportCalendarDateView *dateView) {
-                if (weakSelf.selectBlock) {
-                    weakSelf.selectBlock(weakSelf, dateView);
+            dateView.willSelectBlock = ^(SSJMagicExportCalendarDateView *dateView) {
+                if (weakSelf.willSelectBlock) {
+                    weakSelf.willSelectBlock(weakSelf, dateView);
+                }
+            };
+            dateView.didSelectBlock = ^(SSJMagicExportCalendarDateView *dateView) {
+                if (weakSelf.didSelectBlock) {
+                    weakSelf.didSelectBlock(weakSelf, dateView);
                 }
             };
             [_dateViewArr addObject:dateView];
