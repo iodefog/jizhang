@@ -144,6 +144,9 @@
     return fundingName;
 }
 
+#pragma mark - UIAlertViewDelegate
+
+
 #pragma mark - Getter
 -(UIView *)footerView{
     if (!_footerView) {
@@ -155,7 +158,7 @@
         editeButton.layer.cornerRadius = 2.f;
         editeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         editeButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
-        [editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [editeButton addTarget:self action:@selector(editeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_footerView addSubview:editeButton];
     }
     return _footerView;
@@ -171,6 +174,10 @@
 -(SSJCalenderDetaiImagelFooterView *)imageFooter{
     if (!_imageFooter) {
         _imageFooter = [[SSJCalenderDetaiImagelFooterView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        __weak typeof(self) weakSelf = self;
+        _imageFooter.ModifyButtonClickedBlock = ^(){
+            [weakSelf editeButtonClicked];
+        };
     }
     return _imageFooter;
 }
@@ -180,7 +187,7 @@
 /**
  *  修改流水
  */
--(void)editeButtonClicked:(id)sender{
+-(void)editeButtonClicked{
     SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
     recordMakingVc.item = self.item;
     [self.navigationController pushViewController:recordMakingVc animated:YES];
@@ -212,8 +219,13 @@
 }
 
 -(void)rightBarButtonClicked:(id)sender{
-    [self deleteCharge];
-    [self.navigationController popViewControllerAnimated:YES];
+    __weak typeof(self) weakSelf = self;
+    SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action){
+        [weakSelf deleteCharge];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction];
 }
 
 /**

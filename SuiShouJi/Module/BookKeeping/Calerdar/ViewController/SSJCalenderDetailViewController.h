@@ -9,6 +9,6 @@
 #import "SSJNewBaseTableViewController.h"
 #import "SSJBillingChargeCellItem.h"
 
-@interface SSJCalenderDetailViewController :SSJNewBaseTableViewController
+@interface SSJCalenderDetailViewController :SSJNewBaseTableViewController<UIAlertViewDelegate>
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
 @end
