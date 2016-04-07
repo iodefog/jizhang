@@ -52,10 +52,10 @@ static NSString *const kTitle3 = @"定期提醒";
 
 }
 
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+-(void)goBackAction{
     [self saveChargeReminder];
 }
+
 
 #pragma mark - Getter
 -(SSJChargeReminderTimeView *)chargeReminderTime{
