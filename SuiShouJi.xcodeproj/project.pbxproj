@@ -226,6 +226,7 @@
 		7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDA48991C8821F20010EB01 /* SSJDatePeriod.m */; };
 		7DDBB0201C9AAA57003433D0 /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		7DE27FB31CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE27FB21CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m */; };
+		7DE27FB61CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE27FB51CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m */; };
 		7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE2E9121C9C291C001868F5 /* SSJUmengManager.m */; };
 		7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */; };
 		7DE69B611C8D26E7001D31C1 /* SSJImageSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */; };
@@ -924,6 +925,8 @@
 		7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipZap.xcodeproj; path = ZipZap/ZipZap.xcodeproj; sourceTree = "<group>"; };
 		7DE27FB11CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportResultCheckMarkView.h; sourceTree = "<group>"; };
 		7DE27FB21CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportResultCheckMarkView.m; sourceTree = "<group>"; };
+		7DE27FB41CB5228900D5EB41 /* SSJMagicExportCalendarDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarDateView.h; sourceTree = "<group>"; };
+		7DE27FB51CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarDateView.m; sourceTree = "<group>"; };
 		7DE2E9111C9C291C001868F5 /* SSJUmengManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUmengManager.h; sourceTree = "<group>"; };
 		7DE2E9121C9C291C001868F5 /* SSJUmengManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUmengManager.m; sourceTree = "<group>"; };
 		7DE3AD741C5F26D5009B2131 /* SSJDataSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataSynchronizeTask.h; sourceTree = "<group>"; };
@@ -1532,10 +1535,12 @@
 				7D2135291CB3E7C900D7E8D2 /* SSJMagicExportCalendarView.m */,
 				7D21352A1CB3E7C900D7E8D2 /* SSJMagicExportCalendarViewCell.h */,
 				7D21352B1CB3E7C900D7E8D2 /* SSJMagicExportCalendarViewCell.m */,
-				7D83081D1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.h */,
-				7D83081E1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m */,
+				7DE27FB41CB5228900D5EB41 /* SSJMagicExportCalendarDateView.h */,
+				7DE27FB51CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m */,
 				7D21352C1CB3E7C900D7E8D2 /* SSJMagicExportCalendarViewCellItem.h */,
 				7D21352D1CB3E7C900D7E8D2 /* SSJMagicExportCalendarViewCellItem.m */,
+				7D83081D1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.h */,
+				7D83081E1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m */,
 				7D8308201CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.h */,
 				7D8308211CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.m */,
 			);
@@ -4363,6 +4368,7 @@
 				9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */,
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
+				7DE27FB61CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m in Sources */,
 				9C2E026A1CACFF7C00C5F764 /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
 				7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */,

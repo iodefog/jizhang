@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJMagicExportCalendarHeaderView : UICollectionReusableView
-
-@property (nonatomic, copy) NSString *title;
+@interface SSJMagicExportCalendarHeaderView : UITableViewHeaderFooterView
 
 @end

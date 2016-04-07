@@ -13,11 +13,11 @@
 
 + (BOOL)updateBalanceForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     //  清空资金帐户余额表，再根据用户资金帐户表重新创建记录
-    if (![db executeUpdate:@"delete from bk_funs_acct"]) {
+    if (![db executeUpdate:@"delete from bk_funs_acct where cuserid = ?", userId]) {
         return NO;
     }
     
-    if (![db executeUpdate:@"insert into bk_funs_acct (cuserid, cfundid, ibalance) select cuserid, cfundid, 0 from bk_fund_info where cuserid = ?", SSJUSERID()]) {
+    if (![db executeUpdate:@"insert into bk_funs_acct (cuserid, cfundid, ibalance) select cuserid, cfundid, 0 from bk_fund_info where cuserid = ?", userId]) {
         return NO;
     }
     
