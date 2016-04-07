@@ -9,6 +9,8 @@
 
 #import "SSJCustomKeyboard.h"
 
+#define kspecialString @"￥+-"
+
 @interface SSJCustomKeyboard()
 @property(nonatomic,strong)SSJCustomKeyBoardButton *BackspaceButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *ClearButton;
@@ -247,7 +249,7 @@ static id _instance;
 }
 
 - (void)keyboardBtnTouched:(UIButton *)sender{
-    NSCharacterSet *set=[NSCharacterSet characterSetWithCharactersInString:@"￥+-"];
+    NSCharacterSet *set=[NSCharacterSet characterSetWithCharactersInString:kspecialString];
     if (self.textField==nil) {
         return;
     }
