@@ -40,7 +40,6 @@ static NSString *const kTitle6 = @"关于我们";
         self.title = @"设置";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.hidesBottomBarWhenPushed = YES;
-        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
