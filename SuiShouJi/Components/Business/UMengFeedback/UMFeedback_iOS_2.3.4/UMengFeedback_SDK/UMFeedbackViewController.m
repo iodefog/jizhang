@@ -40,6 +40,9 @@ const CGFloat kMessagesInputToolbarHeightDefault = 44.0f;
 
 @implementation UMFeedbackViewController
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
 
 - (id)init {
     self = [super init];
