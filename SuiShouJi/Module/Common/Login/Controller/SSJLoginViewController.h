@@ -7,9 +7,8 @@
 //
 
 #import "SSJBaseViewController.h"
-#import <TencentOpenAPI/TencentOAuth.h>
 
-@interface SSJLoginViewController : SSJBaseViewController<TencentSessionDelegate>
+@interface SSJLoginViewController : SSJBaseViewController
 
 //  手机号码
 @property (nonatomic, copy) NSString *mobileNo;

@@ -22,6 +22,7 @@
 #import "SSJStartChecker.h"
 #import "SSJDatabaseUpgrader.h"
 #import "SSJRegularManager.h"
+#import "SSJThirdPartyLoginManger.h"
 
 #import "SSJLocalNotificationHelper.h"
 
@@ -293,11 +294,11 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:[SSJWeiXinLoginHelper shareInstance]];
+    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
     return [TencentOAuth HandleOpenURL:url] ||
-    [WXApi handleOpenURL:url delegate:[SSJWeiXinLoginHelper shareInstance]];
+    [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
 }
 @end

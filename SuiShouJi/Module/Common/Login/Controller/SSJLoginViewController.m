@@ -24,16 +24,9 @@
 #import "SSJBaselineTextField.h"
 #import "SSJBorderButton.h"
 #import "SSJFundAccountTable.h"
-#import "SSJWeiXinLoginHelper.h"
+#import "SSJThirdPartyLoginManger.h"
 #import <WXApi.h>
 
-//qq appkey
-static NSString *const KQQAppKey = @"1105086761";
-
-//微信appkey
-static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
-//微信desc
-static NSString *const kWeiXinDescription = @"weixinLogin";
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
 
@@ -46,7 +39,6 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 @property (nonatomic,strong)UIButton *loginButton;
 @property (nonatomic,strong)UIButton *registerButton;
 @property (nonatomic,strong)UIButton *forgetButton;
-@property (nonatomic,strong)TencentOAuth *tencentOAuth;
 @property (nonatomic,strong)UIButton *tencentLoginButton;
 @property (nonatomic,strong)UIButton *weixinLoginButton;
 @property (nonatomic,strong)UIImageView *backGroundImage;
@@ -90,7 +82,6 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
     [scrollView addSubview:self.tencentLoginButton];
     [scrollView addSubview:self.weixinLoginButton];
     [self.view addSubview:scrollView];
-    self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:KQQAppKey andDelegate:self];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -151,47 +142,6 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
     return true;
 }
 
-#pragma mark - TencentSessionDelegate
-//登陆完成调用
-- (void)tencentDidLogin
-{
-    if (self.tencentOAuth.accessToken && 0 != [self.tencentOAuth.accessToken length])
-    {
-        //  记录登录用户的OpenID、Token以及过期时间
-        [self.tencentOAuth getUserInfo];
-    }
-    else
-    {
-        NSLog(@"登录不成功 没有获取accesstoken");
-    }
-}
-
-//非网络错误导致登录失败：
--(void)tencentDidNotLogin:(BOOL)cancelled
-{
-    if (cancelled)
-    {
-        [CDAutoHideMessageHUD showMessage:@"登录取消"];
-    }else{
-        [CDAutoHideMessageHUD showMessage:@"登录失败"];
-    }
-}
-
-// 网络错误导致登录失败：
--(void)tencentDidNotNetWork
-{
-    [CDAutoHideMessageHUD showMessage:@"无网络连接，请设置网络"];
-}
-
-//获取用户信息
--(void)getUserInfoResponse:(APIResponse *)response
-{
-    NSLog(@"respons:%@",response.jsonResponse);
-    NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
-    NSString *realName = [response.jsonResponse objectForKey:@"nickname"];
-    NSString *openId = [self.tencentOAuth openId];
-    [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:realName icon:icon];
-}
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
@@ -325,12 +275,13 @@ static NSString *const kWeiXinDescription = @"weixinLogin";
 }
 
 -(void)qqLoginButtonClicked:(id)sender{
-    NSArray *permissions= [NSArray arrayWithObjects:@"get_user_info",@"get_simple_userinfo",@"add_t",nil];
-    [self.tencentOAuth authorize:permissions inSafari:NO];
+    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
+    }];
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
-    [[SSJWeiXinLoginHelper shareInstance] weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
     }];
 }

@@ -390,6 +390,8 @@
 		BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934381C34FC1800300D43 /* SSJMineHomeViewController.m */; };
 		BD49343C1C35010200300D43 /* SSJMineHomeTabelviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD49343B1C35010200300D43 /* SSJMineHomeTabelviewCell.m */; };
 		BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934411C350D3600300D43 /* SSJSyncSettingViewController.m */; };
+		BD542B561CB544F700655EE2 /* SSJQQLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD542B551CB544F700655EE2 /* SSJQQLoginHelper.m */; };
+		BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */ = {isa = PBXBuildFile; fileRef = BD542B5F1CB5457800655EE2 /* SSJThirdPartyLoginManger.m */; };
 		BD543C411C1A6DBC00910D61 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C401C1A6DBC00910D61 /* main.m */; };
 		BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD543C431C1A6DBC00910D61 /* AppDelegate.m */; };
 		BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
@@ -1205,6 +1207,10 @@
 		BD49343B1C35010200300D43 /* SSJMineHomeTabelviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeTabelviewCell.m; sourceTree = "<group>"; };
 		BD4934401C350D3600300D43 /* SSJSyncSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSyncSettingViewController.h; sourceTree = "<group>"; };
 		BD4934411C350D3600300D43 /* SSJSyncSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncSettingViewController.m; sourceTree = "<group>"; };
+		BD542B541CB544F700655EE2 /* SSJQQLoginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJQQLoginHelper.h; sourceTree = "<group>"; };
+		BD542B551CB544F700655EE2 /* SSJQQLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJQQLoginHelper.m; sourceTree = "<group>"; };
+		BD542B5E1CB5457800655EE2 /* SSJThirdPartyLoginManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThirdPartyLoginManger.h; sourceTree = "<group>"; };
+		BD542B5F1CB5457800655EE2 /* SSJThirdPartyLoginManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThirdPartyLoginManger.m; sourceTree = "<group>"; };
 		BD543C3C1C1A6DBC00910D61 /* SuiShouJi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuiShouJi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD543C401C1A6DBC00910D61 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BD543C421C1A6DBC00910D61 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -2489,6 +2495,10 @@
 			children = (
 				9C2E02721CAE419600C5F764 /* SSJWeiXinLoginHelper.h */,
 				9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */,
+				BD542B541CB544F700655EE2 /* SSJQQLoginHelper.h */,
+				BD542B551CB544F700655EE2 /* SSJQQLoginHelper.m */,
+				BD542B5E1CB5457800655EE2 /* SSJThirdPartyLoginManger.h */,
+				BD542B5F1CB5457800655EE2 /* SSJThirdPartyLoginManger.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -4339,6 +4349,7 @@
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
+				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
 				9C2E02771CAE419600C5F764 /* SSJWeiXinLoginHelper.m in Sources */,
@@ -4373,6 +4384,7 @@
 				BDA2EF071C8D8A76007DD45F /* SSJCustomNavigationBarButton.m in Sources */,
 				BD8FD82B1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m in Sources */,
 				BD70DF631C4751EA000E6CC9 /* SSJLoginService.m in Sources */,
+				BD542B561CB544F700655EE2 /* SSJQQLoginHelper.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
 				9C2E02781CAE419600C5F764 /* SSJQQUserInfoItem.m in Sources */,
 				BD7BC8351C3A1A0F001DE5D8 /* SSJFinancingHomeViewController.m in Sources */,

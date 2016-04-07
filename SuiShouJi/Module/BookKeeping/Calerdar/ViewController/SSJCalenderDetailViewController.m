@@ -57,6 +57,9 @@
     if (indexPath.row == 0) {
         return 55;
     }
+    if (indexPath.row == 3) {
+        return 100;
+    }
     return 50;
 }
 
@@ -75,6 +78,9 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
+        return 4;
+    }
     return 3;
 }
 
@@ -92,11 +98,19 @@
         detailcell.cellLabel.text = @"时间";
         [detailcell.cellLabel sizeToFit];
         return detailcell;
-    }else{
+    }else if(indexPath.row == 2){
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
         detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundId];
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"资金类型";
+        [detailcell.cellLabel sizeToFit];
+        return detailcell;
+    }else{
+        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
+        detailcell.detailLabel.numberOfLines = 2;
+        detailcell.detailLabel.text = self.item.chargeMemo;
+        [detailcell.detailLabel sizeToFit];
+        detailcell.cellLabel.text = @"备注";
         [detailcell.cellLabel sizeToFit];
         return detailcell;
     }
@@ -207,7 +221,6 @@
             
         }];
     }
-
 }
 
 - (void)didReceiveMemoryWarning {

@@ -15,8 +15,8 @@ const int64_t SSJDefaultSyncVersion = -1;
 NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
 //NSString *const SSJBaseURLString = @"http://jz.9188.com";
 
-NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
-//NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
+//NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
+NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
 
 #else
 NSString *const SSJBaseURLString = @"http://jz.9188.com";
@@ -58,4 +58,13 @@ NSString *const SSJChargeReminderNotification = @"SSJChargeReminderNotification"
 NSString *const SSJInitDatabaseDidBeginNotification = @"SSJInitDatabaseDidBeginNotification";
 
 NSString *const SSJInitDatabaseDidFinishNotification = @"SSJInitDatabaseDidFinishNotification";
+
+NSString *const SSJWeiXinAppKey = @"wxf77f7a5867124dfd";
+
+NSString *const SSJWeiXinDescription = @"weixinLogin";
+
+NSString *const SSJWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
+
+NSString *const SSJQQAppKey = @"1105086761";
+
 
