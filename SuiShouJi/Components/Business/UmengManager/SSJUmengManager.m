@@ -10,7 +10,6 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
-#import "UMFeedback.h"
 #import "MobClick.h"
 #import "UMSocial.h"
 
