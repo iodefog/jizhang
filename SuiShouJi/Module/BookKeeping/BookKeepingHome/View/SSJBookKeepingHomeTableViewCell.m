@@ -58,7 +58,9 @@
     self.bottomlineView.top = self.categoryImageButton.bottom;
     self.bottomlineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
     self.bottomlineView.centerX = self.centerX;
+    self.incomeMemoLabel.width = self.width / 2 - 30;
     self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
+    self.expentureMemoLabel.width = self.width / 2 - 30;
     self.expentureMemoLabel.leftTop = CGPointMake(self.expenditureLabel.left, self.expenditureLabel.bottom + 5);
     self.IncomeImage.size =CGSizeMake(35, 35);
     self.IncomeImage.left = self.categoryImageButton.right + 10;
@@ -171,7 +173,7 @@
 -(UILabel *)incomeMemoLabel{
     if (!_incomeMemoLabel) {
         _incomeMemoLabel = [[UILabel alloc]init];
-        _incomeMemoLabel.textAlignment = NSTextAlignmentLeft;
+        _incomeMemoLabel.textAlignment = NSTextAlignmentRight;
         _incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         _incomeMemoLabel.font = [UIFont systemFontOfSize:12];
     }
