@@ -14,6 +14,8 @@
 #import "SSJCalenderTableViewCell.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJChargeDetailMemoCell.h"
+#import "SSJCalenderDetaiImagelFooterView.h"
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
@@ -23,6 +25,7 @@
 @property (nonatomic,strong) NSString *cellColor;
 @property (nonatomic)BOOL incomeOrExpence;
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
+@property(nonatomic, strong) SSJCalenderDetaiImagelFooterView *imageFooter;
 @end
 
 @implementation SSJCalenderDetailViewController
@@ -41,6 +44,8 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCell"];
     [self.tableView registerClass:[SSJCalenderDetailCell class] forCellReuseIdentifier:@"calenderDetailCellID"];
+    [self.tableView registerClass:[SSJChargeDetailMemoCell class] forCellReuseIdentifier:@"calenderDetailMemoCellID"];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -58,7 +63,7 @@
         return 55;
     }
     if (indexPath.row == 3) {
-        return 100;
+        return 85;
     }
     return 50;
 }
@@ -69,10 +74,17 @@
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
+        return 300;
+    }
     return 100;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
+        self.imageFooter.imageName = self.item.chargeImage;
+        return self.imageFooter;
+    }
     return self.footerView;
 }
 
@@ -93,6 +105,8 @@
         return cell;
     }else if (indexPath.row == 1){
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
+        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         detailcell.detailLabel.text = self.item.billDate;
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"时间";
@@ -100,18 +114,17 @@
         return detailcell;
     }else if(indexPath.row == 2){
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
+        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
         detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundId];
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"资金类型";
         [detailcell.cellLabel sizeToFit];
         return detailcell;
     }else{
-        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.detailLabel.numberOfLines = 2;
-        detailcell.detailLabel.text = self.item.chargeMemo;
-        [detailcell.detailLabel sizeToFit];
-        detailcell.cellLabel.text = @"备注";
-        [detailcell.cellLabel sizeToFit];
+        SSJChargeDetailMemoCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailMemoCellID" forIndexPath:indexPath];
+        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
+        detailcell.cellMemo = self.item.chargeMemo;
+        detailcell.cellTitle = @"备注";
         return detailcell;
     }
 }
@@ -131,6 +144,9 @@
     return fundingName;
 }
 
+#pragma mark - UIAlertViewDelegate
+
+
 #pragma mark - Getter
 -(UIView *)footerView{
     if (!_footerView) {
@@ -142,7 +158,7 @@
         editeButton.layer.cornerRadius = 2.f;
         editeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         editeButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
-        [editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [editeButton addTarget:self action:@selector(editeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_footerView addSubview:editeButton];
     }
     return _footerView;
@@ -155,13 +171,23 @@
     return _rightBarButton;
 }
 
+-(SSJCalenderDetaiImagelFooterView *)imageFooter{
+    if (!_imageFooter) {
+        _imageFooter = [[SSJCalenderDetaiImagelFooterView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 300)];
+        __weak typeof(self) weakSelf = self;
+        _imageFooter.ModifyButtonClickedBlock = ^(){
+            [weakSelf editeButtonClicked];
+        };
+    }
+    return _imageFooter;
+}
 
 #pragma mark - Private
 
 /**
  *  修改流水
  */
--(void)editeButtonClicked:(id)sender{
+-(void)editeButtonClicked{
     SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
     recordMakingVc.item = self.item;
     [self.navigationController pushViewController:recordMakingVc animated:YES];
@@ -193,8 +219,13 @@
 }
 
 -(void)rightBarButtonClicked:(id)sender{
-    [self deleteCharge];
-    [self.navigationController popViewControllerAnimated:YES];
+    __weak typeof(self) weakSelf = self;
+    SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+    SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action){
+        [weakSelf deleteCharge];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction];
 }
 
 /**

@@ -305,6 +305,8 @@
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
+		9C6F58B41CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F58B31CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m */; };
+		9C6F58BF1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F58BE1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m */; };
 		9CB85EA21CA3DB5D00715816 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB85EA11CA3DB5D00715816 /* SSJFinancingHomeHelper.m */; };
 		9CD5C38A1CB3A427004CC3FE /* SSJPersonalDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C37D1CB3A427004CC3FE /* SSJPersonalDetailHelper.m */; };
 		9CD5C38B1CB3A427004CC3FE /* SSJPersonalDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3801CB3A427004CC3FE /* SSJPersonalDetailItem.m */; };
@@ -1058,6 +1060,10 @@
 		9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeTableViewCell.m; sourceTree = "<group>"; };
 		9C434E321C2AD4DF00A3D61E /* SSJCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCalendarViewController.h; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.h; sourceTree = SOURCE_ROOT; };
 		9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCalendarViewController.m; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.m; sourceTree = SOURCE_ROOT; };
+		9C6F58B21CB5F61D00A250A0 /* SSJChargeDetailMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeDetailMemoCell.h; sourceTree = "<group>"; };
+		9C6F58B31CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeDetailMemoCell.m; sourceTree = "<group>"; };
+		9C6F58BD1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderDetaiImagelFooterView.h; sourceTree = "<group>"; };
+		9C6F58BE1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderDetaiImagelFooterView.m; sourceTree = "<group>"; };
 		9CB85EA01CA3DB5D00715816 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
 		9CB85EA11CA3DB5D00715816 /* SSJFinancingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHelper.m; sourceTree = "<group>"; };
 		9CD5C37C1CB3A427004CC3FE /* SSJPersonalDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPersonalDetailHelper.h; sourceTree = "<group>"; };
@@ -3588,6 +3594,10 @@
 				BD976FB31C4F246900B0E26D /* SSJCalenderDetailCell.m */,
 				BDAB44941C58777E004289BA /* SSJCalenderTableViewCell.h */,
 				BDAB44951C58777E004289BA /* SSJCalenderTableViewCell.m */,
+				9C6F58B21CB5F61D00A250A0 /* SSJChargeDetailMemoCell.h */,
+				9C6F58B31CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m */,
+				9C6F58BD1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.h */,
+				9C6F58BE1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4281,6 +4291,7 @@
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				9C2E02601CACB93600C5F764 /* SSJFundingDetailListHeaderView.m in Sources */,
 				7DB4290C1CAE48BB00B46F32 /* SSJBookkeepingTreeCheckInService.m in Sources */,
+				9C6F58BF1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
 				BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */,
 				BD0E43FE1C216C7600F9179D /* SSJRecordMakingViewController.m in Sources */,
@@ -4420,6 +4431,7 @@
 				7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				BDEA87301C509E80002681BD /* SSJSmallCalendarView.m in Sources */,
+				9C6F58B41CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m in Sources */,
 				7DE69C3A1C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				9CD5C38A1CB3A427004CC3FE /* SSJPersonalDetailHelper.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,

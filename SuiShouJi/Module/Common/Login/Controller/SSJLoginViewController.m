@@ -276,12 +276,16 @@
 
 -(void)qqLoginButtonClicked:(id)sender{
     [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
         [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
     }];
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
     [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
         [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
     }];
 }
