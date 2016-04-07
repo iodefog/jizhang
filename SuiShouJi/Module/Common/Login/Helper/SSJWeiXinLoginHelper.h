@@ -11,11 +11,6 @@
 
 @interface SSJWeiXinLoginHelper : NSObject<WXApiDelegate>
 
-/**
- *  返回唯一实例对象
- */
-+ (instancetype)shareInstance;
-
 //微信登陆成功的回调
 typedef void (^weiXinLoginSuccessBlock)(NSString *nickName , NSString *iconUrl , NSString *openId);
 

@@ -21,8 +21,8 @@
 //  更新用户表
 + (NSError *)upgradeUserTableWithDatabase:(FMDatabase *)db {
     NSError *error = nil;
-    if (![db columnExists:@"usersignaguture" inTableWithName:@"bk_user"]) {
-        if (![db executeUpdate:@"alter table bk_user add usersignaguture text"]) {
+    if (![db columnExists:@"usersignature" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add usersignature text"]) {
             error = [db lastError];
         }
     }

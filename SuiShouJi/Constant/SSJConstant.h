@@ -74,6 +74,18 @@ extern NSString *const SSJSyncPrivateKey;
 //  用户协议url
 extern NSString *const SSJUserProtocolUrl;
 
+//微信appid
+extern NSString *const SSJWeiXinAppKey;
+
+//微信desc
+extern NSString *const SSJWeiXinDescription;
+
+//微信secret
+extern NSString *const SSJWeiXinSecret;
+
+//qq appkey
+extern NSString *const SSJQQAppKey;
+
 
 /** -------------------- KEY -------------------- */
 //上一次选择的资金账户类型

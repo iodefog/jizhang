@@ -8,37 +8,16 @@
 
 #import "SSJWeiXinLoginHelper.h"
 
-//微信appid
-static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
-
-//微信desc
-static NSString *const kWeiXinDescription = @"weixinLogin";
-
-//微信secret
-static NSString *const kWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
-
 @interface SSJWeiXinLoginHelper()
 @property (nonatomic, strong) weiXinLoginSuccessBlock sucessBlock;
 @end
 
-
 @implementation SSJWeiXinLoginHelper
-
-+ (instancetype)shareInstance {
-    static SSJWeiXinLoginHelper *instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (!instance) {
-            instance = [[SSJWeiXinLoginHelper alloc] init];
-        }
-    });
-    return instance;
-}
 
 -(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock{
     SendAuthReq* req =[[SendAuthReq alloc ]init];
     req.scope = @"snsapi_userinfo";
-    req.state = kWeiXinDescription;
+    req.state = SSJWeiXinDescription;
     [WXApi sendReq:req];
     self.sucessBlock = sucessBlock;
 }
@@ -67,7 +46,7 @@ static NSString *const kWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 }
 
 -(void)getAccessTokenWithCode:(NSString *)code{
-    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",kWeiXinAppKey,kWeiXinSecret,code];
+    NSString *url =[NSString stringWithFormat:@"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%@&secret=%@&code=%@&grant_type=authorization_code",SSJWeiXinAppKey,SSJWeiXinSecret,code];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSURL *zoneUrl = [NSURL URLWithString:url];

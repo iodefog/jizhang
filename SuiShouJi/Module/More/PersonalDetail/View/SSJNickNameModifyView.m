@@ -9,7 +9,6 @@
 #import "SSJNickNameModifyView.h"
 #import <YYKeyboardManager/YYKeyboardManager.h>
 
-
 @interface SSJNickNameModifyView()<YYKeyboardObserver>
 @property(nonatomic, strong) UIView *popView;
 @property(nonatomic, strong) NSString *title;
@@ -21,6 +20,7 @@
 @property(nonatomic, strong) UILabel *titleLabel;
 @property(nonatomic, strong) UITextView *textInput;
 @property(nonatomic, strong) UILabel *textLengthLabel;
+@property (nonatomic,strong) UIView *backView;
 @end
 @implementation SSJNickNameModifyView
 
@@ -28,12 +28,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
         self.title = title;
         self.maxLength = maxTextLength;
-        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backViewClicked:)];
-        [self addGestureRecognizer:gesture];
-        [self addSubview:self.popView];
         [self.popView addSubview:self.titleView];
         [self.titleView addSubview:self.titleLabel];
         [self.popView addSubview:self.textInput];
@@ -43,7 +39,6 @@
         [self.bottomView addSubview:self.cancelButton];
         [self.textInput becomeFirstResponder];
         [[YYKeyboardManager defaultManager] addObserver:self];
-        [self sizeToFit];
     }
     return self;
 }
@@ -52,9 +47,6 @@
     [[YYKeyboardManager defaultManager] removeObserver:self];
 }
 
--(CGSize)sizeThatFits:(CGSize)size{
-    return [UIScreen mainScreen].bounds.size;
-}
 
 - (void)show {
     if (self.superview) {
@@ -63,7 +55,17 @@
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
-    [keyWindow addSubview:self];
+    self.popView.size = CGSizeMake(keyWindow.width - 20, 200);
+    
+    self.popView.top = keyWindow.top;
+    
+    [self setNeedsLayout];
+    
+    self.backView.frame = [UIScreen mainScreen].bounds;
+    
+    [keyWindow addSubview:self.backView];
+    
+    [keyWindow addSubview:self.popView];
     
     [self.textInput becomeFirstResponder];
 }
@@ -75,14 +77,13 @@
     
     [self.textInput resignFirstResponder];
     
-    [self removeFromSuperview];
+    [self.popView removeFromSuperview];
+    
+    [self.backView removeFromSuperview];
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.popView.size = CGSizeMake(self.width - 20, 200);
-    self.popView.bottom = self.height;
-    self.popView.centerX = self.width / 2;
     self.titleView.size = CGSizeMake(self.popView.width, 49);
     self.titleView.leftTop = CGPointMake(0, 0);
     self.titleView.centerX = self.popView.width / 2;
@@ -128,6 +129,16 @@
     } completion:^(BOOL finished) {
         
     }];
+}
+
+-(UIView *)backView{
+    if (!_backView) {
+        _backView = [[UIView alloc]init];
+        _backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backViewClicked:)];
+        [_backView addGestureRecognizer:gesture];
+    }
+    return _backView;
 }
 
 
@@ -230,7 +241,20 @@
 }
 
 -(void)comfirmButtonClicked:(id)sender{
-    
+    [self dismiss];
+    if (self.comfirmButtonClickedBlock) {
+        self.comfirmButtonClickedBlock(self.textInput.text);
+    }
+}
+
+-(void)setOriginalText:(NSString *)originalText{
+    _originalText = originalText;
+    if (_originalText.length > _maxLength) {
+        return;
+    }
+    self.textInput.text = originalText;
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - _originalText.length];
+    [self.textLengthLabel sizeToFit];
 }
 
 
