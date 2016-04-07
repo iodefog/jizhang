@@ -10,7 +10,6 @@
 #import <YYKeyboardManager/YYKeyboardManager.h>
 
 @interface SSJNickNameModifyView()<YYKeyboardObserver>
-@property(nonatomic, strong) UIControl *popView;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic) int maxLength;
 @property(nonatomic, strong) UIView *titleView;
@@ -28,20 +27,16 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backViewClicked:)];
-        [self addGestureRecognizer:gesture];
         self.title = title;
         self.maxLength = maxTextLength;
-        [self addSubview:self.popView];
-        [self.popView addSubview:self.titleView];
+        self.backgroundColor = [UIColor whiteColor];
+        [self addSubview:self.titleView];
         [self.titleView addSubview:self.titleLabel];
-        [self.popView addSubview:self.textInput];
-        [self.popView addSubview:self.textLengthLabel];
-        [self.popView addSubview:self.bottomView];
+        [self addSubview:self.textInput];
+        [self addSubview:self.textLengthLabel];
+        [self addSubview:self.bottomView];
         [self.bottomView addSubview:self.comfirmButton];
         [self.bottomView addSubview:self.cancelButton];
-        [self.textInput becomeFirstResponder];
         [[YYKeyboardManager defaultManager] addObserver:self];
         [self sizeToFit];
     }
@@ -53,7 +48,7 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return [UIScreen mainScreen].bounds.size;
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width - 20, 200);
 }
 
 - (void)show {
@@ -63,9 +58,18 @@
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
-    [keyWindow addSubview:self];
+    self.bottom = keyWindow.height;
     
+    self.centerX = keyWindow.width / 2;
+    
+//    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+//        self.bottom = keyWindow.height;
+//    } timeInterval:0.25 fininshed:NULL];
+
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss)];
+
     [self.textInput becomeFirstResponder];
+
 }
 
 - (void)dismiss {
@@ -73,29 +77,30 @@
         return;
     }
     
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
     [self.textInput resignFirstResponder];
-    
-    [self removeFromSuperview];
-    
+
+    [self.superview ssj_hideBackViewForView:self animation:^{
+        self.top = keyWindow.bottom;
+    } timeInterval:0.25 fininshed:NULL];
 }
+
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.popView.size = CGSizeMake(self.width - 20, 200);
-    self.popView.centerX = self.width / 2;
-    self.popView.top = self.height;
-    self.titleView.size = CGSizeMake(self.popView.width, 49);
+    self.titleView.size = CGSizeMake(self.width, 49);
     self.titleView.leftTop = CGPointMake(0, 0);
-    self.titleView.centerX = self.popView.width / 2;
+    self.titleView.centerX = self.width / 2;
     self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
-    self.textInput.size = CGSizeMake(self.popView.width - 20, 49);
+    self.textInput.size = CGSizeMake(self.width - 20, 49);
     self.textInput.top = self.titleView.bottom + 10;
-    self.textInput.centerX = self.popView.width / 2;
+    self.textInput.centerX = self.width / 2;
     self.textLengthLabel.right = self.textInput.right;
     self.textLengthLabel.top = self.textInput.bottom + 15;
-    self.bottomView.size = CGSizeMake(self.popView.width, 50);
-    self.bottomView.rightBottom = CGPointMake(0, self.popView.height);
-    self.bottomView.centerX = self.popView.width / 2;
+    self.bottomView.size = CGSizeMake(self.width, 50);
+    self.bottomView.rightBottom = CGPointMake(0, self.height);
+    self.bottomView.centerX = self.width / 2;
     self.comfirmButton.size = CGSizeMake(55, 27);
     self.comfirmButton.right = self.textInput.right;
     self.comfirmButton.centerY = self.bottomView.height / 2;
@@ -122,25 +127,15 @@
 #pragma mark - @protocol YYKeyboardObserver
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
     [UIView animateWithDuration:transition.animationCurve delay:0 options:transition.animationOption animations:^{
-        CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self];
-        CGRect popframe = self.popView.frame;
+        CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.superview];
+        CGRect popframe = self.frame;
         popframe.origin.y = kbFrame.origin.y - popframe.size.height - 20;
-        self.popView.frame = popframe;
+        self.frame = popframe;
     } completion:^(BOOL finished) {
         
     }];
 }
 
-
--(UIView *)popView{
-    if (!_popView) {
-        _popView = [[UIControl alloc]init];
-        _popView.userInteractionEnabled = YES;
-        _popView.backgroundColor = [UIColor whiteColor];
-        _popView.layer.cornerRadius = 3.0f;
-    }
-    return _popView;
-}
 
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
@@ -220,10 +215,6 @@
         [_cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelButton;
-}
-
--(void)backViewClicked:(id)sender{
-    [self dismiss];
 }
 
 -(void)cancelButtonClicked:(id)sender{

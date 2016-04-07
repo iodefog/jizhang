@@ -63,6 +63,7 @@
 - (instancetype)init{
     self = [super init];
     if (self) {
+        self.extendedLayoutIncludesOpaqueBars = YES;
         self.toolBarHidden=YES;
         self.showURLInNavigationBar = NO;
         self.showPageTitleInNavigationBar = NO;

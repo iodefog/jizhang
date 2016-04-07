@@ -97,13 +97,13 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
             }else{
                 iconStr = SSJImageURLWithAPI(item.cicon);
             }
-            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
-                //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
-            }else{
+            if (item.realName == nil || [item.realName isEqualToString:@""]) {
                 //手机号登陆
                 NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
                 weakSelf.header.nicknameLabel.text = phoneNum;
+            }else{
+                //三方登录
+                weakSelf.header.nicknameLabel.text = item.realName;
             }
             [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {

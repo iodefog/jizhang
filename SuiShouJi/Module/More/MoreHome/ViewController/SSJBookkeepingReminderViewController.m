@@ -52,6 +52,11 @@ static NSString *const kTitle3 = @"定期提醒";
 
 }
 
+-(void)goBackAction{
+    [self saveChargeReminder];
+}
+
+
 #pragma mark - Getter
 -(SSJChargeReminderTimeView *)chargeReminderTime{
     if (!_chargeReminderTime) {
@@ -78,22 +83,6 @@ static NSString *const kTitle3 = @"定期提醒";
     return _chargeReminderCircle;
 }
 
--(UIView *)footerView{
-    if (!_footerView) {
-        _footerView = [[UIView alloc]init];
-        _footerView.size = CGSizeMake(self.view.width, 80);
-        UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.size = CGSizeMake(self.view.width - 40, 40);
-        comfirmButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
-        comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
-        comfirmButton.layer.cornerRadius = 4.0f;
-        [comfirmButton setTitle:@"保存" forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [_footerView addSubview:comfirmButton];
-    }
-    return _footerView;
-}
-
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -105,9 +94,6 @@ static NSString *const kTitle3 = @"定期提醒";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (section == 2) {
-        return 80;
-    }
     return 0.1f;
 }
 
@@ -153,9 +139,6 @@ static NSString *const kTitle3 = @"定期提醒";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (section == 2) {
-        return self.footerView;
-    }
     return nil;
 }
 
@@ -222,7 +205,7 @@ static NSString *const kTitle3 = @"定期提醒";
     }];
 }
 
--(void)saveButtonClicked:(id)sender{
+-(void)saveChargeReminder{
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
     if (self.item.isOnOrNot) {
         NSArray *tempArr = [self.selectNumCircle componentsSeparatedByString:@","];
