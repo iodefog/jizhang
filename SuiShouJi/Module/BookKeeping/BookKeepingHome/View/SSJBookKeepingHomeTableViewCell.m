@@ -184,7 +184,6 @@
     if (!_expentureMemoLabel) {
         _expentureMemoLabel = [[UILabel alloc]init];
         _expentureMemoLabel.textAlignment = NSTextAlignmentLeft;
-
         _expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         _expentureMemoLabel.font = [UIFont systemFontOfSize:12];
     }
