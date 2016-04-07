@@ -24,9 +24,10 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.cellLabel.left = 10;
-    self.cellLabel.centerY = self.height / 2;
-    self.detailLabel.right = self.width - 10;
-    self.detailLabel.centerY = self.height / 2;
+    self.cellLabel.centerY = self.contentView .height / 2;
+    self.detailLabel.width = self.contentView .width / 2 - 10;
+    self.detailLabel.right = self.contentView .width - 10;
+    self.detailLabel.centerY = self.contentView .height / 2;
 }
 
 -(UILabel *)cellLabel{
@@ -44,7 +45,7 @@
         _detailLabel = [[UILabel alloc]init];
         _detailLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _detailLabel.textAlignment = NSTextAlignmentRight;
-        _detailLabel.font = [UIFont systemFontOfSize:15];
+        _detailLabel.font = [UIFont systemFontOfSize:18];
     }
     return _detailLabel ;
 }

@@ -10,7 +10,7 @@
 #import <YYKeyboardManager/YYKeyboardManager.h>
 
 @interface SSJNickNameModifyView()<YYKeyboardObserver>
-@property(nonatomic, strong) UIView *popView;
+@property(nonatomic, strong) UIControl *popView;
 @property(nonatomic, strong) NSString *title;
 @property(nonatomic) int maxLength;
 @property(nonatomic, strong) UIView *titleView;
@@ -28,8 +28,12 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backViewClicked:)];
+        [self addGestureRecognizer:gesture];
         self.title = title;
         self.maxLength = maxTextLength;
+        [self addSubview:self.popView];
         [self.popView addSubview:self.titleView];
         [self.titleView addSubview:self.titleLabel];
         [self.popView addSubview:self.textInput];
@@ -39,6 +43,7 @@
         [self.bottomView addSubview:self.cancelButton];
         [self.textInput becomeFirstResponder];
         [[YYKeyboardManager defaultManager] addObserver:self];
+        [self sizeToFit];
     }
     return self;
 }
@@ -47,6 +52,9 @@
     [[YYKeyboardManager defaultManager] removeObserver:self];
 }
 
+-(CGSize)sizeThatFits:(CGSize)size{
+    return [UIScreen mainScreen].bounds.size;
+}
 
 - (void)show {
     if (self.superview) {
@@ -55,17 +63,7 @@
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
-    self.popView.size = CGSizeMake(keyWindow.width - 20, 200);
-    
-    self.popView.top = keyWindow.top;
-    
-    [self setNeedsLayout];
-    
-    self.backView.frame = [UIScreen mainScreen].bounds;
-    
-    [keyWindow addSubview:self.backView];
-    
-    [keyWindow addSubview:self.popView];
+    [keyWindow addSubview:self];
     
     [self.textInput becomeFirstResponder];
 }
@@ -77,13 +75,15 @@
     
     [self.textInput resignFirstResponder];
     
-    [self.popView removeFromSuperview];
+    [self removeFromSuperview];
     
-    [self.backView removeFromSuperview];
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.popView.size = CGSizeMake(self.width - 20, 200);
+    self.popView.centerX = self.width / 2;
+    self.popView.top = self.height;
     self.titleView.size = CGSizeMake(self.popView.width, 49);
     self.titleView.leftTop = CGPointMake(0, 0);
     self.titleView.centerX = self.popView.width / 2;
@@ -131,20 +131,10 @@
     }];
 }
 
--(UIView *)backView{
-    if (!_backView) {
-        _backView = [[UIView alloc]init];
-        _backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backViewClicked:)];
-        [_backView addGestureRecognizer:gesture];
-    }
-    return _backView;
-}
-
 
 -(UIView *)popView{
     if (!_popView) {
-        _popView = [[UIView alloc]init];
+        _popView = [[UIControl alloc]init];
         _popView.userInteractionEnabled = YES;
         _popView.backgroundColor = [UIColor whiteColor];
         _popView.layer.cornerRadius = 3.0f;
