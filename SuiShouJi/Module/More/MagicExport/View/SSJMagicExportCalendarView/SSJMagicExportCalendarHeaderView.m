@@ -21,8 +21,8 @@
 }
 
 - (void)layoutSubviews {
-//    [super layoutSubviews];
-    self.textLabel.frame = self.contentView.bounds;
+    [super layoutSubviews];
+    self.textLabel.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.5);
 }
 
 @end

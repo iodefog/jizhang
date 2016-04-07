@@ -39,23 +39,17 @@
     self.marker.center = CGPointMake(self.width * 0.5, self.dateLabel.bottom - self.marker.height * 0.8);
 }
 
-- (void)setSelected:(BOOL)selected {
-    _item.selected = selected;
-    [UIView animateWithDuration:0.25 animations:^{
-        [self updateAccordingToSelectState];
-    }];
-}
-
 - (void)setItem:(SSJMagicExportCalendarViewCellItem *)item {
     _item = item;
+    [self update];
+}
+
+- (void)update {
     self.userInteractionEnabled = _item.canSelect;
     self.marker.hidden = (!_item.showMarker || !_item.showContent);
     self.dateLabel.hidden = self.descLabel.hidden = !_item.showContent;
     self.dateLabel.text = [NSString stringWithFormat:@"%d", _item.date.day];
-    [self updateAccordingToSelectState];
-}
-
-- (void)updateAccordingToSelectState {
+    
     self.dateLabel.clipsToBounds = _item.selected;
     self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor whiteColor];
     self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
@@ -63,10 +57,6 @@
 }
 
 #pragma mark - UIResponder
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
-}
-
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
     
@@ -74,7 +64,7 @@
         return;
     }
     
-    _item.selected = !_item.selected;
+    _item.selected = YES;
     self.dateLabel.clipsToBounds = _item.selected;
     self.marker.tintColor = _item.selected ? [UIColor whiteColor] : [UIColor ssj_colorWithHex:@"ffa81c"];
     [UIView transitionWithView:self duration:0.15 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -85,10 +75,6 @@
     if (_clickBlcok) {
         _clickBlcok(self);
     }
-}
-
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesCancelled:touches withEvent:event];
 }
 
 #pragma mark - Getter

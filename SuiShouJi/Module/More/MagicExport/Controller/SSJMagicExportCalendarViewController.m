@@ -12,6 +12,10 @@
 
 @interface SSJMagicExportCalendarViewController () <SSJMagicExportCalendarViewDelegate>
 
+@property (nonatomic, strong) NSDate *selectBeginDate;
+
+@property (nonatomic, strong) NSDate *selectEndDate;
+
 @property (nonatomic, strong) SSJMagicExportCalendarView *calendarView;
 
 @property (nonatomic, strong) NSArray *billDates;
@@ -65,11 +69,20 @@
 }
 
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectedDate:(NSDate *)date {
-    
-}
-
-- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didDeselectedDate:(NSDate *)date {
-    
+    if (_selectBeginDate) {
+        if ([_selectBeginDate compare:date] == NSOrderedDescending) {
+            // 选择的日期在开始日期之前
+            [calendarView deselectDate:_selectBeginDate];
+            _selectBeginDate = date;
+        } else {
+            // 选择结束日期
+            _selectEndDate = date;
+        }
+    } else {
+        // 第一次选择开始日期
+        _selectBeginDate = date;
+        [calendarView deselectDate:_beginDate];
+    }
 }
 
 #pragma mark - Getter
@@ -77,6 +90,7 @@
     if (!_calendarView) {
         _calendarView = [[SSJMagicExportCalendarView alloc] initWithFrame:self.view.bounds];
         _calendarView.delegate = self;
+        _calendarView.selectedDates = @[self.beginDate, self.endDate];
     }
     return _calendarView;
 }

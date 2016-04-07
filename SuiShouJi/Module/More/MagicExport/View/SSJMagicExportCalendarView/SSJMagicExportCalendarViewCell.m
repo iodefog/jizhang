@@ -8,6 +8,7 @@
 
 #import "SSJMagicExportCalendarViewCell.h"
 #import "SSJMagicExportCalendarDateView.h"
+#import "SSJMagicExportCalendarViewCellItem.h"
 
 @interface SSJMagicExportCalendarViewCell ()
 
@@ -24,6 +25,12 @@
         _dateViewArr = [NSMutableArray arrayWithCapacity:7];
         for (int i = 0; i < 7; i ++) {
             SSJMagicExportCalendarDateView *dateView = [[SSJMagicExportCalendarDateView alloc] init];
+            __weak typeof(self) weakSelf = self;
+            dateView.clickBlcok = ^(SSJMagicExportCalendarDateView *dateView) {
+                if (weakSelf.selectBlock) {
+                    weakSelf.selectBlock(weakSelf, dateView);
+                }
+            };
             [_dateViewArr addObject:dateView];
             [self.contentView addSubview:dateView];
         }
@@ -42,9 +49,10 @@
 }
 
 - (void)setDateItems:(NSArray<SSJMagicExportCalendarViewCellItem *> *)dateItems {
-    for (int i = 0; i < dateItems.count; i ++) {
+    _dateItems = dateItems;
+    for (int i = 0; i < _dateItems.count; i ++) {
         SSJMagicExportCalendarDateView *dateView = [_dateViewArr ssj_safeObjectAtIndex:i];
-        dateView.item = dateItems[i];
+        dateView.item = _dateItems[i];
     }
 }
 

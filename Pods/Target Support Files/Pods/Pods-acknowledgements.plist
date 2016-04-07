@@ -171,15 +171,6 @@ THE SOFTWARE.
 			<string>Copyright 2011 - 2015 UMeng.com. All rights reserved.
 </string>
 			<key>Title</key>
-			<string>UMengFeedback</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright 2011 - 2015 UMeng.com. All rights reserved.
-</string>
-			<key>Title</key>
 			<string>UMengSocial</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
