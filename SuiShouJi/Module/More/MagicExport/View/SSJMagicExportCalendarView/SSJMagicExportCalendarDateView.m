@@ -64,6 +64,10 @@
         return;
     }
     
+    if (_willSelectBlock) {
+        _willSelectBlock(self);
+    }
+    
     _item.selected = YES;
     self.dateLabel.clipsToBounds = _item.selected;
     self.marker.tintColor = _item.selected ? [UIColor whiteColor] : [UIColor ssj_colorWithHex:@"ffa81c"];
@@ -72,8 +76,8 @@
         self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
     } completion:NULL];
     
-    if (_clickBlcok) {
-        _clickBlcok(self);
+    if (_didSelectBlock) {
+        _didSelectBlock(self);
     }
 }
 

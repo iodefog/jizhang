@@ -68,21 +68,28 @@
     return nil;
 }
 
-- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectedDate:(NSDate *)date {
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date {
     if (_selectBeginDate) {
         if ([_selectBeginDate compare:date] == NSOrderedDescending) {
             // 选择的日期在开始日期之前
-            [calendarView deselectDate:_selectBeginDate];
+            [calendarView deselectDates:@[_selectBeginDate]];
             _selectBeginDate = date;
         } else {
             // 选择结束日期
             _selectEndDate = date;
+            if (_completion) {
+                _completion(_selectBeginDate, _selectEndDate);
+            }
         }
     } else {
         // 第一次选择开始日期
         _selectBeginDate = date;
-        [calendarView deselectDate:_beginDate];
+        [calendarView deselectDates:@[_beginDate, _endDate]];
     }
+}
+
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date {
+    
 }
 
 #pragma mark - Getter

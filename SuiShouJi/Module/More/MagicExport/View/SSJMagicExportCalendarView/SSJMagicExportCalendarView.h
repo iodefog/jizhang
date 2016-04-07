@@ -24,7 +24,9 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 
 - (NSString *)calendarView:(SSJMagicExportCalendarView *)calendarView descriptionForSelectedDate:(NSDate *)date;
 
-- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectedDate:(NSDate *)date;
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date;
+
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date;
 
 //- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didDeselectedDate:(NSDate *)date;
 
@@ -39,7 +41,7 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 
 - (void)reload;
 
-- (void)deselectDate:(NSDate *)date;
+- (void)deselectDates:(NSArray<NSDate *> *)dates;
 
 @end
 

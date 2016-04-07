@@ -18,14 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 // 日历结束的日期
 @property (nonatomic, strong) NSDate *endDate;
 
-// 选中的开始日期
-@property (nonatomic, strong, readonly) NSDate *selectBeginDate;
-
-// 选中的结束日期
-@property (nonatomic, strong, readonly) NSDate *selectEndDate;
-
 // 选择日期完成的回调
-@property (nonatomic, copy) void (^completion)(SSJMagicExportCalendarViewController *);
+@property (nonatomic, copy) void (^completion)(NSDate *selectedBeginDate, NSDate *selectedEndDate);
 
 @end
 

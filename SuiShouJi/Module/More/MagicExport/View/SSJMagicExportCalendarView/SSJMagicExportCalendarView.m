@@ -66,25 +66,30 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJMagicExportCalendarViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCalendarCellId forIndexPath:indexPath];
     __weak typeof(self) weakSelf = self;
-    cell.selectBlock = ^(SSJMagicExportCalendarViewCell *cell, SSJMagicExportCalendarDateView *dateView) {
+    cell.willSelectBlock = ^(SSJMagicExportCalendarViewCell *cell, SSJMagicExportCalendarDateView *dateView) {
         if (!weakSelf.delegate) {
             return;
         }
         
         if (dateView.item.selected) {
-            if ([weakSelf.delegate respondsToSelector:@selector(calendarView:didSelectedDate:)]) {
-                [weakSelf.delegate calendarView:weakSelf didSelectedDate:dateView.item.date];
+            if ([weakSelf.delegate respondsToSelector:@selector(calendarView:willSelectDate:)]) {
+                [weakSelf.delegate calendarView:weakSelf willSelectDate:dateView.item.date];
             }
             if ([weakSelf.delegate respondsToSelector:@selector(calendarView:descriptionForSelectedDate:)]) {
                 NSString *desc = [weakSelf.delegate calendarView:weakSelf descriptionForSelectedDate:dateView.item.date];
                 dateView.item.desc = desc;
                 [weakSelf.tableView reloadData];
-//                [dateView update];
             }
-        } else {
-//            if ([weakSelf.delegate respondsToSelector:@selector(calendarView:didDeselectedDate:)]) {
-//                [weakSelf.delegate calendarView:weakSelf didDeselectedDate:dateView.item.date];
-//            }
+        }
+    };
+    cell.didSelectBlock = ^(SSJMagicExportCalendarViewCell *cell, SSJMagicExportCalendarDateView *dateView) {
+        if (!weakSelf.delegate) {
+            return;
+        }
+        if (dateView.item.selected) {
+            if ([weakSelf.delegate respondsToSelector:@selector(calendarView:didSelectDate:)]) {
+                [weakSelf.delegate calendarView:weakSelf didSelectDate:dateView.item.date];
+            }
         }
     };
     cell.dateItems = [_items ssj_objectAtIndexPath:indexPath];
@@ -177,12 +182,12 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     [self.tableView reloadData];
 }
 
-- (void)deselectDate:(NSDate *)date {
-    SSJMagicExportCalendarViewCellItem *item = [_dateItemMapping objectForKey:[date formattedDateWithFormat:@"yyyy-MM-dd"]];
-    if (item) {
+- (void)deselectDates:(NSArray<NSDate *> *)dates {
+    for (NSDate *date in dates) {
+        SSJMagicExportCalendarViewCellItem *item = [_dateItemMapping objectForKey:[date formattedDateWithFormat:@"yyyy-MM-dd"]];
         item.selected = NO;
-        [self.tableView reloadData];
     }
+    [self.tableView reloadData];
 }
 
 #pragma mark - Private
