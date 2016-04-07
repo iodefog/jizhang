@@ -22,7 +22,7 @@
 @property (nonatomic, readonly) BOOL isDatabaseInitFinished;
 
 /**
- *  导航栏返回按钮点击事件
+ *  导航栏返回按钮点击事件，如果子类重写此方法，需要调用父类方法
  */
 - (void)goBackAction;
 

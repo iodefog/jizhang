@@ -130,12 +130,7 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
         }
         
         NSDate *startDate = [calendar dateByAddingComponents:components toDate:earlierPeriod.startDate options:0];
-        NSDate *endDate = [calendar dateByAddingComponents:components toDate:earlierPeriod.endDate options:0];
-        
-        SSJDatePeriod *period = [[SSJDatePeriod alloc] init];
-        period.startDate = startDate;
-        period.endDate = endDate;
-        period.periodType = _periodType;
+        SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:_periodType date:startDate];
         [periods addObject:period];
     }
     
@@ -214,6 +209,12 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     NSCalendar *calendar = [[self class] calendar];
     NSRange daysRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:(NSCalendarUnit)_periodType forDate:_startDate];
     return daysRange.length;
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@", @{@"startDate":(_startDate ? [_startDate formattedDateWithFormat:@"yyyy-MM-dd"] : [NSNull null]),
+                                               @"endDate":(_endDate ? [_endDate formattedDateWithFormat:@"yyyy-MM-dd"] : [NSNull null]),
+                                               @"periodType":@(_periodType)}];
 }
 
 @end

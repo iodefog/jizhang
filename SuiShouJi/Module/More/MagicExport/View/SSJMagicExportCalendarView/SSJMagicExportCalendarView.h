@@ -43,6 +43,8 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 
 - (void)deselectDates:(NSArray<NSDate *> *)dates;
 
+- (void)scrollToDate:(NSDate *)date;
+
 @end
 
 NS_ASSUME_NONNULL_END

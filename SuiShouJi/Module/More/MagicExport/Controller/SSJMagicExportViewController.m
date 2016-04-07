@@ -221,6 +221,7 @@
         _emailTextField.layer.cornerRadius = 3;
         _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _emailTextField.placeholder = @"请输入邮箱地址";
+        _emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, _emailTextField.height)];
         _emailTextField.leftView = leftView;

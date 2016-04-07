@@ -44,6 +44,7 @@
         if (_billDates) {
             [self.view addSubview:self.calendarView];
             [self.calendarView reload];
+            [self.calendarView scrollToDate:_beginDate];
         } else {
             
         }
