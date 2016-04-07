@@ -8,34 +8,21 @@
 
 #import "SSJMagicExportCalendarHeaderView.h"
 
-@interface SSJMagicExportCalendarHeaderView ()
-
-@property (nonatomic, strong) UILabel *titleLabel;
-
-@end
-
 @implementation SSJMagicExportCalendarHeaderView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        _titleLabel = [[UILabel alloc] init];
-        _titleLabel.font = [UIFont systemFontOfSize:18];
-        _titleLabel.textColor = [UIColor whiteColor];
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.backgroundColor = [UIColor ssj_colorWithHex:@"00ccb3"];
-        [self addSubview:_titleLabel];
+- (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier {
+    if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+        self.textLabel.textColor = [UIColor whiteColor];
+        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.textAlignment = NSTextAlignmentCenter;
+        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"00ccb3"];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
-    _titleLabel.frame = self.bounds;
-}
-
-- (void)setTitle:(NSString *)title {
-    _title = title;
-    _titleLabel.text = title;
+//    [super layoutSubviews];
+    self.textLabel.frame = self.contentView.bounds;
 }
 
 @end

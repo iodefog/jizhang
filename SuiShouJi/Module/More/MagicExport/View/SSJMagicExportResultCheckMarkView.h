@@ -1,5 +1,5 @@
 //
-//  SSJMagicExportCalendarHeaderView.h
+//  SSJMagicExportResultCheckMarkView.h
 //  SuiShouJi
 //
 //  Created by old lang on 16/4/6.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJMagicExportCalendarHeaderView : UITableViewHeaderFooterView
+@interface SSJMagicExportResultCheckMarkView : UIView
 
 @end

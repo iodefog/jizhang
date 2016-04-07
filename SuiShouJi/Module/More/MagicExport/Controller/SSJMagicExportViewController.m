@@ -79,6 +79,7 @@
     [super serverDidFinished:service];
     if ([service.returnCode isEqualToString:@"1"]) {
         SSJMagicExportResultViewController *resultVC = [[SSJMagicExportResultViewController alloc] init];
+        resultVC.backController = [self.navigationController.viewControllers firstObject];
         [self.navigationController pushViewController:resultVC animated:YES];
     }
 }
@@ -103,6 +104,8 @@
 #pragma mark - Event
 - (void)selectDateAction {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+    calendarVC.beginDate = self.beginDate;
+    calendarVC.endDate = self.endDate;
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
@@ -116,7 +119,10 @@
         _service = [[SSJMagicExportService alloc] initWithDelegate:self];
         _service.showLodingIndicator = YES;
     }
-    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:self.emailTextField.text];
+//    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:self.emailTextField.text];
+    
+#warning test
+    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:@"815086764@qq.com"];
 }
 
 #pragma mark - Getter
@@ -128,7 +134,6 @@
         _dateLabel.textColor = [UIColor blackColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.headIndent = 10;
         style.firstLineHeadIndent = 10;
         _dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@"选择日期" attributes:@{NSParagraphStyleAttributeName:style}];
     }
@@ -154,7 +159,6 @@
         _emailLabel.textColor = [UIColor blackColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.headIndent = 10;
         style.firstLineHeadIndent = 10;
         _emailLabel.attributedText = [[NSAttributedString alloc] initWithString:@"邮箱地址" attributes:@{NSParagraphStyleAttributeName:style}];
     }
@@ -176,6 +180,11 @@
         _emailTextField.layer.borderWidth = 1;
         _emailTextField.layer.cornerRadius = 3;
         _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        _emailTextField.placeholder = @"请输入邮箱地址";
+        
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, _emailTextField.height)];
+        _emailTextField.leftView = leftView;
+        _emailTextField.leftViewMode = UITextFieldViewModeAlways;
     }
     return _emailTextField;
 }
@@ -183,6 +192,8 @@
 - (UIButton *)commitBtn {
     if (!_commitBtn) {
         _commitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _commitBtn.layer.cornerRadius = 3;
+        _commitBtn.clipsToBounds = YES;
         _commitBtn.frame = CGRectMake(22, self.emailView.bottom + 26, self.view.width - 44, 44);
         _commitBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];

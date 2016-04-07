@@ -6,11 +6,16 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "SSJMagicExportCalendarViewCellItem.h"
+#import "SSJBaseTableViewCell.h"
 
-@interface SSJMagicExportCalendarViewCell : UICollectionViewCell
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, strong) SSJMagicExportCalendarViewCellItem *item;
+@class SSJMagicExportCalendarViewCellItem;
+
+@interface SSJMagicExportCalendarViewCell : SSJBaseTableViewCell
+
+@property (nonatomic, strong) NSArray<SSJMagicExportCalendarViewCellItem *> *dateItems;
 
 @end
+
+NS_ASSUME_NONNULL_END
