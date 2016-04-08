@@ -65,7 +65,7 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if (self.title.length) {
-        [MobClick beginLogPageView:self.title];
+        [MobClick beginLogPageView:[self statisticsTitle]];
     }
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         self.navigationController.interactivePopGestureRecognizer.enabled=YES;
@@ -79,7 +79,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     if (self.title.length) {
-        [MobClick endLogPageView:self.title];
+        [MobClick endLogPageView:[self statisticsTitle]];
     }
 }
 
@@ -247,6 +247,22 @@
     NSMutableArray *leftItems = [self.navigationItem.leftBarButtonItems mutableCopy];
     [leftItems removeObject:self.syncLoadingItem];
     [self.navigationItem setLeftBarButtonItems:leftItems animated:YES];
+}
+
+- (NSString *)statisticsTitle {
+    if (self.title.length) {
+        return self.title;
+    }
+    
+    if (self.navigationItem.title.length) {
+        return self.navigationItem.title;
+    }
+    
+    if (self.tabBarItem.title.length) {
+        return self.tabBarItem.title;
+    }
+    
+    return @"";
 }
 
 @end
