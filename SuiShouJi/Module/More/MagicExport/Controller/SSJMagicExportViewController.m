@@ -169,7 +169,7 @@
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
-        _dateLabel.backgroundColor = [UIColor whiteColor];
+        _dateLabel.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _dateLabel.font = [UIFont systemFontOfSize:14];
         _dateLabel.textColor = [UIColor blackColor];
         
@@ -194,7 +194,7 @@
 - (UILabel *)emailLabel {
     if (!_emailLabel) {
         _emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.selectDateView.bottom, self.view.width, 36)];
-        _emailLabel.backgroundColor = [UIColor whiteColor];
+        _emailLabel.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _emailLabel.font = [UIFont systemFontOfSize:14];
         _emailLabel.textColor = [UIColor blackColor];
         

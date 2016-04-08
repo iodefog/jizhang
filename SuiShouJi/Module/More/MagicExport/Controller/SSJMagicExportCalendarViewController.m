@@ -35,9 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor lightGrayColor];
     [self.view ssj_showLoadingIndicator];
-    
     [SSJMagicExportStore queryAllBillDateWithSuccess:^(NSArray<NSDate *> *result) {
         [self.view ssj_hideLoadingIndicator];
         _billDates = result;

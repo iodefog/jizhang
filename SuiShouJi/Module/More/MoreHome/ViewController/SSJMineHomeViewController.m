@@ -27,7 +27,7 @@
 #import "SSJRegistCompleteViewController.h"
 #import "SSJForgetPasswordSecondStepViewController.h"
 #import "SSJPersonalDetailViewController.h"
-
+#import "SSJBookkeepingTreeViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -199,6 +199,13 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if ([title isEqualToString:kTitle3]) {
         SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
+        return;
+    }
+    
+    //  记账树
+    if ([title isEqualToString:kTitle4]) {
+        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+        [self.navigationController pushViewController:treeVC animated:YES];
         return;
     }
 
