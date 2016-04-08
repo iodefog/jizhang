@@ -13,9 +13,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="tye-cO-Mp7">
-                    <rect key="frame" x="0.0" y="0.0" width="319" height="132"/>
+                    <rect key="frame" x="0.0" y="0.0" width="319" height="200"/>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
                     <rect key="frame" x="159" y="0.0" width="160" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
@@ -39,7 +39,7 @@
                         <constraint firstItem="qoB-04-fHd" firstAttribute="top" secondItem="ALN-pm-jUE" secondAttribute="top" constant="68" id="zyf-TD-IqD"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
                     <rect key="frame" x="0.0" y="0.0" width="160" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsL-w9-uFM">
@@ -69,6 +69,7 @@
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CTg-x2-QiR"/>
                 <constraint firstItem="tye-cO-Mp7" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="GDy-11-GRU"/>
                 <constraint firstAttribute="trailing" secondItem="3TJ-sV-M3Z" secondAttribute="trailing" id="IeK-9R-hY5"/>
+                <constraint firstAttribute="bottom" secondItem="tye-cO-Mp7" secondAttribute="bottom" id="LJp-Iv-eFY"/>
                 <constraint firstItem="vsL-w9-uFM" firstAttribute="baseline" secondItem="GP4-fJ-L5y" secondAttribute="baseline" id="Mfi-9v-ggd"/>
                 <constraint firstItem="DOH-yp-VH2" firstAttribute="baseline" secondItem="qoB-04-fHd" secondAttribute="baseline" id="Vew-eW-CtR"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="width" secondItem="tye-cO-Mp7" secondAttribute="width" multiplier="1:2" id="X9Z-tO-wIg"/>
