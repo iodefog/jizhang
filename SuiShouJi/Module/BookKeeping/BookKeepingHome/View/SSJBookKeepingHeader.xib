@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -12,20 +12,20 @@
             <rect key="frame" x="0.0" y="0.0" width="319" height="200"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="home_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="tye-cO-Mp7">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="tye-cO-Mp7">
                     <rect key="frame" x="0.0" y="0.0" width="319" height="132"/>
                 </imageView>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
-                    <rect key="frame" x="159" y="0.0" width="159.5" height="132"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ALN-pm-jUE">
+                    <rect key="frame" x="159" y="0.0" width="160" height="132"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
                             <rect key="frame" x="79" y="68" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GP4-fJ-L5y">
-                            <rect key="frame" x="55" y="78" width="49.5" height="24"/>
+                            <rect key="frame" x="55" y="78" width="50" height="24"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -39,16 +39,16 @@
                         <constraint firstItem="qoB-04-fHd" firstAttribute="top" secondItem="ALN-pm-jUE" secondAttribute="top" constant="68" id="zyf-TD-IqD"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
-                    <rect key="frame" x="0.0" y="0.0" width="159.5" height="132"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TJ-sV-M3Z">
+                    <rect key="frame" x="0.0" y="0.0" width="160" height="132"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsL-w9-uFM">
-                            <rect key="frame" x="50" y="78" width="59.5" height="24"/>
+                            <rect key="frame" x="50" y="78" width="60" height="24"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DOH-yp-VH2">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DOH-yp-VH2">
                             <rect key="frame" x="79" y="68" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -61,20 +61,9 @@
                         <constraint firstItem="DOH-yp-VH2" firstAttribute="centerX" secondItem="3TJ-sV-M3Z" secondAttribute="centerX" id="VRh-q6-lqT"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhJ-Pb-BeF">
-                    <rect key="frame" x="120" y="120" width="80" height="80"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="80" id="8GU-Tl-6Ih"/>
-                        <constraint firstAttribute="width" constant="80" id="gtb-49-H1j"/>
-                    </constraints>
-                    <connections>
-                        <action selector="bookKeeping:" destination="iN0-l3-epB" eventType="touchUpInside" id="cva-8c-U9M"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="vhJ-Pb-BeF" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="0De-C2-OVZ"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="6My-40-98I"/>
                 <constraint firstItem="ALN-pm-jUE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ATK-B2-MAU"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CTg-x2-QiR"/>
@@ -89,7 +78,6 @@
                 <constraint firstAttribute="trailing" secondItem="ALN-pm-jUE" secondAttribute="trailing" id="h4R-aR-pU4"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="bottom" secondItem="tye-cO-Mp7" secondAttribute="bottom" id="khu-jn-NYt"/>
                 <constraint firstAttribute="trailing" secondItem="tye-cO-Mp7" secondAttribute="trailing" id="m2S-Nf-gzY"/>
-                <constraint firstAttribute="bottom" secondItem="vhJ-Pb-BeF" secondAttribute="bottom" id="qFA-RF-igA"/>
                 <constraint firstItem="ALN-pm-jUE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sek-Ds-7jU"/>
                 <constraint firstItem="3TJ-sV-M3Z" firstAttribute="bottom" secondItem="tye-cO-Mp7" secondAttribute="bottom" id="w8f-NI-LXK"/>
                 <constraint firstItem="ALN-pm-jUE" firstAttribute="width" secondItem="tye-cO-Mp7" secondAttribute="width" multiplier="1:2" id="wM1-R3-kzl"/>
@@ -103,7 +91,6 @@
                 </mask>
             </variation>
             <connections>
-                <outlet property="bookKeepingButton" destination="vhJ-Pb-BeF" id="T5i-nY-aKm"/>
                 <outlet property="expenditureLabel" destination="GP4-fJ-L5y" id="haR-bg-pe1"/>
                 <outlet property="expentureTitleLabel" destination="qoB-04-fHd" id="rpr-fE-vc2"/>
                 <outlet property="incomeLabel" destination="vsL-w9-uFM" id="Thn-ej-Cle"/>

@@ -62,6 +62,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.extendedLayoutIncludesOpaqueBars = YES;
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];
         NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
@@ -135,10 +136,10 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 180);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 132);
     self.bookKeepingHeader.top = 0;
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 132);
     self.tableView.top = self.bookKeepingHeader.bottom;
-    self.tableView.height = self.view.height - self.bookKeepingHeader.bottom - 49;
     self.clearView.frame = self.view.frame;
 }
 
@@ -248,7 +249,7 @@
 -(SSJBookKeepingHeader *)bookKeepingHeader{
     if (!_bookKeepingHeader) {
         _bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
-        _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 160);
+        _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 132);
         __weak typeof(self) weakSelf = self;
         _bookKeepingHeader.BtnClickBlock = ^{
             SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
