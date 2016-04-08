@@ -77,6 +77,11 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    float screenHeight = [UIScreen mainScreen].bounds.size.height;
+    float screenWidth = [UIScreen mainScreen].bounds.size.width;
+    if (screenWidth == 414 && screenHeight == 736) {
+        return 70;
+    }
     return 66;
 }
 
@@ -159,6 +164,7 @@
     }
     return _profitAmountLabel;
 }
+
 #pragma mark - Private
 -(void)getDateFromDateBase{
     __weak typeof(self) weakSelf = self;

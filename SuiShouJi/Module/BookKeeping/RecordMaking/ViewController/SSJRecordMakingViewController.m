@@ -287,6 +287,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         __weak typeof(self) weakSelf = self;
         _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
             if (buttonTag == 1) {
+                [MobClick event:@"1"];
                 if (weakSelf.selectedImage == nil) {
                     UIActionSheet *sheet;
                     sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
@@ -311,8 +312,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 }
                 [weakSelf makeArecord];
             }else if (buttonTag == 3){
+                [MobClick event:@"3"];
                 [weakSelf.ChargeCircleSelectView show];
             }else if (buttonTag == 2){
+                [MobClick event:@"2"];
                 SSJMemoMakingView *memoMakingView = [[SSJMemoMakingView alloc]init];
                 memoMakingView.originalText = weakSelf.chargeMemo;
                 memoMakingView.comfirmButtonClickedBlock = ^(NSString *textInputed){
@@ -541,11 +544,13 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 }
 
 -(void)datePickerButtonClicked:(UIButton*)button{
+    [MobClick event:@"5"];
     [self.DateSelectedView show];
     [self.textInput resignFirstResponder];
 }
 
 -(void)fundingTypeButtonClicked:(UIButton*)button{
+    [MobClick event:@"4"];
     [self.FundingTypeSelectView show];
     [self.textInput resignFirstResponder];
 }
@@ -759,6 +764,11 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
     self.categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
+    if (self.titleSegment.selectedSegmentIndex == 0) {
+        [MobClick event:@"7"];
+    }else{
+        [MobClick event:@"6"];
+    }
     [self getCategoryList];
 }
 

@@ -165,6 +165,14 @@
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     return nil;
 }
+
+#warning test
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y < -10) {
+        NSLog(@"%f",scrollView.contentOffset.y);
+    }
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;

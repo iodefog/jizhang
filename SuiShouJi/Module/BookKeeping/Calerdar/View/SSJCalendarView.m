@@ -61,6 +61,7 @@
         flowLayout.minimumInteritemSpacing = _marginForHorizon;
         _calendar =[[UICollectionView alloc]initWithFrame:self.bounds collectionViewLayout:flowLayout];
         _calendar.backgroundColor=[UIColor whiteColor];
+        _calendar.scrollEnabled = NO;
         _calendar.dataSource=self;
         _calendar.delegate=self;
         _calendar.allowsMultipleSelection = NO;
