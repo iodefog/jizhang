@@ -136,7 +136,7 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 132);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
@@ -167,9 +167,9 @@
 }
 
 #warning test
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     if (scrollView.contentOffset.y < -10) {
-        NSLog(@"%f",scrollView.contentOffset.y);
+        
     }
 }
 
