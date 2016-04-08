@@ -22,8 +22,8 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJImaageBrowseViewController.h"
+#import "SSJMemoMakingView.h"
 #import "SSJChargeCircleSelectView.h"
-#import "SSJMemoMakingViewController.h"
 #import "SSJNewCategoryCollectionView.h"
 #import "SSJCategoryListHelper.h"
 #import "FMDB.h"
@@ -313,17 +313,17 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }else if (buttonTag == 3){
                 [weakSelf.ChargeCircleSelectView show];
             }else if (buttonTag == 2){
-                SSJMemoMakingViewController *memoMakingVC = [[SSJMemoMakingViewController alloc]init];
-                memoMakingVC.oldMemo = weakSelf.chargeMemo;
-                memoMakingVC.MemoMakingBlock = ^(NSString *newMemo){
-                    if (![newMemo isEqualToString:@""]) {
-                        weakSelf.chargeMemo = newMemo;
+                SSJMemoMakingView *memoMakingView = [[SSJMemoMakingView alloc]init];
+                memoMakingView.originalText = weakSelf.chargeMemo;
+                memoMakingView.comfirmButtonClickedBlock = ^(NSString *textInputed){
+                    if (![textInputed isEqualToString:@""]) {
+                        weakSelf.chargeMemo = textInputed;
                         weakSelf.additionalView.hasMemo = YES;
                     }else{
                         weakSelf.additionalView.hasMemo = NO;
                     }
                 };
-                [weakSelf.navigationController pushViewController:memoMakingVC animated:YES];
+                [memoMakingView show];
             }
         };
     }
