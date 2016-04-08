@@ -12,8 +12,8 @@
 
 @interface SSJBookkeepingTreeCheckInService : SSJBaseNetworkService
 
-// 签到次数
-@property (nonatomic, strong, readonly) SSJBookkeepingTreeCheckInModel *checkInTimes;
+//
+@property (nonatomic, strong, readonly) SSJBookkeepingTreeCheckInModel *checkInModel;
 
 // 签到
 - (void)checkIn;

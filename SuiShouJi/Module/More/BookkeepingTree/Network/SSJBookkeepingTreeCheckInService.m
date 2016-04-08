@@ -24,7 +24,10 @@
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
     
-    if ([self.returnCode isEqualToString:@"1"]) {
+    // returnCode为1是签到成功，2是已经签过到
+    if ([self.returnCode isEqualToString:@"1"]
+        || [self.returnCode isEqualToString:@"2"]) {
+        
         NSDictionary *result = [rootElement objectForKey:@"results"];
         NSDictionary *treeInfo = result[@"userTree"];
         

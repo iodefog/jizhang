@@ -32,6 +32,7 @@
 		7D39554F1C5F7CE2004D807C /* SSJStartNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D39554E1C5F7CE2004D807C /* SSJStartNetworkService.m */; };
 		7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955511C5F7D25004D807C /* SSJStartChecker.m */; };
 		7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955541C606BAF004D807C /* SSJStartUpgradeAlertView.m */; };
+		7D410B021CB74FDD00286313 /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D410B011CB74FDD00286313 /* SSJBookkeepingTreeViewController.m */; };
 		7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
 		7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
@@ -720,6 +721,8 @@
 		7D3955511C5F7D25004D807C /* SSJStartChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartChecker.m; sourceTree = "<group>"; };
 		7D3955531C606BAF004D807C /* SSJStartUpgradeAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartUpgradeAlertView.h; sourceTree = "<group>"; };
 		7D3955541C606BAF004D807C /* SSJStartUpgradeAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartUpgradeAlertView.m; sourceTree = "<group>"; };
+		7D410B001CB74FDD00286313 /* SSJBookkeepingTreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJBookkeepingTreeViewController.h; path = SuiShouJi/Module/More/MagicExport/View/SSJMagicExportCalendarView/SSJBookkeepingTreeViewController.h; sourceTree = SOURCE_ROOT; };
+		7D410B011CB74FDD00286313 /* SSJBookkeepingTreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJBookkeepingTreeViewController.m; path = SuiShouJi/Module/More/MagicExport/View/SSJMagicExportCalendarView/SSJBookkeepingTreeViewController.m; sourceTree = SOURCE_ROOT; };
 		7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundAccountTable.h; sourceTree = "<group>"; };
 		7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundAccountTable.m; sourceTree = "<group>"; };
 		7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDailySumChargeTable.h; sourceTree = "<group>"; };
@@ -1976,6 +1979,8 @@
 		7DB429031CAE483100B46F32 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7D410B001CB74FDD00286313 /* SSJBookkeepingTreeViewController.h */,
+				7D410B011CB74FDD00286313 /* SSJBookkeepingTreeViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4497,6 +4502,7 @@
 				7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */,
 				BD7BC8481C3A63A5001DE5D8 /* SSJFundingDetailItem.m in Sources */,
 				BDF5038F1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m in Sources */,
+				7D410B021CB74FDD00286313 /* SSJBookkeepingTreeViewController.m in Sources */,
 				BD0433261C1A78B40051E7AB /* SSJScrollViewAddition.m in Sources */,
 				7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */,
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
