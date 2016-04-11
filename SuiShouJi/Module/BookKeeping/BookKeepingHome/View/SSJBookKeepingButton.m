@@ -25,7 +25,7 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
         [self.layer addSublayer:self.loadingLayer];
-//        [self addSubview:self.recordMakingButton];
+        [self addSubview:self.recordMakingButton];
         [self addSubview:self.pointView];
     }
     return self;
@@ -34,6 +34,7 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.pointView.center = CGPointMake(self.width / 2, self.height / 2);
+    [_pointView.layer setAnchorPoint:CGPointMake(0.5, 44 / 8 + 0.5)];
     self.recordMakingButton.frame = self.bounds;
 }
 
@@ -69,11 +70,10 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
 
 -(UIView *)pointView{
     if (!_pointView) {
-        _pointView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 6, 6)];
+        _pointView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 8, 8)];
         _pointView.layer.borderColor = [UIColor ssj_colorWithHex:@"ffea01"].CGColor;
-        _pointView.layer.borderWidth = 2.0f;
-        _pointView.layer.cornerRadius = 3.0f;
-        [_pointView.layer setAnchorPoint:CGPointMake(44 / 6, 44 / 6)];
+        _pointView.layer.borderWidth = 3.0f;
+        _pointView.layer.cornerRadius = 4.0f;
         _pointView.hidden = YES;
     }
     return _pointView;
