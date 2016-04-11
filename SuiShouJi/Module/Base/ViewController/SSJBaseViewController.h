@@ -12,6 +12,11 @@
 @interface SSJBaseViewController : UIViewController <SSJBaseNetworkServiceDelegate>
 
 /**
+ *  统计标题
+ */
+@property (nonatomic, copy) NSString *statisticsTitle;
+
+/**
  *  点击是否隐藏键盘，默认为NO
  */
 @property (nonatomic) BOOL hideKeyboradWhenTouch;

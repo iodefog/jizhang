@@ -10,7 +10,7 @@
 #import "SSJBookkeepingTreeCheckInService.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
-#import "UIImage+GIF.h"
+#import "FLAnimatedImage.h"
 
 @interface SSJBookkeepingTreeViewController ()
 
@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
 
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) FLAnimatedImageView *imageView;
 
 @end
 
@@ -36,7 +36,6 @@
     [super viewDidLoad];
     
     [self.view addSubview:self.imageView];
-//    [self.view addSubview:self.webView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -52,6 +51,11 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [_checkInService cancel];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.imageView.frame = self.view.bounds;
 }
 
 #pragma mark - UIResponder
@@ -128,12 +132,10 @@
 
 // 显示浇水动画
 - (void)showWateringAnimation {
-//    NSString *html = @"<html><head><body><img src=\"seed_animation.gif\" style=\"width:100% height:100%\"><body></head></html>";
-//    
-////    NSString *html = @"<html><head><body><img src=\"seed_animation.gif\"><body></head></html>";
-//    NSString *path = [[NSBundle mainBundle] resourcePath];
-//    NSURL *baseURL = [NSURL fileURLWithPath:path];
-//    [self.webView loadHTMLString:html baseURL:baseURL];
+    NSString *gifpath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"seed_animation.gif"];
+    NSData *gifData = [NSData dataWithContentsOfFile:gifpath];
+    FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:gifData];
+    self.imageView.animatedImage = image;
 }
 
 // 显示已经浇过水提示
@@ -150,9 +152,10 @@
     return _checkInService;
 }
 
-- (UIImageView *)imageView {
+- (FLAnimatedImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+        _imageView = [[FLAnimatedImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"seed"]];
+//        _imageView = [[FLAnimatedImageView alloc] initWithImage:[UIImage imageNamed:@"seed-568@2x"]];
     }
     return _imageView;
 }
