@@ -264,11 +264,7 @@
         }
     }
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
-            
-        }failure:^(NSError *error) {
-            
-        }];
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
     }
     [db close];
     [self.navigationController popViewControllerAnimated:YES];

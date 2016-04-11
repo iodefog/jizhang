@@ -48,7 +48,7 @@
     self.userInteractionEnabled = _item.canSelect;
     self.marker.hidden = (!_item.showMarker || !_item.showContent);
     self.dateLabel.hidden = self.descLabel.hidden = !_item.showContent;
-    self.dateLabel.text = [NSString stringWithFormat:@"%d", _item.date.day];
+    self.dateLabel.text = [NSString stringWithFormat:@"%d", (int)_item.date.day];
     self.descLabel.text = _item.selected ? _item.desc : nil;
     
     self.dateLabel.clipsToBounds = _item.selected;

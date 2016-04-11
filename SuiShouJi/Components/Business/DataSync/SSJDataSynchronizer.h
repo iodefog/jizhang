@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, SSJDataSynchronizeType) {
+    SSJDataSynchronizeTypeData,
+    SSJDataSynchronizeTypeImage
+};
+
 @interface SSJDataSynchronizer : NSObject
 
 /**
@@ -31,6 +36,6 @@
  *  @param success  同步成功回调
  *  @param failure  同步失败回调
  */
-- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+- (void)startSyncWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure;
 
 @end

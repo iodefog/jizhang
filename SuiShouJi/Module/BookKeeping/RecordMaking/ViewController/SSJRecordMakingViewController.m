@@ -749,11 +749,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         });
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
-            
-        }failure:^(NSError *error) {
-            
-        }];
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
     }
 }
 

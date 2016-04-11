@@ -33,6 +33,8 @@
 		7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955511C5F7D25004D807C /* SSJStartChecker.m */; };
 		7D3955551C606BAF004D807C /* SSJStartUpgradeAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955541C606BAF004D807C /* SSJStartUpgradeAlertView.m */; };
 		7D410B021CB74FDD00286313 /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D410B011CB74FDD00286313 /* SSJBookkeepingTreeViewController.m */; };
+		7D4540871CBB71CE000A4266 /* seed.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4540851CBB71CE000A4266 /* seed.png */; };
+		7D4540881CBB71CE000A4266 /* seed_animation.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D4540861CBB71CE000A4266 /* seed_animation.gif */; };
 		7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
 		7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
@@ -724,6 +726,8 @@
 		7D3955541C606BAF004D807C /* SSJStartUpgradeAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartUpgradeAlertView.m; sourceTree = "<group>"; };
 		7D410B001CB74FDD00286313 /* SSJBookkeepingTreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJBookkeepingTreeViewController.h; path = SuiShouJi/Module/More/MagicExport/View/SSJMagicExportCalendarView/SSJBookkeepingTreeViewController.h; sourceTree = SOURCE_ROOT; };
 		7D410B011CB74FDD00286313 /* SSJBookkeepingTreeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJBookkeepingTreeViewController.m; path = SuiShouJi/Module/More/MagicExport/View/SSJMagicExportCalendarView/SSJBookkeepingTreeViewController.m; sourceTree = SOURCE_ROOT; };
+		7D4540851CBB71CE000A4266 /* seed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = seed.png; sourceTree = "<group>"; };
+		7D4540861CBB71CE000A4266 /* seed_animation.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = seed_animation.gif; sourceTree = "<group>"; };
 		7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundAccountTable.h; sourceTree = "<group>"; };
 		7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundAccountTable.m; sourceTree = "<group>"; };
 		7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDailySumChargeTable.h; sourceTree = "<group>"; };
@@ -1746,6 +1750,15 @@
 			path = SSJStartChecker;
 			sourceTree = "<group>";
 		};
+		7D4540841CBB71CE000A4266 /* BookkeepingTree */ = {
+			isa = PBXGroup;
+			children = (
+				7D4540851CBB71CE000A4266 /* seed.png */,
+				7D4540861CBB71CE000A4266 /* seed_animation.gif */,
+			);
+			path = BookkeepingTree;
+			sourceTree = "<group>";
+		};
 		7D4EF87C1C43A47D003C4B20 /* OtherTable */ = {
 			isa = PBXGroup;
 			children = (
@@ -2038,6 +2051,7 @@
 		7DD7D5D51C4C8E6A00ACE71A /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				7D4540841CBB71CE000A4266 /* BookkeepingTree */,
 				7DE74BD31C9AE9C600D27E7D /* Default */,
 				BDF510741C925BB500A49D74 /* homeImage */,
 				7D893F1E1C91144D00886995 /* budget */,
@@ -4099,6 +4113,7 @@
 				7DE69C5A1C8EDF34001D31C1 /* motion_circle_default@3x.png in Resources */,
 				BD37D2D41C5231D60050BDAA /* bt_delete@2x.png in Resources */,
 				7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */,
+				7D4540871CBB71CE000A4266 /* seed.png in Resources */,
 				7DD7D6AE1C4C8E6A00ACE71A /* bt_house@2x.png in Resources */,
 				7DD7D6FB1C4C8E6A00ACE71A /* founds_exchange@3x.png in Resources */,
 				7D893F2E1C91144D00886995 /* budget_left_disable@3x.png in Resources */,
@@ -4123,6 +4138,7 @@
 				9C0E8C1E1CB645900093F79E /* umeng_add_photo@2x.png in Resources */,
 				7DD7D6EE1C4C8E6A00ACE71A /* bt_zhuanru@2x.png in Resources */,
 				7DD7D6D51C4C8E6A00ACE71A /* bt_shouzhai@3x.png in Resources */,
+				7D4540881CBB71CE000A4266 /* seed_animation.gif in Resources */,
 				BD976FC41C4F57FB00B0E26D /* solid_circle@3x.png in Resources */,
 				7DD7D6F91C4C8E6A00ACE71A /* edit@3x.png in Resources */,
 				BDF5048A1C868A8200DCFA99 /* calender@2x.png in Resources */,

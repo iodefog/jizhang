@@ -383,11 +383,7 @@
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
-            
-        }failure:^(NSError *error) {
-            
-        }];
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
     }
 }
 

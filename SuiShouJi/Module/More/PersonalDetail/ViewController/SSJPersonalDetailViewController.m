@@ -260,11 +260,7 @@ static NSString *const kTitle5 = @"修改密码";
             userItem.nickName = textInputed;
             [SSJUserTableManager saveUserItem:userItem];
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
-                    
-                }failure:^(NSError *error) {
-                    
-                }];
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
             }
         };
     }
@@ -286,11 +282,7 @@ static NSString *const kTitle5 = @"修改密码";
             userItem.signature = textInputed;
             [SSJUserTableManager saveUserItem:userItem];
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
-                    
-                }failure:^(NSError *error) {
-                    
-                }];
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
             }
         };
     }
