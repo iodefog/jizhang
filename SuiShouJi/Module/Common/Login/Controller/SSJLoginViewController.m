@@ -182,10 +182,10 @@
     
     //  登陆成功后强制同步一次
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^{
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type){
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
         [CDAutoHideMessageHUD showMessage:@"同步成功"];
-    } failure:^(NSError *error) {
+    } failure:^(SSJDataSynchronizeType type, NSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SSJHideSyncLoadingNotification object:self];
         [CDAutoHideMessageHUD showMessage:@"同步失败"];
     }];

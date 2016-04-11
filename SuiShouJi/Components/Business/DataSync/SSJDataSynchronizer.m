@@ -128,7 +128,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     }
 }
 
-- (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+- (void)startSyncWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure {
     [self.dataSuccessBlocks addBlock:success];
     [self.dataFailureBlocks addBlock:failure];
     
@@ -146,7 +146,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJDispatch_main_async_safe(^{
             void (^success)() = [self.dataSuccessBlocks block];
             if (success) {
-                success();
+                success(SSJDataSynchronizeTypeData);
             }
             [self.dataSuccessBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
@@ -163,7 +163,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJDispatch_main_async_safe(^{
             void (^success)() = [self.imageSuccessBlocks block];
             if (success) {
-                success();
+                success(SSJDataSynchronizeTypeImage);
             }
             [self.imageSuccessBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncImageSuccessNotification object:self];
@@ -180,7 +180,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJDispatchMainAsync(^{
             void (^failure)() = [self.dataFailureBlocks block];
             if (failure) {
-                failure(error);
+                failure(SSJDataSynchronizeTypeData, error);
             }
             [self.dataFailureBlocks removeBlock];
             
@@ -196,7 +196,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
         SSJDispatchMainAsync(^{
             void (^failure)() = [self.imageFailureBlocks block];
             if (failure) {
-                failure(error);
+                failure(SSJDataSynchronizeTypeImage, error);
             }
             [self.imageFailureBlocks removeBlock];
 #ifdef DEBUG

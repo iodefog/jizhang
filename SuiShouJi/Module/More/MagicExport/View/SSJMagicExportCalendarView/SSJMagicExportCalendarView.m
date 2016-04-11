@@ -190,7 +190,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
             
             NSMutableArray *dateItems = [[NSMutableArray alloc] initWithCapacity:7];
             for (int dateIndex = 0; dateIndex < 7; dateIndex ++) {
-                int day = rowIndex * 7 + dateIndex - firstDayIndex + 1;
+                int day = (int)(rowIndex * 7 + dateIndex - firstDayIndex + 1);
                 
                 SSJMagicExportCalendarViewCellItem *item = [[SSJMagicExportCalendarViewCellItem alloc] init];
                 item.date = [NSDate dateWithYear:period.startDate.year month:period.startDate.month day:day];

@@ -10,11 +10,15 @@
 #import "SSJBookkeepingTreeCheckInService.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
+#import "UIImage+GIF.h"
 
 @interface SSJBookkeepingTreeViewController ()
 
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
+
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
+
+@property (nonatomic, strong) UIImageView *imageView;
 
 @end
 
@@ -23,12 +27,16 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"记账树";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.view addSubview:self.imageView];
+//    [self.view addSubview:self.webView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,6 +86,10 @@
 }
 
 - (void)shakeToCheckIn {
+    
+#warning test
+    [self showWateringAnimation];
+    
     // 如果正在请求签到接口，直接返回
     if (_checkInService.isLoading) {
         return;
@@ -116,7 +128,12 @@
 
 // 显示浇水动画
 - (void)showWateringAnimation {
-    
+//    NSString *html = @"<html><head><body><img src=\"seed_animation.gif\" style=\"width:100% height:100%\"><body></head></html>";
+//    
+////    NSString *html = @"<html><head><body><img src=\"seed_animation.gif\"><body></head></html>";
+//    NSString *path = [[NSBundle mainBundle] resourcePath];
+//    NSURL *baseURL = [NSURL fileURLWithPath:path];
+//    [self.webView loadHTMLString:html baseURL:baseURL];
 }
 
 // 显示已经浇过水提示
@@ -131,6 +148,13 @@
         _checkInService.showLodingIndicator = YES;
     }
     return _checkInService;
+}
+
+- (UIImageView *)imageView {
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    }
+    return _imageView;
 }
 
 @end

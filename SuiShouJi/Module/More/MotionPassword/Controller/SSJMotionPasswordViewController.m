@@ -46,7 +46,6 @@ static const int kVerifyFailureTimesLimit = 5;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
-//        self.hidesNavigationBarWhenPushed = YES;
         self.verifyFailureTimes = kVerifyFailureTimesLimit;
     }
     return self;
@@ -143,6 +142,7 @@ static const int kVerifyFailureTimesLimit = 5;
                     userItem.motionPWDState = @"1";
                     [SSJUserTableManager saveUserItem:userItem];
                     
+                    [self.navigationController setNavigationBarHidden:NO animated:YES];
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     } else {
@@ -185,6 +185,7 @@ static const int kVerifyFailureTimesLimit = 5;
         case SSJMotionPasswordViewControllerTypeVerification: {
             if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
                 //  验证成功
+                [self.navigationController setNavigationBarHidden:NO animated:YES];
                 if (self.finishHandle) {
                     self.finishHandle(self);
                 } else {

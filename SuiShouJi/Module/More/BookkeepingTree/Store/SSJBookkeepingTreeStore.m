@@ -31,7 +31,7 @@
         [result close];
     }];
     
-    if (error) {
+    if (*error) {
         return nil;
     }
     
