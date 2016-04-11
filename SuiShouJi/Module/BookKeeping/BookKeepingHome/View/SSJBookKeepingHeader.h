@@ -10,9 +10,6 @@
 
 @interface SSJBookKeepingHeader : UIView
 
-typedef void(^BtnClickBlock)();
-
-@property (nonatomic, copy) BtnClickBlock BtnClickBlock;
 
 //本月支出
 @property(nonatomic,strong)NSString *expenditure;

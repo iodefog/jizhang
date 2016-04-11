@@ -59,11 +59,4 @@
 
 }
 
-- (IBAction)bookKeeping:(id)sender {
-    if (self.BtnClickBlock) {
-        self.BtnClickBlock();
-    }
-}
-
-
 @end
