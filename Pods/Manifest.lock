@@ -21,6 +21,7 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - DateTools (1.7.0)
+  - FLAnimatedImage (1.0.12)
   - FMDB (2.5):
     - FMDB/standard (= 2.5)
   - FMDB/common (2.5)
@@ -67,6 +68,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 2.5)
   - DateTools
+  - FLAnimatedImage (~> 1.0)
   - FMDB
   - iOS-WebP (= 0.4)
   - MJExtension
@@ -80,6 +82,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
   iOS-WebP: 436d3c506b7587bdef926d1d1c76f8dbf3905edc
   libwebp: 7d74f1ab887df77f23493ce115c9424fad5411b5

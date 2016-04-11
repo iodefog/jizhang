@@ -10,4 +10,6 @@
 
 @interface SSJMagicExportResultCheckMarkView : UIView
 
+- (void)startAnimation:(void (^)())finish;
+
 @end
