@@ -250,8 +250,8 @@
 }
 
 - (NSString *)statisticsTitle {
-    if (self.statisticsTitle.length) {
-        return self.statisticsTitle;
+    if (_statisticsTitle.length) {
+        return _statisticsTitle;
     }
     
     if (self.title.length) {
