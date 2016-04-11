@@ -171,7 +171,7 @@
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
         _dateLabel.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _dateLabel.font = [UIFont systemFontOfSize:14];
-        _dateLabel.textColor = [UIColor blackColor];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.firstLineHeadIndent = 10;
@@ -198,7 +198,7 @@
         _emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.selectDateView.bottom, self.view.width, 36)];
         _emailLabel.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _emailLabel.font = [UIFont systemFontOfSize:14];
-        _emailLabel.textColor = [UIColor blackColor];
+        _emailLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.firstLineHeadIndent = 10;

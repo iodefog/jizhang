@@ -30,9 +30,9 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
+        [self addSubview:self.baseLineView];
         [self addSubview:self.beginDateTitleLab];
         [self addSubview:self.beginDateLab];
-        [self addSubview:self.baseLineView];
         [self addSubview:self.endDateTitleLab];
         [self addSubview:self.endDateLab];
     }
@@ -48,11 +48,11 @@
     self.baseLineView.frame = CGRectMake(10, 108, self.width - 20, 45);
     [self.baseLineView ssj_relayoutBorder];
     
-    self.beginDateTitleLab.leftTop = CGPointMake(10, 94);
+    self.beginDateTitleLab.leftTop = CGPointMake(10, 84);
     [self.beginDateLab sizeToFit];
     self.beginDateLab.leftTop = CGPointMake(10, 116);
     
-    self.endDateTitleLab.rightTop = CGPointMake(self.width - 10, 94);
+    self.endDateTitleLab.rightTop = CGPointMake(self.width - 10, 84);
     [self.endDateLab sizeToFit];
     self.endDateLab.rightTop = CGPointMake(self.width - 10, 116);
 }
