@@ -12,15 +12,15 @@
 
 @property (nonatomic, strong) UILabel *titleLab;
 
+@property (nonatomic, strong) UILabel *beginDateTitleLab;
+
+@property (nonatomic, strong) UILabel *endDateTitleLab;
+
 @property (nonatomic, strong) UILabel *beginDateLab;
 
 @property (nonatomic, strong) UILabel *endDateLab;
 
-@property (nonatomic, strong) UIButton *beginDateBtn;
-
-@property (nonatomic, strong) UIButton *endDateBtn;
-
-@property (nonatomic, strong) UIImageView *arrowView;
+@property (nonatomic, strong) UIView *baseLineView;
 
 @end
 
@@ -30,34 +30,31 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
+        [self addSubview:self.beginDateTitleLab];
         [self addSubview:self.beginDateLab];
-        [self addSubview:self.beginDateBtn];
+        [self addSubview:self.baseLineView];
+        [self addSubview:self.endDateTitleLab];
         [self addSubview:self.endDateLab];
-        [self addSubview:self.endDateBtn];
-        [self addSubview:self.arrowView];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    [self.beginDateBtn ssj_relayoutBorder];
-    [self.endDateBtn ssj_relayoutBorder];
-    
+    self.titleLab.width = 164;
+    [self.titleLab sizeToFit];
     self.titleLab.top = 14;
     self.titleLab.centerX = self.width * 0.5;
     
-//    [self.beginDateLab sizeToFit];
-//    [self.beginDateLab ssj_relayoutBorder];
+    self.baseLineView.frame = CGRectMake(10, 108, self.width - 20, 45);
+    [self.baseLineView ssj_relayoutBorder];
     
-    self.arrowView.center = CGPointMake(self.width * 0.5, self.beginDateBtn.centerY);
+    self.beginDateTitleLab.leftTop = CGPointMake(10, 94);
+    [self.beginDateLab sizeToFit];
+    self.beginDateLab.leftTop = CGPointMake(10, 116);
     
-    CGFloat beginLeft = (self.width - self.arrowView.left - self.beginDateBtn.width) * 0.5;
-    self.beginDateLab.leftTop = CGPointMake(beginLeft, 94);
-    self.beginDateBtn.leftTop = CGPointMake(beginLeft, 116);
-    
-    CGFloat endLeft = (self.width - self.arrowView.right - self.endDateBtn.width) * 0.5 + self.arrowView.right;
-    self.endDateLab.leftTop = CGPointMake(endLeft, 94);
-    self.endDateBtn.leftTop = CGPointMake(endLeft, 116);
+    self.endDateTitleLab.rightTop = CGPointMake(self.width - 10, 94);
+    [self.endDateLab sizeToFit];
+    self.endDateLab.rightTop = CGPointMake(self.width - 10, 116);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -71,13 +68,19 @@
     [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]}]];
     [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"开启了记账之旅～"]];
     self.titleLab.attributedText = title;
-    [self.titleLab sizeToFit];
     
-    [self.beginDateBtn setTitle:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
+    self.beginDateLab.text = [beginDate formattedDateWithFormat:@"yyyy年M月d日"];
 }
 
 - (void)setEndDate:(NSDate *)endDate {
-    [self.endDateBtn setTitle:[endDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
+    [self setNeedsLayout];
+    self.endDateLab.text = [endDate formattedDateWithFormat:@"yyyy年M月d日"];
+}
+
+- (void)selectDateAction {
+    if (_selectDateBlock) {
+        _selectDateBlock();
+    }
 }
 
 - (UILabel *)titleLab {
@@ -89,60 +92,60 @@
     return _titleLab;
 }
 
+- (UILabel *)beginDateTitleLab {
+    if (!_beginDateTitleLab) {
+        _beginDateTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
+        _beginDateTitleLab.font = [UIFont systemFontOfSize:12];
+        _beginDateTitleLab.text = @"起始";
+        _beginDateTitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        [_beginDateTitleLab sizeToFit];
+    }
+    return _beginDateTitleLab;
+}
+
+- (UILabel *)endDateTitleLab {
+    if (!_endDateTitleLab) {
+        _endDateTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
+        _endDateTitleLab.font = [UIFont systemFontOfSize:12];
+        _endDateTitleLab.text = @"结束";
+        _endDateTitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        [_endDateTitleLab sizeToFit];
+    }
+    return _endDateTitleLab;
+}
+
 - (UILabel *)beginDateLab {
     if (!_beginDateLab) {
-        _beginDateLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
-        _beginDateLab.font = [UIFont systemFontOfSize:16];
-        _beginDateLab.text = @"起始";
-        [_beginDateLab sizeToFit];
+        _beginDateLab = [[UILabel alloc] init];
+        _beginDateLab.font = [UIFont systemFontOfSize:18];
+        _beginDateLab.textColor = [UIColor blackColor];
+        _beginDateLab.text = @"--年--月--日";
     }
     return _beginDateLab;
 }
 
 - (UILabel *)endDateLab {
     if (!_endDateLab) {
-        _endDateLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
-        _endDateLab.font = [UIFont systemFontOfSize:16];
-        _endDateLab.text = @"结束";
-        [_endDateLab sizeToFit];
+        _endDateLab = [[UILabel alloc] init];
+        _endDateLab.font = [UIFont systemFontOfSize:18];
+        _endDateLab.text = @"--年--月--日";
+        _endDateLab.textColor = [UIColor blackColor];
     }
     return _endDateLab;
 }
 
-- (UIButton *)beginDateBtn {
-    if (!_beginDateBtn) {
-        _beginDateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _beginDateBtn.size = CGSizeMake(120, 30);
-        _beginDateBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_beginDateBtn setTitle:@"--年--月--日" forState:UIControlStateNormal];
-        [_beginDateBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_beginDateBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
-        [_beginDateBtn ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_beginDateBtn ssj_setBorderWidth:1];
+- (UIView *)baseLineView {
+    if (!_baseLineView) {
+        _baseLineView = [[UIView alloc] init];
+        _baseLineView.backgroundColor = [UIColor whiteColor];
+        [_baseLineView ssj_setBorderWidth:1];
+        [_baseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_baseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"00c6ad"]];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDateAction)];
+        [_baseLineView addGestureRecognizer:tap];
     }
-    return _beginDateBtn;
-}
-
-- (UIButton *)endDateBtn {
-    if (!_endDateBtn) {
-        _endDateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _endDateBtn.size = CGSizeMake(120, 30);
-        _endDateBtn.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_endDateBtn setTitle:@"--年--月--日" forState:UIControlStateNormal];
-        [_endDateBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_endDateBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
-        [_endDateBtn ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_endDateBtn ssj_setBorderWidth:1];
-    }
-    return _endDateBtn;
-}
-
-- (UIImageView *)arrowView {
-    if (!_arrowView) {
-        _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
-        _arrowView.size = CGSizeMake(40, 20);
-    }
-    return _arrowView;
+    return _baseLineView;
 }
 
 @end

@@ -10,12 +10,10 @@
 
 @interface SSJMagicExportSelectDateView : UIView
 
-@property (nonatomic, strong, readonly) UIButton *beginDateBtn;
-
-@property (nonatomic, strong, readonly) UIButton *endDateBtn;
-
 @property (nonatomic, strong) NSDate *beginDate;
 
 @property (nonatomic, strong) NSDate *endDate;
+
+@property (nonatomic, copy) void (^selectDateBlock)(void);
 
 @end

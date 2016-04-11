@@ -124,8 +124,8 @@
 }
 
 - (void)updateBeginAndEndButton {
-    [self.selectDateView.beginDateBtn setTitle:[self.beginDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
-    [self.selectDateView.endDateBtn setTitle:[self.endDate formattedDateWithFormat:@"yyyy年M月d日"] forState:UIControlStateNormal];
+    self.selectDateView.beginDate = self.beginDate;
+    self.selectDateView.endDate = self.endDate;
 }
 
 #pragma mark - Event
@@ -183,10 +183,12 @@
 - (SSJMagicExportSelectDateView *)selectDateView {
     if (!_selectDateView) {
         _selectDateView = [[SSJMagicExportSelectDateView alloc] initWithFrame:CGRectMake(0, self.dateLabel.bottom, self.view.width, 176)];
-        [_selectDateView.beginDateBtn addTarget:self action:@selector(selectDateAction) forControlEvents:UIControlEventTouchUpInside];
-        [_selectDateView.endDateBtn addTarget:self action:@selector(selectDateAction) forControlEvents:UIControlEventTouchUpInside];
-        _selectDateView.beginDate = [NSDate date];
-        _selectDateView.endDate = [NSDate date];
+        __weak typeof(self) weakSelf = self;
+        _selectDateView.selectDateBlock = ^{
+            [weakSelf selectDateAction];
+        };
+//        _selectDateView.beginDate = [NSDate date];
+//        _selectDateView.endDate = [NSDate date];
     }
     return _selectDateView;
 }
