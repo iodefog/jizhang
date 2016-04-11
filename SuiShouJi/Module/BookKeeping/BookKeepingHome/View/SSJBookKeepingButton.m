@@ -39,11 +39,7 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.pointView.center = CGPointMake(self.width / 2, self.height / 2);
-<<<<<<< HEAD
     [_pointView.layer setAnchorPoint:CGPointMake(0.5, 44.f / 8 + 0.5)];
-=======
-    [_pointView.layer setAnchorPoint:CGPointMake(0.5, 44.0 / 8 + 0.5)];
->>>>>>> e17dc3de64395c497d8d51bbb50c3c46f4228a0a
     self.recordMakingButton.frame = self.bounds;
 }
 
