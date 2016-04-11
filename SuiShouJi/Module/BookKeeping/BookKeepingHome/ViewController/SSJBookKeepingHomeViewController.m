@@ -182,10 +182,11 @@
     if (scrollView.contentOffset.y < -68) {
         [self.homeButton startLoading];
         __weak typeof(self) weakSelf = self;
+#warning test
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
-            [weakSelf.homeButton stopLoading];
+
         }failure:^(NSError *error) {
-            [weakSelf.homeButton stopLoading];
+
         }];
     }
 }
