@@ -129,34 +129,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [self.userInfoService cancel];
 }
 
-#pragma mark - Getter
--(SSJMineHomeTableViewHeader *)header{
-    if (!_header) {
-        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
-        _header.frame = CGRectMake(0, 0, self.view.width, 125);
-        __weak typeof(self) weakSelf = self;
-        _header.HeaderButtonClickedBlock = ^(){
-            if (SSJIsUserLogined()) {
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
-                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-            }else{
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }
-        };
-        _header.HeaderClickedBlock = ^(){
-            if (!SSJIsUserLogined()) {
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }
-        };
-    }
-    return _header;
-}
-
-
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 55;
@@ -313,21 +285,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     //设置选择后的图片可被编辑
     picker.allowsEditing = YES;
     [self presentViewController:picker animated:YES completion:^{}];
-}
-
--(void)quitLogButtonClicked:(id)sender {
-    //  退出登陆后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-    
-    SSJClearLoginInfo();
-    
-    [SSJUserTableManager reloadUserIdWithError:nil];
-    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-    self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
-    self.header.nicknameLabel.text = @"待君登录";
-    
-    [self.tableView reloadData];
 }
 
 
@@ -491,5 +448,35 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     return _rightbuttonView;
 }
+
+-(SSJMineHomeTableViewHeader *)header{
+    if (!_header) {
+        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
+        _header.frame = CGRectMake(0, 0, self.view.width, 125);
+        __weak typeof(self) weakSelf = self;
+        _header.HeaderButtonClickedBlock = ^(){
+            if (SSJIsUserLogined()) {
+                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+            }else{
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }
+        };
+        _header.HeaderClickedBlock = ^(){
+            if (!SSJIsUserLogined()) {
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            }else{
+                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+            }
+        };
+    }
+    return _header;
+}
+
 
 @end

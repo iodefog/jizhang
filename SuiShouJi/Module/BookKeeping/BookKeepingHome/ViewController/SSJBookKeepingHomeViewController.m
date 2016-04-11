@@ -23,6 +23,7 @@
 #import "SSJBudgetModel.h"
 #import "SSJBillingChargeCellItem.h"
 #import "SSJHomeBudgetButton.h"
+#import "SSJBookKeepingButton.h"
 #import "SSJBudgetModel.h"
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
@@ -40,6 +41,7 @@
 @property (nonatomic,strong) SSJHomeReminderView *remindView;
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
+@property(nonatomic, strong) SSJBookKeepingButton *homeButton;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -121,9 +123,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.bookKeepingHeader];
+    [self.view addSubview:self.homeButton];
     self.tableView.frame = self.view.frame;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.contentInset = UIEdgeInsetsMake(68, 0, 0, 0);
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -136,11 +140,14 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 132);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
+    self.homeButton.size = CGSizeMake(88, 88);
+    self.homeButton.top = self.bookKeepingHeader.bottom - 20;
+    self.homeButton.centerX = self.view.width / 2;
 }
 
 -(BOOL)prefersStatusBarHidden{
@@ -167,9 +174,9 @@
 }
 
 #warning test
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y < -10) {
-        NSLog(@"%f",scrollView.contentOffset.y);
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.contentOffset.y < -68) {
+        [self.homeButton startLoading];
     }
 }
 
@@ -294,6 +301,14 @@
         };
     }
     return _budgetButton;
+}
+
+-(SSJBookKeepingButton *)homeButton{
+    if (!_homeButton) {
+        _homeButton = [[SSJBookKeepingButton alloc]initWithFrame:CGRectMake(0, 0, 88, 88)];
+        _homeButton.layer.cornerRadius = 44.f;
+    }
+    return _homeButton;
 }
 
 #pragma mark - Private
