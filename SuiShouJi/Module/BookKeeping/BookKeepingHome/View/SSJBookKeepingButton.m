@@ -9,6 +9,8 @@
 
 static const float kPROGRESS_LINE_WIDTH=4.0;
 
+
+
 #import "SSJBookKeepingButton.h"
 
 @interface SSJBookKeepingButton()
@@ -17,7 +19,10 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
 @property(nonatomic, strong) UIView *pointView;
 @end
 
-@implementation SSJBookKeepingButton
+@implementation SSJBookKeepingButton{
+    CFAbsoluteTime _startTime;
+    CFAbsoluteTime _endTime;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -34,7 +39,7 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.pointView.center = CGPointMake(self.width / 2, self.height / 2);
-    [_pointView.layer setAnchorPoint:CGPointMake(0.5, 44 / 8 + 0.5)];
+    [_pointView.layer setAnchorPoint:CGPointMake(0.5, 44.f / 8 + 0.5)];
     self.recordMakingButton.frame = self.bounds;
 }
 
@@ -42,6 +47,9 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
     if (!_recordMakingButton) {
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
         [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateNormal];
+        _recordMakingButton.layer.cornerRadius = self.width / 2;
+        _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        _recordMakingButton.layer.borderWidth = 2.0f;
     }
     return _recordMakingButton;
 }
@@ -74,12 +82,18 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
         _pointView.layer.borderColor = [UIColor ssj_colorWithHex:@"ffea01"].CGColor;
         _pointView.layer.borderWidth = 3.0f;
         _pointView.layer.cornerRadius = 4.0f;
+        _pointView.backgroundColor = [UIColor whiteColor];
         _pointView.hidden = YES;
     }
     return _pointView;
 }
 
 -(void)startLoading{
+    _startTime = CFAbsoluteTimeGetCurrent();
+    
+    self.recordMakingButton.layer.borderColor = [UIColor clearColor].CGColor;
+
+    
     self.pointView.hidden = NO;
     
     self.loadingLayer.hidden = NO;
@@ -99,6 +113,19 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
     
     [self.loadingLayer addAnimation:animation forKey:nil];
 }
+
+- (void)stopLoading{
+    _endTime = CFAbsoluteTimeGetCurrent();
+    
+    NSLog(@"time cost: %0.3f", _endTime - _startTime);
+    
+    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+    
+    self.pointView.hidden = YES;
+    
+    self.loadingLayer.hidden = YES;
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

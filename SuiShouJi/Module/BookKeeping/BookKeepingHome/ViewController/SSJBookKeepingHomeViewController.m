@@ -26,6 +26,7 @@
 #import "SSJBookKeepingButton.h"
 #import "SSJBudgetModel.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
@@ -42,6 +43,7 @@
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
+@property(nonatomic, strong) UILabel *statusLabel;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -137,6 +139,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     _selectIndex = nil;
     [self getCurrentDate];
+//    [self.homeButton stopLoading];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -149,6 +152,7 @@
     self.homeButton.top = self.bookKeepingHeader.bottom - 20;
     self.homeButton.centerX = self.view.width / 2;
 }
+
 
 -(BOOL)prefersStatusBarHidden{
     return YES;
@@ -173,10 +177,16 @@
     return nil;
 }
 
-#warning test
+#pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     if (scrollView.contentOffset.y < -68) {
         [self.homeButton startLoading];
+        __weak typeof(self) weakSelf = self;
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(){
+            [weakSelf.homeButton stopLoading];
+        }failure:^(NSError *error) {
+            [weakSelf.homeButton stopLoading];
+        }];
     }
 }
 

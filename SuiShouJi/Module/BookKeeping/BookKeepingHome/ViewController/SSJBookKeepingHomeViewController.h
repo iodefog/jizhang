@@ -8,5 +8,5 @@
 
 #import "SSJNewBaseTableViewController.h"
 
-@interface SSJBookKeepingHomeViewController : SSJNewBaseTableViewController<UITableViewDataSource,UITableViewDelegate>
+@interface SSJBookKeepingHomeViewController : SSJNewBaseTableViewController<UITableViewDataSource>
 @end

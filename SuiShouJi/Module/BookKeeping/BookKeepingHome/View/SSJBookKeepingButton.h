@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJBookKeepingButton : UIView
+// 开始动画
 -(void)startLoading;
+
+// 结束动画
+- (void)stopLoading;
 @end
