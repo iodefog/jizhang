@@ -32,6 +32,7 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.statisticsTitle = @"流水详情";
         self.title = @"详情";
     }
     return self;

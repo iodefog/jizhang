@@ -51,6 +51,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.statisticsTitle = @"日历";
         self.hidesBottomBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
