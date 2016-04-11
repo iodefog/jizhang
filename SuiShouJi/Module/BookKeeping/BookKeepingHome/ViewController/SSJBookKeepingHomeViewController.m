@@ -131,7 +131,7 @@
     self.tableView.frame = self.view.frame;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.contentInset = UIEdgeInsetsMake(68, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -151,7 +151,7 @@
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
     self.homeButton.size = CGSizeMake(88, 88);
-    self.homeButton.top = self.bookKeepingHeader.bottom - 20;
+    self.homeButton.top = self.bookKeepingHeader.bottom - 44;
     self.homeButton.centerX = self.view.width / 2;
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
@@ -190,13 +190,11 @@
             if (type == SSJDataSynchronizeTypeData) {
                 weakSelf.refreshSuccessOrNot = YES;
                 [weakSelf.homeButton stopLoading];
-                [weakSelf.tableView scrollsToTop];
             }
         }failure:^(SSJDataSynchronizeType type, NSError *error) {
             if (type == SSJDataSynchronizeTypeData) {
                 weakSelf.refreshSuccessOrNot = NO;
                 [weakSelf.homeButton stopLoading];
-                [weakSelf.tableView scrollsToTop];
             }
         }];
     }
@@ -340,6 +338,7 @@
                 [weakSelf.statusLabel sizeToFit];
                 [weakSelf.view setNeedsLayout];
             }
+            [weakSelf.tableView setContentOffset:CGPointMake(0, -44) animated:YES];
             dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
             
             dispatch_after(time, dispatch_get_main_queue(), ^{
