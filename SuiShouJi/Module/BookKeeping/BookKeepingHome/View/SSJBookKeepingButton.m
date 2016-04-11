@@ -9,7 +9,12 @@
 
 static const float kPROGRESS_LINE_WIDTH=4.0;
 
+static const float kAnimationDuration = 3.0;
 
+
+static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
+
+static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 
 #import "SSJBookKeepingButton.h"
 
@@ -103,15 +108,15 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
     
     animation.toValue = [NSNumber numberWithFloat:(2 * M_PI)];
     
-    animation.duration = 3;
+    animation.duration = kAnimationDuration;
 
     animation.cumulative = YES;
     
     animation.repeatCount = HUGE;
     
-    [self.pointView.layer addAnimation:animation forKey:nil];
+    [self.pointView.layer addAnimation:animation forKey:kPointViewAnimationKey];
     
-    [self.loadingLayer addAnimation:animation forKey:nil];
+    [self.loadingLayer addAnimation:animation forKey:kLodingViewAnimationKey];
 }
 
 - (void)stopLoading{
@@ -119,11 +124,33 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
     
     NSLog(@"time cost: %0.3f", _endTime - _startTime);
     
-    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+    double secondInterval = _endTime - _startTime;
     
-    self.pointView.hidden = YES;
-    
-    self.loadingLayer.hidden = YES;
+    if (secondInterval > kAnimationDuration) {
+        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        
+        [self.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
+        
+        [self.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
+        
+        self.pointView.hidden = YES;
+        
+        self.loadingLayer.hidden = YES;
+    }else{
+        __weak typeof(self) weakSelf = self;
+        dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (kAnimationDuration - secondInterval) *NSEC_PER_SEC);
+        dispatch_after(time, dispatch_get_main_queue(), ^{
+            weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+            
+            [weakSelf.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
+            
+            [weakSelf.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
+            
+            weakSelf.pointView.hidden = YES;
+            
+            weakSelf.loadingLayer.hidden = YES;
+        });
+    }
 }
 
 

@@ -261,11 +261,7 @@
         });
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-<<<<<<< HEAD
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-=======
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
->>>>>>> 9e1a6f89c6894391160d6729e8e57588947e8114
     }
 }
 
