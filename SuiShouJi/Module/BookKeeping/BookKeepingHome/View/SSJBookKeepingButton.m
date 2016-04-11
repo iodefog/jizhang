@@ -33,8 +33,7 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.pointView.centerY = 0;
-    self.pointView.centerX = self.width / 2;
+    self.pointView.center = CGPointMake(self.width / 2, self.height / 2);
     self.recordMakingButton.frame = self.bounds;
 }
 
@@ -74,6 +73,7 @@ static const float kPROGRESS_LINE_WIDTH=4.0;
         _pointView.layer.borderColor = [UIColor ssj_colorWithHex:@"ffea01"].CGColor;
         _pointView.layer.borderWidth = 2.0f;
         _pointView.layer.cornerRadius = 3.0f;
+        [_pointView.layer setAnchorPoint:CGPointMake(44 / 6, 44 / 6)];
         _pointView.hidden = YES;
     }
     return _pointView;
