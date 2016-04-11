@@ -33,6 +33,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _startTime = CFAbsoluteTimeGetCurrent();
         self.backgroundColor = [UIColor whiteColor];
         [self.layer addSublayer:self.loadingLayer];
         [self addSubview:self.recordMakingButton];
@@ -55,6 +56,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
         _recordMakingButton.layer.cornerRadius = self.width / 2;
         _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _recordMakingButton.layer.borderWidth = 2.0f;
+        [_recordMakingButton addTarget:self action:@selector(recordMakingButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _recordMakingButton;
 }
@@ -136,6 +138,10 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
         self.pointView.hidden = YES;
         
         self.loadingLayer.hidden = YES;
+        
+        if (self.animationStopBlock) {
+            self.animationStopBlock();
+        }
     }else{
         __weak typeof(self) weakSelf = self;
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (kAnimationDuration - secondInterval) *NSEC_PER_SEC);
@@ -149,7 +155,18 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
             weakSelf.pointView.hidden = YES;
             
             weakSelf.loadingLayer.hidden = YES;
+            
+            if (self.animationStopBlock) {
+                self.animationStopBlock();
+            }
         });
+    }
+    _startTime = CFAbsoluteTimeGetCurrent();
+}
+
+-(void)recordMakingButtonClicked:(id)sender{
+    if (self.recordMakingClickBlock) {
+        self.recordMakingClickBlock();
     }
 }
 

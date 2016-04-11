@@ -47,7 +47,7 @@
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
-
+@property(nonatomic) BOOL refreshSuccessOrNot;
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -126,6 +126,7 @@
     [super viewDidLoad];
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
+    [self.view addSubview:self.statusLabel];
     self.tableView.frame = self.view.frame;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -139,7 +140,7 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     _selectIndex = nil;
     [self getCurrentDate];
-//    [self.homeButton stopLoading];
+    [self.homeButton stopLoading];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -151,8 +152,10 @@
     self.homeButton.size = CGSizeMake(88, 88);
     self.homeButton.top = self.bookKeepingHeader.bottom - 20;
     self.homeButton.centerX = self.view.width / 2;
+    self.statusLabel.height = 21;
+    self.statusLabel.top = self.homeButton.bottom;
+    self.statusLabel.centerX = self.view.width / 2;
 }
-
 
 -(BOOL)prefersStatusBarHidden{
     return YES;
@@ -185,10 +188,12 @@
 #warning test
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
             if (type == SSJDataSynchronizeTypeData) {
+                weakSelf.refreshSuccessOrNot = YES;
                 [weakSelf.homeButton stopLoading];
             }
         }failure:^(SSJDataSynchronizeType type, NSError *error) {
             if (type == SSJDataSynchronizeTypeData) {
+                weakSelf.refreshSuccessOrNot = NO;
                 [weakSelf.homeButton stopLoading];
             }
         }];
@@ -280,11 +285,6 @@
     if (!_bookKeepingHeader) {
         _bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
         _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 132);
-        __weak typeof(self) weakSelf = self;
-        _bookKeepingHeader.BtnClickBlock = ^{
-            SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
-            [weakSelf.navigationController pushViewController:recordmaking animated:YES];
-        };
     }
     return _bookKeepingHeader;
 }
@@ -322,8 +322,42 @@
     if (!_homeButton) {
         _homeButton = [[SSJBookKeepingButton alloc]initWithFrame:CGRectMake(0, 0, 88, 88)];
         _homeButton.layer.cornerRadius = 44.f;
+        __weak typeof(self) weakSelf = self;
+        _homeButton.recordMakingClickBlock = ^(){
+            SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
+            [weakSelf.navigationController pushViewController:recordmaking animated:YES];
+        };
+        _homeButton.animationStopBlock = ^(){
+            weakSelf.statusLabel.hidden = NO;
+            if (weakSelf.refreshSuccessOrNot) {
+                weakSelf.statusLabel.text = @"数据同步成功";
+                [weakSelf.statusLabel sizeToFit];
+                [weakSelf.view setNeedsLayout];
+            }else{
+                weakSelf.statusLabel.text = @"数据同步失败";
+                [weakSelf.statusLabel sizeToFit];
+                [weakSelf.view setNeedsLayout];
+            }
+            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
+            
+            dispatch_after(time, dispatch_get_main_queue(), ^{
+                weakSelf.statusLabel.hidden = YES;
+            });
+        };
     }
     return _homeButton;
+}
+
+-(UILabel *)statusLabel{
+    if (!_statusLabel) {
+        _statusLabel = [[UILabel alloc]init];
+        _statusLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _statusLabel.font = [UIFont systemFontOfSize:14];
+        _statusLabel.hidden = YES;
+        _statusLabel.backgroundColor = [UIColor whiteColor];
+        _statusLabel.text = @"";
+    }
+    return _statusLabel;
 }
 
 #pragma mark - Private

@@ -14,4 +14,12 @@
 
 // 结束动画
 - (void)stopLoading;
+
+typedef void(^recordMakingClickBlock)();
+
+@property (nonatomic, copy) recordMakingClickBlock recordMakingClickBlock;
+
+typedef void(^animationStopBlock)();
+
+@property (nonatomic, copy) animationStopBlock animationStopBlock;
 @end
