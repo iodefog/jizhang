@@ -79,7 +79,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.statisticsTitle = @"";
+        self.statisticsTitle = @"记一笔";
         self.hidesBottomBarWhenPushed = YES;
     }
     return self;

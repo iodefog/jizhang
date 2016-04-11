@@ -45,6 +45,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     {
         self.hidesBottomBarWhenPushed = YES;
         self.extendedLayoutIncludesOpaqueBars = YES;
+        self.statisticsTitle = @"资金账户详情";
     }
     return self;
 }

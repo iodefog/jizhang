@@ -57,6 +57,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.statisticsTitle = @"首页";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
         [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -189,11 +190,13 @@
             if (type == SSJDataSynchronizeTypeData) {
                 weakSelf.refreshSuccessOrNot = YES;
                 [weakSelf.homeButton stopLoading];
+                [weakSelf.tableView scrollsToTop];
             }
         }failure:^(SSJDataSynchronizeType type, NSError *error) {
             if (type == SSJDataSynchronizeTypeData) {
                 weakSelf.refreshSuccessOrNot = NO;
                 [weakSelf.homeButton stopLoading];
+                [weakSelf.tableView scrollsToTop];
             }
         }];
     }

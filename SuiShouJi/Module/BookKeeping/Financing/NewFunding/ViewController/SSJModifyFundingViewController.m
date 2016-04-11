@@ -38,7 +38,8 @@
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {\
+        self.statisticsTitle = @"编辑资金账户";
 //        self.hideKeyboradWhenTouch = YES;
     }
     return self;

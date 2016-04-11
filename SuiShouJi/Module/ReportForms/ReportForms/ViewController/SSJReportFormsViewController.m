@@ -63,6 +63,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.statisticsTitle = @"报表首页";
         self.circleItems = [NSMutableArray array];
         self.calendarUtil = [[SSJReportFormsCalendarUtil alloc] init];
         self.automaticallyAdjustsScrollViewInsets = NO;
