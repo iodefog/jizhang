@@ -17,8 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *bookKeepingButton;
 @property (weak, nonatomic) IBOutlet UILabel *incomeTitleLabel;
 @property (weak, nonatomic) IBOutlet UIView *backgroudview;
-
-- (IBAction)bookKeeping:(id)sender;
 @end
 @implementation SSJBookKeepingHeader
 
@@ -38,7 +36,12 @@
     self.bookKeepingButton.layer.cornerRadius = 40.0f;
     self.bookKeepingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
     self.bookKeepingButton.layer.borderWidth = 1.0f / [UIScreen mainScreen].scale;
-
+    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
+        self.incomeTitleLabel.font = [UIFont systemFontOfSize:16];
+        self.expentureTitleLabel.font = [UIFont systemFontOfSize:16];
+        self.incomeLabel.font = [UIFont systemFontOfSize:26];
+        self.expenditureLabel.font = [UIFont systemFontOfSize:26];
+    }
 }
 
 -(void)setIncome:(NSString *)income{

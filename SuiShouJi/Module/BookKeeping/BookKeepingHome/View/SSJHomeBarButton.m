@@ -27,7 +27,11 @@
 }
 
 -(void)layoutSubviews{
-    _calenderImage.frame = CGRectMake(0, 0, 22, 22);
+    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
+        _calenderImage.frame = CGRectMake(0, 0, 29, 29);
+    }else{
+        _calenderImage.frame = CGRectMake(0, 0, 22, 22);
+    }
     _calenderImage.center = CGPointMake(self.width / 2, self.height / 2);
     _dateLabel.bottom = self.height;
     _dateLabel.center = CGPointMake(self.width / 2, self.height / 2);

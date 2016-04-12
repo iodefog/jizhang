@@ -11,7 +11,6 @@
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-#import "SSJBookKeepingHomeNodateFooter.h"
 #import "SSJHomeBarButton.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginViewController.h"
@@ -144,7 +143,11 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
+    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
+        self.bookKeepingHeader.size = CGSizeMake(self.view.width, 180);
+    }else{
+        self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
+    }
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;

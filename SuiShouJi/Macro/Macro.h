@@ -81,4 +81,10 @@ alpha:(a)]
 //  无效的版本号，int类型
 #define SSJ_INVALID_SYNC_VERSION LONG_LONG_MIN
 
+//  屏幕高度
+#define SSJSCREENHEIGHT CGRectGetHeight([UIScreen mainScreen].bounds)
+
+//  屏幕屏幕宽度
+#define SSJSCREENWITH CGRectGetWidth([UIScreen mainScreen].bounds)
+
 #endif
