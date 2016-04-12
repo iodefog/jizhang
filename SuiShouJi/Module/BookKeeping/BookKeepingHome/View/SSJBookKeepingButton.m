@@ -116,6 +116,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     animation.cumulative = YES;
     
     animation.repeatCount = HUGE;
+    animation.removedOnCompletion = NO;
     
     [self.pointView.layer addAnimation:animation forKey:kPointViewAnimationKey];
     
