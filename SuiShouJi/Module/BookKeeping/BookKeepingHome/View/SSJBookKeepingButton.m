@@ -53,6 +53,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     if (!_recordMakingButton) {
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
         [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateNormal];
+        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateHighlighted]; 
         _recordMakingButton.layer.cornerRadius = self.width / 2;
         _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _recordMakingButton.layer.borderWidth = 2.0f;

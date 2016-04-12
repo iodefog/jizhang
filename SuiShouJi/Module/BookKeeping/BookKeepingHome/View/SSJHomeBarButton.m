@@ -27,7 +27,11 @@
 }
 
 -(void)layoutSubviews{
-    _calenderImage.frame = CGRectMake(0, 0, 22, 22);
+    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
+        _calenderImage.frame = CGRectMake(0, 0, 29, 29);
+    }else{
+        _calenderImage.frame = CGRectMake(0, 0, 22, 22);
+    }
     _calenderImage.center = CGPointMake(self.width / 2, self.height / 2);
     _dateLabel.bottom = self.height;
     _dateLabel.center = CGPointMake(self.width / 2, self.height / 2);
@@ -48,7 +52,11 @@
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor whiteColor];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.font = [UIFont systemFontOfSize:14];
+        if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
+            _dateLabel.font = [UIFont systemFontOfSize:18];
+        }else{
+            _dateLabel.font = [UIFont systemFontOfSize:14];
+        }
     }
     return _dateLabel;
 }
