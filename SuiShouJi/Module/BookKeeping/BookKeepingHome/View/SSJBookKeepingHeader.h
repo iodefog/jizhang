@@ -21,7 +21,6 @@
 //当前月份
 @property (nonatomic)long currentMonth;
 
-+ (id)BookKeepingHeader;
-
 + (CGFloat)viewHeight;
+
 @end
