@@ -141,7 +141,6 @@
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     _selectIndex = nil;
     [self getCurrentDate];
-    [self.homeButton stopLoading];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -342,6 +341,7 @@
             dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
             
             dispatch_after(time, dispatch_get_main_queue(), ^{
+                weakSelf.statusLabel.text = @"";
                 weakSelf.statusLabel.hidden = YES;
             });
         };
