@@ -19,13 +19,13 @@
                     <rect key="frame" x="159" y="0.0" width="160" height="200"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qoB-04-fHd">
-                            <rect key="frame" x="80" y="144" width="0.0" height="0.0"/>
+                            <rect key="frame" x="80" y="134" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GP4-fJ-L5y">
-                            <rect key="frame" x="55" y="154" width="50" height="24"/>
+                            <rect key="frame" x="55" y="144" width="50" height="24"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -33,7 +33,7 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="GP4-fJ-L5y" secondAttribute="bottom" constant="22" id="5aT-o2-kEN"/>
+                        <constraint firstAttribute="bottom" secondItem="GP4-fJ-L5y" secondAttribute="bottom" constant="32" id="5aT-o2-kEN"/>
                         <constraint firstItem="GP4-fJ-L5y" firstAttribute="top" secondItem="qoB-04-fHd" secondAttribute="bottom" constant="10" id="kWa-zJ-hOq"/>
                         <constraint firstItem="GP4-fJ-L5y" firstAttribute="centerX" secondItem="ALN-pm-jUE" secondAttribute="centerX" id="pWP-hb-j9R"/>
                         <constraint firstItem="qoB-04-fHd" firstAttribute="centerX" secondItem="ALN-pm-jUE" secondAttribute="centerX" id="uv4-Y2-vKu"/>
@@ -43,13 +43,13 @@
                     <rect key="frame" x="0.0" y="0.0" width="160" height="200"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsL-w9-uFM">
-                            <rect key="frame" x="50" y="154" width="60" height="24"/>
+                            <rect key="frame" x="50" y="144" width="60" height="24"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DOH-yp-VH2">
-                            <rect key="frame" x="80" y="144" width="0.0" height="0.0"/>
+                            <rect key="frame" x="80" y="134" width="0.0" height="0.0"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -87,8 +87,8 @@
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="IeK-9R-hY5"/>
-                    <exclude reference="bIu-M0-dLf"/>
                     <exclude reference="ATK-B2-MAU"/>
+                    <exclude reference="bIu-M0-dLf"/>
                 </mask>
             </variation>
             <connections>
