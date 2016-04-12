@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7D05C3091CBC970C008467DC /* SSJStartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D05C3081CBC970C008467DC /* SSJStartViewController.m */; };
 		7D05C30C1CBCE68D008467DC /* SSJStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D05C30B1CBCE68D008467DC /* SSJStartView.m */; };
 		7D0B30E51CBBC0050088C3F0 /* tree_level_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0B30C11CBBC0050088C3F0 /* tree_level_1-667@2x.png */; };
 		7D0B30E61CBBC0050088C3F0 /* tree_level_1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D0B30C21CBBC0050088C3F0 /* tree_level_1.gif */; };
@@ -709,8 +708,6 @@
 
 /* Begin PBXFileReference section */
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		7D05C3071CBC970C008467DC /* SSJStartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartViewController.h; sourceTree = "<group>"; };
-		7D05C3081CBC970C008467DC /* SSJStartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartViewController.m; sourceTree = "<group>"; };
 		7D05C30A1CBCE68D008467DC /* SSJStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartView.h; sourceTree = "<group>"; };
 		7D05C30B1CBCE68D008467DC /* SSJStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartView.m; sourceTree = "<group>"; };
 		7D0B30C11CBBC0050088C3F0 /* tree_level_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tree_level_1-667@2x.png"; sourceTree = "<group>"; };
@@ -1681,8 +1678,6 @@
 		7D05C2FE1CBC96F8008467DC /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7D05C3071CBC970C008467DC /* SSJStartViewController.h */,
-				7D05C3081CBC970C008467DC /* SSJStartViewController.m */,
 				7D05C30A1CBCE68D008467DC /* SSJStartView.h */,
 				7D05C30B1CBCE68D008467DC /* SSJStartView.m */,
 			);
@@ -3559,12 +3554,12 @@
 		BD70DF3D1C4751EA000E6CC9 /* Guide */ = {
 			isa = PBXGroup;
 			children = (
+				BD70DF421C4751EA000E6CC9 /* SSJGuideView.h */,
+				BD70DF431C4751EA000E6CC9 /* SSJGuideView.m */,
 				BD70DF3E1C4751EA000E6CC9 /* SSJGuideContentView.h */,
 				BD70DF3F1C4751EA000E6CC9 /* SSJGuideContentView.m */,
 				BD70DF401C4751EA000E6CC9 /* SSJGuideLastContentView.h */,
 				BD70DF411C4751EA000E6CC9 /* SSJGuideLastContentView.m */,
-				BD70DF421C4751EA000E6CC9 /* SSJGuideView.h */,
-				BD70DF431C4751EA000E6CC9 /* SSJGuideView.m */,
 			);
 			path = Guide;
 			sourceTree = "<group>";
@@ -4562,7 +4557,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D05C3091CBC970C008467DC /* SSJStartViewController.m in Sources */,
 				BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */,
 				7DE6E8711C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */,

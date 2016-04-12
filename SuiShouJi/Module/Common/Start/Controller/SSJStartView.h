@@ -8,18 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, SSJStartViewDisplayPhase) {
-    SSJStartViewDisplayPhaseDefault,
-    SSJStartViewDisplayPhaseServer,
-    SSJStartViewDisplayPhaseTree
-};
-
 @interface SSJStartView : UIView
 
-@property (nonatomic, readonly) SSJStartViewDisplayPhase displayPhase;
-
-- (void)showServerImageWithUrl:(NSURL *)url duration:(NSTimeInterval)duration finish:(void (^)())finish;
-
-- (void)showTreeImage:(UIImage *)image duration:(NSTimeInterval)duration finish:(void (^)())finish;
++ (void)showWithCompletion:(void(^)())completion;
 
 @end

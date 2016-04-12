@@ -7,76 +7,250 @@
 //
 
 #import "SSJStartView.h"
+#import "SSJGuideView.h"
+#import "SSJStartView.h"
+#import "SSJStartChecker.h"
+#import "SSJBookkeepingTreeCheckInService.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJDatabaseQueue.h"
 
 static const NSTimeInterval kTransitionDuration = 0.3;
 
-@interface SSJStartView ()
+@interface SSJStartView () <SSJBaseNetworkServiceDelegate>
 
-//  默认的启动页
+@property (nonatomic) BOOL isFirstLaunchForCurrentVersion;
+
+@property (nonatomic) BOOL isServerStartViewShowed;
+
+@property (nonatomic) BOOL hasCheckInTable;
+
+@property (nonatomic, strong) NSURL *serverImageUrl;
+
 @property (nonatomic, strong) UIImageView *defaultView;
 
-//  服务器下发的启动页
-@property (nonatomic, strong) UIImageView *dynamicView;
+@property (nonatomic, strong) UIImageView *startView;
+
+@property (nonatomic, strong) SSJGuideView *guideView;
+
+@property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
+
+@property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
+
+@property (nonatomic, copy) void (^completion)();
 
 @end
 
 @implementation SSJStartView
 
++ (void)showWithCompletion:(void(^)())completion {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    SSJStartView *startView = [[SSJStartView alloc] initWithFrame:window.bounds];
+    startView.completion = completion;
+    [window addSubview:startView];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.defaultView = [[UIImageView alloc] initWithFrame:self.bounds];
-        [self.defaultView setImage:[UIImage ssj_compatibleImageNamed:@"default"]];
-        [self addSubview:self.defaultView];
+        _isFirstLaunchForCurrentVersion = SSJIsFirstLaunchForCurrentVersion();
+        _isServerStartViewShowed = _isFirstLaunchForCurrentVersion;
         
-        self.dynamicView = [[UIImageView alloc] initWithFrame:self.bounds];
-        [self addSubview:self.dynamicView];
+        _defaultView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"default"]];
+        _defaultView.frame = self.bounds;
+        [self addSubview:_defaultView];
+        
+        [self requestStartAPI];
+        [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+            _hasCheckInTable = [db tableExists:@"bk_user_tree"];
+        }];
+        if (_hasCheckInTable) {
+            [self requestCheckIn];
+        } else {
+            // 如果当前版本第一次启动并且没有本地签到表（升级新版本，数据库还没升级完成的情况下），就直接显示引导页
+            [self showGuideViewIfNeeded];
+        }
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    self.defaultView.frame = self.bounds;
-    self.dynamicView.frame = self.bounds;
+    _defaultView.frame = self.bounds;
+    _startView.frame = self.bounds;
+    _guideView.frame = self.bounds;
 }
 
-- (void)showServerImageWithUrl:(NSURL *)url duration:(NSTimeInterval)duration finish:(void (^)())finish {
+- (void)dismiss {
+    if (self.superview) {
+        [UIView animateWithDuration:0.5f animations:^(void){
+            self.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
+            self.alpha = 0;
+        } completion:^(BOOL finished){
+            [self removeFromSuperview];
+            if (_completion) {
+                _completion();
+            }
+        }];
+    }
+}
+
+// 请求签到接口
+- (void)requestCheckIn {
+    if (!_checkInService) {
+        _checkInService = [[SSJBookkeepingTreeCheckInService alloc] initWithDelegate:self];
+        _checkInService.showLodingIndicator = NO;
+    }
+    [_checkInService checkIn];
+}
+
+// 请求启动接口，检测是否有更新、苹果是否正在审核、加载下发启动页
+- (void)requestStartAPI {
+    __weak typeof(self) wself = self;
+    [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
+        // 有下发启动页，就显示；没有就显示记账树
+        NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
+        if (startImgUrl.length) {
+            _serverImageUrl = [NSURL URLWithString:startImgUrl];
+        }
+        
+        [wself showStartViewIfNeeded];
+        [wself showTreeViewIfNeeded];
+    } failure:^(NSString *message) {
+        [wself showTreeViewIfNeeded];
+    }];
+}
+
+// 显示服务端下发的启动页
+- (void)showStartViewIfNeeded {
+    if (!_serverImageUrl || _isFirstLaunchForCurrentVersion) {
+        return;
+    }
+    
     __weak typeof(self) wself = self;
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
     manager.imageDownloader.downloadTimeout = 2;
-    [manager downloadImageWithURL:url options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-        if (!wself) {
+    [manager downloadImageWithURL:_serverImageUrl options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        if (!image || error) {
+            wself.isServerStartViewShowed = YES;
+            [wself showTreeViewIfNeeded];
             return;
         }
-        if (!image) {
-            return;
-        }
-        dispatch_main_sync_safe(^{
-            [UIView transitionWithView:wself duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                wself.dynamicView.image = image;
+        SSJDispatchMainSync(^{
+            [UIView transitionWithView:wself.startView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                if (!wself.startView) {
+                    wself.startView = [[UIImageView alloc] initWithFrame:wself.bounds];
+                }
+                [wself addSubview:wself.startView];
+                wself.startView.image = image;
             } completion:^(BOOL finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if (finish) {
-                        finish();
-                    }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    wself.isServerStartViewShowed = YES;
+                    [wself showTreeViewIfNeeded];
                 });
             }];
         });
     }];
 }
 
-- (void)showTreeImage:(UIImage *)image duration:(NSTimeInterval)duration finish:(void (^)())finish {
-    if (SSJIsFirstLaunchForCurrentVersion()) {
-        [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            _defaultView.image = image;
-        } completion:^(BOOL finished) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (finish) {
-                    finish();
-                }
-            });
-        }];
+// 显示记账树启动页
+- (void)showTreeViewIfNeeded {
+    if (_isFirstLaunchForCurrentVersion) {
+        if (_checkInService.isLoaded) {
+            [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                _defaultView.image = [UIImage imageNamed:[self treeName]];
+            } completion:^(BOOL finished) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self showGuideViewIfNeeded];
+                });
+            }];
+        }
     } else {
+        if (_checkInService.isLoaded && _isServerStartViewShowed) {
+            [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                _defaultView.image = [UIImage imageNamed:[self treeName]];
+            } completion:^(BOOL finished) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self showGuideViewIfNeeded];
+                });
+            }];
+        }
+    }
+}
+
+// 当前版本第一次启动显示引导页
+- (void)showGuideViewIfNeeded {
+    if (_isFirstLaunchForCurrentVersion) {
+        if (!_guideView) {
+            _guideView = [[SSJGuideView alloc] initWithFrame:self.bounds];
+        }
+        __weak typeof(self) wself = self;
+        _guideView.beginHandle = ^(SSJGuideView *guide) {
+            [wself dismiss];
+        };
+        [UIView transitionWithView:self duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self addSubview:_guideView];
+        } completion:NULL];
+    } else {
+        [self dismiss];
+    }
+}
+
+// 返回记账树图片名称
+- (NSString *)treeName {
+    NSInteger checkTimes = _checkInModel.checkInTimes;
+    if (checkTimes >= 0 && checkTimes <= 7) {
+        return @"tree_level_1";
+    } else if (checkTimes >= 8 && checkTimes <= 30) {
+        return @"tree_level_2";
+    } else if (checkTimes >= 31 && checkTimes <= 50) {
+        return @"tree_level_3";
+    } else if (checkTimes >= 51 && checkTimes <= 100) {
+        return @"tree_level_4";
+    } else if (checkTimes >= 101 && checkTimes <= 180) {
+        return @"tree_level_5";
+    } else if (checkTimes >= 181 && checkTimes <= 300) {
+        return @"tree_level_6";
+    } else if (checkTimes >= 301 && checkTimes <= 450) {
+        return @"tree_level_7";
+    } else if (checkTimes >= 451 && checkTimes <= 599) {
+        return @"tree_level_8";
+    } else if (checkTimes >= 600) {
+        return @"tree_level_9";
+    } else {
+        return @"";
+    }
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if (service == _checkInService) {
+        // 1：签到成功 2：已经签过到 else：签到失败
+        if ([_checkInService.returnCode isEqualToString:@"1"]) {
+            
+            _checkInModel = _checkInService.checkInModel;
+            [SSJBookkeepingTreeStore saveCheckInModel:_checkInService.checkInModel error:nil];
+            
+        } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
+            
+            // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
+            _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+            if (![_checkInModel.lastCheckInDate isEqualToString:_checkInService.checkInModel.lastCheckInDate]) {
+                _checkInModel = _checkInService.checkInModel;
+                [SSJBookkeepingTreeStore saveCheckInModel:_checkInService.checkInModel error:nil];
+            }
+            
+        } else {
+            // 根据本地保存的签到记录，显示记账树等级
+            _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+        }
         
+        [self showTreeViewIfNeeded];
+    }
+}
+
+- (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error {
+    if (service == _checkInService) {
+        _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+        [self showTreeViewIfNeeded];
     }
 }
 
