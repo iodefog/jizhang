@@ -77,11 +77,18 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 @property (nonatomic) BOOL showLoginControllerIfTokenInvalid;
 
 /**
- *  是否成功加载过
+ *  是否成功加载过，不区分成功、失败
  *
  *  @return (BOOL)
  */
 @property (readonly, nonatomic) BOOL isLoaded;
+
+/**
+ *  是否加载成功
+ *
+ *  @return (BOOL)
+ */
+@property (readonly, nonatomic) BOOL isLoadSuccess;
 
 /**
  *  是否正在加载

@@ -19,7 +19,7 @@
 // 签到的用户id
 @property (nonatomic, copy) NSString *userId;
 
-// 是否摇一摇签到
+// 是否摇一摇签过到
 @property (nonatomic) BOOL hasShaked;
 
 @end

@@ -26,6 +26,16 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
 @interface SSJStartChecker : NSObject
 
 /**
+ *  请求超市时间，默认60秒
+ */
+@property (nonatomic) NSTimeInterval requestTimeout;
+
+/**
+ *  是否请求过启动接口，不区分成功或失败
+ */
+@property (nonatomic) BOOL isChecked;
+
+/**
  *  返回唯一实例
  *
  *  @return (instancetype) 返回唯一实例对象
