@@ -26,7 +26,6 @@
 
 - (instancetype)initWithDelegate:(id <SSJBaseNetworkServiceDelegate>)delegate {
     if (self = [super init]) {
-        _isLoaded = NO;
         _isLoginService = YES;
         _showMessageIfErrorOccured = YES;
         _showLoginControllerIfTokenInvalid = YES;
@@ -63,12 +62,16 @@
                     [self p_setServerTimeWithHeaders:httpUrlResponse.allHeaderFields];
                 }
                 if ([self isKindOfClass:[SSJBaseNetworkService class]]) {
-                    self -> _isLoaded = YES;
+                    _isLoaded = YES;
+                    _isLoadSuccess = YES;
                     [self p_taskDidFinish:task responseObject:responseObject];
                 }
                 
             } failure:^(NSURLSessionDataTask *task, NSError *error) {
                 if ([self isKindOfClass:[SSJBaseNetworkService class]]) {
+                    _isLoaded = YES;
+                    _isLoadSuccess = NO;
+                    
                     [self p_taskDidFail:task error:error];
                 }
             }];

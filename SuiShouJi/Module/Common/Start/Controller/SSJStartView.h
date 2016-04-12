@@ -10,6 +10,6 @@
 
 @interface SSJStartView : UIView
 
-- (void)showWithUrl:(NSURL *)url duration:(NSTimeInterval)duration finish:(void (^)())finish;
++ (void)showWithCompletion:(void(^)())completion;
 
 @end

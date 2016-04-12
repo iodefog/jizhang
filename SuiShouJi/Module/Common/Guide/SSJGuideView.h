@@ -18,11 +18,9 @@ typedef void(^SSJGuideViewBeginBlock)(SSJGuideView *guideView);
 
 @interface SSJGuideView : UIView
 
-////  点击开始按钮的回调
-//@property (nonatomic, copy) SSJGuideViewBeginBlock beginHandle;
+//  点击开始按钮的回调
+@property (nonatomic, copy) SSJGuideViewBeginBlock beginHandle;
 
-- (void)showIfNeeded;
-
-- (void)showWithFinish:(void (^)())finish;
+- (void)showInView:(UIView *)view finish:(SSJGuideViewBeginBlock)finish;
 
 @end

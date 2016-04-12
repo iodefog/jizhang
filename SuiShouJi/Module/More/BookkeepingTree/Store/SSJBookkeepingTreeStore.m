@@ -19,7 +19,7 @@
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:@"select isignin, isignindate, hasshaked from bk_user_tree where cuserid = ?", userId];
-        if (!result) {
+        if (!result && error) {
             *error = [db lastError];
         }
         
@@ -31,7 +31,7 @@
         [result close];
     }];
     
-    if (*error) {
+    if (error && *error) {
         return nil;
     }
     

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D05C30C1CBCE68D008467DC /* SSJStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D05C30B1CBCE68D008467DC /* SSJStartView.m */; };
 		7D0B30E51CBBC0050088C3F0 /* tree_level_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0B30C11CBBC0050088C3F0 /* tree_level_1-667@2x.png */; };
 		7D0B30E61CBBC0050088C3F0 /* tree_level_1.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D0B30C21CBBC0050088C3F0 /* tree_level_1.gif */; };
 		7D0B30E71CBBC0050088C3F0 /* tree_level_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D0B30C31CBBC0050088C3F0 /* tree_level_1@2x.png */; };
@@ -292,7 +293,6 @@
 		7DE74BD91C9AE9C600D27E7D /* default-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD51C9AE9C600D27E7D /* default-667@2x.png */; };
 		7DE74BDA1C9AE9C600D27E7D /* default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD61C9AE9C600D27E7D /* default@2x.png */; };
 		7DE74BDB1C9AE9C600D27E7D /* default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD71C9AE9C600D27E7D /* default@3x.png */; };
-		7DE74BDF1C9AF28F00D27E7D /* SSJStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */; };
 		7DE74BE21C9BB61700D27E7D /* budget_green_wave_full@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */; };
 		7DE74BE31C9BB61700D27E7D /* budget_green_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */; };
 		7DEF54521C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */; };
@@ -708,6 +708,8 @@
 
 /* Begin PBXFileReference section */
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7D05C30A1CBCE68D008467DC /* SSJStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartView.h; sourceTree = "<group>"; };
+		7D05C30B1CBCE68D008467DC /* SSJStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartView.m; sourceTree = "<group>"; };
 		7D0B30C11CBBC0050088C3F0 /* tree_level_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tree_level_1-667@2x.png"; sourceTree = "<group>"; };
 		7D0B30C21CBBC0050088C3F0 /* tree_level_1.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tree_level_1.gif; sourceTree = "<group>"; };
 		7D0B30C31CBBC0050088C3F0 /* tree_level_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tree_level_1@2x.png"; sourceTree = "<group>"; };
@@ -1076,8 +1078,6 @@
 		7DE74BD51C9AE9C600D27E7D /* default-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-667@2x.png"; sourceTree = "<group>"; };
 		7DE74BD61C9AE9C600D27E7D /* default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@2x.png"; sourceTree = "<group>"; };
 		7DE74BD71C9AE9C600D27E7D /* default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@3x.png"; sourceTree = "<group>"; };
-		7DE74BDD1C9AF28F00D27E7D /* SSJStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartView.h; sourceTree = "<group>"; };
-		7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartView.m; sourceTree = "<group>"; };
 		7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_green_wave_full@3x.png"; sourceTree = "<group>"; };
 		7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_green_wave_full@2x.png"; sourceTree = "<group>"; };
 		7DEF544C1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNode.h; sourceTree = "<group>"; };
@@ -1666,6 +1666,31 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7D05C2FD1CBC96F8008467DC /* Start */ = {
+			isa = PBXGroup;
+			children = (
+				7D05C2FE1CBC96F8008467DC /* Controller */,
+				7D05C2FF1CBC96F8008467DC /* Network */,
+			);
+			path = Start;
+			sourceTree = "<group>";
+		};
+		7D05C2FE1CBC96F8008467DC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7D05C30A1CBCE68D008467DC /* SSJStartView.h */,
+				7D05C30B1CBCE68D008467DC /* SSJStartView.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		7D05C2FF1CBC96F8008467DC /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		7D1D7F471C87EC550001F72A /* SSJRegularManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1936,7 +1961,6 @@
 			isa = PBXGroup;
 			children = (
 				7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */,
-				7DE74BDC1C9AF28200D27E7D /* StartView */,
 				7D768A701C926B6600CB75B0 /* SSJBorderButton */,
 				7DE69C2E1C8EC401001D31C1 /* SCYMotionEncryptionControl */,
 				7DEF544B1C75DEEC00A90153 /* SSJPercentCircleView */,
@@ -2542,15 +2566,6 @@
 				7DE74BD71C9AE9C600D27E7D /* default@3x.png */,
 			);
 			path = Default;
-			sourceTree = "<group>";
-		};
-		7DE74BDC1C9AF28200D27E7D /* StartView */ = {
-			isa = PBXGroup;
-			children = (
-				7DE74BDD1C9AF28F00D27E7D /* SSJStartView.h */,
-				7DE74BDE1C9AF28F00D27E7D /* SSJStartView.m */,
-			);
-			path = StartView;
 			sourceTree = "<group>";
 		};
 		7DEF544B1C75DEEC00A90153 /* SSJPercentCircleView */ = {
@@ -3492,6 +3507,7 @@
 		BD70DF2D1C4751EA000E6CC9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7D05C2FD1CBC96F8008467DC /* Start */,
 				BD70DF2E1C4751EA000E6CC9 /* ForgotPassWord */,
 				BD70DF3D1C4751EA000E6CC9 /* Guide */,
 				BD70DF461C4751EA000E6CC9 /* Login */,
@@ -3538,12 +3554,12 @@
 		BD70DF3D1C4751EA000E6CC9 /* Guide */ = {
 			isa = PBXGroup;
 			children = (
+				BD70DF421C4751EA000E6CC9 /* SSJGuideView.h */,
+				BD70DF431C4751EA000E6CC9 /* SSJGuideView.m */,
 				BD70DF3E1C4751EA000E6CC9 /* SSJGuideContentView.h */,
 				BD70DF3F1C4751EA000E6CC9 /* SSJGuideContentView.m */,
 				BD70DF401C4751EA000E6CC9 /* SSJGuideLastContentView.h */,
 				BD70DF411C4751EA000E6CC9 /* SSJGuideLastContentView.m */,
-				BD70DF421C4751EA000E6CC9 /* SSJGuideView.h */,
-				BD70DF431C4751EA000E6CC9 /* SSJGuideView.m */,
 			);
 			path = Guide;
 			sourceTree = "<group>";
@@ -4725,6 +4741,7 @@
 				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,
 				7DE6E86C1C55DD9C001C9138 /* SSJRegistOrderView.m in Sources */,
 				9C0E8C2C1CB645900093F79E /* UMTextView.m in Sources */,
+				7D05C30C1CBCE68D008467DC /* SSJStartView.m in Sources */,
 				7D83081F1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m in Sources */,
 				9C392DFE1CA3C68F000A7030 /* SSJBookKeepingHomeHelper.m in Sources */,
 				7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */,
@@ -4792,7 +4809,6 @@
 				7DEF547D1C7C65B200A90153 /* SSJBudgetDetailHeaderView.m in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
-				7DE74BDF1C9AF28F00D27E7D /* SSJStartView.m in Sources */,
 				BD37D2D21C5216130050BDAA /* SSJSyncSettingTableViewCell.m in Sources */,
 				BD4934341C34F86700300D43 /* SSJMineHomeTableViewHeader.m in Sources */,
 				BD976FB41C4F246900B0E26D /* SSJCalenderDetailCell.m in Sources */,

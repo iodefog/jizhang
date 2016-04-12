@@ -10,7 +10,7 @@
 #import "SSJStartNetworkService.h"
 #import "SSJStartUpgradeAlertView.h"
 
-static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的次数限制
+static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的次数限制
 
 @interface SSJStartChecker () <SSJBaseNetworkServiceDelegate>
 
@@ -95,6 +95,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
         self.networkService = [[SSJStartNetworkService alloc] initWithDelegate:self];
         self.networkService.showLodingIndicator = NO;
     }
+    self.networkService.timeoutInterval = _requestTimeout;
     [self.networkService request];
 #ifdef DEBUG
     [CDAutoHideMessageHUD showMessage:@"启动接口请求开始"];
@@ -104,14 +105,15 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
 
 //  请求失败后继续请求
 - (void)loadUpdateInfoAfterFailureIfNeededWithErrorMessage:(NSString *)message {
-    self.checkUpdateFailureTimes ++;
     if (self.checkUpdateFailureTimes < kMaxLoadUpdateItmes) {
+        self.checkUpdateFailureTimes ++;
         [self checkUpdate];
 #ifdef DEBUG
         [CDAutoHideMessageHUD showMessage:@"启动接口请求失败，正在重试"];
         SSJPRINT(@">>> 启动接口请求失败，正在重试");
 #endif
     } else {
+        _isChecked = YES;
         if (self.failure) {
             NSString *errorMessage = message.length > 0 ? message : SSJ_ERROR_MESSAGE;
             self.failure(errorMessage);
@@ -128,6 +130,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 2; //  加载更新信息失败的
 
 //  完成请求
 - (void)finishCheckUpdate {
+    _isChecked = YES;
     SSJAppUpdateType updateType = SSJAppUpdateTypeNone;
     if ([self.networkService.type isEqualToString:@"0"]) {
         updateType = SSJAppUpdateTypeUpdate;

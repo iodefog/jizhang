@@ -22,8 +22,6 @@
 
 @property (nonatomic, strong) SSJBorderButton *beginButton;
 
-@property (nonatomic, copy) void (^finishHandle)();
-
 @end
 
 @implementation SSJGuideView
@@ -52,19 +50,11 @@
 //    self.beginButton.center = self.pageControl.center;
 }
 
-- (void)showIfNeeded {
-    if (!self.superview && SSJIsFirstLaunchForCurrentVersion()) {
-        [self showWithFinish:NULL];
-    }
-}
-
-- (void)showWithFinish:(void (^)())finish {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
-    [UIView transitionWithView:window duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [window addSubview:self];
+- (void)showInView:(UIView *)view finish:(SSJGuideViewBeginBlock)finish {
+    [UIView transitionWithView:view duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [view addSubview:self];
     } completion:NULL];
-    self.finishHandle = finish;
+    self.beginHandle = finish;
 }
 
 - (void)dismiss:(BOOL)animated {
@@ -109,11 +99,10 @@
 }
 
 - (void)beginButtonAciton {
-    [self dismiss:YES];
     SSJAddLaunchTimesForCurrentVersion();
-    if (self.finishHandle) {
-        self.finishHandle();
-        self.finishHandle = nil;
+    if (self.beginHandle) {
+        self.beginHandle(self);
+        self.beginHandle = nil;
     }
 }
 
