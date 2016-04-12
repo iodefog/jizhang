@@ -134,10 +134,11 @@
 //    [self.navigationController setNavigationBarHidden:NO];
 }
 
-//- (BOOL)prefersStatusBarHidden
-//{
-//    return YES;
-//}
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    
+    return UIStatusBarStyleDefault;
+    
+}
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
