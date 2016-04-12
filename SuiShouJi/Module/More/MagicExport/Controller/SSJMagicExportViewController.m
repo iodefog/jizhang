@@ -143,6 +143,11 @@
 }
 
 - (void)commitButtonAction {
+#warning test
+    SSJMagicExportResultViewController *resultVC = [[SSJMagicExportResultViewController alloc] init];
+    [self.navigationController pushViewController:resultVC animated:YES];
+    return;
+    
     if (!self.emailTextField.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请先输入邮箱地址"];
         return;

@@ -10,6 +10,10 @@
 
 @interface SSJMagicExportResultCheckMarkView : UIView
 
+@property (nonatomic, readonly) CGFloat radius;
+
+- (instancetype)initWithRadius:(CGFloat)radius;
+
 - (void)startAnimation:(void (^)())finish;
 
 @end

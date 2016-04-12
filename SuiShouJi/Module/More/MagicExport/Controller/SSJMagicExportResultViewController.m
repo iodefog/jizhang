@@ -14,9 +14,7 @@
 
 @property (nonatomic, strong) UIView *headerView;
 
-//@property (nonatomic, strong) SSJMagicExportResultCheckMarkView *checkMark;
-
-@property (nonatomic, strong) UIImageView *checkMark;
+@property (nonatomic, strong) SSJMagicExportResultCheckMarkView *checkMark;
 
 @property (nonatomic, strong) UILabel *remindLab;
 
@@ -40,17 +38,26 @@
     [self.view addSubview:self.checkMark];
     [self.view addSubview:self.remindLab];
     [self.view addSubview:self.goBackBtn];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
-- (void)goBackAction {
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.checkMark startAnimation:^{
+        
+    }];
+}
+
+- (void)goBackHomeAction {
     UITabBarController *tabVC = (UITabBarController *)self.navigationController.tabBarController;
     if ([tabVC isKindOfClass:[UITabBarController class]]) {
         UINavigationController *homeNavi = [tabVC.viewControllers firstObject];
         if ([homeNavi isKindOfClass:[UINavigationController class]]) {
             SSJBookKeepingHomeViewController *homeVC = [homeNavi.viewControllers firstObject];
             if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-                [self.navigationController popToRootViewControllerAnimated:YES];
                 tabVC.selectedIndex = 0;
+                [self.navigationController popToRootViewControllerAnimated:NO];
             }
         }
     }
@@ -60,21 +67,15 @@
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 10)];
-        _headerView.backgroundColor = [UIColor lightGrayColor];
+        _headerView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     }
     return _headerView;
 }
 
-//- (SSJMagicExportResultCheckMarkView *)checkMark {
-//    if (!_checkMark) {
-//        
-//    }
-//    return _checkMark;
-//}
-
-- (UIImageView *)checkMark {
+- (SSJMagicExportResultCheckMarkView *)checkMark {
     if (!_checkMark) {
-        _checkMark = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+        _checkMark = [[SSJMagicExportResultCheckMarkView alloc] initWithRadius:30];
+        _checkMark.center = CGPointMake(self.view.width * 0.5, 66);
     }
     return _checkMark;
 }
@@ -85,6 +86,7 @@
         _remindLab.backgroundColor = [UIColor whiteColor];
         _remindLab.font = [UIFont systemFontOfSize:18];
         _remindLab.textAlignment = NSTextAlignmentCenter;
+        _remindLab.text = @"提交成功，请至您的邮箱查看";
     }
     return _remindLab;
 }
@@ -94,8 +96,10 @@
         _goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _goBackBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_goBackBtn setTitle:@"返回首页" forState:UIControlStateNormal];
-        [_goBackBtn setTitleColor:[UIColor ssj_colorWithHex:@""] forState:UIControlStateNormal];
-        [_goBackBtn addTarget:self action:@selector(goBackAction) forControlEvents:UIControlEventTouchUpInside];
+        [_goBackBtn setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_goBackBtn addTarget:self action:@selector(goBackHomeAction) forControlEvents:UIControlEventTouchUpInside];
+        [_goBackBtn sizeToFit];
+        _goBackBtn.center = CGPointMake(self.view.width * 0.5, 260);
     }
     return _goBackBtn;
 }
