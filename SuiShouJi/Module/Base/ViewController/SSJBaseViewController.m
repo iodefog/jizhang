@@ -53,7 +53,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
 //    self.navigationController.navigationBar.barTintColor = nil;
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
