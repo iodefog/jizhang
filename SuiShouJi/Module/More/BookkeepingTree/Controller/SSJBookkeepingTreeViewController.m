@@ -10,7 +10,9 @@
 #import "SSJBookkeepingTreeCheckInService.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
+#import "SSJBookkeepingTreeHelper.h"
 #import "FLAnimatedImage.h"
+#import "SSJBookkeepingTreeHelpViewController.h"
 
 @interface SSJBookkeepingTreeViewController ()
 
@@ -42,6 +44,9 @@
     } else {
         [self.view addSubview:self.imageView];
     }
+    
+    UIBarButtonItem *helpItem = [[UIBarButtonItem alloc] initWithTitle:@"?" style:UIBarButtonItemStylePlain target:self action:@selector(checkHelpAction)];
+    self.navigationItem.rightBarButtonItem = helpItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -49,8 +54,8 @@
     
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    
-    
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -95,11 +100,14 @@
     }
 }
 
+#pragma mark - Event
+- (void)checkHelpAction {
+    SSJBookkeepingTreeHelpViewController *helpVC = [[SSJBookkeepingTreeHelpViewController alloc] init];
+    [self.navigationController pushViewController:helpVC animated:YES];
+}
+
 #pragma mark - Private
 - (void)shakeToCheckIn {
-    
-#warning test
-    [self showWateringAnimation];
     
     // 如果正在请求签到接口，直接返回
     if (_checkInService.isLoading) {
@@ -139,7 +147,7 @@
 
 // 显示浇水动画
 - (void)showWateringAnimation {
-    NSString *gifName = [NSString stringWithFormat:@"%@.gif", [self treeName]];
+    NSString *gifName = [NSString stringWithFormat:@"%@.gif", [SSJBookkeepingTreeHelper treeImageNameForDays:_checkInModel.checkInTimes]];
     NSString *gifpath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:gifName];
     NSData *gifData = [NSData dataWithContentsOfFile:gifpath];
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:gifData];
@@ -149,30 +157,6 @@
 // 显示已经浇过水提示
 - (void)showRemindView {
     
-}
-
-- (NSString *)treeName {
-    if (_checkInModel.checkInTimes >= 0 && _checkInModel.checkInTimes <= 7) {
-        return @"tree_level_1";
-    } else if (_checkInModel.checkInTimes >= 8 && _checkInModel.checkInTimes <= 30) {
-        return @"tree_level_2";
-    } else if (_checkInModel.checkInTimes >= 31 && _checkInModel.checkInTimes <= 50) {
-        return @"tree_level_3";
-    } else if (_checkInModel.checkInTimes >= 51 && _checkInModel.checkInTimes <= 100) {
-        return @"tree_level_4";
-    } else if (_checkInModel.checkInTimes >= 101 && _checkInModel.checkInTimes <= 180) {
-        return @"tree_level_5";
-    } else if (_checkInModel.checkInTimes >= 181 && _checkInModel.checkInTimes <= 300) {
-        return @"tree_level_6";
-    } else if (_checkInModel.checkInTimes >= 301 && _checkInModel.checkInTimes <= 450) {
-        return @"tree_level_7";
-    } else if (_checkInModel.checkInTimes >= 451 && _checkInModel.checkInTimes <= 599) {
-        return @"tree_level_8";
-    } else if (_checkInModel.checkInTimes >= 600) {
-        return @"tree_level_9";
-    } else {
-        return @"";
-    }
 }
 
 #pragma mark - Getter
@@ -186,7 +170,7 @@
 
 - (FLAnimatedImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[FLAnimatedImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:[self treeName]]];
+        _imageView = [[FLAnimatedImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:[SSJBookkeepingTreeHelper treeImageNameForDays:_checkInModel.checkInTimes]]];
     }
     return _imageView;
 }

@@ -57,7 +57,7 @@ alpha:(a)]
 //  角度转换
 #define degreesToRadians(x)(M_PI*x/180.0)
 
-//  根据屏幕宽度比例计算宽度或高度
+//  根据屏幕宽度比例计算宽度
 #define SSJ_SCALE_WIDTH(x) CGRectGetWidth([UIScreen mainScreen].bounds) / 320 * (x)
 
 //  默认背景颜色
