@@ -145,11 +145,7 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
-        self.bookKeepingHeader.size = CGSizeMake(self.view.width, 180);
-    }else{
-        self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
-    }
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;

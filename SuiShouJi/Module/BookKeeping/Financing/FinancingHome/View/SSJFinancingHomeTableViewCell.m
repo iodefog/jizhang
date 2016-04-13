@@ -35,6 +35,9 @@
     [super layoutSubviews];
     self.backView.size = CGSizeMake(self.width - 8, self.height - 8);
     self.backView.leftTop = CGPointMake(4, 4);
+    self.backView.layer.cornerRadius = 3.f;
+    self.backView.layer.masksToBounds = YES;
+
     self.fundingColorView.size = CGSizeMake(36, self.backView.height);
     self.fundingColorView.leftTop = CGPointMake(0, 0);
     self.fundingIcon.size = CGSizeMake(25, 25);

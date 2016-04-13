@@ -58,7 +58,7 @@
         _budgetLabel = [[UILabel alloc]init];
         _budgetLabel.textColor = [UIColor whiteColor];
         _budgetLabel.textAlignment = NSTextAlignmentLeft;
-        _budgetLabel.font = [UIFont ssj_compatibleSystemFontOfSize:14];
+        _budgetLabel.font = [UIFont systemFontOfSize:14];
     }
     return _budgetLabel;
 }

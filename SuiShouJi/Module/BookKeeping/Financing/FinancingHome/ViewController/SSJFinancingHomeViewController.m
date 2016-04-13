@@ -61,14 +61,14 @@
     [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 66);
     self.headerView.leftTop = CGPointMake(0, 10);
+    self.profitAmountLabel.left = self.profitLabel.right + 20;
+    self.transferButton.size = CGSizeMake(65, 30);
     [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
     [_headerView ssj_setBorderStyle:SSJBorderStyleBottom];
     [_headerView ssj_setBorderWidth:1];
     self.profitLabel.left = 10.0f;
     self.profitLabel.centerY = self.headerView.height / 2;
-    self.profitAmountLabel.left = self.profitLabel.right + 20;
     self.profitAmountLabel.centerY = self.headerView.height / 2;
-    self.transferButton.size = CGSizeMake(65, 30);
     self.transferButton.right = self.view.width - 15;
     self.transferButton.centerY = self.headerView.height / 2;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - 120);
@@ -77,11 +77,6 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    float screenHeight = [UIScreen mainScreen].bounds.size.height;
-    float screenWidth = [UIScreen mainScreen].bounds.size.width;
-    if (screenWidth == 414 && screenHeight == 736) {
-        return 70;
-    }
     return 66;
 }
 
