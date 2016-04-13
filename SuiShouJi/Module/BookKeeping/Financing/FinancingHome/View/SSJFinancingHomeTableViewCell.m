@@ -33,11 +33,10 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.backView.size = CGSizeMake(self.width - 8, self.height - 8);
-    self.backView.leftTop = CGPointMake(4, 4);
+    self.backView.size = CGSizeMake(self.width - 26, self.height - 10);
+    self.backView.leftTop = CGPointMake(13 , 5);
     self.backView.layer.cornerRadius = 3.f;
     self.backView.layer.masksToBounds = YES;
-
     self.fundingColorView.size = CGSizeMake(36, self.backView.height);
     self.fundingColorView.leftTop = CGPointMake(0, 0);
     self.fundingIcon.size = CGSizeMake(25, 25);
@@ -81,7 +80,7 @@
     if (!_fundingNameLabel) {
         _fundingNameLabel = [[UILabel alloc]init];
         _fundingNameLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _fundingNameLabel.font = [UIFont systemFontOfSize:14];
+        _fundingNameLabel.font = [UIFont systemFontOfSize:16];
     }
     return _fundingNameLabel;
 }
@@ -99,7 +98,7 @@
     if (!_fundingMemoLabel) {
         _fundingMemoLabel = [[UILabel alloc]init];
         _fundingMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _fundingMemoLabel.font = [UIFont systemFontOfSize:13];
+        _fundingMemoLabel.font = [UIFont systemFontOfSize:14];
     }
     return _fundingMemoLabel;
 }

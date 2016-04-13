@@ -131,7 +131,7 @@
     self.tableView.frame = self.view.frame;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(38, 0, 0, 0);
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -145,13 +145,13 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 170);
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
-    self.homeButton.size = CGSizeMake(88, 88);
-    self.homeButton.top = self.bookKeepingHeader.bottom - 44;
+    self.homeButton.size = CGSizeMake(96, 96);
+    self.homeButton.top = self.bookKeepingHeader.bottom - 60;
     self.homeButton.centerX = self.view.width / 2;
     self.statusLabel.height = 21;
     self.statusLabel.top = self.homeButton.bottom;
@@ -183,7 +183,7 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -68) {
+    if (scrollView.contentOffset.y < -36) {
         [self.homeButton startLoading];
         __weak typeof(self) weakSelf = self;
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
@@ -204,7 +204,6 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJBookKeepingCell";
@@ -320,8 +319,8 @@
 
 -(SSJBookKeepingButton *)homeButton{
     if (!_homeButton) {
-        _homeButton = [[SSJBookKeepingButton alloc]initWithFrame:CGRectMake(0, 0, 88, 88)];
-        _homeButton.layer.cornerRadius = 44.f;
+        _homeButton = [[SSJBookKeepingButton alloc]initWithFrame:CGRectMake(0, 0, 96, 96)];
+        _homeButton.layer.cornerRadius = 48.f;
         __weak typeof(self) weakSelf = self;
         _homeButton.recordMakingClickBlock = ^(){
             SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
@@ -338,7 +337,7 @@
                 [weakSelf.statusLabel sizeToFit];
                 [weakSelf.view setNeedsLayout];
             }
-            [weakSelf.tableView setContentOffset:CGPointMake(0, -44) animated:YES];
+            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
             dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
             
             dispatch_after(time, dispatch_get_main_queue(), ^{
