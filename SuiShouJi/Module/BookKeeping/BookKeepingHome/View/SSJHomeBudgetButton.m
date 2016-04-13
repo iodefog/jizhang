@@ -47,8 +47,7 @@
 -(UIImageView *)addBudgetView{
     if (!_addBudgetView) {
         _addBudgetView = [[UIImageView alloc]init];
-        _addBudgetView.tintColor = [UIColor whiteColor];
-        _addBudgetView.image = [[UIImage imageNamed:@"add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _addBudgetView.image = [UIImage imageNamed:@"home_add"];
     }
     return _addBudgetView;
 }
