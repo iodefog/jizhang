@@ -16,11 +16,20 @@
 
 @interface SSJBookkeepingTreeViewController ()
 
+// 签到模型
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
 
+// 签到请求
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
 
+// 下雨gif图
 @property (nonatomic, strong) FLAnimatedImageView *imageView;
+
+// 浇水成功提示
+@property (nonatomic, strong) UIImageView *waterSuccessAlertView;
+
+// 已经浇过水提示
+@property (nonatomic, strong) UIImageView *alreadyWaterAlertView;
 
 @end
 
@@ -156,7 +165,31 @@
 
 // 显示已经浇过水提示
 - (void)showRemindView {
-    
+    if (!_waterSuccessAlertView) {
+        _waterSuccessAlertView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"water_success_alert"]];
+    }
+//    if (!self.superview) {
+//        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+//        [keyWindow addSubview:self.backgroundView];
+//        [keyWindow addSubview:self];
+//        self.center = CGPointMake(keyWindow.width * 0.5, keyWindow.height * 0.5);
+//        self.transform = CGAffineTransformMakeScale(0, 0);
+//        
+//        [UIView animateKeyframesWithDuration:0.36 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+//            [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.25 animations:^{
+//                self.transform = CGAffineTransformMakeScale(0.7, 0.7);
+//            }];
+//            [UIView addKeyframeWithRelativeStartTime:0.25 relativeDuration:0.25 animations:^{
+//                self.transform = CGAffineTransformMakeScale(0.9, 0.9);
+//            }];
+//            [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.25 animations:^{
+//                self.transform = CGAffineTransformMakeScale(1.2, 1.2);
+//            }];
+//            [UIView addKeyframeWithRelativeStartTime:0.75 relativeDuration:0.25 animations:^{
+//                self.transform = CGAffineTransformMakeScale(1, 1);
+//            }];
+//        } completion:NULL];
+//    }
 }
 
 #pragma mark - Getter
