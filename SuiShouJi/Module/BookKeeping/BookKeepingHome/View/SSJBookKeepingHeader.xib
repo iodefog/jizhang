@@ -101,6 +101,6 @@
         </view>
     </objects>
     <resources>
-        <image name="home_background.png" width="320" height="132"/>
+        <image name="home_background.png" width="375" height="160"/>
     </resources>
 </document>
