@@ -36,12 +36,10 @@
     self.bookKeepingButton.layer.cornerRadius = 40.0f;
     self.bookKeepingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
     self.bookKeepingButton.layer.borderWidth = 1.0f / [UIScreen mainScreen].scale;
-    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
-        self.incomeTitleLabel.font = [UIFont systemFontOfSize:16];
-        self.expentureTitleLabel.font = [UIFont systemFontOfSize:16];
-        self.incomeLabel.font = [UIFont systemFontOfSize:26];
-        self.expenditureLabel.font = [UIFont systemFontOfSize:26];
-    }
+    self.incomeTitleLabel.font = [UIFont ssj_compatibleSystemFontOfSize:13];
+    self.expentureTitleLabel.font = [UIFont ssj_compatibleSystemFontOfSize:13];
+    self.incomeLabel.font = [UIFont ssj_compatibleSystemFontOfSize:20];
+    self.expenditureLabel.font = [UIFont ssj_compatibleSystemFontOfSize:20];
 }
 
 -(void)setIncome:(NSString *)income{

@@ -45,7 +45,6 @@
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
-@property (nonatomic, strong)SSJWeiXinLoginHelper *weiXinLoginHelper;
 @end
 
 @implementation SSJLoginViewController

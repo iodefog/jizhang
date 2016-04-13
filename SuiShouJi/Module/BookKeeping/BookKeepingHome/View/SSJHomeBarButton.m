@@ -52,11 +52,7 @@
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.textColor = [UIColor whiteColor];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
-            _dateLabel.font = [UIFont systemFontOfSize:18];
-        }else{
-            _dateLabel.font = [UIFont systemFontOfSize:14];
-        }
+        _dateLabel.font = [UIFont ssj_compatibleSystemFontOfSize:14];
     }
     return _dateLabel;
 }
