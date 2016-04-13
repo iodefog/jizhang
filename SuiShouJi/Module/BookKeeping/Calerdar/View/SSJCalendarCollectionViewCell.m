@@ -20,7 +20,6 @@
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.starImage];
         self.isSelected = NO;
-        self.layer.cornerRadius = self.height / 2;
     }
     return self;
 }
@@ -75,6 +74,9 @@
         self.starImage.hidden = NO;
     }else{
         self.starImage.hidden = YES;
+    }
+    if ([_item.backGroundColor isEqualToString:@"47cfbe"] || [_item.backGroundColor isEqualToString:@"cccccc"]) {
+        self.layer.cornerRadius = self.height / 2;
     }
 }
 
