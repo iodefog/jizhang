@@ -45,7 +45,6 @@
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
-@property(nonatomic, strong)SSJWeiXinLoginHelper *weiXinLoginHelper;
 @end
 
 @implementation SSJLoginViewController
@@ -86,7 +85,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self setNeedsStatusBarAppearanceUpdate]; 
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -135,11 +134,6 @@
 //    [self.navigationController setNavigationBarHidden:NO];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle{
-    
-    return UIStatusBarStyleLightContent;
-    
-}
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

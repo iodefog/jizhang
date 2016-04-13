@@ -86,6 +86,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self.authCodeTextField becomeFirstResponder];
 }
 

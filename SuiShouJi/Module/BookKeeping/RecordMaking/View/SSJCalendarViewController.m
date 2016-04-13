@@ -270,14 +270,18 @@
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJCalenderHelper queryDataInYear:self.selectedYear month:self.selectedMonth success:^(NSMutableDictionary *data) {
-        weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
-        [weakSelf.tableView reloadData];
-        weakSelf.calendarView.data = data;
-        if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
-            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
-        }else{
-            [weakSelf.tableView ssj_hideWatermark:YES];
+        NSString *selectedYear = [weakSelf.selectDate substringWithRange:NSMakeRange(0, 4)];
+        NSString *selectedMonth = [weakSelf.selectDate substringWithRange:NSMakeRange(5, 2)];
+        if (weakSelf.selectedYear == [selectedYear integerValue] && weakSelf.selectedMonth == [selectedMonth integerValue]) {
+            weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
+            if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
+                [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
+            }else{
+                [weakSelf.tableView ssj_hideWatermark:YES];
+            }
+            [weakSelf.tableView reloadData];
         }
+        weakSelf.calendarView.data = data;
         [weakSelf.view ssj_hideLoadingIndicator];
         [weakSelf.view setNeedsLayout];
     } failure:^(NSError *error) {

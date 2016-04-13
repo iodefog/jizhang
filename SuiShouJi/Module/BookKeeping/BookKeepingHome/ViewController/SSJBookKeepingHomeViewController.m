@@ -66,6 +66,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     self.extendedLayoutIncludesOpaqueBars = YES;
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];
@@ -136,6 +137,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[self navigationController] setNavigationBarHidden:NO animated:NO];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     _selectIndex = nil;
@@ -143,11 +145,7 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    if (SSJSCREENWITH == 414 && SSJSCREENHEIGHT == 736) {
-        self.bookKeepingHeader.size = CGSizeMake(self.view.width, 180);
-    }else{
-        self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
-    }
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 150);
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
