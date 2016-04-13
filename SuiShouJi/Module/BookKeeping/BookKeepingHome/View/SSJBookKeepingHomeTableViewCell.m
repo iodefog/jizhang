@@ -104,7 +104,7 @@
 -(UILabel*)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _incomeLabel.font = [UIFont systemFontOfSize:13];
+        _incomeLabel.font = [UIFont systemFontOfSize:17];
         _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [_incomeLabel sizeToFit];
     }
@@ -114,7 +114,7 @@
 -(UILabel*)expenditureLabel{
     if (!_expenditureLabel) {
         _expenditureLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _expenditureLabel.font = [UIFont systemFontOfSize:13];
+        _expenditureLabel.font = [UIFont systemFontOfSize:17];
         _expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [_expenditureLabel sizeToFit];
     }
@@ -175,7 +175,7 @@
         _incomeMemoLabel = [[UILabel alloc]init];
         _incomeMemoLabel.textAlignment = NSTextAlignmentRight;
         _incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _incomeMemoLabel.font = [UIFont systemFontOfSize:12];
+        _incomeMemoLabel.font = [UIFont systemFontOfSize:14];
     }
     return _incomeMemoLabel;
 }
@@ -185,7 +185,7 @@
         _expentureMemoLabel = [[UILabel alloc]init];
         _expentureMemoLabel.textAlignment = NSTextAlignmentLeft;
         _expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _expentureMemoLabel.font = [UIFont systemFontOfSize:12];
+        _expentureMemoLabel.font = [UIFont systemFontOfSize:14];
     }
     return _expentureMemoLabel;
 }
@@ -253,7 +253,7 @@
         _categoryImageButton.userInteractionEnabled = NO;
         [_categoryImageButton setImage:nil forState:UIControlStateNormal];
         [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
-        _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
         _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _IncomeImage.image = nil;

@@ -59,7 +59,7 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.headerView.size = CGSizeMake(self.view.width, 66);
+    self.headerView.size = CGSizeMake(self.view.width, 90);
     self.headerView.leftTop = CGPointMake(0, 10);
     self.profitAmountLabel.left = self.profitLabel.right + 20;
     self.transferButton.size = CGSizeMake(65, 30);
@@ -77,7 +77,7 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 66;
+    return 80;
 }
 
 
@@ -128,8 +128,8 @@
         _headerView.backgroundColor = [UIColor whiteColor];
         _profitLabel = [[UILabel alloc]init];
         _profitLabel.text = @"结余";
-        _profitLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _profitLabel.font = [UIFont systemFontOfSize:15];
+        _profitLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _profitLabel.font = [UIFont systemFontOfSize:14];
         [_profitLabel sizeToFit];
     }
     return _headerView;
@@ -154,7 +154,7 @@
     {
         _profitAmountLabel = [[UILabel alloc]init];
         _profitAmountLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _profitAmountLabel.font = [UIFont systemFontOfSize:24];
+        _profitAmountLabel.font = [UIFont systemFontOfSize:30];
 
     }
     return _profitAmountLabel;

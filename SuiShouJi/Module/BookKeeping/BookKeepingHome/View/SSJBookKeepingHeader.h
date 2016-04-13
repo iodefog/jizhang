@@ -23,5 +23,4 @@
 
 + (id)BookKeepingHeader;
 
-+ (CGFloat)viewHeight;
 @end

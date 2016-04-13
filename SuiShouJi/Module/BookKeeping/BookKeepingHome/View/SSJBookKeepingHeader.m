@@ -25,9 +25,6 @@
     return array[0];
 }
 
-+ (CGFloat)viewHeight{
-    return 240;
-}
 
 - (void)awakeFromNib{
     [self.bookKeepingButton setBackgroundColor:[UIColor whiteColor]];
