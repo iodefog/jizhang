@@ -10,6 +10,4 @@
 
 @interface SSJBookkeepingTreeViewController : SSJBaseViewController
 
-@property (nonatomic, copy) NSString *nickName;
-
 @end

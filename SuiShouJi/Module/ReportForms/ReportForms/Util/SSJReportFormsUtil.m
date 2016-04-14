@@ -72,7 +72,7 @@
     
     //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___') and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
+        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___') and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
         
         if (!amountResultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -98,7 +98,7 @@
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and cbilldate <= datetime('now') and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
+        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and cbilldate <= datetime('now', 'localtime') and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -133,7 +133,7 @@
                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___')) group by ITYPE order by ITYPE desc", billDate, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___')) group by ITYPE order by ITYPE desc", billDate, SSJUSERID()];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];

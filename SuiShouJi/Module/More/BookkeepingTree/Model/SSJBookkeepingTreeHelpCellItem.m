@@ -35,7 +35,7 @@
     SSJBookkeepingTreeHelpCellItem *item = [[SSJBookkeepingTreeHelpCellItem alloc] init];
     item.level = level;
     item.imageName = [self treeImageNameForLevel:level];
-    item.treeLevelName = [self treeLevelNameForLevel:level];
+    item.treeLevelName = [SSJBookkeepingTreeHelper treeLevelNameForLevel:level];
     item.treeLevelDays = [self treeLevelDaysForLevel:level];
     return item;
 }
@@ -51,20 +51,6 @@
         case SSJBookkeepingTreeLevelGoldTree:       return @"help_tree_level_7";
         case SSJBookkeepingTreeLevelDiamondTree:    return @"help_tree_level_8";
         case SSJBookkeepingTreeLevelCrownTree:      return @"help_tree_level_9";
-    }
-}
-
-+ (NSString *)treeLevelNameForLevel:(SSJBookkeepingTreeLevel)level {
-    switch (level) {
-        case SSJBookkeepingTreeLevelSeed:           return @"种子";
-        case SSJBookkeepingTreeLevelSapling:        return @"树苗";
-        case SSJBookkeepingTreeLevelSmallTree:      return @"小树";
-        case SSJBookkeepingTreeLevelStrongTree:     return @"壮树";
-        case SSJBookkeepingTreeLevelBigTree:        return @"大树";
-        case SSJBookkeepingTreeLevelSilveryTree:    return @"银树";
-        case SSJBookkeepingTreeLevelGoldTree:       return @"金树";
-        case SSJBookkeepingTreeLevelDiamondTree:    return @"钻石树";
-        case SSJBookkeepingTreeLevelCrownTree:      return @"皇冠树";
     }
 }
 

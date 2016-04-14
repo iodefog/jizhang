@@ -13,10 +13,7 @@
 @implementation SSJBookkeepingTreeStore
 
 + (SSJBookkeepingTreeCheckInModel *)queryCheckInInfoWithUserId:(NSString *)userId error:(NSError **)error{
-    __block NSInteger checkInTimes = 0;
-    __block NSString *lastCheckInDate = nil;
-    __block BOOL hasShaked = NO;
-    
+    __block SSJBookkeepingTreeCheckInModel *model = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:@"select isignin, isignindate, hasshaked from bk_user_tree where cuserid = ?", userId];
         if (!result && error) {
@@ -24,9 +21,12 @@
         }
         
         while ([result next]) {
-            checkInTimes = [result intForColumn:@"isignin"];
-            lastCheckInDate = [result stringForColumn:@"isignindate"];
-            hasShaked = [result boolForColumn:@"hasshaked"];
+            SSJBookkeepingTreeCheckInModel *tmodel = [[SSJBookkeepingTreeCheckInModel alloc] init];
+            tmodel.checkInTimes = [result intForColumn:@"isignin"];
+            tmodel.lastCheckInDate = [result stringForColumn:@"isignindate"];
+            tmodel.hasShaked = [result boolForColumn:@"hasshaked"];
+            tmodel.userId = userId;
+            model = tmodel;
         }
         [result close];
     }];
@@ -35,11 +35,6 @@
         return nil;
     }
     
-    SSJBookkeepingTreeCheckInModel *model = [[SSJBookkeepingTreeCheckInModel alloc] init];
-    model.checkInTimes = checkInTimes;
-    model.lastCheckInDate = lastCheckInDate;
-    model.userId = userId;
-    model.hasShaked = hasShaked;
     return model;
 }
 
@@ -52,7 +47,7 @@
         } else {
             success = [db executeUpdate:@"insert into bk_user_tree (isignin, isignindate, hasshaked, cuserid) values (?, ?, ?, ?)", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.userId];
         }
-        if (!success) {
+        if (!success && error) {
             *error = [db lastError];
         }
     }];

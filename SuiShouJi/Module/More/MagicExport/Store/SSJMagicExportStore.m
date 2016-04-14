@@ -16,7 +16,7 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 
 + (void)queryBillPeriodWithSuccess:(void (^)(NSDictionary<NSString *, NSDate *> *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select max(cbilldate), min(cbilldate) from bk_user_charge where cuserid = ? and operatortype <> 2", SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select max(cbilldate), min(cbilldate) from bk_user_charge where cuserid = ? and operatortype <> 2 and cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -53,7 +53,7 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 
 + (void)queryAllBillDateWithSuccess:(void (^)(NSArray<NSDate *> *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select cbilldate from bk_user_charge where cuserid = ? and operatortype <> 2 order by cbilldate", SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select cbilldate from bk_user_charge where cuserid = ? and operatortype <> 2 and cbilldate <= datetime('now', 'localtime') order by cbilldate", SSJUSERID()];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{

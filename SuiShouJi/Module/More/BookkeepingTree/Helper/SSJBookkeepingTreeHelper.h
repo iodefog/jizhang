@@ -8,12 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, SSJBookkeepingTreeLevel) {
+    SSJBookkeepingTreeLevelSeed,            // 种子
+    SSJBookkeepingTreeLevelSapling,         // 树苗
+    SSJBookkeepingTreeLevelSmallTree,       // 小树
+    SSJBookkeepingTreeLevelStrongTree,      // 壮树
+    SSJBookkeepingTreeLevelBigTree,         // 大树
+    SSJBookkeepingTreeLevelSilveryTree,     // 银树
+    SSJBookkeepingTreeLevelGoldTree,        // 金树
+    SSJBookkeepingTreeLevelDiamondTree,     // 钻石树
+    SSJBookkeepingTreeLevelCrownTree        // 皇冠树
+};
+
 @interface SSJBookkeepingTreeHelper : NSObject
 
 + (NSString *)treeImageNameForDays:(NSInteger)days;
 
-+ (NSString *)treeLevelNameForDays:(NSInteger)days;
++ (NSString *)treeLevelNameForLevel:(SSJBookkeepingTreeLevel)level;
 
-+ (NSString *)treeLevelDaysForDays:(NSInteger)days;
++ (NSString *)descriptionForDays:(NSInteger)days;
 
 @end
