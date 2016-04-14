@@ -9,7 +9,7 @@
 
 static const float kPROGRESS_LINE_WIDTH=4.0;
 
-static const float kAnimationDuration = 3.0;
+static const float kAnimationDuration = 2.0;
 
 
 static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
@@ -116,6 +116,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     animation.cumulative = YES;
     
     animation.repeatCount = HUGE;
+    
     animation.removedOnCompletion = NO;
     
     [self.pointView.layer addAnimation:animation forKey:kPointViewAnimationKey];
@@ -125,8 +126,6 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 
 - (void)stopLoading{
     _endTime = CFAbsoluteTimeGetCurrent();
-    
-    NSLog(@"time cost: %0.3f", _endTime - _startTime);
     
     double secondInterval = _endTime - _startTime;
     
