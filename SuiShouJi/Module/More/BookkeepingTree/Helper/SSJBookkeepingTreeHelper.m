@@ -34,51 +34,66 @@
     }
 }
 
-+ (NSString *)treeLevelNameForDays:(NSInteger)days {
-    if (days >= 0 && days <= 7) {
-        return @"种子";
-    } else if (days >= 8 && days <= 30) {
-        return @"树苗";
-    } else if (days >= 31 && days <= 50) {
-        return @"小树";
-    } else if (days >= 51 && days <= 100) {
-        return @"壮树";
-    } else if (days >= 101 && days <= 180) {
-        return @"大树";
-    } else if (days >= 181 && days <= 300) {
-        return @"银树";
-    } else if (days >= 301 && days <= 450) {
-        return @"金树";
-    } else if (days >= 451 && days <= 599) {
-        return @"钻石树";
-    } else if (days >= 600) {
-        return @"皇冠树";
-    } else {
-        return @"";
++ (NSString *)treeLevelNameForLevel:(SSJBookkeepingTreeLevel)level {
+    switch (level) {
+        case SSJBookkeepingTreeLevelSeed:           return @"种子";
+        case SSJBookkeepingTreeLevelSapling:        return @"树苗";
+        case SSJBookkeepingTreeLevelSmallTree:      return @"小树";
+        case SSJBookkeepingTreeLevelStrongTree:     return @"壮树";
+        case SSJBookkeepingTreeLevelBigTree:        return @"大树";
+        case SSJBookkeepingTreeLevelSilveryTree:    return @"银树";
+        case SSJBookkeepingTreeLevelGoldTree:       return @"金树";
+        case SSJBookkeepingTreeLevelDiamondTree:    return @"钻石树";
+        case SSJBookkeepingTreeLevelCrownTree:      return @"皇冠树";
     }
 }
 
-+ (NSString *)treeLevelDaysForDays:(NSInteger)days {
++ (NSInteger)maxDaysForLevel:(SSJBookkeepingTreeLevel)level {
+    switch (level) {
+        case SSJBookkeepingTreeLevelSeed:           return 7;
+        case SSJBookkeepingTreeLevelSapling:        return 30;
+        case SSJBookkeepingTreeLevelSmallTree:      return 50;
+        case SSJBookkeepingTreeLevelStrongTree:     return 100;
+        case SSJBookkeepingTreeLevelBigTree:        return 180;
+        case SSJBookkeepingTreeLevelSilveryTree:    return 300;
+        case SSJBookkeepingTreeLevelGoldTree:       return 450;
+        case SSJBookkeepingTreeLevelDiamondTree:    return 599;
+        case SSJBookkeepingTreeLevelCrownTree:      return NSIntegerMax;
+    }
+}
+
++ (SSJBookkeepingTreeLevel)treeLevelForDays:(NSInteger)days {
     if (days >= 0 && days <= 7) {
-        return @"0-7";
+        return SSJBookkeepingTreeLevelSeed;
     } else if (days >= 8 && days <= 30) {
-        return @"8-30";
+        return SSJBookkeepingTreeLevelSapling;
     } else if (days >= 31 && days <= 50) {
-        return @"31-50";
+        return SSJBookkeepingTreeLevelSmallTree;
     } else if (days >= 51 && days <= 100) {
-        return @"51-100";
+        return SSJBookkeepingTreeLevelStrongTree;
     } else if (days >= 101 && days <= 180) {
-        return @"101-180";
+        return SSJBookkeepingTreeLevelBigTree;
     } else if (days >= 181 && days <= 300) {
-        return @"181-300";
+        return SSJBookkeepingTreeLevelSilveryTree;
     } else if (days >= 301 && days <= 450) {
-        return @"301-450";
+        return SSJBookkeepingTreeLevelGoldTree;
     } else if (days >= 451 && days <= 599) {
-        return @"451-599";
+        return SSJBookkeepingTreeLevelDiamondTree;
     } else if (days >= 600) {
-        return @"600-inf";
+        return SSJBookkeepingTreeLevelCrownTree;
     } else {
+        return SSJBookkeepingTreeLevelSeed;
+    }
+}
+
++ (NSString *)descriptionForDays:(NSInteger)days {
+    SSJBookkeepingTreeLevel level = [self treeLevelForDays:days];
+    if (level == SSJBookkeepingTreeLevelCrownTree) {
         return @"";
+    } else {
+        NSInteger daysToUpgrade = [self maxDaysForLevel:days] - days;
+        NSString *nextLevel = [self treeLevelNameForLevel:level + 1];
+        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
     }
 }
 

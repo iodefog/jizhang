@@ -135,11 +135,11 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             return;
         }
         SSJDispatchMainSync(^{
+            if (!wself.startView) {
+                wself.startView = [[UIImageView alloc] initWithFrame:wself.bounds];
+            }
+            [wself addSubview:wself.startView];
             [UIView transitionWithView:wself.startView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                if (!wself.startView) {
-                    wself.startView = [[UIImageView alloc] initWithFrame:wself.bounds];
-                }
-                [wself addSubview:wself.startView];
                 wself.startView.image = image;
             } completion:^(BOOL finished) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -153,26 +153,30 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 // 显示记账树启动页
 - (void)showTreeViewIfNeeded {
+    if (!_checkInService.isLoaded) {
+        return;
+    }
+    
     if (_isFirstLaunchForCurrentVersion) {
-        if (_checkInService.isLoaded) {
-            [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                _defaultView.image = [UIImage imageNamed:[self treeName]];
-            } completion:^(BOOL finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self showGuideViewIfNeeded];
-                });
-            }];
-        }
-    } else {
-        if (_checkInService.isLoaded && _isServerStartViewShowed) {
-            [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                _defaultView.image = [UIImage imageNamed:[self treeName]];
-            } completion:^(BOOL finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self showGuideViewIfNeeded];
-                });
-            }];
-        }
+        [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            _defaultView.image = [UIImage imageNamed:[self treeName]];
+        } completion:^(BOOL finished) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self showGuideViewIfNeeded];
+            });
+        }];
+        return;
+    }
+    
+    if (_isServerStartViewShowed) {
+        [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            _defaultView.image = [UIImage imageNamed:[self treeName]];
+        } completion:^(BOOL finished) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self showGuideViewIfNeeded];
+            });
+        }];
+        return;
     }
 }
 

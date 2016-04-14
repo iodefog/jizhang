@@ -12,6 +12,8 @@
 static const void *kSSJViewAnimatioinBackgroundViewKey = &kSSJViewAnimatioinBackgroundViewKey;
 static const void *kSSJViewAnimatioinShowedKey = &kSSJViewAnimatioinShowedKey;
 
+static const NSTimeInterval kDuration = 0.36;
+
 @implementation UIView (SSJViewAnimatioin)
 
 - (UIView *)ssj_backgroundView {
@@ -32,7 +34,7 @@ static const void *kSSJViewAnimatioinShowedKey = &kSSJViewAnimatioinShowedKey;
     objc_setAssociatedObject(self, kSSJViewAnimatioinShowedKey, @(showed), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)ssj_popupInView:(UIView *)view completion:(void (^)())completion {
+- (void)popupInView:(UIView *)view completion:(void (^ __nullable)(BOOL finished))completion {
     if (self == view) {
         return;
     }
@@ -47,9 +49,11 @@ static const void *kSSJViewAnimatioinShowedKey = &kSSJViewAnimatioinShowedKey;
     
     self.center = CGPointMake(view.width * 0.5, view.height * 0.5);
     self.transform = CGAffineTransformMakeScale(0, 0);
+    
+    self.ssj_backgroundView.hidden = NO;
     self.ssj_backgroundView.alpha = 0;
     
-    [UIView animateKeyframesWithDuration:0.36 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+    [UIView animateKeyframesWithDuration:kDuration delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.25 animations:^{
             self.transform = CGAffineTransformMakeScale(0.7, 0.7);
         }];
@@ -63,15 +67,16 @@ static const void *kSSJViewAnimatioinShowedKey = &kSSJViewAnimatioinShowedKey;
             self.transform = CGAffineTransformMakeScale(1, 1);
         }];
         self.ssj_backgroundView.alpha = 0.3;
-    } completion:^(BOOL finished) {
-        if (completion) {
-            completion();
-        }
-    }];
+    } completion:completion];
 }
 
-- (void)dismiss:(void (^)())completion {
-    
+- (void)dismiss:(void (^ __nullable)(BOOL finished))completion {
+    if (self.superview) {
+        [UIView transitionWithView:self.superview duration:kDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            self.hidden = YES;
+            self.ssj_backgroundView.hidden = YES;
+        } completion:completion];
+    }
 }
 
 @end
