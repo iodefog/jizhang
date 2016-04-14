@@ -18,7 +18,7 @@
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
-        [self ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [self ssj_setBorderWidth:1.f];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         self.contentView.backgroundColor = [UIColor whiteColor];
