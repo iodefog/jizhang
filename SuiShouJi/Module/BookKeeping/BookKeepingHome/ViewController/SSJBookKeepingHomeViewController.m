@@ -66,6 +66,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.tableView.contentInset = UIEdgeInsetsMake(38, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     self.extendedLayoutIncludesOpaqueBars = YES;
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
@@ -131,7 +132,6 @@
     self.tableView.frame = self.view.frame;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.contentInset = UIEdgeInsetsMake(38, 0, 0, 0);
     self.view.backgroundColor = [UIColor whiteColor];
 }
 
@@ -185,7 +185,11 @@
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     if (scrollView.contentOffset.y < -38) {
         [self.homeButton startLoading];
-        [scrollView setContentOffset:CGPointMake(0, -80) animated:NO];
+        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
+        self.statusLabel.hidden = NO;
+        self.statusLabel.text = @"数据正在同步中";
+        [self.statusLabel sizeToFit];
+        [self.view setNeedsLayout];
         __weak typeof(self) weakSelf = self;
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
             if (type == SSJDataSynchronizeTypeData) {
