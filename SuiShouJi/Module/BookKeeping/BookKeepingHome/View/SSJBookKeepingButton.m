@@ -130,7 +130,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     double secondInterval = _endTime - _startTime;
     
     if (secondInterval > kAnimationDuration) {
-        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
         
         [self.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
         
@@ -147,7 +147,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
         __weak typeof(self) weakSelf = self;
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (kAnimationDuration - secondInterval) *NSEC_PER_SEC);
         dispatch_after(time, dispatch_get_main_queue(), ^{
-            weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+            weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
             
             [weakSelf.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
             

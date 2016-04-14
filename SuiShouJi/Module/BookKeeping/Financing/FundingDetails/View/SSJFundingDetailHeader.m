@@ -83,6 +83,7 @@
     return _totalExpenceLabel;
 }
 
+
 -(UILabel *)totalIncomeLabel{
     if (!_totalIncomeLabel) {
         _totalIncomeLabel = [[UILabel alloc]init];

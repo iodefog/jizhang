@@ -57,7 +57,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"登录";
+        self.statisticsTitle = @"登录";
 //        self.hideKeyboradWhenTouch = YES;
         self.hidesBottomBarWhenPushed = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatetextfield:) name:UITextFieldTextDidChangeNotification object:nil];
@@ -100,12 +100,12 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.tfPhoneNum.top = 65;
+    self.tfPhoneNum.top = 99;
     self.tfPassword.top = self.tfPhoneNum.bottom + 10;
-    self.loginButton.top = self.tfPassword.bottom + 40;
+    self.loginButton.top = self.tfPassword.bottom + 50;
     self.loginButton.centerX = self.view.width / 2;
-    self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 10);
-    self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 10);
+    self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 30);
+    self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 35);
     self.backGroundImage.frame = self.view.frame;
     self.thirdPartyLoginLabel.centerX = self.view.width / 2;
     self.thirdPartyLoginLabel.bottom = self.view.height - 110;
@@ -370,6 +370,7 @@
         _loginButton = [[UIButton alloc]init];
         _loginButton.size = CGSizeMake(self.view.width - 22, 47);
         _loginButton.clipsToBounds = YES;
+        _loginButton.titleLabel.font = [UIFont systemFontOfSize:24];
         _loginButton.layer.cornerRadius = 3;
         _loginButton.enabled = NO;
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
@@ -388,7 +389,7 @@
         _registerButton.layer.cornerRadius = 3;
         _registerButton.layer.borderColor = [UIColor whiteColor].CGColor;
         _registerButton.layer.borderWidth = 1.0f;
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _registerButton.titleLabel.font = [UIFont systemFontOfSize:24];
         [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
         [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_registerButton ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
@@ -404,7 +405,7 @@
         [_forgetButton setRight:self.loginButton.right];
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
         [_forgetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        _forgetButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_forgetButton sizeToFit];
         _forgetButton.rightTop = CGPointMake(self.view.width - 14, self.loginButton.bottom + 15);
@@ -429,7 +430,7 @@
 -(UIButton *)weixinLoginButton{
     if (!_weixinLoginButton) {
         _weixinLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
-        [_weixinLoginButton setImage:[UIImage imageNamed:@"more_qq"] forState:UIControlStateNormal];
+        [_weixinLoginButton setImage:[UIImage imageNamed:@"more_weixin"] forState:UIControlStateNormal];
         [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
         _weixinLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _weixinLoginButton.spaceBetweenImageAndTitle = 12;
@@ -462,7 +463,7 @@
         _thirdPartyLoginLabel.text = @"使用第三方登录";
         [_thirdPartyLoginLabel sizeToFit];
         _thirdPartyLoginLabel.textColor = [UIColor whiteColor];
-        _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
+        _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:16];
         _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _thirdPartyLoginLabel;
