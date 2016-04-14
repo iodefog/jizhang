@@ -342,12 +342,12 @@
                 [weakSelf.statusLabel sizeToFit];
                 [weakSelf.view setNeedsLayout];
             }
+            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
             dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
             
             dispatch_after(time, dispatch_get_main_queue(), ^{
                 weakSelf.statusLabel.text = @"";
                 weakSelf.statusLabel.hidden = YES;
-                [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
             });
         };
     }
