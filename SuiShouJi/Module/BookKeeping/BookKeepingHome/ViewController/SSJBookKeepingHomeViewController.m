@@ -183,8 +183,9 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -36) {
+    if (scrollView.contentOffset.y < -38) {
         [self.homeButton startLoading];
+        [scrollView setContentOffset:CGPointMake(0, -80) animated:NO];
         __weak typeof(self) weakSelf = self;
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
             if (type == SSJDataSynchronizeTypeData) {
