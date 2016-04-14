@@ -14,6 +14,7 @@
 #import "FLAnimatedImage.h"
 #import "SSJBookkeepingTreeHelpViewController.h"
 #import "UIView+SSJViewAnimatioin.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJBookkeepingTreeViewController ()
 
@@ -23,8 +24,8 @@
 // 签到请求
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
 
-// 下雨gif图
-@property (nonatomic, strong) FLAnimatedImageView *treeView;
+// 树图
+@property (nonatomic, strong) UIImageView *treeView;
 
 // 浇水成功提示
 @property (nonatomic, strong) UIImageView *waterSuccessAlertView;
@@ -40,6 +41,8 @@
 
 // 签到描述
 @property (nonatomic, strong) UILabel *checkInDescLab;
+
+@property (nonatomic, copy) NSString *nickName;
 
 @end
 
@@ -65,6 +68,11 @@
     if (error) {
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         return;
+    }
+    
+    if (SSJIsUserLogined()) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName"] forUserId:SSJUSERID()];
+        _nickName = userItem.nickName;
     }
     
     [self.view addSubview:self.treeView];
@@ -106,34 +114,37 @@
         return;
     }
     
-    // 判断本地是否保存了今天的签到记录，如果保存了，就根据hasShaked是否浇过水
-    NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
-    if ([[NSDate date] isSameDay:lastCheckInDate]) {
-        // 已经浇过水
-        if (_checkInModel.hasShaked) {
-            [self showAlreadyWaterAlert];
-            return;
-        }
-        
-        // 没浇过水
-        if ([self saveCheckInModel]) {
-            [self showWaterSuccessAlert];
-            [self showWateringAnimation];
-            [self updateTree];
-            [self updateCheckInDesc];
-            self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
-        }
+    // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
+    if (!_checkInModel) {
+        [self.checkInService checkIn];
         return;
     }
     
-    // 本地没有保存今天的签到记录，先请求签到接口
-    [self.checkInService checkIn];
+    // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
+    NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
+    if (![[NSDate date] isSameDay:lastCheckInDate]) {
+        [self.checkInService checkIn];
+        return;
+    }
+    
+    // 今天已经浇过水
+    if (_checkInModel.hasShaked) {
+        [self showAlreadyWaterAlert];
+        return;
+    }
+    
+    // 没浇过水
+    if ([self saveCheckInModel]) {
+        [self updateTree];
+        [self updateCheckInDesc];
+        self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
+        [self showWaterSuccessAlert];
+        [self showWateringAnimation];
+    }
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    [super serverDidFinished:service];
-    
     if (service != _checkInService) {
         return;
     }
@@ -142,11 +153,11 @@
         // 签到成功，保存签到结果
         _checkInModel = _checkInService.checkInModel;
         if ([self saveCheckInModel]) {
-            [self showWaterSuccessAlert];
-            [self showWateringAnimation];
             [self updateTree];
             [self updateCheckInDesc];
             self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
+            [self showWaterSuccessAlert];
+            [self showWateringAnimation];
         }
     } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
         // 已经签过到，保存签到结果
@@ -172,7 +183,7 @@
 // 存储签到记录
 - (BOOL)saveCheckInModel {
     _checkInModel.hasShaked = YES;
-    if ([SSJBookkeepingTreeStore saveCheckInModel:_checkInService.checkInModel error:nil]) {
+    if ([SSJBookkeepingTreeStore saveCheckInModel:_checkInModel error:nil]) {
         return YES;
     } else {
         // 保存失败
@@ -187,9 +198,12 @@
     NSString *gifpath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:gifName];
     NSData *gifData = [NSData dataWithContentsOfFile:gifpath];
     FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:gifData];
-    self.treeView.animatedImage = image;
+    
+    FLAnimatedImageView *rainingView = [[FLAnimatedImageView alloc] initWithFrame:self.view.bounds];
+    rainingView.animatedImage = image;
+    [self.view insertSubview:rainingView aboveSubview:self.treeView];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.treeView.animatedImage = nil;
+        [rainingView removeFromSuperview];
     });
 }
 
@@ -210,7 +224,7 @@
 // 显示已经浇过水弹窗提示
 - (void)showAlreadyWaterAlert {
     if (!_alreadyWaterAlertView) {
-        _alreadyWaterAlertView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"water_success_alert"]];
+        _alreadyWaterAlertView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"already_water_alert"]];
     }
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
@@ -251,10 +265,10 @@
     NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
     if ([[NSDate date] isSameDay:lastCheckInDate] && _checkInModel.hasShaked) {
         // 已经浇过水
-        self.checkInStateView.image = [UIImage imageNamed:@"tip_water"];
+        self.checkInStateView.image = [UIImage imageNamed:@"tip_already_water"];
     } else {
         // 没浇过水
-        self.checkInStateView.image = [UIImage imageNamed:@"tip_already_water"];
+        self.checkInStateView.image = [UIImage imageNamed:@"tip_water"];
     }
     [self.checkInStateView sizeToFit];
     self.checkInStateView.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.2);
@@ -262,7 +276,12 @@
 
 // 更新签到信息描述
 - (void)updateCheckInDesc {
-    self.checkInDescLab.text = [NSString stringWithFormat:@"Hi,%@~\n%@", _nickName, [SSJBookkeepingTreeHelper descriptionForDays:[self shakedCheckInTimes]]];
+    NSMutableString *desc = [@"Hi" mutableCopy];
+    if (_nickName.length) {
+        [desc appendFormat:@",%@~", _nickName];
+    }
+    [desc appendFormat:@"\n%@", [SSJBookkeepingTreeHelper descriptionForDays:[self shakedCheckInTimes]]];
+    self.checkInDescLab.text = desc;
     [self.checkInDescLab sizeToFit];
     self.checkInDescLab.center = self.dashLineView.center;
 }
@@ -276,9 +295,9 @@
     return _checkInService;
 }
 
-- (FLAnimatedImageView *)treeView {
+- (UIImageView *)treeView {
     if (!_treeView) {
-        _treeView = [[FLAnimatedImageView alloc] init];
+        _treeView = [[UIImageView alloc] init];
     }
     return _treeView;
 }
@@ -305,7 +324,6 @@
         _checkInDescLab.textColor = [UIColor blackColor];
         _checkInDescLab.textAlignment = NSTextAlignmentCenter;
         _checkInDescLab.numberOfLines = 0;
-        [self.view addSubview:_checkInDescLab];
     }
     return _checkInDescLab;
 }

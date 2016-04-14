@@ -14,6 +14,8 @@
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJUserTableManager.h"
+#import "SSJBookkeepingTreeHelper.h"
 
 static const NSTimeInterval kTransitionDuration = 0.3;
 
@@ -32,6 +34,13 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 @property (nonatomic, strong) UIImageView *startView;
 
 @property (nonatomic, strong) SSJGuideView *guideView;
+
+// 虚线边框
+@property (nonatomic, strong) UIImageView *dashLineView;
+
+@property (nonatomic, strong) UILabel *checkInDescLab;
+
+@property (nonatomic, copy) NSString *nickName;
 
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
 
@@ -68,6 +77,11 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         } else {
             // 如果当前版本第一次启动并且没有本地签到表（升级新版本，数据库还没升级完成的情况下），就直接显示引导页
             [self showGuideViewIfNeeded];
+        }
+        
+        if (SSJIsUserLogined()) {
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName"] forUserId:SSJUSERID()];
+            _nickName = userItem.nickName;
         }
     }
     return self;
@@ -158,26 +172,59 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     }
     
     if (_isFirstLaunchForCurrentVersion) {
-        [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            _defaultView.image = [UIImage imageNamed:[self treeName]];
-        } completion:^(BOOL finished) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self showGuideViewIfNeeded];
-            });
-        }];
+        [self showTreeView];
         return;
     }
     
     if (_isServerStartViewShowed) {
-        [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            _defaultView.image = [UIImage imageNamed:[self treeName]];
-        } completion:^(BOOL finished) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self showGuideViewIfNeeded];
-            });
-        }];
+        [self showTreeView];
         return;
     }
+}
+
+- (void)showTreeView {
+    [self updateCheckInDesc];
+    
+    [UIView transitionWithView:_defaultView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        _defaultView.image = [UIImage imageNamed:[self treeName]];
+        [self addSubview:self.dashLineView];
+        [self addSubview:self.checkInDescLab];
+    } completion:^(BOOL finished) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self showGuideViewIfNeeded];
+        });
+    }];
+}
+
+- (UIImageView *)dashLineView {
+    if (!_dashLineView) {
+        _dashLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dash_border"]];
+        _dashLineView.center = CGPointMake(self.width * 0.5, self.height * 0.78);
+    }
+    return _dashLineView;
+}
+
+- (UILabel *)checkInDescLab {
+    if (!_checkInDescLab) {
+        _checkInDescLab = [[UILabel alloc] init];
+        _checkInDescLab.font = [UIFont systemFontOfSize:14];
+        _checkInDescLab.textColor = [UIColor blackColor];
+        _checkInDescLab.textAlignment = NSTextAlignmentCenter;
+        _checkInDescLab.numberOfLines = 0;
+    }
+    return _checkInDescLab;
+}
+
+// 更新签到信息描述
+- (void)updateCheckInDesc {
+    NSMutableString *desc = [@"Hi" mutableCopy];
+    if (_nickName.length) {
+        [desc appendFormat:@",%@~", _nickName];
+    }
+    [desc appendFormat:@"\n%@", [SSJBookkeepingTreeHelper descriptionForDays:[self shakedCheckInTimes]]];
+    self.checkInDescLab.text = desc;
+    [self.checkInDescLab sizeToFit];
+    self.checkInDescLab.center = self.dashLineView.center;
 }
 
 // 当前版本第一次启动显示引导页
@@ -222,6 +269,20 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     } else {
         return @"";
     }
+}
+
+// 摇一摇签到的次数
+- (NSInteger)shakedCheckInTimes {
+    if (!_checkInModel) {
+        return 0;
+    }
+    
+    NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
+    if ([[NSDate date] isSameDay:lastCheckInDate] && _checkInModel.hasShaked) {
+        return _checkInModel.checkInTimes;
+    }
+    
+    return MIN(_checkInModel.checkInTimes - 1, 0);
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate

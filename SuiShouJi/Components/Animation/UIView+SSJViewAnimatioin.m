@@ -42,14 +42,18 @@ static const NSTimeInterval kDuration = 0.36;
         return;
     }
     
-    if (self.superview != view) {
+    if (self.ssj_backgroundView.superview != view) {
         [view addSubview:self.ssj_backgroundView];
+    }
+    
+    if (self.superview != view) {
         [view addSubview:self];
     }
     
     self.center = CGPointMake(view.width * 0.5, view.height * 0.5);
     self.transform = CGAffineTransformMakeScale(0, 0);
     
+    self.hidden = NO;
     self.ssj_backgroundView.hidden = NO;
     self.ssj_backgroundView.alpha = 0;
     

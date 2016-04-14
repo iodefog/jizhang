@@ -89,11 +89,11 @@
 + (NSString *)descriptionForDays:(NSInteger)days {
     SSJBookkeepingTreeLevel level = [self treeLevelForDays:days];
     if (level == SSJBookkeepingTreeLevelCrownTree) {
-        return @"";
+        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n积蓄另一颗种子茁壮发芽吧。", (long)days];
     } else {
-        NSInteger daysToUpgrade = [self maxDaysForLevel:days] - days;
+        NSInteger daysToUpgrade = [self maxDaysForLevel:level] - days;
         NSString *nextLevel = [self treeLevelNameForLevel:level + 1];
-        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
+        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
     }
 }
 
