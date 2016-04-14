@@ -187,7 +187,7 @@
         [self.homeButton startLoading];
         scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
         self.statusLabel.hidden = NO;
-        self.statusLabel.text = @"数据正在同步中";
+        self.statusLabel.text = @"数据同步中";
         [self.statusLabel sizeToFit];
         [self.view setNeedsLayout];
         __weak typeof(self) weakSelf = self;
