@@ -29,7 +29,6 @@
 #import "FMDB.h"
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
-#warning test
 #import "SSJHomeTableView.h"
 
 @interface SSJBookKeepingHomeViewController ()
