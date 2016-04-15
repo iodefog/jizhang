@@ -298,6 +298,8 @@
 		7DDDA7F51CBE51070029ADAC /* water_success_alert@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DDDA7ED1CBE51070029ADAC /* water_success_alert@3x.png */; };
 		7DDDA8001CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDDA7FF1CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m */; };
 		7DDDA80E1CBE6C7F0029ADAC /* SSJBookkeepingTreeDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDDA80D1CBE6C7F0029ADAC /* SSJBookkeepingTreeDescView.m */; };
+		7DDDA8111CBF75390029ADAC /* help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DDDA80F1CBF75390029ADAC /* help@2x.png */; };
+		7DDDA8121CBF75390029ADAC /* help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DDDA8101CBF75390029ADAC /* help@3x.png */; };
 		7DE27FB31CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE27FB21CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m */; };
 		7DE27FB61CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE27FB51CB5228900D5EB41 /* SSJMagicExportCalendarDateView.m */; };
 		7DE27FBE1CB6771A00D5EB41 /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE27FBD1CB6771A00D5EB41 /* SSJMagicExportCalendarIndexPath.m */; };
@@ -1118,6 +1120,8 @@
 		7DDDA7FF1CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SSJViewAnimatioin.m"; sourceTree = "<group>"; };
 		7DDDA80C1CBE6C7F0029ADAC /* SSJBookkeepingTreeDescView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeDescView.h; sourceTree = "<group>"; };
 		7DDDA80D1CBE6C7F0029ADAC /* SSJBookkeepingTreeDescView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeDescView.m; sourceTree = "<group>"; };
+		7DDDA80F1CBF75390029ADAC /* help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help@2x.png"; sourceTree = "<group>"; };
+		7DDDA8101CBF75390029ADAC /* help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help@3x.png"; sourceTree = "<group>"; };
 		7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipZap.xcodeproj; path = ZipZap/ZipZap.xcodeproj; sourceTree = "<group>"; };
 		7DE27FB11CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportResultCheckMarkView.h; sourceTree = "<group>"; };
 		7DE27FB21CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportResultCheckMarkView.m; sourceTree = "<group>"; };
@@ -1945,6 +1949,8 @@
 		7D4540841CBB71CE000A4266 /* BookkeepingTree */ = {
 			isa = PBXGroup;
 			children = (
+				7DDDA80F1CBF75390029ADAC /* help@2x.png */,
+				7DDDA8101CBF75390029ADAC /* help@3x.png */,
 				7DDDA7E61CBE51070029ADAC /* already_water_alert@2x.png */,
 				7DDDA7E71CBE51070029ADAC /* already_water_alert@3x.png */,
 				7DDDA7E81CBE51070029ADAC /* dash_border@2x.png */,
@@ -4451,6 +4457,7 @@
 				7DE69C5A1C8EDF34001D31C1 /* motion_circle_default@3x.png in Resources */,
 				BD37D2D41C5231D60050BDAA /* bt_delete@2x.png in Resources */,
 				7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */,
+				7DDDA8121CBF75390029ADAC /* help@3x.png in Resources */,
 				7DD7D6AE1C4C8E6A00ACE71A /* bt_house@2x.png in Resources */,
 				7DD7D6FB1C4C8E6A00ACE71A /* founds_exchange@3x.png in Resources */,
 				7D893F2E1C91144D00886995 /* budget_left_disable@3x.png in Resources */,
@@ -4577,6 +4584,7 @@
 				7DDDA7BB1CBE1BFD0029ADAC /* help_tree_level_3@3x.png in Resources */,
 				7DDDA7B41CBE1BFD0029ADAC /* tree_level_8.gif in Resources */,
 				BDF510881C925BB500A49D74 /* home_background@3x.png in Resources */,
+				7DDDA8111CBF75390029ADAC /* help@2x.png in Resources */,
 				BDFBDABE1C7EB0540049F179 /* bt_marry@2x.png in Resources */,
 				7DD7D68E1C4C8E6A00ACE71A /* bt_car@2x.png in Resources */,
 				7DDDA7D51CBE1BFD0029ADAC /* tree_level_4@3x.png in Resources */,
