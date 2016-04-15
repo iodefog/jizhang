@@ -155,7 +155,7 @@
     {
         _profitAmountLabel = [[UILabel alloc]init];
         _profitAmountLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _profitAmountLabel.font = [UIFont systemFontOfSize:30];
+        _profitAmountLabel.font = [UIFont systemFontOfSize:24];
 
     }
     return _profitAmountLabel;
