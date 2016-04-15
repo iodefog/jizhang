@@ -114,6 +114,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
 #endif
     } else {
         _isChecked = YES;
+        _isCheckedSuccess = NO;
         if (self.failure) {
             NSString *errorMessage = message.length > 0 ? message : SSJ_ERROR_MESSAGE;
             self.failure(errorMessage);
@@ -122,8 +123,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
         self.success = nil;
         self.failure = nil;
 #ifdef DEBUG
-        [CDAutoHideMessageHUD showMessage:@"启动接口请求失败，正在重试"];
-        SSJPRINT(@">>> 启动接口请求失败，正在重试");
+        [CDAutoHideMessageHUD showMessage:@"启动接口请求失败"];
 #endif
     }
 }
@@ -131,6 +131,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
 //  完成请求
 - (void)finishCheckUpdate {
     _isChecked = YES;
+    _isCheckedSuccess = YES;
     SSJAppUpdateType updateType = SSJAppUpdateTypeNone;
     if ([self.networkService.type isEqualToString:@"0"]) {
         updateType = SSJAppUpdateTypeUpdate;

@@ -24,7 +24,8 @@
 
 #import "SSJLocalNotificationHelper.h"
 #import <TencentOpenAPI/TencentOAuth.h>
-#import "SSJStartView.h"
+//#import "SSJStartView.h"
+#import "SSJStartViewManager.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -45,6 +46,12 @@ void SCYSaveEnterBackgroundTime() {
 NSDate *SCYEnterBackgroundTime() {
     return [[NSUserDefaults standardUserDefaults] objectForKey:kEnterBackgroundTimeKey];
 }
+
+@interface AppDelegate ()
+
+@property (nonatomic, strong) SSJStartViewManager *startViewManager;
+
+@end
 
 @implementation AppDelegate
 
@@ -86,8 +93,10 @@ NSDate *SCYEnterBackgroundTime() {
     //微信登录
     [WXApi registerApp:kWeiXinAppKey withDescription:kWeiXinDescription];
     
-    [SSJStartView showWithCompletion:^{
+    _startViewManager = [[SSJStartViewManager alloc] init];
+    [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
         [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL];
+        manager = nil;
     }];
 
     return YES;

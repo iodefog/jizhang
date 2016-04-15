@@ -19,6 +19,10 @@
 // 签到的用户id
 @property (nonatomic, copy) NSString *userId;
 
+@property (nonatomic, copy) NSString *treeImgUrl;
+
+@property (nonatomic, copy) NSString *treeGifUrl;
+
 // 是否摇一摇签过到
 @property (nonatomic) BOOL hasShaked;
 

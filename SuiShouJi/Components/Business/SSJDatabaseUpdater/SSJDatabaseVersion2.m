@@ -31,7 +31,7 @@
 }
 
 + (NSError *)createUserTreeWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists bk_user_tree (cuserid text not null, isignin integer not null, isignindate text not null, hasshaked integer default 0)"]) {
+    if (![db executeUpdate:@"create table if not exists bk_user_tree (cuserid text not null, isignin integer not null, isignindate text not null, hasshaked integer default 0, treeimgurl text, treegifurl text)"]) {
         return [db lastError];
     }
     return nil;

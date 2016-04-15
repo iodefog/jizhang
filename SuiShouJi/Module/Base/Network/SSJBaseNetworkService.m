@@ -164,11 +164,10 @@
             }
             
             _desc = [_rootElement objectForKey:@"desc"];
-            
             SSJPRINT(@"%@",_desc);
+            
+            [self requestDidFinish:_rootElement];
         }
-        
-        [self requestDidFinish:_rootElement];
         
         [SSJGlobalServiceManager removeService:self];
         if (self.delegate && [self.delegate respondsToSelector:@selector(serverDidFinished:)]) {

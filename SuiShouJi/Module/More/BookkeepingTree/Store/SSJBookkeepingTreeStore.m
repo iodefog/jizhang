@@ -15,7 +15,7 @@
 + (SSJBookkeepingTreeCheckInModel *)queryCheckInInfoWithUserId:(NSString *)userId error:(NSError **)error{
     __block SSJBookkeepingTreeCheckInModel *model = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select isignin, isignindate, hasshaked from bk_user_tree where cuserid = ?", userId];
+        FMResultSet *result = [db executeQuery:@"select isignin, isignindate, hasshaked, treeimgurl, treegifurl from bk_user_tree where cuserid = ?", userId];
         if (!result && error) {
             *error = [db lastError];
         }
@@ -25,6 +25,8 @@
             tmodel.checkInTimes = [result intForColumn:@"isignin"];
             tmodel.lastCheckInDate = [result stringForColumn:@"isignindate"];
             tmodel.hasShaked = [result boolForColumn:@"hasshaked"];
+            tmodel.treeImgUrl = [result stringForColumn:@"treeimgurl"];
+            tmodel.treeGifUrl = [result stringForColumn:@"treegifurl"];
             tmodel.userId = userId;
             model = tmodel;
         }
@@ -43,9 +45,9 @@
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         BOOL hasRecord = [db boolForQuery:@"select count(*) from bk_user_tree where cuserid = ?", model.userId];
         if (hasRecord) {
-            success = [db executeUpdate:@"update bk_user_tree set isignin = ?, isignindate = ?, hasshaked = ? where cuserid = ?", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.userId];
+            success = [db executeUpdate:@"update bk_user_tree set isignin = ?, isignindate = ?, hasshaked = ?, treeimgurl = ?, treegifurl = ? where cuserid = ?", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.treeImgUrl, model.treeGifUrl, model.userId];
         } else {
-            success = [db executeUpdate:@"insert into bk_user_tree (isignin, isignindate, hasshaked, cuserid) values (?, ?, ?, ?)", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.userId];
+            success = [db executeUpdate:@"insert into bk_user_tree (isignin, isignindate, hasshaked, treeimgurl, treegifurl, cuserid) values (?, ?, ?, ?, ? ,?)", @(model.checkInTimes), model.lastCheckInDate, @(model.hasShaked), model.treeImgUrl, model.treeGifUrl, model.userId];
         }
         if (!success && error) {
             *error = [db lastError];

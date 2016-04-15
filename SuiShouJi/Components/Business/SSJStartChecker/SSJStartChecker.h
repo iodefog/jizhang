@@ -33,7 +33,12 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
 /**
  *  是否请求过启动接口，不区分成功或失败
  */
-@property (nonatomic) BOOL isChecked;
+@property (nonatomic, readonly) BOOL isChecked;
+
+/**
+ *  启动接口是否请求成功，需要结合isChecked一起判断才能准确
+ */
+@property (nonatomic, readonly) BOOL isCheckedSuccess;
 
 /**
  *  返回唯一实例

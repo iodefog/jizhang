@@ -34,6 +34,8 @@
         self.checkInModel.checkInTimes = [treeInfo[@"isignin"] integerValue];
         self.checkInModel.lastCheckInDate = treeInfo[@"isignindate"];
         self.checkInModel.userId = treeInfo[@"cuserid"];
+        self.checkInModel.treeImgUrl = treeInfo[@"userTreeImg"];
+        self.checkInModel.treeGifUrl = treeInfo[@"wateringImg"];
     }
 }
 

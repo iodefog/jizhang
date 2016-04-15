@@ -23,4 +23,6 @@ typedef void(^SSJGuideViewBeginBlock)(SSJGuideView *guideView);
 
 - (void)showInView:(UIView *)view finish:(SSJGuideViewBeginBlock)finish;
 
+- (void)dismiss:(BOOL)animated;
+
 @end

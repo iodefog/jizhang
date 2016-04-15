@@ -14,7 +14,8 @@
 #import "FLAnimatedImage.h"
 #import "SSJBookkeepingTreeHelpViewController.h"
 #import "UIView+SSJViewAnimatioin.h"
-#import "SSJUserTableManager.h"
+
+#import "SSJBookkeepingTreeView.h"
 
 @interface SSJBookkeepingTreeViewController ()
 
@@ -25,7 +26,7 @@
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
 
 // 树图
-@property (nonatomic, strong) UIImageView *treeView;
+@property (nonatomic, strong) SSJBookkeepingTreeView *treeView;
 
 // 浇水成功提示
 @property (nonatomic, strong) UIImageView *waterSuccessAlertView;
@@ -33,16 +34,8 @@
 // 已经浇过水提示
 @property (nonatomic, strong) UIImageView *alreadyWaterAlertView;
 
-// 虚线边框
-@property (nonatomic, strong) UIImageView *dashLineView;
-
 // 签到状态提示
 @property (nonatomic, strong) UIImageView *checkInStateView;
-
-// 签到描述
-@property (nonatomic, strong) UILabel *checkInDescLab;
-
-@property (nonatomic, copy) NSString *nickName;
 
 @end
 
@@ -70,19 +63,14 @@
         return;
     }
     
-    if (SSJIsUserLogined()) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName"] forUserId:SSJUSERID()];
-        _nickName = userItem.nickName;
-    }
+    _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
+    _treeView.checkInModel = _checkInModel;
+    [self.view addSubview:_treeView];
     
-    [self.view addSubview:self.treeView];
-    [self.view addSubview:self.checkInStateView];
-    [self.view addSubview:self.dashLineView];
-    [self.view addSubview:self.checkInDescLab];
+    _checkInStateView = [[UIImageView alloc] init];
+    [self.view addSubview:_checkInStateView];
     
-    [self updateTree];
     [self updateCheckInStateView];
-    [self updateCheckInDesc];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -100,11 +88,6 @@
     [_checkInService cancel];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.treeView.frame = self.view.bounds;
-}
-
 #pragma mark - UIResponder
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
     [super motionBegan:motion withEvent:event];
@@ -114,16 +97,21 @@
         return;
     }
     
+    if (!_checkInService) {
+        _checkInService = [[SSJBookkeepingTreeCheckInService alloc] initWithDelegate:self];
+        _checkInService.showLodingIndicator = YES;
+    }
+    
     // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
     if (!_checkInModel) {
-        [self.checkInService checkIn];
+        [_checkInService checkIn];
         return;
     }
     
     // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
     NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
     if (![[NSDate date] isSameDay:lastCheckInDate]) {
-        [self.checkInService checkIn];
+        [_checkInService checkIn];
         return;
     }
     
@@ -135,8 +123,6 @@
     
     // 没浇过水
     if ([self saveCheckInModel]) {
-        [self updateTree];
-        [self updateCheckInDesc];
         self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
         [self showWaterSuccessAlert];
         [self showWateringAnimation];
@@ -153,8 +139,6 @@
         // 签到成功，保存签到结果
         _checkInModel = _checkInService.checkInModel;
         if ([self saveCheckInModel]) {
-            [self updateTree];
-            [self updateCheckInDesc];
             self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
             [self showWaterSuccessAlert];
             [self showWateringAnimation];
@@ -164,8 +148,6 @@
         _checkInModel = _checkInService.checkInModel;
         [self saveCheckInModel];
         [self showAlreadyWaterAlert];
-        [self updateTree];
-        [self updateCheckInDesc];
         self.checkInStateView.image = [UIImage imageNamed:@"tip_already_water"];
     } else {
         // 签到失败
@@ -249,13 +231,6 @@
     return MIN(_checkInModel.checkInTimes - 1, 0);
 }
 
-// 更新记账树等级
-- (void)updateTree {
-    NSString *treeImageName = [SSJBookkeepingTreeHelper treeImageNameForDays:[self shakedCheckInTimes]];
-    UIImage *treeImage = [UIImage ssj_compatibleImageNamed:treeImageName];
-    self.treeView.image = treeImage;
-}
-
 // 更新签到状态描述
 - (void)updateCheckInStateView {
     if (!_checkInModel) {
@@ -272,60 +247,6 @@
     }
     [self.checkInStateView sizeToFit];
     self.checkInStateView.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.2);
-}
-
-// 更新签到信息描述
-- (void)updateCheckInDesc {
-    NSMutableString *desc = [@"Hi" mutableCopy];
-    if (_nickName.length) {
-        [desc appendFormat:@",%@~", _nickName];
-    }
-    [desc appendFormat:@"\n%@", [SSJBookkeepingTreeHelper descriptionForDays:[self shakedCheckInTimes]]];
-    self.checkInDescLab.text = desc;
-    [self.checkInDescLab sizeToFit];
-    self.checkInDescLab.center = self.dashLineView.center;
-}
-
-#pragma mark - Getter
-- (SSJBookkeepingTreeCheckInService *)checkInService {
-    if (!_checkInService) {
-        _checkInService = [[SSJBookkeepingTreeCheckInService alloc] initWithDelegate:self];
-        _checkInService.showLodingIndicator = YES;
-    }
-    return _checkInService;
-}
-
-- (UIImageView *)treeView {
-    if (!_treeView) {
-        _treeView = [[UIImageView alloc] init];
-    }
-    return _treeView;
-}
-
-- (UIImageView *)checkInStateView {
-    if (!_checkInStateView) {
-        _checkInStateView = [[UIImageView alloc] init];
-    }
-    return _checkInStateView;
-}
-
-- (UIImageView *)dashLineView {
-    if (!_dashLineView) {
-        _dashLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dash_border"]];
-        _dashLineView.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.78);
-    }
-    return _dashLineView;
-}
-
-- (UILabel *)checkInDescLab {
-    if (!_checkInDescLab) {
-        _checkInDescLab = [[UILabel alloc] init];
-        _checkInDescLab.font = [UIFont systemFontOfSize:14];
-        _checkInDescLab.textColor = [UIColor blackColor];
-        _checkInDescLab.textAlignment = NSTextAlignmentCenter;
-        _checkInDescLab.numberOfLines = 0;
-    }
-    return _checkInDescLab;
 }
 
 @end
