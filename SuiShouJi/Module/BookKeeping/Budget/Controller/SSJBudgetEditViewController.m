@@ -161,7 +161,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if (textField.tag == kBudgetMoneyTextFieldTag) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         text = [text stringByReplacingOccurrencesOfString:@"￥" withString:@""];
-        text = [text ssj_reserveDecimalDigits:2];
+        text = [text ssj_reserveDecimalDigits:2 intDigits:0];
         textField.text = [NSString stringWithFormat:@"￥%@", text];
         
         self.model.budgetMoney = [text doubleValue];
@@ -176,7 +176,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
     } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        textField.text = [text ssj_reserveDecimalDigits:1];
+        textField.text = [text ssj_reserveDecimalDigits:1 intDigits:0];
 
         self.remindPercent = MIN([textField.text doubleValue], 100) / 100;
         self.model.remindMoney = self.remindPercent * self.model.budgetMoney;

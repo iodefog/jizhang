@@ -80,7 +80,7 @@
     if (!_fundingNameLabel) {
         _fundingNameLabel = [[UILabel alloc]init];
         _fundingNameLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _fundingNameLabel.font = [UIFont systemFontOfSize:16];
+        _fundingNameLabel.font = [UIFont systemFontOfSize:15];
     }
     return _fundingNameLabel;
 }

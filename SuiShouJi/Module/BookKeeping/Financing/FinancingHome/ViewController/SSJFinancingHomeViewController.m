@@ -31,6 +31,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"我的资金";
+
     }
     return self;
 }
@@ -71,7 +72,7 @@
     self.profitAmountLabel.centerY = self.headerView.height / 2;
     self.transferButton.right = self.view.width - 15;
     self.transferButton.centerY = self.headerView.height / 2;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 120);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 149);
     self.tableView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 
@@ -154,7 +155,7 @@
     {
         _profitAmountLabel = [[UILabel alloc]init];
         _profitAmountLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _profitAmountLabel.font = [UIFont systemFontOfSize:30];
+        _profitAmountLabel.font = [UIFont systemFontOfSize:24];
 
     }
     return _profitAmountLabel;

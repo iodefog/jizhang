@@ -459,7 +459,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    text = [text ssj_reserveDecimalDigits:2];
+    text = [text ssj_reserveDecimalDigits:2 intDigits:6];
     self.textInput.text = [NSString stringWithFormat:@"%@", text];
     return NO;
 }

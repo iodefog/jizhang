@@ -230,12 +230,9 @@
 #pragma mark - private
 -(void)getCurrentDate{
     NSDate *now = [NSDate date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-    _currentYear = [dateComponent year];
-    _currentDay = [dateComponent day];
-    _currentMonth = [dateComponent month];
+    _currentYear = now.year;
+    _currentDay = now.day;
+    _currentMonth = now.month;
 }
 
 -(void)plusButtonClicked:(UIButton*)button{

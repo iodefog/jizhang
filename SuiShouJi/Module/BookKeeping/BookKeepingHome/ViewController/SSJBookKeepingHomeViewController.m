@@ -29,6 +29,7 @@
 #import "FMDB.h"
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
+#import "SSJHomeTableView.h"
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -43,15 +44,15 @@
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
 @property(nonatomic, strong) UILabel *statusLabel;
+@property(nonatomic, strong) SSJHomeTableView *tableView;
+@property(nonatomic, strong) NSIndexPath *selectIndex;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
 @property(nonatomic) BOOL refreshSuccessOrNot;
 @end
 
-@implementation SSJBookKeepingHomeViewController{
-    NSIndexPath *_selectIndex;
-}
+@implementation SSJBookKeepingHomeViewController
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -126,6 +127,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.tableView];
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
@@ -140,7 +142,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[self navigationController] setNavigationBarHidden:NO animated:NO];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    _selectIndex = nil;
+    self.selectIndex = nil;
     [self getCurrentDate];
 }
 
@@ -216,7 +218,7 @@
     if (!bookKeepingCell) {
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    bookKeepingCell.isEdite = ([indexPath compare:_selectIndex] == NSOrderedSame);
+    bookKeepingCell.isEdite = ([indexPath compare:self.selectIndex] == NSOrderedSame);
     if (indexPath.row == self.items.count - 1) {
         bookKeepingCell.isLastRowOrNot = NO;
     }else{
@@ -225,11 +227,11 @@
     bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
-        if (_selectIndex == nil) {
-            _selectIndex = [tableView indexPathForCell:cell];
+        if (weakSelf.selectIndex == nil) {
+            weakSelf.selectIndex = [tableView indexPathForCell:cell];
             [weakSelf.tableView reloadData];
         }else{
-            _selectIndex = nil;
+            weakSelf.selectIndex = nil;
             [weakSelf.tableView reloadData];
         }
 //        cell.isEdite = YES;
@@ -246,7 +248,7 @@
         [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
     };
     bookKeepingCell.deleteButtonClickBlock = ^{
-        _selectIndex = nil;
+        weakSelf.selectIndex = nil;
         [weakSelf getDateFromDatebase];
         [weakSelf.tableView reloadData];
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
@@ -266,6 +268,20 @@
 }
 
 #pragma mark - Getter
+-(SSJHomeTableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[SSJHomeTableView alloc]init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        __weak typeof(self) weakSelf = self;
+        _tableView.tableViewClickBlock = ^(){
+            weakSelf.selectIndex = nil;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _tableView;
+}
+
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
         SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
@@ -292,18 +308,6 @@
     }
     return _bookKeepingHeader;
 }
-
-//-(UIView *)clearView{
-//    if (!_clearView) {
-//        _clearView = [[UIView alloc]init];
-//        _clearView.backgroundColor = [UIColor clearColor];
-//        UITapGestureRecognizer* singleRecognizer;
-//        singleRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(SingleTap:)];
-//        singleRecognizer.numberOfTapsRequired = 1;
-//        [_clearView addGestureRecognizer:singleRecognizer];
-//    }
-//    return _clearView;
-//}
 
 -(SSJHomeBudgetButton *)budgetButton{
     if (!_budgetButton) {

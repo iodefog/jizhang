@@ -100,32 +100,63 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.tfPhoneNum.top = 90;
-    self.tfPassword.top = self.tfPhoneNum.bottom + 10;
-    self.loginButton.top = self.tfPassword.bottom + 40;
-    self.loginButton.centerX = self.view.width / 2;
-    self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 25);
-    self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 20);
-    self.backGroundImage.frame = self.view.frame;
-    self.thirdPartyLoginLabel.centerX = self.view.width / 2;
-    self.thirdPartyLoginLabel.bottom = self.view.height - 150;
-    if ([WXApi isWXAppInstalled]) {
-        self.tencentLoginButton.centerX = self.view.width / 2 / 2;
-        self.tencentLoginButton.centerY = self.view.height - 75;
-        self.weixinLoginButton.centerX = self.view.width / 2 + self.view.width / 2 / 2;
-        self.weixinLoginButton.centerY = self.view.height - 75;
-        self.weixinLoginButton.hidden = NO;
+    if (SSJSCREENWITH == 320 && SSJSCREENHEIGHT == 480) {
+        self.tfPhoneNum.top = 45;
+        self.tfPassword.top = self.tfPhoneNum.bottom + 10;
+        self.loginButton.top = self.tfPassword.bottom + 35;
+        self.loginButton.centerX = self.view.width / 2;
+        self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 20);
+        self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 17);
+        self.backGroundImage.frame = self.view.frame;
+        self.thirdPartyLoginLabel.centerX = self.view.width / 2;
+        self.thirdPartyLoginLabel.bottom = self.view.height - 110;
+        if ([WXApi isWXAppInstalled]) {
+            self.tencentLoginButton.centerX = self.view.width / 2 / 2;
+            self.tencentLoginButton.centerY = self.view.height - 55;
+            self.weixinLoginButton.centerX = self.view.width / 2 + self.view.width / 2 / 2;
+            self.weixinLoginButton.centerY = self.view.height - 55;
+            self.weixinLoginButton.hidden = NO;
+        }else{
+            self.tencentLoginButton.centerX = self.view.width / 2;
+            self.tencentLoginButton.centerY = self.view.height - 55;
+            self.weixinLoginButton.hidden = YES;
+        }
+        self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
+        self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+        self.leftSeperatorLine.left = 0;
+        self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
+        self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+        self.rightSeperatorLine.right = self.view.width;
+
     }else{
-        self.tencentLoginButton.centerX = self.view.width / 2;
-        self.tencentLoginButton.centerY = self.view.height - 75;
-        self.weixinLoginButton.hidden = YES;
+        self.tfPhoneNum.top = 90;
+        self.tfPassword.top = self.tfPhoneNum.bottom + 10;
+        self.loginButton.top = self.tfPassword.bottom + 40;
+        self.loginButton.centerX = self.view.width / 2;
+        self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 25);
+        self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 20);
+        self.backGroundImage.frame = self.view.frame;
+        self.thirdPartyLoginLabel.centerX = self.view.width / 2;
+        self.thirdPartyLoginLabel.bottom = self.view.height - 150;
+        if ([WXApi isWXAppInstalled]) {
+            self.tencentLoginButton.centerX = self.view.width / 2 / 2;
+            self.tencentLoginButton.centerY = self.view.height - 75;
+            self.weixinLoginButton.centerX = self.view.width / 2 + self.view.width / 2 / 2;
+            self.weixinLoginButton.centerY = self.view.height - 75;
+            self.weixinLoginButton.hidden = NO;
+        }else{
+            self.tencentLoginButton.centerX = self.view.width / 2;
+            self.tencentLoginButton.centerY = self.view.height - 75;
+            self.weixinLoginButton.hidden = YES;
+        }
+        self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
+        self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+        self.leftSeperatorLine.left = 0;
+        self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
+        self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
+        self.rightSeperatorLine.right = self.view.width;
+
     }
-    self.leftSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
-    self.leftSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
-    self.leftSeperatorLine.left = 0;
-    self.rightSeperatorLine.size = CGSizeMake((self.view.width - self.thirdPartyLoginLabel.width - 10) / 2, 1.0f / [UIScreen mainScreen].scale);
-    self.rightSeperatorLine.centerY = self.thirdPartyLoginLabel.centerY;
-    self.rightSeperatorLine.right = self.view.width;
 }
 
 -(void)viewDidDisappear:(BOOL)animated{

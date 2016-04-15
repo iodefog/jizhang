@@ -104,7 +104,7 @@
 -(UILabel*)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _incomeLabel.font = [UIFont systemFontOfSize:17];
+        _incomeLabel.font = [UIFont systemFontOfSize:15];
         _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [_incomeLabel sizeToFit];
     }
@@ -114,7 +114,7 @@
 -(UILabel*)expenditureLabel{
     if (!_expenditureLabel) {
         _expenditureLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _expenditureLabel.font = [UIFont systemFontOfSize:17];
+        _expenditureLabel.font = [UIFont systemFontOfSize:15];
         _expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         [_expenditureLabel sizeToFit];
     }
