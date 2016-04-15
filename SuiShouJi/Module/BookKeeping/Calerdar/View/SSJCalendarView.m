@@ -142,7 +142,6 @@
         month = 1;
         year = year + 1;
     }
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSString *firstWeekDayMonth = [[NSString alloc] initWithFormat:@"%ld",year];
     firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%s","-"]];
     firstWeekDayMonth = [firstWeekDayMonth stringByAppendingString:[[NSString alloc]initWithFormat:@"%ld",month]];
@@ -151,8 +150,7 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *weekOfFirstDayOfMonth = [dateFormatter dateFromString:firstWeekDayMonth];
-    NSDateComponents *newCom = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:weekOfFirstDayOfMonth];
-    return [newCom weekday];
+    return weekOfFirstDayOfMonth.weekday;
 }
 
 //返回一个月有多少天
@@ -208,12 +206,9 @@
 
 -(void)getCurrentDate{
     NSDate *now = [NSDate date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-    _currentYear = [dateComponent year];
-    _currentDay = [dateComponent day];
-    _currentMonth = [dateComponent month];
+    _currentYear = now.year;
+    _currentDay = now.day;
+    _currentMonth = now.month;
 }
 
 -(void)getItems{

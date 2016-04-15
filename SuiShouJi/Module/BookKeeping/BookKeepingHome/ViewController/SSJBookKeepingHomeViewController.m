@@ -277,7 +277,7 @@
         __weak typeof(self) weakSelf = self;
         _tableView.tableViewClickBlock = ^(){
             weakSelf.selectIndex = nil;
-            [weakSelf.tableView reloadData]; 
+            [weakSelf.tableView reloadData];
         };
     }
     return _tableView;
