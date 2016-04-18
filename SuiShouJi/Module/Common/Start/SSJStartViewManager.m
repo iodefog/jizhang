@@ -15,6 +15,7 @@
 #import "SSJBookkeepingTreeCheckInService.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJBookkeepingTreeHelper.h"
 
 static const NSTimeInterval kTransitionDuration = 0.3;
 
@@ -159,14 +160,24 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     
     if (_checkInModel) {
         __weak typeof(self) wself = self;
-        _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        [_treeView setCheckInModel:_checkInModel finishLoad:^{
-            [UIView transitionFromView:wself.launchView toView:wself.treeView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [wself showGuideViewIfNeeded];
-                });
-            }];
+        // 加载记账树启动图
+        [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_checkInModel.treeImgUrl finish:^(UIImage *image, BOOL success) {
+            if (success && image) {
+                wself.treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+                [wself.treeView setTreeImg:image];
+                [wself.treeView setCheckTimes:wself.checkInModel.checkInTimes];
+                [UIView transitionFromView:wself.launchView toView:wself.treeView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [wself showGuideViewIfNeeded];
+                    });
+                }];
+            } else {
+                [wself showGuideViewIfNeeded];
+            }
         }];
+        
+        // 加载记账树gif图片
+        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:NULL];
     }
 }
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D035FC31CC4AE5A0030C48B /* no_network_alert@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */; };
+		7D035FC41CC4AE5A0030C48B /* no_network_alert@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */; };
 		7D05C30C1CBCE68D008467DC /* SSJStartView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D05C30B1CBCE68D008467DC /* SSJStartView.m */; };
 		7D1D7F3A1C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F391C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m */; };
 		7D1D7F401C85638A0001F72A /* SSJBudgetEditUnitTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F3F1C85638A0001F72A /* SSJBudgetEditUnitTextField.m */; };
@@ -727,6 +729,8 @@
 
 /* Begin PBXFileReference section */
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_network_alert@2x.png"; sourceTree = "<group>"; };
+		7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_network_alert@3x.png"; sourceTree = "<group>"; };
 		7D05C30A1CBCE68D008467DC /* SSJStartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartView.h; sourceTree = "<group>"; };
 		7D05C30B1CBCE68D008467DC /* SSJStartView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartView.m; sourceTree = "<group>"; };
 		7D1D7F381C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetDetailMiddleTitleView.h; sourceTree = "<group>"; };
@@ -1898,6 +1902,8 @@
 		7D4540841CBB71CE000A4266 /* BookkeepingTree */ = {
 			isa = PBXGroup;
 			children = (
+				7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */,
+				7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */,
 				7DDDA80F1CBF75390029ADAC /* help@2x.png */,
 				7DDDA8101CBF75390029ADAC /* help@3x.png */,
 				7DDDA7E61CBE51070029ADAC /* already_water_alert@2x.png */,
@@ -4308,6 +4314,7 @@
 				9C0E8C181CB645900093F79E /* microphone@2x.png in Resources */,
 				9CEB85A11CC4DA5200AE8F8D /* home_pen_smile@2x.png in Resources */,
 				9C2BCFC11CBF793500D8D8D3 /* ft_zhankai@3x.png in Resources */,
+				7D035FC41CC4AE5A0030C48B /* no_network_alert@3x.png in Resources */,
 				BDF504881C868A8200DCFA99 /* beizhu_sel@2x.png in Resources */,
 				BDF510891C925BB500A49D74 /* home_calender@2x.png in Resources */,
 				9C0E8C171CB645900093F79E /* cancel@2x.png in Resources */,
@@ -4452,6 +4459,7 @@
 				7DD7D7331C4CA8BD00ACE71A /* reportForms_expenses@2x.png in Resources */,
 				7DE69C591C8EDF34001D31C1 /* motion_circle_default@2x.png in Resources */,
 				7DF8DED91C59BFE700CC5DFA /* guide_2-667@2x.png in Resources */,
+				7D035FC31CC4AE5A0030C48B /* no_network_alert@2x.png in Resources */,
 				7DD7D6A21C4C8E6A00ACE71A /* bt_fruit@2x.png in Resources */,
 				BDF504951C868A8200DCFA99 /* xunhuan_nor@3x.png in Resources */,
 				7DDDA7F41CBE51070029ADAC /* water_success_alert@2x.png in Resources */,
