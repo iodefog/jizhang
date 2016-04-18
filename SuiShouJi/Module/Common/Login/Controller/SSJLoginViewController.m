@@ -276,6 +276,7 @@
 -(void)forgetButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
     SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
+    forgetVC.backController = self.backController;
     forgetVC.finishHandle = ^(UIViewController *controller){
         [weakSelf.navigationController popToViewController:weakSelf animated:YES];
     };

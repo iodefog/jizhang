@@ -97,21 +97,16 @@
         return;
     }
     
-    if (!_checkInService) {
-        _checkInService = [[SSJBookkeepingTreeCheckInService alloc] initWithDelegate:self];
-        _checkInService.showLodingIndicator = YES;
-    }
-    
     // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
     if (!_checkInModel) {
-        [_checkInService checkIn];
+        [self.checkInService checkIn];
         return;
     }
     
     // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
     NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
     if (![[NSDate date] isSameDay:lastCheckInDate]) {
-        [_checkInService checkIn];
+        [self.checkInService checkIn];
         return;
     }
     
@@ -125,7 +120,7 @@
     if ([self saveCheckInModel]) {
         self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
         [self showWaterSuccessAlert];
-        [self showWateringAnimation];
+        [_treeView startRainning];
     }
 }
 
@@ -141,7 +136,7 @@
         if ([self saveCheckInModel]) {
             self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
             [self showWaterSuccessAlert];
-            [self showWateringAnimation];
+            [_treeView startRainning];
         }
     } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
         // 已经签过到，保存签到结果
@@ -172,21 +167,6 @@
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         return NO;
     }
-}
-
-// 显示浇水动画
-- (void)showWateringAnimation {
-    NSString *gifName = [NSString stringWithFormat:@"%@.gif", [SSJBookkeepingTreeHelper treeImageNameForDays:[self shakedCheckInTimes]]];
-    NSString *gifpath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:gifName];
-    NSData *gifData = [NSData dataWithContentsOfFile:gifpath];
-    FLAnimatedImage *image = [FLAnimatedImage animatedImageWithGIFData:gifData];
-    
-    FLAnimatedImageView *rainingView = [[FLAnimatedImageView alloc] initWithFrame:self.view.bounds];
-    rainingView.animatedImage = image;
-    [self.view insertSubview:rainingView aboveSubview:self.treeView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [rainingView removeFromSuperview];
-    });
 }
 
 // 显示浇水成功弹窗提示
@@ -248,5 +228,15 @@
     [self.checkInStateView sizeToFit];
     self.checkInStateView.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.2);
 }
+
+#pragma mark - Getter
+- (SSJBookkeepingTreeCheckInService *)checkInService {
+    if (!_checkInService) {
+        _checkInService = [[SSJBookkeepingTreeCheckInService alloc] initWithDelegate:self];
+        _checkInService.showLodingIndicator = YES;
+    }
+    return _checkInService;
+}
+
 
 @end
