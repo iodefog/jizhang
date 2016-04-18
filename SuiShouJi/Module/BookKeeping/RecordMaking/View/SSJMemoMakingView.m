@@ -114,7 +114,7 @@
         [self.textLengthLabel sizeToFit];
         return NO;
     }
-    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%u个字",self.maxLength - string.length];
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - string.length];
     [self.textLengthLabel sizeToFit];
     return YES;
 }

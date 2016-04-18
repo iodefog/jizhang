@@ -39,6 +39,7 @@
         [self.bottomView addSubview:self.cancelButton];
         [[YYKeyboardManager defaultManager] addObserver:self];
         [self sizeToFit];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textfieldDidChage:) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -118,11 +119,17 @@
         [self.textLengthLabel sizeToFit];
         return NO;
     }
-    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - string.length];
-    [self.textLengthLabel sizeToFit];
     return YES;
 }
 
+- (void)textViewDidChange:(UITextView *)textView
+{
+    self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - textView.text.length];
+    [self.textLengthLabel sizeToFit];
+    if (textView.text.length > self.maxLength) {
+        textView.text = [textView.text substringToIndex:self.maxLength];
+    }
+}
 
 #pragma mark - @protocol YYKeyboardObserver
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
@@ -154,6 +161,7 @@
         _textInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _textInput.font = [UIFont systemFontOfSize:15];
         _textInput.delegate = self;
+        _textInput.autocorrectionType = UITextAutocorrectionTypeNo;
     }
     return _textInput;
 }
