@@ -7,6 +7,7 @@
 //
 
 #import "SSJBookkeepingTreeHelper.h"
+#import "AFNetworking.h"
 
 @implementation SSJBookkeepingTreeHelper
 
@@ -95,6 +96,104 @@
         NSString *nextLevel = [self treeLevelNameForLevel:level + 1];
         return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
     }
+}
+
++ (void)loadTreeImageWithUrlPath:(NSString *)url finish:(void (^)(UIImage *image, BOOL success))finish {
+    if (!url.length) {
+        if (finish) {
+            finish(nil, NO);
+        }
+        return;
+    }
+    
+    NSURL *fullUrl = [NSURL URLWithString:SSJImageURLWithAPI(url)];
+    [SDWebImageManager.sharedManager downloadImageWithURL:fullUrl options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        dispatch_main_sync_safe(^{
+            if (finish) {
+                finish(image, !error);
+            }
+        });
+    }];
+}
+
++ (void)loadTreeGifImageDataWithUrlPath:(NSString *)url finish:(void (^)(NSData *data, BOOL success))finish {
+    if (!url.length) {
+        if (finish) {
+            finish(nil, NO);
+        }
+        return;
+    }
+    
+    NSData *imgData = [self loadFromCacheWithUrl:url];
+    if (imgData) {
+        if (finish) {
+            finish(imgData, YES);
+        }
+        return;
+    }
+    
+    NSString *gifUrl = SSJImageURLWithAPI(url);
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager GET:gifUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        if ([responseObject isKindOfClass:[NSData class]]) {
+            [[self memoryCache] setObject:responseObject forKey:url];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [responseObject writeToFile:[self gifDiskPathWithUrl:url] atomically:YES];
+            });
+            if (finish) {
+                finish(responseObject, YES);
+            }
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (finish) {
+            finish(nil, NO);
+        }
+    }];
+}
+
++ (NSData *)loadFromCacheWithUrl:(NSString *)url {
+    NSData *gifData = [[self memoryCache] objectForKey:url];
+    if (gifData) {
+        return gifData;
+    }
+    
+    gifData = [NSData dataWithContentsOfFile:[self gifDiskPathWithUrl:url]];
+    if (gifData) {
+        return gifData;
+    }
+    
+    return nil;
+}
+
++ (NSString *)gifDiskPathWithUrl:(NSString *)url {
+    NSString *documentPath = SSJDocumentPath();
+    NSString *directoryPath = [documentPath stringByAppendingPathComponent:@"gif_tree"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+        NSError *error = nil;
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
+            return @"";
+        }
+    }
+    
+    NSString *fileName = [url lastPathComponent];
+    if (![[fileName pathExtension] isEqualToString:@"gif"]) {
+        return @"";
+    }
+    
+    NSString *filePath = [directoryPath stringByAppendingPathComponent:fileName];
+    return filePath;
+}
+
++ (NSCache *)memoryCache {
+    static NSCache *cache = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (!cache) {
+            cache = [[NSCache alloc] init];
+        }
+    });
+    return cache;
 }
 
 @end

@@ -12,10 +12,10 @@
 
 @interface SSJBookkeepingTreeView : UIView
 
-@property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
+- (void)setTreeImg:(UIImage *)treeImg;
 
-- (void)setCheckInModel:(SSJBookkeepingTreeCheckInModel *)model finishLoad:(void(^)())finish;
+- (void)setTreeGifData:(NSData *)treeGifData;
 
-- (void)startRainning;
+- (void)setCheckTimes:(NSInteger)checkTimes;
 
 @end

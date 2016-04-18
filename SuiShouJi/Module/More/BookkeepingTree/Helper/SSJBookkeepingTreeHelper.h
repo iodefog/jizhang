@@ -28,4 +28,8 @@ typedef NS_ENUM(NSInteger, SSJBookkeepingTreeLevel) {
 
 + (NSString *)descriptionForDays:(NSInteger)days;
 
++ (void)loadTreeImageWithUrlPath:(NSString *)url finish:(void (^)(UIImage *image, BOOL success))finish;
+
++ (void)loadTreeGifImageDataWithUrlPath:(NSString *)url finish:(void (^)(NSData *data, BOOL success))finish;
+
 @end

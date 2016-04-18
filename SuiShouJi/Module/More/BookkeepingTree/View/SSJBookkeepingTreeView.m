@@ -14,9 +14,6 @@
 #import "AFNetworking.h"
 #import "SSJUserTableManager.h"
 
-// 下载gif图片最大失败重试次数
-static const NSInteger kDownloadGifMaxFailureTimes = 3;
-
 @interface SSJBookkeepingTreeView ()
 
 // 展示静态记账树图片
@@ -33,9 +30,6 @@ static const NSInteger kDownloadGifMaxFailureTimes = 3;
 
 // 签到描述
 @property (nonatomic, strong) UILabel *checkInDescLab;
-
-// 下载gif图片失败的次数，每次下载时清零
-@property (nonatomic) NSInteger downloadGifFailureTimes;
 
 @end
 
@@ -83,103 +77,26 @@ static const NSInteger kDownloadGifMaxFailureTimes = 3;
     _dashLineView.center = _checkInDescLab.center = CGPointMake(self.width * 0.5, self.height * 0.78);
 }
 
-- (void)setCheckInModel:(SSJBookkeepingTreeCheckInModel *)checkInModel {
-    [self setCheckInModel:checkInModel finishLoad:NULL];
+- (void)setTreeImg:(UIImage *)treeImg {
+    _treeView.image = treeImg;
 }
 
-- (void)setCheckInModel:(SSJBookkeepingTreeCheckInModel *)model finishLoad:(void(^)())finish {
-    _checkInModel = model;
-    _downloadGifFailureTimes = 0;
-    
-    NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(_checkInModel.treeImgUrl)];
-    [_treeView sd_setImageWithURL:url completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (finish) {
-            finish();
-        }
-    }];
-    
+- (void)setTreeGifData:(NSData *)treeGifData {
+    _rainingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:treeGifData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _rainingView.animatedImage = nil;
+    });
+}
+
+- (void)setCheckTimes:(NSInteger)checkTimes {
     NSMutableString *desc = [@"Hi" mutableCopy];
     if (_nickName.length) {
         [desc appendFormat:@",%@~", _nickName];
     }
-    [desc appendFormat:@"\n%@", [SSJBookkeepingTreeHelper descriptionForDays:_checkInModel.checkInTimes]];
+    [desc appendFormat:@"\n%@", [SSJBookkeepingTreeHelper descriptionForDays:checkTimes]];
     self.checkInDescLab.text = desc;
     [self.checkInDescLab sizeToFit];
-    
-    [self downloadGifImg];
-    
     [self setNeedsLayout];
-}
-
-- (void)downloadGifImg {
-    if ([self loadFromCache]) {
-        return;
-    }
-    
-    if (_downloadGifFailureTimes <= kDownloadGifMaxFailureTimes) {
-        NSString *gifUrl = SSJImageURLWithAPI(_checkInModel.treeGifUrl);
-        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        [manager GET:gifUrl parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-            if ([responseObject isKindOfClass:[NSData class]]) {
-                [[self memoryCache] setObject:responseObject forKey:_checkInModel.treeGifUrl];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [responseObject writeToFile:[self gifDiskPath] atomically:YES];
-                });
-            }
-        } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            _downloadGifFailureTimes ++;
-            [self downloadGifImg];
-        }];
-    }
-}
-
-- (void)startRainning {
-    if (!_checkInModel || !_checkInModel.treeGifUrl.length) {
-        return;
-    }
-    
-    NSData *gifData = [self loadFromCache];
-    if (gifData) {
-        _rainingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:gifData];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            _rainingView.animatedImage = nil;
-        });
-        return;
-    }
-}
-
-- (NSData *)loadFromCache {
-    NSData *gifData = [[self memoryCache] objectForKey:_checkInModel.treeGifUrl];
-    if (gifData) {
-        return gifData;
-    }
-    
-    gifData = [NSData dataWithContentsOfFile:[self gifDiskPath]];
-    if (gifData) {
-        return gifData;
-    }
-    
-    return nil;
-}
-
-- (NSString *)gifDiskPath {
-    NSString *documentPath = SSJDocumentPath();
-    NSString *directoryPath = [documentPath stringByAppendingPathComponent:@"gif_tree"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
-        NSError *error = nil;
-        if (![[NSFileManager defaultManager] createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error]) {
-            return @"";
-        }
-    }
-    
-    NSString *fileName = [_checkInModel.treeGifUrl lastPathComponent];
-    if (![[fileName pathExtension] isEqualToString:@"gif"]) {
-        return @"";
-    }
-    
-    NSString *filePath = [directoryPath stringByAppendingPathComponent:fileName];
-    return filePath;
 }
 
 @end
