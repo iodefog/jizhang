@@ -7,8 +7,8 @@
 //
 
 #import "SSJMineHomeTableViewHeader.h"
-@interface SSJMineHomeTableViewHeader()
 
+@interface SSJMineHomeTableViewHeader()
 
 @end
 
@@ -20,10 +20,6 @@
 }
 
 -(void)awakeFromNib{
-    self.headPotraitImage.layer.cornerRadius = 33;
-    self.headPotraitImage.layer.masksToBounds = YES;
-    self.headPotraitImage.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.headPotraitImage.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
     self.headPotraitImage.userInteractionEnabled = YES;
     UITapGestureRecognizer *singleTap =
     [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(loginButtonClicked:)];
@@ -44,7 +40,6 @@
         self.HeaderClickedBlock();
     }
 }
-
 
 /*
 // Only override drawRect: if you perform custom drawing.

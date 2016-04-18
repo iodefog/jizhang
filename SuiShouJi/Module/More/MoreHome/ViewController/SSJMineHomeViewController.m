@@ -104,9 +104,9 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                 //三方登录
                 weakSelf.header.nicknameLabel.text = item.realName;
             }
-            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";
         }
         [weakSelf.tableView reloadData];
@@ -321,9 +321,9 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                 NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
                 weakSelf.header.nicknameLabel.text = phoneNum;
             }
-            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";
         }
     }];
@@ -415,7 +415,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
     __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        weakSelf.header.headPotraitImage.image = image;
+        weakSelf.header.headPotraitImage.headerImage.image = image;
         [weakSelf.tableView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
