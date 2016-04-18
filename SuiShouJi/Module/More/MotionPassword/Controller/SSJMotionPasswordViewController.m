@@ -285,6 +285,8 @@ static const int kVerifyFailureTimesLimit = 5;
     } else {
         SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
         loginVC.mobileNo = userItem.mobileNo;
+        loginVC.finishHandle = self.finishHandle;
+        loginVC.backController = self.backController;
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
     }
     
@@ -298,6 +300,8 @@ static const int kVerifyFailureTimesLimit = 5;
         [self.navigationController popViewControllerAnimated:YES];
     } else {
         SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+        loginVC.finishHandle = self.finishHandle;
+        loginVC.backController = self.backController;
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
     }
 }
@@ -385,7 +389,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _changeAccountBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_changeAccountBtn setTitle:@"使用其它账号登录" forState:UIControlStateNormal];
         [_changeAccountBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [_changeAccountBtn addTarget:self action:@selector(changeAccountBtn) forControlEvents:UIControlEventTouchUpInside];
+        [_changeAccountBtn addTarget:self action:@selector(changeAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_changeAccountBtn sizeToFit];
         _changeAccountBtn.rightBottom = CGPointMake(self.view.width - 15, self.view.height - 30);
     }

@@ -118,8 +118,8 @@
 }
 
 - (BOOL)isLoading {
-    return (self.task.state == NSURLSessionTaskStateRunning ||
-            self.task.state == NSURLSessionTaskStateSuspended);
+    return (self.task && (self.task.state == NSURLSessionTaskStateRunning ||
+                          self.task.state == NSURLSessionTaskStateSuspended));
 }
 
 /* 封装参数 */
