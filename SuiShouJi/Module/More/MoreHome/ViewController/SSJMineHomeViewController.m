@@ -74,8 +74,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setup"] style:UIBarButtonItemStylePlain target:self action:@selector(setttingButtonClick:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -434,18 +434,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     return _motionSwitch;
 }
 
--(UIView *)rightbuttonView{
-    if (!_rightbuttonView) {
-        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-        UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"more_setup"] forState:UIControlStateNormal];
-        [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(setttingButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_rightbuttonView addSubview:comfirmButton];
-    }
-    return _rightbuttonView;
-}
 
 -(SSJMineHomeTableViewHeader *)header{
     if (!_header) {

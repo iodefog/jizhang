@@ -52,6 +52,8 @@
 -(UIImageView *)photoImage{
     if (!_photoImage) {
         _photoImage = [[UIImageView alloc]init];
+        _photoImage.layer.cornerRadius = 4.f;
+        _photoImage.layer.masksToBounds = YES;
     }
     return _photoImage;
 }

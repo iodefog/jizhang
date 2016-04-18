@@ -52,8 +52,8 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 -(UIButton *)recordMakingButton{
     if (!_recordMakingButton) {
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateNormal];
-        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateHighlighted]; 
+        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen_nor"] forState:UIControlStateNormal];
+        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen_nor"] forState:UIControlStateHighlighted];
         _recordMakingButton.layer.cornerRadius = self.width / 2;
         _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _recordMakingButton.layer.borderWidth = 2.0f;
@@ -186,6 +186,24 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     }
 }
 
+
+-(void)setRefreshSuccessOrNot:(BOOL)refreshSuccessOrNot{
+    _refreshSuccessOrNot = refreshSuccessOrNot;
+    if (_refreshSuccessOrNot) {
+        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
+        [self.recordMakingButton setImage:[UIImage imageNamed:@"home_pen_smile"] forState:UIControlStateNormal];
+    }else{
+        [self.recordMakingButton setImage:[UIImage imageNamed:@"home_pen_sad"] forState:UIControlStateNormal];
+        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e95464"].CGColor;
+    }
+    __weak typeof(self) weakSelf = self;
+    dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
+    dispatch_after(time, dispatch_get_main_queue(), ^{
+        [weakSelf.recordMakingButton setImage:[UIImage imageNamed:@"home_pen_nor"] forState:UIControlStateNormal];
+        
+        weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
+    });
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

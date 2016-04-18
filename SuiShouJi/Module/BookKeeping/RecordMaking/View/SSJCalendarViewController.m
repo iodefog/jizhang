@@ -36,7 +36,7 @@
 @property (nonatomic,strong) NSString *selectDate;
 @property (nonatomic,strong) NSMutableDictionary *data;
 @property(nonatomic, strong) SSJCalenderTableViewNoDataHeader *nodataHeader;
-
+@property(nonatomic, strong) UITableView *tableView;
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
@@ -69,6 +69,7 @@
     self.selectDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
+    [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
@@ -92,7 +93,7 @@
     self.minusButton.centerY = self.dateChangeView.height / 2;
     self.calendarView.frame = CGRectMake(0, 64, self.view.width, self.calendarView.viewHeight);
     self.tableView.top = self.calendarView.bottom;
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.viewHeight);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.viewHeight - 64);
     _firstLineLabel.top = 20;
     _firstLineLabel.centerX = _noDateView.width / 2;
     _secondLineLabel.top = _firstLineLabel.bottom + 10;
@@ -162,6 +163,22 @@
 
 
 #pragma mark - Getter
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc]init];
+        _tableView.backgroundView = nil;
+        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        [_tableView ssj_clearExtendSeparator];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        }
+    }
+    return _tableView;
+}
+
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];

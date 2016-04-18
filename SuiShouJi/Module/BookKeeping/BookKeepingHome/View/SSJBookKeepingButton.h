@@ -22,4 +22,6 @@ typedef void(^recordMakingClickBlock)();
 typedef void(^animationStopBlock)();
 
 @property (nonatomic, copy) animationStopBlock animationStopBlock;
+
+@property(nonatomic) BOOL refreshSuccessOrNot;
 @end

@@ -207,7 +207,7 @@
         _comfirmButton.layer.cornerRadius = 3.0f;
         _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _comfirmButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
-        [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchDragInside];
+        [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmButton;
 }

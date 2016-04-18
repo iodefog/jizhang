@@ -8,6 +8,6 @@
 
 #import "SSJNewBaseTableViewController.h"
 
-@interface SSJCalendarViewController : SSJNewBaseTableViewController
+@interface SSJCalendarViewController : SSJBaseViewController<UITableViewDelegate,UITableViewDataSource>
 
 @end
