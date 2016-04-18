@@ -82,7 +82,11 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     listItem.income = [item.money doubleValue];
                 }
                 listItem.date = month;
-                listItem.isExpand = NO;
+                if ([month isEqualToString:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM"]]) {
+                    listItem.isExpand = YES;
+                }else{
+                    listItem.isExpand = NO;
+                }
                 NSMutableArray *tempArray = [NSMutableArray array];
                 if ([item.billDate isEqualToString:lastDetailDate]) {
                     [tempArray addObject:item];

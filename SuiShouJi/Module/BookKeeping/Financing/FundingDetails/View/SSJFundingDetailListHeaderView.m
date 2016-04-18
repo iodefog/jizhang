@@ -82,10 +82,10 @@
     [formatter setDateFormat:@"yyyy-MM"];
     NSDate *date = [formatter dateFromString:_item.date];
     NSString *dateStr;
-    if ([_item.date hasPrefix:[NSString stringWithFormat:@"%ld",(long)[NSDate date].year]]) {
-        dateStr = [NSString stringWithFormat:@"%ld月",(long)date.month];
+    if ([_item.date hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]) {
+        dateStr = [NSString stringWithFormat:@"%ld月",date.month];
     }else{
-        dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,(long)date.month];
+        dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,date.month];
     }
     self.dateLabel.text = dateStr;
     [self.dateLabel sizeToFit];
