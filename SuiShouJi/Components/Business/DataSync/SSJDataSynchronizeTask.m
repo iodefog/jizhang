@@ -35,6 +35,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 @property (nonatomic) int64_t lastSuccessSyncVersion;
 
+// 需要同步的表
 @property (nonatomic, strong) NSArray *syncTableClasses;
 
 @end
@@ -203,7 +204,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                                   @"crealname":userItem.nickName ?: @"",
                                   @"usersignature":userItem.signature ?: @"",
                                   @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                                  @"isource":SSJDefaultSource()}] forKey:@"bk_user"];
+                                  @"isource":SSJDefaultSource(),
+                                  @"operatortype":@1}] forKey:@"bk_user"];
     }
     
     if (*error) {
@@ -308,7 +310,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         userItem.userId = userId;
         userItem.mobileNo = userInfo[@"cmobileno"];
         userItem.nickName = userInfo[@"crealname"]; // 第三方登录时，服务器返回的crealname就是用户昵称
-        userItem.icon = userInfo[@"cicon"];
+        userItem.signature = userInfo[@"usersignature"];
+        userItem.icon = userInfo[@"cicons"];
         [SSJUserTableManager saveUserItem:userItem];
     }
     

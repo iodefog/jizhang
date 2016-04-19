@@ -13,6 +13,9 @@
 #import "SDWebImageManager.h"
 #import "AFNetworking.h"
 #import "SSJUserTableManager.h"
+#import <AudioToolbox/AudioToolbox.h>
+
+static SystemSoundID kRainingSoundId = 0;
 
 @interface SSJBookkeepingTreeView ()
 
@@ -46,6 +49,10 @@
     return cache;
 }
 
+- (void)dealloc {
+    AudioServicesDisposeSystemSoundID(kRainingSoundId);
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _treeView = [[UIImageView alloc] initWithFrame:self.bounds];
@@ -68,6 +75,11 @@
             SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName"] forUserId:SSJUSERID()];
             _nickName = userItem.nickName;
         }
+        
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"rain_sound" ofType:@"wav"];
+        if (path) {
+            AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path], &kRainingSoundId);
+        }
     }
     return self;
 }
@@ -81,10 +93,14 @@
     _treeView.image = treeImg;
 }
 
-- (void)setTreeGifData:(NSData *)treeGifData {
-    _rainingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:treeGifData];
+- (void)startRainWithGifData:(NSData *)data completion:(void (^)())completion {
+    AudioServicesPlaySystemSoundWithCompletion(kRainingSoundId, NULL);
+    _rainingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         _rainingView.animatedImage = nil;
+        if (completion) {
+            completion();
+        }
     });
 }
 

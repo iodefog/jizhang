@@ -14,8 +14,8 @@
 
 - (void)setTreeImg:(UIImage *)treeImg;
 
-- (void)setTreeGifData:(NSData *)treeGifData;
-
 - (void)setCheckTimes:(NSInteger)checkTimes;
+
+- (void)startRainWithGifData:(NSData *)data completion:(void (^)())completion;
 
 @end

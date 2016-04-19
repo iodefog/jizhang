@@ -56,6 +56,9 @@
 }
 
 #pragma mark - Lifecycle
+- (void)dealloc {
+    
+}
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"记账树";
@@ -91,18 +94,10 @@
 
 - (void)updateNavigationBar {
     if (_isViewSetuped) {
-        [UIView transitionWithView:self.navigationController.navigationBar duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-            [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-            self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                            NSForegroundColorAttributeName:[UIColor whiteColor]};
-        } completion:^(BOOL finished) {
-            
-        }];
-//        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-//        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-//        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-//                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
     } else {
         [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
         [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
@@ -137,15 +132,12 @@
     // 没浇过水
     _checkInModel.hasShaked = YES;
     if ([self saveCheckInModel]) {
-        _checkInStateLab.text = @"Yeah,浇水成功啦！";
-        [self showWaterSuccessAlert];
-        
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
             if (success) {
-                [_treeView setTreeGifData:data];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [_treeView setTreeGifData:nil];
-                });
+                [_treeView startRainWithGifData:data completion:^{
+                    _checkInStateLab.text = @"Yeah,浇水成功啦！";
+                    [self showWaterSuccessAlert];
+                }];
             } else {
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }
