@@ -256,6 +256,8 @@
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
         _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _IncomeImage.hidden = YES;
+        _expentureImage.hidden = YES;
         _IncomeImage.image = nil;
         _expentureImage.image = nil;
         _incomeMemoLabel.text = @"";
@@ -277,6 +279,7 @@
             [self.incomeLabel sizeToFit];
 
         }else{
+
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
             self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -321,17 +324,26 @@
             _expentureImage.userInteractionEnabled = YES;
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 if (self.item.incomeOrExpence) {
+                    _IncomeImage.hidden = YES;
+                    _expentureImage.hidden = NO;
                     [self.expentureImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)]];
                     self.IncomeImage.image = nil;
                 }else{
+                    _expentureImage.hidden = YES;
+
+                    _IncomeImage.hidden = NO;
                     [self.IncomeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)]];
                     self.expentureImage.image = nil;
                 }
             }else{
                 if (self.item.incomeOrExpence) {
+                    _IncomeImage.hidden = YES;
+                    _expentureImage.hidden = NO;
                     [self.expentureImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
                     self.IncomeImage.image = nil;
                 }else{
+                    _expentureImage.hidden = YES;
+                    _IncomeImage.hidden = NO;
                     [self.IncomeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
                     self.expentureImage.image = nil;
                 }

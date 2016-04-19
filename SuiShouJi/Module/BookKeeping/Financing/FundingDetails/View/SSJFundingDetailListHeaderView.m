@@ -95,6 +95,9 @@
     }else if (_item.income - _item.expenture < 0){
         self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",_item.income - _item.expenture];
+    }else{
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        self.moneyLabel.text = @"0.00";
     }
     if (_item.isExpand) {
         self.expandImage.image = [UIImage imageNamed:@"ft_zhankai"];
