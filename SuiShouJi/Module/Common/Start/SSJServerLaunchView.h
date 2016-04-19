@@ -14,4 +14,6 @@
 
 - (void)downloadImgWithUrl:(NSString *)imgUrl completion:(void (^)())completion;
 
+- (void)downloadImgWithUrl:(NSString *)imgUrl timeout:(NSTimeInterval)timeout completion:(void (^)())completion;
+
 @end

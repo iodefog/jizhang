@@ -34,18 +34,31 @@
 }
 
 - (void)downloadImgWithUrl:(NSString *)imgUrl completion:(void (^)())completion {
+    [self downloadImgWithUrl:imgUrl timeout:60 completion:completion];
+}
+
+- (void)downloadImgWithUrl:(NSString *)imgUrl timeout:(NSTimeInterval)timeout completion:(void (^)())completion {
+#ifdef DEBUG
+    [CDAutoHideMessageHUD showMessage:@"开始下载服务端下发启动页"];
+#endif
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
-    manager.imageDownloader.downloadTimeout = 2;
+    manager.imageDownloader.downloadTimeout = timeout;
     
     NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
     [manager downloadImageWithURL:url options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (!image || error) {
+#ifdef DEBUG
+            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载服务端下发启动页失败，error:%@", [error localizedDescription]]];
+#endif
             _isCompleted = YES;
             if (completion) {
                 completion();
             }
             return;
         }
+#ifdef DEBUG
+        [CDAutoHideMessageHUD showMessage:@"下载服务端下发启动页成功"];
+#endif
         SSJDispatchMainSync(^{
             [UIView transitionWithView:self duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
                 if (!_serverView) {

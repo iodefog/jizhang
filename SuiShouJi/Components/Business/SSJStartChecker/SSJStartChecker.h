@@ -26,11 +26,6 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
 @interface SSJStartChecker : NSObject
 
 /**
- *  请求超市时间，默认60秒
- */
-@property (nonatomic) NSTimeInterval requestTimeout;
-
-/**
  *  是否请求过启动接口，不区分成功或失败
  */
 @property (nonatomic, readonly) BOOL isChecked;
@@ -55,6 +50,17 @@ typedef NS_ENUM(NSInteger, SSJAppUpdateType){
  */
 - (void)checkWithSuccess:(void(^)(BOOL isInReview, SSJAppUpdateType type))success
                  failure:(void(^)(NSString *message))failure;
+
+/**
+ *  请求启动接口（版本更新、苹果审核控制）
+ *
+ *  @param timeout 请求超时时限
+ *  @param success 请求成功的回调
+ *  @param failure 请求失败的回调
+ */
+- (void)checkWithTimeoutInterval:(NSTimeInterval)timeout
+                         success:(void(^)(BOOL isInReview, SSJAppUpdateType type))success
+                         failure:(void(^)(NSString *message))failure;
 
 /**
  *  返回是否正在审核，应该在checkWithSuccess:failure:方法之后嗲用，如果之前没有调用果，则直接返回NO；

@@ -99,6 +99,10 @@
 }
 
 + (void)loadTreeImageWithUrlPath:(NSString *)url finish:(void (^)(UIImage *image, BOOL success))finish {
+    [self loadTreeImageWithUrlPath:url timeout:60 finish:finish];
+}
+
++ (void)loadTreeImageWithUrlPath:(NSString *)url timeout:(NSTimeInterval)timeout finish:(void (^)(UIImage *image, BOOL success))finish {
     if (!url.length) {
         if (finish) {
             finish(nil, NO);
@@ -106,8 +110,20 @@
         return;
     }
     
-    NSURL *fullUrl = [NSURL URLWithString:SSJImageURLWithAPI(url)];
-    [SDWebImageManager.sharedManager downloadImageWithURL:fullUrl options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+#ifdef DEBUG
+    [CDAutoHideMessageHUD showMessage:@"开始下载记账树图片"];
+#endif
+    
+    SDWebImageManager *manager = [[SDWebImageManager alloc] init];
+    manager.imageDownloader.downloadTimeout = timeout;
+    [manager downloadImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(url)] options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+#ifdef DEBUG
+        if (error) {
+            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载记账树图片失败，error:%@", [error localizedDescription]]];
+        } else {
+            [CDAutoHideMessageHUD showMessage:@"下载记账树图片成功"];
+        }
+#endif
         dispatch_main_sync_safe(^{
             if (finish) {
                 finish(image, !error);

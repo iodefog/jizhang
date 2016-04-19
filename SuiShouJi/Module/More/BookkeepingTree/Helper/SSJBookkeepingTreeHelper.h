@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, SSJBookkeepingTreeLevel) {
 
 + (void)loadTreeImageWithUrlPath:(NSString *)url finish:(void (^)(UIImage *image, BOOL success))finish;
 
++ (void)loadTreeImageWithUrlPath:(NSString *)url timeout:(NSTimeInterval)timeout finish:(void (^)(UIImage *image, BOOL success))finish;
+
 + (void)loadTreeGifImageDataWithUrlPath:(NSString *)url finish:(void (^)(NSData *data, BOOL success))finish;
 
 @end

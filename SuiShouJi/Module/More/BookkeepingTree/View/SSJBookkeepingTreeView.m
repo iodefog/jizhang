@@ -59,7 +59,7 @@
         
         _checkInDescLab = [[UILabel alloc] init];
         _checkInDescLab.font = [UIFont systemFontOfSize:14];
-        _checkInDescLab.textColor = [UIColor blackColor];
+        _checkInDescLab.textColor = [UIColor whiteColor];
         _checkInDescLab.textAlignment = NSTextAlignmentCenter;
         _checkInDescLab.numberOfLines = 0;
         [self addSubview:self.checkInDescLab];

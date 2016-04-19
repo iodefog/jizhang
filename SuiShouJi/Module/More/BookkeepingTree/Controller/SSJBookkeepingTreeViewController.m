@@ -34,6 +34,8 @@
 // 签到状态提示
 @property (nonatomic, strong) UIImageView *checkInStateView;
 
+@property (nonatomic, strong) UILabel *checkInStateLab;
+
 @end
 
 @implementation SSJBookkeepingTreeViewController
@@ -80,86 +82,6 @@
     [self setupView];
 }
 
-- (void)setupView {
-    [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_checkInModel.treeImgUrl finish:^(UIImage *image, BOOL success) {
-        if (!success) {
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            [CDPointActivityIndicator stopAnimating];
-            return;
-        }
-        
-        if (_checkInModel.hasShaked) {
-            if (!_treeView) {
-                _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
-                [self.view addSubview:_treeView];
-            }
-            [_treeView setTreeImg:image];
-            [_treeView setCheckTimes:_checkInModel.checkInTimes];
-            
-            if (!_checkInStateView) {
-                _checkInStateView = [[UIImageView alloc] init];
-                [self.view addSubview:_checkInStateView];
-            }
-            NSString *imgName = _checkInModel.hasShaked ? @"tip_already_water" : @"tip_water";
-            _checkInStateView.image = [UIImage imageNamed:imgName];
-            [_checkInStateView sizeToFit];
-            _checkInStateView.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.2);
-            
-            [CDPointActivityIndicator stopAnimating];
-            return;
-        }
-        
-        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
-            [CDPointActivityIndicator stopAnimating];
-            if (success) {
-                if (!_treeView) {
-                    _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
-                    [self.view addSubview:_treeView];
-                }
-                [_treeView setTreeImg:image];
-                [_treeView setCheckTimes:_checkInModel.checkInTimes];
-                
-                if (!_checkInStateView) {
-                    _checkInStateView = [[UIImageView alloc] init];
-                    [self.view addSubview:_checkInStateView];
-                }
-                NSString *imgName = _checkInModel.hasShaked ? @"tip_already_water" : @"tip_water";
-                _checkInStateView.image = [UIImage imageNamed:imgName];
-                [_checkInStateView sizeToFit];
-                _checkInStateView.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.2);
-                
-            } else {
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }
-        }];
-    }];
-}
-
-- (BOOL)requestIfNeeded {
-    // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
-    if (!_checkInModel) {
-        if ([[self class] reachability].reachable) {
-            [self.checkInService checkIn];
-        } else {
-            [self showNoNetworkAlert];
-        }
-        return YES;
-    }
-    
-    // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
-    NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
-    if (![[NSDate date] isSameDay:lastCheckInDate]) {
-        if ([[self class] reachability].reachable) {
-            [self.checkInService checkIn];
-        } else {
-            [self showNoNetworkAlert];
-        }
-        return YES;
-    }
-    
-    return NO;
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -173,6 +95,7 @@
     [super viewWillDisappear:animated];
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     
+    [CDPointActivityIndicator stopAnimating];
     if (self.isMovingFromParentViewController || self.isBeingDismissed) {
         [_checkInService cancel];
     }
@@ -256,6 +179,85 @@
 }
 
 #pragma mark - Private
+- (void)setupView {
+    [CDPointActivityIndicator startAnimating];
+    [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_checkInModel.treeImgUrl finish:^(UIImage *image, BOOL success) {
+        if (!success) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            [CDPointActivityIndicator stopAnimating];
+            return;
+        }
+        
+        if (_checkInModel.hasShaked) {
+            if (!_treeView) {
+                _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
+                [self.view addSubview:_treeView];
+            }
+            [_treeView setTreeImg:image];
+            [_treeView setCheckTimes:_checkInModel.checkInTimes];
+            
+            if (!self.checkInStateView.superview) {
+                [self.view addSubview:self.checkInStateView];
+            }
+            if (!self.checkInStateLab.superview) {
+                [self.view addSubview:self.checkInStateLab];
+            }
+            _checkInStateLab.text = _checkInModel.hasShaked ? @"主人，您今天已经浇过水啦！" : @"签到摇一摇，来浇浇水吧～";
+            
+            [CDPointActivityIndicator stopAnimating];
+            return;
+        }
+        
+        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
+            [CDPointActivityIndicator stopAnimating];
+            if (success) {
+                if (!_treeView) {
+                    _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
+                    [self.view addSubview:_treeView];
+                }
+                [_treeView setTreeImg:image];
+                [_treeView setCheckTimes:_checkInModel.checkInTimes];
+                
+                if (!self.checkInStateView.superview) {
+                    [self.view addSubview:self.checkInStateView];
+                }
+                if (!self.checkInStateLab.superview) {
+                    [self.view addSubview:self.checkInStateLab];
+                }
+                _checkInStateLab.text = _checkInModel.hasShaked ? @"主人，您今天已经浇过水啦！" : @"签到摇一摇，来浇浇水吧～";
+                
+            } else {
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }
+        }];
+    }];
+}
+
+- (BOOL)requestIfNeeded {
+    // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
+    if (!_checkInModel) {
+        if ([[self class] reachability].reachable) {
+            [self.checkInService checkIn];
+        } else {
+            [self showNoNetworkAlert];
+        }
+        return YES;
+    }
+    
+    // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
+    NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
+    if (![[NSDate date] isSameDay:lastCheckInDate]) {
+        if ([[self class] reachability].reachable) {
+            [self.checkInService checkIn];
+        } else {
+            [self showNoNetworkAlert];
+        }
+        return YES;
+    }
+    
+    return NO;
+}
+
 // 存储签到记录
 - (BOOL)saveCheckInModel {
     if ([SSJBookkeepingTreeStore saveCheckInModel:_checkInModel error:nil]) {
@@ -336,5 +338,24 @@
     return _checkInService;
 }
 
+- (UIImageView *)checkInStateView {
+    if (!_checkInStateView) {
+        UIImage *img = [[UIImage imageNamed:@"check_state_bg"] resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeTile];
+        _checkInStateView = [[UIImageView alloc] initWithImage:img];
+        _checkInStateView.frame = CGRectMake(0, self.navigationController.navigationBar.bottom, self.view.width, 40);
+    }
+    return _checkInStateView;
+}
+
+- (UILabel *)checkInStateLab {
+    if (!_checkInStateLab) {
+        _checkInStateLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.navigationController.navigationBar.bottom, self.view.width, 40)];
+        _checkInStateLab.backgroundColor = [UIColor clearColor];
+        _checkInStateLab.font = [UIFont systemFontOfSize:16];
+        _checkInStateLab.textColor = [UIColor ssj_colorWithHex:@"468f1b"];
+        _checkInStateLab.textAlignment = NSTextAlignmentCenter;
+    }
+    return _checkInStateLab;
+}
 
 @end

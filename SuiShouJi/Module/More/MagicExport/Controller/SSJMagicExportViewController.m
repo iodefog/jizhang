@@ -152,10 +152,7 @@
         _service = [[SSJMagicExportService alloc] initWithDelegate:self];
         _service.showLodingIndicator = YES;
     }
-    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:self.emailTextField.text];   
-    
-#warning test
-//    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:@"815086764@qq.com"];
+    [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:self.emailTextField.text];
 }
 
 #pragma mark - Getter

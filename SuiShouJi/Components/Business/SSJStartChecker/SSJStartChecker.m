@@ -26,6 +26,8 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
 //  检查更新失败次数
 @property (nonatomic) NSUInteger checkUpdateFailureTimes;
 
+@property (nonatomic) NSTimeInterval timeout;
+
 @end
 
 @implementation SSJStartChecker
@@ -43,6 +45,13 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
 
 - (void)checkWithSuccess:(void(^)(BOOL isInReview, SSJAppUpdateType type))success
                  failure:(void(^)(NSString *message))failure {
+    [self checkWithTimeoutInterval:60 success:success failure:failure];
+}
+
+- (void)checkWithTimeoutInterval:(NSTimeInterval)timeout
+                         success:(void(^)(BOOL isInReview, SSJAppUpdateType type))success
+                         failure:(void(^)(NSString *message))failure {
+    _timeout = timeout;
     self.success = success;
     self.failure = failure;
     [self checkUpdate];
@@ -95,7 +104,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
         self.networkService = [[SSJStartNetworkService alloc] initWithDelegate:self];
         self.networkService.showLodingIndicator = NO;
     }
-    self.networkService.timeoutInterval = _requestTimeout;
+    self.networkService.timeoutInterval = _timeout;
     [self.networkService request];
 #ifdef DEBUG
     [CDAutoHideMessageHUD showMessage:@"启动接口请求开始"];
@@ -123,7 +132,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
         self.success = nil;
         self.failure = nil;
 #ifdef DEBUG
-        [CDAutoHideMessageHUD showMessage:@"启动接口请求失败"];
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"启动接口请求失败,error:%@", message ?: @""]];
 #endif
     }
 }

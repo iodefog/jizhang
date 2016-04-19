@@ -142,8 +142,7 @@
 //    manager.allowInvalidCertificates = _allowInvalidCertificates;
 //    manager.validatesDomainName = _validatesDomainName;
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.session.configuration.timeoutIntervalForRequest = _timeoutInterval;
-    manager.session.configuration.timeoutIntervalForResource = _timeoutInterval;
+    manager.requestSerializer.timeoutInterval = _timeoutInterval;
     return manager;
 }
 
