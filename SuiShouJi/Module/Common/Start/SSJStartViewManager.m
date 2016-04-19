@@ -67,7 +67,9 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 // 请求启动接口，检测是否有更新、苹果是否正在审核、加载下发启动页
 - (void)requestStartAPI {
     __weak typeof(self) wself = self;
-    [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
+    SSJStartChecker *checker = [SSJStartChecker sharedInstance];
+    checker.requestTimeout = 1;
+    [checker checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
         // 没有记账树表，直接显示引导页或首页
         if (!_hasUserTreeTable) {
             [wself showGuideViewIfNeeded];

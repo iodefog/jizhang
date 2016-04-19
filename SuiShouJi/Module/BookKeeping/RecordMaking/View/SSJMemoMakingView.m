@@ -196,6 +196,9 @@
     if (!_penImage) {
         _penImage = [[UIImageView alloc]init];
         _penImage.image = [UIImage imageNamed:@"home_pen"];
+#warning test
+        _penImage.layer.borderColor = [UIColor redColor].CGColor;
+        _penImage.layer.borderWidth = 1;
     }
     return _penImage;
 }

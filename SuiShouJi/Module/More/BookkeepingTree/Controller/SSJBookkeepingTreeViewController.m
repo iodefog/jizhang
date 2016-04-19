@@ -125,7 +125,7 @@
 - (BOOL)requestIfNeeded {
     // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
     if (!_checkInModel) {
-        if ([AFNetworkReachabilityManager managerForDomain:@"SSJBaseURLString"].reachable) {
+        if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachable) {
             [self.checkInService checkIn];
         } else {
             [self showNoNetworkAlert];
@@ -136,7 +136,7 @@
     // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
     NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
     if (![[NSDate date] isSameDay:lastCheckInDate]) {
-        if ([AFNetworkReachabilityManager managerForDomain:@"SSJBaseURLString"].reachable) {
+        if ([AFNetworkReachabilityManager managerForDomain:SSJBaseURLString].reachable) {
             [self.checkInService checkIn];
         } else {
             [self showNoNetworkAlert];
