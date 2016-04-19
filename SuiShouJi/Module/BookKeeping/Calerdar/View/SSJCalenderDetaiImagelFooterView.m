@@ -54,6 +54,10 @@
         _photoImage = [[UIImageView alloc]init];
         _photoImage.layer.cornerRadius = 4.f;
         _photoImage.layer.masksToBounds = YES;
+        _photoImage.userInteractionEnabled = YES;
+        UITapGestureRecognizer *backsingleTap =
+        [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClicked:)];
+        [_photoImage addGestureRecognizer:backsingleTap];
     }
     return _photoImage;
 }
@@ -83,6 +87,12 @@
         [self.photoImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_imageName)]];
     }else{
         [self.photoImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(_imageName)]];
+    }
+}
+
+-(void)imageClicked:(id)sender{
+    if (self.ImageClickedBlock) {
+        self.ImageClickedBlock();
     }
 }
 
