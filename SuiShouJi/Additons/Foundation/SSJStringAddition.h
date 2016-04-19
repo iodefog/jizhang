@@ -35,3 +35,7 @@
 
 - (NSString *)ssj_reserveDecimalDigits:(int)DecimalDigits intDigits:(int)intDigits;
 @end
+
+@interface NSString (SSJFilter)
+- (NSString *)ssj_emojiFilter;
+@end

@@ -270,8 +270,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(SSJRecordMakingAdditionalView*)additionalView{
     if (!_additionalView ) {
         _additionalView = [SSJRecordMakingAdditionalView RecordMakingAdditionalView];
-//        [_additionalView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-//        [_additionalView ssj_setBorderStyle:SSJBorderStyleTop];
         _additionalView.selectedImage = self.selectedImage;
         if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
             _additionalView.hasMemo = YES;

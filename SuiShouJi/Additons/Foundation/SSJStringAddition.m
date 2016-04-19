@@ -126,9 +126,23 @@
     if(arr.count < 2){
         return [NSString stringWithFormat:@"%@",intPart];
     }
-
     
     return self;
 }
 
+
+@end
+
+@implementation NSString (SSJFilter)
+- (NSString *)ssj_emojiFilter{
+    NSMutableString *tempStr = [NSMutableString string];
+    NSString *regEx = @"^[A-Za-z\\d\\u4E00-\\u9FA5\\p{P}‘’“”]";
+    NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regEx];
+    for (int i = 0; i < self.length; i ++) {
+        if ([pred evaluateWithObject:[self substringWithRange:NSMakeRange(i, 1)]]) {
+            [tempStr stringByAppendingString:[self substringWithRange:NSMakeRange(i, 1)]];
+        }
+    }
+    return [NSString stringWithFormat:@"%@",tempStr];
+}
 @end
