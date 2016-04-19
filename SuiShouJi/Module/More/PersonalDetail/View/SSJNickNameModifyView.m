@@ -39,7 +39,6 @@
         [self.bottomView addSubview:self.cancelButton];
         [[YYKeyboardManager defaultManager] addObserver:self];
         [self sizeToFit];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textfieldDidChage:) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -112,12 +111,22 @@
 
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    
+    NSString *regEx = @"^[A-Za-z\\d\\u4E00-\\u9FA5\\p{P}‘’“”]+";
+    NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regEx];
+    if (![pred evaluateWithObject:text] && ![text isEqualToString:@""]) {
+        if (self.typeErrorBlock) {
+            self.typeErrorBlock(@"不能输入特殊字符哦");
+        }
+        return NO;
+    }
     NSString *string = textView.text ? : @"";
     string = [string stringByReplacingCharactersInRange:range withString:text];
     if (string.length > self.maxLength) {
         self.textLengthLabel.text = @"剩余0个字";
         [self.textLengthLabel sizeToFit];
+        if (self.typeErrorBlock) {
+            self.typeErrorBlock([NSString stringWithFormat:@"最多只能输入%ld个字",self.maxLength]);
+        }
         return NO;
     }
     return YES;
@@ -232,7 +241,7 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     [self dismiss];
-    NSLog(@"%@",[self.textInput.text ssj_emojiFilter]);
+//    NSLog(@"-------%@",[self.textInput.text ssj_emojiFilter]);
     if (self.comfirmButtonClickedBlock) {
         self.comfirmButtonClickedBlock(self.textInput.text);
     }

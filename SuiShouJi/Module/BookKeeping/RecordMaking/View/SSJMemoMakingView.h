@@ -15,6 +15,11 @@
 typedef void (^comfirmButtonClickedBlock)(NSString *textInputed);
 
 @property(nonatomic,copy) comfirmButtonClickedBlock comfirmButtonClickedBlock;
+
+typedef void (^typeErrorBlock)(NSString *errorDesc);
+
+@property(nonatomic,copy) typeErrorBlock typeErrorBlock;
+
 - (void)show;
 - (void)dismiss;
 @end

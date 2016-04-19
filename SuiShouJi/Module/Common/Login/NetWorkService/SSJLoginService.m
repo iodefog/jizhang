@@ -77,7 +77,7 @@
     [dict setObject:openID forKey:@"auth_token"];
     [dict setObject:icon forKey:@"cicon"];
     [dict setObject:type forKey:@"type"];
-    [dict setObject:realName forKey:@"crealname"];
+    [dict setObject:[realName ssj_emojiFilter] forKey:@"crealname"];
     [self request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict];
 }
 
