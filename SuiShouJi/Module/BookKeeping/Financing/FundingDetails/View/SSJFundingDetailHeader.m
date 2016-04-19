@@ -90,7 +90,6 @@
         _totalIncomeLabel.font = [UIFont systemFontOfSize:24];
         _totalIncomeLabel.textColor = [UIColor whiteColor];
         _totalIncomeLabel.textAlignment = NSTextAlignmentCenter;
-
     }
     return _totalIncomeLabel;
 }

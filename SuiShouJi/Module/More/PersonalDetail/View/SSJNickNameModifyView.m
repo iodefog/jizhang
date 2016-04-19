@@ -112,6 +112,7 @@
 
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    
     NSString *string = textView.text ? : @"";
     string = [string stringByReplacingCharactersInRange:range withString:text];
     if (string.length > self.maxLength) {
@@ -245,8 +246,6 @@
     self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - _originalText.length];
     [self.textLengthLabel sizeToFit];
 }
-
-
 
 /*
 // Only override drawRect: if you perform custom drawing.
