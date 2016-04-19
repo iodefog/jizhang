@@ -263,6 +263,9 @@ static NSString *const kTitle5 = @"修改密码";
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
             }
         };
+        _nickNameModifyView.typeErrorBlock = ^(NSString *errorDesc){
+            [CDAutoHideMessageHUD showMessage:errorDesc];
+        };
     }
     return _nickNameModifyView;
 }
@@ -284,6 +287,9 @@ static NSString *const kTitle5 = @"修改密码";
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
             }
+        };
+        _signatureModifyView.typeErrorBlock = ^(NSString *errorDesc){
+            [CDAutoHideMessageHUD showMessage:errorDesc];
         };
     }
     return _signatureModifyView;
