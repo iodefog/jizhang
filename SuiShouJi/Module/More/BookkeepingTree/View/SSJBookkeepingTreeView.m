@@ -93,10 +93,25 @@
     if (_nickName.length) {
         [desc appendFormat:@",%@~", _nickName];
     }
-    [desc appendFormat:@"\n%@", [SSJBookkeepingTreeHelper descriptionForDays:checkTimes]];
+    [desc appendFormat:@"\n%@", [self descriptionForDays:checkTimes]];
     self.checkInDescLab.text = desc;
     [self.checkInDescLab sizeToFit];
     [self setNeedsLayout];
+}
+
+- (NSString *)descriptionForDays:(NSInteger)days {
+    SSJBookkeepingTreeLevel level = [SSJBookkeepingTreeHelper treeLevelForDays:days];
+    if (level == SSJBookkeepingTreeLevelCrownTree) {
+        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n积蓄另一颗种子茁壮发芽吧。", (long)days];
+    } else {
+        NSInteger daysToUpgrade = [SSJBookkeepingTreeHelper maxDaysForLevel:level] - days;
+        NSString *nextLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:level + 1];
+        if (daysToUpgrade == 0) {
+            return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n明天就可以长成%@啦。", (long)days, nextLevel];
+        } else {
+            return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
+        }
+    }
 }
 
 @end

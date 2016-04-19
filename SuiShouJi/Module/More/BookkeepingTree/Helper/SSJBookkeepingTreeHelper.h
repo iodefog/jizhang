@@ -22,11 +22,11 @@ typedef NS_ENUM(NSInteger, SSJBookkeepingTreeLevel) {
 
 @interface SSJBookkeepingTreeHelper : NSObject
 
-+ (NSString *)treeImageNameForDays:(NSInteger)days;
-
 + (NSString *)treeLevelNameForLevel:(SSJBookkeepingTreeLevel)level;
 
-+ (NSString *)descriptionForDays:(NSInteger)days;
++ (SSJBookkeepingTreeLevel)treeLevelForDays:(NSInteger)days;
+
++ (NSInteger)maxDaysForLevel:(SSJBookkeepingTreeLevel)level;
 
 + (void)loadTreeImageWithUrlPath:(NSString *)url finish:(void (^)(UIImage *image, BOOL success))finish;
 

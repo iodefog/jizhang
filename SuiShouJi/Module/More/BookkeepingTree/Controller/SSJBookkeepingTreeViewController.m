@@ -119,7 +119,7 @@
     // 没浇过水
     _checkInModel.hasShaked = YES;
     if ([self saveCheckInModel]) {
-        self.checkInStateView.image = [UIImage imageNamed:@"tip_water_success"];
+        _checkInStateLab.text = @"Yeah,浇水成功啦！";
         [self showWaterSuccessAlert];
         
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
@@ -334,6 +334,7 @@
     if (!_checkInService) {
         _checkInService = [[SSJBookkeepingTreeCheckInService alloc] initWithDelegate:self];
         _checkInService.showLodingIndicator = NO;
+        _checkInService.showMessageIfErrorOccured = NO;
     }
     return _checkInService;
 }
