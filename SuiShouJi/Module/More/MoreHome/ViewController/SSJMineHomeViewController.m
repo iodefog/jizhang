@@ -74,8 +74,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setup"] style:UIBarButtonItemStylePlain target:self action:@selector(setttingButtonClick:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -104,9 +104,9 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                 //三方登录
                 weakSelf.header.nicknameLabel.text = item.realName;
             }
-            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";
         }
         [weakSelf.tableView reloadData];
@@ -321,9 +321,9 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                 NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
                 weakSelf.header.nicknameLabel.text = phoneNum;
             }
-            [weakSelf.header.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            weakSelf.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
             weakSelf.header.nicknameLabel.text = @"待君登录";
         }
     }];
@@ -415,7 +415,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
     __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        weakSelf.header.headPotraitImage.image = image;
+        weakSelf.header.headPotraitImage.headerImage.image = image;
         [weakSelf.tableView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
@@ -434,18 +434,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     return _motionSwitch;
 }
 
--(UIView *)rightbuttonView{
-    if (!_rightbuttonView) {
-        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-        UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"more_setup"] forState:UIControlStateNormal];
-        [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(setttingButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_rightbuttonView addSubview:comfirmButton];
-    }
-    return _rightbuttonView;
-}
 
 -(SSJMineHomeTableViewHeader *)header{
     if (!_header) {

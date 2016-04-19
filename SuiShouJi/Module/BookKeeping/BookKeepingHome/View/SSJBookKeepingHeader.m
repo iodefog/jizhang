@@ -27,12 +27,7 @@
 
 
 - (void)awakeFromNib{
-    [self.bookKeepingButton setBackgroundColor:[UIColor whiteColor]];
-    [self.bookKeepingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateNormal];
-    [self.bookKeepingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateHighlighted];
-    self.bookKeepingButton.layer.cornerRadius = 40.0f;
-    self.bookKeepingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
-    self.bookKeepingButton.layer.borderWidth = 1.0f / [UIScreen mainScreen].scale;
+    
 }
 
 -(void)setIncome:(NSString *)income{

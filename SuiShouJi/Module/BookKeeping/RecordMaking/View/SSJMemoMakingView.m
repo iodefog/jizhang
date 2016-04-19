@@ -87,18 +87,17 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.penImage.size = CGSizeMake(30, 30);
+    self.penImage.size = CGSizeMake(15, 30);
     self.penImage.leftTop = CGPointMake(10, 20);
     self.textInput.size = CGSizeMake(self.width - 50, 49);
     self.textInput.leftTop = CGPointMake(self.penImage.right + 10, 20);
-    self.textInput.centerX = self.width / 2;
-    self.textLengthLabel.right = self.textInput.right;
+    self.textLengthLabel.right = self.width - 10;
     self.textLengthLabel.top = self.textInput.bottom + 15;
     self.bottomView.size = CGSizeMake(self.width, 50);
     self.bottomView.rightBottom = CGPointMake(0, self.height);
     self.bottomView.centerX = self.width / 2;
     self.comfirmButton.size = CGSizeMake(55, 27);
-    self.comfirmButton.right = self.textInput.right;
+    self.comfirmButton.right = self.width - 10;
     self.comfirmButton.centerY = self.bottomView.height / 2;
     self.cancelButton.size = CGSizeMake(55, 27);
     self.cancelButton.right = self.comfirmButton.left - 20;
@@ -174,7 +173,7 @@
         _comfirmButton.layer.cornerRadius = 3.0f;
         _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
         _comfirmButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
-        [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchDragInside];
+        [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _comfirmButton;
 }
@@ -195,10 +194,7 @@
 -(UIImageView *)penImage{
     if (!_penImage) {
         _penImage = [[UIImageView alloc]init];
-        _penImage.image = [UIImage imageNamed:@"home_pen"];
-#warning test
-        _penImage.layer.borderColor = [UIColor redColor].CGColor;
-        _penImage.layer.borderWidth = 1;
+        _penImage.image = [UIImage imageNamed:@"home_pen_nor"];
     }
     return _penImage;
 }

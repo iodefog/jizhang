@@ -7,12 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJMineHeaderView.h"
+
 
 @interface SSJMineHomeTableViewHeader : UIView
+
 + (id)MineHomeHeader;
 
-@property (weak, nonatomic) IBOutlet UIImageView *headPotraitImage;
+@property (weak, nonatomic) IBOutlet SSJMineHeaderView *headPotraitImage;
 @property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;
+@property(nonatomic, strong) NSString *imageUrl;
 
 //点击头像回调
 typedef void (^HeaderButtonClickedBlock)();

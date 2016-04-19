@@ -339,10 +339,12 @@
             weakSelf.statusLabel.hidden = NO;
             if (weakSelf.refreshSuccessOrNot) {
                 weakSelf.statusLabel.text = @"数据同步成功";
+                weakSelf.homeButton.refreshSuccessOrNot = YES;
                 [weakSelf.statusLabel sizeToFit];
                 [weakSelf.view setNeedsLayout];
             }else{
                 weakSelf.statusLabel.text = @"数据同步失败";
+                weakSelf.homeButton.refreshSuccessOrNot = NO;
                 [weakSelf.statusLabel sizeToFit];
                 [weakSelf.view setNeedsLayout];
             }

@@ -16,6 +16,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJChargeDetailMemoCell.h"
 #import "SSJCalenderDetaiImagelFooterView.h"
+#import "SSJImaageBrowseViewController.h"
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
@@ -178,6 +179,11 @@
         __weak typeof(self) weakSelf = self;
         _imageFooter.ModifyButtonClickedBlock = ^(){
             [weakSelf editeButtonClicked];
+        };
+        _imageFooter.ImageClickedBlock = ^(){
+            SSJImaageBrowseViewController *imageBrowseVc = [[SSJImaageBrowseViewController alloc]init];
+            imageBrowseVc.item = weakSelf.item;
+            [weakSelf.navigationController pushViewController:imageBrowseVc animated:YES];
         };
     }
     return _imageFooter;

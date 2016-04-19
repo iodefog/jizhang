@@ -14,5 +14,10 @@ typedef void (^ModifyButtonClickedBlock)();
 
 @property (nonatomic, copy) ModifyButtonClickedBlock ModifyButtonClickedBlock;
 
+//点击图片回调
+typedef void (^ImageClickedBlock)();
+
+@property (nonatomic, copy) ImageClickedBlock ImageClickedBlock;
+
 @property(nonatomic, strong) NSString *imageName;
 @end
