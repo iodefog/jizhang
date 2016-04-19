@@ -175,6 +175,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
     
     //  查询要同步的表中的数据
+//    __block NSString *userId = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
         //  把当前同步的版本号插入到BK_SYNC表中
@@ -193,13 +194,17 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
             }
         }
         
-        NSString *userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
-        if (userId.length && !SSJIsUserLogined()) {
-            [jsonObject setObject:@[@{@"cuserid":userId,
-                                      @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
-                                      @"isource":SSJDefaultSource()}] forKey:@"bk_user"];
-        }
+//        userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
     }];
+    
+    if (self.userId.length) {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"signature"] forUserId:self.userId];
+        [jsonObject setObject:@[@{@"cuserid":self.userId,
+                                  @"crealname":userItem.nickName ?: @"",
+                                  @"usersignature":userItem.signature ?: @"",
+                                  @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                  @"isource":SSJDefaultSource()}] forKey:@"bk_user"];
+    }
     
     if (*error) {
         return nil;

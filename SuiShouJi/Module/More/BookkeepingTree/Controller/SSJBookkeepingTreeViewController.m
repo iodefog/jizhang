@@ -36,6 +36,8 @@
 
 @property (nonatomic, strong) UILabel *checkInStateLab;
 
+@property (nonatomic) BOOL isViewSetuped;
+
 @end
 
 @implementation SSJBookkeepingTreeViewController
@@ -84,11 +86,27 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
+    [self updateNavigationBar];
+}
+
+- (void)updateNavigationBar {
+    if (_isViewSetuped) {
+        [UIView transitionWithView:self.navigationController.navigationBar duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+            [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+            self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                            NSForegroundColorAttributeName:[UIColor whiteColor]};
+        } completion:^(BOOL finished) {
+            
+        }];
+//        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+//        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+//        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+//                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+    } else {
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -189,6 +207,8 @@
         }
         
         if (_checkInModel.hasShaked) {
+            [CDPointActivityIndicator stopAnimating];
+            
             if (!_treeView) {
                 _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
                 [self.view addSubview:_treeView];
@@ -203,8 +223,8 @@
                 [self.view addSubview:self.checkInStateLab];
             }
             _checkInStateLab.text = _checkInModel.hasShaked ? @"主人，您今天已经浇过水啦！" : @"签到摇一摇，来浇浇水吧～";
-            
-            [CDPointActivityIndicator stopAnimating];
+            _isViewSetuped = YES;
+            [self updateNavigationBar];
             return;
         }
         
@@ -225,7 +245,8 @@
                     [self.view addSubview:self.checkInStateLab];
                 }
                 _checkInStateLab.text = _checkInModel.hasShaked ? @"主人，您今天已经浇过水啦！" : @"签到摇一摇，来浇浇水吧～";
-                
+                _isViewSetuped = YES;
+                [self updateNavigationBar];
             } else {
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }
