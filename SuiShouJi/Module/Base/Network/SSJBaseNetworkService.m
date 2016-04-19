@@ -143,6 +143,7 @@
 //    manager.validatesDomainName = _validatesDomainName;
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.session.configuration.timeoutIntervalForRequest = _timeoutInterval;
+    manager.session.configuration.timeoutIntervalForResource = _timeoutInterval;
     return manager;
 }
 

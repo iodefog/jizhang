@@ -33,7 +33,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 @property (nonatomic, strong) void (^completion)(SSJStartViewManager *);
 
-@property (nonatomic) BOOL hasUserTreeTable;
+@property (nonatomic) BOOL shouldRequestCheckIn;
 
 @end
 
@@ -54,12 +54,16 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     [window addSubview:_launchView];
     
     [self requestStartAPI];
+    
+    __block BOOL hasUserTreeTable;
     // 如果没有本地签到表（升级新版本，数据库还没升级完成的情况下），不能请求签到接口
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        _hasUserTreeTable = [db tableExists:@"bk_user_tree"];
+        hasUserTreeTable = [db tableExists:@"bk_user_tree"];
     }];
     
-    if (_hasUserTreeTable) {
+    // 如果没有userid，就不调用签到接口，签到接口需要userid（第一次启动初始化数据库未完成前，userid为空）
+    _shouldRequestCheckIn = hasUserTreeTable && SSJUSERID().length;
+    if (_shouldRequestCheckIn) {
         [self requestCheckIn];
     }
 }
@@ -70,8 +74,8 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     SSJStartChecker *checker = [SSJStartChecker sharedInstance];
     checker.requestTimeout = 1;
     [checker checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
-        // 没有记账树表，直接显示引导页或首页
-        if (!_hasUserTreeTable) {
+        // 签到接口没有请求，直接显示引导页或首页
+        if (!_shouldRequestCheckIn) {
             [wself showGuideViewIfNeeded];
             return;
         }
@@ -84,8 +88,8 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             }];
         }
     } failure:^(NSString *message) {
-        // 没有记账树表，直接显示引导页或首页
-        if (!_hasUserTreeTable) {
+        // 签到接口没有请求，直接显示引导页或首页
+        if (!_shouldRequestCheckIn) {
             [wself showGuideViewIfNeeded];
             return;
         }
