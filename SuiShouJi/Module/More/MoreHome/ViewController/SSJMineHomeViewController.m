@@ -442,7 +442,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         __weak typeof(self) weakSelf = self;
         _header.HeaderButtonClickedBlock = ^(){
             if (SSJIsUserLogined()) {
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
             }else{
                 SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
@@ -456,7 +456,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
                 loginVC.backController = weakSelf;
                 [weakSelf.navigationController pushViewController:loginVC animated:YES];
             }else{
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
             }
         };

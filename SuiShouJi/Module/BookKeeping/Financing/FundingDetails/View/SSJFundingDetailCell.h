@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJFundingDetailCell : SSJBaseTableViewCell
-
+@property(nonatomic, strong) SSJBillingChargeCellItem *item;
 @end

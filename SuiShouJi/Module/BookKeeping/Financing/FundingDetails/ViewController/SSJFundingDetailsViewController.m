@@ -113,7 +113,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
         return cell;
     }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
-        [cell setCellItem:[[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1]];
+        cell.item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
         return cell;
     }
     return [UITableViewCell new];

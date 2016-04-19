@@ -270,8 +270,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 -(SSJRecordMakingAdditionalView*)additionalView{
     if (!_additionalView ) {
         _additionalView = [SSJRecordMakingAdditionalView RecordMakingAdditionalView];
-        [_additionalView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
-        [_additionalView ssj_setBorderStyle:SSJBorderStyleTop];
         _additionalView.selectedImage = self.selectedImage;
         if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
             _additionalView.hasMemo = YES;
@@ -338,6 +336,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_inputTopView ) {
         _inputTopView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
         _inputTopView.backgroundColor = [UIColor whiteColor];
+        [_inputTopView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_inputTopView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_inputTopView ssj_setBorderWidth:1.f];
         [_inputTopView addSubview:self.fundingTypeButton];
         self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
         _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
