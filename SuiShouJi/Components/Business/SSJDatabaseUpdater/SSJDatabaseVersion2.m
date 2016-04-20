@@ -26,6 +26,11 @@
             error = [db lastError];
         }
     }
+    if (![db columnExists:@"cwritedate" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cwritedate text"]) {
+            error = [db lastError];
+        }
+    }
     
     return error;
 }

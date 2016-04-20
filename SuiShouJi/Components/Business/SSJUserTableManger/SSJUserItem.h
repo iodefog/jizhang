@@ -47,7 +47,10 @@
 @property (nonatomic, copy) NSString *defaultFundAcctState;
 
 //  个性签名
-@property(nonatomic, strong) NSString *signature;
+@property (nonatomic, strong) NSString *signature;
+
+//  客户端修改时间（目前只有修改昵称、个性签名才能改这个属性）
+@property (nonatomic, copy) NSString *writeDate;
 
 + (NSDictionary *)propertyMapping;
 
