@@ -53,7 +53,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat imageDiam = 26;
+    CGFloat imageDiam = 40;
     
     self.imageView.left = 10;
     self.imageView.size = CGSizeMake(imageDiam, imageDiam);
@@ -71,13 +71,13 @@
         self.textLabel.left = self.imageView.right + 10;
         self.textLabel.centerY = self.contentView.height * 0.5;
     } else if (self.photo.hidden || self.memo.hidden) {
-        CGFloat gap = 5;
+        CGFloat gap = 10;
         CGFloat top = (self.contentView.height - self.textLabel.height - self.photo.height - gap) * 0.5;
         self.textLabel.top = top;
         UIImageView *displayedView = self.photo.hidden ? self.memo : self.photo;
         displayedView.leftTop = CGPointMake(self.imageView.right + 10, self.textLabel.bottom + gap);
     } else {
-        CGFloat gap = 5;
+        CGFloat gap = 10;
         CGFloat top = (self.contentView.height - self.textLabel.height - self.photo.height - gap) * 0.5;
         self.textLabel.top = top;
         self.photo.leftTop = CGPointMake(self.imageView.right + 10, self.textLabel.bottom + gap);
