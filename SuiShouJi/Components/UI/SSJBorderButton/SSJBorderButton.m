@@ -28,6 +28,8 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 @property (nonatomic, strong) NSMutableDictionary *backgroundColorInfo;
 
+@property (nonatomic) BOOL shouldPerformAction;
+
 @end
 
 @implementation SSJBorderButton
@@ -126,6 +128,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     
+    _shouldPerformAction = YES;
     self.state = SSJBorderButtonStateHighlighted;
     
 //    CALayer *presentationLayer = self.layer.presentationLayer;
@@ -141,6 +144,13 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesMoved:touches withEvent:event];
+    
+    UITouch *touch = [touches anyObject];
+    CGPoint touchPoint = [touch locationInView:self];
+    if (!CGRectContainsPoint(self.bounds, touchPoint)) {
+        self.state = SSJBorderButtonStateNormal;
+        _shouldPerformAction = NO;
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -158,7 +168,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 //        self.titleLabel.textColor = self.color;
 //    } completion:NULL];
     
-    if (self.enabled) {
+    if (self.enabled && _shouldPerformAction) {
         if ([self.target respondsToSelector:self.action]) {
             [self.target performSelector:self.action withObject:nil afterDelay:0.0];
         }

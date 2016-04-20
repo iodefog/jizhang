@@ -11,8 +11,10 @@
 #import "SSJMagicExportSelectDateView.h"
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJMagicExportResultViewController.h"
+#import "SSJRecordMakingViewController.h"
 #import "SSJMagicExportService.h"
 #import "SSJMagicExportStore.h"
+#import "SSJBorderButton.h"
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate>
 
@@ -50,6 +52,8 @@
 @property (nonatomic, strong) NSDate *endDate;
 
 @property (nonatomic, strong) SSJMagicExportService *service;
+
+@property (nonatomic, strong) UIView *noDataRemindView;
 
 @end
 
@@ -109,9 +113,11 @@
         if (_firstRecordDate && _lastRecordDate) {
             self.scrollView.hidden = NO;
             [self updateBeginAndEndButton];
+            [self.view ssj_hideWatermark:YES];
         } else {
             // 没有记账流水
             self.scrollView.hidden = YES;
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         }
         
     } failure:^(NSError *error) {
@@ -160,6 +166,11 @@
         _service.showLodingIndicator = YES;
     }
     [_service exportWithBeginDate:self.beginDate endDate:self.endDate emailAddress:self.emailTextField.text];
+}
+
+- (void)recordBtnAction {
+    SSJRecordMakingViewController *recordVC = [[SSJRecordMakingViewController alloc] init];
+    [self.navigationController pushViewController:recordVC animated:YES];
 }
 
 #pragma mark - Getter
@@ -249,6 +260,38 @@
         [_commitBtn addTarget:self action:@selector(commitButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _commitBtn;
+}
+
+- (UIView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[UIView alloc] initWithFrame:self.view.bounds];
+        
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calendar_norecord"]];
+        imgView.centerX = _noDataRemindView.width * 0.5;
+        imgView.top = 40;
+        [_noDataRemindView addSubview:imgView];
+        
+        UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, imgView.bottom + 10, self.view.width, 16)];
+        lab.backgroundColor = [UIColor clearColor];
+        lab.font = [UIFont systemFontOfSize:15];
+        lab.text = @"您还未有记账数据哦";
+        lab.textAlignment = NSTextAlignmentCenter;
+        [_noDataRemindView addSubview:lab];
+        
+        SSJBorderButton *recordBtn = [[SSJBorderButton alloc] initWithFrame:CGRectMake((_noDataRemindView.width - 120) * 0.5, lab.bottom + 20, 120, 30)];
+        recordBtn.fontSize = 15;
+        recordBtn.borderWidth = 1;
+        recordBtn.cornerRadius = 15;
+        [recordBtn setTitle:@"记一笔" forState:SSJBorderButtonStateNormal];
+        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
+        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateHighlighted];
+        [recordBtn addTarget:self action:@selector(recordBtnAction)];
+        [_noDataRemindView addSubview:recordBtn];
+    }
+    return _noDataRemindView;
 }
 
 @end

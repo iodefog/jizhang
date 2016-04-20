@@ -95,7 +95,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)indexPath.section];
     NSArray *datas = sectionInfo[SSJBillingChargeRecordKey];
     SSJBillingChargeCellItem *selectedItem = [datas ssj_safeObjectAtIndex:indexPath.row];
-    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] init];
+    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     calenderDetailVC.item = selectedItem;
     [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
