@@ -38,7 +38,6 @@
     _selectedImage = self.image;
     self.view.backgroundColor = [UIColor blackColor];
     [self.view addSubview:self.imageBrowser];
-    [self.view addSubview:self.backButton];
     [self.view addSubview:self.bottomBackGroundView];
     [self.view addSubview:self.comfirmButton];
     [self.view addSubview:self.deleteButton];
@@ -46,12 +45,14 @@
     [self.view addSubview:self.moneyLabel];
     [self.view addSubview:self.memoLabel];
     [self.view addSubview:self.dateLabel];
+    [self getImageAndDetails];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [[self navigationController] setNavigationBarHidden:NO animated:NO];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -81,15 +82,6 @@
 }
 
 #pragma mark - Getter
--(UIButton *)backButton{
-    if (!_backButton) {
-        _backButton = [[UIButton alloc]init];
-        [_backButton setImage:[UIImage imageNamed:@"home_back"] forState:UIControlStateNormal];
-        [_backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _backButton;
-}
-
 -(UIButton *)changeImageButton{
     if (!_changeImageButton) {
         _changeImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 45, 70)];
@@ -141,9 +133,6 @@
     return _imageBrowser;
 }
 
--(void)backButtonClicked:(id)sender{
-    [self ssj_backOffAction];
-}
 
 -(UILabel *)moneyLabel{
     if (!_moneyLabel) {
@@ -187,19 +176,18 @@
     self.imageBrowser.image = image;
 }
 
--(void)setItem:(SSJBillingChargeCellItem *)item{
-    _item = item;
+-(void)getImageAndDetails{
     self.deleteButton.hidden = YES;
     self.changeImageButton.hidden = YES;
     self.comfirmButton.hidden = YES;
-    if (item.incomeOrExpence) {
+    if (_item.incomeOrExpence) {
         self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
     }else{
         self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
 
     }
     [self.moneyLabel sizeToFit];
-    if (_item.chargeMemo != nil && ![item.chargeMemo isEqualToString:@""]) {
+    if (_item.chargeMemo != nil && ![_item.chargeMemo isEqualToString:@""]) {
         self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];
         [self.memoLabel sizeToFit];
     }

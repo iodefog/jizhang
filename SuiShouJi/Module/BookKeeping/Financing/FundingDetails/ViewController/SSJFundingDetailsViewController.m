@@ -137,7 +137,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     if (indexPath.row > 0) {
         SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
-            return 60;
+            return 75;
         }else{
             return 30;
         }

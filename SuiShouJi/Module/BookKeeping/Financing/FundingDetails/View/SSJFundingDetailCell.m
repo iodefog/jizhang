@@ -23,6 +23,9 @@
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+    
+        self.textLabel.textColor = [UIColor blackColor];
+        
         
         [self.contentView addSubview:self.moneyLab];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -40,7 +43,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat imageDiam = 26;
+    CGFloat imageDiam = 40;
     
     self.imageView.left = 10;
     self.imageView.size = CGSizeMake(imageDiam, imageDiam);
@@ -54,18 +57,18 @@
         self.haveImage.size = CGSizeMake(19, 19);
         self.memoImage.size = CGSizeMake(19, 19);
         self.typeLabel.left = self.imageView.right + 10;
-        self.typeLabel.centerY = self.height * 0.5 * 0.5;
+        self.typeLabel.bottom = self.height * 0.5 - 5;
         if (([_item.chargeMemo isEqualToString:@""] || _item.chargeMemo == nil) && (![_item.chargeImage isEqualToString:@""] && _item.chargeImage != nil)) {
             self.haveImage.left = self.typeLabel.left;
-            self.haveImage.centerY = self.contentView.height - self.contentView.height / 4;
+            self.haveImage.top = self.contentView.height * 0.5 + 5;
         }else if (([_item.chargeImage isEqualToString:@""] || _item.chargeImage == nil) && (![_item.chargeMemo isEqualToString:@""] && _item.chargeMemo != nil)){
             self.memoImage.left = self.typeLabel.left;
-            self.memoImage.centerY = self.contentView.height - self.contentView.height / 4;
+            self.memoImage.top = self.contentView.height * 0.5 + 5;
         }else{
             self.haveImage.left = self.typeLabel.left;
-            self.haveImage.centerY = self.contentView.height - self.contentView.height / 4;
+            self.haveImage.top = self.contentView.height * 0.5 + 5;
             self.memoImage.left = self.haveImage.right + 10;
-            self.memoImage.centerY = self.contentView.height - self.contentView.height / 4;
+            self.memoImage.top = self.contentView.height * 0.5 + 5;
         }
     }
     self.moneyLab.right = self.contentView.width - 10;
