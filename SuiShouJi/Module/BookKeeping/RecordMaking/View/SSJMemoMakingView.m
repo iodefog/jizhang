@@ -129,8 +129,9 @@
 {
     self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - textView.text.length];
     [self.textLengthLabel sizeToFit];
-    if (textView.text.length > self.maxLength) {
+    if (textView.text.length >= self.maxLength) {
         textView.text = [textView.text substringToIndex:self.maxLength];
+        self.textLengthLabel.text = @"剩余0个字";
     }
 }
 
@@ -183,7 +184,7 @@
 
 -(UIButton *)comfirmButton{
     if (!_comfirmButton) {
-        _comfirmButton = [[UIButton alloc]init];
+        _comfirmButton = [[UIButton alloc]init];                         
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         _comfirmButton.layer.cornerRadius = 3.0f;

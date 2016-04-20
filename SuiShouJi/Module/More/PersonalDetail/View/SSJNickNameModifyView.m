@@ -121,11 +121,12 @@
     }
     NSString *string = textView.text ? : @"";
     string = [string stringByReplacingCharactersInRange:range withString:text];
-    if (string.length > self.maxLength) {
+    if (string.length >= self.maxLength) {
         self.textLengthLabel.text = @"剩余0个字";
         [self.textLengthLabel sizeToFit];
         if (self.typeErrorBlock) {
             self.typeErrorBlock([NSString stringWithFormat:@"最多只能输入%ld个字",self.maxLength]);
+            self.textLengthLabel.text = @"剩余0个字";
         }
         return NO;
     }
