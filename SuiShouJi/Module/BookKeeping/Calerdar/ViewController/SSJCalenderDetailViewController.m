@@ -232,7 +232,7 @@
         [weakSelf deleteCharge];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction, nil];
 }
 
 /**
