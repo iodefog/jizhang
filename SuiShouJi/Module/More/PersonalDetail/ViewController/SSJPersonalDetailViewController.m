@@ -258,6 +258,7 @@ static NSString *const kTitle5 = @"修改密码";
             SSJUserItem *userItem = [[SSJUserItem alloc] init];
             userItem.userId = SSJUSERID();
             userItem.nickName = textInputed;
+            userItem.writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             [SSJUserTableManager saveUserItem:userItem];
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
@@ -283,6 +284,7 @@ static NSString *const kTitle5 = @"修改密码";
             SSJUserItem *userItem = [[SSJUserItem alloc] init];
             userItem.userId = SSJUSERID();
             userItem.signature = textInputed;
+            userItem.writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             [SSJUserTableManager saveUserItem:userItem];
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
