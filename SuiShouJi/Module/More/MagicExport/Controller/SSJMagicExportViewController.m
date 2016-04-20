@@ -16,18 +16,25 @@
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate>
 
+
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
+//
 @property (nonatomic, strong) UILabel *dateLabel;
 
+//
 @property (nonatomic, strong) UILabel *emailLabel;
 
+//
 @property (nonatomic, strong) SSJMagicExportSelectDateView *selectDateView;
 
+//
 @property (nonatomic, strong) UIView *emailView;
 
+//
 @property (nonatomic, strong) UITextField *emailTextField;
 
+//
 @property (nonatomic, strong) UIButton *commitBtn;
 
 // 第一次记账时间

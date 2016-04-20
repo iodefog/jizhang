@@ -42,7 +42,7 @@ static const NSTimeInterval kDuration = 0.8;
         return;
     }
     
-    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(_radius, _radius) radius:_radius startAngle:-M_PI_2 endAngle:(-M_PI_2 + M_PI * 2) clockwise:NO];
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(_radius, _radius) radius:_radius startAngle:-M_PI_2 endAngle:(-M_PI_2 - M_PI * 2) clockwise:NO];
     [path moveToPoint:CGPointMake(0.20 * self.width, 0.48 * self.height)];
     [path addLineToPoint:CGPointMake(0.41 * self.width, 0.72 * self.height)];
     [path addLineToPoint:CGPointMake(0.79 * self.width, 0.30 * self.height)];
