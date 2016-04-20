@@ -327,7 +327,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 };
                 memoMakingView.typeErrorBlock = ^(NSString *errorDesc){
                     [CDAutoHideMessageHUD showMessage:errorDesc];
-                };
+                }; 
                 [memoMakingView show];
             }
         };

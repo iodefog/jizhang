@@ -72,7 +72,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
-    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
+    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
 
 }
 
@@ -123,7 +123,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJCalenderTableViewCell *cell = (SSJCalenderTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
-    SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
+    SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     CalenderDetailVC.item = item;
     [self.navigationController pushViewController:CalenderDetailVC animated:YES];
 }
@@ -155,7 +155,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
+    SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCellIdentifier" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setCellItem:[self.items ssj_safeObjectAtIndex:indexPath.row]];
     return cell;
