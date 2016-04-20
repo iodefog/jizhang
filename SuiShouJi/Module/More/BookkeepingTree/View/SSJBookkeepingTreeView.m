@@ -118,7 +118,7 @@ static SystemSoundID kRainingSoundId = 0;
 - (NSString *)descriptionForDays:(NSInteger)days {
     SSJBookkeepingTreeLevel level = [SSJBookkeepingTreeHelper treeLevelForDays:days];
     if (level == SSJBookkeepingTreeLevelCrownTree) {
-        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n积蓄另一颗种子茁壮发芽吧。", (long)days];
+        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n终于成顶级皇冠树了。", (long)days];
     } else {
         NSInteger daysToUpgrade = [SSJBookkeepingTreeHelper maxDaysForLevel:level] - days;
         NSString *nextLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:level + 1];
