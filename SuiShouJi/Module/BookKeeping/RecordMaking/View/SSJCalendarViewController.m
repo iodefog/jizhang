@@ -123,7 +123,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJCalenderTableViewCell *cell = (SSJCalenderTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem*)cell.cellItem;
-    SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]init];
+    SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     CalenderDetailVC.item = item;
     [self.navigationController pushViewController:CalenderDetailVC animated:YES];
 }
