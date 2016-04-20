@@ -275,8 +275,14 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         _tableView.delegate = self;
         _tableView.rowHeight = 60;
         _tableView.sectionHeaderHeight = 45;
+        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        [_tableView ssj_clearExtendSeparator];
         [_tableView registerClass:[SSJMagicExportCalendarViewCell class] forCellReuseIdentifier:kCalendarCellId];
         [_tableView registerClass:[SSJMagicExportCalendarHeaderView class] forHeaderFooterViewReuseIdentifier:kCalendarHeaderId];
+        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        }
     }
     return _tableView;
 }
