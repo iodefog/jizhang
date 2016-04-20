@@ -50,14 +50,11 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [[self navigationController] setNavigationBarHidden:NO animated:NO];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"pic_back"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
+    self.navigationItem.leftBarButtonItem = rightItem;
 }
 
 -(void)viewDidLayoutSubviews{
@@ -247,6 +244,10 @@
 }
 
 #pragma mark - Private
+-(void)backButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
 -(void)changeImageButtonClicked:(id)sender{
     UIActionSheet *sheet;
     sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];

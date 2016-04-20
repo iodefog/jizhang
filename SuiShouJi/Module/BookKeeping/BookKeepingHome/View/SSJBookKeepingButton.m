@@ -99,6 +99,8 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 -(void)startLoading{
     _startTime = CFAbsoluteTimeGetCurrent();
     
+    [MobClick event:@"15"];
+    
     self.recordMakingButton.layer.borderColor = [UIColor clearColor].CGColor;
 
     

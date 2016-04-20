@@ -366,6 +366,8 @@
 		9C0E8C301CB761FF0093F79E /* SSJMemoMakingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0E8C2F1CB761FF0093F79E /* SSJMemoMakingView.m */; };
 		9C0E8C3D1CBB3ADF0093F79E /* SSJBookKeepingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C0E8C3C1CBB3ADF0093F79E /* SSJBookKeepingButton.m */; };
 		9C1833D21CBE56CC00C5B54B /* home_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C1833D11CBE56CC00C5B54B /* home_add@2x.png */; };
+		9C2229351CC78D980040DD54 /* pic_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2229341CC78D980040DD54 /* pic_back@2x.png */; };
+		9C2229371CC78D9D0040DD54 /* pic_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2229361CC78D9D0040DD54 /* pic_back@3x.png */; };
 		9C252BFA1CAB754100AE58D3 /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */; };
 		9C252BFD1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C252BFC1CABDCDC00AE58D3 /* SSJFundingDetailListItem.m */; };
 		9C262C7B1CBCDB4000368B48 /* home_calender@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */; };
@@ -1225,6 +1227,8 @@
 		9C0E8C3B1CBB3ADF0093F79E /* SSJBookKeepingButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingButton.h; sourceTree = "<group>"; };
 		9C0E8C3C1CBB3ADF0093F79E /* SSJBookKeepingButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingButton.m; sourceTree = "<group>"; };
 		9C1833D11CBE56CC00C5B54B /* home_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_add@2x.png"; sourceTree = "<group>"; };
+		9C2229341CC78D980040DD54 /* pic_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_back@2x.png"; sourceTree = "<group>"; };
+		9C2229361CC78D9D0040DD54 /* pic_back@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pic_back@3x.png"; sourceTree = "<group>"; };
 		9C252BF81CAB754100AE58D3 /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
 		9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		9C252BFB1CABDCDC00AE58D3 /* SSJFundingDetailListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailListItem.h; sourceTree = "<group>"; };
@@ -2247,6 +2251,8 @@
 				7DD7D5DA1C4C8E6A00ACE71A /* BillTypeImage */,
 				7DD7D6471C4C8E6A00ACE71A /* checkmark@2x.png */,
 				7DD7D6481C4C8E6A00ACE71A /* checkmark@3x.png */,
+				9C2229341CC78D980040DD54 /* pic_back@2x.png */,
+				9C2229361CC78D9D0040DD54 /* pic_back@3x.png */,
 				7DD7D6491C4C8E6A00ACE71A /* close@2x.png */,
 				7DD7D64A1C4C8E6A00ACE71A /* close@3x.png */,
 				7DD7D64D1C4C8E6A00ACE71A /* edit@2x.png */,
@@ -4447,6 +4453,7 @@
 				BD1EE5F01C9807CD00814A05 /* calendar_norecord@2x.png in Resources */,
 				7DD7D6F51C4C8E6A00ACE71A /* close@3x.png in Resources */,
 				7DD7D6EA1C4C8E6A00ACE71A /* bt_youfei@2x.png in Resources */,
+				9C2229371CC78D9D0040DD54 /* pic_back@3x.png in Resources */,
 				7DD7D6981C4C8E6A00ACE71A /* bt_deficit@2x.png in Resources */,
 				BDF318721C5F0AA900302DD6 /* record_ok@2x.png in Resources */,
 				7DD7D6AD1C4C8E6A00ACE71A /* bt_hongbao@3x.png in Resources */,
@@ -4603,6 +4610,7 @@
 				7DD7D6B61C4C8E6A00ACE71A /* bt_jiaoshui@2x.png in Resources */,
 				7DD7D6C61C4C8E6A00ACE71A /* bt_pingzhangzhichu@2x.png in Resources */,
 				7DD7D7261C4C8E6A00ACE71A /* tab_founds_nor@2x.png in Resources */,
+				9C2229351CC78D980040DD54 /* pic_back@2x.png in Resources */,
 				9C262C7B1CBCDB4000368B48 /* home_calender@3x.png in Resources */,
 				7DD7D6971C4C8E6A00ACE71A /* bt_daikuan@3x.png in Resources */,
 				7D768A7A1C96A1A900CB75B0 /* budget_delete@3x.png in Resources */,
