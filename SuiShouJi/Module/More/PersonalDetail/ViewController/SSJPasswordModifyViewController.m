@@ -133,7 +133,7 @@
     NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     if (![pred evaluateWithObject:self.modifiedPasswordInput.text]){
-        [CDAutoHideMessageHUD showMessage:@"您的新密码不是由数字和密码组成的哦，请重新设置一个吧～"];
+        [CDAutoHideMessageHUD showMessage:@"您的新密码不是由6到15位数字和字母组成的哦，请重新设置一个吧～"];
         return;
     }else if (![self.comfirmNewPasswordInput.text isEqualToString:self.modifiedPasswordInput.text]){
         [CDAutoHideMessageHUD showMessage:@"您两次输入的新密码不一致，请重新输入吧～"];
