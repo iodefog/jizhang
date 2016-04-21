@@ -144,8 +144,11 @@
     __block BOOL success = YES;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *statment = nil;
-        NSDictionary *userInfo = [self fieldMapWithUserItem:userItem];
+        NSMutableDictionary *userInfo = [[self fieldMapWithUserItem:userItem] mutableCopy];
         if (![db boolForQuery:@"select count(*) from BK_USER where CUSERID = ?", userId]) {
+            if (![[userInfo allKeys] containsObject:@"cwritedate"]) {
+                [userInfo setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
+            }
             statment = [self inertSQLStatementWithUserInfo:userInfo];
         } else {
             statment = [self updateSQLStatementWithUserInfo:userInfo];
@@ -165,7 +168,7 @@
 }
 
 + (NSString *)inertSQLStatementWithUserInfo:(NSDictionary *)userInfo {
-    NSArray *keys = [userInfo allKeys];
+    NSMutableArray *keys = [[userInfo allKeys] mutableCopy];
     NSMutableArray *values = [NSMutableArray arrayWithCapacity:[keys count]];
     for (NSString *key in keys) {
         [values addObject:[NSString stringWithFormat:@":%@", key]];

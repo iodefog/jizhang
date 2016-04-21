@@ -203,6 +203,7 @@
             
             if (!_treeView) {
                 _treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:self.view.bounds];
+                [_treeView setMuteButtonShowed:YES];
                 [self.view addSubview:_treeView];
             }
             [_treeView setTreeImg:image];
