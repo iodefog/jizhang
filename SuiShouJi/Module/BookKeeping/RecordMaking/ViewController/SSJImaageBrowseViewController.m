@@ -76,6 +76,11 @@
 
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
+
 #pragma mark - Getter
 -(UIButton *)changeImageButton{
     if (!_changeImageButton) {
