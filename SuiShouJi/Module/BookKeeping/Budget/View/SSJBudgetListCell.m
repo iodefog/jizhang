@@ -123,13 +123,13 @@
 - (SSJBudgetWaveWaterView *)waveView {
     if (!_waveView) {
         _waveView = [[SSJBudgetWaveWaterView alloc] initWithRadius:90];
-        _waveView.waveAmplitude = 8;
-        _waveView.waveSpeed = 8;
+        _waveView.waveAmplitude = 6;
+        _waveView.waveSpeed = 4;
         _waveView.waveCycle = 1;
-        _waveView.waveGrowth = 3;
-        _waveView.waveOffset = 24;
+        _waveView.waveGrowth = 2;
+        _waveView.waveOffset = 40;
         _waveView.fullWaveAmplitude = 5;
-        _waveView.fullWaveSpeed = 5;
+        _waveView.fullWaveSpeed = 3;
         _waveView.fullWaveCycle = 4;
         _waveView.outerBorderWidth = 5;
         _waveView.showText = YES;

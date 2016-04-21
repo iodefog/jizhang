@@ -29,7 +29,7 @@ static const NSTimeInterval kRaninDuration = 3;
 @property (nonatomic, strong) UIImageView *dashLineView;
 
 // 用户昵称
-@property (nonatomic, strong) NSString *nickName;
+@property (nonatomic, strong) NSString *userName;
 
 // 签到描述
 @property (nonatomic, strong) UILabel *checkInDescLab;
@@ -77,8 +77,13 @@ static const NSTimeInterval kRaninDuration = 3;
         [self addSubview:self.checkInDescLab];
         
         if (SSJIsUserLogined()) {
-            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName"] forUserId:SSJUSERID()];
-            _nickName = userItem.nickName;
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"mobileNo"] forUserId:SSJUSERID()];
+            _userName = userItem.nickName;
+            if (!_userName.length) {
+                if (userItem.mobileNo.length >= 7) {
+                    _userName = [userItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                }
+            }
         }
         
         _muteButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -140,8 +145,8 @@ static const NSTimeInterval kRaninDuration = 3;
 
 - (void)setCheckTimes:(NSInteger)checkTimes {
     NSMutableString *desc = [@"Hi" mutableCopy];
-    if (_nickName.length) {
-        [desc appendFormat:@",%@~", _nickName];
+    if (_userName.length) {
+        [desc appendFormat:@",%@~", _userName];
     }
     [desc appendFormat:@"\n%@", [self descriptionForDays:checkTimes]];
     self.checkInDescLab.text = desc;

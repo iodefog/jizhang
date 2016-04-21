@@ -179,6 +179,7 @@
         self.fullView.hidden = NO;
         [self.growingView stopWave];
         [self.fullView startWave];
+//        [self.fullView drawWave];
         self.fullView.borderColor = [UIColor ssj_colorWithHex:@"0fceb6"];
         for (int i = 0; i < self.fullView.items.count; i ++) {
             SSJWaveWaterViewItem *item = self.fullView.items[i];
@@ -195,6 +196,7 @@
         self.fullView.hidden = NO;
         [self.growingView stopWave];
         [self.fullView startWave];
+//        [self.fullView drawWave];
         self.fullView.borderColor = [UIColor ssj_colorWithHex:@"ff654c"];
         for (int i = 0; i < self.fullView.items.count; i ++) {
             SSJWaveWaterViewItem *item = self.fullView.items[i];

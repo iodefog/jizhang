@@ -43,12 +43,19 @@ NS_ASSUME_NONNULL_BEGIN
 // 顶部标题与底部标题的间隙，default 0
 @property (nonatomic) CGFloat titleGap;
 
+//
 - (instancetype)initWithRadius:(CGFloat)radius;
 
+// 绘制水波纹，没有动画效果
+- (void)drawWave;
+
+// 开始水波动画
 - (void)startWave;
 
+// 停止水波动画
 - (void)stopWave;
 
+// 重置水波动画，水波纹会回到起点，并且停止动画
 - (void)reset;
 
 @end

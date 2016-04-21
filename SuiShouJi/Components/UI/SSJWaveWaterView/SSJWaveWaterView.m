@@ -79,10 +79,21 @@
     }
 }
 
+- (void)drawWave {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (SSJWaveWaterPath *path in _wavePaths) {
+            [path updateCurrentPoint];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setNeedsDisplay];
+        });
+    });
+}
+
 - (void)startWave {
     if (_waveDisplaylink == nil) {
 //         启动定时调用
-        _waveDisplaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawWave:)];
+        _waveDisplaylink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawWave)];
         _waveDisplaylink.frameInterval = 5;
         [_waveDisplaylink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     }
@@ -135,17 +146,6 @@
     CGPoint bottomTitlePoint = CGPointMake((self.width - bottomTitleSize.width) * 0.5, topTitleSize.height + top + _titleGap);
     [_bottomTitle drawAtPoint:bottomTitlePoint withAttributes:@{NSFontAttributeName:bottomFont,
                                                                 NSForegroundColorAttributeName:_bottomTitleColor}];
-}
-
-- (void)drawWave:(CADisplayLink *)displayLink {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (SSJWaveWaterPath *path in _wavePaths) {
-            [path updateCurrentPoint];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self setNeedsDisplay];
-        });
-    });
 }
 
 @end
