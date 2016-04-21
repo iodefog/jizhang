@@ -29,7 +29,7 @@
 
 - (void)layoutSubviews {
     self.titleLabel.center = CGPointMake(self.width * 0.5, self.height * 0.5);
-    self.preBtn.size = self.nextBtn.size = CGSizeMake(27, self.height);
+    self.preBtn.size = self.nextBtn.size = CGSizeMake(40, self.height);
     self.preBtn.right = self.titleLabel.left;
     self.nextBtn.left = self.titleLabel.right;
 }
@@ -46,6 +46,7 @@
     if (!_preBtn) {
         _preBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_preBtn setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
+        [_preBtn setImage:[UIImage imageNamed:@"reportForms_left_disable"] forState:UIControlStateDisabled];
     }
     return _preBtn;
 }
@@ -54,6 +55,7 @@
     if (!_nextBtn) {
         _nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_nextBtn setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
+        [_nextBtn setImage:[UIImage imageNamed:@"reportForms_right_diable"] forState:UIControlStateDisabled];
     }
     return _nextBtn;
 }

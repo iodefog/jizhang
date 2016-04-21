@@ -57,6 +57,10 @@
 		7D6AAB6E1C3146500007C0A3 /* SSJReportFormsUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB6D1C3146500007C0A3 /* SSJReportFormsUtil.m */; };
 		7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */ = {isa = PBXBuildFile; fileRef = 7D6AAB731C322E0C0007C0A3 /* mydatabase.db */; };
 		7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */; };
+		7D6BEA801CC886AE00D4046B /* reportForms_left_disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7C1CC886AE00D4046B /* reportForms_left_disable@2x.png */; };
+		7D6BEA811CC886AE00D4046B /* reportForms_left_disable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7D1CC886AE00D4046B /* reportForms_left_disable@3x.png */; };
+		7D6BEA821CC886AE00D4046B /* reportForms_right_diable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7E1CC886AE00D4046B /* reportForms_right_diable@2x.png */; };
+		7D6BEA831CC886AE00D4046B /* reportForms_right_diable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7F1CC886AE00D4046B /* reportForms_right_diable@3x.png */; };
 		7D72D9261CBDEF2A00ACEE2D /* SSJBookkeepingTreeHelpCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D72D9251CBDEF2A00ACEE2D /* SSJBookkeepingTreeHelpCell.m */; };
 		7D72D92B1CBDEF2F00ACEE2D /* SSJBookkeepingTreeHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D72D9281CBDEF2F00ACEE2D /* SSJBookkeepingTreeHelpViewController.m */; };
 		7D72D9301CBDEF7700ACEE2D /* SSJBookkeepingTreeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D72D92F1CBDEF7700ACEE2D /* SSJBookkeepingTreeHelper.m */; };
@@ -830,6 +834,10 @@
 		7D6AAB731C322E0C0007C0A3 /* mydatabase.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = mydatabase.db; sourceTree = "<group>"; };
 		7D6AAB821C32A5480007C0A3 /* SSJReportFormsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsItem.h; sourceTree = "<group>"; };
 		7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsItem.m; sourceTree = "<group>"; };
+		7D6BEA7C1CC886AE00D4046B /* reportForms_left_disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left_disable@2x.png"; sourceTree = "<group>"; };
+		7D6BEA7D1CC886AE00D4046B /* reportForms_left_disable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left_disable@3x.png"; sourceTree = "<group>"; };
+		7D6BEA7E1CC886AE00D4046B /* reportForms_right_diable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right_diable@2x.png"; sourceTree = "<group>"; };
+		7D6BEA7F1CC886AE00D4046B /* reportForms_right_diable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right_diable@3x.png"; sourceTree = "<group>"; };
 		7D72D9241CBDEF2A00ACEE2D /* SSJBookkeepingTreeHelpCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeHelpCell.h; sourceTree = "<group>"; };
 		7D72D9251CBDEF2A00ACEE2D /* SSJBookkeepingTreeHelpCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeHelpCell.m; sourceTree = "<group>"; };
 		7D72D9271CBDEF2F00ACEE2D /* SSJBookkeepingTreeHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeHelpViewController.h; sourceTree = "<group>"; };
@@ -2482,6 +2490,10 @@
 		7DD7D6731C4C8E6A00ACE71A /* ReportForms */ = {
 			isa = PBXGroup;
 			children = (
+				7D6BEA7C1CC886AE00D4046B /* reportForms_left_disable@2x.png */,
+				7D6BEA7D1CC886AE00D4046B /* reportForms_left_disable@3x.png */,
+				7D6BEA7E1CC886AE00D4046B /* reportForms_right_diable@2x.png */,
+				7D6BEA7F1CC886AE00D4046B /* reportForms_right_diable@3x.png */,
 				7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */,
 				7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */,
 				7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */,
@@ -4343,6 +4355,7 @@
 				7D035FC41CC4AE5A0030C48B /* no_network_alert@3x.png in Resources */,
 				BDF504881C868A8200DCFA99 /* beizhu_sel@2x.png in Resources */,
 				BDF510891C925BB500A49D74 /* home_calender@2x.png in Resources */,
+				7D6BEA811CC886AE00D4046B /* reportForms_left_disable@3x.png in Resources */,
 				9C0E8C171CB645900093F79E /* cancel@2x.png in Resources */,
 				7DD7D6F21C4C8E6A00ACE71A /* checkmark@2x.png in Resources */,
 				BDFBDAB81C7EB01E0049F179 /* bt_marry@3x.png in Resources */,
@@ -4458,6 +4471,7 @@
 				7DD7D6D21C4C8E6A00ACE71A /* bt_shopping@2x.png in Resources */,
 				7DD7D72D1C4C8FCF00ACE71A /* reportForms_period@2x.png in Resources */,
 				7DDDA7C31CBE1BFD0029ADAC /* help_tree_level_7@3x.png in Resources */,
+				7D6BEA831CC886AE00D4046B /* reportForms_right_diable@3x.png in Resources */,
 				BDA3FDF11C58CAC400FB57B1 /* ft_chuxuka@2x.png in Resources */,
 				BDA3FDED1C58CAC400FB57B1 /* ft_cash@2x.png in Resources */,
 				7DDDA7F11CBE51070029ADAC /* tip_already_water@2x.png in Resources */,
@@ -4486,6 +4500,7 @@
 				BDA3FDFA1C58CAC400FB57B1 /* ft_invest@3x.png in Resources */,
 				9C0E8C241CB645900093F79E /* umeng_fb_audio_play_default@2x.png in Resources */,
 				9CEB85A21CC4DA5200AE8F8D /* home_pen_smile@3x.png in Resources */,
+				7D6BEA821CC886AE00D4046B /* reportForms_right_diable@2x.png in Resources */,
 				7DD7D7331C4CA8BD00ACE71A /* reportForms_expenses@2x.png in Resources */,
 				7DE69C591C8EDF34001D31C1 /* motion_circle_default@2x.png in Resources */,
 				7DF8DED91C59BFE700CC5DFA /* guide_2-667@2x.png in Resources */,
@@ -4589,6 +4604,7 @@
 				7DD7D6BD1C4C8E6A00ACE71A /* bt_medicine@3x.png in Resources */,
 				9C2BCFC01CBF793500D8D8D3 /* ft_zhankai@2x.png in Resources */,
 				9CEB85C01CC5D8FC00AE8F8D /* mark_jilu@3x.png in Resources */,
+				7D6BEA801CC886AE00D4046B /* reportForms_left_disable@2x.png in Resources */,
 				7DD7D7251C4C8E6A00ACE71A /* tab_form_nor@3x.png in Resources */,
 				9C0E8C231CB645900093F79E /* umeng_fb_audio_play_03@2x.png in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,

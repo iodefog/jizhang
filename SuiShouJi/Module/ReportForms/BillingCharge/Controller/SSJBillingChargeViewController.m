@@ -127,7 +127,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
-        _tableView.rowHeight = 55;
+        _tableView.rowHeight = 75;
         _tableView.sectionHeaderHeight = 40;
         [_tableView ssj_clearExtendSeparator];
         [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];
