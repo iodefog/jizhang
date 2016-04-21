@@ -562,12 +562,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 -(void)getCurrentDate{
     NSDate *now = [NSDate date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:now];
-    _currentYear= [dateComponent year];
-    _currentDay = [dateComponent day];
-    _currentMonth = [dateComponent month];
+    _currentYear= now.year;
+    _currentDay = now.day;
+    _currentMonth = now.month;
 }
 
 -(void)makeArecord{
@@ -851,12 +848,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     NSDateFormatter *dateFormater = [[NSDateFormatter alloc]init];
     [dateFormater setDateFormat:@"yyyy-MM-dd"];
     NSDate *selectDate = [dateFormater dateFromString:date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:selectDate];
-    _originaldYear= [dateComponent year];
-    _originaldDay = [dateComponent day];
-    _originaldMonth = [dateComponent month];
+    _originaldYear= selectDate.year;
+    _originaldDay = selectDate.day;
+    _originaldMonth = selectDate.month;
 }
 
 -(void)closeButtonClicked:(id)sender{
