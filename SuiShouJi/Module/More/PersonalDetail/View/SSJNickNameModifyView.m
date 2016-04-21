@@ -137,7 +137,7 @@
 {
     self.textLengthLabel.text = [NSString stringWithFormat:@"剩余%lu个字",self.maxLength - textView.text.length];
     [self.textLengthLabel sizeToFit];
-    if (textView.text.length > self.maxLength) {
+    if (textView.text.length >= self.maxLength) {
         textView.text = [textView.text substringToIndex:self.maxLength];
     }
 }
@@ -244,7 +244,7 @@
     [self dismiss];
 //    NSLog(@"-------%@",[self.textInput.text ssj_emojiFilter]);
     if (self.comfirmButtonClickedBlock) {
-        self.comfirmButtonClickedBlock(self.textInput.text);
+        self.comfirmButtonClickedBlock([self.textInput.text ssj_emojiFilter]);
     }
 }
 
