@@ -12,6 +12,7 @@
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJMagicExportResultViewController.h"
 #import "SSJRecordMakingViewController.h"
+#import "SSJMagicExportAnnouncementViewController.h"
 #import "SSJMagicExportService.h"
 #import "SSJMagicExportStore.h"
 #import "SSJBorderButton.h"
@@ -55,6 +56,9 @@
 
 @property (nonatomic, strong) UIView *noDataRemindView;
 
+// 公告
+@property (nonatomic, strong) UILabel *announcementLab;
+
 @end
 
 @implementation SSJMagicExportViewController
@@ -71,17 +75,24 @@
     [super viewDidLoad];
     [self setUpView];
     // 现隐藏视图，等数据加载出来在显示
+    self.announcementLab.hidden = YES;
     self.scrollView.hidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setShadowImage:nil];
     [self loadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.service cancel];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    _scrollView.frame = CGRectMake(0, self.announcementLab.bottom, self.view.width, self.view.height - self.announcementLab.bottom);
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -111,11 +122,13 @@
         }
         
         if (_firstRecordDate && _lastRecordDate) {
+            self.announcementLab.hidden = NO;
             self.scrollView.hidden = NO;
             [self updateBeginAndEndButton];
             [self.view ssj_hideWatermark:YES];
         } else {
             // 没有记账流水
+            self.announcementLab.hidden = YES;
             self.scrollView.hidden = YES;
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         }
@@ -127,13 +140,23 @@
 }
 
 - (void)setUpView {
-    [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.dateLabel];
-    [self.scrollView addSubview:self.selectDateView];
-    [self.scrollView addSubview:self.emailLabel];
-    [self.scrollView addSubview:self.emailView];
-    [self.scrollView addSubview:self.commitBtn];
+    if (!_scrollView) {
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+    }
+    
+    [self.view addSubview:self.announcementLab];
+    [self.view addSubview:_scrollView];
+    [_scrollView addSubview:self.dateLabel];
+    [_scrollView addSubview:self.selectDateView];
+    [_scrollView addSubview:self.emailLabel];
+    [_scrollView addSubview:self.emailView];
+    [_scrollView addSubview:self.commitBtn];
     [self.emailView addSubview:self.emailTextField];
+    
+    _scrollView.contentSize = CGSizeMake(self.scrollView.width, self.commitBtn.bottom + 20);
+    
+//    _scrollView.layer.borderWidth = 5;
+//    _scrollView.layer.borderColor = [UIColor redColor].CGColor;
 }
 
 - (void)updateBeginAndEndButton {
@@ -173,14 +196,12 @@
     [self.navigationController pushViewController:recordVC animated:YES];
 }
 
-#pragma mark - Getter
-- (TPKeyboardAvoidingScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:self.view.bounds];
-    }
-    return _scrollView;
+- (void)showAnnouncement {
+    SSJMagicExportAnnouncementViewController *announcementVC = [[SSJMagicExportAnnouncementViewController alloc] init];
+    [self.navigationController pushViewController:announcementVC animated:YES];
 }
 
+#pragma mark - Getter
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
@@ -292,6 +313,24 @@
         [_noDataRemindView addSubview:recordBtn];
     }
     return _noDataRemindView;
+}
+
+- (UILabel *)announcementLab {
+    if (!_announcementLab) {
+        _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 35)];
+        _announcementLab.backgroundColor = [UIColor whiteColor];
+        _announcementLab.font = [UIFont systemFontOfSize:14];
+        
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.firstLineHeadIndent = 10;
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"【公告】关于邮箱收件问题的通知" attributes:@{NSParagraphStyleAttributeName:style}];
+        _announcementLab.attributedText = text;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAnnouncement)];
+        [_announcementLab addGestureRecognizer:tap];
+        _announcementLab.userInteractionEnabled = YES;
+    }
+    return _announcementLab;
 }
 
 @end

@@ -59,7 +59,6 @@
 
 - (void)dismiss:(BOOL)animated {
     if (self.superview) {
-        [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:(animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone)];
         [UIView animateWithDuration:0.5f animations:^(void){
             self.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
             self.alpha = 0;
