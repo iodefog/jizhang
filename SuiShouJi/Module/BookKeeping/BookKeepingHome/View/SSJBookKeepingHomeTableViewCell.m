@@ -237,15 +237,11 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *billDate=[dateFormatter dateFromString:item.billDate];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
-    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:billDate];
-    NSDateComponents *currentdateComponent = [calendar components:unitFlags fromDate:[NSDate date]];
-    long day = [dateComponent day];
-    long month = [dateComponent month];
-    long year = [dateComponent year];
-    long currentMonth = [currentdateComponent month];
-    long currentYear = [currentdateComponent year];
+    long day = billDate.day;
+    long month = billDate.month;
+    long year = billDate.year;
+    long currentMonth = [NSDate date].month;
+    long currentYear = [NSDate date].year;
     if ([item.billId isEqualToString:@"-1"]) {
         _IncomeImage.userInteractionEnabled = NO;
         _expentureImage.userInteractionEnabled = NO;
