@@ -13,9 +13,9 @@
 #import "SDWebImageManager.h"
 #import "AFNetworking.h"
 #import "SSJUserTableManager.h"
-#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
-static SystemSoundID kRainingSoundId = 0;
+static const NSTimeInterval kRaninDuration = 3;
 
 @interface SSJBookkeepingTreeView ()
 
@@ -34,6 +34,11 @@ static SystemSoundID kRainingSoundId = 0;
 // 签到描述
 @property (nonatomic, strong) UILabel *checkInDescLab;
 
+// 静音按钮，按钮选中状态下就是静音
+@property (nonatomic, strong) UIButton *muteButton;
+
+@property (nonatomic, strong) AVAudioPlayer *player;
+
 @end
 
 @implementation SSJBookkeepingTreeView
@@ -50,7 +55,7 @@ static SystemSoundID kRainingSoundId = 0;
 }
 
 - (void)dealloc {
-    AudioServicesDisposeSystemSoundID(kRainingSoundId);
+    [_player stop];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -76,9 +81,20 @@ static SystemSoundID kRainingSoundId = 0;
             _nickName = userItem.nickName;
         }
         
+        _muteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_muteButton setImage:[UIImage imageNamed:@"rain_sound_on"] forState:UIControlStateNormal];
+        [_muteButton setImage:[UIImage imageNamed:@"rain_sound_on"] forState:(UIControlStateNormal | UIControlStateHighlighted)];
+        [_muteButton setImage:[UIImage imageNamed:@"rain_sound_off"] forState:UIControlStateSelected];
+        [_muteButton setImage:[UIImage imageNamed:@"rain_sound_off"] forState:(UIControlStateSelected | UIControlStateHighlighted)];
+        [_muteButton addTarget:self action:@selector(muteButtonAction) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:_muteButton];
+        
         NSString *path = [[NSBundle mainBundle] pathForResource:@"rain_sound" ofType:@"wav"];
         if (path) {
-            AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:path], &kRainingSoundId);
+            _player = [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSURL alloc] initFileURLWithPath:path] error:nil];
+            if (_player.duration < kRaninDuration) {
+                _player.numberOfLoops = -1;
+            }
         }
     }
     return self;
@@ -87,6 +103,21 @@ static SystemSoundID kRainingSoundId = 0;
 - (void)layoutSubviews {
     _treeView.frame = _rainingView.frame = self.bounds;
     _dashLineView.center = _checkInDescLab.center = CGPointMake(self.width * 0.5, self.height * 0.78);
+    _muteButton.frame = CGRectMake(self.width - 65, 120, 30, 30);
+}
+
+- (void)muteButtonAction {
+    _muteButton.selected = !_muteButton.selected;
+    _player.volume = _muteButton.selected ? 0 : 1;
+}
+
+- (void)setMute:(BOOL)mute {
+    _player.volume = mute ? 0 : 1;
+    _muteButton.selected = mute;
+}
+
+- (void)setMuteButtonShowed:(BOOL)showed {
+    _muteButton.hidden = !showed;
 }
 
 - (void)setTreeImg:(UIImage *)treeImg {
@@ -94,9 +125,12 @@ static SystemSoundID kRainingSoundId = 0;
 }
 
 - (void)startRainWithGifData:(NSData *)data completion:(void (^)())completion {
-    AudioServicesPlaySystemSoundWithCompletion(kRainingSoundId, NULL);
+    if (!_player.playing) {
+        [_player play];
+    }
     _rainingView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:data];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kRaninDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_player stop];
         _rainingView.animatedImage = nil;
         if (completion) {
             completion();

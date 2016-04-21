@@ -201,6 +201,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             if (success && image) {
                 wself.treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:[UIScreen mainScreen].bounds];
                 [wself.treeView setTreeImg:image];
+                [wself.treeView setMuteButtonShowed:NO];
                 [wself.treeView setCheckTimes:wself.checkInModel.checkInTimes];
                 [UIView transitionFromView:wself.launchView toView:wself.treeView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

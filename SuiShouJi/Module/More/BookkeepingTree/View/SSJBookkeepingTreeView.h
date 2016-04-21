@@ -12,6 +12,10 @@
 
 @interface SSJBookkeepingTreeView : UIView
 
+- (void)setMute:(BOOL)mute;
+
+- (void)setMuteButtonShowed:(BOOL)showed;
+
 - (void)setTreeImg:(UIImage *)treeImg;
 
 - (void)setCheckTimes:(NSInteger)checkTimes;
