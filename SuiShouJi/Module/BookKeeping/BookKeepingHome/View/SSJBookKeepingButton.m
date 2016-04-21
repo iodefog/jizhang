@@ -117,7 +117,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 
     animation.cumulative = YES;
     
-    animation.repeatCount = HUGE;
+    animation.repeatCount = 3;
     
     animation.removedOnCompletion = NO;
     
@@ -125,20 +125,6 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     
     [self.loadingLayer addAnimation:animation forKey:kLodingViewAnimationKey];
     
-    __weak typeof(self) weakSelf = self;
-    
-    dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, kAnimationDuration * 3 * NSEC_PER_SEC);
-    dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-        weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
-        
-        [weakSelf.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
-        
-        [weakSelf.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
-        
-        weakSelf.pointView.hidden = YES;
-        
-        weakSelf.loadingLayer.hidden = YES;
-    });
 }
 
 - (void)stopLoading{
@@ -179,7 +165,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
             }
         });
     }
-    _startTime = CFAbsoluteTimeGetCurrent();
+    _startTime = 0;
 }
 
 -(void)recordMakingButtonClicked:(id)sender{

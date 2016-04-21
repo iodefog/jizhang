@@ -111,14 +111,6 @@
 
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-    NSString *regEx = @"^[A-Za-z\\d\\u4E00-\\u9FA5\\p{P}‘’“”]+";
-    NSPredicate * pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regEx];
-    if (![pred evaluateWithObject:text] && ![text isEqualToString:@""]) {
-        if (self.typeErrorBlock) {
-            self.typeErrorBlock(@"不能输入特殊字符哦");
-        }
-        return NO;
-    }
     NSString *string = textView.text ? : @"";
     string = [string stringByReplacingCharactersInRange:range withString:text];
     if (string.length >= self.maxLength) {
