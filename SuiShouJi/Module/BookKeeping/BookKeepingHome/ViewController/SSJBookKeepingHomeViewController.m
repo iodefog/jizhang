@@ -199,10 +199,8 @@
                 [weakSelf.homeButton stopLoading];
             }
         }failure:^(SSJDataSynchronizeType type, NSError *error) {
-            if (type == SSJDataSynchronizeTypeData) {
-                weakSelf.refreshSuccessOrNot = NO;
-                [weakSelf.homeButton stopLoading];
-            }
+            weakSelf.refreshSuccessOrNot = NO;
+            [weakSelf.homeButton stopLoading];
         }];
     }
 }

@@ -109,7 +109,7 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     self.loadingLayer.hidden = NO;
     
     CABasicAnimation *animation = [ CABasicAnimation
-                                   animationWithKeyPath: @"transform.rotation.z" ];
+                                   animationWithKeyPath: @"transform.rotation.z"];
     
     animation.toValue = [NSNumber numberWithFloat:(2 * M_PI)];
     
@@ -120,6 +120,8 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     animation.repeatCount = 3;
     
     animation.removedOnCompletion = NO;
+    
+    animation.delegate = self;
     
     [self.pointView.layer addAnimation:animation forKey:kPointViewAnimationKey];
     
@@ -191,6 +193,16 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
         
         weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
     });
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    if (flag) {
+        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
+        
+        self.pointView.hidden = YES;
+        
+        self.loadingLayer.hidden = YES;
+    }
 }
 
 /*
