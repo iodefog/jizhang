@@ -76,17 +76,17 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
             }else{
                 SSJFundingDetailListItem *listItem = [[SSJFundingDetailListItem alloc]init];
+                if ([lastDate isEqualToString:@""]) {
+                    listItem.isExpand = YES;
+                }else{
+                    listItem.isExpand = NO;
+                }
                 if (item.incomeOrExpence) {
                     listItem.expenture = - [item.money doubleValue];
                 }else{
                     listItem.income = [item.money doubleValue];
                 }
                 listItem.date = month;
-                if ([month isEqualToString:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM"]]) {
-                    listItem.isExpand = YES;
-                }else{
-                    listItem.isExpand = NO;
-                }
                 NSMutableArray *tempArray = [NSMutableArray array];
                 if ([item.billDate isEqualToString:lastDetailDate]) {
                     [tempArray addObject:item];
