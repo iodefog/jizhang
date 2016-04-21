@@ -202,7 +202,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 
 + (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
     //  根据周期类型、支出类型分类，查询离今天最近的一次预算
-    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate) from bk_user_budget where cuserid = ? and operatortype <> 2 and istate = 1 group by itype, cbilltype", userId];
+    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype", userId];
     if (!resultSet) {
         [resultSet close];
         return NO;
@@ -213,8 +213,16 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *currentDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate day]];
         NSDate *recentEndDate = [NSDate dateWithString:[resultSet stringForColumn:@"max(cedate)"] formatString:@"yyyy-MM-dd"];
         
-        //  如果最近的一次预算时间晚于或等于当前时间，就忽略
+        //  如果最近的一次预算周期等于当前周期，就忽略
         if ([recentEndDate compare:currentDate] != NSOrderedAscending) {
+            continue;
+        }
+        
+        int operatortype = [resultSet intForColumn:@"operatortype"];
+        int istate = [resultSet intForColumn:@"istate"];
+        
+        // 如果最近一次预算已删除或关闭，就忽略
+        if (operatortype == 2 || istate == 0) {
             continue;
         }
         
