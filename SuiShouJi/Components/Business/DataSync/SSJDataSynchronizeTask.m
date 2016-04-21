@@ -199,13 +199,14 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     }];
     
     if (self.userId.length) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"signature"] forUserId:self.userId];
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"nickName", @"signature",@"writeDate"] forUserId:self.userId];
         [jsonObject setObject:@[@{@"cuserid":self.userId,
                                   @"crealname":userItem.nickName ?: @"",
                                   @"usersignature":userItem.signature ?: @"",
                                   @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
                                   @"isource":SSJDefaultSource(),
-                                  @"operatortype":@1}] forKey:@"bk_user"];
+                                  @"operatortype":@1,
+                                  @"cwritedate":userItem.writeDate ?: @""}] forKey:@"bk_user"];
     }
     
     if (*error) {

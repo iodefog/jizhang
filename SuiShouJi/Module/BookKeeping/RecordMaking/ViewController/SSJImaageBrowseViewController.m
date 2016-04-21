@@ -9,7 +9,6 @@
 #import "SSJImaageBrowseViewController.h"
 
 @interface SSJImaageBrowseViewController ()
-@property (nonatomic,strong) UIButton *backButton;
 @property (nonatomic,strong) UIButton *changeImageButton;
 @property (nonatomic,strong) UIButton *deleteButton;
 @property (nonatomic,strong) UIButton *comfirmButton;
@@ -18,6 +17,7 @@
 @property (nonatomic,strong) UILabel *moneyLabel;
 @property (nonatomic,strong) UILabel *memoLabel;
 @property (nonatomic,strong) UILabel *dateLabel;
+@property(nonatomic, strong) UIView *leftButtonView;
 @end
 
 @implementation SSJImaageBrowseViewController{
@@ -53,15 +53,13 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     [[self navigationController] setNavigationBarHidden:NO animated:NO];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"pic_back"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
-    self.navigationItem.leftBarButtonItem = rightItem;
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithCustomView:self.leftButtonView];
+    self.navigationItem.leftBarButtonItem = leftItem;
 }
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.imageBrowser.center = self.view.center;
-    self.backButton.size = CGSizeMake(30, 30);
-    self.backButton.leftTop = CGPointMake(10, 10);
     self.bottomBackGroundView.size = CGSizeMake(self.view.width, 100);
     self.bottomBackGroundView.bottom = self.view.height;
     self.comfirmButton.size = CGSizeMake(58, 58);
@@ -149,6 +147,18 @@
         _memoLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _memoLabel;
+}
+
+-(UIView *)leftButtonView{
+    if (!_leftButtonView) {
+        _leftButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+        UIButton *backButton = [[UIButton alloc]init];
+        backButton.frame = CGRectMake(0, 0, 44, 44);
+        [backButton setImage:[UIImage imageNamed:@"pic_back"] forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_leftButtonView addSubview:backButton];
+    }
+    return _leftButtonView;
 }
 
 -(UILabel *)dateLabel{
