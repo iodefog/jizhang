@@ -397,13 +397,13 @@
     }];
     [SSJBookKeepingHomeHelper queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        [weakSelf.tableView reloadData];
+        [weakSelf.tableView ssj_hideLoadingIndicator];
         if (result.count == 0) {
             [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
         }else{
             [weakSelf.tableView ssj_hideWatermark:YES];
         }
-        [weakSelf.tableView reloadData];
-        [weakSelf.tableView ssj_hideLoadingIndicator];
     }failure:^(NSError *error) {
         
     }];
