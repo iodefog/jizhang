@@ -259,32 +259,39 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)ssj_showWatermarkWithCustomView:(UIView *)view animated:(BOOL)animated target:(id)target action:(SEL)action {
     UIView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
     
+    if (watermark == self) {
+        return;
+    }
+    
     if (watermark != view) {
         [watermark removeFromSuperview];
         watermark = view;
         objc_setAssociatedObject(self, kDefaultWatermarkKey, watermark, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
-    if (watermark.superview != self && watermark != self) {
+    if ([self isKindOfClass:[UIScrollView class]]) {
+        UIScrollView *scrollView = (UIScrollView *)self;
+        objc_setAssociatedObject(self, kOriginalContentSizeKey, [NSValue valueWithCGSize:scrollView.contentSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        CGSize contentSize = scrollView.contentSize;
+        contentSize.height = MAX(watermark.height, scrollView.contentSize.height);
+        scrollView.contentSize = contentSize;
+        watermark.center = CGPointMake(contentSize.width * 0.5, contentSize.height * 0.5);
+    } else {
+        watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+    }
+    
+    if ([target respondsToSelector:action]) {
+        for (UIGestureRecognizer *gesture in watermark.gestureRecognizers) {
+            [watermark removeGestureRecognizer:gesture];
+        }
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
+        [watermark addGestureRecognizer:tapGesture];
+    }
+    
+    if (watermark.superview != self) {
         [self addSubview:watermark];
         
-        if ([target respondsToSelector:action]) {
-            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
-            [watermark addGestureRecognizer:tapGesture];
-        }
-        
         watermark.alpha = 0;
-        if ([self isKindOfClass:[UIScrollView class]]) {
-            UIScrollView *scrollView = (UIScrollView *)self;
-            objc_setAssociatedObject(self, kOriginalContentSizeKey, [NSValue valueWithCGSize:scrollView.contentSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-            CGSize contentSize = scrollView.contentSize;
-            contentSize.height = MAX(watermark.height, scrollView.contentSize.height);
-            scrollView.contentSize = contentSize;
-            watermark.center = CGPointMake(contentSize.width * 0.5, contentSize.height * 0.5);
-        } else {
-            watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
-        }
-        
         [UIView animateWithDuration:(animated ? kAnimationDuration : 0) animations:^{
             watermark.alpha = 1;
         } completion:nil];
