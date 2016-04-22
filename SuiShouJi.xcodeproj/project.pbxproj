@@ -72,6 +72,7 @@
 		7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7C1C96C93A00CB75B0 /* SSJSynchronizeTask.m */; };
 		7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */; };
 		7D768A831C97E76400CB75B0 /* SSJDatabaseVersion1.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */; };
+		7D79FDDA1CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D79FDD91CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.m */; };
 		7D83081F1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D83081E1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m */; };
 		7D8308221CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8308211CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.m */; };
 		7D8308251CB4F66B004E48ED /* SSJMagicExportResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8308241CB4F66B004E48ED /* SSJMagicExportResultViewController.m */; };
@@ -860,6 +861,8 @@
 		7D768A811C97E76400CB75B0 /* SSJDatabaseVersion1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion1.h; sourceTree = "<group>"; };
 		7D768A821C97E76400CB75B0 /* SSJDatabaseVersion1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion1.m; sourceTree = "<group>"; };
 		7D768A841C97E78600CB75B0 /* SSJDatabaseVersionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersionProtocol.h; sourceTree = "<group>"; };
+		7D79FDD81CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportAnnouncementViewController.h; sourceTree = "<group>"; };
+		7D79FDD91CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportAnnouncementViewController.m; sourceTree = "<group>"; };
 		7D83081D1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarHeaderView.h; sourceTree = "<group>"; };
 		7D83081E1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarHeaderView.m; sourceTree = "<group>"; };
 		7D8308201CB4BA26004E48ED /* SSJMagicExportCalendarWeekView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarWeekView.h; sourceTree = "<group>"; };
@@ -2140,6 +2143,8 @@
 				7DB428FD1CAE108A00B46F32 /* SSJMagicExportCalendarViewController.m */,
 				7D8308231CB4F66B004E48ED /* SSJMagicExportResultViewController.h */,
 				7D8308241CB4F66B004E48ED /* SSJMagicExportResultViewController.m */,
+				7D79FDD81CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.h */,
+				7D79FDD91CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4972,6 +4977,7 @@
 				9CD5C38A1CB3A427004CC3FE /* SSJPersonalDetailHelper.m in Sources */,
 				BD0433B91C1AA2FF0051E7AB /* SSJBookKeepingHomeViewController.m in Sources */,
 				BDF382411C3E0E4100955038 /* SSJColorSelectViewControllerViewController.m in Sources */,
+				7D79FDDA1CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.m in Sources */,
 				BD774A971C88348B001E11FB /* SSJBookkeepingRiminderCell.m in Sources */,
 				7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */,
 				BDBA5CAA1C89C3FD00224AC6 /* SSJLocalNotificationHelper.m in Sources */,
