@@ -52,7 +52,9 @@
 @property(nonatomic) BOOL refreshSuccessOrNot;
 @end
 
-@implementation SSJBookKeepingHomeViewController
+@implementation SSJBookKeepingHomeViewController{
+    BOOL _isRefreshing;
+}
   
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -185,7 +187,8 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38) {
+    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
+        _isRefreshing = YES;
         [self.homeButton startLoading];
         scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
         self.statusLabel.hidden = NO;
@@ -352,6 +355,7 @@
             dispatch_after(time, dispatch_get_main_queue(), ^{
                 weakSelf.statusLabel.text = @"";
                 weakSelf.statusLabel.hidden = YES;
+                _isRefreshing = NO;
             });
         };
     }

@@ -118,6 +118,7 @@
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
     [super motionBegan:motion withEvent:event];
     
+    [MobClick event:@"16"];
     // 如果正在请求签到接口，直接返回
     if (_checkInService.isLoading) {
         return;
@@ -134,6 +135,7 @@
     if ([self saveCheckInModel]) {
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
             if (success) {
+                [MobClick event:@"17"];
                 [_treeView startRainWithGifData:data completion:^{
                     _checkInStateLab.text = @"Yeah,浇水成功啦！";
                     [self showWaterSuccessAlert];
