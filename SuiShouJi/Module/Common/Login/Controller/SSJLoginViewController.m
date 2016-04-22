@@ -111,9 +111,9 @@
         self.thirdPartyLoginLabel.centerX = self.view.width / 2;
         self.thirdPartyLoginLabel.bottom = self.view.height - 110;
         if ([WXApi isWXAppInstalled]) {
-            self.tencentLoginButton.centerX = self.view.width / 2 / 2;
+            self.tencentLoginButton.centerX = self.view.width / 2 - 50;
             self.tencentLoginButton.centerY = self.view.height - 55;
-            self.weixinLoginButton.centerX = self.view.width / 2 + self.view.width / 2 / 2;
+            self.weixinLoginButton.centerX = self.view.width / 2 + 50;
             self.weixinLoginButton.centerY = self.view.height - 55;
             self.weixinLoginButton.hidden = NO;
         }else{
@@ -139,9 +139,9 @@
         self.thirdPartyLoginLabel.centerX = self.view.width / 2;
         self.thirdPartyLoginLabel.bottom = self.view.height - 150;
         if ([WXApi isWXAppInstalled]) {
-            self.tencentLoginButton.centerX = self.view.width / 2 / 2;
+            self.weixinLoginButton.centerX = self.view.width / 2 - 50;
             self.tencentLoginButton.centerY = self.view.height - 75;
-            self.weixinLoginButton.centerX = self.view.width / 2 + self.view.width / 2 / 2;
+            self.tencentLoginButton.centerX = self.view.width / 2 + 50;
             self.weixinLoginButton.centerY = self.view.height - 75;
             self.weixinLoginButton.hidden = NO;
         }else{
