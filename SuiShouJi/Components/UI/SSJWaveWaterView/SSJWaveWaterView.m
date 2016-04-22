@@ -28,7 +28,7 @@
         self.borderColor = [UIColor orangeColor];
         
         _topTitleFontSize = 12;
-        _bottomTitleFontSize = 18;
+        _bottomTitleFontSize = 15;
         _topTitleColor = [UIColor whiteColor];
         _bottomTitleColor = [UIColor whiteColor];
         
