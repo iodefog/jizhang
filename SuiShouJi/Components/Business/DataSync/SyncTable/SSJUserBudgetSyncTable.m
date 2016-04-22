@@ -63,7 +63,9 @@
         if ([record[@"operatortype"] intValue] != 2) {
             
             //  本地记录修改时间较晚，保留本地记录，忽略合并记录
-            NSDate *localDate = [resultSet dateForColumn:@"cwritedate"];
+            NSString *localDateStr = [resultSet stringForColumn:@"cwritedate"];
+            NSDate *localDate = [NSDate dateWithString:localDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            
             if ([mergeDate compare:localDate] == NSOrderedAscending) {
                 [resultSet close];
                 return NO;

@@ -25,6 +25,9 @@
 
 #import <ZipZap/ZipZap.h>
 
+//
+static const NSTimeInterval kTimeoutInterval = 30;
+
 //  同步文件名称
 static NSString *const kSyncFileName = @"sync_data.json";
 
@@ -268,6 +271,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     [parameters enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [request setValue:obj forHTTPHeaderField:key];
     }];
+    
+    request.timeoutInterval = kTimeoutInterval;
     
     //  开始上传
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];

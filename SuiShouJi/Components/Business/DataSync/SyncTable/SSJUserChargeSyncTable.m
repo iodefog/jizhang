@@ -27,6 +27,7 @@
 }
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
+    
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
     NSString *configId = record[@"iconfigid"];  //  定期记账配置id可已为空（仅一次）
@@ -76,8 +77,10 @@
 //                return NO;
 //            }
             
+            
             //  本地记录修改时间晚于将要合并数据的修改时间，保留本地记录，忽略合并记录
-            NSDate *localDate = [resultSet dateForColumn:@"cwritedate"];
+            NSString *localDateStr = [resultSet stringForColumn:@"cwritedate"];
+            NSDate *localDate = [NSDate dateWithString:localDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
             NSDate *mergeDate = [NSDate dateWithString:record[@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
             if ([mergeDate compare:localDate] == NSOrderedAscending) {
                 [resultSet close];
