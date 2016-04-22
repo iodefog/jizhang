@@ -76,7 +76,7 @@ static const int kDatabaseVersion = 2;
 
 + (NSDictionary *)databaseVersionInfo {
     return @{@1:[SSJDatabaseVersion1 class],
-             @1:[SSJDatabaseVersion2 class]};
+             @2:[SSJDatabaseVersion2 class]};
 }
 
 @end
