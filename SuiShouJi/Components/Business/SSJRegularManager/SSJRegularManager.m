@@ -114,8 +114,8 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
-    //  查询当前用户所有定期记账最近一次的流水记录
-    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.operatortype <> 2 group by b.iconfigid", userId, userId];
+    //  查询当前用户所有有效定期记账最近一次的流水记录
+    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
     if (!resultSet) {
         return NO;
     }
