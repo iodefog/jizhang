@@ -151,8 +151,10 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
+                    //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
+                    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
+                    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
                     if (success) {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
                         SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
                         success();
                     }
@@ -343,11 +345,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
             return NO;
         }
     }
-    
-    //  合并数据完成后根据定期记账和定期预算进行补充；如果补充失败，也不影响同步，在其他时机可以再次补充
-    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
-    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
-    
     
     //  所有数据合并成功、版本号更新成功后，插入一个新的记录到BK_SYNC中
     if (updateVersionSuccess) {
