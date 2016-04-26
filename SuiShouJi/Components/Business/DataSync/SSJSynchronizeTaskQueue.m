@@ -54,12 +54,14 @@
                 }
                 [self.tasks removeObject:self.task];
                 self.task = nil;
+                [self performTaskIfNeeded];
             } failure:^(NSError *error) {
                 if (self.delegate && [self.delegate respondsToSelector:@selector(synchronizeTaskQueue:failToFinishTask:error:)]) {
                     [self.delegate synchronizeTaskQueue:self failToFinishTask:self.task error:error];
                 }
                 [self.tasks removeObject:self.task];
                 self.task = nil;
+                [self performTaskIfNeeded];
             }];
         });
     }
