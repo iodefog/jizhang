@@ -41,9 +41,9 @@
         }
     }
     
-    if (![db executeUpdate:@"alter table bk_user alter column cDefaultFundAcctState integer default 0"]) {
-        return [db lastError];
-    }
+//    if (![db executeUpdate:@"alter table bk_user alter column cDefaultFundAcctState integer default 0"]) {
+//        return [db lastError];
+//    }
     
     return nil;
 }
