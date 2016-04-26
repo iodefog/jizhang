@@ -12,27 +12,40 @@
 @implementation SSJDatabaseVersion2
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
-    NSError *error = nil;
-    error = [self upgradeUserTableWithDatabase:db];
+    NSError *error = [self upgradeUserTableWithDatabase:db];;
+    if (error) {
+        return error;
+    }
+    
     error = [self createUserTreeWithDatabase:db];
-    return error;
+    if (error) {
+        return error;
+    }
+    
+    return nil;
 }
 
 //  更新用户表
 + (NSError *)upgradeUserTableWithDatabase:(FMDatabase *)db {
-    NSError *error = nil;
     if (![db columnExists:@"usersignature" inTableWithName:@"bk_user"]) {
         if (![db executeUpdate:@"alter table bk_user add usersignature text"]) {
-            error = [db lastError];
+            return [db lastError];
         }
     }
     if (![db columnExists:@"cwritedate" inTableWithName:@"bk_user"]) {
         if (![db executeUpdate:@"alter table bk_user add cwritedate text"]) {
-            error = [db lastError];
+            return [db lastError];
+        }
+        if (![db executeUpdate:@"update bk_user set cwritedate = ?", [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+            return [db lastError];
         }
     }
     
-    return error;
+    if (![db executeUpdate:@"alter table bk_user alter column cDefaultFundAcctState integer default 0"]) {
+        return [db lastError];
+    }
+    
+    return nil;
 }
 
 + (NSError *)createUserTreeWithDatabase:(FMDatabase *)db {
