@@ -29,6 +29,9 @@ PODS:
     - FMDB/common
   - iOS-WebP (0.4):
     - libwebp (~> 0.4.2)
+  - JSPatch (1.0):
+    - JSPatch/Core (= 1.0)
+  - JSPatch/Core (1.0)
   - libwebp (0.4.4):
     - libwebp/core (= 0.4.4)
     - libwebp/dec (= 0.4.4)
@@ -54,6 +57,7 @@ PODS:
     - libwebp/core
   - libwebp/webp (0.4.4)
   - MJExtension (3.0.7)
+  - RESideMenu (4.0.7)
   - SDWebImage (3.7.3):
     - SDWebImage/Core (= 3.7.3)
   - SDWebImage/Core (3.7.3)
@@ -71,7 +75,9 @@ DEPENDENCIES:
   - FLAnimatedImage (~> 1.0)
   - FMDB
   - iOS-WebP (= 0.4)
+  - JSPatch
   - MJExtension
+  - RESideMenu (~> 4.0.7)
   - SDWebImage (~> 3.7)
   - SDWebImage/WebP
   - UMengAnalytics-NO-IDFA
@@ -85,8 +91,10 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 96e8f1bcc1329e269330f99770ad4285d9003e52
   iOS-WebP: 436d3c506b7587bdef926d1d1c76f8dbf3905edc
+  JSPatch: c689ea4dde17441f2f4a95d40dfedb8900c20099
   libwebp: 7d74f1ab887df77f23493ce115c9424fad5411b5
   MJExtension: 290cc966f0f849b12b6391a38e296e0004ae8e5e
+  RESideMenu: f24c508404b49c667344c54aba7e590883533958
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
   UMengAnalytics-NO-IDFA: 6d02561a00579b2e37718f204eb81347df5d7b8b
   UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
