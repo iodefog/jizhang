@@ -15,22 +15,13 @@
 @property (nonatomic,strong) UIButton *categoryImageButton;
 @property (nonatomic,strong) UIButton *editeButton;
 @property (nonatomic,strong) UIButton *deleteButton;
-@property (nonatomic,strong) UILabel *incomeLabel;
-@property (nonatomic,strong) UILabel *expenditureLabel;
-@property (nonatomic,strong) UIView *toplineView;
-@property (nonatomic,strong) UILabel *incomeMemoLabel;
-@property (nonatomic,strong) UILabel *expentureMemoLabel;
-@property (nonatomic,strong) UIImageView *IncomeImage;
-@property (nonatomic,strong) UIImageView *expentureImage;
-
 @end
 
 @implementation SSJBookKeepingHomeTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self addSubview:self.toplineView];
-        [self addSubview:self.bottomlineView];
+        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.categoryImageButton];
         [self addSubview:self.expenditureLabel];
         [self addSubview:self.incomeLabel];
@@ -53,10 +44,6 @@
     self.incomeLabel.centerY = self.height / 2;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
     self.expenditureLabel.centerY = self.height / 2;
-    self.toplineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
-    self.toplineView.centerX = self.centerX;
-    self.bottomlineView.top = self.categoryImageButton.bottom;
-    self.bottomlineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
     self.bottomlineView.centerX = self.centerX;
     self.incomeMemoLabel.width = self.width / 2 - 30;
     self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
@@ -124,9 +111,11 @@
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
         _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 38, 38)];
+        [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _categoryImageButton.backgroundColor = [UIColor whiteColor];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageButton.layer.cornerRadius = 19;
+        _categoryImageButton.layer.masksToBounds = YES;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _categoryImageButton;
@@ -152,22 +141,6 @@
         [_deleteButton addTarget:self action:@selector(deleteButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteButton;
-}
-
--(UIView *)toplineView{
-    if (!_toplineView) {
-        _toplineView = [[UIView alloc]init];
-        _toplineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
-    }
-    return _toplineView;
-}
-
--(UIView *)bottomlineView{
-    if (!_bottomlineView) {
-        _bottomlineView = [[UIView alloc]init];
-        _bottomlineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
-    }
-    return _bottomlineView;
 }
 
 -(UILabel *)incomeMemoLabel{
@@ -251,7 +224,7 @@
         [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
-        _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
         _IncomeImage.hidden = YES;
         _expentureImage.hidden = YES;
         _IncomeImage.image = nil;
@@ -275,7 +248,6 @@
             [self.incomeLabel sizeToFit];
 
         }else{
-
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
             self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -290,6 +262,7 @@
             [self.expenditureLabel sizeToFit];
         }
     }else{
+        [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         if (!item.incomeOrExpence) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",item.typeName,[item.money doubleValue]];
             [self.incomeLabel sizeToFit];
@@ -357,7 +330,6 @@
 
 -(void)setIsEdite:(BOOL)isEdite{
     _isEdite = isEdite;
-    
 }
 
 -(void)editeButtonClicked{

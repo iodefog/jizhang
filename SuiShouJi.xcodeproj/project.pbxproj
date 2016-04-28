@@ -401,8 +401,11 @@
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
+		9C5673591CCF444900B756BB /* home_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C5673581CCF444900B756BB /* home_line.png */; };
 		9C6F58B41CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F58B31CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m */; };
 		9C6F58BF1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F58BE1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m */; };
+		9C7089621CD1B63B006F3A62 /* SSJScrollTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7089611CD1B63B006F3A62 /* SSJScrollTextLayer.m */; };
+		9C70896C1CD1B7EE006F3A62 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C70896B1CD1B7EE006F3A62 /* SSJScrollTextView.m */; };
 		9CB85EA21CA3DB5D00715816 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB85EA11CA3DB5D00715816 /* SSJFinancingHomeHelper.m */; };
 		9CD5C38A1CB3A427004CC3FE /* SSJPersonalDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C37D1CB3A427004CC3FE /* SSJPersonalDetailHelper.m */; };
 		9CD5C38B1CB3A427004CC3FE /* SSJPersonalDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3801CB3A427004CC3FE /* SSJPersonalDetailItem.m */; };
@@ -601,7 +604,6 @@
 		BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */; };
 		BDCE42471C9F8C6800682B27 /* zhouqi_none@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCE42461C9F8C6800682B27 /* zhouqi_none@2x.png */; };
 		BDCE42491C9F8C6C00682B27 /* zhouqi_none@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDCE42481C9F8C6C00682B27 /* zhouqi_none@3x.png */; };
-		BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */; };
 		BDD78B001C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */; };
 		BDD78B021C1FA4E100C7EE0E /* SSJCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78AFF1C1FA4E100C7EE0E /* SSJCalendarView.m */; };
 		BDD78B2F1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */; };
@@ -1286,10 +1288,15 @@
 		9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeTableViewCell.m; sourceTree = "<group>"; };
 		9C434E321C2AD4DF00A3D61E /* SSJCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCalendarViewController.h; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.h; sourceTree = SOURCE_ROOT; };
 		9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCalendarViewController.m; path = SuiShouJi/Module/BookKeeping/RecordMaking/View/SSJCalendarViewController.m; sourceTree = SOURCE_ROOT; };
+		9C5673581CCF444900B756BB /* home_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_line.png; sourceTree = "<group>"; };
 		9C6F58B21CB5F61D00A250A0 /* SSJChargeDetailMemoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeDetailMemoCell.h; sourceTree = "<group>"; };
 		9C6F58B31CB5F61D00A250A0 /* SSJChargeDetailMemoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeDetailMemoCell.m; sourceTree = "<group>"; };
 		9C6F58BD1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalenderDetaiImagelFooterView.h; sourceTree = "<group>"; };
 		9C6F58BE1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalenderDetaiImagelFooterView.m; sourceTree = "<group>"; };
+		9C7089601CD1B63B006F3A62 /* SSJScrollTextLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJScrollTextLayer.h; sourceTree = "<group>"; };
+		9C7089611CD1B63B006F3A62 /* SSJScrollTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJScrollTextLayer.m; sourceTree = "<group>"; };
+		9C70896A1CD1B7EE006F3A62 /* SSJScrollTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJScrollTextView.h; sourceTree = "<group>"; };
+		9C70896B1CD1B7EE006F3A62 /* SSJScrollTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJScrollTextView.m; sourceTree = "<group>"; };
 		9CB85EA01CA3DB5D00715816 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
 		9CB85EA11CA3DB5D00715816 /* SSJFinancingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHelper.m; sourceTree = "<group>"; };
 		9CD5C37C1CB3A427004CC3FE /* SSJPersonalDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPersonalDetailHelper.h; sourceTree = "<group>"; };
@@ -1611,7 +1618,6 @@
 		BDC01FF21C2D92E3008B1F75 /* CDAutoHideMessageHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAutoHideMessageHUD.m; sourceTree = "<group>"; };
 		BDCE42461C9F8C6800682B27 /* zhouqi_none@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhouqi_none@2x.png"; sourceTree = "<group>"; };
 		BDCE42481C9F8C6C00682B27 /* zhouqi_none@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhouqi_none@3x.png"; sourceTree = "<group>"; };
-		BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHeader.xib; sourceTree = "<group>"; };
 		BDD78AFA1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarCollectionViewCell.h; sourceTree = "<group>"; };
 		BDD78AFB1C1FA4E100C7EE0E /* SSJCalendarCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCalendarCollectionViewCell.m; sourceTree = "<group>"; };
 		BDD78AFE1C1FA4E100C7EE0E /* SSJCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCalendarView.h; sourceTree = "<group>"; };
@@ -3327,7 +3333,6 @@
 			children = (
 				BD2854781C1EBCC20014C736 /* SSJBookKeepingHeader.h */,
 				BD2854791C1EBCC20014C736 /* SSJBookKeepingHeader.m */,
-				BDD78AED1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib */,
 				BDD78B2D1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.h */,
 				BDD78B2E1C1FE56B00C7EE0E /* SSJBookKeepingHomeTableViewCell.m */,
 				BDF382381C3DFF8C00955038 /* SSJHomeBarButton.h */,
@@ -3345,6 +3350,10 @@
 				9C0E8C3C1CBB3ADF0093F79E /* SSJBookKeepingButton.m */,
 				9C2BCFCC1CBFA06000D8D8D3 /* SSJHomeTableView.h */,
 				9C2BCFCD1CBFA06000D8D8D3 /* SSJHomeTableView.m */,
+				9C7089601CD1B63B006F3A62 /* SSJScrollTextLayer.h */,
+				9C7089611CD1B63B006F3A62 /* SSJScrollTextLayer.m */,
+				9C70896A1CD1B7EE006F3A62 /* SSJScrollTextView.h */,
+				9C70896B1CD1B7EE006F3A62 /* SSJScrollTextView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4080,6 +4089,7 @@
 		BDF510741C925BB500A49D74 /* homeImage */ = {
 			isa = PBXGroup;
 			children = (
+				9C5673581CCF444900B756BB /* home_line.png */,
 				9C2BCFC31CBF8DC400D8D8D3 /* home_add@3x.png */,
 				9C1833D11CBE56CC00C5B54B /* home_add@2x.png */,
 				BDF510751C925BB500A49D74 /* home_back@2x.png */,
@@ -4326,6 +4336,7 @@
 				7DD7D69A1C4C8E6A00ACE71A /* bt_digital@2x.png in Resources */,
 				BDFBDAC61C7EB0E80049F179 /* bt_baby@3x.png in Resources */,
 				7DD7D6CB1C4C8E6A00ACE71A /* bt_recharge@3x.png in Resources */,
+				9C5673591CCF444900B756BB /* home_line.png in Resources */,
 				7DDDA7C51CBE1BFD0029ADAC /* help_tree_level_8@3x.png in Resources */,
 				9CEB85C21CC5D8FC00AE8F8D /* mark_pic@3x.png in Resources */,
 				BDDB68201C9FE54700C27E79 /* yindao@3x.jpg in Resources */,
@@ -4576,7 +4587,6 @@
 				BD8C7F981C914CC400A70100 /* no_record_bg@3x.png in Resources */,
 				7DD7D6E01C4C8E6A00ACE71A /* bt_tuikuan@2x.png in Resources */,
 				BDF510971C925C8D00A49D74 /* tab_more_nor@2x.png in Resources */,
-				BDD78AEE1C1ECD4200C7EE0E /* SSJBookKeepingHeader.xib in Resources */,
 				9C2BCFB91CBF72D900D8D8D3 /* more_weixin@3x.png in Resources */,
 				7DD7D6901C4C8E6A00ACE71A /* bt_clean@2x.png in Resources */,
 				7DD7D69B1C4C8E6A00ACE71A /* bt_digital@3x.png in Resources */,
@@ -4766,6 +4776,7 @@
 				BD0432F61C1A77BB0051E7AB /* TPKeyboardAvoidingTableView.m in Sources */,
 				BD0433241C1A78B40051E7AB /* SSJImageAddition.m in Sources */,
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,
+				9C70896C1CD1B7EE006F3A62 /* SSJScrollTextView.m in Sources */,
 				BD49343C1C35010200300D43 /* SSJMineHomeTabelviewCell.m in Sources */,
 				9C2BCFCE1CBFA06000D8D8D3 /* SSJHomeTableView.m in Sources */,
 				7DE27FBE1CB6771A00D5EB41 /* SSJMagicExportCalendarIndexPath.m in Sources */,
@@ -4868,6 +4879,7 @@
 				7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */,
 				7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */,
 				7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */,
+				9C7089621CD1B63B006F3A62 /* SSJScrollTextLayer.m in Sources */,
 				7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */,
 				9C0E8C281CB645900093F79E /* UMChatToolBar.m in Sources */,
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
@@ -5158,8 +5170,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5181,9 +5193,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "fcae74cd-30fe-4bbc-afff-dd7056de98bb";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -5196,8 +5208,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5219,9 +5231,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "fcae74cd-30fe-4bbc-afff-dd7056de98bb";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

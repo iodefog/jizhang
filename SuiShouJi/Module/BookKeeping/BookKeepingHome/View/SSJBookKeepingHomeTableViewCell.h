@@ -35,4 +35,16 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 
 @property (nonatomic) BOOL isLastRowOrNot;
 
+@property (nonatomic,strong) UILabel *incomeLabel;
+
+@property (nonatomic,strong) UILabel *expenditureLabel;
+
+@property (nonatomic,strong) UILabel *incomeMemoLabel;
+
+@property (nonatomic,strong) UILabel *expentureMemoLabel;
+
+@property (nonatomic,strong) UIImageView *IncomeImage;
+
+@property (nonatomic,strong) UIImageView *expentureImage;
+
 @end

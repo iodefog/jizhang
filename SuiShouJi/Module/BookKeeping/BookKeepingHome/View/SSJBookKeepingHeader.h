@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJScrollTextView.h"
 
 @interface SSJBookKeepingHeader : UIView
 
@@ -17,10 +18,13 @@
 //本月收入
 @property(nonatomic,strong)NSString *income;
 
+@property (strong, nonatomic) UILabel *expenditureTitleLabel;
+
+@property (strong, nonatomic) UILabel *incomeTitleLabel;
+
 
 //当前月份
 @property (nonatomic)long currentMonth;
 
-+ (id)BookKeepingHeader;
 
 @end

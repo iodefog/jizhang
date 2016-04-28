@@ -54,8 +54,9 @@
 
 @implementation SSJBookKeepingHomeViewController{
     BOOL _isRefreshing;
+    BOOL _hasLoad;
 }
-  
+
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -69,6 +70,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    _hasLoad = NO;
     self.tableView.contentInset = UIEdgeInsetsMake(38, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     self.extendedLayoutIncludesOpaqueBars = YES;
@@ -209,12 +211,32 @@
 }
 
 #warning test
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    cell.transform = CGAffineTransformMakeTranslation(0, self.view.height * (indexPath.row + 1));
-//    [UIView animateWithDuration:2 animations:^{
-//        cell.transform = CGAffineTransformI   dentity;
-//    }];
-//}
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (!_hasLoad) {
+        SSJBookKeepingHomeTableViewCell * visibleCell = (SSJBookKeepingHomeTableViewCell *)cell;
+        visibleCell.incomeLabel.alpha = 0;
+        visibleCell.expenditureLabel.alpha = 0;
+        visibleCell.incomeMemoLabel.alpha = 0;
+        visibleCell.expentureMemoLabel.alpha = 0;
+        visibleCell.IncomeImage.alpha = 0;
+        visibleCell.expentureImage.alpha = 0;
+        visibleCell.transform = CGAffineTransformMakeTranslation(0, self.view.height);
+        [UIView animateWithDuration:1 delay:0.1 * (indexPath.row + 1) options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            visibleCell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:1 animations:^{
+                visibleCell.incomeLabel.alpha = 1;
+                visibleCell.expenditureLabel.alpha = 1;
+                visibleCell.incomeMemoLabel.alpha = 1;
+                visibleCell.expentureMemoLabel.alpha = 1;
+                visibleCell.IncomeImage.alpha = 1;
+                visibleCell.expentureImage.alpha = 1;
+            } completion:^(BOOL finished) {
+                _hasLoad = YES;
+            }];
+        }];
+    }
+}
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -312,7 +334,7 @@
 
 -(SSJBookKeepingHeader *)bookKeepingHeader{
     if (!_bookKeepingHeader) {
-        _bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
+        _bookKeepingHeader = [[SSJBookKeepingHeader alloc]init];
         _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 132);
     }
     return _bookKeepingHeader;
