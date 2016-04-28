@@ -10,4 +10,6 @@
 
 @interface SSJBookKeepingHomeViewController : SSJBaseViewController
 <UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic) BOOL hasLoad;
+
 @end

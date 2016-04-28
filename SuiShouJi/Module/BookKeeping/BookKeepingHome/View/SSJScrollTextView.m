@@ -33,6 +33,7 @@
 
 -(void)setString:(NSString *)string{
     _string = string;
+    int validNumCount = 0;
     for (int i = 0; i < self.layerArr.count; i ++) {
         [[self.layerArr objectAtIndex:i] removeFromSuperlayer];
     }
@@ -56,11 +57,12 @@
             textLayer.textFont = self.textFont;
             textLayer.frame = CGRectMake(totalStrWidth, 0, strWidth, siglestringHeight);
             textLayer.textColor = self.textColor;
-            textLayer.animationDuration = self.totalAnimationDuration / (1 + (i + 1)*0.3);
+            textLayer.animationDuration = self.totalAnimationDuration / (1 + (validNumCount + 1)*0.3);
             textLayer.numStr = tempStr;
             [self.layer addSublayer:textLayer];
             totalStrWidth += strWidth;
             [self.layerArr addObject:textLayer];
+            validNumCount ++;
         }
     }
     [self sizeToFit];
