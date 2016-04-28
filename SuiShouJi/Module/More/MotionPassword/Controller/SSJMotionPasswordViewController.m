@@ -45,12 +45,18 @@ static const int kVerifyFailureTimesLimit = 5;
 #pragma mark - Lifecycle
 + (void)verifyMotionPasswordIfNeeded:(void (^)())finish {
     if (!SSJIsUserLogined()) {
+        if (finish) {
+            finish();
+        }
         return;
     }
     
     //  如果当前页面已经是手势密码，直接返回
     UIViewController *currentVC = SSJVisibalController();
     if ([currentVC isKindOfClass:[SSJMotionPasswordViewController class]]) {
+        if (finish) {
+            finish();
+        }
         return;
     }
     
@@ -74,28 +80,32 @@ static const int kVerifyFailureTimesLimit = 5;
             return;
         }
         
-        //  手势密码没有设置过，提醒用户设置
-        SSJAlertViewAction *nextAction = [SSJAlertViewAction actionWithTitle:@"下次再说" handler:^(SSJAlertViewAction *action) {
-            //  关闭手势密码
-            SSJUserItem *userItem = [[SSJUserItem alloc] init];
-            userItem.userId = SSJUSERID();
-            userItem.motionPWDState = @"0";
-            [SSJUserTableManager saveUserItem:userItem];
-        }];
-        
-        SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"去设置" handler:^(SSJAlertViewAction *action) {
-            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-            motionVC.finishHandle = ^(UIViewController *controller) {
-                if (finish) {
-                    finish();
-                }
-                [controller dismissViewControllerAnimated:YES completion:NULL];
-            };
-            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
-            [currentVC presentViewController:naviVC animated:YES completion:NULL];
-        }];
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您还没有设置手势密码，是否去设置？" action:nextAction, sureAction, nil];
+//        //  手势密码没有设置过，提醒用户设置
+//        SSJAlertViewAction *nextAction = [SSJAlertViewAction actionWithTitle:@"下次再说" handler:^(SSJAlertViewAction *action) {
+//            //  关闭手势密码
+//            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+//            userItem.userId = SSJUSERID();
+//            userItem.motionPWDState = @"0";
+//            [SSJUserTableManager saveUserItem:userItem];
+//        }];
+//        
+//        SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"去设置" handler:^(SSJAlertViewAction *action) {
+//            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+//            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+//            motionVC.finishHandle = ^(UIViewController *controller) {
+//                if (finish) {
+//                    finish();
+//                }
+//                [controller dismissViewControllerAnimated:YES completion:NULL];
+//            };
+//            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+//            [currentVC presentViewController:naviVC animated:YES completion:NULL];
+//        }];
+//        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您还没有设置手势密码，是否去设置？" action:nextAction, sureAction, nil];
+    }
+    
+    if (finish) {
+        finish();
     }
 }
 
