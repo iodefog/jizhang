@@ -478,11 +478,17 @@
                 [weakSelf.tableView ssj_hideWatermark:YES];
             }
         }else{
+            [weakSelf.tableView ssj_hideWatermark:YES];
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
-            NSArray *newAddArr = [NSArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
+            NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
+            if (weakSelf.items.count == 1) {
+                [weakSelf.tableView beginUpdates];
+                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                [weakSelf.tableView endUpdates];
+            }
             for (int i = 0; i < newAddArr.count; i++) {
                 SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
-                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
                 [weakSelf.items insertObject:item atIndex:item.chargeIndex];
                 [weakSelf.tableView beginUpdates];
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
