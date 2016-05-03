@@ -14,6 +14,7 @@ NSString *const SSJIncomeSumlKey = @"SSJIncomeSumlKey";
 NSString *const SSJExpentureSumKey = @"SSJExpentureSumKey";
 NSString *const SSJOrginalChargeArrKey = @"SSJOrginalChargeArrKey";
 NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
+NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
 
 @implementation SSJBookKeepingHomeHelper
 
@@ -50,8 +51,11 @@ NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
         NSString *userid = SSJUSERID();
         NSMutableArray *originalChargeArr = [NSMutableArray array];
         NSMutableArray *newAddChargeArr = [NSMutableArray array];
-        int count = 0;
+        NSMutableDictionary *summaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
+        NSString *lastDate = @"";
+        int count = 0;
+        int chargeCount = 0;
         FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         if (!chargeResult) {
             if (failure) {
@@ -77,7 +81,16 @@ NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
             item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
             item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
             int configOperatorType = [chargeResult intForColumn:@"CONFIGOPERATORTYPE"];
-            item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
+            item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];\
+            if (![item.billDate isEqualToString:lastDate]) {
+                lastDate = item.billDate;
+                chargeCount = 0;
+                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
+            }else{
+                chargeCount = [[summaryDic valueForKey:item.billDate] intValue] + 1;
+                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
+                    
+            }
             item.chargeIndex = count;
             if (configOperatorType == 2) {
                 item.chargeCircleType = - 1;
@@ -96,10 +109,14 @@ NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
             count++;
         }
         for (int i = 0; i < newAddChargeArr.count; i++) {
+            SSJBillingChargeCellItem *item = [newAddChargeArr objectAtIndex:i];
+            int chargeCount = [[summaryDic valueForKey:item.billDate] intValue];
+            [summaryDic setValue:@(chargeCount - 1) forKey:item.billDate];
             [originalChargeArr removeObject:[newAddChargeArr objectAtIndex:i]];
         }
         [tempDic setObject:originalChargeArr forKey:SSJOrginalChargeArrKey];
         [tempDic setObject:newAddChargeArr forKey:SSJNewAddChargeArrKey];
+        [tempDic setObject:summaryDic forKey:SSJChargeCountSummaryKey];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempDic);

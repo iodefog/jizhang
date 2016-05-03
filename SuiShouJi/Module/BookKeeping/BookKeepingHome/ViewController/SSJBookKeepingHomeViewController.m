@@ -481,18 +481,25 @@
             [weakSelf.tableView ssj_hideWatermark:YES];
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
-            if (weakSelf.items.count == 1) {
-                [weakSelf.tableView beginUpdates];
-                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-                [weakSelf.tableView endUpdates];
-            }
+            NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
             for (int i = 0; i < newAddArr.count; i++) {
                 SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
-//                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//                if (weakSelf.items.count != 1) {
+//                    if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
+//                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 2 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//                    }else{
+//                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+//                    }
+//                }
                 [weakSelf.items insertObject:item atIndex:item.chargeIndex];
                 [weakSelf.tableView beginUpdates];
-                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
+                    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                }else{
+                    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                }
                 [weakSelf.tableView endUpdates];
+                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
             }
             [weakSelf.newlyAddChargeArr removeAllObjects];
         }
