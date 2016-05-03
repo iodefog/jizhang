@@ -8,17 +8,13 @@
 
 #import "SSJHomeTableView.h"
 
-@interface SSJHomeTableView()
-@property(nonatomic, strong) UIImageView *backImage;
-@end
-
 @implementation SSJHomeTableView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundView = self.backImage;
+        self.backgroundView = nil;
         self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         self.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
         [self ssj_clearExtendSeparator];
@@ -35,13 +31,12 @@
         self.tableViewClickBlock();
     }
 }
-
--(UIImageView *)backImage{
-    if (!_backImage) {
-        _backImage = [[UIImageView alloc]init];
-        _backImage.image = [UIImage imageNamed:@"home_line"];
-    }
-    return _backImage;
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
 }
+*/
 
 @end

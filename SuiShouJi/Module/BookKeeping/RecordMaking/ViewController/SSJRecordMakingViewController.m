@@ -651,9 +651,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid];
                 }
             }
-            if (self.addNewChargeBlock) {
-                self.addNewChargeBlock(@[chargeID]);
-            }
         }else if (self.item.ID != nil){
             //修改流水
             if ([db intForQuery:@"select operatortype from bk_user_charge where ichargeid = ?",weakSelf.item.ID] == 2) {

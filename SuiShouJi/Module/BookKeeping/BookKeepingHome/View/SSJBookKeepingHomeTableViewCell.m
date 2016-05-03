@@ -12,18 +12,23 @@
 #import "FMDB.h"
 
 @interface SSJBookKeepingHomeTableViewCell()
+@property (nonatomic,strong) UIButton *categoryImageButton;
 @property (nonatomic,strong) UIButton *editeButton;
 @property (nonatomic,strong) UIButton *deleteButton;
-@property (nonatomic,strong) UIImageView *backImage;
-@property (nonatomic,strong) UIView *bottomlineView;
+@property (nonatomic,strong) UILabel *incomeLabel;
+@property (nonatomic,strong) UILabel *expenditureLabel;
 @property (nonatomic,strong) UIView *toplineView;
+@property (nonatomic,strong) UILabel *incomeMemoLabel;
+@property (nonatomic,strong) UILabel *expentureMemoLabel;
+@property (nonatomic,strong) UIImageView *IncomeImage;
+@property (nonatomic,strong) UIImageView *expentureImage;
+
 @end
 
 @implementation SSJBookKeepingHomeTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.toplineView];
         [self addSubview:self.bottomlineView];
         [self addSubview:self.categoryImageButton];
@@ -42,18 +47,17 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.toplineView.height = self.height / 2;
-    self.toplineView.centerX = self.width / 2;
-    self.toplineView.top = 0;
-    self.bottomlineView.height = self.height / 2;
-    self.bottomlineView.centerX = self.width / 2;
-    self.bottomlineView.bottom = self.height;
     self.categoryImageButton.centerY = self.height * 0.5;
     self.categoryImageButton.centerX = self.width * 0.5;
     self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
     self.incomeLabel.centerY = self.height / 2;
     self.expenditureLabel.leftBottom = CGPointMake(self.categoryImageButton.right + 10, self.height);
     self.expenditureLabel.centerY = self.height / 2;
+    self.toplineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
+    self.toplineView.centerX = self.centerX;
+    self.bottomlineView.top = self.categoryImageButton.bottom;
+    self.bottomlineView.size = CGSizeMake(1 / [UIScreen mainScreen].scale, self.height - self.categoryImageButton.bottom);
+    self.bottomlineView.centerX = self.centerX;
     self.incomeMemoLabel.width = self.width / 2 - 30;
     self.incomeMemoLabel.rightTop = CGPointMake(self.incomeLabel.right, self.incomeLabel.bottom + 5);
     self.expentureMemoLabel.width = self.width / 2 - 30;
@@ -120,11 +124,9 @@
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
         _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 38, 38)];
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _categoryImageButton.backgroundColor = [UIColor whiteColor];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageButton.layer.cornerRadius = 19;
-        _categoryImageButton.layer.masksToBounds = YES;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _categoryImageButton;
@@ -150,6 +152,22 @@
         [_deleteButton addTarget:self action:@selector(deleteButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteButton;
+}
+
+-(UIView *)toplineView{
+    if (!_toplineView) {
+        _toplineView = [[UIView alloc]init];
+        _toplineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _toplineView;
+}
+
+-(UIView *)bottomlineView{
+    if (!_bottomlineView) {
+        _bottomlineView = [[UIView alloc]init];
+        _bottomlineView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    return _bottomlineView;
 }
 
 -(UILabel *)incomeMemoLabel{
@@ -196,28 +214,23 @@
     return _expentureImage;
 }
 
--(UIView *)toplineView{
-    if (!_toplineView) {
-        _toplineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, self.height / 2)];
-        _toplineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
-    }
-    return _toplineView;
-}
-
--(UIView *)bottomlineView{
-    if (!_bottomlineView) {
-        _bottomlineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, self.height / 2)];
-        _bottomlineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
-    }
-    return _bottomlineView;
-}
-
 -(void)buttonClicked{
     if (self.beginEditeBtnClickBlock) {
         self.beginEditeBtnClickBlock(self);
     }
 }
 
+//- (void)drawRect:(CGRect)rect {
+//    [super drawRect:rect];
+//    CGContextRef ctx = UIGraphicsGetCurrentContext();
+//    CGContextMoveToPoint(ctx, self.centerX, 0);
+//    CGContextAddLineToPoint(ctx, self.centerX, self.categoryImageButton.top);
+//    CGContextSetRGBStrokeColor(ctx, 204.0/225, 204.0/255, 204.0/255, 1.0);
+//    CGContextSetLineWidth(ctx, 1);
+//    CGContextSetLineCap(ctx, kCGLineCapRound);
+//    CGContextStrokePath(ctx);
+//    [self setNeedsDisplay];
+//}
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
@@ -238,7 +251,7 @@
         [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
         [_categoryImageButton setTintColor:[UIColor whiteColor]];
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
         _IncomeImage.hidden = YES;
         _expentureImage.hidden = YES;
         _IncomeImage.image = nil;
@@ -262,6 +275,7 @@
             [self.incomeLabel sizeToFit];
 
         }else{
+
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
             self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -276,7 +290,6 @@
             [self.expenditureLabel sizeToFit];
         }
     }else{
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         if (!item.incomeOrExpence) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",item.typeName,[item.money doubleValue]];
             [self.incomeLabel sizeToFit];
@@ -344,6 +357,7 @@
 
 -(void)setIsEdite:(BOOL)isEdite{
     _isEdite = isEdite;
+    
 }
 
 -(void)editeButtonClicked{
@@ -390,24 +404,6 @@
 -(void)setIsLastRowOrNot:(BOOL)isLastRowOrNot{
     _isLastRowOrNot = isLastRowOrNot;
     self.bottomlineView.hidden = !_isLastRowOrNot;
-}
-
--(void)shake{
-    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
-    anim.keyPath = @"transform.translation.y";
-    
-    anim.values = @[@(-1),  @(1), @(-1)];
-    
-    anim.duration = 0.25;
-    // 动画的重复执行次数
-    anim.repeatCount = 2;
-    
-    // 保持动画执行完毕后的状态
-    anim.removedOnCompletion = NO;
-    
-    anim.fillMode = kCAFillModeForwards;
-    
-    [self.categoryImageButton.layer addAnimation:anim forKey:@"shake"];
 }
 
 @end

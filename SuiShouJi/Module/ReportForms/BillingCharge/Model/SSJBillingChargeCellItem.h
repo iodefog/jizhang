@@ -58,7 +58,4 @@
 //循环记账类型开关(循环配置用,0是关闭,1是开启)
 @property (nonatomic) BOOL isOnOrNot;
 
-//流水的下标
-@property(nonatomic) int chargeIndex;
-
 @end

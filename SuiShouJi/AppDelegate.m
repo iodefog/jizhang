@@ -95,14 +95,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:^{
-            UITabBarController *tabVC = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-            UINavigationController *navi = [tabVC.viewControllers firstObject];
-            SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
-            if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-                [homeVC reloadWithAnimation];
-            }
-        }];
+        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL];
         manager = nil;
     }];
 
