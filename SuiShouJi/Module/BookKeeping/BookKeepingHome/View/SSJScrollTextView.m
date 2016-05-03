@@ -22,7 +22,8 @@
         self.textFont = 15;
         self.textColor = [UIColor blackColor];
         self.totalAnimationDuration = 1.f;
-        self.clipsToBounds = YES;
+        self.scrollAble = YES;
+        self.clipsToBounds = NO;
     }
     return self;
 }
@@ -40,10 +41,10 @@
     float totalStrWidth = 0;
     float siglestringHeight = [@"0" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}].height;
     for (int i = 0; i < _string.length; i ++) {
-        NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",@"^[1-9]+$"];
+        NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",@"^[0-9]+$"];
         NSString *tempStr = [_string substringWithRange:NSMakeRange(i, 1)];
         float strWidth = [tempStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}].width;
-        if (![numberPre evaluateWithObject:tempStr]) {
+        if (![numberPre evaluateWithObject:tempStr] || !self.scrollAble) {
             CATextLayer *textLayer = [CATextLayer layer];
             textLayer.frame = CGRectMake(totalStrWidth, 0, strWidth, siglestringHeight);
             textLayer.fontSize = self.textFont;
@@ -78,6 +79,10 @@
 
 -(void)setTotalAnimationDuration:(float)totalAnimationDuration{
     _totalAnimationDuration = totalAnimationDuration;
+}
+
+-(void)setScrollAble:(BOOL)scrollAble{
+    _scrollAble = scrollAble;
 }
 
 /*

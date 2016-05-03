@@ -8,7 +8,7 @@
 
 #import "SSJScrollTextLayer.h"
 @interface SSJScrollTextLayer()
-@property(nonatomic, strong) NSTimer *timer;
+@property(nonatomic, strong) CADisplayLink *timer;
 @end
 @implementation SSJScrollTextLayer{
     int _currentNum;
@@ -32,27 +32,30 @@
     return self;
 }
 
--(NSTimer *)timer{
+-(CADisplayLink *)timer{
     if (!_timer) {
-        _timer = [NSTimer scheduledTimerWithTimeInterval:self.animationDuration / [self.numStr intValue] target:self selector:@selector(changeNum) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
+        _timer = [CADisplayLink displayLinkWithTarget:self
+                                             selector:@selector(changeNum)];
     }
     return _timer;
 }
 
 -(void)changeNum{
-    _currentNum ++;
-    if (_currentNum > [self.numStr intValue]) {
-        [self.timer invalidate];
-    }else{
-        self.string = [NSString stringWithFormat:@"%d",_currentNum];
-    }
+    int randomNum = arc4random() % 10;
+    self.string = [NSString stringWithFormat:@"%d",randomNum];
 }
 
 -(void)setNumStr:(NSString *)numStr{
     _numStr = numStr;
-    [self.timer fire];
+    [self.timer addToRunLoop:[NSRunLoop currentRunLoop]
+                 forMode:NSDefaultRunLoopMode];
+    __weak typeof(self) weakSelf = self;
+    dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, self.animationDuration * NSEC_PER_SEC);
+    dispatch_after(time, dispatch_get_main_queue(), ^{
+        [weakSelf stopTimer];
+    });
 }
+
 
 -(void)setTextFont:(int)textFont{
     _textFont = textFont;
@@ -66,6 +69,12 @@
 
 -(void)setAnimationDuration:(float)animationDuration{
     _animationDuration = animationDuration;
+}
+
+-(void)stopTimer{
+    self.string = self.numStr;
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 @end

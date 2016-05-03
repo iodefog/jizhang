@@ -11,8 +11,7 @@
 
 @interface SSJBookKeepingHeader()
 @property (strong, nonatomic) UIImageView *backgroudview;
-@property(nonatomic,strong)SSJScrollTextView *expenditureView;
-@property(nonatomic,strong)SSJScrollTextView *incomeView;
+
 @end
 @implementation SSJBookKeepingHeader
 

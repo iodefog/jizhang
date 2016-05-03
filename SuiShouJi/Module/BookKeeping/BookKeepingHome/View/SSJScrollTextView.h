@@ -21,5 +21,6 @@
 //文字滚动时间(默认为1)
 @property(nonatomic) float totalAnimationDuration;
 
-
+//是否需要滚动(默认为NO)
+@property(nonatomic) BOOL scrollAble;
 @end

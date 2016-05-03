@@ -31,8 +31,6 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 
 @property (nonatomic) BOOL isEdite;
 
-@property (nonatomic,strong) UIView *bottomlineView;
-
 @property (nonatomic) BOOL isLastRowOrNot;
 
 @property (nonatomic,strong) UILabel *incomeLabel;
@@ -46,5 +44,11 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 @property (nonatomic,strong) UIImageView *IncomeImage;
 
 @property (nonatomic,strong) UIImageView *expentureImage;
+
+@property (nonatomic,strong) UIButton *categoryImageButton;
+
+
+//抖动动画
+-(void)shake;
 
 @end

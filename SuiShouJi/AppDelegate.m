@@ -100,7 +100,7 @@ NSDate *SCYEnterBackgroundTime() {
             UINavigationController *navi = [tabVC.viewControllers firstObject];
             SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
             if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-//                homeVC.hasLoad = NO;
+                [homeVC reloadWithAnimation];
             }
         }];
         manager = nil;

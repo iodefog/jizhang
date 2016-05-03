@@ -22,6 +22,9 @@
 
 @property (strong, nonatomic) UILabel *incomeTitleLabel;
 
+@property(nonatomic,strong)SSJScrollTextView *expenditureView;
+
+@property(nonatomic,strong)SSJScrollTextView *incomeView;
 
 //当前月份
 @property (nonatomic)long currentMonth;
