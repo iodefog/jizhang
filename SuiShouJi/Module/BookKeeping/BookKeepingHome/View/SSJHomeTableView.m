@@ -18,7 +18,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundView = self.backImage;
         self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
         self.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
         [self ssj_clearExtendSeparator];
@@ -34,14 +33,6 @@
     if (self.tableViewClickBlock) {
         self.tableViewClickBlock();
     }
-}
-
--(UIImageView *)backImage{
-    if (!_backImage) {
-        _backImage = [[UIImageView alloc]init];
-        _backImage.image = [UIImage imageNamed:@"home_line"];
-    }
-    return _backImage;
 }
 
 @end

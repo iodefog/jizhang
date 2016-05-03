@@ -485,12 +485,10 @@
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
             [weakSelf.tableView reloadData];
             [weakSelf.tableView ssj_hideLoadingIndicator];
-            if (result.count == 0) {
+            if (((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count == 0) {
                 [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
-                weakSelf.tableView.backgroundView = nil;
             }else{
                 [weakSelf.tableView ssj_hideWatermark:YES];
-                weakSelf.tableView.backgroundView = self.backImage;
             }
         }else{
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
