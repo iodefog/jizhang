@@ -46,6 +46,10 @@
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) SSJHomeTableView *tableView;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
+@property(nonatomic, strong) NSString *currentIncome;
+@property(nonatomic, strong) NSString *currentExpenditure;
+@property(nonatomic, strong) UIImageView *backImage;
+@property(nonatomic, strong) NSMutableArray *newlyAddChargeArr;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -55,7 +59,7 @@
 @implementation SSJBookKeepingHomeViewController{
     BOOL _isRefreshing;
 }
-  
+
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -69,6 +73,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    _hasLoad = YES;
     self.tableView.contentInset = UIEdgeInsetsMake(38, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     self.extendedLayoutIncludesOpaqueBars = YES;
@@ -134,6 +139,7 @@
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
     self.tableView.frame = self.view.frame;
+//    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.backgroundColor = [UIColor whiteColor];
@@ -208,13 +214,38 @@
     }
 }
 
-#warning test
-//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    cell.transform = CGAffineTransformMakeTranslation(0, self.view.height * (indexPath.row + 1));
-//    [UIView animateWithDuration:2 animations:^{
-//        cell.transform = CGAffineTransformI   dentity;
-//    }];
-//}
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (!self.hasLoad) {
+        __weak typeof(self) weakSelf = self;
+        SSJBookKeepingHomeTableViewCell * visibleCell = (SSJBookKeepingHomeTableViewCell *)cell;
+        visibleCell.incomeLabel.alpha = 0;
+        visibleCell.expenditureLabel.alpha = 0;
+        visibleCell.incomeMemoLabel.alpha = 0;
+        visibleCell.expentureMemoLabel.alpha = 0;
+        visibleCell.IncomeImage.alpha = 0;
+        visibleCell.expentureImage.alpha = 0;
+        self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
+        self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
+        visibleCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
+        [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            visibleCell.categoryImageButton.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            [visibleCell shake];
+            [UIView animateWithDuration:0.4 animations:^{
+                visibleCell.incomeLabel.alpha = 1;
+                visibleCell.expenditureLabel.alpha = 1;
+                visibleCell.incomeMemoLabel.alpha = 1;
+                visibleCell.expentureMemoLabel.alpha = 1;
+                visibleCell.IncomeImage.alpha = 1;
+                visibleCell.expentureImage.alpha = 1;
+                weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
+                weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
+            } completion:^(BOOL finished) {
+                weakSelf.hasLoad = YES;
+            }];
+        }];
+    }
+}
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -277,6 +308,14 @@
 }
 
 #pragma mark - Getter
+//-(UIImageView *)backImage{
+//    if (!_backImage) {
+//        _backImage = [[UIImageView alloc]init];
+//        _backImage.image = [UIImage imageNamed:@"home_line"];
+//    }
+//    return _backImage;
+//}
+
 -(SSJHomeTableView *)tableView{
     if (!_tableView) {
         _tableView = [[SSJHomeTableView alloc]init];
@@ -312,7 +351,7 @@
 
 -(SSJBookKeepingHeader *)bookKeepingHeader{
     if (!_bookKeepingHeader) {
-        _bookKeepingHeader = [SSJBookKeepingHeader BookKeepingHeader];
+        _bookKeepingHeader = [[SSJBookKeepingHeader alloc]init];
         _bookKeepingHeader.frame = CGRectMake(0, 0, self.view.width, 132);
     }
     return _bookKeepingHeader;
@@ -342,6 +381,9 @@
         __weak typeof(self) weakSelf = self;
         _homeButton.recordMakingClickBlock = ^(){
             SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
+            recordmaking.addNewChargeBlock = ^(NSArray *chargeIdArr){
+                weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
+            };
             [weakSelf.navigationController pushViewController:recordmaking animated:YES];
         };
         _homeButton.animationStopBlock = ^(){
@@ -402,21 +444,68 @@
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     [SSJBookKeepingHomeHelper queryForIncomeAndExpentureSumWithMonth:_currentMonth Year:_currentYear Success:^(NSDictionary *result) {
-        weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
-        weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+        if (weakSelf.hasLoad) {
+            weakSelf.bookKeepingHeader.incomeView.scrollAble = NO;
+            weakSelf.bookKeepingHeader.expenditureView.scrollAble = NO;
+            weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
+            weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+        }else{
+            weakSelf.bookKeepingHeader.incomeView.scrollAble = YES;
+            weakSelf.bookKeepingHeader.expenditureView.scrollAble = YES;
+            weakSelf.bookKeepingHeader.incomeView.alpha = 0;
+            weakSelf.bookKeepingHeader.expenditureView.alpha = 0;
+            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
+            dispatch_after(time, dispatch_get_main_queue(), ^{
+                weakSelf.bookKeepingHeader.incomeView.alpha = 1;
+                weakSelf.bookKeepingHeader.expenditureView.alpha = 1;
+                weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
+                weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+            });
+        }
+
     } failure:^(NSError *error) {
         
     }];
-    [SSJBookKeepingHomeHelper queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
-        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        [weakSelf.tableView reloadData];
-        [weakSelf.tableView ssj_hideLoadingIndicator];
-        if (result.count == 0) {
-            [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
+//    [SSJBookKeepingHomeHelper queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
+//        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+//        [weakSelf.tableView reloadData];
+//        [weakSelf.tableView ssj_hideLoadingIndicator];
+//        if (result.count == 0) {
+//            [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
+//            weakSelf.tableView.backgroundView = nil;
+//        }else{
+//            [weakSelf.tableView ssj_hideWatermark:YES];
+//            weakSelf.tableView.backgroundView = self.backImage;
+//        }
+//    }failure:^(NSError *error) {
+//        
+//    }];
+    [SSJBookKeepingHomeHelper queryForChargeListExceptCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
+        if (!((NSArray *)[result objectForKey:SSJNewAddChargeArrKey]).count) {
+            weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
+            [weakSelf.tableView reloadData];
+            [weakSelf.tableView ssj_hideLoadingIndicator];
+            if (result.count == 0) {
+                [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
+                weakSelf.tableView.backgroundView = nil;
+            }else{
+                [weakSelf.tableView ssj_hideWatermark:YES];
+                weakSelf.tableView.backgroundView = self.backImage;
+            }
         }else{
-            [weakSelf.tableView ssj_hideWatermark:YES];
+            weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
+            NSArray *newAddArr = [NSArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
+            for (int i = 0; i < newAddArr.count; i++) {
+                SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
+                [weakSelf.items insertObject:item atIndex:item.chargeIndex];
+                [weakSelf.tableView beginUpdates];
+                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                [weakSelf.tableView endUpdates];
+//                SSJBookKeepingHomeTableViewCell *cell = [weakSelf.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]];
+            }
+            [weakSelf.newlyAddChargeArr removeAllObjects];
         }
-    }failure:^(NSError *error) {
+    } failure:^(NSError *error) {
         
     }];
 }
@@ -430,7 +519,8 @@
 }
 
 -(void)reloadDataAfterSync{
-    [self getDateFromDatebase];
+//    [self getDateFromDatebase];
+    
     [self reloadBudgetData];
 }
 
@@ -452,6 +542,11 @@
     } failure:^(NSError * _Nullable error) {
         NSLog(@"%@",error.localizedDescription);
     }];
+}
+
+-(void)reloadWithAnimation{
+    self.hasLoad = NO;
+    [self getDateFromDatebase];
 }
 
 - (void)didReceiveMemoryWarning {
