@@ -50,6 +50,7 @@
 @property(nonatomic, strong) NSString *currentExpenditure;
 @property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) NSMutableArray *newlyAddChargeArr;
+@property(nonatomic, strong) NSMutableArray *newlyAddIndexArr;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
@@ -466,20 +467,6 @@
     } failure:^(NSError *error) {
         
     }];
-//    [SSJBookKeepingHomeHelper queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
-//        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-//        [weakSelf.tableView reloadData];
-//        [weakSelf.tableView ssj_hideLoadingIndicator];
-//        if (result.count == 0) {
-//            [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
-//            weakSelf.tableView.backgroundView = nil;
-//        }else{
-//            [weakSelf.tableView ssj_hideWatermark:YES];
-//            weakSelf.tableView.backgroundView = self.backImage;
-//        }
-//    }failure:^(NSError *error) {
-//        
-//    }];
     [SSJBookKeepingHomeHelper queryForChargeListExceptCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
         if (!((NSArray *)[result objectForKey:SSJNewAddChargeArrKey]).count) {
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
@@ -495,11 +482,11 @@
             NSArray *newAddArr = [NSArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             for (int i = 0; i < newAddArr.count; i++) {
                 SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
+                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
                 [weakSelf.items insertObject:item atIndex:item.chargeIndex];
                 [weakSelf.tableView beginUpdates];
                 [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
                 [weakSelf.tableView endUpdates];
-//                SSJBookKeepingHomeTableViewCell *cell = [weakSelf.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]];
             }
             [weakSelf.newlyAddChargeArr removeAllObjects];
         }
