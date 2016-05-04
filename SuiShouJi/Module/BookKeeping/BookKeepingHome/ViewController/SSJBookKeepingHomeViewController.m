@@ -223,13 +223,13 @@
         if (item.incomeOrExpence) {
             currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, 1, 0);
+            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, -1, 0);
         }else{
             currentCell.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, 1, 0);
+            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
         }
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:0.7 animations:^{
             currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
             currentCell.incomeLabel.transform = CGAffineTransformIdentity;
