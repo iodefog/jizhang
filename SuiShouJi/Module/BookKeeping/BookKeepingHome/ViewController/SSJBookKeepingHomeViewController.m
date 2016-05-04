@@ -235,8 +235,8 @@
             currentCell.incomeLabel.transform = CGAffineTransformIdentity;
             currentCell.expentureMemoLabel.transform = CGAffineTransformIdentity;
             currentCell.incomeMemoLabel.transform = CGAffineTransformIdentity;
-            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 0, 0, -1);
-            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 0, 0, -1);
+            currentCell.expentureImage.layer.transform = CATransform3DIdentity;
+            currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
         } completion:^(BOOL finished) {
             [currentCell shake];
         }];
