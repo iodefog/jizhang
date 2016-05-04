@@ -216,35 +216,61 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (!self.hasLoad) {
-        __weak typeof(self) weakSelf = self;
-        SSJBookKeepingHomeTableViewCell * visibleCell = (SSJBookKeepingHomeTableViewCell *)cell;
-        visibleCell.incomeLabel.alpha = 0;
-        visibleCell.expenditureLabel.alpha = 0;
-        visibleCell.incomeMemoLabel.alpha = 0;
-        visibleCell.expentureMemoLabel.alpha = 0;
-        visibleCell.IncomeImage.alpha = 0;
-        visibleCell.expentureImage.alpha = 0;
-        self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
-        self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
-        visibleCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
-        [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
-            visibleCell.categoryImageButton.transform = CGAffineTransformIdentity;
+    SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
+    SSJBillingChargeCellItem *item = currentCell.item;
+    if ([self.newlyAddIndexArr containsObject:@(indexPath.row)]) {
+        currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - currentCell.height / 2);
+        if (item.incomeOrExpence) {
+            currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
+            currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
+            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, 1, 0);
+        }else{
+            currentCell.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
+            currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
+            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, 1, 0);
+        }
+        [UIView animateWithDuration:1 animations:^{
+            currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
+            currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
+            currentCell.incomeLabel.transform = CGAffineTransformIdentity;
+            currentCell.expentureMemoLabel.transform = CGAffineTransformIdentity;
+            currentCell.incomeMemoLabel.transform = CGAffineTransformIdentity;
+            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 0, 0, -1);
+            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 0, 0, -1);
         } completion:^(BOOL finished) {
-            [visibleCell shake];
-            [UIView animateWithDuration:0.4 animations:^{
-                visibleCell.incomeLabel.alpha = 1;
-                visibleCell.expenditureLabel.alpha = 1;
-                visibleCell.incomeMemoLabel.alpha = 1;
-                visibleCell.expentureMemoLabel.alpha = 1;
-                visibleCell.IncomeImage.alpha = 1;
-                visibleCell.expentureImage.alpha = 1;
-                weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
-                weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
-            } completion:^(BOOL finished) {
-                weakSelf.hasLoad = YES;
-            }];
+            [currentCell shake];
         }];
+        [self.newlyAddIndexArr removeObject:@(indexPath.row)];
+    }else{
+        if (!self.hasLoad) {
+            __weak typeof(self) weakSelf = self;
+            currentCell.incomeLabel.alpha = 0;
+            currentCell.expenditureLabel.alpha = 0;
+            currentCell.incomeMemoLabel.alpha = 0;
+            currentCell.expentureMemoLabel.alpha = 0;
+            currentCell.IncomeImage.alpha = 0;
+            currentCell.expentureImage.alpha = 0;
+            self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
+            self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
+            currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
+            [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+                currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
+            } completion:^(BOOL finished) {
+                [currentCell shake];
+                [UIView animateWithDuration:0.4 animations:^{
+                    currentCell.incomeLabel.alpha = 1;
+                    currentCell.expenditureLabel.alpha = 1;
+                    currentCell.incomeMemoLabel.alpha = 1;
+                    currentCell.expentureMemoLabel.alpha = 1;
+                    currentCell.IncomeImage.alpha = 1;
+                    currentCell.expentureImage.alpha = 1;
+                    weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
+                    weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
+                } completion:^(BOOL finished) {
+                    weakSelf.hasLoad = YES;
+                }];
+            }];
+        }
     }
 }
 
@@ -483,7 +509,9 @@
             NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
             NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
             for (int i = 0; i < newAddArr.count; i++) {
+                weakSelf.newlyAddIndexArr = [NSMutableArray arrayWithCapacity:0];
                 SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
+                [weakSelf.newlyAddIndexArr addObject:@(item.chargeIndex)];
 //                if (weakSelf.items.count != 1) {
 //                    if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
 //                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 2 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -494,9 +522,9 @@
                 [weakSelf.items insertObject:item atIndex:item.chargeIndex];
                 [weakSelf.tableView beginUpdates];
                 if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
-                    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
                 }else{
-                    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+                    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
                 }
                 [weakSelf.tableView endUpdates];
                 [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
