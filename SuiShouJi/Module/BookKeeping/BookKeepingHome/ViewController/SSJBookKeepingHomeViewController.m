@@ -192,29 +192,6 @@
     return nil;
 }
 
-#pragma mark - UIScrollViewDelegate
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
-        _isRefreshing = YES;
-        [self.homeButton startLoading];
-        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
-        self.statusLabel.hidden = NO;
-        self.statusLabel.text = @"数据同步中";
-        [self.statusLabel sizeToFit];
-        [self.view setNeedsLayout];
-        __weak typeof(self) weakSelf = self;
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
-            if (type == SSJDataSynchronizeTypeData) {
-                weakSelf.refreshSuccessOrNot = YES;
-                [weakSelf.homeButton stopLoading];
-            }
-        }failure:^(SSJDataSynchronizeType type, NSError *error) {
-            weakSelf.refreshSuccessOrNot = NO;
-            [weakSelf.homeButton stopLoading];
-        }];
-    }
-}
-
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
     SSJBillingChargeCellItem *item = currentCell.item;
@@ -273,6 +250,31 @@
         }
     }
 }
+
+
+#pragma mark - UIScrollViewDelegate
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
+        _isRefreshing = YES;
+        [self.homeButton startLoading];
+        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
+        self.statusLabel.hidden = NO;
+        self.statusLabel.text = @"数据同步中";
+        [self.statusLabel sizeToFit];
+        [self.view setNeedsLayout];
+        __weak typeof(self) weakSelf = self;
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
+            if (type == SSJDataSynchronizeTypeData) {
+                weakSelf.refreshSuccessOrNot = YES;
+                [weakSelf.homeButton stopLoading];
+            }
+        }failure:^(SSJDataSynchronizeType type, NSError *error) {
+            weakSelf.refreshSuccessOrNot = NO;
+            [weakSelf.homeButton stopLoading];
+        }];
+    }
+}
+
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -407,11 +409,12 @@
         _homeButton.layer.cornerRadius = 48.f;
         __weak typeof(self) weakSelf = self;
         _homeButton.recordMakingClickBlock = ^(){
-            SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
-            recordmaking.addNewChargeBlock = ^(NSArray *chargeIdArr){
+            SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
+            recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
             };
-            [weakSelf.navigationController pushViewController:recordmaking animated:YES];
+            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+            [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
         _homeButton.animationStopBlock = ^(){
             weakSelf.statusLabel.hidden = NO;
@@ -531,6 +534,9 @@
             }
             [weakSelf.newlyAddChargeArr removeAllObjects];
         }
+        if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+            [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+        }
     } failure:^(NSError *error) {
         
     }];
@@ -545,7 +551,7 @@
 }
 
 -(void)reloadDataAfterSync{
-//    [self getDateFromDatebase];
+    [self getDateFromDatebase];
     
     [self reloadBudgetData];
 }
