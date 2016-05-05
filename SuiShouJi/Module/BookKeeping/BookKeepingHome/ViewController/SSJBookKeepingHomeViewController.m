@@ -558,6 +558,7 @@
 
 - (void)reloadDataAfterInitDatabase {
     [self getDateFromDatebase];
+    
     [self reloadBudgetData];
 }
 
