@@ -198,7 +198,7 @@
 
 -(UIView *)toplineView{
     if (!_toplineView) {
-        _toplineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, self.height / 2)];
+        _toplineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 , self.height / 2)];
         _toplineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
     }
     return _toplineView;
@@ -206,7 +206,7 @@
 
 -(UIView *)bottomlineView{
     if (!_bottomlineView) {
-        _bottomlineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 / [UIScreen mainScreen].scale, self.height / 2)];
+        _bottomlineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 , self.height / 2)];
         _bottomlineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
     }
     return _bottomlineView;

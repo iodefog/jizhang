@@ -28,19 +28,19 @@
 #import "SSJForgetPasswordSecondStepViewController.h"
 #import "SSJPersonalDetailViewController.h"
 #import "SSJBookkeepingTreeViewController.h"
+#import "SSJMagicExportViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
 
-static NSString *const kTitle1 = @"手势密码";
-static NSString *const kTitle2 = @"记账提醒";
-static NSString *const kTitle3 = @"周期记账";
-static NSString *const kTitle4 = @"记账树";
-static NSString *const kTitle5 = @"把APP推荐给好友";
-static NSString *const kTitle6 = @"给个好评";
+static NSString *const kTitle1 = @"记账提醒";
+static NSString *const kTitle2 = @"周期记账";
+static NSString *const kTitle3 = @"数据文件导出";
+static NSString *const kTitle4 = @"意见反馈";
+static NSString *const kTitle5 = @"给个好评";
+static NSString *const kTitle6 = @"设置";
 
-static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 
 @interface SSJMineHomeViewController ()
@@ -74,17 +74,15 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setup"] style:UIBarButtonItemStylePlain target:self action:@selector(setttingButtonClick:)];
-    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝
+    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2, kTitle3],@[kTitle4],@[kTitle5],@[kTitle6]];
+        self.titles = @[@[kTitle1 , kTitle2], @[kTitle3],@[kTitle4 , kTitle6]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2, kTitle3], @[kTitle4],@[kTitle5],@[kTitle6]];
+        self.titles = @[@[kTitle1 , kTitle2], @[kTitle3], @[kTitle4 , kTitle5 , kTitle6]];
     }
     
     __weak typeof(self) weakSelf = self;
@@ -151,7 +149,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     //  给个好评
-    if ([title isEqualToString:kTitle6]) {
+    if ([title isEqualToString:kTitle5]) {
         NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
@@ -160,41 +158,53 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     
     //  记账提醒
-    if ([title isEqualToString:kTitle2]) {
+    if ([title isEqualToString:kTitle1]) {
         SSJBookkeepingReminderViewController *BookkeepingReminderVC = [[SSJBookkeepingReminderViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
     
     //  周期记账
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle2]) {
         SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
     
-    //  记账树
-    if ([title isEqualToString:kTitle4]) {
-        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
-        [self.navigationController pushViewController:treeVC animated:YES];
-        return;
-    }
+//    //  记账树
+//    if ([title isEqualToString:kTitle4]) {
+//        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+//        [self.navigationController pushViewController:treeVC animated:YES];
+//        return;
+//    }
 
-    //  把APP推荐给好友
-    if ([title isEqualToString:kTitle5]) {
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                             appKey:kUMAppKey
-                                          shareText:@"财务管理第一步，从记录消费生活开始!"
-                                         shareImage:[UIImage imageNamed:@"icon"]
-                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                           delegate:self];
+//    //  把APP推荐给好友
+//    if ([title isEqualToString:kTitle5]) {
+//        [UMSocialSnsService presentSnsIconSheetView:self
+//                                             appKey:kUMAppKey
+//                                          shareText:@"财务管理第一步，从记录消费生活开始!"
+//                                         shareImage:[UIImage imageNamed:@"icon"]
+//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+//                                           delegate:self];
+//    }
+    
+    //意见反馈
+    if ([title isEqualToString:kTitle4]) {
+        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
+                                             animated:YES];
     }
     
-//    //意见反馈
-//    if ([title isEqualToString:kTitle6]) {
-//        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
-//                                             animated:YES];
-//    }
+    //数据导出
+    if ([title isEqualToString:kTitle3]) {
+        SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
+        [self.navigationController pushViewController:magicExportVC animated:YES];
+    }
+    
+    //设置
+    if ([title isEqualToString:kTitle6]) {
+        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:settingVC animated:YES];
+    }
     
 //    if ([title isEqualToString:kTitle7]) {
 //        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
@@ -220,11 +230,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     
     if ([mineHomeCell.cellTitle isEqualToString:kTitle1]) {
-        mineHomeCell.accessoryView = self.motionSwitch;
-    } else {
-        mineHomeCell.accessoryView = nil;
-    }
-    if ([mineHomeCell.cellTitle isEqualToString:kTitle2]) {
         mineHomeCell.detailLabel.text = self.circleChargeState;
         [mineHomeCell.detailLabel sizeToFit];
     }else{
@@ -234,30 +239,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     return mineHomeCell;
 }
 
-#pragma mark - UMSocialUIDelegate
--(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
-{
-    //根据`responseCode`得到发送结果,如果分享成功
-    if(response.responseCode == UMSResponseCodeSuccess)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
-    }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享失败"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
-    }
-}
-
--(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
-{
-    if (platformName == UMShareToSina) {
-        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://5.9188.com/note/d/";
-        socialData.shareImage = [UIImage imageNamed:@"weibo_banner"];
-    }
-    else{
-        socialData.shareText = @"财务管理第一步，从记录消费生活开始!";
-    }
-}
 
 
 #pragma mark - Event
@@ -387,10 +368,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [SSJUserTableManager saveUserItem:item];
 }
 
-- (void)setttingButtonClick:(id)sender{
-        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        [self.navigationController pushViewController:settingVC animated:YES];
-}
 
 -(void)getCircleChargeState{
     __weak typeof(self) weakSelf = self;
