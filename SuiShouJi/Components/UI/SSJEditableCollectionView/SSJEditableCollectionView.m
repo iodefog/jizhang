@@ -8,9 +8,6 @@
 
 #import "SSJEditableCollectionView.h"
 
-#warning test
-#import "SSJViewAddition.h"
-
 static const CGFloat kMaxSpeed = 100;
 
 @interface SSJEditableCollectionView () <UICollectionViewDataSource>
