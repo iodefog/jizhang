@@ -137,10 +137,12 @@
 
 
 #pragma mark - Getter
--(UICollectionView *)collectionView{
+-(SSJEditableCollectionView *)collectionView{
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        flowLayout.minimumInteritemSpacing = 10;
+        flowLayout.minimumLineSpacing = 10;
         _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
