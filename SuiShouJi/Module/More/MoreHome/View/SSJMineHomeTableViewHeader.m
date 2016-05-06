@@ -9,14 +9,21 @@
 #import "SSJMineHomeTableViewHeader.h"
 
 @interface SSJMineHomeTableViewHeader()
-
+@property (weak, nonatomic) IBOutlet SSJMineHeaderView *headPotraitImage;
+@property (weak, nonatomic) IBOutlet UILabel *nicknameLabel;
+@property(nonatomic, strong) UIButton *checkInButton;
+@property(nonatomic, strong) UIButton *syncButton;
 @end
 
 @implementation SSJMineHomeTableViewHeader
 
-+ (id)MineHomeHeader {
-    NSArray *array = [[NSBundle mainBundle] loadNibNamed:@"SSJMineHomeTableViewHeader" owner:nil options:nil];
-    return array[0];
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+    }
+    return self;
 }
 
 -(void)awakeFromNib{

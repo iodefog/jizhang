@@ -18,7 +18,7 @@
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
-@property (nonatomic,strong) UICollectionView *collectionView;
+@property (nonatomic,strong) SSJEditableCollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIView *headerView;
 @property (nonatomic,strong) UILabel *profitAmountLabel;
@@ -118,14 +118,32 @@
     return UIEdgeInsetsMake(5, 10, 5, 10);
 }
 
+#pragma mark - SSJEditableCollectionViewDelegate
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row != self.items.count - 1) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    if (toIndexPath.row != self.items.count - 1) {
+        return YES;
+    }else{
+        return NO;
+    }
+}
+
+
 #pragma mark - Getter
 -(UICollectionView *)collectionView{
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-        _collectionView=[[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
-        _collectionView.dataSource=self;
-        _collectionView.delegate=self;
+        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+        _collectionView.editDelegate=self;
+        _collectionView.editDataSource=self;
         _collectionView.backgroundColor = [UIColor whiteColor];
     }
     return _collectionView;

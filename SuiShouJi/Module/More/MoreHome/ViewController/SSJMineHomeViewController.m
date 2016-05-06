@@ -97,15 +97,15 @@ static NSString *const kTitle6 = @"设置";
             if (item.realName == nil || [item.realName isEqualToString:@""]) {
                 //手机号登陆
                 NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                weakSelf.header.nicknameLabel.text = phoneNum;
+//                weakSelf.header.nicknameLabel.text = phoneNum;
             }else{
                 //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
+//                weakSelf.header.nicknameLabel.text = item.realName;
             }
-            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+//            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            weakSelf.header.nicknameLabel.text = @"待君登录";
+//            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
+//            weakSelf.header.nicknameLabel.text = @"待君登录";
         }
         [weakSelf.tableView reloadData];
     }];
@@ -296,16 +296,16 @@ static NSString *const kTitle6 = @"设置";
             }
             if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
                 //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
+//                weakSelf.header.nicknameLabel.text = item.realName;
             }else{
-                //手机号登陆
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                weakSelf.header.nicknameLabel.text = phoneNum;
+//                //手机号登陆
+//                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+//                weakSelf.header.nicknameLabel.text = phoneNum;
             }
-            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+//            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            weakSelf.header.nicknameLabel.text = @"待君登录";
+//            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
+//            weakSelf.header.nicknameLabel.text = @"待君登录";
         }
     }];
 }
@@ -392,7 +392,7 @@ static NSString *const kTitle6 = @"设置";
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
     __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        weakSelf.header.headPotraitImage.headerImage.image = image;
+//        weakSelf.header.headPotraitImage.headerImage.image = image;
         [weakSelf.tableView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
@@ -412,34 +412,34 @@ static NSString *const kTitle6 = @"设置";
 }
 
 
--(SSJMineHomeTableViewHeader *)header{
-    if (!_header) {
-        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
-        _header.frame = CGRectMake(0, 0, self.view.width, 125);
-        __weak typeof(self) weakSelf = self;
-        _header.HeaderButtonClickedBlock = ^(){
-            if (SSJIsUserLogined()) {
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-            }else{
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }
-        };
-        _header.HeaderClickedBlock = ^(){
-            if (!SSJIsUserLogined()) {
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }else{
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-            }
-        };
-    }
-    return _header;
-}
+//-(SSJMineHomeTableViewHeader *)header{
+//    if (!_header) {
+//        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
+//        _header.frame = CGRectMake(0, 0, self.view.width, 125);
+//        __weak typeof(self) weakSelf = self;
+//        _header.HeaderButtonClickedBlock = ^(){
+//            if (SSJIsUserLogined()) {
+//                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+//                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+//            }else{
+//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+//                loginVC.backController = weakSelf;
+//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+//            }
+//        };
+//        _header.HeaderClickedBlock = ^(){
+//            if (!SSJIsUserLogined()) {
+//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+//                loginVC.backController = weakSelf;
+//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+//            }else{
+//                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+//                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+//            }
+//        };
+//    }
+//    return _header;
+//}
 
 
 @end

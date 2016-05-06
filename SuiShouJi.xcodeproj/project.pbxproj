@@ -503,7 +503,6 @@
 		BD37D2EB1C56443F0050BDAA /* SSJUserInfoNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2EA1C56443F0050BDAA /* SSJUserInfoNetworkService.m */; };
 		BD37D2EE1C56465F0050BDAA /* SSJUserInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */; };
 		BD4934341C34F86700300D43 /* SSJMineHomeTableViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */; };
-		BD4934361C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */; };
 		BD4934391C34FC1800300D43 /* SSJMineHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934381C34FC1800300D43 /* SSJMineHomeViewController.m */; };
 		BD49343C1C35010200300D43 /* SSJMineHomeTabelviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD49343B1C35010200300D43 /* SSJMineHomeTabelviewCell.m */; };
 		BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD4934411C350D3600300D43 /* SSJSyncSettingViewController.m */; };
@@ -1466,7 +1465,6 @@
 		BD37D2ED1C56465F0050BDAA /* SSJUserInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserInfoItem.m; sourceTree = "<group>"; };
 		BD4934321C34F86700300D43 /* SSJMineHomeTableViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeTableViewHeader.h; sourceTree = "<group>"; };
 		BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeTableViewHeader.m; sourceTree = "<group>"; };
-		BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJMineHomeTableViewHeader.xib; sourceTree = "<group>"; };
 		BD4934371C34FC1800300D43 /* SSJMineHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeViewController.h; sourceTree = "<group>"; };
 		BD4934381C34FC1800300D43 /* SSJMineHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeViewController.m; sourceTree = "<group>"; };
 		BD49343A1C35010200300D43 /* SSJMineHomeTabelviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeTabelviewCell.h; sourceTree = "<group>"; };
@@ -3446,7 +3444,6 @@
 			children = (
 				BD4934321C34F86700300D43 /* SSJMineHomeTableViewHeader.h */,
 				BD4934331C34F86700300D43 /* SSJMineHomeTableViewHeader.m */,
-				BD4934351C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib */,
 				BD49343A1C35010200300D43 /* SSJMineHomeTabelviewCell.h */,
 				BD49343B1C35010200300D43 /* SSJMineHomeTabelviewCell.m */,
 				BD37D2D01C5216130050BDAA /* SSJSyncSettingTableViewCell.h */,
@@ -4557,7 +4554,6 @@
 				7DD7D72E1C4C90E400ACE71A /* reportForms_filter@3x.png in Resources */,
 				7DDDA7C11CBE1BFD0029ADAC /* help_tree_level_6@6x.png in Resources */,
 				BDF504911C868A8200DCFA99 /* recordmaking_save.png in Resources */,
-				BD4934361C34F87C00300D43 /* SSJMineHomeTableViewHeader.xib in Resources */,
 				BDA3FDFB1C58CAC400FB57B1 /* ft_shiwuka@2x.png in Resources */,
 				7DDDA7BB1CBE1BFD0029ADAC /* help_tree_level_3@3x.png in Resources */,
 				BDF510881C925BB500A49D74 /* home_background@3x.png in Resources */,
@@ -5221,7 +5217,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};

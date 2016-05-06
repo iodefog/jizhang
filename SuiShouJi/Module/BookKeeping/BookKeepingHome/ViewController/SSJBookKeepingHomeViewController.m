@@ -535,7 +535,7 @@
             [weakSelf.newlyAddChargeArr removeAllObjects];
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            }   
         }
     } failure:^(NSError *error) {
         
