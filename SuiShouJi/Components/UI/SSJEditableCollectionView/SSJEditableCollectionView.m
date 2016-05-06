@@ -8,6 +8,9 @@
 
 #import "SSJEditableCollectionView.h"
 
+#warning test
+#import "SSJViewAddition.h"
+
 static const CGFloat kMaxSpeed = 100;
 
 @interface SSJEditableCollectionView () <UICollectionViewDataSource>
@@ -20,7 +23,9 @@ static const CGFloat kMaxSpeed = 100;
 
 @property (nonatomic) BOOL movable;
 
-@property (nonatomic, strong) NSIndexPath *moveIndexPath;
+@property (nonatomic, strong) NSIndexPath *currentMovedIndexPath;
+
+@property (nonatomic, strong) NSIndexPath *originalMovedIndexPath;
 
 @property (nonatomic, strong) UIImageView *movedCell;
 
@@ -38,6 +43,8 @@ static const CGFloat kMaxSpeed = 100;
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
         
         _shouldCheckIntersection = YES;
+        
+        _movedCellScale = 1;
         
         _movedCell = [[UIImageView alloc] init];
         _movedCell.hidden = YES;
@@ -68,7 +75,7 @@ static const CGFloat kMaxSpeed = 100;
     if (_editDataSource && [_editDataSource respondsToSelector:@selector(collectionView:cellForItemAtIndexPath:)]) {
         UICollectionViewCell *cell = [_editDataSource collectionView:collectionView cellForItemAtIndexPath:indexPath];
         if (_movable) {
-            cell.hidden = [_moveIndexPath compare:indexPath] == NSOrderedSame;
+            cell.hidden = [_currentMovedIndexPath compare:indexPath] == NSOrderedSame;
         }
         return cell;
     }
@@ -123,40 +130,12 @@ static const CGFloat kMaxSpeed = 100;
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesEnded:touches withEvent:event];
-    
-    _movable = NO;
-    _longPressGesture.enabled = YES;
-    self.scrollEnabled = YES;
-    if (_editable && _moveIndexPath) {
-        UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:_moveIndexPath];
-        [UIView animateWithDuration:0.25 animations:^{
-            _movedCell.transform = CGAffineTransformMakeScale(1, 1);
-            _movedCell.frame = attributes.frame;
-        } completion:^(BOOL finished) {
-            _movedCell.hidden = YES;
-            UICollectionViewCell *cell = [self cellForItemAtIndexPath:_moveIndexPath];
-            cell.hidden = NO;
-        }];
-    }
+    [self endMovingCell];
 }
 
 - (void)touchesCancelled:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesCancelled:touches withEvent:event];
-    
-    _movable = NO;
-    _longPressGesture.enabled = YES;
-    self.scrollEnabled = YES;
-    if (_editable && _moveIndexPath) {
-        UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:_moveIndexPath];
-        [UIView animateWithDuration:0.25 animations:^{
-            _movedCell.transform = CGAffineTransformMakeScale(1, 1);
-            _movedCell.frame = attributes.frame;
-        } completion:^(BOOL finished) {
-            _movedCell.hidden = YES;
-            UICollectionViewCell *cell = [self cellForItemAtIndexPath:_moveIndexPath];
-            cell.hidden = NO;
-        }];
-    }
+    [self endMovingCell];
 }
 
 #pragma mark - Event
@@ -175,20 +154,21 @@ static const CGFloat kMaxSpeed = 100;
     
     if (!_movable) {
         CGPoint touchPoint = [_longPressGesture locationInView:self];
-        _moveIndexPath = [self indexPathForItemAtPoint:touchPoint];
+        _currentMovedIndexPath = [self indexPathForItemAtPoint:touchPoint];
+        _originalMovedIndexPath = _currentMovedIndexPath;
         
 //        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:willMoveCellAtIndexPath:)]) {
 //            [_editDelegate collectionView:self willMoveCellAtIndexPath:_moveIndexPath];
 //        }
         
-        UICollectionViewCell *movedCell = [self cellForItemAtIndexPath:_moveIndexPath];
+        UICollectionViewCell *movedCell = [self cellForItemAtIndexPath:_currentMovedIndexPath];
         _touchPointInCell = [_longPressGesture locationInView:movedCell];
         
         _movedCell.frame = movedCell.frame;
         [_movedCell setImage:[movedCell.layer.presentationLayer ssj_takeScreenShotWithSize:_movedCell.size opaque:NO scale:0]];
         _movedCell.hidden = NO;
         [UIView animateWithDuration:0.25 animations:^{
-            _movedCell.transform = CGAffineTransformMakeScale(1.2, 1.2);
+            _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
         }];
         movedCell.hidden = YES;
         _movable = YES;
@@ -241,7 +221,7 @@ static const CGFloat kMaxSpeed = 100;
 
 // 将当前移动的cell保持在可视范围内
 - (void)keepCurrentMovedCellVisible {
-    if (!_movable || !_moveIndexPath || !_movedCell) {
+    if (!_movable || !_currentMovedIndexPath || !_movedCell) {
         return;
     }
     
@@ -273,47 +253,47 @@ static const CGFloat kMaxSpeed = 100;
 
 // 检测是否有与当前移动的cell相交的cell
 - (void)checkIfHasIntersectantCells {
-    if (!_shouldCheckIntersection || !_moveIndexPath || !_movedCell) {
+    if (!_shouldCheckIntersection || !_currentMovedIndexPath || !_movedCell) {
         return;
     }
     
     NSIndexPath *topIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.centerX, _movedCell.top)];
-    if ([self exchangeCellsIfNeededWithIndexPath:topIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:topIndex]) {
         return;
     }
     
     NSIndexPath *leftTopIndex = [self indexPathForItemAtPoint:_movedCell.leftTop];
-    if ([self exchangeCellsIfNeededWithIndexPath:leftTopIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:leftTopIndex]) {
         return;
     }
     
     NSIndexPath *leftIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.left, _movedCell.centerY)];
-    if ([self exchangeCellsIfNeededWithIndexPath:leftIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:leftIndex]) {
         return;
     }
     
     NSIndexPath *leftBottomIndex = [self indexPathForItemAtPoint:_movedCell.leftBottom];
-    if ([self exchangeCellsIfNeededWithIndexPath:leftBottomIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:leftBottomIndex]) {
         return;
     }
     
     NSIndexPath *bottomIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.centerX, _movedCell.bottom)];
-    if ([self exchangeCellsIfNeededWithIndexPath:bottomIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:bottomIndex]) {
         return;
     }
     
     NSIndexPath *bottomRightIndex = [self indexPathForItemAtPoint:_movedCell.rightBottom];
-    if ([self exchangeCellsIfNeededWithIndexPath:bottomRightIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:bottomRightIndex]) {
         return;
     }
     
     NSIndexPath *rightIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.right, _movedCell.centerY)];
-    if ([self exchangeCellsIfNeededWithIndexPath:rightIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:rightIndex]) {
         return;
     }
     
     NSIndexPath *rightTopIndex = [self indexPathForItemAtPoint:_movedCell.rightTop];
-    if ([self exchangeCellsIfNeededWithIndexPath:rightTopIndex]) {
+    if ([self moveCellToIndexPathIfNeeded:rightTopIndex]) {
         return;
     }
 }
@@ -331,35 +311,35 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 // 如果两个cell相交就交换它们
-- (BOOL)exchangeCellsIfNeededWithIndexPath:(NSIndexPath *)indexPath {
-    if (!_moveIndexPath || !indexPath) {
+- (BOOL)moveCellToIndexPathIfNeeded:(NSIndexPath *)toIndexPath {
+    if (!_currentMovedIndexPath || !toIndexPath) {
         return NO;
     }
     
-    if ([indexPath compare:_moveIndexPath] == NSOrderedSame) {
+    if ([toIndexPath compare:_currentMovedIndexPath] == NSOrderedSame) {
         return NO;
     }
     
-    CGRect exchangeCellRegion1 = CGRectMake(_movedCell.left + _exchangeCellRegion.origin.x, _movedCell.top + _exchangeCellRegion.origin.y, _exchangeCellRegion.size.width, _exchangeCellRegion.size.height);
+    CGRect exchangeCellRegion1 = UIEdgeInsetsInsetRect(_movedCell.frame, _exchangeCellRegion);
     
-    UICollectionViewCell *anotherCell = [self cellForItemAtIndexPath:indexPath];
-    CGRect exchangeCellRegion2 = CGRectMake(anotherCell.left + _exchangeCellRegion.origin.x, anotherCell.top + _exchangeCellRegion.origin.y, _exchangeCellRegion.size.width, _exchangeCellRegion.size.height);
+    UICollectionViewCell *anotherCell = [self cellForItemAtIndexPath:toIndexPath];
+    CGRect exchangeCellRegion2 = UIEdgeInsetsInsetRect(anotherCell.frame, _exchangeCellRegion);
     
     if (CGRectIntersectsRect(exchangeCellRegion1, exchangeCellRegion2)) {
         
         BOOL couldExchangeCell = YES;
-        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldExchangeCellsWithIndexPath:anotherIndexPath:)]) {
-            couldExchangeCell = [_editDelegate collectionView:self shouldExchangeCellsWithIndexPath:_moveIndexPath anotherIndexPath:indexPath];
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldMoveCellAtIndexPath:toIndexPath:)]) {
+            couldExchangeCell = [_editDelegate collectionView:self shouldMoveCellAtIndexPath:_currentMovedIndexPath toIndexPath:toIndexPath];
         }
         
         if (couldExchangeCell) {
-            [self moveItemAtIndexPath:_moveIndexPath toIndexPath:indexPath];
+            [self moveItemAtIndexPath:_currentMovedIndexPath toIndexPath:toIndexPath];
             
-            if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didExchangeCellsWithIndexPath:anotherIndexPath:)]) {
-                [_editDelegate collectionView:self didExchangeCellsWithIndexPath:_moveIndexPath anotherIndexPath:indexPath];
+            if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didMoveCellAtIndexPath:toIndexPath:)]) {
+                [_editDelegate collectionView:self didMoveCellAtIndexPath:_currentMovedIndexPath toIndexPath:toIndexPath];
             }
             
-            _moveIndexPath = indexPath;
+            _currentMovedIndexPath = toIndexPath;
             
             _shouldCheckIntersection = NO;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -370,6 +350,36 @@ static const CGFloat kMaxSpeed = 100;
     }
     
     return NO;
+}
+
+- (void)endMovingCell {
+    if (!_movable) {
+        return;
+    }
+    
+    if ([_originalMovedIndexPath compare:_currentMovedIndexPath] != NSOrderedSame) {
+        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didEndMovingCellFromIndexPath:toTargetIndexPath:)]) {
+            [_editDelegate collectionView:self didEndMovingCellFromIndexPath:_originalMovedIndexPath toTargetIndexPath:_currentMovedIndexPath];
+        }
+    }
+    
+    _movable = NO;
+    _longPressGesture.enabled = YES;
+    self.scrollEnabled = YES;
+    if (_currentMovedIndexPath) {
+        UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:_currentMovedIndexPath];
+        [UIView animateWithDuration:0.25 animations:^{
+            _movedCell.transform = CGAffineTransformMakeScale(1, 1);
+            _movedCell.frame = attributes.frame;
+        } completion:^(BOOL finished) {
+            _movedCell.hidden = YES;
+            UICollectionViewCell *cell = [self cellForItemAtIndexPath:_currentMovedIndexPath];
+            cell.hidden = NO;
+            
+            _currentMovedIndexPath = nil;
+            _originalMovedIndexPath = nil;
+        }];
+    }
 }
 
 @end

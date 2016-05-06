@@ -26,8 +26,6 @@
  */
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath;
 
-//- (void)collectionView:(SSJEditableCollectionView *)collectionView willBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath;
-
 /**
  *  已经进入编辑状态，可由用户长按触发或调用beginEditing触发
  *
@@ -38,29 +36,38 @@
  */
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath;
 
-//- (void)collectionView:(SSJEditableCollectionView *)collectionView willMoveCellAtIndexPath:(NSIndexPath *)indexPath;
-
 /**
- *  询问代理者是否应该交换两个cell
+ *  询问代理者是否应该把cell移动到指定的位置；在整个移动过程中可触发多次，只要有其他的cell和当前移动的cell相交的话，就会触发此方法
  *
  *  @param collectionView
- *  @param indexPath
- *  @param anotherIndexPath
+ *  @param fromIndexPath
+ *  @param toIndexPath
  *
  *  @return (void)
  */
-- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldExchangeCellsWithIndexPath:(NSIndexPath *)indexPath anotherIndexPath:(NSIndexPath *)anotherIndexPath;
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
 
 /**
- *  已经交换了两个cell
+ *  已经把cell移动到指定的位置；在整个移动过程中可触发多次，只要有其他的cell和当前移动的cell相交的话，就会触发此方法
  *
  *  @param collectionView
- *  @param indexPath
- *  @param anotherIndexPath
+ *  @param fromIndexPath
+ *  @param toIndexPath
  *
  *  @return (void)
  */
-- (void)collectionView:(SSJEditableCollectionView *)collectionView didExchangeCellsWithIndexPath:(NSIndexPath *)indexPath anotherIndexPath:(NSIndexPath *)anotherIndexPath;
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath;
+
+/**
+ *  已经把cell移动到指定的位置；在整个移动过程中指挥触发一次，从长按事件开始到结束，如果开始位置和结束位置不同，就会触发此方法
+ *
+ *  @param collectionView
+ *  @param fromIndexPath
+ *  @param toIndexPath
+ *
+ *  @return (void)
+ */
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath;
 
 /**
  *  询问代理者是否应该结束编辑状态；在编辑状态下用户手动点击collectionView触发，调用endEditing不会触发此方法
@@ -99,7 +106,12 @@
 /**
  *  交换cell的碰撞区域
  */
-@property (nonatomic) CGRect exchangeCellRegion;
+@property (nonatomic) UIEdgeInsets exchangeCellRegion;
+
+/**
+ *  长按事件开始，移动的cell的放大比例，最小为0
+ */
+@property (nonatomic) CGFloat movedCellScale;
 
 /**
  *  将当前移动的cell保持在屏幕可视范围内;editDelegate需要在scrollViewDidScroll方法中调用此方法
