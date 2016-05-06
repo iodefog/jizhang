@@ -1,0 +1,182 @@
+//
+//  SSJRecordMakingBillTypeSelectionView.m
+//  SSRecordMakingDemo
+//
+//  Created by old lang on 16/4/29.
+//  Copyright © 2016年 ___9188___. All rights reserved.
+//
+
+#import "SSJRecordMakingBillTypeSelectionView.h"
+#import "SSJRecordMakingBillTypeSelectionCell.h"
+#import "SSJEditableCollectionView.h"
+
+#define kCellWidth CGRectGetWidth(self.bounds) / 4
+#define kCellHeight 88
+
+static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
+
+@interface SSJRecordMakingBillTypeSelectionView () <SSJEditableCollectionViewDataSource, SSJEditableCollectionViewDelegate>
+
+@property (nonatomic, strong) SSJEditableCollectionView *collectionView;
+
+@property (nonatomic, strong) NSMutableArray *internalItems;
+
+@property (nonatomic, strong) NSIndexPath *lastSelectedIndex;
+
+@end
+
+@implementation SSJRecordMakingBillTypeSelectionView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        _internalItems = [NSMutableArray array];
+        [self addSubview:self.collectionView];
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    self.collectionView.frame = self.bounds;
+    
+    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
+    flowLayout.itemSize = CGSizeMake(kCellWidth, kCellHeight);
+}
+
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return _internalItems.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    SSJRecordMakingBillTypeSelectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    cell.item = _internalItems[indexPath.row];
+    __weak typeof(self) wself = self;
+    cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
+        [wself.internalItems removeObject:cell.item];
+        NSIndexPath *deleteIndexPath = [wself.collectionView indexPathForCell:cell];
+        [wself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
+    };
+    return cell;
+}
+
+#pragma mark - UICollectionViewDelegate
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.item == _internalItems.count - 1) {
+        return;
+    }
+    
+    if (!_lastSelectedIndex || [_lastSelectedIndex compare:indexPath] != NSOrderedSame) {
+        NSMutableArray *indexPaths = [@[] mutableCopy];
+        
+        if (_lastSelectedIndex) {
+            SSJRecordMakingBillTypeSelectionCellItem *lastSelectedItem = _internalItems[_lastSelectedIndex.item];
+            lastSelectedItem.selected = NO;
+            lastSelectedItem.animated = YES;
+            [indexPaths addObject:_lastSelectedIndex];
+        }
+        
+        SSJRecordMakingBillTypeSelectionCellItem *currentSelectedItem = _internalItems[indexPath.item];
+        currentSelectedItem.selected = YES;
+        currentSelectedItem.animated = YES;
+        [indexPaths addObject:indexPath];
+        
+        [_collectionView reloadItemsAtIndexPaths:indexPaths];
+        _lastSelectedIndex = indexPath;
+    }
+}
+
+#pragma mark - SSJEditCollectionViewDelegate
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath {
+    return indexPath.item != _internalItems.count - 1;
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath {
+    for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
+        item.editable = item != [_internalItems lastObject];
+    }
+    [_collectionView reloadData];
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView willMoveCellAtIndexPath:(NSIndexPath *)indexPath {
+    SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[indexPath.item];
+    item.editable = YES;
+    [_collectionView reloadItemsAtIndexPaths:@[indexPath]];
+}
+
+
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    if (fromIndexPath.item != _internalItems.count - 1
+        && toIndexPath.item != _internalItems.count - 1) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath {
+    SSJRecordMakingBillTypeSelectionCellItem *moveItem = _internalItems[fromIndexPath.item];
+    [_internalItems removeObject:moveItem];
+    [_internalItems insertObject:moveItem atIndex:toIndexPath.item];
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didExchangeCellsWithIndexPath:(NSIndexPath *)indexPath anotherIndexPath:(NSIndexPath *)anotherIndexPath {
+    [_internalItems exchangeObjectAtIndex:indexPath.item withObjectAtIndex:anotherIndexPath.item];
+}
+
+- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView {
+    for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
+        item.editable = NO;
+    }
+    [_collectionView reloadData];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [_collectionView keepCurrentMovedCellVisible];
+    [_collectionView checkIfHasIntersectantCells];
+}
+
+- (void)setItems:(NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *)items {
+    [_internalItems removeAllObjects];
+    if (items) {
+        [_internalItems addObjectsFromArray:items];
+    }
+    [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@""]];
+    [_collectionView reloadData];
+}
+
+- (NSArray *)items {
+    return [_internalItems copy];
+}
+
+- (void)endEditing {
+    [_collectionView endEditing];
+}
+
+#pragma mark - Getter
+- (SSJEditableCollectionView *)collectionView {
+    if (!_collectionView) {
+        _collectionView = [[SSJEditableCollectionView alloc] initWithFrame:self.frame collectionViewLayout:self.layout];
+        _collectionView.editDelegate = self;
+        _collectionView.editDataSource = self;
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.backgroundColor = nil;
+        [_collectionView registerClass:[SSJRecordMakingBillTypeSelectionCell class] forCellWithReuseIdentifier:kCellId];
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(11, (kCellWidth - 52) * 0.5, 25, (kCellWidth - 52) * 0.5);
+    }
+    return _collectionView;
+}
+
+- (UICollectionViewFlowLayout *)layout {
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.minimumLineSpacing = 0;
+    layout.minimumInteritemSpacing = 0;
+    layout.itemSize = CGSizeMake(kCellWidth, kCellHeight);
+    return layout;
+}
+
+@end

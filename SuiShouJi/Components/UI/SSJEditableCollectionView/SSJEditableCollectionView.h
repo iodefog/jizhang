@@ -16,6 +16,7 @@
 
 @protocol SSJEditableCollectionViewDelegate <UICollectionViewDelegate>
 
+@optional
 /**
  *  询问代理者是否应该进入编辑状态，只能由用户长按触发
  *

@@ -335,6 +335,10 @@
 		7DEF55581C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF55571C7F0AE100A90153 /* SSJBudgetEditPeriodSelectionView.m */; };
 		7DEF555C1C808B4800A90153 /* SSJBudgetConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF555B1C808B4800A90153 /* SSJBudgetConst.m */; };
 		7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */; };
+		7DF8B9BB1CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9B71CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.m */; };
+		7DF8B9BC1CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9B91CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.m */; };
+		7DF8B9C61CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9C51CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.m */; };
+		7DF8B9C81CDC4BA600F461A6 /* SSJRecordMakingBillTypeSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9C71CDC4BA600F461A6 /* SSJRecordMakingBillTypeSelectionView.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
 		7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */; };
@@ -1196,6 +1200,14 @@
 		7DEF555B1C808B4800A90153 /* SSJBudgetConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetConst.m; sourceTree = "<group>"; };
 		7DF8B9AB1CDC2B0000F461A6 /* SSJEditableCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJEditableCollectionView.h; sourceTree = "<group>"; };
 		7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJEditableCollectionView.m; sourceTree = "<group>"; };
+		7DF8B9B61CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingBillTypeSelectionCell.h; sourceTree = "<group>"; };
+		7DF8B9B71CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingBillTypeSelectionCell.m; sourceTree = "<group>"; };
+		7DF8B9B81CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingBillTypeSelectionCellLabel.h; sourceTree = "<group>"; };
+		7DF8B9B91CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingBillTypeSelectionCellLabel.m; sourceTree = "<group>"; };
+		7DF8B9BA1CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingBillTypeSelectionView.h; sourceTree = "<group>"; };
+		7DF8B9C41CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingBillTypeSelectionCellItem.h; sourceTree = "<group>"; };
+		7DF8B9C51CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingBillTypeSelectionCellItem.m; sourceTree = "<group>"; };
+		7DF8B9C71CDC4BA600F461A6 /* SSJRecordMakingBillTypeSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingBillTypeSelectionView.m; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
 		7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-667@2x.png"; sourceTree = "<group>"; };
 		7DF8DECE1C59BFE700CC5DFA /* guide_1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@3x.png"; sourceTree = "<group>"; };
@@ -3500,6 +3512,8 @@
 		BD0E43E11C21009900F9179D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7DF8B9C41CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.h */,
+				7DF8B9C51CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.m */,
 				BD8FD8291C3266CD00B7AABA /* SSJRecordMakingCategoryItem.h */,
 				BD8FD82A1C3266CD00B7AABA /* SSJRecordMakingCategoryItem.m */,
 				BD7BC83F1C3A2633001DE5D8 /* SSJFundingItem.h */,
@@ -3518,6 +3532,12 @@
 		BD0E43E31C21009900F9179D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7DF8B9BA1CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionView.h */,
+				7DF8B9C71CDC4BA600F461A6 /* SSJRecordMakingBillTypeSelectionView.m */,
+				7DF8B9B61CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.h */,
+				7DF8B9B71CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.m */,
+				7DF8B9B81CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.h */,
+				7DF8B9B91CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.m */,
 				9C252BF81CAB754100AE58D3 /* SSJCustomKeyboard.h */,
 				9C252BF91CAB754100AE58D3 /* SSJCustomKeyboard.m */,
 				BD0E43E81C21110B00F9179D /* SSJCustomKeyBoardButton.h */,
@@ -4805,6 +4825,7 @@
 				9C0E8C2A1CB645900093F79E /* UMPostTableViewCell.m in Sources */,
 				BD976FB91C4F353E00B0E26D /* SSJFundingDetailCell.m in Sources */,
 				BD37D2EE1C56465F0050BDAA /* SSJUserInfoItem.m in Sources */,
+				7DF8B9C61CDC4B4D00F461A6 /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
 				BD0E43EA1C21110B00F9179D /* SSJCustomKeyBoardButton.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
 				BD33FD371C4BAEEA006A6942 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
@@ -4938,6 +4959,7 @@
 				7D72D9301CBDEF7700ACEE2D /* SSJBookkeepingTreeHelper.m in Sources */,
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
+				7DF8B9C81CDC4BA600F461A6 /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
 				7D72D92B1CBDEF2F00ACEE2D /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
@@ -4956,6 +4978,7 @@
 				9C0874F11CA5282A007A647E /* SSJCategoryListHelper.m in Sources */,
 				BD0432EF1C1A77BB0051E7AB /* CDPointActivityIndicator.m in Sources */,
 				BD06AF661C44B98C0028B571 /* SSJFundingTransferViewController.m in Sources */,
+				7DF8B9BC1CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				7DE6E86C1C55DD9C001C9138 /* SSJRegistOrderView.m in Sources */,
 				9C0E8C2C1CB645900093F79E /* UMTextView.m in Sources */,
 				7D83081F1CB4A6B0004E48ED /* SSJMagicExportCalendarHeaderView.m in Sources */,
@@ -5020,6 +5043,7 @@
 				7D1D7F3A1C846B5F0001F72A /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				BD4934421C350D3600300D43 /* SSJSyncSettingViewController.m in Sources */,
 				BDF503831C7ED92C00DCFA99 /* SSJChargeCircleSelectView.m in Sources */,
+				7DF8B9BB1CDC4B3300F461A6 /* SSJRecordMakingBillTypeSelectionCell.m in Sources */,
 				7DEF55521C7EEB3300A90153 /* SSJBudgetTypeModel.m in Sources */,
 				7DEF552E1C7DB43400A90153 /* SSJBudgetListCellItem.m in Sources */,
 				7D587E511CC0DF360058847B /* SSJStartViewManager.m in Sources */,
