@@ -533,9 +533,9 @@
                 [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
             }
             [weakSelf.newlyAddChargeArr removeAllObjects];
-        }
-        if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-            [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            }
         }
     } failure:^(NSError *error) {
         

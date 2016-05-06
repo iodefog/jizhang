@@ -8,6 +8,6 @@
 
 #import "SSJBaseViewController.h"
 
-@interface SSJFinancingHomeViewController : SSJBaseViewController<UITableViewDelegate,UITableViewDataSource>
+@interface SSJFinancingHomeViewController : SSJBaseViewController<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @end
