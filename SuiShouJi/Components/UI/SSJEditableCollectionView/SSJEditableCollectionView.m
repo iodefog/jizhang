@@ -47,9 +47,6 @@ static const CGFloat kMaxSpeed = 100;
         _movedCell.hidden = YES;
         [self addSubview:_movedCell];
         
-        _movedCell.layer.borderColor = [UIColor redColor].CGColor;
-        _movedCell.layer.borderWidth = 1;
-        
         _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(beginEditingWhenLongPressBegin)];
         [self addGestureRecognizer:_longPressGesture];
         
