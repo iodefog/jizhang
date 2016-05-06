@@ -105,7 +105,7 @@
     
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor colorWithRed:85.0 / 255.0 green:72.0 / 255.0 blue:0 alpha:0.1] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     rightSpace.width = -15;
@@ -192,29 +192,6 @@
     return nil;
 }
 
-#pragma mark - UIScrollViewDelegate
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
-        _isRefreshing = YES;
-        [self.homeButton startLoading];
-        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
-        self.statusLabel.hidden = NO;
-        self.statusLabel.text = @"数据同步中";
-        [self.statusLabel sizeToFit];
-        [self.view setNeedsLayout];
-        __weak typeof(self) weakSelf = self;
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
-            if (type == SSJDataSynchronizeTypeData) {
-                weakSelf.refreshSuccessOrNot = YES;
-                [weakSelf.homeButton stopLoading];
-            }
-        }failure:^(SSJDataSynchronizeType type, NSError *error) {
-            weakSelf.refreshSuccessOrNot = NO;
-            [weakSelf.homeButton stopLoading];
-        }];
-    }
-}
-
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
     SSJBillingChargeCellItem *item = currentCell.item;
@@ -223,13 +200,13 @@
         if (item.incomeOrExpence) {
             currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, 1, 0);
+            currentCell.expentureImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, -1, 0);
         }else{
             currentCell.incomeLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
-            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , 1, 1, 0);
+            currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
         }
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:0.7 animations:^{
             currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
             currentCell.incomeLabel.transform = CGAffineTransformIdentity;
@@ -273,6 +250,31 @@
         }
     }
 }
+
+
+#pragma mark - UIScrollViewDelegate
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
+        _isRefreshing = YES;
+        [self.homeButton startLoading];
+        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
+        self.statusLabel.hidden = NO;
+        self.statusLabel.text = @"数据同步中";
+        [self.statusLabel sizeToFit];
+        [self.view setNeedsLayout];
+        __weak typeof(self) weakSelf = self;
+        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
+            if (type == SSJDataSynchronizeTypeData) {
+                weakSelf.refreshSuccessOrNot = YES;
+                [weakSelf.homeButton stopLoading];
+            }
+        }failure:^(SSJDataSynchronizeType type, NSError *error) {
+            weakSelf.refreshSuccessOrNot = NO;
+            [weakSelf.homeButton stopLoading];
+        }];
+    }
+}
+
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -407,11 +409,12 @@
         _homeButton.layer.cornerRadius = 48.f;
         __weak typeof(self) weakSelf = self;
         _homeButton.recordMakingClickBlock = ^(){
-            SSJRecordMakingViewController *recordmaking = [[SSJRecordMakingViewController alloc]init];
-            recordmaking.addNewChargeBlock = ^(NSArray *chargeIdArr){
+            SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
+            recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
                 weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
             };
-            [weakSelf.navigationController pushViewController:recordmaking animated:YES];
+            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+            [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
         _homeButton.animationStopBlock = ^(){
             weakSelf.statusLabel.hidden = NO;
@@ -531,6 +534,9 @@
             }
             [weakSelf.newlyAddChargeArr removeAllObjects];
         }
+        if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+            [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+        }
     } failure:^(NSError *error) {
         
     }];
@@ -545,13 +551,14 @@
 }
 
 -(void)reloadDataAfterSync{
-//    [self getDateFromDatebase];
+    [self getDateFromDatebase];
     
     [self reloadBudgetData];
 }
 
 - (void)reloadDataAfterInitDatabase {
     [self getDateFromDatebase];
+    
     [self reloadBudgetData];
 }
 

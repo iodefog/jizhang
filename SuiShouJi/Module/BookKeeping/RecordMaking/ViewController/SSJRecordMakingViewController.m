@@ -715,7 +715,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,userid];
                 [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid];
             }
-            
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            }
         }else{
             //修改循环记账配置
             if ([db intForQuery:@"select operatortype from BK_CHARGE_PERIOD_CONFIG where ICONFIGID = ?",weakSelf.item.configId] == 2) {
@@ -747,15 +749,15 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                     }
                 }
             }
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            }
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [weakSelf.navigationController dismissViewControllerAnimated:YES completion:NULL];
         });
     }];
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-    }
 }
 
 -(void)segmentPressed:(id)sender{
