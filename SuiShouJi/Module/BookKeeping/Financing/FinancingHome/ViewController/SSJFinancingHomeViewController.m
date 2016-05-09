@@ -15,15 +15,13 @@
 #import "SSJFinancingHomePopView.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
+#import "SSJFinancingHomeHeader.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
 @property (nonatomic,strong) SSJEditableCollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *items;
-@property (nonatomic,strong) UIView *headerView;
-@property (nonatomic,strong) UILabel *profitAmountLabel;
-@property (nonatomic,strong) UILabel *profitLabel;
-@property (nonatomic,strong) UIButton *transferButton;
+@property (nonatomic,strong) SSJFinancingHomeHeader *headerView;
 @end
 
 @implementation SSJFinancingHomeViewController
@@ -38,9 +36,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.headerView];
-    [self.headerView addSubview:self.profitLabel];
-    [self.headerView addSubview:self.profitAmountLabel];
-    [self.headerView addSubview:self.transferButton];
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:@"financingHomeCell"];
 }
@@ -59,18 +54,18 @@
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.headerView.size = CGSizeMake(self.view.width, 90);
+    self.headerView.size = CGSizeMake(self.view.width, 85);
     self.headerView.leftTop = CGPointMake(0, 10);
-    self.profitAmountLabel.left = self.profitLabel.right + 20;
-    self.transferButton.size = CGSizeMake(65, 30);
+//    self.profitAmountLabel.left = self.profitLabel.right + 20;
+//    self.transferButton.size = CGSizeMake(65, 30);
     [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
     [_headerView ssj_setBorderStyle:SSJBorderStyleBottom];
     [_headerView ssj_setBorderWidth:1];
-    self.profitLabel.left = 10.0f;
-    self.profitLabel.centerY = self.headerView.height / 2;
-    self.profitAmountLabel.centerY = self.headerView.height / 2;
-    self.transferButton.right = self.view.width - 15;
-    self.transferButton.centerY = self.headerView.height / 2;
+//    self.profitLabel.left = 10.0f;
+//    self.profitLabel.centerY = self.headerView.height / 2;
+//    self.profitAmountLabel.centerY = self.headerView.height / 2;
+//    self.transferButton.right = self.view.width - 15;
+//    self.transferButton.centerY = self.headerView.height / 2;
     self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 149);
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
@@ -115,7 +110,7 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(5, 10, 5, 10);
+    return UIEdgeInsetsMake(15, 10, 5, 10);
 }
 
 #pragma mark - SSJEditableCollectionViewDelegate
@@ -140,9 +135,8 @@
 -(SSJEditableCollectionView *)collectionView{
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
-        [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 10;
-        flowLayout.minimumLineSpacing = 10;
         _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
@@ -151,42 +145,13 @@
     return _collectionView;
 }
 
--(UIView *)headerView{
+-(SSJFinancingHomeHeader *)headerView{
     if (!_headerView) {
-        _headerView = [[UIView alloc]init];
+        _headerView = [[SSJFinancingHomeHeader alloc]init];
         _headerView.backgroundColor = [UIColor whiteColor];
-        _profitLabel = [[UILabel alloc]init];
-        _profitLabel.text = @"结余";
-        _profitLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _profitLabel.font = [UIFont systemFontOfSize:14];
-        [_profitLabel sizeToFit];
+        [_headerView.transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _headerView;
-}
-
--(UIButton *)transferButton{
-    if (!_transferButton) {
-        _transferButton = [[UIButton alloc]init];
-        [_transferButton setTitle:@"转账" forState:UIControlStateNormal];
-        [_transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        _transferButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_transferButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
-        _transferButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
-        _transferButton.layer.borderWidth = 1;
-        _transferButton.layer.cornerRadius = 2;
-    }
-    return _transferButton;
-}
-
--(UILabel *)profitAmountLabel{
-    if (!_profitAmountLabel)
-    {
-        _profitAmountLabel = [[UILabel alloc]init];
-        _profitAmountLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _profitAmountLabel.font = [UIFont systemFontOfSize:24];
-
-    }
-    return _profitAmountLabel;
 }
 
 #pragma mark - Private
@@ -194,8 +159,7 @@
     __weak typeof(self) weakSelf = self;
     [self.collectionView ssj_showLoadingIndicator];
     [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
-        weakSelf.profitAmountLabel.text = [NSString stringWithFormat:@"%.2f",result];
-        [weakSelf.profitAmountLabel sizeToFit];
+        weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
         [weakSelf.view setNeedsLayout];
     } failure:^(NSError *error) {
         
