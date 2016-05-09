@@ -8,6 +8,7 @@
 
 #import "SSJRecordMakingBillTypeSelectionView.h"
 #import "SSJRecordMakingBillTypeSelectionCell.h"
+#import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "SSJEditableCollectionView.h"
 
 #define kCellWidth CGRectGetWidth(self.bounds) / 4
@@ -55,17 +56,19 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         [wself.internalItems removeObject:cell.item];
         NSIndexPath *deleteIndexPath = [wself.collectionView indexPathForCell:cell];
         [wself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
+        if (wself.deleteAction) {
+            wself.deleteAction(wself, cell.item);
+        }
     };
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.item == _internalItems.count - 1) {
+        if (_addAction) {
+            _addAction(self);
+        }
         return;
     }
     
@@ -86,6 +89,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         
         [_collectionView reloadItemsAtIndexPaths:indexPaths];
         _lastSelectedIndex = indexPath;
+        
+        if (_selectAction) {
+            _selectAction(self, currentSelectedItem);
+        }
     }
 }
 
@@ -137,6 +144,13 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [_collectionView keepCurrentMovedCellVisible];
     [_collectionView checkIfHasIntersectantCells];
+    
+    if (scrollView.panGestureRecognizer) {
+        CGPoint velocity = [scrollView.panGestureRecognizer velocityInView:scrollView];
+        if (_dragAction) {
+            _dragAction(self, velocity.y < 0);
+        }
+    }
 }
 
 - (void)setItems:(NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *)items {
@@ -162,6 +176,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _collectionView = [[SSJEditableCollectionView alloc] initWithFrame:self.frame collectionViewLayout:self.layout];
         _collectionView.editDelegate = self;
         _collectionView.editDataSource = self;
+        _collectionView.alwaysBounceVertical = YES;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
         _collectionView.backgroundColor = nil;

@@ -7,11 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJRecordMakingBillTypeSelectionCellItem.h"
+
+@class SSJRecordMakingBillTypeSelectionCellItem;
 
 @interface SSJRecordMakingBillTypeSelectionView : UIView
 
-@property (nonatomic, strong) NSArray <SSJRecordMakingBillTypeSelectionCellItem *> *items;
+@property (nonatomic, strong) NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *items;
+
+@property (nonatomic, copy) void (^deleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
+
+@property (nonatomic, copy) void (^selectAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
+
+@property (nonatomic, copy) void (^addAction)(SSJRecordMakingBillTypeSelectionView *);
+
+@property (nonatomic, copy) void (^dragAction)(SSJRecordMakingBillTypeSelectionView *, BOOL isDragUp);
+
 
 - (void)endEditing;
 

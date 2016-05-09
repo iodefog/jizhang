@@ -167,7 +167,7 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     if (self.chargeCircleSelectBlock) {
-        self.chargeCircleSelectBlock(_selectedCircle);
+        self.chargeCircleSelectBlock(_selectedCircle, [_titleArray ssj_safeObjectAtIndex:(_selectedCircle + 1)]);
     }
     [self dismiss];
 }

@@ -15,7 +15,7 @@
 @property (nonatomic) BOOL incomeOrExpenture;
 
 //点击按钮的回调
-typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType);
+typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType, NSString *typeName);
 
 
 @property(nonatomic, copy) chargeCircleSelectBlock chargeCircleSelectBlock;

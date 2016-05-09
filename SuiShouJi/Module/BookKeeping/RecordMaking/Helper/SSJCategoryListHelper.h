@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJRecordMakingCategoryItem.h"
+
+@class SSJRecordMakingBillTypeSelectionCellItem;
 
 @interface SSJCategoryListHelper : NSObject
 
@@ -18,7 +19,9 @@
  *  @param success           查询成功的回调
  *  @param failure           查询失败的回调
  */
-+ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture Success:(void(^)(NSMutableArray *result))success failure:(void (^)(NSError *error))failure;
++ (void)queryForCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
+                                          Success:(void(^)(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result))success
+                                          failure:(void (^)(NSError *error))failure;
 
 /**
  *  删除一个记账类型
