@@ -29,6 +29,9 @@
 #import "FMDB.h"
 #import "FMDatabaseAdditions.h"
 
+#import "SSJRecordMakingBillTypeInputView.h"
+#import "SSJRecordMakingBillTypeSelectionView.h"
+
 static const NSTimeInterval kAnimationDuration = 0.2;
 
 @interface SSJRecordMakingViewController ()
@@ -53,6 +56,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic,strong) NSString *defualtID;
 @property (nonatomic,strong) SSJFundingItem *selectItem;
 @property (nonatomic,strong) SSJFundingItem *defualtItem;
+
+@property (nonatomic, strong) SSJRecordMakingBillTypeInputView *billTypeInputView;
+
+@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *billTypeSelectionView;
 
 
 @property (nonatomic) long currentYear;
@@ -145,6 +152,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             [self updateFundingType];
         }
     }
+    
     [self settitleSegment];
     [self.view addSubview:self.selectedCategoryView];
     [self.selectedCategoryView addSubview:self.textInput];
@@ -152,7 +160,10 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self.view addSubview:self.additionalView];
     [self.view addSubview:self.inputTopView];
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.categoryListView];
+//    [self.view addSubview:self.categoryListView];
+    
+    [self.view addSubview:self.billTypeInputView];
+    [self.view addSubview:self.billTypeSelectionView];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -176,7 +187,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     self.textInput.centerY = self.categoryImage.centerY;
     self.additionalView.height = 200;
     self.additionalView.bottom = self.view.height;
-    self.categoryListView.top = self.selectedCategoryView.bottom + 5;
+//    self.categoryListView.top = self.selectedCategoryView.bottom + 5;
+    self.billTypeSelectionView.frame = CGRectMake(0, self.selectedCategoryView.bottom, self.view.width, self.view.height - self.selectedCategoryView.bottom);
+    
     self.inputTopView.bottom = self.additionalView.top;
     self.categoryListView.size = CGSizeMake(self.view.width, self.view.height - 240 - self.selectedCategoryView.bottom);
     
@@ -458,6 +471,21 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         };
     }
     return _ChargeCircleSelectView;
+}
+
+- (SSJRecordMakingBillTypeInputView *)billTypeInputView {
+    if (!_billTypeInputView) {
+        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 91)];
+        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
+    }
+    return _billTypeInputView;
+}
+
+- (SSJRecordMakingBillTypeSelectionView *)billTypeSelectionView {
+    if (!_billTypeSelectionView) {
+        _billTypeSelectionView = [[SSJRecordMakingBillTypeSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - self.selectedCategoryView.bottom)];
+    }
+    return _billTypeSelectionView;
 }
 
 #pragma mark - UITextFieldDelegate
