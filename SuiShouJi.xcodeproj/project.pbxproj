@@ -413,6 +413,9 @@
 		9C6F58BF1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6F58BE1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m */; };
 		9C7089621CD1B63B006F3A62 /* SSJScrollTextLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7089611CD1B63B006F3A62 /* SSJScrollTextLayer.m */; };
 		9C70896C1CD1B7EE006F3A62 /* SSJScrollTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C70896B1CD1B7EE006F3A62 /* SSJScrollTextView.m */; };
+		9C991D811CE06C120031CD02 /* SSJFinancingHomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C991D801CE06C120031CD02 /* SSJFinancingHomeHeader.m */; };
+		9C991D8A1CE0742D0031CD02 /* zhuanzhang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C991D891CE0742D0031CD02 /* zhuanzhang@2x.png */; };
+		9C991D8C1CE074670031CD02 /* zhuanzhang@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C991D8B1CE074670031CD02 /* zhuanzhang@3x.png */; };
 		9CB85EA21CA3DB5D00715816 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB85EA11CA3DB5D00715816 /* SSJFinancingHomeHelper.m */; };
 		9CD5C38A1CB3A427004CC3FE /* SSJPersonalDetailHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C37D1CB3A427004CC3FE /* SSJPersonalDetailHelper.m */; };
 		9CD5C38B1CB3A427004CC3FE /* SSJPersonalDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3801CB3A427004CC3FE /* SSJPersonalDetailItem.m */; };
@@ -1319,6 +1322,10 @@
 		9C7089611CD1B63B006F3A62 /* SSJScrollTextLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJScrollTextLayer.m; sourceTree = "<group>"; };
 		9C70896A1CD1B7EE006F3A62 /* SSJScrollTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJScrollTextView.h; sourceTree = "<group>"; };
 		9C70896B1CD1B7EE006F3A62 /* SSJScrollTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJScrollTextView.m; sourceTree = "<group>"; };
+		9C991D7F1CE06C120031CD02 /* SSJFinancingHomeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHeader.h; sourceTree = "<group>"; };
+		9C991D801CE06C120031CD02 /* SSJFinancingHomeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHeader.m; sourceTree = "<group>"; };
+		9C991D891CE0742D0031CD02 /* zhuanzhang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhuanzhang@2x.png"; sourceTree = "<group>"; };
+		9C991D8B1CE074670031CD02 /* zhuanzhang@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhuanzhang@3x.png"; sourceTree = "<group>"; };
 		9CB85EA01CA3DB5D00715816 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
 		9CB85EA11CA3DB5D00715816 /* SSJFinancingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHelper.m; sourceTree = "<group>"; };
 		9CD5C37C1CB3A427004CC3FE /* SSJPersonalDetailHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPersonalDetailHelper.h; sourceTree = "<group>"; };
@@ -2370,6 +2377,8 @@
 				BDF510721C925A6500A49D74 /* weibo_banner.png */,
 				BDDB68211C9FE54C00C27E79 /* yindao@2x.jpg */,
 				BDDB681F1C9FE54700C27E79 /* yindao@3x.jpg */,
+				9C991D8B1CE074670031CD02 /* zhuanzhang@3x.png */,
+				9C991D891CE0742D0031CD02 /* zhuanzhang@2x.png */,
 				7DD7D6731C4C8E6A00ACE71A /* ReportForms */,
 				7DD7D6791C4C8E6A00ACE71A /* tabbarimage */,
 			);
@@ -3892,6 +3901,8 @@
 				BDD8817A1C5B642600B6FC02 /* SSJFinancingHomePopView.xib */,
 				BD7BC8271C3A1A0F001DE5D8 /* SSJFinancingHomeCell.h */,
 				BD7BC8281C3A1A0F001DE5D8 /* SSJFinancingHomeCell.m */,
+				9C991D7F1CE06C120031CD02 /* SSJFinancingHomeHeader.h */,
+				9C991D801CE06C120031CD02 /* SSJFinancingHomeHeader.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4541,6 +4552,7 @@
 				BDA3FDF11C58CAC400FB57B1 /* ft_chuxuka@2x.png in Resources */,
 				BDA3FDED1C58CAC400FB57B1 /* ft_cash@2x.png in Resources */,
 				7DDDA7F11CBE51070029ADAC /* tip_already_water@2x.png in Resources */,
+				9C991D8A1CE0742D0031CD02 /* zhuanzhang@2x.png in Resources */,
 				BDF504851C868A8200DCFA99 /* beizhu_nor@2x.png in Resources */,
 				BDF504941C868A8200DCFA99 /* xunhuan_nor@2x.png in Resources */,
 				7DDDA7B91CBE1BFD0029ADAC /* help_tree_level_2@3x.png in Resources */,
@@ -4638,6 +4650,7 @@
 				BDF510971C925C8D00A49D74 /* tab_more_nor@2x.png in Resources */,
 				9C2BCFB91CBF72D900D8D8D3 /* more_weixin@3x.png in Resources */,
 				7DD7D6901C4C8E6A00ACE71A /* bt_clean@2x.png in Resources */,
+				9C991D8C1CE074670031CD02 /* zhuanzhang@3x.png in Resources */,
 				7DD7D69B1C4C8E6A00ACE71A /* bt_digital@3x.png in Resources */,
 				BDF069AD1C5B4D01001430BB /* white_jiantou@2x.png in Resources */,
 				7D893F291C91144D00886995 /* budget_add@2x.png in Resources */,
@@ -4960,6 +4973,7 @@
 				BDF503921C85A00100DCFA99 /* SSJCircleChargeCell.m in Sources */,
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
+				9C991D811CE06C120031CD02 /* SSJFinancingHomeHeader.m in Sources */,
 				7D768A731C926B6600CB75B0 /* SSJBorderButton.m in Sources */,
 				BDFBDAB21C7DA9240049F179 /* SSJImaageBrowseViewController.m in Sources */,
 				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,

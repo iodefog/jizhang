@@ -20,7 +20,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.layer.cornerRadius = 4.f;
+        self.layer.cornerRadius = 8.f;
         [self.contentView addSubview:self.fundingBalanceLabel];
         [self.contentView addSubview:self.fundingNameLabel];
         [self.contentView addSubview:self.fundingMemoLabel];
@@ -56,7 +56,7 @@
     if (!_fundingNameLabel) {
         _fundingNameLabel = [[UILabel alloc]init];
         _fundingNameLabel.textColor = [UIColor whiteColor];
-        _fundingNameLabel.font = [UIFont systemFontOfSize:15];
+        _fundingNameLabel.font = [UIFont systemFontOfSize:18];
     }
     return _fundingNameLabel;
 }
@@ -65,7 +65,7 @@
     if (!_fundingBalanceLabel) {
         _fundingBalanceLabel = [[UILabel alloc]init];
         _fundingBalanceLabel.textColor = [UIColor whiteColor];
-        _fundingBalanceLabel.font = [UIFont systemFontOfSize:18];
+        _fundingBalanceLabel.font = [UIFont systemFontOfSize:22];
     }
     return _fundingBalanceLabel;
 }
@@ -74,7 +74,7 @@
     if (!_fundingMemoLabel) {
         _fundingMemoLabel = [[UILabel alloc]init];
         _fundingMemoLabel.textColor = [UIColor whiteColor];
-        _fundingMemoLabel.font = [UIFont systemFontOfSize:14];
+        _fundingMemoLabel.font = [UIFont systemFontOfSize:13];
     }
     return _fundingMemoLabel;
 }
