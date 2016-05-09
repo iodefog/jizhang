@@ -12,7 +12,7 @@
 
 @interface SSJMineHomeTableViewHeader : UIView
 
-+ (id)MineHomeHeader;
+//+ (id)MineHomeHeader;
 
 @property(nonatomic, strong) NSString *imageUrl;
 

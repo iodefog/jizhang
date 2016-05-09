@@ -254,25 +254,25 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
-        _isRefreshing = YES;
-        [self.homeButton startLoading];
-        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
-        self.statusLabel.hidden = NO;
-        self.statusLabel.text = @"数据同步中";
-        [self.statusLabel sizeToFit];
-        [self.view setNeedsLayout];
-        __weak typeof(self) weakSelf = self;
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
-            if (type == SSJDataSynchronizeTypeData) {
-                weakSelf.refreshSuccessOrNot = YES;
-                [weakSelf.homeButton stopLoading];
-            }
-        }failure:^(SSJDataSynchronizeType type, NSError *error) {
-            weakSelf.refreshSuccessOrNot = NO;
-            [weakSelf.homeButton stopLoading];
-        }];
-    }
+//    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
+//        _isRefreshing = YES;
+//        [self.homeButton startLoading];
+//        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
+//        self.statusLabel.hidden = NO;
+//        self.statusLabel.text = @"数据同步中";
+//        [self.statusLabel sizeToFit];
+//        [self.view setNeedsLayout];
+//        __weak typeof(self) weakSelf = self;
+//        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
+//            if (type == SSJDataSynchronizeTypeData) {
+//                weakSelf.refreshSuccessOrNot = YES;
+//                [weakSelf.homeButton stopLoading];
+//            }
+//        }failure:^(SSJDataSynchronizeType type, NSError *error) {
+//            weakSelf.refreshSuccessOrNot = NO;
+//            [weakSelf.homeButton stopLoading];
+//        }];
+//    }
 }
 
 
@@ -416,28 +416,28 @@
             UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
-        _homeButton.animationStopBlock = ^(){
-            weakSelf.statusLabel.hidden = NO;
-            if (weakSelf.refreshSuccessOrNot) {
-                weakSelf.statusLabel.text = @"数据同步成功";
-                weakSelf.homeButton.refreshSuccessOrNot = YES;
-                [weakSelf.statusLabel sizeToFit];
-                [weakSelf.view setNeedsLayout];
-            }else{
-                weakSelf.statusLabel.text = @"数据同步失败";
-                weakSelf.homeButton.refreshSuccessOrNot = NO;
-                [weakSelf.statusLabel sizeToFit];
-                [weakSelf.view setNeedsLayout];
-            }
-            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
-            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
-            
-            dispatch_after(time, dispatch_get_main_queue(), ^{
-                weakSelf.statusLabel.text = @"";
-                weakSelf.statusLabel.hidden = YES;
-                _isRefreshing = NO;
-            });
-        };
+//        _homeButton.animationStopBlock = ^(){
+//            weakSelf.statusLabel.hidden = NO;
+//            if (weakSelf.refreshSuccessOrNot) {
+//                weakSelf.statusLabel.text = @"数据同步成功";
+//                weakSelf.homeButton.refreshSuccessOrNot = YES;
+//                [weakSelf.statusLabel sizeToFit];
+//                [weakSelf.view setNeedsLayout];
+//            }else{
+//                weakSelf.statusLabel.text = @"数据同步失败";
+//                weakSelf.homeButton.refreshSuccessOrNot = NO;
+//                [weakSelf.statusLabel sizeToFit];
+//                [weakSelf.view setNeedsLayout];
+//            }
+//            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
+//            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
+//            
+//            dispatch_after(time, dispatch_get_main_queue(), ^{
+//                weakSelf.statusLabel.text = @"";
+//                weakSelf.statusLabel.hidden = YES;
+//                _isRefreshing = NO;
+//            });
+//        };
     }
     return _homeButton;
 }
