@@ -14,6 +14,10 @@
 
 //+ (id)MineHomeHeader;
 
+@property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
+
+@property (nonatomic, strong) UILabel *nicknameLabel;
+
 @property(nonatomic, strong) NSString *imageUrl;
 
 //点击头像回调

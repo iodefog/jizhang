@@ -9,8 +9,7 @@
 #import "SSJMineHomeTableViewHeader.h"
 
 @interface SSJMineHomeTableViewHeader()
-@property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
-@property (nonatomic, strong) UILabel *nicknameLabel;
+
 @property(nonatomic, strong) UILabel *checkInLevelLabel;
 @property(nonatomic, strong) UIButton *checkInButton;
 @property(nonatomic, strong) UIButton *syncButton;

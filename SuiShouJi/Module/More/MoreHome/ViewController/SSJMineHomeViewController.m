@@ -53,6 +53,7 @@ static NSString *const kTitle6 = @"设置";
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 
+
 //  手势密码开关
 @property (nonatomic, strong) UISwitch *motionSwitch;
 
@@ -74,6 +75,9 @@ static NSString *const kTitle6 = @"设置";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
+#warning test
+    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"登录" style:UIBarButtonItemStylePlain target:self action:@selector(loginButtonClicked)];
+    self.navigationItem.rightBarButtonItem = item;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -97,15 +101,15 @@ static NSString *const kTitle6 = @"设置";
             if (item.realName == nil || [item.realName isEqualToString:@""]) {
                 //手机号登陆
                 NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-//                weakSelf.header.nicknameLabel.text = phoneNum;
+                weakSelf.header.nicknameLabel.text = phoneNum;
             }else{
                 //三方登录
-//                weakSelf.header.nicknameLabel.text = item.realName;
+                weakSelf.header.nicknameLabel.text = item.realName;
             }
-//            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-//            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-//            weakSelf.header.nicknameLabel.text = @"待君登录";
+            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.nicknameLabel.text = @"待君登录";
         }
         [weakSelf.tableView reloadData];
     }];
@@ -296,16 +300,16 @@ static NSString *const kTitle6 = @"设置";
             }
             if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
                 //三方登录
-//                weakSelf.header.nicknameLabel.text = item.realName;
+                weakSelf.header.nicknameLabel.text = item.realName;
             }else{
-//                //手机号登陆
-//                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-//                weakSelf.header.nicknameLabel.text = phoneNum;
+                //手机号登陆
+                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                weakSelf.header.nicknameLabel.text = phoneNum;
             }
-//            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
         } else {
-//            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-//            weakSelf.header.nicknameLabel.text = @"待君登录";
+            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
+            weakSelf.header.nicknameLabel.text = @"待君登录";
         }
     }];
 }
@@ -382,6 +386,17 @@ static NSString *const kTitle6 = @"设置";
             [weakSelf.tableView reloadData];
         });
     }];
+}
+
+#warning test
+- (void)loginButtonClicked{
+    if (!SSJIsUserLogined()) {
+        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+        [self.navigationController pushViewController:loginVc animated:YES];
+    }else{
+        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+        [self.navigationController pushViewController:personalDetailVc animated:YES];
+    }
 }
 
 #pragma mark - UIImagePickerControllerDelegate

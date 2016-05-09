@@ -206,7 +206,7 @@
             currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
         }
-        [UIView animateWithDuration:0.7 animations:^{
+        [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.2 initialSpringVelocity:3.f options:UIViewAnimationOptionCurveEaseIn animations:^{
             currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
             currentCell.incomeLabel.transform = CGAffineTransformIdentity;
@@ -215,7 +215,7 @@
             currentCell.expentureImage.layer.transform = CATransform3DIdentity;
             currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
         } completion:^(BOOL finished) {
-            [currentCell shake];
+//            [currentCell shake];
         }];
         [self.newlyAddIndexArr removeObject:@(indexPath.row)];
     }else{
