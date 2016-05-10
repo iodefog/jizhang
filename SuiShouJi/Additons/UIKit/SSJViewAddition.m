@@ -155,6 +155,22 @@ static const void *kBorderLayerKey  = &kBorderLayerKey;
 
 @implementation UIView (SSJBorder)
 
+- (void)ssj_setCornerStyle:(UIRectCorner)cornerStyle {
+    [[self ssj_borderLayer] setCornerStyle:cornerStyle];
+}
+
+- (UIRectCorner)ssj_cornerStyle {
+    return [[self ssj_borderLayer] cornerStyle];
+}
+
+- (void)ssj_setCornerRadius:(CGFloat)cornerRadius {
+    [self ssj_borderLayer].customCornerRadius = cornerRadius;
+}
+
+- (CGFloat)ssj_cornerRadius {
+    return [self ssj_borderLayer].customCornerRadius;
+}
+
 - (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle {
     [[self ssj_borderLayer] setCustomBorderStyle:customBorderStyle];
 }

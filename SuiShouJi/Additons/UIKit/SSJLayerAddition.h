@@ -58,6 +58,10 @@ typedef NS_OPTIONS(NSUInteger, SSJBorderStyle) {
 //  边框线类型
 @property (nonatomic, assign) SSJBorderStyle customBorderStyle;
 
+@property (nonatomic, assign) UIRectCorner cornerStyle;
+
+@property (nonatomic, assign) CGFloat customCornerRadius;
+
 //  边框线宽度 dufault 1.0
 @property (nonatomic, assign) CGFloat customBorderWidth;
 

@@ -66,6 +66,12 @@
 
 @interface UIView (SSJBorder)
 
+@property (nonatomic, readonly, getter=ssj_borderLayer) SSJBorderLayer *borderLayer;
+
+@property (nonatomic, getter=ssj_cornerStyle, setter=ssj_setCornerStyle:) UIRectCorner cornerStyle;
+
+@property (nonatomic, getter=ssj_cornerRadius, setter=ssj_setCornerRadius:) CGFloat cornerRadius;
+
 //  设置边框线类型
 - (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle;
 

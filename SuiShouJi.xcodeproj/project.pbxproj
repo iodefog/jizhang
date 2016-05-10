@@ -243,6 +243,9 @@
 		7DD7D7351C4CA8BD00ACE71A /* reportForms_income@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D7311C4CA8BD00ACE71A /* reportForms_income@2x.png */; };
 		7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D7321C4CA8BD00ACE71A /* reportForms_income@3x.png */; };
 		7DD7D7401C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */; };
+		7DD902971CE202790076929F /* SCYSlidePagingHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902941CE202790076929F /* SCYSlidePagingHeaderView.m */; };
+		7DD902981CE202790076929F /* SCYSlidePagingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD902961CE202790076929F /* SCYSlidePagingView.m */; };
+		7DD9029B1CE20BC30076929F /* SSJAddNewTypeColorSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9029A1CE20BC30076929F /* SSJAddNewTypeColorSelectionView.m */; };
 		7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDA48991C8821F20010EB01 /* SSJDatePeriod.m */; };
 		7DDBB0201C9AAA57003433D0 /* SSJSyncFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDBB01F1C9AAA57003433D0 /* SSJSyncFileModel.m */; };
 		7DDDA7681CBE03ED0029ADAC /* SSJBookkeepingTreeRuleDescView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDDA7671CBE03ED0029ADAC /* SSJBookkeepingTreeRuleDescView.m */; };
@@ -1186,6 +1189,12 @@
 		7DD7D7321C4CA8BD00ACE71A /* reportForms_income@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_income@3x.png"; sourceTree = "<group>"; };
 		7DD7D73E1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserDefaultDataCreater.h; sourceTree = "<group>"; };
 		7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserDefaultDataCreater.m; sourceTree = "<group>"; };
+		7DD902931CE202790076929F /* SCYSlidePagingHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYSlidePagingHeaderView.h; sourceTree = "<group>"; };
+		7DD902941CE202790076929F /* SCYSlidePagingHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYSlidePagingHeaderView.m; sourceTree = "<group>"; };
+		7DD902951CE202790076929F /* SCYSlidePagingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYSlidePagingView.h; sourceTree = "<group>"; };
+		7DD902961CE202790076929F /* SCYSlidePagingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYSlidePagingView.m; sourceTree = "<group>"; };
+		7DD902991CE20BC30076929F /* SSJAddNewTypeColorSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddNewTypeColorSelectionView.h; sourceTree = "<group>"; };
+		7DD9029A1CE20BC30076929F /* SSJAddNewTypeColorSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddNewTypeColorSelectionView.m; sourceTree = "<group>"; };
 		7DDA48981C8821F20010EB01 /* SSJDatePeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatePeriod.h; sourceTree = "<group>"; };
 		7DDA48991C8821F20010EB01 /* SSJDatePeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatePeriod.m; sourceTree = "<group>"; };
 		7DDBB01E1C9AAA57003433D0 /* SSJSyncFileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSyncFileModel.h; sourceTree = "<group>"; };
@@ -2300,6 +2309,7 @@
 		7D6AAB5F1C312C340007C0A3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				7DD902921CE202790076929F /* SCYSlidePagingView */,
 				7DF8B9AA1CDC2B0000F461A6 /* SSJEditableCollectionView */,
 				7DC517251CA93D3F00D23CF0 /* SSJWaveWaterView */,
 				7D768A701C926B6600CB75B0 /* SSJBorderButton */,
@@ -2921,6 +2931,17 @@
 				7DD7D73F1C4CDB9000ACE71A /* SSJUserDefaultDataCreater.m */,
 			);
 			path = UserDefaultData;
+			sourceTree = "<group>";
+		};
+		7DD902921CE202790076929F /* SCYSlidePagingView */ = {
+			isa = PBXGroup;
+			children = (
+				7DD902931CE202790076929F /* SCYSlidePagingHeaderView.h */,
+				7DD902941CE202790076929F /* SCYSlidePagingHeaderView.m */,
+				7DD902951CE202790076929F /* SCYSlidePagingView.h */,
+				7DD902961CE202790076929F /* SCYSlidePagingView.m */,
+			);
+			path = SCYSlidePagingView;
 			sourceTree = "<group>";
 		};
 		7DDA48971C8821D70010EB01 /* Foundation */ = {
@@ -3572,12 +3593,12 @@
 				BD04330E1C1A78B40051E7AB /* SSJImageAddition.m */,
 				BD04330F1C1A78B40051E7AB /* SSJLayerAddition.h */,
 				BD0433101C1A78B40051E7AB /* SSJLayerAddition.m */,
+				BD0433151C1A78B40051E7AB /* SSJViewAddition.h */,
+				BD0433161C1A78B40051E7AB /* SSJViewAddition.m */,
 				BD0433111C1A78B40051E7AB /* SSJScrollViewAddition.h */,
 				BD0433121C1A78B40051E7AB /* SSJScrollViewAddition.m */,
 				BD0433131C1A78B40051E7AB /* SSJTableView.h */,
 				BD0433141C1A78B40051E7AB /* SSJTableView.m */,
-				BD0433151C1A78B40051E7AB /* SSJViewAddition.h */,
-				BD0433161C1A78B40051E7AB /* SSJViewAddition.m */,
 				BD0433171C1A78B40051E7AB /* SSJViewControllerAddition.h */,
 				BD0433181C1A78B40051E7AB /* SSJViewControllerAddition.m */,
 				BD0433191C1A78B40051E7AB /* UIBarButtonItem+CDCategory.h */,
@@ -3921,6 +3942,8 @@
 		BD0E43E31C21009900F9179D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				7DD902991CE20BC30076929F /* SSJAddNewTypeColorSelectionView.h */,
+				7DD9029A1CE20BC30076929F /* SSJAddNewTypeColorSelectionView.m */,
 				7DFF73FD1CE06005007D1BDE /* SSJRecordMakingBillTypeInputView.h */,
 				7DFF73FE1CE06005007D1BDE /* SSJRecordMakingBillTypeInputView.m */,
 				7DFF74071CE067FF007D1BDE /* SSJRecordMakingBillTypeInputAccessoryView.h */,
@@ -5317,6 +5340,7 @@
 				BD0214481C3E87AE000E944E /* SSJFundingTypeSelectViewController.m in Sources */,
 				7DDBB0201C9AAA57003433D0 /* SSJSyncFileModel.m in Sources */,
 				BD70DED41C46496E000E6CC9 /* SSJNewFundingTypeCell.m in Sources */,
+				7DD902981CE202790076929F /* SCYSlidePagingView.m in Sources */,
 				BDAB44961C58777E004289BA /* SSJCalenderTableViewCell.m in Sources */,
 				7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */,
 				BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */,
@@ -5437,6 +5461,7 @@
 				9C7089621CD1B63B006F3A62 /* SSJScrollTextLayer.m in Sources */,
 				7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */,
 				9C0E8C281CB645900093F79E /* UMChatToolBar.m in Sources */,
+				7DD902971CE202790076929F /* SCYSlidePagingHeaderView.m in Sources */,
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
 				7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */,
 				7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
@@ -5483,6 +5508,7 @@
 				9C0E8C301CB761FF0093F79E /* SSJMemoMakingView.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
 				9C2E02771CAE419600C5F764 /* SSJWeiXinLoginHelper.m in Sources */,
+				7DD9029B1CE20BC30076929F /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				BD70DF641C4751EA000E6CC9 /* SSJRegistCheckAuthCodeViewController.m in Sources */,
 				BD70DF671C4751EA000E6CC9 /* SSJRegistNetworkService.m in Sources */,
 				7D2B241C1C3E091B009A74A8 /* SSJDataSynchronizer.m in Sources */,
@@ -5757,7 +5783,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -5795,7 +5821,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

@@ -44,14 +44,8 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteBtn addTarget:self action:@selector(deleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [_deleteBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_deleteBtn setImage:[UIImage imageNamed:@"bt_delete"] forState:UIControlStateNormal];
         [self.contentView addSubview:_deleteBtn];
-        
-        _deleteBtn.layer.borderWidth = 1;
-        _deleteBtn.layer.borderColor = [UIColor redColor].CGColor;
-        
-//        self.contentView.layer.borderColor = [UIColor redColor].CGColor;
-//        self.contentView.layer.borderWidth = 1;
     }
     return self;
 }
@@ -61,7 +55,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     _label.bottom = self.contentView.height;
     _label.centerX = self.contentView.width * 0.5;
     _deleteBtn.size = CGSizeMake(22, 22);
-    _deleteBtn.center = _imageView.rightTop;
+    _deleteBtn.center = CGPointMake(_imageView.right - 2, _imageView.top + 2);
 }
 
 - (void)setSelected:(BOOL)selected {
