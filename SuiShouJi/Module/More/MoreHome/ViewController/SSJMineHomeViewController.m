@@ -225,8 +225,21 @@ static NSString *const kTitle6 = @"设置";
     if (!_header) {
         __weak typeof(self) weakSelf = self;
         _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];\
-        _header.HeaderButtonClickedBlock = ^(){
+        _header.HeaderClickedBlock = ^(){
             [weakSelf loginButtonClicked];
+        };
+        _header.syncButtonClickBlock = ^(){
+            [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
+                if (type == SSJDataSynchronizeTypeData) {
+                    
+                }
+            }failure:^(SSJDataSynchronizeType type, NSError *error) {
+            
+            }];
+        };
+        _header.checkInButtonClickBlock = ^(){
+            SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+            [weakSelf.navigationController pushViewController:treeVC animated:YES];
         };
     }
     return _header;

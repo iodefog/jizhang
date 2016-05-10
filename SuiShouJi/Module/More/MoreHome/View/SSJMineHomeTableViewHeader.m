@@ -95,6 +95,7 @@
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_checkInButton ssj_setBorderColor:[UIColor whiteColor]];
         [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [_checkInButton addTarget:self action:@selector(checkInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _checkInButton;
 }
@@ -109,6 +110,7 @@
         [_syncButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_syncButton ssj_setBorderColor:[UIColor whiteColor]];
         [_syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
+        [_syncButton addTarget:self action:@selector(syncButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _syncButton;
 }
@@ -165,10 +167,23 @@
 }
 
 - (void)loginButtonClicked:(id)sender {
-    if (self.HeaderButtonClickedBlock) {
-        self.HeaderButtonClickedBlock();
+    if (self.HeaderClickedBlock) {
+        self.HeaderClickedBlock();
     }
 }
+
+- (void)checkInButtonClicked:(id)sender{
+    if (self.checkInButtonClickBlock) {
+        self.checkInButtonClickBlock();
+    }
+}
+
+- (void)syncButtonClicked:(id)sender{
+    if (self.syncButtonClickBlock) {
+        self.syncButtonClickBlock();
+    }
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

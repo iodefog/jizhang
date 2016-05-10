@@ -254,7 +254,14 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-//    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
+    if (scrollView.contentOffset.y < -38) {
+        __weak typeof(self) weakSelf = self;
+        SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
+        recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
+            weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
+        };
+        UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+        [weakSelf presentViewController:recordNav animated:YES completion:NULL];
 //        _isRefreshing = YES;
 //        [self.homeButton startLoading];
 //        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
@@ -272,7 +279,7 @@
 //            weakSelf.refreshSuccessOrNot = NO;
 //            [weakSelf.homeButton stopLoading];
 //        }];
-//    }
+    }
 }
 
 

@@ -17,11 +17,17 @@
 
 @property(nonatomic, strong) SSJUserInfoItem *item;
 
-//点击头像回调
-typedef void (^HeaderButtonClickedBlock)();
+//点击同步的回调
+typedef void (^syncButtonClickBlock)();
 
-@property (nonatomic, copy) HeaderButtonClickedBlock HeaderButtonClickedBlock;
+@property (nonatomic, copy) syncButtonClickBlock syncButtonClickBlock;
 
+//点击同步的回调
+typedef void (^checkInButtonClickBlock)();
+
+@property (nonatomic, copy) checkInButtonClickBlock checkInButtonClickBlock;
+
+//点击登录回调
 typedef void (^HeaderClickedBlock)();
 
 @property (nonatomic, copy) HeaderClickedBlock HeaderClickedBlock;
