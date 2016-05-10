@@ -13,10 +13,23 @@
 #import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 
-@interface SSJADDNewTypeViewController ()
+#import "SCYSlidePagingHeaderView.h"
+#import "SSJAddNewTypeColorSelectionView.h"
+
+@interface SSJADDNewTypeViewController () <SCYSlidePagingHeaderViewDelegate, UITextFieldDelegate>
+
 @property (nonatomic,strong) UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIView *rightbuttonView;
+
+@property (nonatomic, strong) SCYSlidePagingHeaderView *titleSegmentView;
+
+@property (nonatomic, strong) UITextField *customTypeInputView;
+
+@property (nonatomic, strong) UIImageView *selectedTypeView;
+
+@property (nonatomic, strong) SSJAddNewTypeColorSelectionView *colorSelectionView;
+
 @end
 
 @implementation SSJADDNewTypeViewController{
@@ -43,14 +56,12 @@
     [self getDateFromDb];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
     self.navigationItem.rightBarButtonItem = rightBarButton;
+    
+    self.navigationItem.titleView = self.titleSegmentView;
 }
 
 -(void)viewDidLayoutSubviews{
-    self.collectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
-}
-
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+//    self.collectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -96,6 +107,26 @@
     [collectionView reloadData];
 }
 
+#pragma mark - UITextFieldDelegate
+
+#pragma mark - SCYSlidePagingHeaderViewDelegate
+- (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+    if (index == 0) {
+        _customTypeInputView.hidden = YES;
+        _colorSelectionView.hidden = YES;
+        _collectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
+    } else if (index == 1) {
+        _customTypeInputView.hidden = NO;
+        _colorSelectionView.hidden = NO;
+        _collectionView.frame = CGRectMake(0, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5);
+    }
+}
+
+#pragma mark - Event
+- (void)selectColorAction {
+    NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selected];
+}
+
 #pragma mark - Getter
 - (UICollectionView *)collectionView{
     if (_collectionView==nil) {
@@ -123,6 +154,49 @@
         [_rightbuttonView addSubview:comfirmButton];
     }
     return _rightbuttonView;
+}
+
+- (SCYSlidePagingHeaderView *)titleSegmentView {
+    if (!_titleSegmentView) {
+        _titleSegmentView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, 204, 44)];
+        _titleSegmentView.delegate = self;
+        _titleSegmentView.buttonClickAnimated = YES;
+        _titleSegmentView.titleColor = [UIColor ssj_colorWithHex:@"999999"];
+        _titleSegmentView.selectedTitleColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+        [_titleSegmentView setTabSize:CGSizeMake(102, 2)];
+    }
+    return _titleSegmentView;
+}
+
+- (UITextField *)customTypeInputView {
+    if (!_customTypeInputView) {
+        _customTypeInputView = [[UITextField alloc] initWithFrame:CGRectMake(0, 10, self.view.width, 63)];
+        _customTypeInputView.backgroundColor = [UIColor whiteColor];
+        _customTypeInputView.font = [UIFont systemFontOfSize:15];
+        _customTypeInputView.placeholder = @"请输入类别名称";
+        _customTypeInputView.delegate = self;
+        [_customTypeInputView ssj_setBorderWidth:1];
+        [_customTypeInputView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_customTypeInputView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
+        
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, _customTypeInputView.height)];
+        _selectedTypeView = [[UIImageView alloc] init];
+        [leftView addSubview:_selectedTypeView];
+        _customTypeInputView.leftView = leftView;
+        _customTypeInputView.leftViewMode = UITextFieldViewModeAlways;
+    }
+    return _customTypeInputView;
+}
+
+- (SSJAddNewTypeColorSelectionView *)colorSelectionView {
+    if (!_colorSelectionView) {
+        _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithFrame:CGRectMake(0, self.view.height - 186, self.view.width, 186)];
+        [_colorSelectionView ssj_setBorderWidth:1];
+        [_colorSelectionView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_colorSelectionView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_colorSelectionView addTarget:self action:@selector(selectColorAction) forControlEvents:UIControlEventValueChanged];
+    }
+    return _colorSelectionView;
 }
 
 #pragma mark - private

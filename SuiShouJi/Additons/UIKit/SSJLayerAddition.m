@@ -116,6 +116,20 @@
     }
 }
 
+- (void)setCornerStyle:(UIRectCorner)cornerType {
+    if (_cornerStyle != cornerType) {
+        _cornerStyle = cornerType;
+        [self setNeedsDisplay];
+    }
+}
+
+- (void)setCustomCornerRadius:(CGFloat)customCornerRadius {
+    if (_customCornerRadius != customCornerRadius) {
+        _customCornerRadius = customCornerRadius;
+        [self setNeedsDisplay];
+    }
+}
+
 - (void)setCustomBorderColor:(UIColor *)customBorderColor {
     _customBorderColor = customBorderColor;
     [self setNeedsDisplay];
@@ -136,28 +150,136 @@
 }
 
 - (void)drawInContext:(CGContextRef)ctx {
-    if (_customBorderStyle == SSJBorderStyleleNone) {
+    if (_customBorderStyle == SSJBorderStyleleNone
+        || _customBorderWidth <= 0) {
         return;
     }
-    CGContextSetStrokeColorWithColor(ctx, _customBorderColor.CGColor);
-    CGContextSetLineWidth(ctx, _customBorderWidth);
+    
+    UIBezierPath *path = [UIBezierPath bezierPath];
     
     if ((_customBorderStyle & SSJBorderStyleTop) == SSJBorderStyleTop) {
-        CGContextMoveToPoint(ctx, _borderInsets.left, _borderInsets.top);
-        CGContextAddLineToPoint(ctx, self.width - _borderInsets.right, _borderInsets.top);
+        CGPoint leftTop = CGPointMake(_borderInsets.left, _borderInsets.top);
+        if ((_cornerStyle & UIRectCornerTopLeft) == UIRectCornerTopLeft) {
+            leftTop = CGPointMake(leftTop.x + self.customCornerRadius, leftTop.y);
+        }
+        
+        CGPoint rightTop = CGPointMake(self.width - _borderInsets.right, _borderInsets.top);
+        if ((_cornerStyle & UIRectCornerTopRight) == UIRectCornerTopRight) {
+            rightTop = CGPointMake(rightTop.x - self.customCornerRadius, leftTop.y);
+        }
+        
+        [path moveToPoint:leftTop];
+        [path addLineToPoint:rightTop];
     }
-    if ((_customBorderStyle & SSJBorderStyleLeft) == SSJBorderStyleLeft) {
-        CGContextMoveToPoint(ctx, _borderInsets.left, _borderInsets.top);
-        CGContextAddLineToPoint(ctx, _borderInsets.left, self.height - _borderInsets.bottom);
-    }
-    if ((_customBorderStyle & SSJBorderStyleBottom) == SSJBorderStyleBottom) {
-        CGContextMoveToPoint(ctx, _borderInsets.left, self.height - _borderInsets.bottom);
-        CGContextAddLineToPoint(ctx, self.width - _borderInsets.right, self.height - _borderInsets.bottom);
-    }
+    
     if ((_customBorderStyle & SSJBorderStyleRight) == SSJBorderStyleRight) {
-        CGContextMoveToPoint(ctx, self.width - _borderInsets.right, _borderInsets.top);
-        CGContextAddLineToPoint(ctx, self.width - _borderInsets.right, self.height - _borderInsets.bottom);
+        CGPoint rightTop = CGPointMake(self.width - _borderInsets.right, _borderInsets.top);
+        if ((_cornerStyle & UIRectCornerTopRight) == UIRectCornerTopRight) {
+            rightTop = CGPointMake(rightTop.x, rightTop.y + self.customCornerRadius);
+        }
+        
+        CGPoint rightBottom = CGPointMake(self.width - _borderInsets.right, self.height - _borderInsets.bottom);
+        if ((_cornerStyle & UIRectCornerBottomRight) == UIRectCornerBottomRight) {
+            rightBottom = CGPointMake(rightBottom.x, rightBottom.y - self.customCornerRadius);
+        }
+        
+        [path moveToPoint:rightTop];
+        [path addLineToPoint:rightBottom];
     }
+    
+    if ((_customBorderStyle & SSJBorderStyleBottom) == SSJBorderStyleBottom) {
+        CGPoint rightBottom = CGPointMake(self.width - _borderInsets.right, self.height - _borderInsets.bottom);
+        if ((_cornerStyle & UIRectCornerBottomRight) == UIRectCornerBottomRight) {
+            rightBottom = CGPointMake(rightBottom.x - self.customCornerRadius, rightBottom.y);
+        }
+        
+        CGPoint leftBottom = CGPointMake(_borderInsets.left, self.height - _borderInsets.bottom);
+        if ((_cornerStyle & UIRectCornerBottomLeft) == UIRectCornerBottomLeft) {
+            leftBottom = CGPointMake(leftBottom.x + self.customCornerRadius, leftBottom.y);
+        }
+        
+        [path moveToPoint:rightBottom];
+        [path addLineToPoint:leftBottom];
+    }
+    
+    if ((_customBorderStyle & SSJBorderStyleLeft) == SSJBorderStyleLeft) {
+        CGPoint leftBottom = CGPointMake(_borderInsets.left, self.height - _borderInsets.bottom);
+        if ((_cornerStyle & UIRectCornerBottomLeft) == UIRectCornerBottomLeft) {
+            leftBottom = CGPointMake(leftBottom.x, leftBottom.y - self.customCornerRadius);
+        }
+        
+        CGPoint leftTop = CGPointMake(_borderInsets.left, _borderInsets.top);
+        if ((_cornerStyle & UIRectCornerTopLeft) == UIRectCornerTopLeft) {
+            leftTop = CGPointMake(leftTop.x, leftTop.y + self.customCornerRadius);
+        }
+        
+        [path moveToPoint:leftBottom];
+        [path addLineToPoint:leftTop];
+    }
+    
+    if ((_customBorderStyle & SSJBorderStyleTop) == SSJBorderStyleTop
+        && (_customBorderStyle & SSJBorderStyleLeft) == SSJBorderStyleLeft) {
+        if ((_cornerStyle & UIRectCornerTopLeft) == UIRectCornerTopLeft) {
+            CGPoint center = CGPointMake(_borderInsets.left + self.customCornerRadius, _borderInsets.top + self.customCornerRadius);
+            [path addArcWithCenter:center radius:self.customCornerRadius startAngle:M_PI endAngle:M_PI * 1.5 clockwise:YES];
+        } else {
+            CGPoint pt_1 = CGPointMake(_borderInsets.left, _borderInsets.top + self.customCornerRadius);
+            CGPoint pt_2 = CGPointMake(_borderInsets.left, _borderInsets.top);
+            CGPoint pt_3 = CGPointMake(_borderInsets.left + self.customCornerRadius, _borderInsets.top);
+            [path moveToPoint:pt_1];
+            [path addLineToPoint:pt_2];
+            [path addLineToPoint:pt_3];
+        }
+    }
+    
+    if ((_customBorderStyle & SSJBorderStyleTop) == SSJBorderStyleTop
+        && (_customBorderStyle & SSJBorderStyleRight) == SSJBorderStyleRight) {
+        if ((_cornerStyle & UIRectCornerTopRight) == UIRectCornerTopRight) {
+            CGPoint center = CGPointMake(self.width - _borderInsets.right - self.customCornerRadius, _borderInsets.top + self.customCornerRadius);
+            [path addArcWithCenter:center radius:self.customCornerRadius startAngle:M_PI * 1.5 endAngle:M_PI * 2 clockwise:YES];
+        } else {
+            CGPoint pt_1 = CGPointMake(self.width - _borderInsets.right - self.customCornerRadius, _borderInsets.top);
+            CGPoint pt_2 = CGPointMake(self.width - _borderInsets.right, _borderInsets.top);
+            CGPoint pt_3 = CGPointMake(self.width - _borderInsets.right, _borderInsets.top + self.customCornerRadius);
+            [path moveToPoint:pt_1];
+            [path addLineToPoint:pt_2];
+            [path addLineToPoint:pt_3];
+        }
+    }
+    
+    if ((_customBorderStyle & SSJBorderStyleRight) == SSJBorderStyleRight
+        && (_customBorderStyle & SSJBorderStyleBottom) == SSJBorderStyleBottom) {
+        if ((_cornerStyle & UIRectCornerBottomRight) == UIRectCornerBottomRight) {
+            CGPoint center = CGPointMake(self.width - _borderInsets.right - self.customCornerRadius, self.height - _borderInsets.bottom - self.customCornerRadius);
+            [path addArcWithCenter:center radius:self.customCornerRadius startAngle:0 endAngle:M_PI_2 clockwise:YES];
+        } else {
+            CGPoint pt_1 = CGPointMake(self.width - _borderInsets.right, self.height - _borderInsets.bottom - self.customCornerRadius);
+            CGPoint pt_2 = CGPointMake(self.width - _borderInsets.right, self.height - _borderInsets.bottom);
+            CGPoint pt_3 = CGPointMake(self.width - _borderInsets.right - self.customCornerRadius, self.height - _borderInsets.bottom);
+            [path moveToPoint:pt_1];
+            [path addLineToPoint:pt_2];
+            [path addLineToPoint:pt_3];
+        }
+    }
+    
+    if ((_customBorderStyle & SSJBorderStyleBottom) == SSJBorderStyleBottom
+        && (_customBorderStyle & SSJBorderStyleLeft) == SSJBorderStyleLeft) {
+        if ((_cornerStyle & UIRectCornerBottomLeft) == UIRectCornerBottomLeft) {
+            CGPoint center = CGPointMake(_borderInsets.left + self.customCornerRadius, self.height - _borderInsets.bottom - self.customCornerRadius);
+            [path addArcWithCenter:center radius:self.customCornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
+        } else {
+            CGPoint pt_1 = CGPointMake(_borderInsets.left + self.customCornerRadius, self.height - _borderInsets.bottom);
+            CGPoint pt_2 = CGPointMake(_borderInsets.left, self.height - _borderInsets.bottom);
+            CGPoint pt_3 = CGPointMake(_borderInsets.left, self.height - _borderInsets.bottom - self.customCornerRadius);
+            [path moveToPoint:pt_1];
+            [path addLineToPoint:pt_2];
+            [path addLineToPoint:pt_3];
+        }
+    }
+    
+    CGContextAddPath(ctx, path.CGPath);
+    CGContextSetLineWidth(ctx, _customBorderWidth);
+    CGContextSetStrokeColorWithColor(ctx, _customBorderColor.CGColor);
     CGContextStrokePath(ctx);
 }
 

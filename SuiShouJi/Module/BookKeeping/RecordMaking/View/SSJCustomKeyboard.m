@@ -258,6 +258,9 @@ static id _instance;
     }
     if ([sender.titleLabel.text isEqualToString:@"OK"]) {
         [self.textField resignFirstResponder];
+        if (_textField.delegate && [_textField.delegate respondsToSelector:@selector(textFieldShouldReturn:)]) {
+            [_textField.delegate textFieldShouldReturn:_textField];
+        }
         return;
     }
     BOOL shouldChangeText = YES;

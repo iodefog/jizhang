@@ -393,7 +393,15 @@ static const NSTimeInterval kAnimationDuration = 0.25;
             }];
         };
         _billTypeSelectionView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-            
+            SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
+            addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
+            addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
+//                wself.categoryListView.selectedId = categoryID;
+//                wself.categoryID = categoryID;
+//                wself.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//                wself.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
+            };
+            [wself.navigationController pushViewController:addNewTypeVc animated:YES];
         };
         _billTypeSelectionView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
             if (isDragUp) {
@@ -436,6 +444,13 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         }
     }
     
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == _billTypeInputView.moneyInput) {
+        [self makeArecord];
+    }
     return YES;
 }
 
@@ -614,11 +629,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         _titleSegment.selectedSegmentIndex = !self.item.incomeOrExpence;
     }
     _titleSegment.size = CGSizeMake(115, 30);
-    _titleSegment.tintColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
-    NSDictionary *dictForNormal = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex: @"a7a7a7"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
-    [_titleSegment setTitleTextAttributes:dictForNormal forState:UIControlStateNormal];
-    NSDictionary *dictForSelected = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor ssj_colorWithHex:@"47cfbe"],NSForegroundColorAttributeName,[UIFont systemFontOfSize:15],NSFontAttributeName,nil];
-    [_titleSegment setTitleTextAttributes:dictForSelected forState:UIControlStateSelected];
+    _titleSegment.borderColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
+    _titleSegment.selectedBorderColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex: @"a7a7a7"]} forState:UIControlStateNormal];
+    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"EB4A64"]} forState:UIControlStateSelected];
     [_titleSegment addTarget: self action: @selector(segmentPressed:)forControlEvents: UIControlEventValueChanged];
     self.navigationItem.titleView = _titleSegment;
 }
