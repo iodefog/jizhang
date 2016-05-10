@@ -135,11 +135,11 @@ static BOOL KHasEnterFinancing;
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     if (!KHasEnterFinancing) {
         SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
-        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width * (indexPath.row + 1) , 0);
-        [UIView animateWithDuration:0.4 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
+        [UIView animateWithDuration:0.2 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
             currentCell.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
-            
+            KHasEnterFinancing = YES;
         }];
     }
 }
@@ -179,13 +179,11 @@ static BOOL KHasEnterFinancing;
         
     }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
-        if (![result isEqualToArray:weakSelf.items]) {
-            weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-            [weakSelf.collectionView reloadData];
-        }
+        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        [weakSelf.collectionView reloadData];
         [weakSelf.collectionView ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
-        
+        [weakSelf.collectionView ssj_hideLoadingIndicator];
     }];
 }
 

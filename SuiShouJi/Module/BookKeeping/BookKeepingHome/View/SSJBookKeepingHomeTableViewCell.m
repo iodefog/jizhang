@@ -48,6 +48,13 @@
     self.bottomlineView.height = self.height / 2;
     self.bottomlineView.centerX = self.width / 2;
     self.bottomlineView.bottom = self.height;
+    if ([self.item.billId isEqualToString:@"-1"]) {
+        self.categoryImageButton.size = CGSizeMake(6, 6);
+        self.categoryImageButton.layer.cornerRadius = 3.f;
+    }else{
+        self.categoryImageButton.size = CGSizeMake(38, 38);
+        self.categoryImageButton.layer.cornerRadius = 19.f;
+    }
     self.categoryImageButton.centerY = self.height * 0.5;
     self.categoryImageButton.centerX = self.width * 0.5;
     self.incomeLabel.rightBottom = CGPointMake(self.categoryImageButton.left - 5, self.height);
@@ -119,11 +126,10 @@
 
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
-        _categoryImageButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 38, 38)];
+        _categoryImageButton = [[UIButton alloc]init];
         [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _categoryImageButton.backgroundColor = [UIColor whiteColor];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
-        _categoryImageButton.layer.cornerRadius = 19;
         _categoryImageButton.layer.masksToBounds = YES;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -235,10 +241,8 @@
         _categoryImageButton.layer.borderWidth = 0;
         _categoryImageButton.userInteractionEnabled = NO;
         [_categoryImageButton setImage:nil forState:UIControlStateNormal];
-        [_categoryImageButton setTitle:@"结余" forState:UIControlStateNormal];
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        [_categoryImageButton setTintColor:[UIColor whiteColor]];
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
         _IncomeImage.hidden = YES;
         _expentureImage.hidden = YES;
         _IncomeImage.image = nil;

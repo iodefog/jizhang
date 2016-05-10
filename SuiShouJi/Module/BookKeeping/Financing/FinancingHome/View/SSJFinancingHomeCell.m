@@ -12,6 +12,7 @@
 @property(nonatomic, strong) UILabel *fundingNameLabel;
 @property(nonatomic, strong) UILabel *fundingMemoLabel;
 @property(nonatomic, strong) UIView *backView;
+@property(nonatomic, strong) UIButton *deleteButton;
 @end
 
 @implementation SSJFinancingHomeCell
@@ -21,6 +22,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.layer.cornerRadius = 8.f;
+        [self.contentView addSubview:self.deleteButton];
         [self.contentView addSubview:self.fundingBalanceLabel];
         [self.contentView addSubview:self.fundingNameLabel];
         [self.contentView addSubview:self.fundingMemoLabel];
@@ -31,12 +33,16 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    if ([_item.fundingMemo isEqualToString:@""]||_item.fundingMemo == nil) {
-        self.fundingNameLabel.left = 10;
+    self.deleteButton.size = CGSizeMake(30, 30);
+    self.deleteButton.center = CGPointMake(self.width - 10, 5 );
+    if (!_item.fundingMemo.length) {
+        self.fundingNameLabel.left = 25;
         self.fundingNameLabel.centerY = self.contentView.height / 2;
     }else{
-        self.fundingNameLabel.leftTop = CGPointMake(10, 10) ;
-        self.fundingMemoLabel.leftTop = CGPointMake(10, self.fundingNameLabel.bottom + 7);
+        self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
+        self.fundingNameLabel.left = 25;
+        self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
+        self.fundingMemoLabel.left = 25;
     }
     self.fundingBalanceLabel.centerY = self.contentView.height / 2;
     self.fundingBalanceLabel.right = self.contentView.width - 10;
@@ -77,6 +83,14 @@
         _fundingMemoLabel.font = [UIFont systemFontOfSize:13];
     }
     return _fundingMemoLabel;
+}
+
+-(UIButton *)deleteButton{
+    if (!_deleteButton) {
+        _deleteButton = [[UIButton alloc]init];
+        [_deleteButton setImage:[UIImage imageNamed:@"ft_delete"] forState:UIControlStateNormal];
+    }
+    return _deleteButton;
 }
 
 -(void)setItem:(SSJFinancingHomeitem *)item{

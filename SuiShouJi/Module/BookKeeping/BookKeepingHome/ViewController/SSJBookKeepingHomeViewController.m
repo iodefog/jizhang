@@ -230,6 +230,7 @@
             self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
             self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
             currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
+            currentCell.dotView.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
             [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
                 currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             } completion:^(BOOL finished) {
