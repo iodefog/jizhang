@@ -11,5 +11,6 @@
 @interface SSJMineHomeImageCell : SSJBaseTableViewCell
 @property (nonatomic,strong) NSString *cellTitle;
 @property (nonatomic,strong) NSString *cellDetail;
+@property(nonatomic, strong) NSString *cellSubTitle;
 @property(nonatomic, strong) UIImage *cellImage;
 @end

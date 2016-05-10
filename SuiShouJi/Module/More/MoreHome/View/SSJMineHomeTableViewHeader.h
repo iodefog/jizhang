@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJMineHeaderView.h"
 #import "SSJUserInfoItem.h"
+#import "SSJBookkeepingTreeHelper.h"
 
 
 @interface SSJMineHomeTableViewHeader : UIView
@@ -17,6 +18,8 @@
 
 @property(nonatomic, strong) SSJUserInfoItem *item;
 
+@property(nonatomic) SSJBookkeepingTreeLevel checkInLevel;
+ 
 //点击同步的回调
 typedef void (^syncButtonClickBlock)();
 

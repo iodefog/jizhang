@@ -29,6 +29,9 @@
 #import "SSJPersonalDetailViewController.h"
 #import "SSJBookkeepingTreeViewController.h"
 #import "SSJMagicExportViewController.h"
+#import "SSJBookkeepingTreeHelper.h"
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -93,6 +96,9 @@ static NSString *const kTitle6 = @"设置";
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
     }];
+    
+    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+    self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
     
     //  查询手势密码是否开启
     if (SSJIsUserLogined()) {
@@ -220,7 +226,10 @@ static NSString *const kTitle6 = @"设置";
     }else{
         mineHomeCell.cellDetail = @"";
     }
-
+    
+    if ([mineHomeCell.cellTitle isEqualToString:kTitle4]) {
+        mineHomeCell.cellSubTitle = @"反馈交流QQ群:552563622";
+    }
     return mineHomeCell;
 }
 

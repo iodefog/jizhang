@@ -166,6 +166,44 @@
 
 }
 
+-(void)setCheckInLevel:(SSJBookkeepingTreeLevel)checkInLevel{
+    _checkInLevel = checkInLevel;
+    NSString *levelStr;
+    switch (_checkInLevel) {
+        case SSJBookkeepingTreeLevelSeed:
+            levelStr = @"种子";
+            break;
+        case SSJBookkeepingTreeLevelSapling:
+            levelStr = @"树苗";
+            break;
+        case SSJBookkeepingTreeLevelSmallTree:
+            levelStr = @"小树";
+            break;
+        case SSJBookkeepingTreeLevelStrongTree:
+            levelStr = @"壮树";
+            break;
+        case SSJBookkeepingTreeLevelBigTree:
+            levelStr = @"大树";
+            break;
+        case SSJBookkeepingTreeLevelSilveryTree:
+            levelStr = @"银树";
+            break;
+        case SSJBookkeepingTreeLevelGoldTree:
+            levelStr = @"金树";
+            break;
+        case SSJBookkeepingTreeLevelDiamondTree:
+            levelStr = @"钻石树";
+            break;
+        case SSJBookkeepingTreeLevelCrownTree:
+            levelStr = @"皇冠树";
+            break;
+        default:
+            break;
+    }
+    self.checkInLevelLabel.text = [NSString stringWithFormat:@"等级: %@",levelStr];
+    [self.checkInLevelLabel sizeToFit];
+}
+
 - (void)loginButtonClicked:(id)sender {
     if (self.HeaderClickedBlock) {
         self.HeaderClickedBlock();

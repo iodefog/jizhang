@@ -10,6 +10,7 @@
 @interface SSJMineHomeImageCell()
 @property (nonatomic,strong) UILabel *titleLabel;
 @property (nonatomic,strong) UILabel *detailLabel;
+@property (nonatomic,strong) UILabel *subTitleLabel;
 @property(nonatomic, strong) UIImageView *cellImageView;
 @end
 
@@ -20,6 +21,7 @@
         [self.contentView addSubview:self.cellImageView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.detailLabel];
+        [self.contentView addSubview:self.subTitleLabel];
     }
     return self;
 }
@@ -30,7 +32,13 @@
     self.cellImageView.left = 10;
     self.cellImageView.centerY = self.height / 2;
     self.titleLabel.left = self.cellImageView.right + 10;
-    self.titleLabel.centerY = self.height / 2;
+    self.subTitleLabel.left = self.titleLabel.left;
+    if (self.cellSubTitle.length) {
+        self.subTitleLabel.top = self.height / 2 + 2;
+        self.titleLabel.bottom = self.height / 2 - 2;
+    }else{
+        self.titleLabel.centerY = self.height / 2;
+    }
     self.detailLabel.width = 200;
     self.detailLabel.centerY = self.height / 2;
     if (self.contentView.width == self.width) {
@@ -58,6 +66,16 @@
     return _detailLabel;
 }
 
+-(UILabel *)subTitleLabel{
+    if (!_subTitleLabel) {
+        _subTitleLabel = [[UILabel alloc]init];
+        _subTitleLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _subTitleLabel.textAlignment = NSTextAlignmentRight;
+        _subTitleLabel.font = [UIFont systemFontOfSize:13];
+    }
+    return _subTitleLabel;
+}
+
 -(UIImageView *)cellImageView{
     if (!_cellImageView) {
         _cellImageView = [[UIImageView alloc]init];
@@ -75,6 +93,12 @@
     _cellDetail = cellDetail;
     self.detailLabel.text = _cellDetail;
     [self.detailLabel sizeToFit];
+}
+
+-(void)setCellSubTitle:(NSString *)cellSubTitle{
+    _cellSubTitle = cellSubTitle;
+    self.subTitleLabel.text = cellSubTitle;
+    [self.subTitleLabel sizeToFit];
 }
 
 -(void)setCellImage:(UIImage *)cellImage{
