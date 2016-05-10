@@ -53,6 +53,7 @@ static NSString *const kTitle6 = @"设置";
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 
+
 //  手势密码开关
 @property (nonatomic, strong) UISwitch *motionSwitch;
 
@@ -87,27 +88,7 @@ static NSString *const kTitle6 = @"设置";
     
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
-        if (SSJIsUserLogined()) {
-            NSString *iconStr;
-            if ([item.cicon hasPrefix:@"http"]) {
-                iconStr = item.cicon;
-            }else{
-                iconStr = SSJImageURLWithAPI(item.cicon);
-            }
-            if (item.realName == nil || [item.realName isEqualToString:@""]) {
-                //手机号登陆
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-//                weakSelf.header.nicknameLabel.text = phoneNum;
-            }else{
-                //三方登录
-//                weakSelf.header.nicknameLabel.text = item.realName;
-            }
-//            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        } else {
-//            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-//            weakSelf.header.nicknameLabel.text = @"待君登录";
-        }
-        [weakSelf.tableView reloadData];
+        weakSelf.header.item = item;
     }];
     
     //  查询手势密码是否开启
@@ -239,7 +220,30 @@ static NSString *const kTitle6 = @"设置";
     return mineHomeCell;
 }
 
-
+#pragma mark - Getter
+-(SSJMineHomeTableViewHeader *)header{
+    if (!_header) {
+        __weak typeof(self) weakSelf = self;
+        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];\
+        _header.HeaderClickedBlock = ^(){
+            [weakSelf loginButtonClicked];
+        };
+        _header.syncButtonClickBlock = ^(){
+            [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
+                if (type == SSJDataSynchronizeTypeData) {
+                    
+                }
+            }failure:^(SSJDataSynchronizeType type, NSError *error) {
+            
+            }];
+        };
+        _header.checkInButtonClickBlock = ^(){
+            SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+            [weakSelf.navigationController pushViewController:treeVC animated:YES];
+        };
+    }
+    return _header;
+}
 
 #pragma mark - Event
 -(void)takePhoto{
@@ -287,26 +291,7 @@ static NSString *const kTitle6 = @"设置";
 -(void)reloadDataAfterSync{
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
-        if (SSJIsUserLogined()) {
-            NSString *iconStr;
-            if ([item.cicon hasPrefix:@"http"]) {
-                iconStr = item.cicon;
-            }else{
-                iconStr = SSJImageURLWithAPI(item.cicon);
-            }
-            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
-                //三方登录
-//                weakSelf.header.nicknameLabel.text = item.realName;
-            }else{
-//                //手机号登陆
-//                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-//                weakSelf.header.nicknameLabel.text = phoneNum;
-            }
-//            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        } else {
-//            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-//            weakSelf.header.nicknameLabel.text = @"待君登录";
-        }
+        weakSelf.header.item = item;
     }];
 }
 
@@ -382,6 +367,17 @@ static NSString *const kTitle6 = @"设置";
             [weakSelf.tableView reloadData];
         });
     }];
+}
+
+#warning test
+- (void)loginButtonClicked{
+    if (!SSJIsUserLogined()) {
+        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+        [self.navigationController pushViewController:loginVc animated:YES];
+    }else{
+        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+        [self.navigationController pushViewController:personalDetailVc animated:YES];
+    }
 }
 
 #pragma mark - UIImagePickerControllerDelegate

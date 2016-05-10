@@ -52,10 +52,10 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 -(UIButton *)recordMakingButton{
     if (!_recordMakingButton) {
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen_nor"] forState:UIControlStateNormal];
-        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen_nor"] forState:UIControlStateHighlighted];
+        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateNormal];
+        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateHighlighted];
         _recordMakingButton.layer.cornerRadius = self.width / 2;
-        _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
         _recordMakingButton.layer.borderWidth = 2.0f;
         [_recordMakingButton addTarget:self action:@selector(recordMakingButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -96,79 +96,79 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     return _pointView;
 }
 
--(void)startLoading{
-    _startTime = CFAbsoluteTimeGetCurrent();
-    
-    [MobClick event:@"15"];
-    
-    self.recordMakingButton.layer.borderColor = [UIColor clearColor].CGColor;
-
-    
-    self.pointView.hidden = NO;
-    
-    self.loadingLayer.hidden = NO;
-    
-    CABasicAnimation *animation = [ CABasicAnimation
-                                   animationWithKeyPath: @"transform.rotation.z"];
-    
-    animation.toValue = [NSNumber numberWithFloat:(2 * M_PI)];
-    
-    animation.duration = kAnimationDuration;
-
-    animation.cumulative = YES;
-    
-    animation.repeatCount = 3;
-    
-    animation.removedOnCompletion = NO;
-    
-    animation.delegate = self;
-    
-    [self.pointView.layer addAnimation:animation forKey:kPointViewAnimationKey];
-    
-    [self.loadingLayer addAnimation:animation forKey:kLodingViewAnimationKey];
-    
-}
-
-- (void)stopLoading{
-    _endTime = CFAbsoluteTimeGetCurrent();
-    
-    double secondInterval = _endTime - _startTime;
-    
-    if (secondInterval > kAnimationDuration) {
-        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
-        
-        [self.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
-        
-        [self.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
-        
-        self.pointView.hidden = YES;
-        
-        self.loadingLayer.hidden = YES;
-        
-        if (self.animationStopBlock) {
-            self.animationStopBlock();
-        }
-    }else{
-        __weak typeof(self) weakSelf = self;
-        dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (kAnimationDuration - secondInterval) *NSEC_PER_SEC);
-        dispatch_after(time, dispatch_get_main_queue(), ^{
-            weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
-            
-            [weakSelf.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
-            
-            [weakSelf.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
-            
-            weakSelf.pointView.hidden = YES;
-            
-            weakSelf.loadingLayer.hidden = YES;
-            
-            if (self.animationStopBlock) {
-                self.animationStopBlock();
-            }
-        });
-    }
-    _startTime = 0;
-}
+//-(void)startLoading{
+//    _startTime = CFAbsoluteTimeGetCurrent();
+//    
+//    [MobClick event:@"15"];
+//    
+//    self.recordMakingButton.layer.borderColor = [UIColor clearColor].CGColor;
+//
+//    
+//    self.pointView.hidden = NO;
+//    
+//    self.loadingLayer.hidden = NO;
+//    
+//    CABasicAnimation *animation = [ CABasicAnimation
+//                                   animationWithKeyPath: @"transform.rotation.z"];
+//    
+//    animation.toValue = [NSNumber numberWithFloat:(2 * M_PI)];
+//    
+//    animation.duration = kAnimationDuration;
+//
+//    animation.cumulative = YES;
+//    
+//    animation.repeatCount = 3;
+//    
+//    animation.removedOnCompletion = NO;
+//    
+//    animation.delegate = self;
+//    
+//    [self.pointView.layer addAnimation:animation forKey:kPointViewAnimationKey];
+//    
+//    [self.loadingLayer addAnimation:animation forKey:kLodingViewAnimationKey];
+//    
+//}
+//
+//- (void)stopLoading{
+//    _endTime = CFAbsoluteTimeGetCurrent();
+//    
+//    double secondInterval = _endTime - _startTime;
+//    
+//    if (secondInterval > kAnimationDuration) {
+//        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
+//        
+//        [self.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
+//        
+//        [self.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
+//        
+//        self.pointView.hidden = YES;
+//        
+//        self.loadingLayer.hidden = YES;
+//        
+//        if (self.animationStopBlock) {
+//            self.animationStopBlock();
+//        }
+//    }else{
+//        __weak typeof(self) weakSelf = self;
+//        dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (kAnimationDuration - secondInterval) *NSEC_PER_SEC);
+//        dispatch_after(time, dispatch_get_main_queue(), ^{
+//            weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
+//            
+//            [weakSelf.pointView.layer removeAnimationForKey:kPointViewAnimationKey];
+//            
+//            [weakSelf.loadingLayer removeAnimationForKey:kLodingViewAnimationKey];
+//            
+//            weakSelf.pointView.hidden = YES;
+//            
+//            weakSelf.loadingLayer.hidden = YES;
+//            
+//            if (self.animationStopBlock) {
+//                self.animationStopBlock();
+//            }
+//        });
+//    }
+//    _startTime = 0;
+//}
 
 -(void)recordMakingButtonClicked:(id)sender{
     if (self.recordMakingClickBlock) {

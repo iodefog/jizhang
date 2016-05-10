@@ -206,7 +206,7 @@
             currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
         }
-        [UIView animateWithDuration:0.7 animations:^{
+        [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.2 initialSpringVelocity:3.f options:UIViewAnimationOptionCurveEaseIn animations:^{
             currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
             currentCell.incomeLabel.transform = CGAffineTransformIdentity;
@@ -215,7 +215,7 @@
             currentCell.expentureImage.layer.transform = CATransform3DIdentity;
             currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
         } completion:^(BOOL finished) {
-            [currentCell shake];
+//            [currentCell shake];
         }];
         [self.newlyAddIndexArr removeObject:@(indexPath.row)];
     }else{
@@ -254,24 +254,31 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38 && !_isRefreshing) {
-        _isRefreshing = YES;
-        [self.homeButton startLoading];
-        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
-        self.statusLabel.hidden = NO;
-        self.statusLabel.text = @"数据同步中";
-        [self.statusLabel sizeToFit];
-        [self.view setNeedsLayout];
+    if (scrollView.contentOffset.y < -38) {
         __weak typeof(self) weakSelf = self;
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
-            if (type == SSJDataSynchronizeTypeData) {
-                weakSelf.refreshSuccessOrNot = YES;
-                [weakSelf.homeButton stopLoading];
-            }
-        }failure:^(SSJDataSynchronizeType type, NSError *error) {
-            weakSelf.refreshSuccessOrNot = NO;
-            [weakSelf.homeButton stopLoading];
-        }];
+        SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
+        recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
+            weakSelf.newlyAddChargeArr = [NSMutableArray arrayWithArray:chargeIdArr];
+        };
+        UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
+        [weakSelf presentViewController:recordNav animated:YES completion:NULL];
+//        _isRefreshing = YES;
+//        [self.homeButton startLoading];
+//        scrollView.contentInset = UIEdgeInsetsMake(59, 0, 0, 0);
+//        self.statusLabel.hidden = NO;
+//        self.statusLabel.text = @"数据同步中";
+//        [self.statusLabel sizeToFit];
+//        [self.view setNeedsLayout];
+//        __weak typeof(self) weakSelf = self;
+//        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
+//            if (type == SSJDataSynchronizeTypeData) {
+//                weakSelf.refreshSuccessOrNot = YES;
+//                [weakSelf.homeButton stopLoading];
+//            }
+//        }failure:^(SSJDataSynchronizeType type, NSError *error) {
+//            weakSelf.refreshSuccessOrNot = NO;
+//            [weakSelf.homeButton stopLoading];
+//        }];
     }
 }
 
@@ -416,28 +423,28 @@
             UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordmakingVC];
             [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
-        _homeButton.animationStopBlock = ^(){
-            weakSelf.statusLabel.hidden = NO;
-            if (weakSelf.refreshSuccessOrNot) {
-                weakSelf.statusLabel.text = @"数据同步成功";
-                weakSelf.homeButton.refreshSuccessOrNot = YES;
-                [weakSelf.statusLabel sizeToFit];
-                [weakSelf.view setNeedsLayout];
-            }else{
-                weakSelf.statusLabel.text = @"数据同步失败";
-                weakSelf.homeButton.refreshSuccessOrNot = NO;
-                [weakSelf.statusLabel sizeToFit];
-                [weakSelf.view setNeedsLayout];
-            }
-            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
-            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
-            
-            dispatch_after(time, dispatch_get_main_queue(), ^{
-                weakSelf.statusLabel.text = @"";
-                weakSelf.statusLabel.hidden = YES;
-                _isRefreshing = NO;
-            });
-        };
+//        _homeButton.animationStopBlock = ^(){
+//            weakSelf.statusLabel.hidden = NO;
+//            if (weakSelf.refreshSuccessOrNot) {
+//                weakSelf.statusLabel.text = @"数据同步成功";
+//                weakSelf.homeButton.refreshSuccessOrNot = YES;
+//                [weakSelf.statusLabel sizeToFit];
+//                [weakSelf.view setNeedsLayout];
+//            }else{
+//                weakSelf.statusLabel.text = @"数据同步失败";
+//                weakSelf.homeButton.refreshSuccessOrNot = NO;
+//                [weakSelf.statusLabel sizeToFit];
+//                [weakSelf.view setNeedsLayout];
+//            }
+//            [weakSelf.tableView setContentOffset:CGPointMake(0, -36) animated:YES];
+//            dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
+//            
+//            dispatch_after(time, dispatch_get_main_queue(), ^{
+//                weakSelf.statusLabel.text = @"";
+//                weakSelf.statusLabel.hidden = YES;
+//                _isRefreshing = NO;
+//            });
+//        };
     }
     return _homeButton;
 }

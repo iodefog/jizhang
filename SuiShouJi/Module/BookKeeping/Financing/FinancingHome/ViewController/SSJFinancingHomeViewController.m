@@ -130,6 +130,9 @@
     }
 }
 
+-(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
 
 #pragma mark - Getter
 -(SSJEditableCollectionView *)collectionView{
@@ -138,6 +141,7 @@
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 10;
         _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+        _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
         _collectionView.backgroundColor = [UIColor whiteColor];

@@ -11,7 +11,7 @@
 
 @interface SSJBookKeepingHeader()
 @property (strong, nonatomic) UIImageView *backgroudview;
-
+@property(nonatomic, strong) UIView *seperatorLine;
 @end
 @implementation SSJBookKeepingHeader
 
@@ -19,6 +19,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self addSubview:self.seperatorLine];
         [self addSubview:self.incomeView];
         [self addSubview:self.incomeTitleLabel];
         [self addSubview:self.expenditureView];
@@ -29,6 +30,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.seperatorLine.size = CGSizeMake(1, self.height - 44);
+    self.seperatorLine.centerX = self.width / 2;
+    self.seperatorLine.top = 44;
     self.incomeView.centerX = self.width / 2 / 2;
     self.incomeView.bottom = self.height - 32;
     self.incomeTitleLabel.bottom = self.incomeView.top - 10;
@@ -76,6 +80,14 @@
         _incomeTitleLabel.font = [UIFont systemFontOfSize:14];
     }
     return _incomeTitleLabel;
+}
+
+-(UIView *)seperatorLine{
+    if (!_seperatorLine) {
+        _seperatorLine = [[UIView alloc]init];
+        _seperatorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+    }
+    return _seperatorLine;
 }
 
 -(void)setCurrentMonth:(long )currentMonth{
