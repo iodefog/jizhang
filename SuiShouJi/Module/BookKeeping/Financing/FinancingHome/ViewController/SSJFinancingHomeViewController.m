@@ -6,6 +6,8 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
+static BOOL KHasEnterFinancing;
+
 #import "SSJFinancingHomeViewController.h"
 #import "SSJFinancingHomeCell.h"
 #import "SSJFinancingHomeitem.h"
@@ -131,7 +133,15 @@
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if (!KHasEnterFinancing) {
+        SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
+        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width * (indexPath.row + 1) , 0);
+        [UIView animateWithDuration:0.4 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            currentCell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
 }
 
 #pragma mark - Getter

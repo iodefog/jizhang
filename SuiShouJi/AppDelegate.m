@@ -38,6 +38,9 @@ static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
 //微信desc
 static NSString *const kWeiXinDescription = @"weixinLogin";
 
+//是否进入资金页面
+static BOOL KHasEnterFinancing = NO;
+
 void SCYSaveEnterBackgroundTime() {
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kEnterBackgroundTimeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
