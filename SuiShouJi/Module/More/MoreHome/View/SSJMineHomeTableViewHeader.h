@@ -8,17 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJMineHeaderView.h"
+#import "SSJUserInfoItem.h"
 
 
 @interface SSJMineHomeTableViewHeader : UIView
 
 //+ (id)MineHomeHeader;
 
-@property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
-
-@property (nonatomic, strong) UILabel *nicknameLabel;
-
-@property(nonatomic, strong) NSString *imageUrl;
+@property(nonatomic, strong) SSJUserInfoItem *item;
 
 //点击头像回调
 typedef void (^HeaderButtonClickedBlock)();

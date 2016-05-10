@@ -75,9 +75,6 @@ static NSString *const kTitle6 = @"设置";
     [super viewDidLoad];
     self.tableView.tableHeaderView = self.header;
     [self.tableView reloadData];
-#warning test
-    UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"登录" style:UIBarButtonItemStylePlain target:self action:@selector(loginButtonClicked)];
-    self.navigationItem.rightBarButtonItem = item;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -91,27 +88,7 @@ static NSString *const kTitle6 = @"设置";
     
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
-        if (SSJIsUserLogined()) {
-            NSString *iconStr;
-            if ([item.cicon hasPrefix:@"http"]) {
-                iconStr = item.cicon;
-            }else{
-                iconStr = SSJImageURLWithAPI(item.cicon);
-            }
-            if (item.realName == nil || [item.realName isEqualToString:@""]) {
-                //手机号登陆
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                weakSelf.header.nicknameLabel.text = phoneNum;
-            }else{
-                //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
-            }
-            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        } else {
-            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            weakSelf.header.nicknameLabel.text = @"待君登录";
-        }
-        [weakSelf.tableView reloadData];
+        weakSelf.header.item = item;
     }];
     
     //  查询手势密码是否开启
@@ -243,7 +220,17 @@ static NSString *const kTitle6 = @"设置";
     return mineHomeCell;
 }
 
-
+#pragma mark - Getter
+-(SSJMineHomeTableViewHeader *)header{
+    if (!_header) {
+        __weak typeof(self) weakSelf = self;
+        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];\
+        _header.HeaderButtonClickedBlock = ^(){
+            [weakSelf loginButtonClicked];
+        };
+    }
+    return _header;
+}
 
 #pragma mark - Event
 -(void)takePhoto{
@@ -291,26 +278,7 @@ static NSString *const kTitle6 = @"设置";
 -(void)reloadDataAfterSync{
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
-        if (SSJIsUserLogined()) {
-            NSString *iconStr;
-            if ([item.cicon hasPrefix:@"http"]) {
-                iconStr = item.cicon;
-            }else{
-                iconStr = SSJImageURLWithAPI(item.cicon);
-            }
-            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
-                //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
-            }else{
-                //手机号登陆
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                weakSelf.header.nicknameLabel.text = phoneNum;
-            }
-            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        } else {
-            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            weakSelf.header.nicknameLabel.text = @"待君登录";
-        }
+        weakSelf.header.item = item;
     }];
 }
 
