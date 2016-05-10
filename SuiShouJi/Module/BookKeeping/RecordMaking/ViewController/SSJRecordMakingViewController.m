@@ -31,11 +31,13 @@
 
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
+#import "SSJRecordMakingBillTypeInputAccessoryView.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
+#import "YYKeyboardManager.h"
 
-static const NSTimeInterval kAnimationDuration = 0.2;
+static const NSTimeInterval kAnimationDuration = 0.25;
 
-@interface SSJRecordMakingViewController ()
+@interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate, YYKeyboardObserver>
 
 @property (nonatomic,strong) SSJSegmentedControl *titleSegment;
 
@@ -45,7 +47,6 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 
-@property (nonatomic,strong) SSJSmallCalendarView *calendarView;
 @property (nonatomic,strong) SSJChargeCircleSelectView *ChargeCircleSelectView;
 @property (nonatomic) NSInteger selectChargeCircleType;
 @property (nonatomic,strong) NSString *chargeMemo;
@@ -57,6 +58,8 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputView *billTypeInputView;
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *billTypeSelectionView;
+
+@property (nonatomic, strong) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
 
 
 @property (nonatomic) long currentYear;
@@ -77,6 +80,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"记一笔";
         self.hidesBottomBarWhenPushed = YES;
+        [[YYKeyboardManager defaultManager] addObserver:self];
     }
     return self;
 }
@@ -92,8 +96,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     [self settitleSegment];
     [self.view addSubview:self.billTypeInputView];
     [self.view addSubview:self.billTypeSelectionView];
-    [self.billTypeInputView becomeFirstResponder];
-    self.billTypeInputView.accessoryView.memoView.text = self.item.chargeMemo;
+    [self.view addSubview:self.accessoryView];
+    [self.billTypeInputView.moneyInput becomeFirstResponder];
+    self.accessoryView.memoView.text = self.item.chargeMemo;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -281,7 +286,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 //}
 
 - (void)updateFundingType {
-    [_billTypeInputView.accessoryView.accountBtn setTitle:_selectItem.fundingName forState:UIControlStateNormal];
+    [self.accessoryView.accountBtn setTitle:_selectItem.fundingName forState:UIControlStateNormal];
     self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
 }
 
@@ -293,10 +298,12 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             weakSelf.selectedDay = day;
             weakSelf.selectedMonth = month;
             weakSelf.selectedYear = year;
-            [weakSelf.billTypeInputView.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
-            weakSelf.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",weakSelf.selectedDay];
+            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
+            [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", month, day] forState:UIControlStateNormal];
             [weakSelf.DateSelectedView dismiss];
-            [weakSelf.billTypeInputView becomeFirstResponder];
+        };
+        _DateSelectedView.dismissBlock = ^{
+            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
     }
     return _DateSelectedView;
@@ -316,24 +323,19 @@ static const NSTimeInterval kAnimationDuration = 0.2;
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
                     [weakSelf.FundingTypeSelectView reloadDate];
-                    [weakSelf.billTypeInputView.accessoryView.accountBtn setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
+                    [weakSelf.accessoryView.accountBtn setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
                     weakSelf.selectItem = newFundingItem;
                     [weakSelf updateFundingType];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
             [weakSelf.FundingTypeSelectView dismiss];
-            [weakSelf.billTypeInputView becomeFirstResponder];
+        };
+        _FundingTypeSelectView.dismissBlock = ^{
+            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
     }
     return _FundingTypeSelectView;
-}
-
--(SSJSmallCalendarView *)calendarView{
-    if (!_calendarView) {
-        _calendarView = [[SSJSmallCalendarView alloc]init];
-    }
-    return _calendarView;
 }
 
 -(SSJChargeCircleSelectView *)ChargeCircleSelectView{
@@ -342,21 +344,24 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         _ChargeCircleSelectView.selectCircleType = self.selectChargeCircleType;
         _ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
         __weak typeof(self) weakSelf = self;
-        _ChargeCircleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType, NSString *typeName){
+        _ChargeCircleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
             if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [alert show];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-                [weakSelf.billTypeInputView.accessoryView.dateBtn setTitle:@"仅一次" forState:UIControlStateNormal];
+                [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
             }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType == 4){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-                [weakSelf.billTypeInputView.accessoryView.dateBtn setTitle:@"仅一次" forState:UIControlStateNormal];
+                [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
                 [alert show];
             }else{
                 weakSelf.selectChargeCircleType = chargeCircleType;
-                [weakSelf.billTypeInputView.accessoryView.dateBtn setTitle:typeName forState:UIControlStateNormal];
+                [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
             }
+        };
+        _ChargeCircleSelectView.dismissBlock = ^{
+            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
     }
     return _ChargeCircleSelectView;
@@ -366,10 +371,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     if (!_billTypeInputView) {
         _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 91)];
         _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
-        [_billTypeInputView.accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
-        [_billTypeInputView.accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
-        [_billTypeInputView.accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
-        [_billTypeInputView.accessoryView.periodBtn addTarget:self action:@selector(selectPeriodAction) forControlEvents:UIControlEventTouchUpInside];
+        _billTypeInputView.moneyInput.delegate = self;
     }
     return _billTypeInputView;
 }
@@ -384,13 +386,57 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             }];
         };
         _billTypeSelectionView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-            
+            [wself.billTypeInputView.moneyInput becomeFirstResponder];
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                wself.billTypeInputView.billTypeName = item.title;
+                wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+            }];
         };
         _billTypeSelectionView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
             
         };
+        _billTypeSelectionView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
+            if (isDragUp) {
+                [wself.billTypeInputView.moneyInput resignFirstResponder];
+            } else {
+                [wself.billTypeInputView.moneyInput becomeFirstResponder];
+            }
+        };
     }
     return _billTypeSelectionView;
+}
+
+- (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
+    if (!_accessoryView) {
+        _accessoryView = [[SSJRecordMakingBillTypeInputAccessoryView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, 86)];
+        [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView.periodBtn addTarget:self action:@selector(selectPeriodAction) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView.dateBtn setTitle:[[NSDate date] formattedDateWithFormat:@"M月d日"] forState:UIControlStateNormal];
+        [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
+        [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+        _accessoryView.memoView.delegate = self;
+    }
+    return _accessoryView;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (_billTypeInputView.moneyInput == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:10];
+        return NO;
+    } else if (_accessoryView.memoView == textField) {
+        NSString *text = textField.text ? : @"";
+        text = [text stringByReplacingCharactersInRange:range withString:string];
+        if (string.length > 50) {
+            [CDAutoHideMessageHUD showMessage:@"最多只能输入50个字"];
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -404,6 +450,9 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         case 1:  //打开本地相册
             [self localPhoto];
             break;
+        case 2:  //打开本地相册
+            [self.billTypeInputView.moneyInput becomeFirstResponder];
+            break;
     }
 }
 
@@ -412,32 +461,54 @@ static const NSTimeInterval kAnimationDuration = 0.2;
 {
     [picker dismissViewControllerAnimated:YES completion:NULL];
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    self.additionalView.selectedImage = image;
     _selectedImage = image;
+    [self.billTypeInputView.moneyInput becomeFirstResponder];
+}
+
+#pragma mark - YYKeyboardObserver
+- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+    if (transition.toVisible) {
+        if ([_billTypeInputView.moneyInput isFirstResponder]
+            || [_accessoryView.memoView isFirstResponder]) {
+            _accessoryView.top = self.view.height;
+            [UIView animateWithDuration:transition.animationDuration delay:0 options:transition.animationOption animations:^{
+                _accessoryView.bottom = self.view.height - transition.toFrame.size.height;
+            } completion:NULL];
+        }
+    } else {
+        [UIView animateWithDuration:transition.animationDuration delay:0 options:transition.animationOption animations:^{
+            _accessoryView.top = self.view.height;
+        } completion:NULL];
+    }
 }
 
 #pragma mark - Event
 - (void)selectFundAccountAction {
     [MobClick event:@"4"];
     [self.FundingTypeSelectView show];
-    [_billTypeInputView.accessoryView resignFirstResponder];
+    [_billTypeInputView.moneyInput resignFirstResponder];
+    [_accessoryView.memoView resignFirstResponder];
 }
 
 - (void)selectBillDateAction {
     [MobClick event:@"5"];
     [self.DateSelectedView show];
-    [_billTypeInputView.accessoryView resignFirstResponder];
+    [_billTypeInputView.moneyInput resignFirstResponder];
+    [_accessoryView.memoView resignFirstResponder];
 }
 
 - (void)selectPhotoAction {
     UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
     [sheet showInView:self.view];
+    [_billTypeInputView.moneyInput resignFirstResponder];
+    [_accessoryView.memoView resignFirstResponder];
 }
 
 - (void)selectPeriodAction {
     [MobClick event:@"3"];
     [self.ChargeCircleSelectView show];
-    [_billTypeInputView.accessoryView resignFirstResponder];
+    [_billTypeInputView.moneyInput resignFirstResponder];
+    [_accessoryView.memoView resignFirstResponder];
 }
 
 #pragma mark - private
@@ -495,11 +566,15 @@ static const NSTimeInterval kAnimationDuration = 0.2;
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
+        __block NSInteger selectedIndex = 0;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            item.selected = [item.ID isEqualToString:_defualtID];
+            if ([item.ID isEqualToString:_defualtID]) {
+                selectedIndex = index;
+            }
         });
         weakSelf.billTypeSelectionView.items = result;
+        weakSelf.billTypeSelectionView.selectedIndex = selectedIndex;
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
@@ -556,7 +631,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
             [alert show];
             weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-            [weakSelf.billTypeInputView.accessoryView.dateBtn setTitle:@"仅一次" forState:UIControlStateNormal];
+            [weakSelf.accessoryView.dateBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
             return;
         }
     }
@@ -565,7 +640,7 @@ static const NSTimeInterval kAnimationDuration = 0.2;
         return;
     }
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        double chargeMoney = [self.billTypeInputView.money doubleValue];
+        double chargeMoney = [self.billTypeInputView.moneyInput.text doubleValue];
         NSString *operationTime = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *selectDate;
         NSString *userid= SSJUSERID();

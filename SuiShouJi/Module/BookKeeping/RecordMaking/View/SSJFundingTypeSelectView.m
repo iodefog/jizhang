@@ -73,7 +73,11 @@
     
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:NULL];
+    } timeInterval:0.25 fininshed:^(BOOL complation) {
+        if (_dismissBlock) {
+            _dismissBlock();
+        }
+    }];
 }
 
 #pragma mark - UITableViewDelegate
