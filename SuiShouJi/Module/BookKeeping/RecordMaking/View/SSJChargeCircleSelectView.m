@@ -15,11 +15,11 @@
 @property (nonatomic,strong) UILabel *titleLabel;
 @property (nonatomic,strong) UIButton *closeButton;
 @property (nonatomic,strong) UIButton *comfirmButton;
+@property (nonatomic, copy) NSString *selectedPeriod;
 @end
 
 @implementation SSJChargeCircleSelectView{
     NSArray *_titleArray;
-    NSInteger _selectedCircle;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -69,7 +69,11 @@
     
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:NULL];
+    } timeInterval:0.25 fininshed:^(BOOL complation) {
+        if (_dismissBlock) {
+            _dismissBlock();
+        }
+    }];
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
@@ -126,7 +130,8 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    _selectedCircle = row - 1;
+    _selectCircleType = row - 1;
+    _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType + 1)];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
@@ -152,6 +157,7 @@
 
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
     _selectCircleType = selectCircleType;
+    _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType + 1)];
     [self.pickerView selectRow:_selectCircleType + 1 inComponent:0 animated:NO];
 }
 
@@ -167,7 +173,7 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     if (self.chargeCircleSelectBlock) {
-        self.chargeCircleSelectBlock(_selectedCircle, [_titleArray ssj_safeObjectAtIndex:(_selectedCircle + 1)]);
+        self.chargeCircleSelectBlock(_selectCircleType);
     }
     [self dismiss];
 }

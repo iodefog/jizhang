@@ -22,7 +22,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 @property (nonatomic, strong) NSMutableArray *internalItems;
 
-@property (nonatomic, strong) NSIndexPath *lastSelectedIndex;
+@property (nonatomic) NSInteger lastSelectedIndex;
 
 @end
 
@@ -72,28 +72,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         return;
     }
     
-    if (!_lastSelectedIndex || [_lastSelectedIndex compare:indexPath] != NSOrderedSame) {
-        NSMutableArray *indexPaths = [@[] mutableCopy];
-        
-        if (_lastSelectedIndex) {
-            SSJRecordMakingBillTypeSelectionCellItem *lastSelectedItem = _internalItems[_lastSelectedIndex.item];
-            lastSelectedItem.selected = NO;
-            lastSelectedItem.animated = YES;
-            [indexPaths addObject:_lastSelectedIndex];
-        }
-        
-        SSJRecordMakingBillTypeSelectionCellItem *currentSelectedItem = _internalItems[indexPath.item];
-        currentSelectedItem.selected = YES;
-        currentSelectedItem.animated = YES;
-        [indexPaths addObject:indexPath];
-        
-        [_collectionView reloadItemsAtIndexPaths:indexPaths];
-        _lastSelectedIndex = indexPath;
-        
-        if (_selectAction) {
-            _selectAction(self, currentSelectedItem);
-        }
-    }
+    _selectedIndex = indexPath.item;
+    [self updateSelectedItem];
 }
 
 #pragma mark - SSJEditCollectionViewDelegate
@@ -145,7 +125,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     [_collectionView keepCurrentMovedCellVisible];
     [_collectionView checkIfHasIntersectantCells];
     
-    if (scrollView.panGestureRecognizer) {
+    if (scrollView.panGestureRecognizer && scrollView.dragging) {
         CGPoint velocity = [scrollView.panGestureRecognizer velocityInView:scrollView];
         if (_dragAction) {
             _dragAction(self, velocity.y < 0);
@@ -159,6 +139,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         [_internalItems addObjectsFromArray:items];
     }
     [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@""]];
+    SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [_internalItems ssj_safeObjectAtIndex:_selectedIndex];
+    selectedItem.selected = YES;
     [_collectionView reloadData];
 }
 
@@ -166,8 +148,38 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     return [_internalItems copy];
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+    if (_selectedIndex != selectedIndex) {
+        _selectedIndex = selectedIndex;
+        [self updateSelectedItem];
+    }
+}
+
 - (void)endEditing {
     [_collectionView endEditing];
+}
+
+- (void)updateSelectedItem {
+    if (_lastSelectedIndex != _selectedIndex) {
+        NSMutableArray *indexPaths = [@[] mutableCopy];
+        
+        SSJRecordMakingBillTypeSelectionCellItem *lastSelectedItem = _internalItems[_lastSelectedIndex];
+        lastSelectedItem.selected = NO;
+        lastSelectedItem.animated = YES;
+        [indexPaths addObject:[NSIndexPath indexPathForItem:_lastSelectedIndex inSection:0]];
+        
+        SSJRecordMakingBillTypeSelectionCellItem *currentSelectedItem = _internalItems[_selectedIndex];
+        currentSelectedItem.selected = YES;
+        currentSelectedItem.animated = YES;
+        [indexPaths addObject:[NSIndexPath indexPathForItem:_selectedIndex inSection:0]];
+        
+        [_collectionView reloadItemsAtIndexPaths:indexPaths];
+        _lastSelectedIndex = _selectedIndex;
+        
+        if (_selectAction) {
+            _selectAction(self, currentSelectedItem);
+        }
+    }
 }
 
 #pragma mark - Getter
@@ -176,6 +188,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _collectionView = [[SSJEditableCollectionView alloc] initWithFrame:self.frame collectionViewLayout:self.layout];
         _collectionView.editDelegate = self;
         _collectionView.editDataSource = self;
+        _collectionView.movedCellScale = 1.3;
         _collectionView.alwaysBounceVertical = YES;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;

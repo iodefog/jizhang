@@ -20,6 +20,7 @@
         self.fontSize = 16;
         self.textColor = [UIColor blueColor];
         self.backgroundColor = [UIColor whiteColor];
+        self.layer.contentsScale = [UIScreen mainScreen].scale;
     }
     return self;
 }

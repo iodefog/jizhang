@@ -7,18 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
 @interface SSJRecordMakingBillTypeInputView : UIView
 
 @property (nonatomic, copy) NSString *billTypeName;
 
-@property (nonatomic, copy) NSString *money;
-
-@property (nonatomic, strong, readonly) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
-
-- (void)becomeFirstResponder;
-
-- (void)resignFirstResponder;
+@property (nonatomic, strong, readonly) UITextField *moneyInput;
 
 @end

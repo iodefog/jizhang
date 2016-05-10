@@ -22,6 +22,7 @@
 
 @property (nonatomic, copy) void (^dragAction)(SSJRecordMakingBillTypeSelectionView *, BOOL isDragUp);
 
+@property (nonatomic) NSInteger selectedIndex;
 
 - (void)endEditing;
 
