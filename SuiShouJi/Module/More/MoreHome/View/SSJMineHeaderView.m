@@ -35,7 +35,6 @@
 -(UIImageView *)headerImage{
     if (!_headerImage) {
         _headerImage = [[UIImageView alloc]init];
-
     }
     return _headerImage;
 }

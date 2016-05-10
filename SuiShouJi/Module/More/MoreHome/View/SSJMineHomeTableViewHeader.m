@@ -26,13 +26,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.backImage];
-        [self addSubview:self.loginButton];
         [self addSubview:self.headPotraitImage];
         [self addSubview:self.nicknameLabel];
         [self addSubview:self.checkInLevelLabel];
         [self addSubview:self.syncButton];
         [self addSubview:self.checkInButton];
         [self addSubview:self.verticalSepertorLine];
+        [self addSubview:self.loginButton];
     }
     return self;
 }

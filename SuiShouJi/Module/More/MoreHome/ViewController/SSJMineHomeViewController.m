@@ -8,7 +8,7 @@
 
 #import "SSJMineHomeViewController.h"
 #import "SSJMineHomeTableViewHeader.h"
-#import "SSJMineHomeTabelviewCell.h"
+#import "SSJMineHomeImageCell.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "SSJLoginViewController.h"
@@ -50,6 +50,7 @@ static NSString *const kTitle6 = @"设置";
 @property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSArray *titles;
+@property (nonatomic, strong) NSArray *images;
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 
@@ -81,11 +82,13 @@ static NSString *const kTitle6 = @"设置";
     [super viewWillAppear:animated];
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
+        self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
         self.titles = @[@[kTitle1 , kTitle2], @[kTitle3],@[kTitle4 , kTitle6]];
     } else {
+        self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]];
         self.titles = @[@[kTitle1 , kTitle2], @[kTitle3], @[kTitle4 , kTitle5 , kTitle6]];
     }
-    
+
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
@@ -203,18 +206,19 @@ static NSString *const kTitle6 = @"设置";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJMineHomeCell";
-    SSJMineHomeTabelviewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJMineHomeImageCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
-        mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        mineHomeCell = [[SSJMineHomeImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     
+    mineHomeCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];
+    
     if ([mineHomeCell.cellTitle isEqualToString:kTitle1]) {
-        mineHomeCell.detailLabel.text = self.circleChargeState;
-        [mineHomeCell.detailLabel sizeToFit];
+        mineHomeCell.cellDetail = self.circleChargeState;
     }else{
-        mineHomeCell.detailLabel.text = @"";
+        mineHomeCell.cellDetail = @"";
     }
 
     return mineHomeCell;
@@ -369,7 +373,6 @@ static NSString *const kTitle6 = @"设置";
     }];
 }
 
-#warning test
 - (void)loginButtonClicked{
     if (!SSJIsUserLogined()) {
         SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
