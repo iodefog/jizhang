@@ -28,6 +28,9 @@
         if (![self.item.categoryTitle isEqualToString:@"添加"]) {
             [self addLongPressGesture];
         }
+        
+        self.contentView.layer.borderColor = [UIColor redColor].CGColor;
+        self.contentView.layer.borderWidth = 1;
     }
     return self;
 }

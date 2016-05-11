@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) NSMutableArray *buttons;
 @property (nonatomic) CGSize tabSize;
-@property (nonatomic, strong) UIView *bottomLine;
+//@property (nonatomic, strong) UIView *bottomLine;
 
 @end
 
@@ -29,9 +29,9 @@
         _tabView.backgroundColor = _selectedTitleColor;
         [self addSubview:_tabView];
         
-        _bottomLine = [[UIView alloc] init];
-        _bottomLine.backgroundColor = [UIColor blueColor];
-        [self addSubview:_bottomLine];
+//        _bottomLine = [[UIView alloc] init];
+//        _bottomLine.backgroundColor = [UIColor blueColor];
+//        [self addSubview:_bottomLine];
         
         self.backgroundColor = [UIColor whiteColor];
         self.showsHorizontalScrollIndicator = NO;
@@ -77,8 +77,8 @@
     _tabView.centerX = width * 0.5 + width * _selectedIndex;
     self.contentSize = CGSizeMake(width * _buttons.count, height);
     
-    CGFloat scale = [UIScreen mainScreen].scale;
-    _bottomLine.frame = CGRectMake(0, self.height - 1 / scale, self.contentSize.width, 1 / scale);
+//    CGFloat scale = [UIScreen mainScreen].scale;
+//    _bottomLine.frame = CGRectMake(0, self.height - 1 / scale, self.contentSize.width, 1 / scale);
 }
 
 - (void)setDelegate:(id<UIScrollViewDelegate>)delegate {
