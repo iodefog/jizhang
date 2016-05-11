@@ -119,9 +119,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 {
     SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (![item.fundingName isEqualToString:@"添加资金账户"]) {
+        __weak typeof(self) weakSelf = self;
         SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
         cell.item = item;
         cell.editeModel = _editeModel;
+        cell.deleteButtonClickBlock = ^(){
+            [weakSelf.items removeObjectAtIndex:indexPath.row];
+            [weakSelf.collectionView reloadData];
+        };
         return cell;
     }else{
         SSJFinancingHomeAddCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingAddCellIdentifier forIndexPath:indexPath];
@@ -173,14 +178,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     
 }
 
-- (void)collectionView:(SSJEditableCollectionView *)collectionView didMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
-    [self.items exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];
-    SSJFinancingHomeitem *fromItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
-    SSJFinancingHomeitem *toItem = [self.items ssj_safeObjectAtIndex:toIndexPath.row];
-    NSInteger tempOrder;
-    tempOrder = fromItem.fundingOrder;
-    fromItem.fundingOrder = toItem.fundingOrder;
-    toItem.fundingOrder = tempOrder;
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
+    SSJFinancingHomeitem *currentItem = [self.items objectAtIndex:fromIndexPath.row];
+    [self.items removeObjectAtIndex:fromIndexPath.row];
+    [self.items insertObject:currentItem atIndex:toIndexPath.row];
+    for (int i = 0; i < self.items.count; i ++) {
+        SSJFinancingHomeitem *tempItem = [self.items objectAtIndex:i];
+        tempItem.fundingOrder = i + 1;
+    }
 }
 
 #pragma mark - Getter

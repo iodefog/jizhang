@@ -256,6 +256,7 @@
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     if (scrollView.contentOffset.y < -38) {
+        [self.homeButton stopLoading];
         __weak typeof(self) weakSelf = self;
         SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
         recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
@@ -281,6 +282,13 @@
 //            [weakSelf.homeButton stopLoading];
 //        }];
     }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y < 0 && self.items.count != 0) {
+        self.tableView.lineHeight = 100;
+    }
+    [self.homeButton startAnimating];
 }
 
 
@@ -358,6 +366,7 @@
         _tableView = [[SSJHomeTableView alloc]init];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.showsVerticalScrollIndicator = NO;
         __weak typeof(self) weakSelf = self;
         _tableView.tableViewClickBlock = ^(){
             weakSelf.selectIndex = nil;

@@ -10,10 +10,10 @@
 
 @interface SSJBookKeepingButton : UIView
 // 开始动画
-//-(void)startLoading;
+-(void)startAnimating;
 
 // 结束动画
-//- (void)stopLoading;
+- (void)stopLoading;
 
 typedef void(^recordMakingClickBlock)();
 
@@ -24,4 +24,6 @@ typedef void(^recordMakingClickBlock)();
 //@property (nonatomic, copy) animationStopBlock animationStopBlock;
 
 @property(nonatomic) BOOL refreshSuccessOrNot;
+
+
 @end
