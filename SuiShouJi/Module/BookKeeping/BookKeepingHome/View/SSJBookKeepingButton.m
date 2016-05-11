@@ -7,14 +7,10 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-static const float kPROGRESS_LINE_WIDTH=4.0;
 
-static const float kAnimationDuration = 2.0;
-
+#define Angle2Radian(angle) ((angle) / 180.0 * M_PI)
 
 static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
-
-static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 
 #import "SSJBookKeepingButton.h"
 
@@ -22,6 +18,8 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 @property(nonatomic, strong) UIButton *recordMakingButton;
 @property(nonatomic, strong) CAGradientLayer *loadingLayer;
 @property(nonatomic, strong) UIView *pointView;
+@property(nonatomic, strong) UIImageView *lineImage;
+@property(nonatomic, strong) UIImageView *penImage;
 @end
 
 @implementation SSJBookKeepingButton{
@@ -33,27 +31,27 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _startTime = CFAbsoluteTimeGetCurrent();
         self.backgroundColor = [UIColor whiteColor];
-        [self.layer addSublayer:self.loadingLayer];
         [self addSubview:self.recordMakingButton];
-        [self addSubview:self.pointView];
+        [self addSubview:self.penImage];
+        [self addSubview:self.lineImage];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.pointView.center = CGPointMake(self.width / 2, self.height / 2);
-    [_pointView.layer setAnchorPoint:CGPointMake(0.5, 48.f / 8 + 0.5)];
     self.recordMakingButton.frame = self.bounds;
+    self.penImage.size = CGSizeMake(65, 65);
+    self.penImage.center = CGPointMake(self.width / 2, self.height / 2);
+    self.lineImage.size = CGSizeMake(39, 7);
+    self.lineImage.top = self.penImage.bottom - 2;
+    self.lineImage.centerX = self.width / 2;
 }
 
 -(UIButton *)recordMakingButton{
     if (!_recordMakingButton) {
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateNormal];
-        [_recordMakingButton setImage:[UIImage imageNamed:@"home_pen"] forState:UIControlStateHighlighted];
         _recordMakingButton.layer.cornerRadius = self.width / 2;
         _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
         _recordMakingButton.layer.borderWidth = 2.0f;
@@ -62,39 +60,55 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
     return _recordMakingButton;
 }
 
--(CAGradientLayer *)loadingLayer{
-    if (!_loadingLayer) {
-        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.width/2, self.height/2) radius:(self.width-kPROGRESS_LINE_WIDTH)/2 startAngle:degreesToRadians(0) endAngle:degreesToRadians(360) clockwise:YES];
-        CAShapeLayer *progressLayer = [CAShapeLayer layer];
-        progressLayer.frame = self.bounds;
-        progressLayer.fillColor =  [[UIColor clearColor] CGColor];
-        progressLayer.strokeColor=[UIColor redColor].CGColor;
-        progressLayer.lineCap = kCALineCapRound;
-        progressLayer.lineWidth = kPROGRESS_LINE_WIDTH;
-        progressLayer.path = path.CGPath;
-        _loadingLayer =  [CAGradientLayer layer];
-        _loadingLayer.frame = progressLayer.frame;
-        [_loadingLayer setColors:[NSArray arrayWithObjects:(id)[[UIColor ssj_colorWithHex:@"ffea01"] CGColor],(id)[[UIColor whiteColor] CGColor], nil]];
-        [_loadingLayer setLocations:@[@0,@0.5]];
-        [_loadingLayer setStartPoint:CGPointMake(0, 0)];
-        [_loadingLayer setEndPoint:CGPointMake(1, 0)];
-        [_loadingLayer setMask:progressLayer];
-        _loadingLayer.hidden = YES;
+-(UIImageView *)penImage{
+    if (!_penImage) {
+        _penImage = [[UIImageView alloc]init];
+        _penImage.image = [UIImage imageNamed:@"home_pen"];
     }
-    return _loadingLayer;
+    return _penImage;
 }
 
--(UIView *)pointView{
-    if (!_pointView) {
-        _pointView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 8, 8)];
-        _pointView.layer.borderColor = [UIColor ssj_colorWithHex:@"ffea01"].CGColor;
-        _pointView.layer.borderWidth = 3.0f;
-        _pointView.layer.cornerRadius = 4.0f;
-        _pointView.backgroundColor = [UIColor whiteColor];
-        _pointView.hidden = YES;
+-(UIImageView *)lineImage{
+    if (!_lineImage) {
+        _lineImage = [[UIImageView alloc]init];
+        _lineImage.image = [UIImage imageNamed:@"home_line"];
     }
-    return _pointView;
+    return _lineImage;
 }
+
+//-(CAGradientLayer *)loadingLayer{
+//    if (!_loadingLayer) {
+//        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.width/2, self.height/2) radius:(self.width-kPROGRESS_LINE_WIDTH)/2 startAngle:degreesToRadians(0) endAngle:degreesToRadians(360) clockwise:YES];
+//        CAShapeLayer *progressLayer = [CAShapeLayer layer];
+//        progressLayer.frame = self.bounds;
+//        progressLayer.fillColor =  [[UIColor clearColor] CGColor];
+//        progressLayer.strokeColor=[UIColor redColor].CGColor;
+//        progressLayer.lineCap = kCALineCapRound;
+//        progressLayer.lineWidth = kPROGRESS_LINE_WIDTH;
+//        progressLayer.path = path.CGPath;
+//        _loadingLayer =  [CAGradientLayer layer];
+//        _loadingLayer.frame = progressLayer.frame;
+//        [_loadingLayer setColors:[NSArray arrayWithObjects:(id)[[UIColor ssj_colorWithHex:@"ffea01"] CGColor],(id)[[UIColor whiteColor] CGColor], nil]];
+//        [_loadingLayer setLocations:@[@0,@0.5]];
+//        [_loadingLayer setStartPoint:CGPointMake(0, 0)];
+//        [_loadingLayer setEndPoint:CGPointMake(1, 0)];
+//        [_loadingLayer setMask:progressLayer];
+//        _loadingLayer.hidden = YES;
+//    }
+//    return _loadingLayer;
+//}
+//
+//-(UIView *)pointView{
+//    if (!_pointView) {
+//        _pointView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 8, 8)];
+//        _pointView.layer.borderColor = [UIColor ssj_colorWithHex:@"ffea01"].CGColor;
+//        _pointView.layer.borderWidth = 3.0f;
+//        _pointView.layer.cornerRadius = 4.0f;
+//        _pointView.backgroundColor = [UIColor whiteColor];
+//        _pointView.hidden = YES;
+//    }
+//    return _pointView;
+//}
 
 //-(void)startLoading{
 //    _startTime = CFAbsoluteTimeGetCurrent();
@@ -169,6 +183,29 @@ static NSString *const kPointViewAnimationKey = @"pointViewAnimationKey";
 //    }
 //    _startTime = 0;
 //}
+
+// 抖动动画
+- (void)startAnimating
+{
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+    anim.keyPath = @"transform.rotation";
+    
+    anim.values = @[@(Angle2Radian(-25)),  @(Angle2Radian(25)), @(Angle2Radian(-25))];
+    anim.duration = 0.5;
+    // 动画的重复执行次数
+    anim.repeatCount = MAXFLOAT;
+    
+    // 保持动画执行完毕后的状态
+    anim.removedOnCompletion = NO;
+    anim.fillMode = kCAFillModeForwards;
+    
+    [self.penImage.layer addAnimation:anim forKey:kLodingViewAnimationKey];
+}
+
+- (void)stopLoading{
+    [self.penImage.layer removeAnimationForKey:kLodingViewAnimationKey];
+}
+
 
 -(void)recordMakingButtonClicked:(id)sender{
     if (self.recordMakingClickBlock) {
