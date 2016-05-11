@@ -92,10 +92,22 @@
     item.fundingAmount = [set doubleForColumn:@"IBALANCE"];
     item.fundingMemo = [set stringForColumn:@"CMEMO"];
     item.fundingOrder = [set intForColumn:@"IORDER"];
-    if (item.fundingOrder) {
-        
-    }
     item.isAddOrNot = NO;
     return item;
+}
+
+
++ (void)SaveFundingOderWithItems:(NSArray <SSJFinancingHomeitem *> *)items error:(NSError **)error{
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        for (int i = 0; i < items.count; i++) {
+            SSJFinancingHomeitem *item = [items ssj_safeObjectAtIndex:i];
+            if (!item.isAddOrNot) {
+                NSString *sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld and cwritedate = '%@' and iversion = %@ and operatortype = 1 where cfundid = '%@'",item.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+                if (![db executeUpdate:sql]) {
+                    *rollback = YES;
+                };
+            }
+        }
+    }];
 }
 @end

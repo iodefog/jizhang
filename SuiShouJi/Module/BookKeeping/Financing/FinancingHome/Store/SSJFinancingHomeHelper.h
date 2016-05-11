@@ -25,4 +25,8 @@
  *  @param failure 查询失败的回调
  */
 + (void)queryForFundingSumMoney:(void(^)(double result))success failure:(void (^)(NSError *error))failure;
+
++ (void)SaveFundingOderWithItems:(NSArray <SSJFinancingHomeitem *> *)items error:(NSError **)error;
+
+
 @end

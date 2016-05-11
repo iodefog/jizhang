@@ -173,6 +173,16 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     
 }
 
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    [self.items exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];
+    SSJFinancingHomeitem *fromItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
+    SSJFinancingHomeitem *toItem = [self.items ssj_safeObjectAtIndex:toIndexPath.row];
+    NSInteger tempOrder;
+    tempOrder = fromItem.fundingOrder;
+    fromItem.fundingOrder = toItem.fundingOrder;
+    toItem.fundingOrder = tempOrder;
+}
+
 #pragma mark - Getter
 -(SSJEditableCollectionView *)collectionView{
     if (_collectionView==nil) {
@@ -220,7 +230,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.collectionView endEditing];
     _editeModel = NO;
     self.navigationItem.rightBarButtonItem = nil;
-    [self getDateFromDateBase];
+    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
+    [self.collectionView reloadData];
 }
 
 -(void)transferButtonClicked{
