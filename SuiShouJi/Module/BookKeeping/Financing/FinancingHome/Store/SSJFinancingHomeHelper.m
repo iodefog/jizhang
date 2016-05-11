@@ -15,7 +15,7 @@
         NSString *userid = SSJUSERID();
         NSMutableArray *fundingList = [[NSMutableArray alloc]init];
         NSMutableArray *orderArr = [[NSMutableArray alloc]init];
-        FMResultSet * fundingResult = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?  ORDER BY A.IORDER DESC , A.CPARENT ASC , A.CWRITEDATE DESC",userid];
+        FMResultSet * fundingResult = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?  ORDER BY A.IORDER ASC , A.CPARENT ASC , A.CWRITEDATE DESC",userid];
         if (!fundingResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -102,12 +102,16 @@
         for (int i = 0; i < items.count; i++) {
             SSJFinancingHomeitem *item = [items ssj_safeObjectAtIndex:i];
             if (!item.isAddOrNot) {
-                NSString *sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld and cwritedate = '%@' and iversion = %@ and operatortype = 1 where cfundid = '%@'",item.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
-                if (![db executeUpdate:sql]) {
-                    *rollback = YES;
-                };
+                NSString *sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",item.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+                [db executeUpdate:sql];
             }
         }
+    }];
+}
+
++ (void)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        [db executeUpdate:@"update bk_fund_info set operatortype = 2 where cfundid = ?",item.fundingID];
     }];
 }
 @end

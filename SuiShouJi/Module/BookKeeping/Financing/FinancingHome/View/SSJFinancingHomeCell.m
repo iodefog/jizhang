@@ -7,6 +7,7 @@
 //
 
 #import "SSJFinancingHomeCell.h"
+#import "SSJFinancingHomeHelper.h"
 
 @interface SSJFinancingHomeCell()
 @property(nonatomic, strong) UILabel *fundingNameLabel;
@@ -89,6 +90,7 @@
     if (!_deleteButton) {
         _deleteButton = [[UIButton alloc]init];
         [_deleteButton setImage:[UIImage imageNamed:@"ft_delete"] forState:UIControlStateNormal];
+        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteButton;
 }
@@ -113,6 +115,13 @@
 -(void)setEditeModel:(BOOL)editeModel{
     _editeModel = editeModel;
     self.deleteButton.hidden = !_editeModel;
+}
+
+-(void)deleteButtonClicked:(id)sender{
+    [SSJFinancingHomeHelper deleteFundingWithFundingItem:self.item];
+    if (self.deleteButtonClickBlock) {
+        self.deleteButtonClickBlock();
+    }
 }
 
 @end
