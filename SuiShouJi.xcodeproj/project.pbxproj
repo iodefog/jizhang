@@ -437,6 +437,9 @@
 		9C4078371CE1FC3100A61956 /* tab_founds_sel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C40782F1CE1FC3100A61956 /* tab_founds_sel@3x.png */; };
 		9C4078381CE1FC3100A61956 /* tab_more_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078301CE1FC3100A61956 /* tab_more_sel@2x.png */; };
 		9C4078391CE1FC3100A61956 /* tab_more_sel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078311CE1FC3100A61956 /* tab_more_sel@3x.png */; };
+		9C4078441CE2183500A61956 /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4078431CE2183500A61956 /* SSJFinancingHomeAddCell.m */; };
+		9C4078471CE2190800A61956 /* tianjia_border@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078451CE2190800A61956 /* tianjia_border@2x.png */; };
+		9C4078481CE2190800A61956 /* tianjia_border@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078461CE2190800A61956 /* tianjia_border@3x.png */; };
 		9C434E2B1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */; };
 		9C434E2F1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E2E1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.m */; };
 		9C434E341C2AD4DF00A3D61E /* SSJCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C434E331C2AD4DF00A3D61E /* SSJCalendarViewController.m */; };
@@ -1466,6 +1469,10 @@
 		9C40782F1CE1FC3100A61956 /* tab_founds_sel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_founds_sel@3x.png"; sourceTree = "<group>"; };
 		9C4078301CE1FC3100A61956 /* tab_more_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_more_sel@2x.png"; sourceTree = "<group>"; };
 		9C4078311CE1FC3100A61956 /* tab_more_sel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_more_sel@3x.png"; sourceTree = "<group>"; };
+		9C4078421CE2183500A61956 /* SSJFinancingHomeAddCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeAddCell.h; sourceTree = "<group>"; };
+		9C4078431CE2183500A61956 /* SSJFinancingHomeAddCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeAddCell.m; sourceTree = "<group>"; };
+		9C4078451CE2190800A61956 /* tianjia_border@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia_border@2x.png"; sourceTree = "<group>"; };
+		9C4078461CE2190800A61956 /* tianjia_border@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia_border@3x.png"; sourceTree = "<group>"; };
 		9C434E291C2A99FF00A3D61E /* SSJFundingTypeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectView.h; sourceTree = "<group>"; };
 		9C434E2A1C2A99FF00A3D61E /* SSJFundingTypeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectView.m; sourceTree = "<group>"; };
 		9C434E2D1C2A9A8400A3D61E /* SSJFundingTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeTableViewCell.h; sourceTree = "<group>"; };
@@ -2623,6 +2630,8 @@
 				BDDB681F1C9FE54700C27E79 /* yindao@3x.jpg */,
 				9C991D8B1CE074670031CD02 /* zhuanzhang@3x.png */,
 				9C991D891CE0742D0031CD02 /* zhuanzhang@2x.png */,
+				9C4078451CE2190800A61956 /* tianjia_border@2x.png */,
+				9C4078461CE2190800A61956 /* tianjia_border@3x.png */,
 				7DD7D6731C4C8E6A00ACE71A /* ReportForms */,
 				7DD7D6791C4C8E6A00ACE71A /* tabbarimage */,
 			);
@@ -4300,6 +4309,8 @@
 				BD7BC8281C3A1A0F001DE5D8 /* SSJFinancingHomeCell.m */,
 				9C991D7F1CE06C120031CD02 /* SSJFinancingHomeHeader.h */,
 				9C991D801CE06C120031CD02 /* SSJFinancingHomeHeader.m */,
+				9C4078421CE2183500A61956 /* SSJFinancingHomeAddCell.h */,
+				9C4078431CE2183500A61956 /* SSJFinancingHomeAddCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4762,6 +4773,7 @@
 				BD976FC21C4F57F700B0E26D /* solid_circle@2x.png in Resources */,
 				7DDDA7C71CBE1BFD0029ADAC /* help_tree_level_9@3x.png in Resources */,
 				7DD7D7271C4C8E6A00ACE71A /* tab_founds_nor@3x.png in Resources */,
+				9C4078481CE2190800A61956 /* tianjia_border@3x.png in Resources */,
 				7DF8DEDC1C59BFE700CC5DFA /* guide_3-667@2x.png in Resources */,
 				9C4078391CE1FC3100A61956 /* tab_more_sel@3x.png in Resources */,
 				BD976FB01C4F1AC200B0E26D /* add@2x.png in Resources */,
@@ -4869,6 +4881,7 @@
 				BDA3FE061C59034C00FB57B1 /* SSJBookKeepingHomePopView.xib in Resources */,
 				7DDDA7BA1CBE1BFD0029ADAC /* help_tree_level_3@2x.png in Resources */,
 				7DDDA7B61CBE1BFD0029ADAC /* help_tree_level_1@2x.png in Resources */,
+				9C4078471CE2190800A61956 /* tianjia_border@2x.png in Resources */,
 				9C4078381CE1FC3100A61956 /* tab_more_sel@2x.png in Resources */,
 				7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */,
 				7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */,
@@ -5451,6 +5464,7 @@
 				BD0433911C1A8DA50051E7AB /* SSJBaseNetworkService.m in Sources */,
 				BD70DF621C4751EA000E6CC9 /* SSJLoginViewController.m in Sources */,
 				7DEF54741C7C243700A90153 /* SSJBudgetModel.m in Sources */,
+				9C4078441CE2183500A61956 /* SSJFinancingHomeAddCell.m in Sources */,
 				7D2B24001C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m in Sources */,
 				BDF5038C1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m in Sources */,
 				BD70DF601C4751EA000E6CC9 /* SSJGuideView.m in Sources */,
@@ -5783,7 +5797,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -5821,7 +5835,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

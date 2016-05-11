@@ -34,4 +34,7 @@
 
 //账户备注
 @property(nonatomic,strong) NSString *fundingMemo;
+
+
+@property(nonatomic) NSInteger fundingOrder;
 @end

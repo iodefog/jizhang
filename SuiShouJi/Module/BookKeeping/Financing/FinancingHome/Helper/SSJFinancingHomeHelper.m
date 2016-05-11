@@ -14,7 +14,8 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableArray *fundingList = [[NSMutableArray alloc]init];
-        FMResultSet * fundingResult = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? ORDER BY A.CPARENT ASC , A.CWRITEDATE DESC",userid];
+        NSMutableArray *orderArr = [[NSMutableArray alloc]init];
+        FMResultSet * fundingResult = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?  ORDER BY A.IORDER DESC , A.CPARENT ASC , A.CWRITEDATE DESC",userid];
         if (!fundingResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -24,7 +25,24 @@
             return;
         }
         while ([fundingResult next]) {
-            [fundingList addObject:[self fundingItemWithResultSet:fundingResult inDatabase:db]];
+            SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+            item.fundingColor = [fundingResult stringForColumn:@"CCOLOR"];
+            item.fundingIcon = [fundingResult stringForColumn:@"CICOIN"];
+            item.fundingID = [fundingResult stringForColumn:@"CFUNDID"];
+            item.fundingName = [fundingResult stringForColumn:@"CACCTNAME"];
+            item.fundingParent = [fundingResult stringForColumn:@"CPARENT"];
+            item.fundingAmount = [fundingResult doubleForColumn:@"IBALANCE"];
+            item.fundingMemo = [fundingResult stringForColumn:@"CMEMO"];
+            item.fundingOrder = [fundingResult intForColumn:@"IORDER"];
+            [orderArr addObject:@(item.fundingOrder)];
+            item.isAddOrNot = NO;
+            [fundingList addObject:item];
+        }
+        if ([orderArr containsObject:@(0)]) {
+            for (int i = 0; i < fundingList.count; i ++) {
+                SSJFinancingHomeitem *item = [fundingList objectAtIndex:i];
+                item.fundingOrder = i + 1;
+            }
         }
         SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
         item.fundingName = @"添加资金账户";
@@ -73,6 +91,10 @@
     item.fundingParent = [set stringForColumn:@"CPARENT"];
     item.fundingAmount = [set doubleForColumn:@"IBALANCE"];
     item.fundingMemo = [set stringForColumn:@"CMEMO"];
+    item.fundingOrder = [set intForColumn:@"IORDER"];
+    if (item.fundingOrder) {
+        
+    }
     item.isAddOrNot = NO;
     return item;
 }

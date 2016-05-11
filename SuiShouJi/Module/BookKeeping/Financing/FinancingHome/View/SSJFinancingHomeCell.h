@@ -16,4 +16,7 @@
 
 @property (nonatomic,strong) UILabel *fundingBalanceLabel;
 
+
+@property(nonatomic) BOOL editeModel;
+
 @end

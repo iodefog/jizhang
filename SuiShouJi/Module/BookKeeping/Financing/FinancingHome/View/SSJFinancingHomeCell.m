@@ -34,7 +34,7 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.deleteButton.size = CGSizeMake(30, 30);
-    self.deleteButton.center = CGPointMake(self.width - 10, 5 );
+    self.deleteButton.center = CGPointMake(self.width - 10, 5);
     if (!_item.fundingMemo.length) {
         self.fundingNameLabel.left = 25;
         self.fundingNameLabel.centerY = self.contentView.height / 2;
@@ -108,6 +108,11 @@
     self.fundingMemoLabel.text = _item.fundingMemo;
     [self.fundingMemoLabel sizeToFit];
     [self setNeedsLayout];
+}
+
+-(void)setEditeModel:(BOOL)editeModel{
+    _editeModel = editeModel;
+    self.deleteButton.hidden = !_editeModel;
 }
 
 @end
