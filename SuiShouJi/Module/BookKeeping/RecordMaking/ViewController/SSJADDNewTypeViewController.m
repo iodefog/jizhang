@@ -17,13 +17,18 @@
 #import "SSJAddNewTypeColorSelectionView.h"
 #import "SSJCategoryListHelper.h"
 
+static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
+
 @interface SSJADDNewTypeViewController () <SCYSlidePagingHeaderViewDelegate, UITextFieldDelegate>
 
-@property (nonatomic,strong) UICollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIView *rightbuttonView;
 
 @property (nonnull, strong) NSArray *customItems;
+
+@property (nonatomic,strong) UICollectionView *newCategoryCollectionView;
+
+@property (nonatomic,strong) UICollectionView *customCategoryCollectionView;
 
 @property (nonatomic, strong) SCYSlidePagingHeaderView *titleSegmentView;
 
@@ -32,6 +37,14 @@
 @property (nonatomic, strong) UIImageView *selectedTypeView;
 
 @property (nonatomic, strong) SSJAddNewTypeColorSelectionView *colorSelectionView;
+
+@property (nonatomic, strong) UICollectionViewFlowLayout *newCategoryLayout;
+
+@property (nonatomic, strong) UICollectionViewFlowLayout *customCategoryLayout;
+
+@property (nonatomic) NSInteger newCategorySelectedIndex;
+
+@property (nonatomic) NSInteger customCategorySelectedIndex;
 
 @end
 
@@ -61,13 +74,16 @@
     self.navigationItem.rightBarButtonItem = rightBarButton;
     
     self.navigationItem.titleView = self.titleSegmentView;
+    [self.view addSubview:self.newCategoryCollectionView];
     [self.view addSubview:self.customTypeInputView];
-    [self.view addSubview:self.collectionView];
+    [self.view addSubview:self.customCategoryCollectionView];
     [self.view addSubview:self.colorSelectionView];
 }
 
 -(void)viewDidLayoutSubviews{
-    [self updateView];
+    _newCategoryCollectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
+    _colorSelectionView.frame = CGRectMake(0, self.view.height - 186, self.view.width, 186);
+    _customCategoryCollectionView.frame = CGRectMake(0, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -76,34 +92,24 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
+    SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     NSArray *currentItems = (_titleSegmentView.selectedIndex ? _customItems : _items);
     cell.item = (SSJRecordMakingCategoryItem*)[currentItems objectAtIndex:indexPath.row];
-    if ([cell.item.categoryID isEqualToString:_selectedItem.categoryID]) {
-        cell.categoryImage.tintColor = [UIColor whiteColor];
-        cell.categoryImage.image = [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:cell.item.categoryColor];
-    }else{
-        cell.categoryImage.backgroundColor = [UIColor clearColor];
-        [cell.categoryImage.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    }
-    
     return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    _selectedID = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item.categoryID;
-    _selectedItem = ((SSJCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath]).item;
-    [collectionView reloadData];
+    if (collectionView == _newCategoryCollectionView) {
+        _newCategorySelectedIndex = indexPath.item;
+    } else if (collectionView == _customCategoryCollectionView) {
+        _customCategorySelectedIndex = indexPath.item;
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == _collectionView) {
-        if (_titleSegmentView.selectedIndex != 1) {
-            return;
-        }
+    if (scrollView == _customCategoryCollectionView) {
         if (scrollView.dragging && !scrollView.decelerating) {
             CGPoint velocity = [scrollView.panGestureRecognizer velocityInView:scrollView];
             if (velocity.y < 0) {
@@ -119,19 +125,21 @@
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+    [self loadData];
     [self updateView];
     if (index == 0) {
         [_customTypeInputView resignFirstResponder];
-        _collectionView.collectionViewLayout = [self addLayout];
     } else if (index == 1) {
         [_customTypeInputView becomeFirstResponder];
-        _collectionView.collectionViewLayout = [self customLayout];
     }
 }
 
 #pragma mark - Event
 - (void)selectColorAction {
-    NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selected];
+    NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
+    [_customItems makeObjectsPerformSelector:@selector(setCategoryColor:) withObject:colorValue];
+    [_customCategoryCollectionView reloadData];
+    [_customCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_customCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
 }
 
 -(void)comfirmButtonClick:(id)sender{
@@ -141,7 +149,7 @@
 //        [weakSelf getDateFromDb];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [[NSNotificationCenter defaultCenter]postNotificationName:@"addNewTypeNotification" object:nil];
-            [weakSelf.collectionView reloadData];
+            [weakSelf.newCategoryCollectionView reloadData];
             [weakSelf.navigationController popViewControllerAnimated:YES];
             if (weakSelf.NewCategorySelectedBlock) {
                 weakSelf.NewCategorySelectedBlock(_selectedID,_selectedItem);
@@ -149,46 +157,11 @@
         });
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     }
 }
 
 #pragma mark - Getter
-- (UICollectionView *)collectionView {
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = self.titleSegmentView.selectedIndex ? [self customLayout] : [self addLayout];
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) collectionViewLayout:layout];
-        _collectionView.dataSource=self;
-        _collectionView.delegate=self;
-        [_collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier"];
-        _collectionView.backgroundColor = [UIColor whiteColor];
-        _collectionView.contentOffset = CGPointMake(0, 0);
-    }
-    return _collectionView;
-}
-
-- (UICollectionViewFlowLayout *)addLayout {
-    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    flowLayout.minimumInteritemSpacing = 0;
-    flowLayout.minimumLineSpacing = 0;
-    CGFloat width = (self.view.width - 16) * 0.2;
-    flowLayout.itemSize = CGSizeMake(width, 94);
-    flowLayout.sectionInset = UIEdgeInsetsMake(0, 8, 0, 8);
-    return flowLayout;
-}
-
-- (UICollectionViewFlowLayout *)customLayout {
-    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    flowLayout.minimumInteritemSpacing = 0;
-    flowLayout.minimumLineSpacing = 0;
-    CGFloat width = (self.view.width - 16) * 0.2;
-    flowLayout.itemSize = CGSizeMake(width, 60);
-    flowLayout.sectionInset = UIEdgeInsetsMake(10, 8, 0, 8);
-    return flowLayout;
-}
-
 -(UIView *)rightbuttonView{
     if (!_rightbuttonView) {
         _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
@@ -214,6 +187,57 @@
     return _titleSegmentView;
 }
 
+- (UICollectionView *)newCategoryCollectionView {
+    if (!_newCategoryCollectionView) {
+        _newCategoryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) collectionViewLayout:self.newCategoryLayout];
+        _newCategoryCollectionView.dataSource=self;
+        _newCategoryCollectionView.delegate=self;
+        [_newCategoryCollectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
+        _newCategoryCollectionView.backgroundColor = [UIColor whiteColor];
+        _newCategoryCollectionView.contentOffset = CGPointMake(0, 0);
+    }
+    return _newCategoryCollectionView;
+}
+
+- (UICollectionView *)customCategoryCollectionView {
+    if (!_customCategoryCollectionView) {
+        _customCategoryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5) collectionViewLayout:self.customCategoryLayout];
+        _customCategoryCollectionView.dataSource=self;
+        _customCategoryCollectionView.delegate=self;
+        [_customCategoryCollectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
+        _customCategoryCollectionView.backgroundColor = [UIColor whiteColor];
+        _customCategoryCollectionView.contentOffset = CGPointMake(0, 0);
+        _customCategoryCollectionView.hidden = YES;
+    }
+    return _customCategoryCollectionView;
+}
+
+- (UICollectionViewFlowLayout *)newCategoryLayout {
+    if (!_newCategoryLayout) {
+        _newCategoryLayout = [[UICollectionViewFlowLayout alloc] init];
+        [_newCategoryLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+        _newCategoryLayout.minimumInteritemSpacing = 0;
+        _newCategoryLayout.minimumLineSpacing = 0;
+        CGFloat width = (self.view.width - 16) * 0.2;
+        _newCategoryLayout.itemSize = CGSizeMake(width, 94);
+        _newCategoryLayout.sectionInset = UIEdgeInsetsMake(0, 8, 0, 8);
+    }
+    return _newCategoryLayout;
+}
+
+- (UICollectionViewFlowLayout *)customCategoryLayout {
+    if (!_customCategoryLayout) {
+        _customCategoryLayout = [[UICollectionViewFlowLayout alloc] init];
+        [_customCategoryLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+        _customCategoryLayout.minimumInteritemSpacing = 0;
+        _customCategoryLayout.minimumLineSpacing = 0;
+        CGFloat width = (self.view.width - 16) * 0.2;
+        _customCategoryLayout.itemSize = CGSizeMake(width, 60);
+        _customCategoryLayout.sectionInset = UIEdgeInsetsMake(10, 8, 0, 8);
+    }
+    return _customCategoryLayout;
+}
+
 - (UITextField *)customTypeInputView {
     if (!_customTypeInputView) {
         _customTypeInputView = [[UITextField alloc] initWithFrame:CGRectMake(0, 10, self.view.width, 63)];
@@ -230,6 +254,7 @@
         [leftView addSubview:_selectedTypeView];
         _customTypeInputView.leftView = leftView;
         _customTypeInputView.leftViewMode = UITextFieldViewModeAlways;
+        _customTypeInputView.hidden = YES;
     }
     return _customTypeInputView;
 }
@@ -242,65 +267,35 @@
         [_colorSelectionView ssj_setBorderStyle:SSJBorderStyleTop];
         [_colorSelectionView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
         [_colorSelectionView addTarget:self action:@selector(selectColorAction) forControlEvents:UIControlEventValueChanged];
+        _colorSelectionView.hidden = YES;
     }
     return _colorSelectionView;
 }
 
 #pragma mark - private
-//-(void)getDateFromDb{
-//    [self.collectionView ssj_showLoadingIndicator];
-//    
-//    __weak typeof(self) weakSelf = self;
-//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-//        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-//        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
-//        while ([rs next]) {
-//            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-//            item.categoryTitle = [rs stringForColumn:@"CNAME"];
-//            item.categoryImage = [rs stringForColumn:@"CCOIN"];
-//            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
-//            item.categoryID = [rs stringForColumn:@"ID"];
-//            [tempArray addObject:item];
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^(){
-//            weakSelf.items = tempArray;
-//            [weakSelf.collectionView reloadData];
-//            _selectedID = ((SSJRecordMakingCategoryItem*)[weakSelf.items firstObject]).categoryID;
-//            [weakSelf.collectionView ssj_hideLoadingIndicator];
-//        });
-//    }];
-//}
-
-//-(void)getdefualtItem{
-//    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-//        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID LIMIT 1 OFFSET 0",[NSNumber numberWithBool:self.incomeOrExpence],SSJUSERID()];
-//        while ([rs next]) {
-//            _defualtItem = [[SSJRecordMakingCategoryItem alloc]init];
-//            _defualtItem.categoryTitle = [rs stringForColumn:@"CNAME"];
-//            _defualtItem.categoryImage = [rs stringForColumn:@"CCOIN"];
-//            _defualtItem.categoryColor = [rs stringForColumn:@"CCOLOR"];
-//            _defualtItem.categoryID = [rs stringForColumn:@"ID"];
-//        }
-//        _selectedItem = _defualtItem;
-//    }];
-//}
-
 - (void)loadData {
-    [_collectionView ssj_showLoadingIndicator];
-    [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
-        _items = result;
-        [SSJCategoryListHelper queryCustomCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<SSJRecordMakingCategoryItem *> *items) {
-            [_collectionView ssj_showLoadingIndicator];
-            _customItems = items;
-            [_collectionView reloadData];
+    if (_titleSegmentView.selectedIndex == 0) {
+        [_newCategoryCollectionView ssj_showLoadingIndicator];
+        [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
+            _items = result;
+            [_newCategoryCollectionView reloadData];
+            [_newCategoryCollectionView ssj_hideLoadingIndicator];
         } failure:^(NSError *error) {
-            [_collectionView ssj_showLoadingIndicator];
+            [_newCategoryCollectionView ssj_hideLoadingIndicator];
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
-    } failure:^(NSError *error) {
-        [_collectionView ssj_showLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-    }];
+    } else if (_titleSegmentView.selectedIndex == 1) {
+        [_customCategoryCollectionView ssj_showLoadingIndicator];
+        [SSJCategoryListHelper queryCustomCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<SSJRecordMakingCategoryItem *> *items) {
+            _customItems = items;
+            [self selectColorAction];
+            [_customCategoryCollectionView reloadData];
+            [_customCategoryCollectionView ssj_hideLoadingIndicator];
+        } failure:^(NSError *error) {
+            [_customCategoryCollectionView ssj_hideLoadingIndicator];
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+    }
 }
 
 -(void)closeButtonClicked:(id)sender{
@@ -308,15 +303,19 @@
 }
 
 - (void)updateView {
-    if (_titleSegmentView.selectedIndex == 0) {
-        _customTypeInputView.hidden = YES;
-        _colorSelectionView.hidden = YES;
-        _collectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
-    } else if (_titleSegmentView.selectedIndex == 1) {
-        _customTypeInputView.hidden = NO;
-        _colorSelectionView.hidden = NO;
-        _collectionView.frame = CGRectMake(0, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5);
-    }
+    [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        if (_titleSegmentView.selectedIndex == 0) {
+            _customTypeInputView.hidden = YES;
+            _colorSelectionView.hidden = YES;
+            _customCategoryCollectionView.hidden = YES;
+            _newCategoryCollectionView.hidden = NO;
+        } else if (_titleSegmentView.selectedIndex == 1) {
+            _customTypeInputView.hidden = NO;
+            _colorSelectionView.hidden = NO;
+            _customCategoryCollectionView.hidden = NO;
+            _newCategoryCollectionView.hidden = YES;
+        }
+    } completion:NULL];
 }
 
 @end

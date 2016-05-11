@@ -125,7 +125,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     [_collectionView keepCurrentMovedCellVisible];
     [_collectionView checkIfHasIntersectantCells];
     
-    if (scrollView.panGestureRecognizer && scrollView.dragging) {
+    if (scrollView.panGestureRecognizer && scrollView.dragging && !scrollView.decelerating) {
         CGPoint velocity = [scrollView.panGestureRecognizer velocityInView:scrollView];
         if (_dragAction) {
             _dragAction(self, velocity.y < 0);

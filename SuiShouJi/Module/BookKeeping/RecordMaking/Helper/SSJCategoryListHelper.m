@@ -19,7 +19,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' ORDER BY B.CWRITEDATE , A.ID",incomeOrExpenture,userId];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null ORDER BY B.CWRITEDATE , A.ID",incomeOrExpenture,userId];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
@@ -95,7 +95,7 @@
                                              success:(void(^)(NSArray<SSJRecordMakingCategoryItem *> *items))success
                                              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select ccoin where itype = ? and cparent = 'root'", @(incomeOrExpenture)];
+        FMResultSet *result = [db executeQuery:@"select ccoin from bk_bill_type where itype = ? and cparent = 'root'", @(incomeOrExpenture)];
         if (!result) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

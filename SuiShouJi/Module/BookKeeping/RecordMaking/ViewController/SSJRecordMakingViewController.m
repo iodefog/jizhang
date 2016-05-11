@@ -112,6 +112,11 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     [self.billTypeInputView resignFirstResponder];
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    _billTypeSelectionView.height = self.view.height - self.billTypeInputView.bottom;
+}
+
 #pragma mark - Getter
 //-(SSJNewCategoryCollectionView*)categoryListView{
 //    if (_categoryListView == nil) {

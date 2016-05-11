@@ -20,6 +20,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        _enable = YES;
         _titleFont = 15;
         _titleColor = [UIColor lightGrayColor];
         _selectedTitleColor = [UIColor blueColor];
@@ -138,6 +139,15 @@
     }
 }
 
+- (void)setEnable:(BOOL)enable {
+    if (_enable != enable) {
+        _enable = enable;
+        for (UIButton *btn in _buttons) {
+            btn.enabled = enable;
+        }
+    }
+}
+
 - (NSArray *)getButtons {
     return [NSArray arrayWithArray:self.buttons];
 }
@@ -200,6 +210,7 @@
         [button setTitleColor:_selectedTitleColor forState:UIControlStateSelected];
         [button setTitleColor:_selectedTitleColor forState:(UIControlStateHighlighted | UIControlStateSelected)];
         button.selected = idx == _selectedIndex;
+        button.enabled = _enable;
         [_buttons addObject:button];
         [self addSubview:button];
     }
