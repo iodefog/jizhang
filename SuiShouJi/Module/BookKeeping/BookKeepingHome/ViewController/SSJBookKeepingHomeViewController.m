@@ -255,8 +255,10 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38) {
-        [self.homeButton stopLoading];
+    [self.homeButton stopLoading];
+    if (scrollView.contentOffset.y < - 70) {
+        _isRefreshing = NO;
+        
         __weak typeof(self) weakSelf = self;
         SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
         recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
@@ -284,11 +286,16 @@
     }
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y < 0 && self.items.count != 0) {
-        self.tableView.lineHeight = 100;
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y < -38 && self.items.count != 0 && self.tableView) {
+        self.tableView.lineHeight = - scrollView.contentOffset.y;
+        if (scrollView.dragging && !_isRefreshing) {
+            [self.homeButton startAnimating];
+            _isRefreshing = YES;
+        }
+    }else{
+        _isRefreshing = NO;
     }
-    [self.homeButton startAnimating];
 }
 
 

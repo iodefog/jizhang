@@ -30,9 +30,10 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.lineView.top = 0;
+//    self.lineView.top = 0;
     self.lineView.centerX = self.width / 2;
     self.lineView.height = self.lineHeight;
+    self.lineView.top = -self.lineHeight;
 }
 
 
