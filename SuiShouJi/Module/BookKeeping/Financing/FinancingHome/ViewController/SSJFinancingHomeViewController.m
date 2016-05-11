@@ -8,6 +8,11 @@
 
 static BOOL KHasEnterFinancing;
 
+static NSString * SSJFinancingNormalCellIdentifier = @"financingHomeNormalCell";
+
+static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
+
+
 #import "SSJFinancingHomeViewController.h"
 #import "SSJFinancingHomeCell.h"
 #import "SSJFinancingHomeitem.h"
@@ -18,6 +23,7 @@ static BOOL KHasEnterFinancing;
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJFinancingHomeHeader.h"
+#import "SSJFinancingHomeAddCell.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -26,7 +32,9 @@ static BOOL KHasEnterFinancing;
 @property (nonatomic,strong) SSJFinancingHomeHeader *headerView;
 @end
 
-@implementation SSJFinancingHomeViewController
+@implementation SSJFinancingHomeViewController{
+    BOOL _editeModel;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -37,9 +45,11 @@ static BOOL KHasEnterFinancing;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _editeModel = NO;
     [self.view addSubview:self.headerView];
     [self.view addSubview:self.collectionView];
-    [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:@"financingHomeCell"];
+    [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier];
+    [self.collectionView registerClass:[SSJFinancingHomeAddCell class] forCellWithReuseIdentifier:SSJFinancingAddCellIdentifier];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -87,7 +97,17 @@ static BOOL KHasEnterFinancing;
 
 }
 
-
+-(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    if (!KHasEnterFinancing) {
+        SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
+        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
+        [UIView animateWithDuration:0.2 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            currentCell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            KHasEnterFinancing = YES;
+        }];
+    }
+}
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -97,17 +117,27 @@ static BOOL KHasEnterFinancing;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * CellIdentifier = @"financingHomeCell";
-    SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    
-    return cell;
+    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
+        SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
+        cell.item = item;
+        cell.editeModel = _editeModel;
+        return cell;
+    }else{
+        SSJFinancingHomeAddCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingAddCellIdentifier forIndexPath:indexPath];
+        return cell;;
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.view.width - 20, 85);
+    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
+        return CGSizeMake(self.view.width - 20, 85);
+    }else{
+        return CGSizeMake(self.view.width - 20, 50);
+    }
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -132,16 +162,25 @@ static BOOL KHasEnterFinancing;
     }
 }
 
--(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (!KHasEnterFinancing) {
-        SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
-        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width * (indexPath.row + 1) , 0);
-        [UIView animateWithDuration:0.4 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
-            currentCell.transform = CGAffineTransformIdentity;
-        } completion:^(BOOL finished) {
-            
-        }];
-    }
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    _editeModel = YES;
+    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(collectionViewEndEditing)];
+    self.navigationItem.rightBarButtonItem = rightBarItem;
+    [self.collectionView reloadData];
+}
+
+- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
+    
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    [self.items exchangeObjectAtIndex:fromIndexPath.row withObjectAtIndex:toIndexPath.row];
+    SSJFinancingHomeitem *fromItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
+    SSJFinancingHomeitem *toItem = [self.items ssj_safeObjectAtIndex:toIndexPath.row];
+    NSInteger tempOrder;
+    tempOrder = fromItem.fundingOrder;
+    fromItem.fundingOrder = toItem.fundingOrder;
+    toItem.fundingOrder = tempOrder;
 }
 
 #pragma mark - Getter
@@ -179,14 +218,20 @@ static BOOL KHasEnterFinancing;
         
     }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
-        if (![result isEqualToArray:weakSelf.items]) {
-            weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-            [weakSelf.collectionView reloadData];
-        }
+        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        [weakSelf.collectionView reloadData];
         [weakSelf.collectionView ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
-        
+        [weakSelf.collectionView ssj_hideLoadingIndicator];
     }];
+}
+
+-(void)collectionViewEndEditing{
+    [self.collectionView endEditing];
+    _editeModel = NO;
+    self.navigationItem.rightBarButtonItem = nil;
+    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
+    [self.collectionView reloadData];
 }
 
 -(void)transferButtonClicked{
