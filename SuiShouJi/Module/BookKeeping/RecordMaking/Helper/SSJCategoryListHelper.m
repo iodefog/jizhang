@@ -109,6 +109,7 @@
         while ([result next]) {
             SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
             item.categoryImage = [result stringForColumn:@"ccoin"];
+            item.categoryTintColor = @"969696";
             [tempArray addObject:item];
         }
         
@@ -117,6 +118,17 @@
                 success(tempArray);
             });
         }
+    }];
+}
+
++ (void)addNewCustomCategoryWithIncomeOrExpenture:(int)incomeOrExpenture
+                                             name:(NSString *)name
+                                             icon:(NSString *)icon
+                                            color:(NSString *)color
+                                          success:(void(^)())success
+                                          failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        [db executeUpdate:@"select max()"];
     }];
 }
 

@@ -203,6 +203,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 }
 
 - (void)stopLoading{
+    NSLog(@"%@", [self.penImage.layer animationForKey:kLodingViewAnimationKey]);
     [self.penImage.layer removeAnimationForKey:kLodingViewAnimationKey];
 }
 

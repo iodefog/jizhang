@@ -102,8 +102,18 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (collectionView == _newCategoryCollectionView) {
         _newCategorySelectedIndex = indexPath.item;
+        for (int i = 0; i < _items.count; i ++) {
+            SSJRecordMakingCategoryItem *item = _items[i];
+            item.selected = i == _newCategorySelectedIndex;
+        }
+        [_newCategoryCollectionView reloadData];
     } else if (collectionView == _customCategoryCollectionView) {
         _customCategorySelectedIndex = indexPath.item;
+        for (int i = 0; i < _customItems.count; i ++) {
+            SSJRecordMakingCategoryItem *item = _customItems[i];
+            item.selected = i == _customCategorySelectedIndex;
+        }
+        [_customCategoryCollectionView reloadData];
     }
 }
 
@@ -139,23 +149,27 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
     [_customItems makeObjectsPerformSelector:@selector(setCategoryColor:) withObject:colorValue];
     [_customCategoryCollectionView reloadData];
-    [_customCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_customCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+//    [_customCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_customCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
 }
 
 -(void)comfirmButtonClick:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
-//        [weakSelf getDateFromDb];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"addNewTypeNotification" object:nil];
-            [weakSelf.newCategoryCollectionView reloadData];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-            if (weakSelf.NewCategorySelectedBlock) {
-                weakSelf.NewCategorySelectedBlock(_selectedID,_selectedItem);
-            }
-        });
-    }];
+    if (_titleSegmentView.selectedIndex == 0) {
+        __weak typeof(self) weakSelf = self;
+        [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+            [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
+            //        [weakSelf getDateFromDb];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+                if (weakSelf.NewCategorySelectedBlock) {
+                    weakSelf.NewCategorySelectedBlock(_selectedID,_selectedItem);
+                }
+            });
+        }];
+        
+    } else if (_titleSegmentView.selectedIndex == 1) {
+        
+    }
+    
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     }
@@ -275,26 +289,42 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 #pragma mark - private
 - (void)loadData {
     if (_titleSegmentView.selectedIndex == 0) {
-        [_newCategoryCollectionView ssj_showLoadingIndicator];
-        [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
-            _items = result;
-            [_newCategoryCollectionView reloadData];
-            [_newCategoryCollectionView ssj_hideLoadingIndicator];
-        } failure:^(NSError *error) {
-            [_newCategoryCollectionView ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
+        if (_items.count == 0) {
+            [_newCategoryCollectionView ssj_showLoadingIndicator];
+            [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
+                _items = result;
+                
+                _newCategorySelectedIndex = MIN(_newCategorySelectedIndex, _items.count - 1);
+                SSJRecordMakingCategoryItem *selectedItem = _items[_newCategorySelectedIndex];
+                selectedItem.selected = YES;
+                
+                [_newCategoryCollectionView reloadData];
+//                [_newCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_newCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                [_newCategoryCollectionView ssj_hideLoadingIndicator];
+            } failure:^(NSError *error) {
+                [_newCategoryCollectionView ssj_hideLoadingIndicator];
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        }
     } else if (_titleSegmentView.selectedIndex == 1) {
-        [_customCategoryCollectionView ssj_showLoadingIndicator];
-        [SSJCategoryListHelper queryCustomCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<SSJRecordMakingCategoryItem *> *items) {
-            _customItems = items;
-            [self selectColorAction];
-            [_customCategoryCollectionView reloadData];
-            [_customCategoryCollectionView ssj_hideLoadingIndicator];
-        } failure:^(NSError *error) {
-            [_customCategoryCollectionView ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
+        if (_customItems.count == 0) {
+            [_customCategoryCollectionView ssj_showLoadingIndicator];
+            [SSJCategoryListHelper queryCustomCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<SSJRecordMakingCategoryItem *> *items) {
+                _customItems = items;
+                
+                _customCategorySelectedIndex = MIN(_customCategorySelectedIndex, _customItems.count - 1);
+                SSJRecordMakingCategoryItem *selectedItem = _customItems[_customCategorySelectedIndex];
+                selectedItem.selected = YES;
+                
+                [self selectColorAction];
+                [_customCategoryCollectionView reloadData];
+//                [_customCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_customCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                [_customCategoryCollectionView ssj_hideLoadingIndicator];
+            } failure:^(NSError *error) {
+                [_customCategoryCollectionView ssj_hideLoadingIndicator];
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        }
     }
 }
 

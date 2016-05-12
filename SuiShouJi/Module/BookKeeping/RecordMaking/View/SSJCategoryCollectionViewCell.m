@@ -43,19 +43,26 @@
     self.categoryName.centerX = self.width / 2;
 }
 
-- (void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
-    [self updateCategoryImage];
-}
+//- (void)setSelected:(BOOL)selected {
+//    [super setSelected:selected];
+//    [self updateCategoryImage];
+//}
 
 - (void)updateCategoryImage {
-    if (self.selected) {
+    if (_item.selected) {
         _categoryImage.tintColor = [UIColor whiteColor];
         _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _categoryImage.backgroundColor = [UIColor ssj_colorWithHex:_item.categoryColor];
     } else {
-        _categoryImage.backgroundColor = [UIColor clearColor];
-        _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        if (_item.categoryTintColor.length) {
+            _categoryImage.tintColor = [UIColor ssj_colorWithHex:_item.categoryTintColor];
+            _categoryImage.backgroundColor = [UIColor clearColor];
+            _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        } else {
+            _categoryImage.tintColor = [UIColor whiteColor];
+            _categoryImage.backgroundColor = [UIColor clearColor];
+            _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        }
     }
 }
 
@@ -65,7 +72,7 @@
     _categoryName.text = _item.categoryTitle;
     [_categoryName sizeToFit];
     [self updateCategoryImage];
-    _categoryImage.image = [UIImage imageNamed:self.item.categoryImage];
+//    _categoryImage.image = [UIImage imageNamed:self.item.categoryImage];
 }
 
 -(void)addLongPressGesture{

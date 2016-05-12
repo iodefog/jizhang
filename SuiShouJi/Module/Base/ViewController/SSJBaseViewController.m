@@ -76,9 +76,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    if (self.title.length) {
-        [MobClick endLogPageView:[self statisticsTitle]];
-    }
+    [MobClick endLogPageView:[self statisticsTitle]];
 }
 
 #pragma mark - UIResponder

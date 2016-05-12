@@ -57,8 +57,21 @@
                                              success:(void(^)(NSArray<SSJRecordMakingCategoryItem *> *items))success
                                              failure:(void (^)(NSError *error))failure;
 
++ (void)addNewCustomCategoryWithIncomeOrExpenture:(int)incomeOrExpenture
+                                             name:(NSString *)name
+                                             icon:(NSString *)icon
+                                            color:(NSString *)color
+                                          success:(void(^)())success
+                                          failure:(void (^)(NSError *error))failure;
+
+/**
+ *  自定义支出类型颜色
+ */
 + (NSArray *)payOutColors;
 
+/**
+ *  自定义收入类型颜色
+ */
 + (NSArray *)incomeColors;
 
 @end
