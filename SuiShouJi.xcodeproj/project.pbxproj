@@ -409,6 +409,10 @@
 		9C3276CC1CE339AC00109C4C /* home_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C3276CA1CE339AC00109C4C /* home_line@2x.png */; };
 		9C3276CD1CE339AC00109C4C /* home_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C3276CB1CE339AC00109C4C /* home_line@3x.png */; };
 		9C3276D11CE4154100109C4C /* SSJBookKeepingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3276D01CE4154100109C4C /* SSJBookKeepingHomeHelper.m */; };
+		9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
+		9C3276F01CE4615200109C4C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276EF1CE4615200109C4C /* AudioToolbox.framework */; };
+		9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276F11CE4615C00109C4C /* CoreTelephony.framework */; };
+		9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276F31CE4616900109C4C /* SystemConfiguration.framework */; };
 		9C4077F81CE1B3D700A61956 /* SSJMineHomeImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4077F71CE1B3D700A61956 /* SSJMineHomeImageCell.m */; };
 		9C4077FB1CE1B48900A61956 /* ft_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4077F91CE1B48900A61956 /* ft_delete@2x.png */; };
 		9C4077FC1CE1B48900A61956 /* ft_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4077FA1CE1B48900A61956 /* ft_delete@3x.png */; };
@@ -1445,6 +1449,10 @@
 		9C3276CB1CE339AC00109C4C /* home_line@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_line@3x.png"; sourceTree = "<group>"; };
 		9C3276CF1CE4154100109C4C /* SSJBookKeepingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeHelper.h; sourceTree = "<group>"; };
 		9C3276D01CE4154100109C4C /* SSJBookKeepingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeHelper.m; sourceTree = "<group>"; };
+		9C3276ED1CE4614700109C4C /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		9C3276EF1CE4615200109C4C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9C3276F11CE4615C00109C4C /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		9C3276F31CE4616900109C4C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9C4077F61CE1B3D700A61956 /* SSJMineHomeImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeImageCell.h; sourceTree = "<group>"; };
 		9C4077F71CE1B3D700A61956 /* SSJMineHomeImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeImageCell.m; sourceTree = "<group>"; };
 		9C4077F91CE1B48900A61956 /* ft_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_delete@2x.png"; sourceTree = "<group>"; };
@@ -2015,6 +2023,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */,
+				9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */,
+				9C3276F01CE4615200109C4C /* AudioToolbox.framework in Frameworks */,
+				9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */,
 				7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */,
 				7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */,
 				BD0E43F71C21365100F9179D /* Security.framework in Frameworks */,
@@ -2048,6 +2060,10 @@
 		72D2CCC3D3120C3CD45EDEB9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9C3276F31CE4616900109C4C /* SystemConfiguration.framework */,
+				9C3276F11CE4615C00109C4C /* CoreTelephony.framework */,
+				9C3276EF1CE4615200109C4C /* AudioToolbox.framework */,
+				9C3276ED1CE4614700109C4C /* libz.tbd */,
 				7D4A431D1CC86F51002F0264 /* AVFoundation.framework */,
 				BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */,
 				7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */,
@@ -4603,8 +4619,8 @@
 				00FE05383A1062C5712BB3A5 /* Check Pods Manifest.lock */,
 				BD543C381C1A6DBC00910D61 /* Sources */,
 				BD543C391C1A6DBC00910D61 /* Frameworks */,
-				BD543C3A1C1A6DBC00910D61 /* Resources */,
 				175C6C0EB66DD05297F16D8B /* Embed Pods Frameworks */,
+				BD543C3A1C1A6DBC00910D61 /* Resources */,
 				0C92DF356BA12E7AD868771B /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -5782,13 +5798,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5805,9 +5823,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -5820,13 +5838,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/AlipayZF",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/YWFramework",
+					"$(PROJECT_DIR)/SuiShouJi/Vendor/OneSDK",
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/SuiShouJi/PrefixHeader.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5843,9 +5863,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMengFeedback/UMFeedback_iOS_2.3.4/UMengFeedback_SDK/UMOpus",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "1ac79ce1-9d60-4bb6-8e3d-865510fa26ff";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

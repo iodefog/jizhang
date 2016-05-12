@@ -86,6 +86,8 @@ extern NSString *const SSJWeiXinSecret;
 //qq appkey
 extern NSString *const SSJQQAppKey;
 
+//阿里百川 appkey
+extern NSString *const SSJYWAppKey;
 
 /** -------------------- KEY -------------------- */
 //上一次选择的资金账户类型

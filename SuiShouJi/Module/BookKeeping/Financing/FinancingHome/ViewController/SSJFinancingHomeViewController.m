@@ -82,6 +82,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self collectionViewEndEditing];
+}
+
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -55,7 +55,7 @@
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],

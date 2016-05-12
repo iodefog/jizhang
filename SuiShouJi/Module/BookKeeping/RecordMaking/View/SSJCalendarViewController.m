@@ -293,7 +293,7 @@
             }else{
                 [weakSelf.tableView ssj_hideWatermark:YES];
             }
-            [weakSelf.tableView reloadData];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
         }
         weakSelf.calendarView.data = data;
         [weakSelf.view ssj_hideLoadingIndicator];
