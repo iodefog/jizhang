@@ -106,13 +106,13 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
+//    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     rightSpace.width = -15;
-    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
-    leftSpace.width = -10;
+//    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+//    leftSpace.width = -10;
 //    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
-    self.navigationItem.leftBarButtonItems = @[leftBarButtonItem];
+    self.navigationItem.titleView = self.budgetButton;
     self.navigationItem.rightBarButtonItems = @[rightSpace, self.rightBarButton];
     
     //  数据库初始化完成后再查询数据
@@ -161,7 +161,7 @@
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
-    self.homeButton.size = CGSizeMake(96, 96);
+    self.homeButton.size = CGSizeMake(106, 106);
     self.homeButton.top = self.bookKeepingHeader.bottom - 60;
     self.homeButton.centerX = self.view.width / 2;
     self.statusLabel.height = 21;
@@ -206,7 +206,7 @@
             currentCell.incomeMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
             currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
         }
-        [UIView animateWithDuration:0.7 delay:0 usingSpringWithDamping:0.2 initialSpringVelocity:3.f options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:0.7 animations:^{
             currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
             currentCell.incomeLabel.transform = CGAffineTransformIdentity;
@@ -215,7 +215,7 @@
             currentCell.expentureImage.layer.transform = CATransform3DIdentity;
             currentCell.IncomeImage.layer.transform = CATransform3DIdentity;
         } completion:^(BOOL finished) {
-//            [currentCell shake];
+            [currentCell shake];
         }];
         [self.newlyAddIndexArr removeObject:@(indexPath.row)];
     }else{
@@ -255,8 +255,10 @@
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (scrollView.contentOffset.y < -38) {
-        [self.homeButton stopLoading];
+    [self.homeButton stopLoading];
+    if (scrollView.contentOffset.y < - 80) {
+        _isRefreshing = NO;
+        
         __weak typeof(self) weakSelf = self;
         SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
         recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
@@ -284,11 +286,16 @@
     }
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y < 0 && self.items.count != 0) {
-        self.tableView.lineHeight = 100;
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y < -38 && self.items.count != 0 && self.tableView) {
+        self.tableView.lineHeight = - scrollView.contentOffset.y;
+        if (scrollView.dragging && !_isRefreshing) {
+            [self.homeButton startAnimating];
+            _isRefreshing = YES;
+        }
+    }else{
+        _isRefreshing = NO;
     }
-    [self.homeButton startAnimating];
 }
 
 
@@ -422,8 +429,8 @@
 
 -(SSJBookKeepingButton *)homeButton{
     if (!_homeButton) {
-        _homeButton = [[SSJBookKeepingButton alloc]initWithFrame:CGRectMake(0, 0, 96, 96)];
-        _homeButton.layer.cornerRadius = 48.f;
+        _homeButton = [[SSJBookKeepingButton alloc]initWithFrame:CGRectMake(0, 0, 106, 106)];
+        _homeButton.layer.cornerRadius = 53.f;
         __weak typeof(self) weakSelf = self;
         _homeButton.recordMakingClickBlock = ^(){
             SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
