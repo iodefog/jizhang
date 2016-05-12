@@ -31,7 +31,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 }
 
 - (void)setColors:(NSArray *)colors {
-    if (![colors isEqualToArray:colors]) {
+    if (![_colors isEqualToArray:colors]) {
         _colors = colors;
         [_collectionView reloadData];
     }

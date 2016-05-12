@@ -40,6 +40,8 @@
 //  代理协议；注意：只能设置customDelegate，设置delegate无效
 @property (nonatomic, assign) id <SCYSlidePagingHeaderViewDelegate> customDelegate;
 
+@property (nonatomic) BOOL enable;
+
 //  获取按钮数组
 - (NSArray *)getButtons;
 

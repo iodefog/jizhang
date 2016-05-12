@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) NSMutableArray *buttons;
 @property (nonatomic) CGSize tabSize;
-@property (nonatomic, strong) UIView *bottomLine;
+//@property (nonatomic, strong) UIView *bottomLine;
 
 @end
 
@@ -20,6 +20,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        _enable = YES;
         _titleFont = 15;
         _titleColor = [UIColor lightGrayColor];
         _selectedTitleColor = [UIColor blueColor];
@@ -29,9 +30,9 @@
         _tabView.backgroundColor = _selectedTitleColor;
         [self addSubview:_tabView];
         
-        _bottomLine = [[UIView alloc] init];
-        _bottomLine.backgroundColor = [UIColor blueColor];
-        [self addSubview:_bottomLine];
+//        _bottomLine = [[UIView alloc] init];
+//        _bottomLine.backgroundColor = [UIColor blueColor];
+//        [self addSubview:_bottomLine];
         
         self.backgroundColor = [UIColor whiteColor];
         self.showsHorizontalScrollIndicator = NO;
@@ -77,8 +78,8 @@
     _tabView.centerX = width * 0.5 + width * _selectedIndex;
     self.contentSize = CGSizeMake(width * _buttons.count, height);
     
-    CGFloat scale = [UIScreen mainScreen].scale;
-    _bottomLine.frame = CGRectMake(0, self.height - 1 / scale, self.contentSize.width, 1 / scale);
+//    CGFloat scale = [UIScreen mainScreen].scale;
+//    _bottomLine.frame = CGRectMake(0, self.height - 1 / scale, self.contentSize.width, 1 / scale);
 }
 
 - (void)setDelegate:(id<UIScrollViewDelegate>)delegate {
@@ -135,6 +136,15 @@
         }
         [button setTitleColor:_selectedTitleColor forState:UIControlStateSelected];
         [button setTitleColor:_selectedTitleColor forState:(UIControlStateHighlighted | UIControlStateSelected)];
+    }
+}
+
+- (void)setEnable:(BOOL)enable {
+    if (_enable != enable) {
+        _enable = enable;
+        for (UIButton *btn in _buttons) {
+            btn.enabled = enable;
+        }
     }
 }
 
@@ -200,6 +210,7 @@
         [button setTitleColor:_selectedTitleColor forState:UIControlStateSelected];
         [button setTitleColor:_selectedTitleColor forState:(UIControlStateHighlighted | UIControlStateSelected)];
         button.selected = idx == _selectedIndex;
+        button.enabled = _enable;
         [_buttons addObject:button];
         [self addSubview:button];
     }
