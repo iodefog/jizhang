@@ -36,8 +36,6 @@
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
-#import <YWFeedbackFMWK/YWFeedbackKit.h>
-
 
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"周期记账";
@@ -59,9 +57,6 @@ static NSString *const kTitle6 = @"设置";
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 
-@property (nonatomic, strong) YWFeedbackKit *feedbackKit;
-
-
 
 //  手势密码开关
 @property (nonatomic, strong) UISwitch *motionSwitch;
@@ -70,7 +65,6 @@ static NSString *const kTitle6 = @"设置";
 
 @implementation SSJMineHomeViewController{
     NSArray *_titleForSectionTwoArray;
-    SSJUserInfoItem *_userItem;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -101,7 +95,6 @@ static NSString *const kTitle6 = @"设置";
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
-        _userItem = item;
     }];
     
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
@@ -187,33 +180,8 @@ static NSString *const kTitle6 = @"设置";
     
     //意见反馈
     if ([title isEqualToString:kTitle4]) {
-        __weak typeof(self) weakSelf = self;
-        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
-            if ( viewController != nil ) {
-#warning 这里可以设置你需要显示的标题
-                viewController.title = @"反馈界面";
-                
-                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
-                [weakSelf presentViewController:nav animated:YES completion:nil];
-                
-                viewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:weakSelf action:@selector(actionQuitFeedback)];
-                
-                __weak typeof(nav) weakNav = nav;
-                
-                [viewController setOpenURLBlock:^(NSString *aURLString, UIViewController *aParentController) {
-                    UIViewController *webVC = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-                    UIWebView *webView = [[UIWebView alloc] initWithFrame:webVC.view.bounds];
-                    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-                    
-                    [webVC.view addSubview:webView];
-                    [weakNav pushViewController:webVC animated:YES];
-                    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:aURLString]]];
-                }];
-            } else {
-                NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
-            }
-        }];
-
+        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
+                                             animated:YES];
     }
     
     //数据导出
@@ -233,19 +201,6 @@ static NSString *const kTitle6 = @"设置";
 //        [self.navigationController pushViewController:settingVC animated:YES];
 //    }
 }
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    NSMutableArray *titleArr = [NSMutableArray array];
-//    [titleArr addObjectsFromArray:self.titles];
-//    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
-//    currentCell.transform = CGAffineTransformMakeTranslation(self.view.width , 0);
-//    [UIView animateWithDuration:0.7 delay:0.1 * [self.titles indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
-//        currentCell.transform = CGAffineTransformIdentity;
-//    } completion:^(BOOL finished) {
-//        
-//    }];
-}
-
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.titles[section] count];
@@ -282,7 +237,7 @@ static NSString *const kTitle6 = @"设置";
 -(SSJMineHomeTableViewHeader *)header{
     if (!_header) {
         __weak typeof(self) weakSelf = self;
-        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];
+        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];\
         _header.HeaderClickedBlock = ^(){
             [weakSelf loginButtonClicked];
         };
@@ -301,25 +256,6 @@ static NSString *const kTitle6 = @"设置";
         };
     }
     return _header;
-}
-
--(YWFeedbackKit *)feedbackKit{
-    if (!_feedbackKit) {
-        NSString *avtarUrl;
-        if ([_userItem.cicon hasPrefix:@"http"]) {
-            avtarUrl = _userItem.cicon;
-        }else{
-            avtarUrl = SSJImageURLWithAPI(_userItem.cicon);
-        }
-        _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:@"60028148"];
-        _feedbackKit.customUIPlist = @{@"bgColor":@"#eb4a64",
-                                       @"color":@"#393939",
-                                       @"avatar":avtarUrl};
-        _feedbackKit.extInfo = @{@"userid":_userItem.cuserid ,
-                                 @"loginType":@(SSJUserLoginType()),
-                                 @"mobileNo":_userItem.cmobileno};
-    }
-    return _feedbackKit;
 }
 
 #pragma mark - Event
@@ -369,7 +305,6 @@ static NSString *const kTitle6 = @"设置";
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
         weakSelf.header.item = item;
-        _userItem = item;
     }];
 }
 
