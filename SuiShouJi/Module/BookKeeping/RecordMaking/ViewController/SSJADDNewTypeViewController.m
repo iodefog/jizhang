@@ -149,13 +149,12 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
     [_customItems makeObjectsPerformSelector:@selector(setCategoryColor:) withObject:colorValue];
     [_customCategoryCollectionView reloadData];
-//    [_customCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_customCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
 }
 
 -(void)comfirmButtonClick:(id)sender{
     if (_titleSegmentView.selectedIndex == 0) {
         __weak typeof(self) weakSelf = self;
-        [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
             [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
             //        [weakSelf getDateFromDb];
             dispatch_async(dispatch_get_main_queue(), ^(){
@@ -167,7 +166,24 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         }];
         
     } else if (_titleSegmentView.selectedIndex == 1) {
+        NSString *name = _customTypeInputView.text;
+        if (name.length == 0) {
+            [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
+            return;
+        } else if (name.length > 5) {
+            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
+            return;
+        }
         
+        SSJRecordMakingCategoryItem *selectedItem = [_customItems ssj_safeObjectAtIndex:_customCategorySelectedIndex];
+        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:name icon:selectedItem.categoryImage color:selectedItem.categoryColor success:^{
+            [self.navigationController popViewControllerAnimated:YES];
+            if (self.NewCategorySelectedBlock) {
+                self.NewCategorySelectedBlock(_selectedID, _selectedItem);
+            }
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+        }];
     }
     
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
