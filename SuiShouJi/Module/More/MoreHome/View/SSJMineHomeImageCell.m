@@ -28,7 +28,7 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.cellImageView.size = CGSizeMake(40, 40);
+    self.cellImageView.size = CGSizeMake(22, 22);
     self.cellImageView.left = 10;
     self.cellImageView.centerY = self.height / 2;
     self.titleLabel.left = self.cellImageView.right + 10;

@@ -1300,13 +1300,13 @@
 		7DE69C531C8EDF34001D31C1 /* motion_circle_error@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "motion_circle_error@3x.png"; sourceTree = "<group>"; };
 		7DE69C691C8F04DB001D31C1 /* SSJMotionPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordViewController.h; sourceTree = "<group>"; };
 		7DE69C6A1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMotionPasswordViewController.m; sourceTree = "<group>"; };
-		7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@2x.png"; sourceTree = "<group>"; };
-		7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_lock@3x.png"; sourceTree = "<group>"; };
+		7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login_lock@2x.png"; path = "../login_lock@2x.png"; sourceTree = "<group>"; };
+		7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login_lock@3x.png"; path = "../login_lock@3x.png"; sourceTree = "<group>"; };
 		7DE6E8661C55DB75001C9138 /* SSJBaselineTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaselineTextField.h; sourceTree = "<group>"; };
 		7DE6E8671C55DB75001C9138 /* SSJBaselineTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBaselineTextField.m; sourceTree = "<group>"; };
 		7DE6E86A1C55DD9C001C9138 /* SSJRegistOrderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRegistOrderView.h; sourceTree = "<group>"; };
 		7DE6E86B1C55DD9C001C9138 /* SSJRegistOrderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRegistOrderView.m; sourceTree = "<group>"; };
-		7DE6E86D1C55E61F001C9138 /* register_agreement@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "register_agreement@2x.png"; sourceTree = "<group>"; };
+		7DE6E86D1C55E61F001C9138 /* register_agreement@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "register_agreement@2x.png"; path = "../register_agreement@2x.png"; sourceTree = "<group>"; };
 		7DE6E86F1C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJForgetPasswordFirstStepViewController.h; sourceTree = "<group>"; };
 		7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJForgetPasswordFirstStepViewController.m; sourceTree = "<group>"; };
 		7DE6E8721C5641B6001C9138 /* SSJForgetPasswordSecondStepViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJForgetPasswordSecondStepViewController.h; sourceTree = "<group>"; };
@@ -1491,8 +1491,8 @@
 		9C3277711CE4AC7E00109C4C /* more_tongbu_s@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_tongbu_s@3x.png"; sourceTree = "<group>"; };
 		9C3277721CE4AC7E00109C4C /* more_tongbucircle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_tongbucircle@2x.png"; sourceTree = "<group>"; };
 		9C3277731CE4AC7E00109C4C /* more_tongbucircle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_tongbucircle@3x.png"; sourceTree = "<group>"; };
-		9C32777A1CE56BC300109C4C /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
-		9C32777B1CE56BC300109C4C /* login_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@3x.png"; sourceTree = "<group>"; };
+		9C32777A1CE56BC300109C4C /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login_bg@2x.png"; path = "../login_bg@2x.png"; sourceTree = "<group>"; };
+		9C32777B1CE56BC300109C4C /* login_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login_bg@3x.png"; path = "../login_bg@3x.png"; sourceTree = "<group>"; };
 		9C4077F61CE1B3D700A61956 /* SSJMineHomeImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeImageCell.h; sourceTree = "<group>"; };
 		9C4077F71CE1B3D700A61956 /* SSJMineHomeImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHomeImageCell.m; sourceTree = "<group>"; };
 		9C4077F91CE1B48900A61956 /* ft_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_delete@2x.png"; sourceTree = "<group>"; };
@@ -1920,7 +1920,7 @@
 		BD976FBF1C4F57F200B0E26D /* circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle@3x.png"; sourceTree = "<group>"; };
 		BD976FC11C4F57F700B0E26D /* solid_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "solid_circle@2x.png"; sourceTree = "<group>"; };
 		BD976FC31C4F57FB00B0E26D /* solid_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "solid_circle@3x.png"; sourceTree = "<group>"; };
-		BDA2EEFB1C8B16FB007DD45F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		BDA2EEFB1C8B16FB007DD45F /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../icon.png; sourceTree = "<group>"; };
 		BDA2EF051C8D8A75007DD45F /* SSJCustomNavigationBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomNavigationBarButton.h; sourceTree = "<group>"; };
 		BDA2EF061C8D8A75007DD45F /* SSJCustomNavigationBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomNavigationBarButton.m; sourceTree = "<group>"; };
 		BDA2EF081C8D9B50007DD45F /* SSJHomeBudgetButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBudgetButton.h; sourceTree = "<group>"; };
@@ -2624,8 +2624,6 @@
 		7DD7D5D51C4C8E6A00ACE71A /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				9C32777A1CE56BC300109C4C /* login_bg@2x.png */,
-				9C32777B1CE56BC300109C4C /* login_bg@3x.png */,
 				9C4077FD1CE1B84000A61956 /* MoreImage */,
 				7D4540841CBB71CE000A4266 /* BookkeepingTree */,
 				7DE74BD31C9AE9C600D27E7D /* Default */,
@@ -2634,10 +2632,6 @@
 				7DE69C491C8EDF34001D31C1 /* motion_password */,
 				BDF504721C868A8200DCFA99 /* MakeARecordImage */,
 				7DF8DECB1C59BFE700CC5DFA /* Guide */,
-				BDA2EEFB1C8B16FB007DD45F /* icon.png */,
-				7DE6E86D1C55E61F001C9138 /* register_agreement@2x.png */,
-				7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */,
-				7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */,
 				BD976FAE1C4F1AC200B0E26D /* add@2x.png */,
 				BD976FAF1C4F1AC200B0E26D /* add@3x.png */,
 				7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */,
@@ -3494,6 +3488,8 @@
 		9C4077FD1CE1B84000A61956 /* MoreImage */ = {
 			isa = PBXGroup;
 			children = (
+				9C32777A1CE56BC300109C4C /* login_bg@2x.png */,
+				9C32777B1CE56BC300109C4C /* login_bg@3x.png */,
 				9C32776E1CE4AC7E00109C4C /* more_tongbu_f@2x.png */,
 				9C32776F1CE4AC7E00109C4C /* more_tongbu_f@3x.png */,
 				9C3277701CE4AC7E00109C4C /* more_tongbu_s@2x.png */,
@@ -3522,6 +3518,10 @@
 				9C4078051CE1B84000A61956 /* more_tongbu@3x.png */,
 				9C4078061CE1B84000A61956 /* more_weixin@2x.png */,
 				9C4078071CE1B84000A61956 /* more_weixin@3x.png */,
+				7DE6E85D1C55BA7B001C9138 /* login_lock@2x.png */,
+				7DE6E85E1C55BA7B001C9138 /* login_lock@3x.png */,
+				7DE6E86D1C55E61F001C9138 /* register_agreement@2x.png */,
+				BDA2EEFB1C8B16FB007DD45F /* icon.png */,
 			);
 			path = MoreImage;
 			sourceTree = "<group>";

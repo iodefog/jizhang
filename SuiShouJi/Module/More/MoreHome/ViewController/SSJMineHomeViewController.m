@@ -83,8 +83,7 @@ static NSString *const kTitle6 = @"设置";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.tableHeaderView = self.header;
-    [self.tableView reloadData];
+    [self.view addSubview:self.header];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -118,6 +117,13 @@ static NSString *const kTitle6 = @"设置";
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
 }
 
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    self.header.size = CGSizeMake(self.view.width, 155);
+    self.header.leftTop = CGPointMake(0, 64);
+    self.tableView.top = self.header.bottom - 64;
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.userInfoService cancel];
@@ -125,6 +131,10 @@ static NSString *const kTitle6 = @"设置";
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle4]) {
+        return 65;
+    }
     return 55;
 }
 
@@ -212,6 +222,7 @@ static NSString *const kTitle6 = @"设置";
                 }];
             } else {
                 NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
+                [CDAutoHideMessageHUD showMessage:title];
             }
         }];
 
@@ -286,15 +297,6 @@ static NSString *const kTitle6 = @"设置";
         _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];
         _header.HeaderClickedBlock = ^(){
             [weakSelf loginButtonClicked];
-        };
-        _header.syncButtonClickBlock = ^(){
-            [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:^(SSJDataSynchronizeType type){
-                if (type == SSJDataSynchronizeTypeData) {
-                    
-                }
-            }failure:^(SSJDataSynchronizeType type, NSError *error) {
-            
-            }];
         };
         _header.checkInButtonClickBlock = ^(){
             SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];

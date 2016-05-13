@@ -7,16 +7,18 @@
 //
 
 #import "SSJMineHomeTableViewHeader.h"
+#import "SSJMineSyncButton.h"
 
 @interface SSJMineHomeTableViewHeader()
 @property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
 @property (nonatomic, strong) UILabel *nicknameLabel;
 @property(nonatomic, strong) UILabel *checkInLevelLabel;
 @property(nonatomic, strong) UIButton *checkInButton;
-@property(nonatomic, strong) UIButton *syncButton;
+//@property(nonatomic, strong) UIButton *syncButton;
 @property(nonatomic, strong) UIView *verticalSepertorLine;
 @property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) UIButton *loginButton;
+@property(nonatomic, strong) SSJMineSyncButton *syncButton;
 @end
 
 @implementation SSJMineHomeTableViewHeader
@@ -100,17 +102,12 @@
     return _checkInButton;
 }
 
--(UIButton *)syncButton{
+-(SSJMineSyncButton *)syncButton{
     if (!_syncButton) {
-        _syncButton = [[UIButton alloc]init];
-        [_syncButton setTitle:@"云同步" forState:UIControlStateNormal];
-        [_syncButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_syncButton setImage:[UIImage imageNamed:@"more_tongbu"] forState:UIControlStateNormal];
-        _syncButton.titleLabel.font = [UIFont systemFontOfSize:16];
+        _syncButton = [[SSJMineSyncButton alloc]init];
         [_syncButton ssj_setBorderStyle:SSJBorderStyleTop];
         [_syncButton ssj_setBorderColor:[UIColor whiteColor]];
         [_syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
-        [_syncButton addTarget:self action:@selector(syncButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _syncButton;
 }
