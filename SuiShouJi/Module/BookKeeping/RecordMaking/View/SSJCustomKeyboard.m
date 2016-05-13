@@ -81,7 +81,7 @@ static id _instance;
         ((SSJCustomKeyBoardButton*)([self.numButtonArray objectAtIndex:i])).frame = CGRectMake(i % 3 * _buttonWight, i / 3 * _buttonHeight, _buttonWight, _buttonHeight);
     }
     self.DecimalButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.DecimalButton.leftBottom = CGPointMake(0, 200);
+    self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
     self.ClearButton.size = CGSizeMake(_buttonWight, _buttonHeight);
