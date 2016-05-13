@@ -6,7 +6,7 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-static BOOL KHasEnterFinancing;
+static BOOL KHasEnterFinancingHome;
 
 static NSString * SSJFinancingNormalCellIdentifier = @"financingHomeNormalCell";
 
@@ -103,13 +103,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (!KHasEnterFinancing) {
+    if (!KHasEnterFinancingHome) {
         SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
         currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
         [UIView animateWithDuration:0.2 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
             currentCell.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
-            KHasEnterFinancing = YES;
+            KHasEnterFinancingHome = YES;
         }];
     }
 }

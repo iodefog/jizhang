@@ -46,6 +46,7 @@ static NSString *const kTitle4 = @"意见反馈";
 static NSString *const kTitle5 = @"给个好评";
 static NSString *const kTitle6 = @"设置";
 
+static BOOL KHasEnterMineHome;
 
 
 @interface SSJMineHomeViewController ()
@@ -69,7 +70,7 @@ static NSString *const kTitle6 = @"设置";
 @end
 
 @implementation SSJMineHomeViewController{
-    NSArray *_titleForSectionTwoArray;
+    NSArray *_titleArr;
     SSJUserInfoItem *_userItem;
 }
 
@@ -92,9 +93,12 @@ static NSString *const kTitle6 = @"设置";
     if ([SSJStartChecker sharedInstance].isInReview) {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
         self.titles = @[@[kTitle1 , kTitle2], @[kTitle3],@[kTitle4 , kTitle6]];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle6];
     } else {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]];
         self.titles = @[@[kTitle1 , kTitle2], @[kTitle3], @[kTitle4 , kTitle5 , kTitle6]];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle5 , kTitle4 , kTitle6];
+
     }
 
     __weak typeof(self) weakSelf = self;
@@ -247,15 +251,15 @@ static NSString *const kTitle6 = @"设置";
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    NSMutableArray *titleArr = [NSMutableArray array];
-//    [titleArr addObjectsFromArray:self.titles];
-//    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
-//    currentCell.transform = CGAffineTransformMakeTranslation(self.view.width , 0);
-//    [UIView animateWithDuration:0.7 delay:0.1 * [self.titles indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
-//        currentCell.transform = CGAffineTransformIdentity;
-//    } completion:^(BOOL finished) {
-//        
-//    }];
+    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
+    if (!KHasEnterMineHome) {
+        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
+        [UIView animateWithDuration:0.3 delay:0.1 * [_titleArr indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            currentCell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            KHasEnterMineHome = YES;
+        }];
+    }
 }
 
 #pragma mark - UITableViewDataSource
