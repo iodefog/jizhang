@@ -65,7 +65,7 @@
     [self setNeedsLayout];
     
     NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"亲爱的用户，您在"];
-    [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]}]];
+    [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"eb4a64"]}]];
     [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"开启了记账之旅"]];
     self.titleLab.attributedText = title;
     

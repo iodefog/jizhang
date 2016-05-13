@@ -96,7 +96,7 @@
         _goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _goBackBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_goBackBtn setTitle:@"返回首页" forState:UIControlStateNormal];
-        [_goBackBtn setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_goBackBtn setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         [_goBackBtn addTarget:self action:@selector(goBackHomeAction) forControlEvents:UIControlEventTouchUpInside];
         [_goBackBtn sizeToFit];
         _goBackBtn.center = CGPointMake(self.view.width * 0.5, 260);

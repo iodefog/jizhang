@@ -67,7 +67,7 @@
     self.beginDateLab.text = [NSString stringWithFormat:@"开始时间：%@",item.beginDate];
     [self.beginDateLab sizeToFit];
     
-    UIColor *paymentColor = item.payment > item.budget ? [UIColor redColor] : [UIColor ssj_colorWithHex:@"47cfbe"];
+    UIColor *paymentColor = item.payment > item.budget ? [UIColor redColor] : [UIColor ssj_colorWithHex:@"eb4a64"];
     NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", item.payment]];
     [paymentStr setAttributes:@{NSForegroundColorAttributeName:paymentColor} range:NSMakeRange(3, paymentStr.length - 3)];
     self.paymentLab.attributedText = paymentStr;

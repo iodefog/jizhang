@@ -80,7 +80,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     [self loadAllData];
 }
 

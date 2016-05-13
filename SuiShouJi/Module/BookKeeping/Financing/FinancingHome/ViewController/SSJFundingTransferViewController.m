@@ -81,7 +81,7 @@
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked)];
-        _rightButton.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _rightButton.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
     }
     return _rightButton;
 }
@@ -90,7 +90,7 @@
     if (_transferIntext == nil) {
         _transferIntext = [[UITextField alloc]init];
 //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        [_transferIntext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
+        [_transferIntext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
         [_transferIntext ssj_setBorderStyle:SSJBorderStyleBottom];
         _transferIntext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferIntext.font = [UIFont systemFontOfSize:24];
@@ -111,7 +111,7 @@
     if (_transferOuttext == nil) {
         _transferOuttext = [[UITextField alloc]init];
         //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        [_transferOuttext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"]];
+        [_transferOuttext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
         [_transferOuttext ssj_setBorderStyle:SSJBorderStyleBottom];
         _transferOuttext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferOuttext.font = [UIFont systemFontOfSize:24];

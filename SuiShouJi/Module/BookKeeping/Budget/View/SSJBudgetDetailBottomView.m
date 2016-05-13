@@ -44,11 +44,11 @@
         _button = [[SSJBorderButton alloc] init];
         [_button setFontSize:21];
         [_button setTitle:@"编辑" forState:SSJBorderButtonStateNormal];
-        [_button setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateNormal];
+        [_button setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
         [_button setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [_button setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateNormal];
+        [_button setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
         [_button setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
-        [_button setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateHighlighted];
+        [_button setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateHighlighted];
     }
     return _button;
 }

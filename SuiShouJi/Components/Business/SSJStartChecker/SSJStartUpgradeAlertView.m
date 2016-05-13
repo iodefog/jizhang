@@ -194,7 +194,7 @@ static const NSTimeInterval kDuration = 0.3;
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _cancelButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[[_cancelButton titleColorForState:UIControlStateNormal] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
         [_cancelButton addTarget:self action:@selector(cancelButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_cancelButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
@@ -208,7 +208,7 @@ static const NSTimeInterval kDuration = 0.3;
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_sureButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_sureButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         [_sureButton setTitleColor:[[_sureButton titleColorForState:UIControlStateNormal] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
         [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_sureButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];

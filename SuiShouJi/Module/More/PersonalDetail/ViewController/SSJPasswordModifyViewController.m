@@ -112,7 +112,7 @@
         [comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         comfirmButton.layer.cornerRadius = 3.f;
         comfirmButton.layer.masksToBounds = YES;
-        [comfirmButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [comfirmButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         [comfirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         comfirmButton.center = CGPointMake(_comfirmView.width / 2, _comfirmView.height / 2);
