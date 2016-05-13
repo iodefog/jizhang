@@ -48,12 +48,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 @end
 
-@implementation SSJADDNewTypeViewController{
-    NSIndexPath *_selectedIndex;
-    NSString *_selectedID;
-    SSJRecordMakingCategoryItem *_selectedItem;
-    SSJRecordMakingCategoryItem *_defualtItem;
-}
+@implementation SSJADDNewTypeViewController
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -154,13 +149,14 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 -(void)comfirmButtonClick:(id)sender{
     if (_titleSegmentView.selectedIndex == 0) {
         __weak typeof(self) weakSelf = self;
+        SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:_newCategorySelectedIndex];
         [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-            [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],_selectedID,SSJUSERID()];
+            [db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],item.categoryID,SSJUSERID()];
             //        [weakSelf getDateFromDb];
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [weakSelf.navigationController popViewControllerAnimated:YES];
-                if (weakSelf.NewCategorySelectedBlock) {
-                    weakSelf.NewCategorySelectedBlock(_selectedID,_selectedItem);
+                if (weakSelf.addNewCategoryAction) {
+                    weakSelf.addNewCategoryAction(item.categoryID);
                 }
             });
         }];
@@ -176,10 +172,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         }
         
         SSJRecordMakingCategoryItem *selectedItem = [_customItems ssj_safeObjectAtIndex:_customCategorySelectedIndex];
-        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:name icon:selectedItem.categoryImage color:selectedItem.categoryColor success:^{
+        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:name icon:selectedItem.categoryImage color:selectedItem.categoryColor success:^(NSString *categoryId){
             [self.navigationController popViewControllerAnimated:YES];
-            if (self.NewCategorySelectedBlock) {
-                self.NewCategorySelectedBlock(_selectedID, _selectedItem);
+            if (self.addNewCategoryAction) {
+                self.addNewCategoryAction(categoryId);
             }
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:[error localizedDescription]];

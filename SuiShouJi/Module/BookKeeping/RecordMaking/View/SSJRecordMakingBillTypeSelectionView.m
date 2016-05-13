@@ -134,6 +134,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 }
 
 - (void)setItems:(NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *)items {
+    _selectedIndex = 0;
+    _lastSelectedIndex = 0;
     [_internalItems removeAllObjects];
     if (items) {
         [_internalItems addObjectsFromArray:items];

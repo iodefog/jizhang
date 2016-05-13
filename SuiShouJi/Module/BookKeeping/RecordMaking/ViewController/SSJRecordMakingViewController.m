@@ -51,7 +51,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 @property (nonatomic) NSInteger selectChargeCircleType;
 @property (nonatomic,strong) NSString *chargeMemo;
 @property (nonatomic,strong) NSString *categoryID;
-@property (nonatomic,strong) NSString *defualtID;
+//@property (nonatomic,strong) NSString *defualtID;
 @property (nonatomic,strong) SSJFundingItem *selectItem;
 @property (nonatomic,strong) SSJFundingItem *defualtItem;
 
@@ -118,178 +118,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 #pragma mark - Getter
-//-(SSJNewCategoryCollectionView*)categoryListView{
-//    if (_categoryListView == nil) {
-//        _categoryListView = [[SSJNewCategoryCollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 390)];
-//        _categoryListView.selectedId = self.defualtID;
-//        __weak typeof(self) weakSelf = self;
-//        _categoryListView.removeFromCategoryListBlock = ^(){
-//            [weakSelf getCategoryList];
-//            [weakSelf getDefualtColorAndDefualtId];
-//        };
-//        _categoryListView.ItemClickedBlock = ^(SSJRecordMakingCategoryItem *item){
-//            if (![item.categoryTitle isEqualToString:@"添加"]) {
-//                weakSelf.categoryID = item.categoryTitle;
-//                [UIView animateWithDuration:kAnimationDuration animations:^{
-//                    weakSelf.categoryNameLabel.text = item.categoryTitle;
-//                    [weakSelf.categoryNameLabel sizeToFit];
-//                    weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
-//                    weakSelf.categoryImage.tintColor = [UIColor whiteColor];
-//                    weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//                    weakSelf.categoryID = item.categoryID;
-//                }];
-//            }else{
-//                SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
-//                addNewTypeVc.incomeOrExpence = !
-//                weakSelf.titleSegment.selectedSegmentIndex;
-//                addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
-//                    weakSelf.categoryListView.selectedId = categoryID;
-//                    weakSelf.categoryID = categoryID;
-//                    weakSelf.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//                    weakSelf.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
-//                    [weakSelf.categoryListView reloadData];
-//                };
-//                [weakSelf.navigationController pushViewController:addNewTypeVc animated:YES];
-//            }
-//        };
-//        
-//    }
-//    return _categoryListView;
-//}
-
-//-(UITextField*)textInput{
-//    if (!_textInput) {
-//        _textInput = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, 200, 44)];
-//        _textInput.tintColor = [UIColor whiteColor];
-//        _textInput.inputView = [SSJCustomKeyboard sharedInstance];
-//        _textInput.delegate = self;
-//        _textInput.textColor = [UIColor whiteColor];
-//        _textInput.font = [UIFont systemFontOfSize:30];
-//        _textInput.textAlignment = NSTextAlignmentRight;
-//        _textInput.placeholder = @"0.00";
-//        [_textInput setValue:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
-//        if (self.item != nil) {
-//            _textInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
-//            _textInput.textColor = [UIColor whiteColor];
-//        }
-//    }
-//    return _textInput;
-//}
-
-//-(UIImageView*)categoryImage{
-//    if (!_categoryImage) {
-//        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-//        _categoryImage.layer.masksToBounds = YES;
-//        _categoryImage.tintColor = [UIColor whiteColor];
-//        _categoryImage.image = [[UIImage imageNamed:_defualtImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//    }
-//    return _categoryImage;
-//}
-
-//-(SSJRecordMakingAdditionalView*)additionalView{
-//    if (!_additionalView ) {
-//        _additionalView = [SSJRecordMakingAdditionalView RecordMakingAdditionalView];
-//        _additionalView.selectedImage = self.selectedImage;
-//        if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
-//            _additionalView.hasMemo = YES;
-//        }else{
-//            _additionalView.hasMemo = NO;
-//        }
-//        if (self.selectChargeCircleType != -1) {
-//            _additionalView.hasCircle = YES;
-//        }else{
-//            _additionalView.hasCircle = NO;
-//        }
-//        _additionalView.frame = CGRectMake(0, 0, self.view.width, 200);
-//        _additionalView.selectedImage = self.selectedImage;
-//        __weak typeof(self) weakSelf = self;
-//        _additionalView.btnClickedBlock = ^(NSInteger buttonTag){
-//            if (buttonTag == 1) {
-//                [MobClick event:@"1"];
-//                if (weakSelf.selectedImage == nil) {
-//                    UIActionSheet *sheet;
-//                    sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:weakSelf cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
-//                    [sheet showInView:weakSelf.view];
-//                }else{
-//                    SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
-//                    imageBrowserVC.image = weakSelf.selectedImage;
-//                    imageBrowserVC.NewImageSelectedBlock = ^(UIImage *image){
-//                        weakSelf.additionalView.selectedImage = image;
-//                        weakSelf.selectedImage = image;
-//                    };
-//                    imageBrowserVC.DeleteImageBlock = ^(){
-//                        weakSelf.additionalView.selectedImage = nil;
-//                        weakSelf.selectedImage = nil;
-//                    };
-//                    [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
-//                }
-//            }else if (buttonTag == 4){
-//                if ([weakSelf.textInput.text doubleValue] <= 0 || [weakSelf.textInput.text isEqualToString:@""]) {
-//                    [CDAutoHideMessageHUD showMessage:@"记账金额必须大于0"];
-//                    return;
-//                }
-//                [weakSelf makeArecord];
-//            }else if (buttonTag == 3){
-//                [MobClick event:@"3"];
-//                [weakSelf.ChargeCircleSelectView show];
-//            }else if (buttonTag == 2){
-//                [MobClick event:@"2"];
-//                SSJMemoMakingView *memoMakingView = [[SSJMemoMakingView alloc]init];
-//                memoMakingView.originalText = weakSelf.chargeMemo;
-//                memoMakingView.comfirmButtonClickedBlock = ^(NSString *textInputed){
-//                    if (![textInputed isEqualToString:@""]) {
-//                        weakSelf.chargeMemo = textInputed;
-//                        weakSelf.additionalView.hasMemo = YES;
-//                    }else{
-//                        weakSelf.additionalView.hasMemo = NO;
-//                    }
-//                };
-//                memoMakingView.typeErrorBlock = ^(NSString *errorDesc){
-//                    [CDAutoHideMessageHUD showMessage:errorDesc];
-//                }; 
-//                [memoMakingView show];
-//            }
-//        };
-//    }
-//    return _additionalView;
-//}
-
-//-(UIView*)inputTopView{
-//    if (!_inputTopView ) {
-//        _inputTopView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
-//        _inputTopView.backgroundColor = [UIColor whiteColor];
-//        [_inputTopView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-//        [_inputTopView ssj_setBorderStyle:SSJBorderStyleBottom];
-//        [_inputTopView ssj_setBorderWidth:1.f];
-//        [_inputTopView addSubview:self.fundingTypeButton];
-//        self.datePickerButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.width / 2 + 10, 0, self.view.width / 2 - 30, 40)];
-//        _datePickerButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-//        [self.datePickerButton setTitle:[NSString stringWithFormat:@"%ld月",self.selectedMonth] forState:UIControlStateNormal];
-//        [self.datePickerButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-//        self.datePickerButton.titleLabel.font = [UIFont systemFontOfSize:14];
-//        self.datePickerButton.titleEdgeInsets = UIEdgeInsetsMake(0, 60, 0, 30);
-//        [self.datePickerButton addTarget:self action:@selector(datePickerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//        [_inputTopView addSubview:self.datePickerButton];
-//        self.calendarView.currentDay = [NSString stringWithFormat:@"%02ld",self.selectedDay];
-//        self.calendarView.frame = CGRectMake(self.datePickerButton.width - 20, 0, 24, 24);
-//        self.calendarView.centerY = self.datePickerButton.height / 2;
-//        [self.datePickerButton addSubview:self.calendarView];
-//    }
-//    return _inputTopView;
-//}
-
-//- (UIButton *)fundingTypeButton {
-//    if (!_fundingTypeButton) {
-//        _fundingTypeButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, self.view.width / 2, 40)];
-//        [_fundingTypeButton setTitleColor:[UIColor ssj_colorWithHex:@"393939"] forState:UIControlStateNormal];
-//        _fundingTypeButton.titleLabel.font = [UIFont systemFontOfSize:14];
-//        _fundingTypeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-//        _fundingTypeButton.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-//        [_fundingTypeButton addTarget:self action:@selector(fundingTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//    }
-//    return _fundingTypeButton;
-//}
-
 - (void)updateFundingType {
     [self.accessoryView.accountBtn setTitle:_selectItem.fundingName forState:UIControlStateNormal];
     self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
@@ -396,15 +224,14 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                 wself.billTypeInputView.billTypeName = item.title;
                 wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
             }];
+            wself.categoryID = item.ID;
         };
         _billTypeSelectionView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
             SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
             addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
-            addNewTypeVc.NewCategorySelectedBlock = ^(NSString *categoryID,SSJRecordMakingCategoryItem *item){
-//                wself.categoryListView.selectedId = categoryID;
-//                wself.categoryID = categoryID;
-//                wself.categoryImage.image = [[UIImage imageNamed:item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//                wself.selectedCategoryView.backgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
+            addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
+                wself.categoryID = categoryId;
+                [wself getCategoryList];
             };
             [wself.navigationController pushViewController:addNewTypeVc animated:YES];
         };
@@ -503,6 +330,17 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 #pragma mark - Event
+-(void)segmentPressed:(id)sender{
+    [self getDefualtColorAndDefualtId];
+    self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
+    if (self.titleSegment.selectedSegmentIndex == 0) {
+        [MobClick event:@"7"];
+    }else{
+        [MobClick event:@"6"];
+    }
+    [self getCategoryList];
+}
+
 - (void)selectFundAccountAction {
     [MobClick event:@"4"];
     [self.FundingTypeSelectView show];
@@ -589,7 +427,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         __block NSInteger selectedIndex = 0;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if ([item.ID isEqualToString:_defualtID]) {
+            if ([item.ID isEqualToString:_categoryID]) {
                 selectedIndex = index;
             }
         });
@@ -674,9 +512,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         }
         if (self.item == nil) {
             //新增流水
-            if (!weakSelf.categoryID) {
-                weakSelf.categoryID = weakSelf.defualtID;
-            }
             NSString *chargeID = SSJUUID();
             if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
@@ -835,17 +670,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     }];
 }
 
--(void)segmentPressed:(id)sender{
-    [self getDefualtColorAndDefualtId];
-    self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
-    if (self.titleSegment.selectedSegmentIndex == 0) {
-        [MobClick event:@"7"];
-    }else{
-        [MobClick event:@"6"];
-    }
-    [self getCategoryList];
-}
-
 -(void)getDefualtColorAndDefualtId{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
@@ -855,14 +679,14 @@ static const NSTimeInterval kAnimationDuration = 0.25;
             FMResultSet *rs = [db executeQuery:@"SELECT A.ID, A.CNAME , A.CCOLOR , A.CCOIN , B.* FROM BK_BILL_TYPE A, BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 1 AND CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.CWRITEDATE , B.CBILLID LIMIT 1",[NSNumber numberWithDouble:!weakSelf.titleSegment.selectedSegmentIndex],userid];
             while([rs next]) {
                 _defualtColor = [rs stringForColumn:@"CCOLOR"];
-                _defualtID = [rs stringForColumn:@"ID"];
+                _categoryID = [rs stringForColumn:@"ID"];
                 _defualtImage = [rs stringForColumn:@"CCOIN"];
                 typeName = [rs stringForColumn:@"CNAME"];
             }
             [rs close];
         }else{
             _defualtColor = weakSelf.item.colorValue;
-            _defualtID = weakSelf.item.billId;
+            _categoryID = weakSelf.item.billId;
             _defualtImage = weakSelf.item.imageName;
             typeName = weakSelf.item.typeName;
         }
@@ -871,7 +695,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                 weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
             }];
             weakSelf.billTypeInputView.billTypeName = typeName;
-            weakSelf.categoryID = _defualtID;
         });
     }];
 }
