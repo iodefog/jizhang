@@ -10,24 +10,15 @@
 #import "SSJCustomKeyboard.h"
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
-#import "SSJCalendarCollectionViewCell.h"
 #import "SSJFundingTypeSelectView.h"
-#import "SSJCategoryCollectionViewCell.h"
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
-#import "SSJRecordMakingAdditionalView.h"
 #import "SSJNewFundingViewController.h"
-#import "UIButton+WebCache.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
-#import "SSJImaageBrowseViewController.h"
-#import "SSJMemoMakingView.h"
 #import "SSJChargeCircleSelectView.h"
-#import "SSJNewCategoryCollectionView.h"
 #import "SSJCategoryListHelper.h"
-#import "FMDB.h"
-#import "FMDatabaseAdditions.h"
 
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
@@ -51,7 +42,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 @property (nonatomic) NSInteger selectChargeCircleType;
 @property (nonatomic,strong) NSString *chargeMemo;
 @property (nonatomic,strong) NSString *categoryID;
-//@property (nonatomic,strong) NSString *defualtID;
+
 @property (nonatomic,strong) SSJFundingItem *selectItem;
 @property (nonatomic,strong) SSJFundingItem *defualtItem;
 
@@ -88,7 +79,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
+    [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
     
     [self initData];
     
@@ -242,6 +233,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                 [wself.billTypeInputView.moneyInput becomeFirstResponder];
             }
         };
+        _billTypeSelectionView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
+            UIBarButtonItem *endEditingItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:wself action:@selector(endEditingAction)];
+            [wself.navigationItem setRightBarButtonItem:endEditingItem animated:YES];
+        };
     }
     return _billTypeSelectionView;
 }
@@ -369,6 +364,11 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     [_accessoryView.memoView resignFirstResponder];
 }
 
+- (void)endEditingAction {
+    [_billTypeSelectionView endEditing];
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
 #pragma mark - private
 - (void)initData {
     NSDate *now = [NSDate date];
@@ -471,7 +471,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     }else{
         _titleSegment.selectedSegmentIndex = !self.item.incomeOrExpence;
     }
-    _titleSegment.size = CGSizeMake(115, 30);
+    _titleSegment.size = CGSizeMake(202, 30);
     _titleSegment.borderColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
     _titleSegment.selectedBorderColor = [UIColor ssj_colorWithHex:@"EB4A64"];
     [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex: @"a7a7a7"]} forState:UIControlStateNormal];
@@ -753,28 +753,12 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     _originaldMonth = selectDate.month;
 }
 
--(void)closeButtonClicked:(id)sender{
-    [self ssj_backOffAction];
-}
+//-(void)closeButtonClicked:(id)sender{
+//    [self ssj_backOffAction];
+//}
 
 -(void)reloadDataAfterSync{
 //    [self.categoryListView reloadData];
 }
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
