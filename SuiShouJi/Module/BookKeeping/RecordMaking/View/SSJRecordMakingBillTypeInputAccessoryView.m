@@ -8,6 +8,9 @@
 
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
+static NSString *const kTitleColorValue = @"a7a7a7";
+static NSString *const kBorderColorValue = @"cccccc";
+
 @interface SSJRecordMakingBillTypeInputAccessoryView ()
 
 @property (nonatomic, strong) UIView *topView;
@@ -95,9 +98,9 @@
         _accountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _accountBtn.frame = CGRectMake(0, 0, 66, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_accountBtn setTitleColor:[UIColor ssj_colorWithHex:@"858585"] forState:UIControlStateNormal];
+        [_accountBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _accountBtn.layer.borderWidth = 1;
-        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:@"858585"].CGColor;
+        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
     }
     return _accountBtn;
@@ -108,9 +111,9 @@
         _dateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _dateBtn.frame = CGRectMake(0, 0, 66, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_dateBtn setTitleColor:[UIColor ssj_colorWithHex:@"858585"] forState:UIControlStateNormal];
+        [_dateBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _dateBtn.layer.borderWidth = 1;
-        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:@"858585"].CGColor;
+        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
     }
     return _dateBtn;
@@ -121,9 +124,9 @@
         _photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _photoBtn.frame = CGRectMake(0, 0, 66, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_photoBtn setTitleColor:[UIColor ssj_colorWithHex:@"858585"] forState:UIControlStateNormal];
+        [_photoBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _photoBtn.layer.borderWidth = 1;
-        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:@"858585"].CGColor;
+        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
     }
     return _photoBtn;
@@ -134,9 +137,9 @@
         _periodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _periodBtn.frame = CGRectMake(0, 0, 66, 24);
         _periodBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_periodBtn setTitleColor:[UIColor ssj_colorWithHex:@"858585"] forState:UIControlStateNormal];
+        [_periodBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _periodBtn.layer.borderWidth = 1;
-        _periodBtn.layer.borderColor = [UIColor ssj_colorWithHex:@"858585"].CGColor;
+        _periodBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _periodBtn.layer.cornerRadius = _periodBtn.height * 0.5;
     }
     return _periodBtn;
