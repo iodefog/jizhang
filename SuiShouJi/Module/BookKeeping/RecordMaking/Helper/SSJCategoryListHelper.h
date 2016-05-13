@@ -71,7 +71,7 @@
                                              name:(NSString *)name
                                              icon:(NSString *)icon
                                             color:(NSString *)color
-                                          success:(void(^)())success
+                                          success:(void(^)(NSString *categoryId))success
                                           failure:(void (^)(NSError *error))failure;
 
 /**
