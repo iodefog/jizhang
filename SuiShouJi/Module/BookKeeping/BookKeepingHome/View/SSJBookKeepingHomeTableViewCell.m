@@ -151,7 +151,7 @@
     if (!_deleteButton) {
         _deleteButton = [[UIButton alloc]init];
         _deleteButton.hidden = YES;
-        [_deleteButton setImage:[UIImage imageNamed:@"home_delet"] forState:UIControlStateNormal];
+        [_deleteButton setImage:[UIImage imageNamed:@"home_delete"] forState:UIControlStateNormal];
         _deleteButton.layer.cornerRadius = 16;
         [_deleteButton addTarget:self action:@selector(deleteButtonClick) forControlEvents:UIControlEventTouchUpInside];
     }

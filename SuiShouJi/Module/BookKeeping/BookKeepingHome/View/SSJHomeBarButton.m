@@ -27,7 +27,7 @@
 }
 
 -(void)layoutSubviews{
-    _calenderImage.frame = CGRectMake(0, 0, 22, 22);
+    _calenderImage.frame = CGRectMake(0, 0, 30, 30);
     _calenderImage.center = CGPointMake(self.width / 2, self.height / 2);
     _dateLabel.bottom = self.height;
     _dateLabel.center = CGPointMake(self.width / 2, self.height / 2 + 3);
