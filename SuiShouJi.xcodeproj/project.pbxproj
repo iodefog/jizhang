@@ -49,6 +49,7 @@
 		7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB41C5106CE00E202A2 /* SSJBaseSyncTable.m */; };
 		7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D581EB71C5107C300E202A2 /* SSJSyncTable.m */; };
 		7D5848741CE4557D0027DAFA /* SSJDatabaseVersion3.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5848731CE4557D0027DAFA /* SSJDatabaseVersion3.m */; };
+		7D5848801CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D58487F1CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m */; };
 		7D587E511CC0DF360058847B /* SSJStartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E501CC0DF360058847B /* SSJStartViewManager.m */; };
 		7D587E5B1CC0DFF40058847B /* SSJServerLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D587E5A1CC0DFF40058847B /* SSJServerLaunchView.m */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
@@ -987,6 +988,8 @@
 		7D581EB71C5107C300E202A2 /* SSJSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSyncTable.m; sourceTree = "<group>"; };
 		7D5848721CE4557D0027DAFA /* SSJDatabaseVersion3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion3.h; sourceTree = "<group>"; };
 		7D5848731CE4557D0027DAFA /* SSJDatabaseVersion3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion3.m; sourceTree = "<group>"; };
+		7D58487E1CE5BB4A0027DAFA /* SSJBillTypeSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillTypeSyncTable.h; sourceTree = "<group>"; };
+		7D58487F1CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillTypeSyncTable.m; sourceTree = "<group>"; };
 		7D587E4F1CC0DF360058847B /* SSJStartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJStartViewManager.h; sourceTree = "<group>"; };
 		7D587E501CC0DF360058847B /* SSJStartViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStartViewManager.m; sourceTree = "<group>"; };
 		7D587E591CC0DFF40058847B /* SSJServerLaunchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJServerLaunchView.h; sourceTree = "<group>"; };
@@ -2251,6 +2254,8 @@
 			children = (
 				7D581EB31C5106CE00E202A2 /* SSJBaseSyncTable.h */,
 				7D581EB41C5106CE00E202A2 /* SSJBaseSyncTable.m */,
+				7D58487E1CE5BB4A0027DAFA /* SSJBillTypeSyncTable.h */,
+				7D58487F1CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m */,
 				7D2B24281C3E09A0009A74A8 /* SSJUserBillSyncTable.h */,
 				7D2B24291C3E09A0009A74A8 /* SSJUserBillSyncTable.m */,
 				7D2B24251C3E098F009A74A8 /* SSJFundInfoSyncTable.h */,
@@ -5545,6 +5550,7 @@
 				7DFF74091CE067FF007D1BDE /* SSJRecordMakingBillTypeInputAccessoryView.m in Sources */,
 				7DB4290C1CAE48BB00B46F32 /* SSJBookkeepingTreeCheckInService.m in Sources */,
 				9C6F58BF1CB6020000A250A0 /* SSJCalenderDetaiImagelFooterView.m in Sources */,
+				7D5848801CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m in Sources */,
 				9C0E8C2B1CB645900093F79E /* UMRadialView.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
 				BD976FA31C4E0F2200B0E26D /* SSJPortraitUploadNetworkService.m in Sources */,
