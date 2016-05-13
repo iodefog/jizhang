@@ -68,7 +68,7 @@ static NSString *const kTitle6 = @"手势密码";
     }else{
         self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3],@[kTitle4],@[kTitle5],@[kTitle6]];
     }
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -238,7 +238,7 @@ static NSString *const kTitle6 = @"手势密码";
         [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
         quitLogButton.layer.cornerRadius = 3.f;
         quitLogButton.layer.masksToBounds = YES;
-        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);

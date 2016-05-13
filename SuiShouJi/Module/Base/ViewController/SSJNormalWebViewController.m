@@ -68,7 +68,7 @@
         self.showURLInNavigationBar = NO;
         self.showPageTitleInNavigationBar = NO;
         self.hidesBottomBarWhenPushed=YES;
-        self.progressViewTintColor=[UIColor ssj_colorWithHex:@"#47cfbe"];
+        self.progressViewTintColor=[UIColor ssj_colorWithHex:@"#eb4a64"];
     }
     return self;
 }

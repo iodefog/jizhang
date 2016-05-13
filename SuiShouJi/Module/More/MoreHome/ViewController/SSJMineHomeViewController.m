@@ -118,7 +118,7 @@ static BOOL KHasEnterMineHome;
         [self.motionSwitch setOn:NO];
     }
     [self getCircleChargeState];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 -(void)viewDidLayoutSubviews{

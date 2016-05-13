@@ -42,7 +42,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     
     [self.view ssj_showLoadingIndicator];
     

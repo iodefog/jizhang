@@ -257,7 +257,7 @@
         _emailTextField.delegate = self;
         _emailTextField.layer.borderWidth = 1;
         _emailTextField.layer.cornerRadius = 3;
-        _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
         _emailTextField.placeholder = @"请输入邮箱地址";
         _emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         
@@ -277,7 +277,7 @@
         _commitBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_commitBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_commitBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         [_commitBtn addTarget:self action:@selector(commitButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _commitBtn;
@@ -304,11 +304,11 @@
         recordBtn.borderWidth = 1;
         recordBtn.cornerRadius = 15;
         [recordBtn setTitle:@"记一笔" forState:SSJBorderButtonStateNormal];
-        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
         [recordBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
         [recordBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:SSJBorderButtonStateHighlighted];
+        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateHighlighted];
         [recordBtn addTarget:self action:@selector(recordBtnAction)];
         [_noDataRemindView addSubview:recordBtn];
     }

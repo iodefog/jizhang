@@ -416,7 +416,7 @@
         _loginButton.layer.cornerRadius = 3;
         _loginButton.enabled = NO;
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         _loginButton.backgroundColor = [UIColor whiteColor];
         [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

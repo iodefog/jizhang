@@ -54,7 +54,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [super viewWillAppear:animated];
     self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4]];
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -184,7 +184,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 //        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
 //        quitLogButton.layer.cornerRadius = 3.f;
 //        quitLogButton.layer.masksToBounds = YES;
-//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
 //        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 //        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);

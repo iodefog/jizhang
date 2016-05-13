@@ -9,7 +9,7 @@
 #import "SSJRegistOrderView.h"
 
 #define SSJ_NORMAL_COLOR [UIColor ssj_colorWithHex:@"#a7a7a7"]
-#define SSJ_HIGHLIGHTED_COLOR [UIColor ssj_colorWithHex:@"#47cfbe"]
+#define SSJ_HIGHLIGHTED_COLOR [UIColor ssj_colorWithHex:@"#eb4a64"]
 
 @interface SSJRegistOrderView ()
 

@@ -155,10 +155,10 @@
         _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 100)];
         UIButton *editeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 22, 40)];
         [editeButton setTitle:@"修改此记录" forState:UIControlStateNormal];
-        [editeButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [editeButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         editeButton.layer.borderWidth = 1.f;
         editeButton.layer.cornerRadius = 2.f;
-        editeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        editeButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
         editeButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
         [editeButton addTarget:self action:@selector(editeButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         [_footerView addSubview:editeButton];
