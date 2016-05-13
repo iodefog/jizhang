@@ -75,8 +75,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     _hasLoad = YES;
-    self.tableView.contentInset = UIEdgeInsetsMake(38, 0, 0, 0);
-    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];
@@ -105,7 +105,7 @@
     
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 //    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     rightSpace.width = -15;
@@ -287,10 +287,16 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y < -38 && self.items.count != 0 && self.tableView) {
+    if (scrollView.contentOffset.y < -38) {
         self.tableView.lineHeight = - scrollView.contentOffset.y;
+        if (self.items.count == 0) {
+            self.tableView.hasData = NO;
+        }else{
+            self.tableView.hasData = YES;
+        }
         if (scrollView.dragging && !_isRefreshing) {
             [self.homeButton startAnimating];
+
             _isRefreshing = YES;
         }
     }else{

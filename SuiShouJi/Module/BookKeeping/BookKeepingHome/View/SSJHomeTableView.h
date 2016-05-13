@@ -14,4 +14,7 @@ typedef void(^tableViewClickBlock)();
 @property (nonatomic, copy) tableViewClickBlock tableViewClickBlock;
 
 @property(nonatomic) float lineHeight;
+
+@property(nonatomic) BOOL hasData;
+
 @end

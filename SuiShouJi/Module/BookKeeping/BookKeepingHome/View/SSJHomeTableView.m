@@ -31,6 +31,7 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
 //    self.lineView.top = 0;
+    self.lineView.height = 0;
     self.lineView.centerX = self.width / 2;
     self.lineView.height = self.lineHeight;
     self.lineView.top = -self.lineHeight;
@@ -48,6 +49,17 @@
 -(void)setLineHeight:(float)lineHeight{
     _lineHeight = lineHeight;
     [self setNeedsLayout];
+}
+
+-(void)setHasData:(BOOL)hasData{
+    _hasData = hasData;
+    if (!_hasData) {
+        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        self.lineView.width = 1.5f;
+    }else{
+        self.lineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        self.lineView.width = 1.f;
+    }
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

@@ -12,6 +12,9 @@
 <UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic) BOOL hasLoad;
 
+
 //首页动画加载
 -(void)reloadWithAnimation;
+
+
 @end

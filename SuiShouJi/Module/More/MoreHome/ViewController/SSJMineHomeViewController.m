@@ -313,7 +313,7 @@ static NSString *const kTitle6 = @"设置";
             avtarUrl = SSJImageURLWithAPI(_userItem.cicon);
         }
         _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:SSJYWAppKey];
-        _feedbackKit.customUIPlist = @{@"bgColor":@"#fffff",
+        _feedbackKit.customUIPlist = @{@"bgColor":@"#ffffff",
                                        @"color":@"#393939",
                                        @"avatar":avtarUrl ?: @""};
         _feedbackKit.extInfo = @{@"userid":_userItem.cuserid ,
