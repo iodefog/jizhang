@@ -26,6 +26,8 @@
 #import "SSJFundAccountTable.h"
 #import "SSJThirdPartyLoginManger.h"
 #import <WXApi.h>
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJBookkeepingTreeHelper.h"
 
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
@@ -213,6 +215,14 @@
         //  更新资金帐户余额
         [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];
+    
+    // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
+    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+    if (![checkInModel.lastCheckInDate isEqualToString:_loginService.checkInModel.lastCheckInDate]) {
+        [SSJBookkeepingTreeStore saveCheckInModel:_loginService.checkInModel error:nil];
+        [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_loginService.checkInModel.treeImgUrl finish:NULL];
+        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_loginService.checkInModel.treeGifUrl finish:NULL];
+    }
     
     //  登陆成功后强制同步一次
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];

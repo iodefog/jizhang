@@ -28,6 +28,8 @@
 
 @property (nonatomic,strong) SSJUserItem *item;
 
+@property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
+
 @end
 
 @implementation SSJLoginService
@@ -101,6 +103,7 @@
         
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
+        self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }
 }
 
