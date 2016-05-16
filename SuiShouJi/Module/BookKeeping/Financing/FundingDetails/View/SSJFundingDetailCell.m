@@ -15,6 +15,7 @@
 @property(nonatomic, strong) UIImageView *memoImage;
 @property(nonatomic, strong) UIImageView *haveImage;
 @property(nonatomic, strong) UILabel *typeLabel;
+@property(nonatomic, strong) UILabel *memoLabel;
 @end
 
 @implementation SSJFundingDetailCell
@@ -35,6 +36,8 @@
         [self.contentView addSubview:self.haveImage];
         
         [self.contentView addSubview:self.memoImage];
+        
+        [self.contentView addSubview:self.memoLabel];
 
     }
     return self;
@@ -45,30 +48,44 @@
     
     CGFloat imageDiam = 40;
     
-    self.imageView.left = 10;
-    self.imageView.size = CGSizeMake(imageDiam, imageDiam);
-    self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
-    self.imageView.layer.cornerRadius = imageDiam * 0.5;
-    self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
-    if (([_item.chargeMemo isEqualToString:@""] || _item.chargeMemo == nil) && ([_item.chargeImage isEqualToString:@""] || _item.chargeImage == nil)){
+    self.memoLabel.width = 200;
+    
+    if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
+        self.imageView.left = 10;
+        self.imageView.size = CGSizeMake(imageDiam, imageDiam);
+        self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
+        self.imageView.layer.cornerRadius = imageDiam * 0.5;
+        self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
     }else{
+        self.imageView.size = CGSizeMake(imageDiam, imageDiam);
+        self.imageView.left = 10;
+        self.imageView.layer.cornerRadius = imageDiam * 0.5;
+        self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
         self.haveImage.size = CGSizeMake(19, 19);
         self.memoImage.size = CGSizeMake(19, 19);
         self.typeLabel.left = self.imageView.right + 10;
-        self.typeLabel.bottom = self.height * 0.5 - 5;
-        if (([_item.chargeMemo isEqualToString:@""] || _item.chargeMemo == nil) && (![_item.chargeImage isEqualToString:@""] && _item.chargeImage != nil)) {
+
+        if (_item.chargeMemo.length == 0 && _item.chargeImage.length != 0) {
+            self.imageView.top = 27;
+            self.typeLabel.bottom = self.imageView.centerY - 5;
             self.haveImage.left = self.typeLabel.left;
-            self.haveImage.top = self.contentView.height * 0.5 + 5;
-        }else if (([_item.chargeImage isEqualToString:@""] || _item.chargeImage == nil) && (![_item.chargeMemo isEqualToString:@""] && _item.chargeMemo != nil)){
+            self.haveImage.top = self.imageView.centerY + 5;
+        }else if (_item.chargeImage.length == 0 && _item.chargeMemo.length != 0){
+            self.imageView.top = 27;
+            self.typeLabel.bottom = self.imageView.centerY - 5;
             self.memoImage.left = self.typeLabel.left;
-            self.memoImage.top = self.contentView.height * 0.5 + 5;
+            self.memoImage.top = self.imageView.centerY + 5;
+            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
         }else{
+            self.imageView.top = 17;
+            self.typeLabel.bottom = self.imageView.centerY - 5;
             self.haveImage.left = self.typeLabel.left;
-            self.haveImage.top = self.contentView.height * 0.5 + 5;
-            self.memoImage.left = self.haveImage.right + 10;
-            self.memoImage.top = self.contentView.height * 0.5 + 5;
+            self.haveImage.top = self.imageView.centerY + 5;
+            self.memoImage.left = self.haveImage.left;
+            self.memoImage.top = self.haveImage.bottom + 5;
+            self.memoLabel.leftBottom = CGPointMake(self.memoImage.right + 10, self.memoImage.bottom);
         }
     }
     self.moneyLab.right = self.contentView.width - 10;
@@ -86,12 +103,16 @@
         self.typeLabel.text = item.typeName;
     }
     [self.typeLabel sizeToFit];
-    if (![item.chargeMemo isEqualToString:@""] && item.chargeMemo != nil) {
+    if (item.chargeMemo.length != 0) {
         self.memoImage.hidden = NO;
+        self.memoLabel.hidden = NO;
+        self.memoLabel.text = _item.chargeMemo;
+        [self.memoLabel sizeToFit];
     }else{
         self.memoImage.hidden = YES;
+        self.memoLabel.hidden = NO;
     }
-    if (![item.chargeImage isEqualToString:@""] && item.chargeImage != nil) {
+    if (item.chargeImage.length != 0) {
         self.haveImage.hidden = NO;
     }else{
         self.haveImage.hidden = YES;
@@ -133,9 +154,18 @@
     if (!_typeLabel) {
         _typeLabel = [[UILabel alloc]init];
         _typeLabel.font = [UIFont systemFontOfSize:15];
-        _typeLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        _typeLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
     }
     return _typeLabel;
+}
+
+-(UILabel *)memoLabel{
+    if (!_memoLabel) {
+        _memoLabel = [[UILabel alloc]init];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _memoLabel.font = [UIFont systemFontOfSize:13];
+    }
+    return _memoLabel;
 }
 
 @end

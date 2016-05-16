@@ -73,6 +73,8 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(leftButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = leftItem;
 
 }
 
@@ -109,7 +111,7 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 75;
+    return 90;
 }   
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -303,6 +305,14 @@
     }];
 }
 
+
+-(void)leftButtonClicked:(id)sender{
+    SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
+    recordMakingVC.selectedDay = self.selectedDay;
+    recordMakingVC.selectedMonth = self.selectedMonth;
+    recordMakingVC.selectedYear = self.selectedYear;
+    UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
+    [self presentViewController:recordNav animated:YES completion:NULL];}
 
 //-(void)getHaveRecordOrNotForDate:(NSString *)date WithSuccess:(void(^)(bool result))success
 //                         failure:(void (^)(NSError * _Nullable error))failure{

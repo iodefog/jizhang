@@ -126,6 +126,7 @@ static BOOL KHasEnterMineHome;
     self.header.size = CGSizeMake(self.view.width, 155);
     self.header.leftTop = CGPointMake(0, 64);
     self.tableView.top = self.header.bottom - 64;
+    self.tableView.height = self.view.height - 155;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
