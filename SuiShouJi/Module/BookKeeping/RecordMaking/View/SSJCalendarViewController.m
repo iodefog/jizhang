@@ -74,6 +74,7 @@
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(leftButtonClicked:)];
+    [leftItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:22]} forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = leftItem;
 
 }
