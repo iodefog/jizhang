@@ -317,6 +317,7 @@
 		7DE74BDB1C9AE9C600D27E7D /* default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BD71C9AE9C600D27E7D /* default@3x.png */; };
 		7DE74BE21C9BB61700D27E7D /* budget_green_wave_full@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */; };
 		7DE74BE31C9BB61700D27E7D /* budget_green_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */; };
+		7DEDBC201CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEDBC1F1CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.m */; };
 		7DEF54521C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */; };
 		7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
 		7DEF54541C75DEEC00A90153 /* SSJPercentCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54511C75DEEC00A90153 /* SSJPercentCircleView.m */; };
@@ -1324,6 +1325,8 @@
 		7DE74BD71C9AE9C600D27E7D /* default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default@3x.png"; sourceTree = "<group>"; };
 		7DE74BE01C9BB61700D27E7D /* budget_green_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_green_wave_full@3x.png"; sourceTree = "<group>"; };
 		7DE74BE11C9BB61700D27E7D /* budget_green_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_green_wave_full@2x.png"; sourceTree = "<group>"; };
+		7DEDBC1E1CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMotionPasswordSettingViewController.h; sourceTree = "<group>"; };
+		7DEDBC1F1CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMotionPasswordSettingViewController.m; sourceTree = "<group>"; };
 		7DEF544C1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNode.h; sourceTree = "<group>"; };
 		7DEF544D1C75DEEC00A90153 /* SSJPercentCircleAdditionNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionNode.m; sourceTree = "<group>"; };
 		7DEF544E1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleAdditionNodeItem.h; sourceTree = "<group>"; };
@@ -3163,6 +3166,8 @@
 			children = (
 				7DE69C691C8F04DB001D31C1 /* SSJMotionPasswordViewController.h */,
 				7DE69C6A1C8F04DB001D31C1 /* SSJMotionPasswordViewController.m */,
+				7DEDBC1E1CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.h */,
+				7DEDBC1F1CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -5545,6 +5550,7 @@
 				7DEF552B1C7DB27600A90153 /* SSJBudgetListCell.m in Sources */,
 				BDA3FE031C59032B00FB57B1 /* SSJBookKeepingHomePopView.m in Sources */,
 				7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */,
+				7DEDBC201CE95CA900BDF5CA /* SSJMotionPasswordSettingViewController.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				9C2E02601CACB93600C5F764 /* SSJFundingDetailListHeaderView.m in Sources */,
 				7DFF74091CE067FF007D1BDE /* SSJRecordMakingBillTypeInputAccessoryView.m in Sources */,

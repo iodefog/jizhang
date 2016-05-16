@@ -116,6 +116,9 @@ static NSString *const kTitle6 = @"手势密码";
     if ([title isEqualToString:kTitle3]) {
         [self.signatureModifyView show];
     }
+    if ([title isEqualToString:kTitle6]) {
+        
+    }
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
