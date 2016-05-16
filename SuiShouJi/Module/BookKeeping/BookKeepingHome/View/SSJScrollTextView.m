@@ -46,6 +46,7 @@
         float strWidth = [tempStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:self.textFont]}].width;
         if (![numberPre evaluateWithObject:tempStr] || !self.scrollAble) {
             CATextLayer *textLayer = [CATextLayer layer];
+            textLayer.contentsScale = [UIScreen mainScreen].scale;
             textLayer.frame = CGRectMake(totalStrWidth, 0, strWidth, siglestringHeight);
             textLayer.fontSize = self.textFont;
             textLayer.foregroundColor = self.textColor.CGColor;
