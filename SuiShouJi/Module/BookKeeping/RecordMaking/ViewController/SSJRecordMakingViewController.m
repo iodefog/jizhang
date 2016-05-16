@@ -506,6 +506,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [CDAutoHideMessageHUD showMessage:@"金额不能为0"];
         return;
     }
+    if ([_billTypeInputView.moneyInput.text doubleValue] < 0) {
+        [CDAutoHideMessageHUD showMessage:@"金额不能小于0"];
+        return;
+    }
     if (self.selectChargeCircleType != -1) {
         NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         if (![selectDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {

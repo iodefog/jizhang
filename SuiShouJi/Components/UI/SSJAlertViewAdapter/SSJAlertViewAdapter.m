@@ -13,7 +13,7 @@
 
 @property (readwrite, nonatomic, strong) NSMutableArray *p_Actions;
 
-@property (nonatomic, weak) id alert;
+@property (nonatomic, strong) id alert;
 
 @end
 

@@ -28,7 +28,7 @@
                     @"icon":@"cicons",
                     @"signature":@"usersignature",
                     @"writeDate":@"cwritedate",
-                    @"motionTrackState":@"cmotionTrackState",
+                    @"motionTrackState":@"cmotionPwdTrackState",
                     @"fingerPrintState":@"cfingerPrintState"};
     }
     return mapping;
