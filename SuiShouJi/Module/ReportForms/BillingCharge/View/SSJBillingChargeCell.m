@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIImageView *memo;
 
+@property(nonatomic, strong) UILabel *memoLab;
+
 @end
 
 @implementation SSJBillingChargeCell
@@ -114,6 +116,16 @@
         _moneyLab.font = [UIFont systemFontOfSize:20];
     }
     return _moneyLab;
+}
+
+-(UILabel *)memoLab{
+    if (!_memoLab) {
+        _memoLab = [[UILabel alloc]init];
+        _memoLab.backgroundColor = [UIColor whiteColor];
+        _memoLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _memoLab.font = [UIFont systemFontOfSize:13];
+    }
+    return _memoLab;
 }
 
 @end
