@@ -46,7 +46,13 @@ static id _instance;
 + (SSJCustomKeyboard *)sharedInstance{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _instance = [[self alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 240)];
+        double keyBoardHeight;
+        if (SSJSCREENWITH == 320 && SSJSCREENHEIGHT == 480) {
+            keyBoardHeight = 130;
+        }else{
+            keyBoardHeight = 240;
+        }
+        _instance = [[self alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, keyBoardHeight)];
     });
     return _instance;
 }

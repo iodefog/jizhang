@@ -287,7 +287,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y < -38) {
+    if (scrollView.contentOffset.y < - 46) {
         self.tableView.lineHeight = - scrollView.contentOffset.y;
         if (self.items.count == 0) {
             self.tableView.hasData = NO;
