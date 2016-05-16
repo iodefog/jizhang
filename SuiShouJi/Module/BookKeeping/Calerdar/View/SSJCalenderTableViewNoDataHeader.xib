@@ -32,7 +32,7 @@
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="记一笔">
-                        <color key="titleColor" red="0.27843137254901962" green="0.81176470588235294" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
                         <action selector="recordButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="kpB-pj-s3a"/>
