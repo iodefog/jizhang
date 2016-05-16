@@ -1,0 +1,72 @@
+//
+//  SSJBillTypeSyncTable.m
+//  SuiShouJi
+//
+//  Created by old lang on 16/5/13.
+//  Copyright © 2016年 ___9188___. All rights reserved.
+//
+
+#import "SSJBillTypeSyncTable.h"
+#import "SSJSyncTable.h"
+
+@implementation SSJBillTypeSyncTable
+
++ (NSString *)tableName {
+    return @"bk_bill_type";
+}
+
++ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        *error = [db lastError];
+        return nil;
+    }
+    
+    FMResultSet *result = [db executeQuery:@"select id, cname, itype, ccoin, ccolor, icustom from bk_bill_type as a, bk_user_bill as b where a.id = b.cbillid and a.icustom = 1 and b.cuserid = ? and b.iversion > ?", userId, @(version)];
+    if (!result) {
+        *error = [db lastError];
+        return nil;
+    }
+    
+    NSMutableArray *syncRecords = [NSMutableArray array];
+    while ([result next]) {
+        NSString *ID = [result stringForColumn:@"id"];
+        NSString *cname = [result stringForColumn:@"cname"];
+        NSString *itype = [result stringForColumn:@"itype"];
+        NSString *ccoin = [result stringForColumn:@"ccoin"];
+        NSString *ccolor = [result stringForColumn:@"ccolor"];
+        NSString *icustom = [result stringForColumn:@"icustom"];
+        [syncRecords addObject:@{@"id":ID,
+                                 @"cname":cname,
+                                 @"itype":itype,
+                                 @"ccoin":ccoin,
+                                 @"ccolor":ccolor,
+                                 @"icustom":icustom}];
+    }
+    return syncRecords;
+}
+
++ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    for (NSDictionary *recordInfo in records) {
+        NSString *ID = recordInfo[@"id"];
+        if ([db boolForQuery:@"select count(*) from bk_bill_type where id = ?", ID]) {
+            continue;
+        }
+        
+        NSString *cname = recordInfo[@"cname"];
+        NSString *itype = recordInfo[@"itype"];
+        NSString *ccoin = recordInfo[@"ccoin"];
+        NSString *ccolor = recordInfo[@"ccolor"];
+        if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom) values (?, ?, ?, ?, ?, 1)", ID, cname, itype, ccoin, ccolor]) {
+            *error = [db lastError];
+            return NO;
+        }
+    }
+    return YES;
+}
+
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    return YES;
+}
+
+@end

@@ -11,7 +11,7 @@
 #import "SSJRecordMakingBillTypeSelectionCellLabel.h"
 
 static const NSTimeInterval kDuration = 0.25;
-static const CGFloat kScale = 1.3;
+static const CGFloat kScale = 1.2;
 
 static NSString *const kBorderColorAnimationKey = @"kBorderColorAnimationKey";
 static NSString *const kTransformAnimationKey = @"kTransformAnimationKey";
@@ -121,6 +121,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         textColorAnimation.fillMode = kCAFillModeForwards;
         textColorAnimation.toValue = (__bridge id _Nullable)(_item.selected ? selectedColor.CGColor : [UIColor blackColor].CGColor);
         [_label.layer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
+        
     } else {
         _imageView.layer.borderColor = borderColor;
         _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformMakeScale(1, 1);

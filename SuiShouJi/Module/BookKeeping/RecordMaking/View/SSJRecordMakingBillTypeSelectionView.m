@@ -86,6 +86,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         item.editable = item != [_internalItems lastObject];
     }
     [_collectionView reloadData];
+    
+    if (_beginEditingAction) {
+        _beginEditingAction(self);
+    }
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView willMoveCellAtIndexPath:(NSIndexPath *)indexPath {
