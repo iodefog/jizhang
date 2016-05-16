@@ -294,7 +294,7 @@
         }else{
             self.tableView.hasData = YES;
         }
-        if (scrollView.dragging && !_isRefreshing) {
+        if (!scrollView.decelerating && !_isRefreshing) {
             [self.homeButton startAnimating];
 
             _isRefreshing = YES;
@@ -303,7 +303,6 @@
         _isRefreshing = NO;
     }
 }
-
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

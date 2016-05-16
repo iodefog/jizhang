@@ -26,7 +26,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"选择颜色";
-        _colorArray = @[@"#fe8a65",@"#ffb994",@"#58c8e9",@"#62b3fd",@"#fe79b4",@"#ff7a90",@"#aecc50",@"#c9a0ff",@"#8c99f6",@"#80e290"];
+        _colorArray = @[@"#fc7a60",@"#b1c23e",@"#25b4dd",@"#5a98de",@"#8bb84a",@"#a883db",@"#20cac0",@"#faa94a",@"#ef6161",@"#f16189"];
     }
     return self;
 }

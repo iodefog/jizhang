@@ -166,7 +166,7 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1052','手续费',1,'','bt_shouxufei','#d4ba28',0,0,NULL,28)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1053','佣金',1,'','bt_yongjin','#68b58a',0,0,NULL,29)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1056','借出款',1,'','bt_jiechu','#b84848',0,0,NULL,32)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2018','赚钱',0,'','bt_huaqian','#f25c5c',1,0,NULL,1)",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2018','赚钱',0,'','bt_zhuanqian','#f25c5c',1,0,NULL,1)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2020','借入款',0,'','bt_jiechu','#b84848',1,0,NULL,12)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2021','零花钱',0,'','bt_lingyong','#9f5c1b',0,0,NULL,5)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2022','租金',0,'','bt_zujin','#b05c5c',0,0,NULL,6)",

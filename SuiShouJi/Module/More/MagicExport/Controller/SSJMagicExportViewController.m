@@ -67,6 +67,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"数据导出";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
