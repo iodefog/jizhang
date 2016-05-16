@@ -262,7 +262,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.periodBtn addTarget:self action:@selector(selectPeriodAction) forControlEvents:UIControlEventTouchUpInside];
-        [_accessoryView.dateBtn setTitle:[[NSDate date] formattedDateWithFormat:@"M月d日"] forState:UIControlStateNormal];
+        [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:UIControlStateNormal];
         [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
         [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
         _accessoryView.memoView.delegate = self;

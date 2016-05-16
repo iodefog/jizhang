@@ -24,6 +24,8 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, strong) UILabel *remindLab;
 
+@property (nonatomic, strong) UIButton *verifyLoginPwdBtn;
+
 @property (nonatomic, strong) UIButton *forgetPwdBtn;
 
 @property (nonatomic, strong) UIButton *changeAccountBtn;
@@ -34,9 +36,14 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, copy) NSString *password;
 
+@property (nonatomic, copy) NSString *loginPassword;
+
 @property (nonatomic, copy) NSString *iconUrl;
 
 @property (nonatomic) int verifyFailureTimes;
+
+// 设置手势密码时是否需要验证初始密码
+@property (nonatomic) BOOL needToVerifyOriginalPwd;
 
 @end
 
@@ -79,29 +86,6 @@ static const int kVerifyFailureTimesLimit = 5;
             
             return;
         }
-        
-//        //  手势密码没有设置过，提醒用户设置
-//        SSJAlertViewAction *nextAction = [SSJAlertViewAction actionWithTitle:@"下次再说" handler:^(SSJAlertViewAction *action) {
-//            //  关闭手势密码
-//            SSJUserItem *userItem = [[SSJUserItem alloc] init];
-//            userItem.userId = SSJUSERID();
-//            userItem.motionPWDState = @"0";
-//            [SSJUserTableManager saveUserItem:userItem];
-//        }];
-//        
-//        SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"去设置" handler:^(SSJAlertViewAction *action) {
-//            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-//            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-//            motionVC.finishHandle = ^(UIViewController *controller) {
-//                if (finish) {
-//                    finish();
-//                }
-//                [controller dismissViewControllerAnimated:YES completion:NULL];
-//            };
-//            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
-//            [currentVC presentViewController:naviVC animated:YES completion:NULL];
-//        }];
-//        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您还没有设置手势密码，是否去设置？" action:nextAction, sureAction, nil];
     }
     
     if (finish) {
@@ -126,13 +110,26 @@ static const int kVerifyFailureTimesLimit = 5;
     
     switch (self.type) {
         case SSJMotionPasswordViewControllerTypeSetting: {
-            [self.view addSubview:self.miniMotionView];
-            self.remindLab.text = @"绘制解锁图案";
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"loginPWD", @"motionPWD", @"motionTrackState"] forUserId:SSJUSERID()];
+            if ([userItem.motionTrackState boolValue]) {
+                [self.view addSubview:self.miniMotionView];
+            }
+            if (userItem.motionPWD.length) {
+                self.needToVerifyOriginalPwd = YES;
+                self.password = userItem.motionPWD;
+                self.loginPassword = userItem.loginPWD;
+                self.miniMotionView.hidden = YES;
+                self.remindLab.text = @"请输入原手势密码";
+                [self.view addSubview:self.verifyLoginPwdBtn];
+            } else {
+                self.remindLab.text = @"绘制解锁图案";
+            }
+            
         }   break;
             
         case SSJMotionPasswordViewControllerTypeVerification: {
             //  查询手势密码
-            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"icon"] forUserId:SSJUSERID()];
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"icon", @"fingerPrintState"] forUserId:SSJUSERID()];
             self.password = userItem.motionPWD;
             self.iconUrl = [userItem.icon hasPrefix:@"http"] ? userItem.icon : SSJImageURLWithAPI(userItem.icon);
             
@@ -141,7 +138,9 @@ static const int kVerifyFailureTimesLimit = 5;
             [self.view addSubview:self.changeAccountBtn];
             self.remindLab.text = @"请输入手势密码";
             
-            [self verifyTouchIDIfNeeded];
+            if ([userItem.fingerPrintState boolValue]) {
+                [self verifyTouchIDIfNeeded];
+            }
             
         }   break;
     }
@@ -197,11 +196,37 @@ static const int kVerifyFailureTimesLimit = 5;
     switch (self.type) {
         //  设置手势密码
         case SSJMotionPasswordViewControllerTypeSetting: {
-            [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusCorrect];
-            if (self.password) {
-                //  设置成功
+            // 验证初试密码
+            if (_needToVerifyOriginalPwd) {
                 if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
-                    //  保存手势密码
+                    return SCYMotionEncryptionCircleLayerStatusCorrect;
+                } else {
+                    return SCYMotionEncryptionCircleLayerStatusError;
+                }
+            }
+            
+            [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusCorrect];
+            
+            if (!self.password) {
+                //  第一次绘制
+                if (keypads.count < 3) {
+                    [CDAutoHideMessageHUD showMessage:@"至少选择3个"];
+                    [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusError];
+                    double delayInSeconds = 0.4;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        [self.miniMotionView setKeypads:[self.miniMotionView allKeypads] toStatus:SCYMotionEncryptionCircleLayerStatusDefault];
+                    });
+                    return SCYMotionEncryptionCircleLayerStatusError;
+                } else {
+                    self.remindLab.text = @"请再次绘制解锁图案";
+                    self.password = [keypads componentsJoinedByString:@","];
+                    return SCYMotionEncryptionCircleLayerStatusCorrect;
+                }
+            } else {
+                //  第二次绘制
+                if ([self.password isEqualToString:[keypads componentsJoinedByString:@","]]) {
+                    //  设置成功，保存手势密码
                     SSJUserItem *userItem = [[SSJUserItem alloc] init];
                     userItem.userId = SSJUSERID();
                     userItem.motionPWD = self.password;
@@ -215,35 +240,19 @@ static const int kVerifyFailureTimesLimit = 5;
                         [self ssj_backOffAction];
                     }
                     return SCYMotionEncryptionCircleLayerStatusCorrect;
+                } else {
+                    //  设置失败，重新绘制
+                    self.remindLab.text = @"绘制解锁图案";
+                    [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusError];
+                    double delayInSeconds = 0.4;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        [self.miniMotionView setKeypads:[self.miniMotionView allKeypads] toStatus:SCYMotionEncryptionCircleLayerStatusDefault];
+                    });
+                    self.password = nil;
+                    return SCYMotionEncryptionCircleLayerStatusError;
                 }
-                
-                //  设置失败，重新绘制
-                self.remindLab.text = @"绘制解锁图案";
-                [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusError];
-                double delayInSeconds = 0.4;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [self.miniMotionView setKeypads:[self.miniMotionView allKeypads] toStatus:SCYMotionEncryptionCircleLayerStatusDefault];
-                });
-                self.password = nil;
-                return SCYMotionEncryptionCircleLayerStatusError;
             }
-            
-            //  第一次绘制
-            if (keypads.count < 3) {
-                [CDAutoHideMessageHUD showMessage:@"至少选择3个"];
-                [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusError];
-                double delayInSeconds = 0.4;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [self.miniMotionView setKeypads:[self.miniMotionView allKeypads] toStatus:SCYMotionEncryptionCircleLayerStatusDefault];
-                });
-                return SCYMotionEncryptionCircleLayerStatusError;
-            }
-            
-            self.remindLab.text = @"请再次绘制解锁图案";
-            self.password = [keypads componentsJoinedByString:@","];
-            return SCYMotionEncryptionCircleLayerStatusCorrect;
         }
             break;
             
@@ -336,10 +345,32 @@ static const int kVerifyFailureTimesLimit = 5;
     }
 }
 
+- (void)verifyLoginPwdAction {
+    SSJAlertViewAdapter *alert = [SSJAlertViewAdapter adapterWithTitle:@"请输入登录密码" message:nil action:nil];
+    __weak typeof(alert) weakAlert = alert;
+    __weak typeof(self) weakSelf = self;
+    [alert addAction:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+        NSString *inputPwd = [weakAlert.textField.text ssj_md5HexDigest];
+        if (![inputPwd isEqualToString:weakSelf.loginPassword]) {
+            [CDAutoHideMessageHUD showMessage:@"密码输入错误，请重新输入"];
+            return;
+        }
+        
+        if (weakSelf.type == SSJMotionPasswordViewControllerTypeSetting) {
+            weakSelf.miniMotionView.hidden = NO;
+            weakSelf.verifyLoginPwdBtn.hidden = YES;
+        }
+    }]];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.secureTextEntry = YES;
+    }];
+    [alert show];
+}
+
 #pragma mark - Getter
 - (UIImageView *)backgroundView {
     if (!_backgroundView) {
-        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"motion_background.jpg"]];
+        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"motion_background"]];
         _backgroundView.frame = self.view.bounds;
     }
     return _backgroundView;
@@ -378,6 +409,20 @@ static const int kVerifyFailureTimesLimit = 5;
         _remindLab.font = [UIFont systemFontOfSize:18];
     }
     return _remindLab;
+}
+
+- (UIButton *)verifyLoginPwdBtn {
+    if (!_verifyLoginPwdBtn) {
+        _verifyLoginPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _verifyLoginPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
+        [_verifyLoginPwdBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [_verifyLoginPwdBtn addTarget:self action:@selector(verifyLoginPwdAction) forControlEvents:UIControlEventTouchUpInside];
+        [_verifyLoginPwdBtn sizeToFit];
+        _verifyLoginPwdBtn.centerX = self.view.width * 0.5;
+        _verifyLoginPwdBtn.bottom = self.view.height - 30;
+    }
+    return _verifyLoginPwdBtn;
 }
 
 - (UIButton *)forgetPwdBtn {
