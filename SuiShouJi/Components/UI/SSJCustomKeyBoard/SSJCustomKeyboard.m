@@ -13,7 +13,6 @@
 
 @interface SSJCustomKeyboard()
 @property(nonatomic,strong)SSJCustomKeyBoardButton *BackspaceButton;
-@property(nonatomic,strong)SSJCustomKeyBoardButton *ClearButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *PlusButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *MinusButton;
 @property(nonatomic,strong)SSJCustomKeyBoardButton *DecimalButton;
@@ -73,7 +72,6 @@ static id _instance;
         [self setNumKey];
         [self addSubview:self.DecimalButton];
         [self addSubview:self.ZeroButton];
-        [self addSubview:self.ClearButton];
         [self addSubview:self.BackspaceButton];
         [self addSubview:self.PlusButton];
         [self addSubview:self.MinusButton];
@@ -90,15 +88,13 @@ static id _instance;
     self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
-    self.ClearButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.ClearButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.BackspaceButton.rightTop = CGPointMake(self.right, 0);
     self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.PlusButton.rightTop = CGPointMake(self.width, self.BackspaceButton.bottom);
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.MinusButton.rightTop = CGPointMake(self.width, self.PlusButton.bottom);
-    self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.MinusButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
+    self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight * 2);
     self.ComfirmButton.rightBottom = CGPointMake(self.width, self.height);
 }
 
@@ -155,22 +151,22 @@ static id _instance;
     return _BackspaceButton;
 }
 
-//清除键
--(SSJCustomKeyBoardButton*)ClearButton{
-    if (!_ClearButton) {
-        _ClearButton = [[SSJCustomKeyBoardButton alloc]init];
-        [_ClearButton setTitle:@"C" forState:UIControlStateNormal];
-        _ClearButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_ClearButton setTintColor:[UIColor whiteColor]];
-        [_ClearButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
-        _ClearButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _ClearButton.backgroundColor = [UIColor whiteColor];
-        _ClearButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
-        _ClearButton.layer.borderWidth = 1.0f / 2;
-        _ClearButton.tag = 12;
-    }
-    return _ClearButton;
-}
+////清除键
+//-(SSJCustomKeyBoardButton*)ClearButton{
+//    if (!_ClearButton) {
+//        _ClearButton = [[SSJCustomKeyBoardButton alloc]init];
+//        [_ClearButton setTitle:@"C" forState:UIControlStateNormal];
+//        _ClearButton.titleLabel.font = [UIFont systemFontOfSize:15];
+//        [_ClearButton setTintColor:[UIColor whiteColor]];
+//        [_ClearButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
+//        _ClearButton.titleLabel.font = [UIFont systemFontOfSize:24];
+//        _ClearButton.backgroundColor = [UIColor whiteColor];
+//        _ClearButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+//        _ClearButton.layer.borderWidth = 1.0f / 2;
+//        _ClearButton.tag = 12;
+//    }
+//    return _ClearButton;
+//}
 
 //+键
 -(SSJCustomKeyBoardButton*)PlusButton{
