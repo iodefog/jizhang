@@ -55,7 +55,7 @@
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
     self.top = keyWindow.height;
-    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismissIfNeeded) animation:^{
         self.bottom = keyWindow.height;
     } timeInterval:0.25 fininshed:NULL];
 }
@@ -70,8 +70,8 @@
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
     } timeInterval:0.25 fininshed:^(BOOL complation) {
-        if (_dismissBlock) {
-            _dismissBlock();
+        if (_dismissAction) {
+            _dismissAction(self);
         }
     }];
 }
@@ -175,15 +175,17 @@
     if (self.chargeCircleSelectBlock) {
         self.chargeCircleSelectBlock(_selectCircleType);
     }
-    [self dismiss];
+    [self dismissIfNeeded];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (void)dismissIfNeeded {
+    BOOL shouldDismiss = YES;
+    if (_shouldDismissWhenSureButtonClick) {
+        shouldDismiss = _shouldDismissWhenSureButtonClick(self);
+    }
+    if (shouldDismiss) {
+        [self dismiss];
+    }
 }
-*/
 
 @end

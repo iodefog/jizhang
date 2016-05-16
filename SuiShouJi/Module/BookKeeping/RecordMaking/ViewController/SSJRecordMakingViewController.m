@@ -119,6 +119,11 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
         __weak typeof(self) weakSelf = self;
         _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
+//            if (weakSelf.selectChargeCircleType != -1
+//                && (year < weakSelf.currentYear || month < weakSelf.currentMonth || day < weakSelf.currentDay)) {
+//                [CDAutoHideMessageHUD showMessage:@""];
+//                return;
+//            }
             weakSelf.selectedDay = day;
             weakSelf.selectedMonth = month;
             weakSelf.selectedYear = year;
@@ -164,27 +169,35 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 -(SSJChargeCircleSelectView *)ChargeCircleSelectView{
     if (!_ChargeCircleSelectView) {
+        __weak typeof(self) weakSelf = self;
         _ChargeCircleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _ChargeCircleSelectView.selectCircleType = self.selectChargeCircleType;
         _ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
-        __weak typeof(self) weakSelf = self;
-        _ChargeCircleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
-            if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay) ) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
-                [alert show];
-                weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-                [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
-            }else if (weakSelf.selectedDay > 28 && chargeCircleType != 6 && chargeCircleType == 4){
+        _ChargeCircleSelectView.shouldDismissWhenSureButtonClick =  ^BOOL(SSJChargeCircleSelectView *circleView) {
+            if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay)) {
+                if (circleView.selectCircleType != -1) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+                    weakSelf.ChargeCircleSelectView.selectCircleType = -1;
+                    weakSelf.selectChargeCircleType = -1;
+                    [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+                    return NO;
+                }
+            }
+            
+            if (weakSelf.selectedDay > 28 && circleView.selectCircleType == 6 && circleView.selectCircleType == 4){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
+                weakSelf.selectChargeCircleType = -1;
                 [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
                 [alert show];
-            }else{
-                weakSelf.selectChargeCircleType = chargeCircleType;
-                [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+                return NO;
             }
+            
+            weakSelf.selectChargeCircleType = circleView.selectCircleType;
+            [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+            return YES;
         };
-        _ChargeCircleSelectView.dismissBlock = ^{
+        _ChargeCircleSelectView.dismissAction = ^(SSJChargeCircleSelectView *circleView) {
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
     }
@@ -196,6 +209,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 91)];
         _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
         _billTypeInputView.moneyInput.delegate = self;
+        _billTypeInputView.moneyInput.text = _item.money;
     }
     return _billTypeInputView;
 }
@@ -325,6 +339,11 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 #pragma mark - Event
+- (void)goBackAction {
+    [super goBackAction];
+    [self.view endEditing:YES];
+}
+
 -(void)segmentPressed:(id)sender{
     [self getDefualtColorAndDefualtId];
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
@@ -359,6 +378,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 - (void)selectPeriodAction {
     [MobClick event:@"3"];
+    self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
     [self.ChargeCircleSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -482,13 +502,16 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 -(void)makeArecord{
     __weak typeof(self) weakSelf = self;
+    if ([_billTypeInputView.moneyInput.text doubleValue] == 0) {
+        [CDAutoHideMessageHUD showMessage:@"金额不能为0"];
+        return;
+    }
     if (self.selectChargeCircleType != -1) {
         NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         if (![selectDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            [alert show];
-            weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-            [weakSelf.accessoryView.dateBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//            weakSelf.ChargeCircleSelectView.selectCircleType = -1;
+//            [weakSelf.accessoryView.dateBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
             return;
         }
     }

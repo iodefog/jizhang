@@ -22,7 +22,9 @@ typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType);
 
 @property(nonatomic, copy) chargeCircleSelectBlock chargeCircleSelectBlock;
 
-@property (nonatomic, copy) void (^dismissBlock)();
+@property (nonatomic, copy) BOOL (^shouldDismissWhenSureButtonClick)(SSJChargeCircleSelectView *);
+
+@property (nonatomic, copy) void (^dismissAction)(SSJChargeCircleSelectView *);
 
 
 - (void)show;

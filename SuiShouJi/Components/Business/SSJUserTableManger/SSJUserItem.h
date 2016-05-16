@@ -52,6 +52,12 @@
 //  客户端修改时间（目前只有修改昵称、个性签名才能改这个属性）
 @property (nonatomic, copy) NSString *writeDate;
 
+//  手势密码显示轨迹（1为显示 0为隐藏）
+@property (nonatomic, copy) NSString *motionTrackState;
+
+//  指纹解锁（1为显示 0为隐藏）
+@property (nonatomic, copy) NSString *fingerPrintState;
+
 + (NSDictionary *)propertyMapping;
 
 @end

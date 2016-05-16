@@ -26,6 +26,7 @@ static NSString *const kTitle6 = @"手势密码";
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJPasswordModifyViewController.h"
 #import "SSJNickNameModifyView.h"
+#import "SSJMotionPasswordSettingViewController.h"
 
 
 @interface SSJPersonalDetailViewController ()
@@ -117,7 +118,8 @@ static NSString *const kTitle6 = @"手势密码";
         [self.signatureModifyView show];
     }
     if ([title isEqualToString:kTitle6]) {
-        
+        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
     }
 }
 #pragma mark - UITableViewDataSource
