@@ -22,6 +22,11 @@
         return error;
     }
     
+    error = [self upgradeUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -63,6 +68,22 @@
 + (NSError *)upgradeUserBillTableWithDatabase:(FMDatabase *)db {
     if (![db columnExists:@"iorder" inTableWithName:@"bk_user_bill"]) {
         if (![db executeUpdate:@"alter table bk_user_bill add iorder integer"]) {
+            return [db lastError];
+        }
+    }
+    
+    return nil;
+}
+
++ (NSError *)upgradeUserTableWithDatabase:(FMDatabase *)db {
+    if (![db columnExists:@"cmotionPwdTrackState" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cmotionPwdTrackState integer default 1"]) {
+            return [db lastError];
+        }
+    }
+    
+    if (![db columnExists:@"cfingerPrintState" inTableWithName:@"bk_user"]) {
+        if (![db executeUpdate:@"alter table bk_user add cfingerPrintState integer default 1"]) {
             return [db lastError];
         }
     }
