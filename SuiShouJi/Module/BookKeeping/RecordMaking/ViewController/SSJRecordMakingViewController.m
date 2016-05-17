@@ -96,7 +96,8 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-//    [self.billTypeInputView resignFirstResponder];
+    [_billTypeInputView.moneyInput resignFirstResponder];
+    [_accessoryView.memoView resignFirstResponder];
 }
 
 - (void)viewDidLayoutSubviews {
