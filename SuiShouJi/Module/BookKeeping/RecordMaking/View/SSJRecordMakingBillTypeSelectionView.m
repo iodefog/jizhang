@@ -11,7 +11,7 @@
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "SSJEditableCollectionView.h"
 
-#define kCellWidth CGRectGetWidth(self.bounds) / 4
+#define kCellWidth CGRectGetWidth(self.bounds) / 5
 #define kCellHeight 88
 
 static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
