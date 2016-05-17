@@ -34,11 +34,11 @@
     self.seperatorLine.centerX = self.width / 2;
     self.seperatorLine.top = 44;
     self.incomeView.centerX = self.width / 2 / 2;
-    self.incomeView.bottom = self.height - 32;
+    self.incomeView.bottom = self.height - 46;
     self.incomeTitleLabel.bottom = self.incomeView.top - 10;
     self.incomeTitleLabel.centerX = self.width / 2 / 2;
     self.expenditureView.centerX = self.width / 2 + self.width / 2 / 2;
-    self.expenditureView.bottom = self.height - 32;
+    self.expenditureView.bottom = self.height - 46;
     self.expenditureTitleLabel.bottom = self.expenditureView.top - 10;
     self.expenditureTitleLabel.centerX = self.width / 2 + self.width / 2 / 2;
 }
@@ -67,8 +67,8 @@
 -(UILabel *)expenditureTitleLabel{
     if (!_expenditureTitleLabel) {
         _expenditureTitleLabel = [[UILabel alloc]init];
-        _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _expenditureTitleLabel.font = [UIFont systemFontOfSize:14];
+        _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _expenditureTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _expenditureTitleLabel;
 }
@@ -76,8 +76,8 @@
 -(UILabel *)incomeTitleLabel{
     if (!_incomeTitleLabel) {
         _incomeTitleLabel = [[UILabel alloc]init];
-        _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _incomeTitleLabel.font = [UIFont systemFontOfSize:14];
+        _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _incomeTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _incomeTitleLabel;
 }

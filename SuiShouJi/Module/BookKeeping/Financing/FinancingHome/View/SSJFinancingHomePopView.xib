@@ -11,41 +11,34 @@
             <rect key="frame" x="0.0" y="0.0" width="327" height="602"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yindao.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Mv3-qb-Dkd">
-                    <rect key="frame" x="0.0" y="0.0" width="327" height="602"/>
-                </imageView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U9v-HN-GJE">
-                    <rect key="frame" x="123" y="542" width="80" height="40"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="founds_yindao_top.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jh2-Cc-VYS">
+                    <rect key="frame" x="0.0" y="151" width="327" height="175"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="80" id="HtM-ZR-oJ3"/>
-                        <constraint firstAttribute="height" constant="40" id="khH-7i-sTE"/>
+                        <constraint firstAttribute="height" constant="175" id="Dpo-A7-7pt"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <state key="normal" title="知道了">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="knowButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="xDQ-eF-Q21"/>
-                    </connections>
-                </button>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="founds_yindao_bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="621-xd-sJM">
+                    <rect key="frame" x="0.0" y="406" width="327" height="137"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="137" id="zJx-tB-9NQ"/>
+                    </constraints>
+                </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="Mv3-qb-Dkd" secondAttribute="bottom" id="13Q-g2-pJN"/>
-                <constraint firstItem="Mv3-qb-Dkd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="FV1-WI-6dI"/>
-                <constraint firstItem="Mv3-qb-Dkd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="I3P-63-IYB"/>
-                <constraint firstAttribute="bottom" secondItem="U9v-HN-GJE" secondAttribute="bottom" constant="20" id="UxW-5z-Mg0"/>
-                <constraint firstAttribute="trailing" secondItem="Mv3-qb-Dkd" secondAttribute="trailing" id="WFI-t9-fY2"/>
-                <constraint firstItem="U9v-HN-GJE" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="eXj-q2-ItX"/>
+                <constraint firstAttribute="bottom" secondItem="621-xd-sJM" secondAttribute="bottom" constant="59" id="7Fq-bQ-btl"/>
+                <constraint firstItem="Jh2-Cc-VYS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CLl-AB-98w"/>
+                <constraint firstAttribute="trailing" secondItem="Jh2-Cc-VYS" secondAttribute="trailing" id="Gfk-UU-Yzn"/>
+                <constraint firstItem="621-xd-sJM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="leI-vI-kMw"/>
+                <constraint firstAttribute="trailing" secondItem="621-xd-sJM" secondAttribute="trailing" id="qd6-Tm-ndK"/>
+                <constraint firstItem="Jh2-Cc-VYS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="151" id="zdV-Ri-Hw2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <connections>
-                <outlet property="knowButton" destination="U9v-HN-GJE" id="vBX-tT-aTn"/>
-            </connections>
             <point key="canvasLocation" x="-48.5" y="27"/>
         </view>
     </objects>
     <resources>
-        <image name="yindao.jpg" width="320" height="569"/>
+        <image name="founds_yindao_bottom.png" width="375" height="137"/>
+        <image name="founds_yindao_top.png" width="375" height="175"/>
     </resources>
 </document>

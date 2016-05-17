@@ -302,7 +302,7 @@ static id _instance;
         inputString = [resultNum stringValue];
         self.rightNum = 0;
         self.PlusOrMinusModel = YES;
-        self.plusOrMinusKeyHasPressed = YES;
+        self.plusOrMinusKeyHasPressed = NO;
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
         self.lastPressTag = 13;
     }else if (sender.tag == 14){
