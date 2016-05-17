@@ -8,16 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class SSJAlertViewAction;
 
 typedef void (^SSJAlertViewActionHandle)(SSJAlertViewAction *action);
 
 @interface SSJAlertViewAction : NSObject
 
-@property (nonatomic, copy, readonly) NSString *title;
+@property (nullable, nonatomic, copy, readonly) NSString *title;
 
-@property (nonatomic, copy, readonly) SSJAlertViewActionHandle handler;
+@property (nullable, nonatomic, copy, readonly) SSJAlertViewActionHandle handler;
 
-+ (instancetype)actionWithTitle:(NSString *)title handler:(SSJAlertViewActionHandle)handler;
++ (instancetype)actionWithTitle:(NSString * _Nullable )title handler:(__nullable SSJAlertViewActionHandle)handler;
 
 @end
+
+NS_ASSUME_NONNULL_END

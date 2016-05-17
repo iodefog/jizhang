@@ -13,11 +13,18 @@
 
 @property (readwrite, nonatomic, strong) NSMutableArray *p_Actions;
 
+@property (nonatomic, strong) id alert;
+
 @end
 
 @implementation SSJAlertViewAdapter
 
 + (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message action:(SSJAlertViewAction *)action,... {
+    SSJAlertViewAdapter *adapter = [SSJAlertViewAdapter adapterWithTitle:title message:message action:action];
+    [adapter show];
+}
+
++ (instancetype)adapterWithTitle:(nullable NSString *)title message:(nullable NSString *)message action:(nullable SSJAlertViewAction *)action,... {
     SSJAlertViewAdapter *adapter = [SSJAlertViewAdapter adapter];
     if (action) {
         [adapter.p_Actions addObject:action];
@@ -40,7 +47,7 @@
             }];
             [alertVC addAction:alertAction];
         }
-        [SSJVisibalController() presentViewController:alertVC animated:YES completion:nil];
+        adapter.alert = alertVC;
     } else {
         SSJAlertViewDelegator *delegator = [SSJAlertViewDelegator sharedDelegator];
         delegator.alertViewAdapter = adapter;
@@ -48,8 +55,13 @@
         for (SSJAlertViewAction *action in adapter.actions) {
             [aler addButtonWithTitle:action.title];
         }
-        [aler show];
+        adapter.alert = aler;
     }
+    return adapter;
+}
+
++ (instancetype)adapterWithTitle:(nullable NSString *)title message:(nullable NSString *)message {
+    return [SSJAlertViewAdapter adapterWithTitle:title message:message action:nil];
 }
 
 + (instancetype)adapter {
@@ -63,9 +75,42 @@
     return self;
 }
 
+- (void)addAction:(SSJAlertViewAction *)action {
+    [_p_Actions addObject:action];
+    if (SSJSystemVersion() >= 8.0) {
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:action.title style:UIAlertActionStyleDefault handler:^(UIAlertAction *bAction) {
+            if (action.handler) {
+                action.handler(action);
+            }
+        }];
+        [_alert addAction:alertAction];
+    } else {
+        [_alert addButtonWithTitle:action.title];
+    }
+}
+
+- (void)addTextFieldWithConfigurationHandler:(void (^ __nullable)(UITextField *textField))configurationHandler {
+    if (SSJSystemVersion() >= 8.0) {
+        [_alert addTextFieldWithConfigurationHandler:configurationHandler];
+    } else {
+        if (configurationHandler) {
+            UITextField *textField = [_alert textFieldAtIndex:0];
+            configurationHandler(textField);
+        }
+    }
+}
+
+- (void)show {
+    if (SSJSystemVersion() >= 8.0) {
+        [SSJVisibalController() presentViewController:_alert animated:YES completion:nil];
+    } else {
+        [_alert show];
+    }
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (self.actions.count > 0) {
-        SSJAlertViewAction *action = self.actions[buttonIndex];
+    if (_p_Actions.count > 0) {
+        SSJAlertViewAction *action = [_p_Actions ssj_safeObjectAtIndex:buttonIndex];
         if (action.handler) {
             action.handler(action);
         }
@@ -74,6 +119,14 @@
 
 - (NSArray *)actions {
     return [NSArray arrayWithArray:_p_Actions];
+}
+
+- (UITextField *)textField {
+    if (SSJSystemVersion() >= 8.0) {
+        return [[_alert textFields] firstObject];
+    } else {
+        return [_alert textFieldAtIndex:0];
+    }
 }
 
 @end

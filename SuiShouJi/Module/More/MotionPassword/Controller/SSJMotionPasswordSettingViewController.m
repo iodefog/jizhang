@@ -11,8 +11,6 @@
 #import "SSJUserTableManager.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 
-static NSString *const kCellId = @"kCellId";
-
 @interface SSJMotionPasswordSettingViewController ()
 
 @property (nonatomic, strong) UISwitch *motionSwitch;
@@ -25,6 +23,8 @@ static NSString *const kCellId = @"kCellId";
 
 @property (nonatomic, strong) NSArray *titles;
 
+@property (nonatomic) BOOL canTouchIdUsed;
+
 @end
 
 @implementation SSJMotionPasswordSettingViewController
@@ -33,7 +33,8 @@ static NSString *const kCellId = @"kCellId";
     self = [super init];
     if (self) {
         self.title = @"手势密码";
-        [self initTitles];
+        LAContext *context = [[LAContext alloc] init];
+        _canTouchIdUsed = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
     }
     return self;
 }
@@ -41,22 +42,30 @@ static NSString *const kCellId = @"kCellId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _userItem = [SSJUserTableManager queryProperty:@[@"motionPWDState", @"motionTrackState", @"fingerPrintState"] forUserId:SSJUSERID()];
-    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 8)];
     headerView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     self.tableView.tableHeaderView = headerView;
     self.tableView.rowHeight = 60;
     self.tableView.backgroundColor = [UIColor whiteColor];
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kCellId];
 }
 
-- (void)initTitles {
-    LAContext *context = [[LAContext alloc] init];
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
-        _titles = @[@"手势密码", @"显示手势轨迹", @"修改手势密码", @"指纹解锁"];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    _userItem = [SSJUserTableManager queryProperty:@[@"userId", @"motionPWDState", @"motionPWD", @"motionTrackState", @"fingerPrintState"] forUserId:SSJUSERID()];
+    [self updateTitles];
+    [self.tableView reloadData];
+}
+
+- (void)updateTitles {
+    if ([_userItem.motionPWDState boolValue] && _userItem.motionPWD.length) {
+        if (_canTouchIdUsed) {
+            _titles = @[@"手势密码", @"显示手势轨迹", @"修改手势密码", @"指纹解锁"];
+        } else {
+            _titles = @[@"手势密码", @"显示手势轨迹", @"修改手势密码"];
+        }
     } else {
-        _titles = @[@"手势密码", @"显示手势轨迹", @"修改手势密码"];
+        _titles = @[@"手势密码"];
     }
 }
 
@@ -66,7 +75,10 @@ static NSString *const kCellId = @"kCellId";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellId forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellId"];
+    }
     cell.textLabel.text = [_titles ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row == 0) {
         cell.accessoryView = self.motionSwitch;
@@ -75,6 +87,7 @@ static NSString *const kCellId = @"kCellId";
         cell.accessoryView = self.trackSwitch;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else if (indexPath.row == 2) {
+        cell.accessoryView = nil;
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
     } else if (indexPath.row == 3) {
@@ -99,6 +112,44 @@ static NSString *const kCellId = @"kCellId";
 - (void)motionSwitchAction {
     _userItem.motionPWDState = [NSString stringWithFormat:@"%d", _motionSwitch.on];
     [SSJUserTableManager saveUserItem:_userItem];
+
+    if (_motionSwitch.on) {
+        [self.tableView beginUpdates];
+        if (_canTouchIdUsed) {
+            _titles = @[@"手势密码", @"显示手势轨迹", @"修改手势密码", @"指纹解锁"];
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0],
+                                                     [NSIndexPath indexPathForRow:2 inSection:0],
+                                                     [NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            _titles = @[@"手势密码", @"显示手势轨迹", @"修改手势密码"];
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0],
+                                                     [NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        [self.tableView endUpdates];
+        
+        if (!_userItem.motionPWD.length) {
+            SSJMotionPasswordViewController *motionPasswordVC = [[SSJMotionPasswordViewController alloc] init];
+            motionPasswordVC.type = SSJMotionPasswordViewControllerTypeSetting;
+            [self.navigationController pushViewController:motionPasswordVC animated:YES];
+        }
+    } else {
+        _titles = @[@"手势密码"];
+        [self.tableView beginUpdates];
+        if (_canTouchIdUsed) {
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0],
+                                                     [NSIndexPath indexPathForRow:2 inSection:0],
+                                                     [NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0],
+                                                     [NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        [self.tableView endUpdates];
+        
+        SSJMotionPasswordViewController *motionPasswordVC = [[SSJMotionPasswordViewController alloc] init];
+        motionPasswordVC.type = SSJMotionPasswordViewControllerTypeTurnoff;
+        [self.navigationController pushViewController:motionPasswordVC animated:YES];
+    }
+//    [self.tableView reloadData];
 }
 
 - (void)trackSwitchAction {
@@ -115,7 +166,7 @@ static NSString *const kCellId = @"kCellId";
 - (UISwitch *)motionSwitch {
     if (!_motionSwitch) {
         _motionSwitch = [[UISwitch alloc] init];
-        _motionSwitch.on = [_userItem.motionPWDState boolValue];
+        _motionSwitch.on = [_userItem.motionPWDState boolValue] && _userItem.motionPWD.length;
         [_motionSwitch addTarget:self action:@selector(motionSwitchAction) forControlEvents:UIControlEventValueChanged];
     }
     return _motionSwitch;
