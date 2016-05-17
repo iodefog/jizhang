@@ -20,7 +20,7 @@
 @implementation SSJAlertViewAdapter
 
 + (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message action:(SSJAlertViewAction *)action,... {
-    SSJAlertViewAdapter *adapter = [SSJAlertViewAdapter adapterWithTitle:title message:message action:action];
+    SSJAlertViewAdapter *adapter = [SSJAlertViewAdapter adapterWithTitle:title message:message action:action, nil];
     [adapter show];
 }
 
