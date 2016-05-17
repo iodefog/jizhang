@@ -19,6 +19,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJCategoryListHelper.h"
+#import "SSJImaageBrowseViewController.h"
 
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
@@ -85,7 +86,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     [self.view addSubview:self.billTypeInputView];
     [self.view addSubview:self.billTypeSelectionView];
     [self.view addSubview:self.accessoryView];
-    [self.billTypeInputView.moneyInput becomeFirstResponder];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,6 +107,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 #pragma mark - Getter
 - (void)updateFundingType {
     [self.accessoryView.accountBtn setTitle:_selectItem.fundingName forState:UIControlStateNormal];
+    self.accessoryView.accountBtn.selected = YES;
     self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
 }
 
@@ -148,7 +149,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
                     [weakSelf.FundingTypeSelectView reloadDate];
-                    [weakSelf.accessoryView.accountBtn setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
                     weakSelf.selectItem = newFundingItem;
                     [weakSelf updateFundingType];
                 };
@@ -175,7 +175,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                     [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
                     weakSelf.ChargeCircleSelectView.selectCircleType = -1;
                     weakSelf.selectChargeCircleType = -1;
-                    [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+                    [weakSelf updatePeriodButtonTitle];
                     return NO;
                 }
             }
@@ -184,13 +184,13 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
                 weakSelf.selectChargeCircleType = -1;
-                [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+                [weakSelf updatePeriodButtonTitle];
                 [alert show];
                 return NO;
             }
             
             weakSelf.selectChargeCircleType = circleView.selectCircleType;
-            [weakSelf.accessoryView.periodBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+            [weakSelf updatePeriodButtonTitle];
             return YES;
         };
         _ChargeCircleSelectView.dismissAction = ^(SSJChargeCircleSelectView *circleView) {
@@ -254,15 +254,18 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
     if (!_accessoryView) {
         _accessoryView = [[SSJRecordMakingBillTypeInputAccessoryView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, 86)];
+        _accessoryView.buttonTitleNormalColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _accessoryView.buttonTitleSelectedColor = [UIColor blackColor];
         [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.periodBtn addTarget:self action:@selector(selectPeriodAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:UIControlStateNormal];
         [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
-        [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
         _accessoryView.memoView.delegate = self;
         _accessoryView.memoView.text = _item.chargeMemo;
+        _accessoryView.dateBtn.selected = YES;
+        [self updatePeriodButtonTitle];
     }
     return _accessoryView;
 }
@@ -317,6 +320,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     _selectedImage = image;
     [self.billTypeInputView.moneyInput becomeFirstResponder];
+    _accessoryView.photoBtn.selected = YES;
 }
 
 #pragma mark - YYKeyboardObserver
@@ -367,10 +371,16 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 - (void)selectPhotoAction {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
-    [sheet showInView:self.view];
-    [_billTypeInputView.moneyInput resignFirstResponder];
-    [_accessoryView.memoView resignFirstResponder];
+    if (_selectedImage) {
+        SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
+        imageBrowserVC.image = _selectedImage;
+        [self.navigationController pushViewController:imageBrowserVC animated:YES];
+    } else {
+        UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
+        [sheet showInView:self.view];
+        [_billTypeInputView.moneyInput resignFirstResponder];
+        [_accessoryView.memoView resignFirstResponder];
+    }
 }
 
 - (void)selectPeriodAction {
@@ -455,6 +465,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
             weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
         }];
         weakSelf.billTypeInputView.billTypeName = selectedItem.title;
+        [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
@@ -764,6 +775,16 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     _originaldYear= selectDate.year;
     _originaldDay = selectDate.day;
     _originaldMonth = selectDate.month;
+}
+
+- (void)updatePeriodButtonTitle {
+    if (self.ChargeCircleSelectView.selectCircleType == -1) {
+        [_accessoryView.periodBtn setTitle:@"设置循环" forState:UIControlStateNormal];
+        _accessoryView.periodBtn.selected = NO;
+    } else {
+        [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
+        _accessoryView.periodBtn.selected = YES;
+    }
 }
 
 //-(void)closeButtonClicked:(id)sender{

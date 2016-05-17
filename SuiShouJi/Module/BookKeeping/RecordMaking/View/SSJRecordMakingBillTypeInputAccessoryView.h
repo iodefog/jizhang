@@ -22,4 +22,8 @@
 
 @property (nonatomic, strong, readonly) UIButton *periodBtn;
 
+@property (nonatomic, strong) UIColor *buttonTitleNormalColor;
+
+@property (nonatomic, strong) UIColor *buttonTitleSelectedColor;
+
 @end
