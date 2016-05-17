@@ -354,6 +354,8 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [MobClick event:@"6"];
     }
     [self getCategoryList];
+    [_billTypeSelectionView endEditing];
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
 - (void)selectFundAccountAction {

@@ -117,6 +117,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     [_internalItems exchangeObjectAtIndex:indexPath.item withObjectAtIndex:anotherIndexPath.item];
 }
 
+- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView {
+    return NO;
+}
+
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView {
     for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
         item.editable = NO;
