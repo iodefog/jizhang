@@ -569,6 +569,11 @@
                             [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
                         }
                         [weakSelf.tableView endUpdates];
+                    }else{
+                        weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
+                        SSJBillingChargeCellItem *editeItem = [[result objectForKey:SSJNewAddChargeArrKey] objectAtIndex:i];
+                        [weakSelf.items insertObject:editeItem atIndex:editeItem.chargeIndex];
+                        [weakSelf.tableView reloadData];
                     }
                     [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 }
