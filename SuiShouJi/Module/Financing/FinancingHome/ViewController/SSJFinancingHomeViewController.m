@@ -130,6 +130,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         cell.editeModel = _editeModel;
         cell.deleteButtonClickBlock = ^(){
             [weakSelf.items removeObjectAtIndex:indexPath.row];
+            [weakSelf.collectionView deleteItemsAtIndexPaths:@[indexPath]];
             [weakSelf.collectionView reloadData];
         };
         return cell;

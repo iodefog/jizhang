@@ -47,7 +47,9 @@
     [self.view addSubview:self.moneyLabel];
     [self.view addSubview:self.memoLabel];
     [self.view addSubview:self.dateLabel];
-    [self getImageAndDetails];
+    if (self.item != nil) {
+        [self getImageAndDetails];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
