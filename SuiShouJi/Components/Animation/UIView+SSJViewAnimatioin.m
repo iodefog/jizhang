@@ -34,7 +34,7 @@ static const NSTimeInterval kDuration = 0.36;
     objc_setAssociatedObject(self, kSSJViewAnimatioinShowedKey, @(showed), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (void)popupInView:(UIView *)view completion:(void (^ __nullable)(BOOL finished))completion {
+- (void)ssj_popupInView:(UIView *)view completion:(void (^ __nullable)(BOOL finished))completion {
     if (self == view) {
         return;
     }
@@ -74,7 +74,7 @@ static const NSTimeInterval kDuration = 0.36;
     } completion:completion];
 }
 
-- (void)dismiss:(void (^ __nullable)(BOOL finished))completion {
+- (void)ssj_dismiss:(void (^ __nullable)(BOOL finished))completion {
     if (self.superview) {
         [UIView transitionWithView:self.superview duration:kDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             self.hidden = YES;

@@ -298,9 +298,9 @@
     [self.alertView sizeToFit];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.alertView popupInView:window completion:^(BOOL finished) {
+    [self.alertView ssj_popupInView:window completion:^(BOOL finished) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.alertView dismiss:NULL];
+            [self.alertView ssj_dismiss:NULL];
         });
     }];
 }
@@ -311,9 +311,9 @@
     [self.alertView sizeToFit];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.alertView popupInView:window completion:^(BOOL finished) {
+    [self.alertView ssj_popupInView:window completion:^(BOOL finished) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.alertView dismiss:NULL];
+            [self.alertView ssj_dismiss:NULL];
         });
     }];
 }
@@ -324,9 +324,9 @@
     [self.alertView sizeToFit];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.alertView popupInView:window completion:^(BOOL finished) {
+    [self.alertView ssj_popupInView:window completion:^(BOOL finished) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.alertView dismiss:NULL];
+            [self.alertView ssj_dismiss:NULL];
         });
     }];
 }

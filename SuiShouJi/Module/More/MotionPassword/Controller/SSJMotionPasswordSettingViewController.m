@@ -9,6 +9,7 @@
 #import "SSJMotionPasswordSettingViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSJUserTableManager.h"
+#import "SSJBaseTableViewCell.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 
 @interface SSJMotionPasswordSettingViewController ()
@@ -75,9 +76,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
+    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellId"];
+        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellId"];
+        cell.textLabel.textColor = [UIColor ssj_colorWithHex:@"444444"];
     }
     cell.textLabel.text = [_titles ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row == 0) {
