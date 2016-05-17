@@ -569,6 +569,7 @@
                             [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
                         }
                         [weakSelf.tableView endUpdates];
+                        [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[sumDic valueForKey:item.billDate] intValue] inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
                     }else{
                         weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                         SSJBillingChargeCellItem *editeItem = [[result objectForKey:SSJNewAddChargeArrKey] objectAtIndex:i];

@@ -545,7 +545,6 @@
 		9C9471871CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94715C1CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m */; };
 		9C9471881CEB224C00D69079 /* SSJFundingDetailListHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94715E1CEB224C00D69079 /* SSJFundingDetailListHeaderView.m */; };
 		9C9471891CEB224C00D69079 /* SSJFundingDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471611CEB224C00D69079 /* SSJFundingDetailsViewController.m */; };
-		9C94718A1CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471641CEB224C00D69079 /* SSJFinancingHomeHelper.m */; };
 		9C94718B1CEB224C00D69079 /* SSJColorSelectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471681CEB224C00D69079 /* SSJColorSelectCollectionViewCell.m */; };
 		9C94718C1CEB224C00D69079 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94716A1CEB224C00D69079 /* SSJModifyFundingTableViewCell.m */; };
 		9C94718D1CEB224C00D69079 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94716C1CEB224C00D69079 /* SSJNewFundingTypeCell.m */; };
@@ -5694,7 +5693,6 @@
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
 				7D5F33731CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
 				7D72D92B1CBDEF2F00ACEE2D /* SSJBookkeepingTreeHelpViewController.m in Sources */,
-				9C94718A1CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
