@@ -17,6 +17,8 @@ static NSString *const kBorderColorValue = @"cccccc";
 
 @property (nonatomic, strong) UIView *bottomView;
 
+@property (nonatomic, strong) UIImageView *memoIcon;
+
 @property (nonatomic, strong) UITextField *memoView;
 
 @property (nonatomic, strong) UIButton *accountBtn;
@@ -36,6 +38,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         [self addSubview:self.topView];
         [self addSubview:self.bottomView];
         
+        [self.topView addSubview:self.memoIcon];
         [self.topView addSubview:self.memoView];
         [self.bottomView addSubview:self.accountBtn];
         [self.bottomView addSubview:self.dateBtn];
@@ -82,6 +85,15 @@ static NSString *const kBorderColorValue = @"cccccc";
         [_bottomView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _bottomView;
+}
+
+- (UIImageView *)memoIcon {
+    if (!_memoIcon) {
+        _memoIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record_making_memo"]];
+        _memoIcon.left = 12;
+        _memoIcon.centerY = self.topView.height * 0.5;
+    }
+    return _memoIcon;
 }
 
 - (UITextField *)memoView {

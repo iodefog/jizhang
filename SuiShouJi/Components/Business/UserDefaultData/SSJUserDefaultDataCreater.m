@@ -205,7 +205,7 @@
     [result1 close];
     [result2 close];
     
-    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate from BK_BILL_TYPE where istate <> 2"];
+    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder from BK_BILL_TYPE where istate <> 2"];
     if (!billTypeResult) {
         return [db lastError];
     }
@@ -216,8 +216,9 @@
     while ([billTypeResult next]) {
         NSString *billId = [billTypeResult stringForColumn:@"id"];
         int state = [billTypeResult intForColumn:@"istate"];
+        NSString *order = [billTypeResult stringForColumn:@"defaultOrder"];
         
-        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", userID, billId, @(state), date, @(SSJSyncVersion()), billId, userID];
+        BOOL executeSuccessfull = [db executeUpdate:@"insert into BK_USER_BILL (CUSERID, CBILLID, ISTATE, IORDER, CWRITEDATE, IVERSION, OPERATORTYPE) select ?, ?, ?, ?, ?, ?, 0 where not exists (select * from BK_USER_BILL where CBILLID = ? and cuserid = ?)", userID, billId, @(state), order, date, @(SSJSyncVersion()), billId, userID];
         successfull = successfull && executeSuccessfull;
     }
     

@@ -59,9 +59,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 @end
 
 @implementation SSJRecordMakingViewController{
-
-    NSString *_defualtColor;
-    NSString *_defualtImage;
     long _originaldMonth;
     long _originaldYear;
     long _originaldDay;
@@ -206,7 +203,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 - (SSJRecordMakingBillTypeInputView *)billTypeInputView {
     if (!_billTypeInputView) {
         _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 91)];
-        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
         _billTypeInputView.moneyInput.delegate = self;
         _billTypeInputView.moneyInput.text = _item.money;
     }
@@ -347,7 +343,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 -(void)segmentPressed:(id)sender{
-    [self getDefualtColorAndDefualtId];
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
     if (self.titleSegment.selectedSegmentIndex == 0) {
         [MobClick event:@"7"];
@@ -428,7 +423,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         }
     }
     
-    [self getDefualtColorAndDefualtId];
     if (self.item != nil) {
         [self getSelectedFundingType];
     }else{
@@ -449,12 +443,19 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         __block NSInteger selectedIndex = 0;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if ([item.ID isEqualToString:_categoryID]) {
+            if (_item && [item.ID isEqualToString:_item.ID]) {
                 selectedIndex = index;
             }
         });
         weakSelf.billTypeSelectionView.items = result;
         weakSelf.billTypeSelectionView.selectedIndex = selectedIndex;
+        
+        SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [weakSelf.billTypeSelectionView.items ssj_safeObjectAtIndex:selectedIndex];
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
+        }];
+        weakSelf.billTypeInputView.billTypeName = selectedItem.title;
+        
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
@@ -707,35 +708,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [weakSelf.navigationController dismissViewControllerAnimated:YES completion:NULL];
-        });
-    }];
-}
-
--(void)getDefualtColorAndDefualtId{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        NSString *typeName = nil;
-        if (weakSelf.item == nil) {
-            NSString *userid = SSJUSERID();
-            FMResultSet *rs = [db executeQuery:@"SELECT A.ID, A.CNAME , A.CCOLOR , A.CCOIN , B.* FROM BK_BILL_TYPE A, BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 1 AND CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.CWRITEDATE , B.CBILLID LIMIT 1",[NSNumber numberWithDouble:!weakSelf.titleSegment.selectedSegmentIndex],userid];
-            while([rs next]) {
-                _defualtColor = [rs stringForColumn:@"CCOLOR"];
-                _categoryID = [rs stringForColumn:@"ID"];
-                _defualtImage = [rs stringForColumn:@"CCOIN"];
-                typeName = [rs stringForColumn:@"CNAME"];
-            }
-            [rs close];
-        }else{
-            _defualtColor = weakSelf.item.colorValue;
-            _categoryID = weakSelf.item.billId;
-            _defualtImage = weakSelf.item.imageName;
-            typeName = weakSelf.item.typeName;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [UIView animateWithDuration:kAnimationDuration animations:^{
-                weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:_defualtColor];
-            }];
-            weakSelf.billTypeInputView.billTypeName = typeName;
         });
     }];
 }
