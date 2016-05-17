@@ -49,7 +49,7 @@ extern NSString *const SSJChargeCountSummaryKey;
  *  @param success 查询成功的回调
  *  @param failure 查询失败的回调
  */
-+ (void)queryForChargeListExceptCharge:(NSArray *)charge
++ (void)queryForChargeListExceptNewCharge:(NSArray *)newCharge
                               Success:(void(^)(NSDictionary *result))success
                               failure:(void (^)(NSError *error))failure;
 @end
