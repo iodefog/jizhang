@@ -89,7 +89,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     [self.view addSubview:self.billTypeSelectionView];
     [self.view addSubview:self.accessoryView];
     [self.billTypeInputView.moneyInput becomeFirstResponder];
-    self.accessoryView.memoView.text = self.item.chargeMemo;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -266,6 +265,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
         [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
         _accessoryView.memoView.delegate = self;
+        _accessoryView.memoView.text = _item.chargeMemo;
     }
     return _accessoryView;
 }
@@ -523,6 +523,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
         return;
     }
+    self.chargeMemo = _accessoryView.memoView.text;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSMutableArray *editeChargeArr = [NSMutableArray arrayWithCapacity:0];
         double chargeMoney = [self.billTypeInputView.moneyInput.text doubleValue];
