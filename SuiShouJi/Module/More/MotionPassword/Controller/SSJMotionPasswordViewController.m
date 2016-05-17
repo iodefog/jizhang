@@ -381,15 +381,20 @@ static const int kVerifyFailureTimesLimit = 5;
     if ([inputPwd isEqualToString:_userItem.loginPWD]) {
         // 验证登录密码正确
         if (_type == SSJMotionPasswordViewControllerTypeSetting) {
+            self.remindLab.text = @"绘制解锁图案";
+            self.remindLab.textColor = [UIColor whiteColor];
+            _needToVerifyOriginalPwd = NO;
             _miniMotionView.hidden = NO;
             _verifyLoginPwdBtn.hidden = YES;
-            _needToVerifyOriginalPwd = YES;
+            [_passwordAlertView dismiss];
         } else if (_type == SSJMotionPasswordViewControllerTypeTurnoff) {
             _userItem.motionPWDState = @"0";
             [SSJUserTableManager saveUserItem:_userItem];
             [self goBackAction];
         }
     } else {
+        [_passwordAlertView shake];
+        _passwordAlertView.passwordInput.text = nil;
         [CDAutoHideMessageHUD showMessage:@"密码输入错误，请重新输入"];
     }
 }

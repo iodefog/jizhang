@@ -44,6 +44,7 @@ static NSString *const kPinkColor = @"eb4a64";
         
         self.layer.cornerRadius = 3;
         self.layer.masksToBounds = YES;
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -54,6 +55,9 @@ static NSString *const kPinkColor = @"eb4a64";
     [UIView animateKeyframesWithDuration:0.5 delay:0 options:0 animations:^{
         for (int i = 0; i < 8; i ++) {
             CGFloat translationX = i & 1 ? -10 : 10;
+            if (i == 7) {
+                translationX = 0;
+            }
             [UIView addKeyframeWithRelativeStartTime:startTime relativeDuration:duration animations:^{
                 self.transform = CGAffineTransformMakeTranslation(translationX, 0);
             }];
@@ -97,10 +101,13 @@ static NSString *const kPinkColor = @"eb4a64";
 }
 
 - (UITextField *)passwordInput {
-    if (_passwordInput) {
+    if (!_passwordInput) {
         _passwordInput = [[UITextField alloc] initWithFrame:CGRectMake((self.width - 186) * 0.5, (kBodyHeight - 32) * 0.5, 186, 32)];
-        _passwordInput.borderStyle = UITextBorderStyleRoundedRect;
+        _passwordInput.textAlignment = NSTextAlignmentCenter;
+//        _passwordInput.borderStyle = UITextBorderStyleRoundedRect;
         _passwordInput.secureTextEntry = YES;
+        _passwordInput.layer.cornerRadius = 3;
+        _passwordInput.layer.borderWidth = 1;
         _passwordInput.layer.borderColor = [UIColor ssj_colorWithHex:kPinkColor].CGColor;
     }
     return _passwordInput;
