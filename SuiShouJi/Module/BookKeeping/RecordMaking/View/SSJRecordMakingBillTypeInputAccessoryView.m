@@ -8,7 +8,6 @@
 
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
-static NSString *const kTitleColorValue = @"a7a7a7";
 static NSString *const kBorderColorValue = @"cccccc";
 
 @interface SSJRecordMakingBillTypeInputAccessoryView ()
@@ -16,6 +15,8 @@ static NSString *const kBorderColorValue = @"cccccc";
 @property (nonatomic, strong) UIView *topView;
 
 @property (nonatomic, strong) UIView *bottomView;
+
+@property (nonatomic, strong) UIImageView *memoIcon;
 
 @property (nonatomic, strong) UITextField *memoView;
 
@@ -36,6 +37,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         [self addSubview:self.topView];
         [self addSubview:self.bottomView];
         
+        [self.topView addSubview:self.memoIcon];
         [self.topView addSubview:self.memoView];
         [self.bottomView addSubview:self.accountBtn];
         [self.bottomView addSubview:self.dateBtn];
@@ -55,6 +57,30 @@ static NSString *const kBorderColorValue = @"cccccc";
     _photoBtn.left = _dateBtn.right + horizontalGap;
     _periodBtn.left = _photoBtn.right + horizontalGap;
     _accountBtn.centerY = _dateBtn.centerY = _photoBtn.centerY = _periodBtn.centerY = _bottomView.height * 0.5;
+}
+
+- (void)setButtonTitleNormalColor:(UIColor *)buttonTitleNormalColor {
+    [_accountBtn setTitleColor:buttonTitleNormalColor forState:UIControlStateNormal];
+    [_dateBtn setTitleColor:buttonTitleNormalColor forState:UIControlStateNormal];
+    [_photoBtn setTitleColor:buttonTitleNormalColor forState:UIControlStateNormal];
+    [_periodBtn setTitleColor:buttonTitleNormalColor forState:UIControlStateNormal];
+    
+    [_accountBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
+    [_dateBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
+    [_photoBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
+    [_periodBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
+}
+
+- (void)setButtonTitleSelectedColor:(UIColor *)buttonTitleSelectedColor {
+    [_accountBtn setTitleColor:buttonTitleSelectedColor forState:UIControlStateSelected];
+    [_dateBtn setTitleColor:buttonTitleSelectedColor forState:UIControlStateSelected];
+    [_photoBtn setTitleColor:buttonTitleSelectedColor forState:UIControlStateSelected];
+    [_periodBtn setTitleColor:buttonTitleSelectedColor forState:UIControlStateSelected];
+    
+    [_accountBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+    [_dateBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+    [_photoBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+    [_periodBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
 }
 
 #pragma mark - Getter
@@ -84,6 +110,15 @@ static NSString *const kBorderColorValue = @"cccccc";
     return _bottomView;
 }
 
+- (UIImageView *)memoIcon {
+    if (!_memoIcon) {
+        _memoIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record_making_memo"]];
+        _memoIcon.left = 12;
+        _memoIcon.centerY = self.topView.height * 0.5;
+    }
+    return _memoIcon;
+}
+
 - (UITextField *)memoView {
     if (!_memoView) {
         _memoView = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, self.topView.width - 40, self.topView.height)];
@@ -99,7 +134,6 @@ static NSString *const kBorderColorValue = @"cccccc";
         _accountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _accountBtn.frame = CGRectMake(0, 0, 66, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_accountBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _accountBtn.layer.borderWidth = 1;
         _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
@@ -112,7 +146,6 @@ static NSString *const kBorderColorValue = @"cccccc";
         _dateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _dateBtn.frame = CGRectMake(0, 0, 66, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_dateBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _dateBtn.layer.borderWidth = 1;
         _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
@@ -125,7 +158,6 @@ static NSString *const kBorderColorValue = @"cccccc";
         _photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _photoBtn.frame = CGRectMake(0, 0, 66, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_photoBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _photoBtn.layer.borderWidth = 1;
         _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
@@ -138,7 +170,6 @@ static NSString *const kBorderColorValue = @"cccccc";
         _periodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _periodBtn.frame = CGRectMake(0, 0, 66, 24);
         _periodBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-        [_periodBtn setTitleColor:[UIColor ssj_colorWithHex:kTitleColorValue] forState:UIControlStateNormal];
         _periodBtn.layer.borderWidth = 1;
         _periodBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
         _periodBtn.layer.cornerRadius = _periodBtn.height * 0.5;

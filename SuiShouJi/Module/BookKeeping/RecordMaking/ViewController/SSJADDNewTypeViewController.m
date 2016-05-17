@@ -67,8 +67,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(comfirmButtonClick:)];
     self.navigationItem.rightBarButtonItem = rightItem;
-//    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
-//    self.navigationItem.rightBarButtonItem = rightBarButton;
     
     self.navigationItem.titleView = self.titleSegmentView;
     [self.view addSubview:self.newCategoryCollectionView];
