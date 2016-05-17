@@ -52,7 +52,7 @@
     if (_model == nil) {
         [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
     }else{
-        if (_model.budgetMoney < _model.payMoney) {
+        if (_model.budgetMoney > _model.payMoney) {
             [self.button setTitle:[NSString stringWithFormat:@"剩余 %.2f",_model.budgetMoney - _model.payMoney] forState:UIControlStateNormal];
         }else{
             [self.button setTitle:[NSString stringWithFormat:@"超支 %.2f",_model.payMoney - _model.budgetMoney] forState:UIControlStateNormal];

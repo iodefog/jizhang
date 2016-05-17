@@ -156,7 +156,7 @@
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 170);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 200);
     self.bookKeepingHeader.top = 0;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
