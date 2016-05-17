@@ -61,4 +61,7 @@
 //记账的下标
 @property(nonatomic) int chargeIndex;
 
+//操作类型
+@property(nonatomic) int operatorType;
+
 @end

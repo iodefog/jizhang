@@ -43,7 +43,7 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
     }];
 }
 
-+ (void)queryForChargeListExceptCharge:(NSArray *)charge
++ (void)queryForChargeListExceptNewCharge:(NSArray *)newCharge
                               Success:(void(^)(NSDictionary *result))success
                              failure:(void (^)(NSError *error))failure
 {
@@ -56,7 +56,7 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
         NSString *lastDate = @"";
         int count = 0;
         int chargeCount = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , A.OPERATORTYPE AS CHARGEOPERATORTYPE , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID , OPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID , OPERATORTYPE FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID , 0 AS OPERATORTYPE  FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -80,6 +80,7 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
             item.chargeThumbImage = [chargeResult stringForColumn:@"THUMBURL"];
             item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
             item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
+            item.operatorType = [chargeResult intForColumn:@"CHARGEOPERATORTYPE"];
             int configOperatorType = [chargeResult intForColumn:@"CONFIGOPERATORTYPE"];
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];\
             if (![item.billDate isEqualToString:lastDate]) {
@@ -100,8 +101,9 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
             if ([item.configId isEqualToString:@""] || item.configId == nil) {
                 item.chargeCircleType = - 1;
             }
-            for (int i = 0; i < charge.count; i++) {
-                if ([item.ID isEqualToString:[charge objectAtIndex:i]]) {
+            for (int i = 0; i < newCharge.count; i++) {
+                SSJBillingChargeCellItem *newItem = [newCharge objectAtIndex:i];
+                if ([item.ID isEqualToString:newItem.ID]) {
                     [newAddChargeArr addObject:item];
                 }
             }

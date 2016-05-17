@@ -524,6 +524,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         return;
     }
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSMutableArray *editeChargeArr = [NSMutableArray arrayWithCapacity:0];
         double chargeMoney = [self.billTypeInputView.moneyInput.text doubleValue];
         NSString *operationTime = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *selectDate;
@@ -588,9 +589,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                     [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid];
                 }
             }
-            if (self.addNewChargeBlock) {
-                self.addNewChargeBlock(@[chargeID]);
-            }
+            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
+            item.ID = chargeID;
+            item.operatorType = 1;
+            [editeChargeArr addObject:item];
         }else if (self.item.ID != nil){
             //修改流水
             if ([db intForQuery:@"select operatortype from bk_user_charge where ichargeid = ?",weakSelf.item.ID] == 2) {
@@ -628,6 +630,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                     [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",@"",@"",weakSelf.item.ID,userid];
                     [db executeUpdate:@"delete from BK_IMG_SYNC where RID = ?",self.item.ID];
                 }
+                SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
+                item.ID = self.item.ID;
+                item.operatorType = 2;
+                [editeChargeArr addObject:item];
             }
             if (self.titleSegment.selectedSegmentIndex == 0) {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,userid];
@@ -689,6 +695,9 @@ static const NSTimeInterval kAnimationDuration = 0.25;
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
             }
+        }
+        if (self.addNewChargeBlock) {
+            self.addNewChargeBlock(editeChargeArr);
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
         dispatch_async(dispatch_get_main_queue(), ^(){
