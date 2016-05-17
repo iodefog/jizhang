@@ -2381,7 +2381,6 @@
 				7D5F32401CEAE6C10086B67E /* BookKeepingHome */,
 				7D5F32611CEAE6C10086B67E /* Budget */,
 				7D5F328D1CEAE6C10086B67E /* Calerdar */,
-				7D5F32A71CEAE6C10086B67E /* Financing */,
 				7D5F32ED1CEAE6C10086B67E /* RecordMaking */,
 			);
 			path = BookKeeping;
@@ -2599,7 +2598,8 @@
 				7D5F32BE1CEAE6C10086B67E /* FundingDetails */,
 				7D5F32DC1CEAE6C10086B67E /* NewFunding */,
 			);
-			path = Financing;
+			name = Financing;
+			path = BookKeeping/Financing;
 			sourceTree = "<group>";
 		};
 		7D5F32A81CEAE6C10086B67E /* FinancingHome */ = {
@@ -4179,6 +4179,7 @@
 			isa = PBXGroup;
 			children = (
 				7D5F323F1CEAE6C10086B67E /* BookKeeping */,
+				7D5F32A71CEAE6C10086B67E /* Financing */,
 				BD0433701C1A8DA50051E7AB /* Base */,
 				BD70DF2D1C4751EA000E6CC9 /* Common */,
 				BD0433A21C1A9DFB0051E7AB /* ReportForms */,
