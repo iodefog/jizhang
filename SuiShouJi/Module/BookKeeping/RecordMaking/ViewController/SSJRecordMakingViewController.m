@@ -96,7 +96,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.billTypeInputView resignFirstResponder];
+//    [self.billTypeInputView resignFirstResponder];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -468,6 +468,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         }];
         weakSelf.billTypeInputView.billTypeName = selectedItem.title;
         [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+        
+        if (!_item) {
+            _categoryID = selectedItem.ID;
+        }
         
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
