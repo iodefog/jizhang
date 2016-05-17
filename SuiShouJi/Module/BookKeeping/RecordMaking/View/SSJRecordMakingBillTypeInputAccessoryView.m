@@ -89,6 +89,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _memoView = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, self.topView.width - 40, self.topView.height)];
         _memoView.font = [UIFont systemFontOfSize:13];
         _memoView.placeholder = @"写点啥备注下";
+        _memoView.returnKeyType = UIReturnKeyDone;
     }
     return _memoView;
 }

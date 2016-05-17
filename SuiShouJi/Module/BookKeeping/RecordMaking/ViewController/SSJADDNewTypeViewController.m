@@ -64,9 +64,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [self loadData];
     
     self.view.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
-    self.navigationItem.rightBarButtonItem = rightBarButton;
+    [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(comfirmButtonClick:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
+//    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
+//    self.navigationItem.rightBarButtonItem = rightBarButton;
     
     self.navigationItem.titleView = self.titleSegmentView;
     [self.view addSubview:self.newCategoryCollectionView];
@@ -109,6 +111,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             item.selected = i == _customCategorySelectedIndex;
         }
         [_customCategoryCollectionView reloadData];
+        [self updateSelectedImage];
     }
 }
 
@@ -142,6 +145,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 #pragma mark - Event
 - (void)selectColorAction {
     NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
+    _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:colorValue];
     [_customItems makeObjectsPerformSelector:@selector(setCategoryColor:) withObject:colorValue];
     [_customCategoryCollectionView reloadData];
 }
@@ -276,13 +280,19 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [_customTypeInputView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, _customTypeInputView.height)];
-        _selectedTypeView = [[UIImageView alloc] init];
-        [leftView addSubview:_selectedTypeView];
+        [leftView addSubview:self.selectedTypeView];
         _customTypeInputView.leftView = leftView;
         _customTypeInputView.leftViewMode = UITextFieldViewModeAlways;
         _customTypeInputView.hidden = YES;
     }
     return _customTypeInputView;
+}
+
+- (UIImageView *)selectedTypeView {
+    if (!_selectedTypeView) {
+        _selectedTypeView = [[UIImageView alloc] init];
+    }
+    return _selectedTypeView;
 }
 
 - (SSJAddNewTypeColorSelectionView *)colorSelectionView {
@@ -311,7 +321,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                 selectedItem.selected = YES;
                 
                 [_newCategoryCollectionView reloadData];
-//                [_newCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_newCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
                 [_newCategoryCollectionView ssj_hideLoadingIndicator];
             } failure:^(NSError *error) {
                 [_newCategoryCollectionView ssj_hideLoadingIndicator];
@@ -330,18 +339,15 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                 
                 [self selectColorAction];
                 [_customCategoryCollectionView reloadData];
-//                [_customCategoryCollectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:_customCategorySelectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
                 [_customCategoryCollectionView ssj_hideLoadingIndicator];
+                
+                [self updateSelectedImage];
             } failure:^(NSError *error) {
                 [_customCategoryCollectionView ssj_hideLoadingIndicator];
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }];
         }
     }
-}
-
--(void)closeButtonClicked:(id)sender{
-    [self ssj_backOffAction];
 }
 
 - (void)updateView {
@@ -358,6 +364,16 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             _newCategoryCollectionView.hidden = YES;
         }
     } completion:NULL];
+}
+
+- (void)updateSelectedImage {
+    NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
+    SSJRecordMakingCategoryItem *selectedItem = [_customItems ssj_safeObjectAtIndex:_customCategorySelectedIndex];
+    _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:colorValue];
+    _selectedTypeView.image = [[UIImage imageNamed:selectedItem.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [_selectedTypeView sizeToFit];
+    _selectedTypeView.left = 30;
+    _selectedTypeView.centerY = _customTypeInputView.height * 0.5;
 }
 
 @end
