@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJEditableCollectionView.h"
 
-@interface SSJFinancingHomeViewController : SSJBaseViewController<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface SSJFinancingHomeViewController : SSJBaseViewController<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
 @end
