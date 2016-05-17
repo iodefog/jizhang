@@ -161,6 +161,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
 }
 
+- (void)setContentInsets:(UIEdgeInsets)contentInsets {
+    _collectionView.contentInset = contentInsets;
+}
+
 - (void)endEditing {
     [_collectionView endEditing];
 }
@@ -201,7 +205,6 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _collectionView.backgroundColor = nil;
         [_collectionView registerClass:[SSJRecordMakingBillTypeSelectionCell class] forCellWithReuseIdentifier:kCellId];
         _collectionView.exchangeCellRegion = UIEdgeInsetsMake(11, (kCellWidth - 52) * 0.5, 25, (kCellWidth - 52) * 0.5);
-        _collectionView.contentInset = UIEdgeInsetsMake(0, 0, 326, 0);
     }
     return _collectionView;
 }

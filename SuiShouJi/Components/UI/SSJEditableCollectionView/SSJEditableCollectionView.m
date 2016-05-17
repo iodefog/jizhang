@@ -98,14 +98,6 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 #pragma mark - UIResponder
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-//    [super touchesBegan:touches withEvent:event];
-//}
-
-//- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-//    [super touchesMoved:touches withEvent:event];
-//}
-
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     if (_editable) {
         return;
@@ -120,10 +112,6 @@ static const CGFloat kMaxSpeed = 100;
         }
     }
 }
-
-//- (void)touchesCancelled:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-//    [super touchesCancelled:touches withEvent:event];
-//}
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -247,6 +235,8 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 - (void)endEditing {
+    [self endMovingCell];
+    
     if (_editable) {
         _editable = NO;
         

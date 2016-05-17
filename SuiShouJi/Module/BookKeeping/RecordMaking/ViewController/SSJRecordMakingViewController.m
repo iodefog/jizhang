@@ -217,6 +217,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     if (!_billTypeSelectionView) {
         __weak typeof(self) wself = self;
         _billTypeSelectionView = [[SSJRecordMakingBillTypeSelectionView alloc] initWithFrame:CGRectMake(0, self.billTypeInputView.bottom, self.view.width, self.view.height - self.billTypeInputView.bottom)];
+        _billTypeSelectionView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
         _billTypeSelectionView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
             [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID Success:NULL failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
@@ -289,7 +290,8 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if (textField == _billTypeInputView.moneyInput) {
+    if (textField == _billTypeInputView.moneyInput
+        || textField == _accessoryView.memoView) {
         [self makeArecord];
     }
     return YES;
@@ -503,10 +505,12 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 -(void)makeArecord{
     __weak typeof(self) weakSelf = self;
     if ([_billTypeInputView.moneyInput.text doubleValue] == 0) {
+        [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"金额不能为0"];
         return;
     }
     if ([_billTypeInputView.moneyInput.text doubleValue] < 0) {
+        [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"金额不能小于0"];
         return;
     }

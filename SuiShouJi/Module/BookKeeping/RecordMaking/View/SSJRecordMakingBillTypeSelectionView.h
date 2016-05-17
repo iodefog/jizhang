@@ -26,6 +26,8 @@
 
 @property (nonatomic) NSInteger selectedIndex;
 
+@property (nonatomic) UIEdgeInsets contentInsets;
+
 - (void)endEditing;
 
 @end
