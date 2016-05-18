@@ -113,6 +113,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
                 circleItem.colorValue = [resultSet stringForColumn:@"ccolor"];
                 circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
                 circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", scale * 100];
+                circleItem.imageBorderShowed = YES;
                 [circleItemArr addObject:circleItem];
             }
         }

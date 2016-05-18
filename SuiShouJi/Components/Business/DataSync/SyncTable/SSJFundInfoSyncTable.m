@@ -15,7 +15,7 @@
 }
 
 + (NSArray *)columns {
-    return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"iorder", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
@@ -23,7 +23,7 @@
 }
 
 + (NSArray *)optionalColumns {
-    return @[@"cmemo"];
+    return @[@"cmemo", @"iorder"];
 }
 
 + (NSString *)queryRecordsForSyncAdditionalCondition {

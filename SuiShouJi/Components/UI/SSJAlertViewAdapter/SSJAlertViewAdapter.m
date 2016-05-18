@@ -20,7 +20,19 @@
 @implementation SSJAlertViewAdapter
 
 + (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message action:(SSJAlertViewAction *)action,... {
-    SSJAlertViewAdapter *adapter = [SSJAlertViewAdapter adapterWithTitle:title message:message action:action, nil];
+    SSJAlertViewAdapter *adapter = [SSJAlertViewAdapter adapter];
+    if (action) {
+        [adapter.p_Actions addObject:action];
+    }
+    va_list actionList;
+    va_start(actionList, action);
+    SSJAlertViewAction *tempAction = nil;
+    while ((tempAction = va_arg(actionList, SSJAlertViewAction *))) {
+        [adapter.p_Actions addObject:tempAction];
+    }
+    va_end(actionList);
+    
+    [adapter configureAlertWithTitle:title message:message];
     [adapter show];
 }
 
@@ -37,26 +49,7 @@
     }
     va_end(actionList);
     
-    if (SSJSystemVersion() >= 8.0) {
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        for (SSJAlertViewAction *tempAction in adapter.actions) {
-            UIAlertAction *alertAction = [UIAlertAction actionWithTitle:tempAction.title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                if (tempAction.handler) {
-                    tempAction.handler(tempAction);
-                }
-            }];
-            [alertVC addAction:alertAction];
-        }
-        adapter.alert = alertVC;
-    } else {
-        SSJAlertViewDelegator *delegator = [SSJAlertViewDelegator sharedDelegator];
-        delegator.alertViewAdapter = adapter;
-        UIAlertView *aler = [[UIAlertView alloc] initWithTitle:title message:message delegate:delegator cancelButtonTitle:nil otherButtonTitles:nil, nil];
-        for (SSJAlertViewAction *action in adapter.actions) {
-            [aler addButtonWithTitle:action.title];
-        }
-        adapter.alert = aler;
-    }
+    [adapter configureAlertWithTitle:title message:message];
     return adapter;
 }
 
@@ -108,15 +101,6 @@
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (_p_Actions.count > 0) {
-        SSJAlertViewAction *action = [_p_Actions ssj_safeObjectAtIndex:buttonIndex];
-        if (action.handler) {
-            action.handler(action);
-        }
-    }
-}
-
 - (NSArray *)actions {
     return [NSArray arrayWithArray:_p_Actions];
 }
@@ -126,6 +110,38 @@
         return [[_alert textFields] firstObject];
     } else {
         return [_alert textFieldAtIndex:0];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (_p_Actions.count > 0) {
+        SSJAlertViewAction *action = [_p_Actions ssj_safeObjectAtIndex:buttonIndex];
+        if (action.handler) {
+            action.handler(action);
+        }
+    }
+}
+
+- (void)configureAlertWithTitle:(NSString *)title message:(NSString *)message {
+    if (SSJSystemVersion() >= 8.0) {
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        for (SSJAlertViewAction *tempAction in self.actions) {
+            UIAlertAction *alertAction = [UIAlertAction actionWithTitle:tempAction.title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                if (tempAction.handler) {
+                    tempAction.handler(tempAction);
+                }
+            }];
+            [alertVC addAction:alertAction];
+        }
+        self.alert = alertVC;
+    } else {
+        SSJAlertViewDelegator *delegator = [SSJAlertViewDelegator sharedDelegator];
+        delegator.alertViewAdapter = self;
+        UIAlertView *aler = [[UIAlertView alloc] initWithTitle:title message:message delegate:delegator cancelButtonTitle:nil otherButtonTitles:nil, nil];
+        for (SSJAlertViewAction *action in self.actions) {
+            [aler addButtonWithTitle:action.title];
+        }
+        self.alert = aler;
     }
 }
 
