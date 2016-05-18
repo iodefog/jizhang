@@ -131,7 +131,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         cell.deleteButtonClickBlock = ^(){
             [weakSelf.items removeObjectAtIndex:indexPath.row];
             [weakSelf.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-            [weakSelf.collectionView reloadData];
         };
         return cell;
     }else{
