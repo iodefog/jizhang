@@ -10,8 +10,9 @@ static NSString *const kTitle1 = @"更换头像";
 static NSString *const kTitle2 = @"昵称";
 static NSString *const kTitle3 = @"个性签名";
 static NSString *const kTitle4 = @"手机号";
-static NSString *const kTitle5 = @"修改登录密码";
-static NSString *const kTitle6 = @"手势密码";
+static NSString *const kTitle5 = @"我的等级";
+static NSString *const kTitle6 = @"修改登录密码";
+static NSString *const kTitle7 = @"手势密码";
 
 
 #import "SSJPersonalDetailViewController.h"
@@ -65,9 +66,9 @@ static NSString *const kTitle6 = @"手势密码";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (SSJUserLoginType() != SSJLoginTypeNormal) {
-        self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3],@[kTitle6]];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3],@[kTitle6]];
     }else{
-        self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3],@[kTitle4],@[kTitle5],@[kTitle6]];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle4],@[kTitle5 , kTitle6]];
     }
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
