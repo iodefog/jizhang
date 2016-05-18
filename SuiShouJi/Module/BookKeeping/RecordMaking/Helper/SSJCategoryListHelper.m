@@ -140,7 +140,8 @@
         }
         
         NSString *newCategoryId = SSJUUID();
-        if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom) values (?, ?, ?, ?, ?, 1)", newCategoryId, name, @(incomeOrExpenture), icon, color]) {
+        NSString *colorValue = [color hasPrefix:@"#"] ? color : [NSString stringWithFormat:@"#%@", color];
+        if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom) values (?, ?, ?, ?, ?, 1)", newCategoryId, name, @(incomeOrExpenture), icon, colorValue]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
