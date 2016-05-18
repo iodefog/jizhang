@@ -40,7 +40,6 @@
     }
     [self.view addSubview:self.headerView];
     [self.view addSubview:self.collectionView];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
     self.navigationItem.rightBarButtonItem  = rightBarButton;
     // Do any additional setup after loading the view.

@@ -514,6 +514,8 @@
 		9C4078391CE1FC3100A61956 /* tab_more_sel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078311CE1FC3100A61956 /* tab_more_sel@3x.png */; };
 		9C4078471CE2190800A61956 /* tianjia_border@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078451CE2190800A61956 /* tianjia_border@2x.png */; };
 		9C4078481CE2190800A61956 /* tianjia_border@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078461CE2190800A61956 /* tianjia_border@3x.png */; };
+		9C6E30AC1CEC067500394BB9 /* canleder_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E30AB1CEC067500394BB9 /* canleder_jia@3x.png */; };
+		9C6E30B51CEC067D00394BB9 /* canleder_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E30B41CEC067D00394BB9 /* canleder_jia@2x.png */; };
 		9C762FB61CE9B21200ED88BE /* dian_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C762FAE1CE9B21200ED88BE /* dian_nor@2x.png */; };
 		9C762FB71CE9B21200ED88BE /* dian_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C762FAF1CE9B21200ED88BE /* dian_nor@3x.png */; };
 		9C762FB81CE9B21200ED88BE /* dian_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C762FB01CE9B21200ED88BE /* dian_sel@2x.png */; };
@@ -1630,6 +1632,8 @@
 		9C4078311CE1FC3100A61956 /* tab_more_sel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_more_sel@3x.png"; sourceTree = "<group>"; };
 		9C4078451CE2190800A61956 /* tianjia_border@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia_border@2x.png"; sourceTree = "<group>"; };
 		9C4078461CE2190800A61956 /* tianjia_border@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia_border@3x.png"; sourceTree = "<group>"; };
+		9C6E30AB1CEC067500394BB9 /* canleder_jia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "canleder_jia@3x.png"; sourceTree = "<group>"; };
+		9C6E30B41CEC067D00394BB9 /* canleder_jia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "canleder_jia@2x.png"; sourceTree = "<group>"; };
 		9C762FAE1CE9B21200ED88BE /* dian_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dian_nor@2x.png"; sourceTree = "<group>"; };
 		9C762FAF1CE9B21200ED88BE /* dian_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dian_nor@3x.png"; sourceTree = "<group>"; };
 		9C762FB01CE9B21200ED88BE /* dian_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dian_sel@2x.png"; sourceTree = "<group>"; };
@@ -3059,6 +3063,8 @@
 				BD8C7F971C914CC400A70100 /* no_record_bg@3x.png */,
 				BD1EE5EF1C9807CD00814A05 /* calendar_norecord@2x.png */,
 				BD1EE5F11C9807EF00814A05 /* calendar_norecord@3x.png */,
+				9C6E30B41CEC067D00394BB9 /* canleder_jia@2x.png */,
+				9C6E30AB1CEC067500394BB9 /* canleder_jia@3x.png */,
 				BDF510721C925A6500A49D74 /* weibo_banner.png */,
 				9C9471201CEB051400D69079 /* founds_yindao_bottom@2x.png */,
 				9C9471211CEB051400D69079 /* founds_yindao_bottom@3x.png */,
@@ -5293,6 +5299,7 @@
 				9C2BCFBE1CBF793500D8D8D3 /* ft_shouqi@2x.png in Resources */,
 				7DD7D6D81C4C8E6A00ACE71A /* bt_sport@2x.png in Resources */,
 				BD8C7F981C914CC400A70100 /* no_record_bg@3x.png in Resources */,
+				9C6E30AC1CEC067500394BB9 /* canleder_jia@3x.png in Resources */,
 				7DD7D6E01C4C8E6A00ACE71A /* bt_tuikuan@2x.png in Resources */,
 				BDF510971C925C8D00A49D74 /* tab_more_nor@2x.png in Resources */,
 				9C991E331CE0A79F0031CD02 /* bt_riyong@3x.png in Resources */,
@@ -5395,6 +5402,7 @@
 				7DD7D6D41C4C8E6A00ACE71A /* bt_shouzhai@2x.png in Resources */,
 				7DD7D6D01C4C8E6A00ACE71A /* bt_shebao@2x.png in Resources */,
 				7DDDA7F51CBE51070029ADAC /* water_success_alert@3x.png in Resources */,
+				9C6E30B51CEC067D00394BB9 /* canleder_jia@2x.png in Resources */,
 				BDA3FDF21C58CAC400FB57B1 /* ft_chuxuka@3x.png in Resources */,
 				7DDDA7C01CBE1BFD0029ADAC /* help_tree_level_6@2x.png in Resources */,
 				7DD7D6FF1C4C8E6A00ACE71A /* founds_zhuanru@3x.png in Resources */,
