@@ -292,8 +292,10 @@ static id _instance;
         if (self.lastPressTag != 13) {
             if (self.plusOrMinusKeyHasPressed == NO) {
                 self.leftNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
+                self.rightNum = 0;
             }else{
                 self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
+                self.leftNum = 0;
             }
         }
         self.leftNum = self.leftNum + self.rightNum;
@@ -309,8 +311,10 @@ static id _instance;
         if (self.lastPressTag != 14) {
             if (self.plusOrMinusKeyHasPressed == NO) {
                 self.leftNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
+                self.rightNum = 0;
             }else{
                 self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
+                self.leftNum = 0;
             }
         }
         self.leftNum = self.leftNum - self.rightNum;

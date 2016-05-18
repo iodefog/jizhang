@@ -88,7 +88,7 @@
         self.contentViews = [[NSMutableArray alloc] initWithCapacity:4];
     }
     
-    NSArray *images = @[@"guide_1",@"guide_2",@"guide_3",@"guide_4"];
+    NSArray *images = @[@"guide_1",@"guide_2",@"guide_3"];
     for (int i = 0; i < images.count; i ++) {
         UIImage *image = [UIImage ssj_compatibleImageNamed:images[i]];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];

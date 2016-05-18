@@ -30,6 +30,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 @property (nonatomic,strong) SSJEditableCollectionView *collectionView;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) SSJFinancingHomeHeader *headerView;
+@property(nonatomic, strong) NSString *newlyAddFundId;
 @end
 
 @implementation SSJFinancingHomeViewController{
