@@ -456,7 +456,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         __block NSInteger selectedIndex = 0;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if (_item && [item.ID isEqualToString:_item.ID]) {
+            if (_item && [item.ID isEqualToString:_item.billId]) {
                 selectedIndex = index;
             }
         });
