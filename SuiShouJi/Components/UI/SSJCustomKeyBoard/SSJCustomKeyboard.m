@@ -88,12 +88,12 @@ static id _instance;
     self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
-    self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.BackspaceButton.rightTop = CGPointMake(self.right, 0);
-    self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.PlusButton.rightTop = CGPointMake(self.width, self.BackspaceButton.bottom);
     self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.MinusButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
+    self.MinusButton.rightTop = CGPointMake(self.right, 0);
+    self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.PlusButton.rightTop = CGPointMake(self.width, self.MinusButton.bottom);
+    self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.BackspaceButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight * 2);
     self.ComfirmButton.rightBottom = CGPointMake(self.width, self.height);
 }
