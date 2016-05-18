@@ -98,6 +98,10 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         [self.navigationController pushViewController:fundingDetailVC animated:YES];
     }else{
         SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+            [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:weakSelf.items.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+        };
         [self.navigationController pushViewController:newFundingVC animated:YES];
     }
 

@@ -40,6 +40,7 @@
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
 @property (nonatomic) long selectedDay;
+@property (nonatomic) BOOL needAnimation;
 
 @end
 
@@ -127,6 +128,20 @@
     SSJCalenderDetailViewController *CalenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     CalenderDetailVC.item = item;
     [self.navigationController pushViewController:CalenderDetailVC animated:YES];
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.needAnimation) {
+        __weak typeof(self) weakSelf = self;
+        SSJCalenderTableViewCell * currentCell = (SSJCalenderTableViewCell *)cell;
+        currentCell.transform = CGAffineTransformMakeTranslation(0, self.view.height - 400);
+        [UIView animateWithDuration:0.3 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            currentCell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            weakSelf.needAnimation = NO;
+        }];
+    }
+
 }
 
 #pragma mark - UITableViewDataSource
@@ -294,7 +309,7 @@
             }else{
                 [weakSelf.tableView ssj_hideWatermark:YES];
             }
-            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            [weakSelf reloadWithAnimation];
         }
         weakSelf.calendarView.data = data;
         [weakSelf.view ssj_hideLoadingIndicator];
@@ -324,6 +339,10 @@
 //    }];
 //}
 
+-(void)reloadWithAnimation{
+    self.needAnimation = YES;
+    [self.tableView reloadData];
+}
 
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];
