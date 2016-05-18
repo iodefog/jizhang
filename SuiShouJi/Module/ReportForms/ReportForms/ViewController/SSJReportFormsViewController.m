@@ -337,6 +337,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                 circleItem.imageName = item.imageName;
                 circleItem.colorValue = item.colorValue;
                 circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+                circleItem.imageBorderShowed = YES;
                 [self.circleItems addObject:circleItem];
                 
             } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
@@ -348,6 +349,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                     circleItem.imageName = item.imageName;
                     circleItem.colorValue = item.colorValue;
                     circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+                    circleItem.imageBorderShowed = NO;
                     [self.circleItems addObject:circleItem];
                 }
             }

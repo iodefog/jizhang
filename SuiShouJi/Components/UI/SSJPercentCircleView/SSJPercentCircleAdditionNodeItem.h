@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) CGFloat imageRadius;
 
+@property (nonatomic) BOOL imageBorderShowed;
+
 @property (nonatomic, copy) NSString *borderColorValue;
 
 @property (nonatomic) CGFloat gapBetweenImageAndText;

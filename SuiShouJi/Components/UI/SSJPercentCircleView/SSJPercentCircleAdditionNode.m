@@ -257,9 +257,11 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         _imageView.size = CGSizeMake(self.item.imageRadius * 2, self.item.imageRadius * 2);
         _imageView.contentScaleFactor = _imageView.contentScaleFactor * scale;
         _imageView.contentMode = UIViewContentModeCenter;
-        _imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
-        _imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
-        _imageView.layer.cornerRadius = _imageView.width * 0.5;
+        if (self.item.imageBorderShowed) {
+            _imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
+            _imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+            _imageView.layer.cornerRadius = _imageView.width * 0.5;
+        }
         _imageView.transform = CGAffineTransformMakeScale(0, 0);
     }
     return _imageView;
