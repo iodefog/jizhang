@@ -410,6 +410,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJSegmentedControl *)segmentControl {
     if (!_segmentControl) {
         _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
+        _segmentControl.size = CGSizeMake(225, 30);
         _segmentControl.font = [UIFont systemFontOfSize:15];
         _segmentControl.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         _segmentControl.selectedBorderColor = [UIColor ssj_colorWithHex:@"#eb4a64"];

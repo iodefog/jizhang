@@ -9,6 +9,8 @@
 #import "SSJAddNewTypeColorSelectionView.h"
 #import "SSJColorSelectCollectionViewCell.h"
 
+#define ITEM_SIZE_WIDTH (self.width - 80) / 6
+
 static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 
 @interface SSJAddNewTypeColorSelectionView () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -24,6 +26,10 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
         [self addSubview:self.collectionView];
     }
     return self;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    return CGSizeMake(self.width, 30 + ITEM_SIZE_WIDTH * 2);
 }
 
 - (void)layoutSubviews {
@@ -74,8 +80,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     flowLayout.minimumInteritemSpacing = 10;
     flowLayout.minimumLineSpacing = 10;
-    CGFloat width = (self.width - 80) / 6;
-    flowLayout.itemSize = CGSizeMake(width, width);
+    flowLayout.itemSize = CGSizeMake(ITEM_SIZE_WIDTH, ITEM_SIZE_WIDTH);
     flowLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
     return flowLayout;
 }

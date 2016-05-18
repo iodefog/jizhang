@@ -75,17 +75,20 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    CGFloat width = 0.0;
-    CGFloat height = 0.0;
-    CGFloat horizontalGap = 16.0;
-    CGFloat verticalGap = 10.0;
-    for (UIButton *button in self.buttons) {
-        NSString *title = [button titleForState:button.state];
-        CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:self.font}];
-        width = MAX(width, titleSize.width + horizontalGap);
-        height = MAX(height, titleSize.height + verticalGap);
+    if (CGSizeEqualToSize(self.size, CGSizeZero)) {
+        CGFloat width = 0.0;
+        CGFloat height = 0.0;
+        CGFloat horizontalGap = 16.0;
+        CGFloat verticalGap = 10.0;
+        for (UIButton *button in self.buttons) {
+            NSString *title = [button titleForState:button.state];
+            CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:self.font}];
+            width = MAX(width, titleSize.width + horizontalGap);
+            height = MAX(height, titleSize.height + verticalGap);
+        }
+        return CGSizeMake(width * self.buttons.count, height);
     }
-    return CGSizeMake(width * self.buttons.count, height);
+    return self.size;
 }
 
 - (nullable NSString *)titleForSegmentAtIndex:(NSUInteger)segment {
