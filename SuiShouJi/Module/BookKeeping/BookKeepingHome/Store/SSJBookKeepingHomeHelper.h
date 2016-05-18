@@ -23,6 +23,7 @@ extern NSString *const SSJNewAddChargeArrKey;
 
 extern NSString *const SSJChargeCountSummaryKey;
 
+extern NSString *const SSJDateStartIndexDicKey;
 
 /**
  *  查询首页所有记账记录

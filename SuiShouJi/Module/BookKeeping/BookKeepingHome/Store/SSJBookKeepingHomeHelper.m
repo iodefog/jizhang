@@ -15,6 +15,7 @@ NSString *const SSJExpentureSumKey = @"SSJExpentureSumKey";
 NSString *const SSJOrginalChargeArrKey = @"SSJOrginalChargeArrKey";
 NSString *const SSJNewAddChargeArrKey = @"SSJNewAddChargeArrKey";
 NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
+NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
 
 @implementation SSJBookKeepingHomeHelper
 
@@ -53,6 +54,7 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
         NSMutableArray *newAddChargeArr = [NSMutableArray array];
         NSMutableDictionary *summaryDic = [NSMutableDictionary dictionaryWithCapacity:0];
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionary];
+        NSMutableDictionary *startIndex = [NSMutableDictionary dictionary];
         NSString *lastDate = @"";
         int count = 0;
         int chargeCount = 0;
@@ -82,7 +84,10 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
             item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
             item.operatorType = [chargeResult intForColumn:@"CHARGEOPERATORTYPE"];
             int configOperatorType = [chargeResult intForColumn:@"CONFIGOPERATORTYPE"];
-            item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];\
+            item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
+            if ([item.billId isEqualToString:@"-1"]) {
+                [startIndex setObject:@(count) forKey:item.billDate];
+            }
             if (![item.billDate isEqualToString:lastDate]) {
                 lastDate = item.billDate;
                 chargeCount = 0;
@@ -90,7 +95,6 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
             }else{
                 chargeCount = [[summaryDic valueForKey:item.billDate] intValue] + 1;
                 [summaryDic setValue:@(chargeCount) forKey:item.billDate];
-                    
             }
             item.chargeIndex = count;
             if (configOperatorType == 2) {
@@ -119,6 +123,7 @@ NSString *const SSJChargeCountSummaryKey = @"SSJChargeCountSummaryKey";
         [tempDic setObject:originalChargeArr forKey:SSJOrginalChargeArrKey];
         [tempDic setObject:newAddChargeArr forKey:SSJNewAddChargeArrKey];
         [tempDic setObject:summaryDic forKey:SSJChargeCountSummaryKey];
+        [tempDic setObject:startIndex forKey:SSJDateStartIndexDicKey];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempDic);

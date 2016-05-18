@@ -15,7 +15,7 @@
         NSString *userid = SSJUSERID();
         NSMutableArray *fundingList = [[NSMutableArray alloc]init];
         NSMutableArray *orderArr = [[NSMutableArray alloc]init];
-        FMResultSet * fundingResult = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?  ORDER BY A.IORDER ASC , A.CPARENT ASC , A.CWRITEDATE DESC",userid];
+        FMResultSet * fundingResult = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? ORDER BY A.CPARENT ASC , A.CWRITEDATE DESC",userid];
         if (!fundingResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
