@@ -173,7 +173,7 @@ static id _instance;
     if (!_PlusButton) {
         _PlusButton = [[SSJCustomKeyBoardButton alloc]init];
         _PlusButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
-        [_PlusButton setTitle:@"+" forState:UIControlStateNormal];
+        [_PlusButton setImage:[UIImage imageNamed:@"plus"] forState:UIControlStateNormal];
         _PlusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_PlusButton setTintColor:[UIColor whiteColor]];
         [_PlusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
@@ -190,7 +190,7 @@ static id _instance;
     if (!_MinusButton) {
         _MinusButton = [[SSJCustomKeyBoardButton alloc]init];
         _MinusButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
-        [_MinusButton setTitle:@"-" forState:UIControlStateNormal];
+        [_MinusButton setImage:[UIImage imageNamed:@"minus"] forState:UIControlStateNormal];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_MinusButton setTintColor:[UIColor whiteColor]];
         [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];\
