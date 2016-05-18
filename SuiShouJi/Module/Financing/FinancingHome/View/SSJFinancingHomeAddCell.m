@@ -29,7 +29,7 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.backImage.frame = self.bounds;
-    self.addImage.size = CGSizeMake(33, 33);
+    self.addImage.size = CGSizeMake(13, 13);
     self.addImage.centerY = self.height / 2;
     self.addImage.right = self.width / 2 - 40;
     self.addLabel.centerY = self.height / 2;
