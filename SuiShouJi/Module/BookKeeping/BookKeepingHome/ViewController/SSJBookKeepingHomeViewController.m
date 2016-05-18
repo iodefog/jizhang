@@ -549,7 +549,7 @@
                 weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                 NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
                 NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
-                NSMutableDictionary *startIndex = [NSMutableDictionary dictionaryWithCapacity:[result objectForKey:SSJDateStartIndexDicKey]];
+                NSMutableDictionary *startIndex = [NSMutableDictionary dictionaryWithCapacity:0];
                 for (int i = 0; i < newAddArr.count; i++) {
                     weakSelf.newlyAddIndexArr = [NSMutableArray arrayWithCapacity:0];
                     SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
