@@ -154,7 +154,7 @@
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
             item.type = type;
             item.money = [resultSet doubleForColumn:@"SUM(IMONEY)"];
-            item.colorValue = type == 0 ? @"#64b3fe" : @"#fe7373";
+            item.colorValue = type == 0 ? @"#f56262" : @"#59ae65";
             item.imageName = type == 0 ? @"reportForms_income" : @"reportForms_expenses";
             [result addObject:item];
             amount += item.money;

@@ -161,6 +161,8 @@ static NSString *const kTitle6 = @"手势密码";
         mineHomeCell.cellDetail = self.item.mobileNo;
     }else if ([title isEqualToString:kTitle5]){
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else if ([title isEqualToString:kTitle6]) {
+        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return mineHomeCell;
 }

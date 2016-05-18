@@ -53,10 +53,10 @@ static const int kVerifyFailureTimesLimit = 5;
 @implementation SSJMotionPasswordViewController
 
 #pragma mark - Lifecycle
-+ (void)verifyMotionPasswordIfNeeded:(void (^)())finish {
++ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish {
     if (!SSJIsUserLogined()) {
         if (finish) {
-            finish();
+            finish(NO);
         }
         return;
     }
@@ -65,7 +65,7 @@ static const int kVerifyFailureTimesLimit = 5;
     UIViewController *currentVC = SSJVisibalController();
     if ([currentVC isKindOfClass:[SSJMotionPasswordViewController class]]) {
         if (finish) {
-            finish();
+            finish(NO);
         }
         return;
     }
@@ -80,7 +80,7 @@ static const int kVerifyFailureTimesLimit = 5;
             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
             motionVC.finishHandle = ^(UIViewController *controller) {
                 if (finish) {
-                    finish();
+                    finish(YES);
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
@@ -92,7 +92,7 @@ static const int kVerifyFailureTimesLimit = 5;
     }
     
     if (finish) {
-        finish();
+        finish(NO);
     }
 }
 

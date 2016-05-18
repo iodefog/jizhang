@@ -52,7 +52,7 @@
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
-@property(nonatomic) BOOL  allowRefresh;
+
 
 @end
 
@@ -73,7 +73,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    _hasLoad = YES;
+//    _hasLoad = YES;
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
@@ -602,7 +602,6 @@
 
 -(void)reloadDataAfterSync{
     [self getDateFromDatebase];
-    
     [self reloadBudgetData];
 }
 

@@ -19,11 +19,11 @@ NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
 //NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
 
 #else
-//NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
-//NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
+NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
+NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
 
-NSString *const SSJBaseURLString = @"http://jz.9188.com";
-NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
+//NSString *const SSJBaseURLString = @"http://jz.9188.com";
+//NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
 #endif
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";

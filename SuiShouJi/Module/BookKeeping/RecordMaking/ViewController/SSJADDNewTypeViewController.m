@@ -77,7 +77,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 -(void)viewDidLayoutSubviews{
     _newCategoryCollectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
-    _colorSelectionView.frame = CGRectMake(0, self.view.height - 186, self.view.width, 186);
+    _colorSelectionView.bottom = self.view.height;
     _customCategoryCollectionView.frame = CGRectMake(0, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5);
 }
 
@@ -223,6 +223,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [_newCategoryCollectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
         _newCategoryCollectionView.backgroundColor = [UIColor whiteColor];
         _newCategoryCollectionView.contentOffset = CGPointMake(0, 0);
+        _newCategoryCollectionView.contentInset = UIEdgeInsetsMake(0, 0, 94, 0);
     }
     return _newCategoryCollectionView;
 }
@@ -295,7 +296,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (SSJAddNewTypeColorSelectionView *)colorSelectionView {
     if (!_colorSelectionView) {
-        _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithFrame:CGRectMake(0, self.view.height - 186, self.view.width, 186)];
+        _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 0)];
+        [_colorSelectionView sizeToFit];
         _colorSelectionView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
         [_colorSelectionView ssj_setBorderWidth:1];
         [_colorSelectionView ssj_setBorderStyle:SSJBorderStyleTop];
