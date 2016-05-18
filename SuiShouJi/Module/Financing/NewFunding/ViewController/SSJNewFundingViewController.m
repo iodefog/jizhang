@@ -44,7 +44,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     _selectParent = @"1";
     _selectColor = @"#fe8a65";
     _selectIcoin = @"ft_cash";
@@ -250,9 +249,9 @@
     if (success) {
         [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CUSERID,CFUNDID,IBALANCE) VALUES (?,?,?)",SSJUSERID(),fundId,[NSNumber numberWithDouble:fundAmount]];
         if ([_amountTextField.text doubleValue] > 0) {
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",userId,SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"1",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
+            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"1",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
         }else if([_amountTextField.text doubleValue] < 0){
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",userId,SSJUSERID(),[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"2",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
+            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",[_amountTextField.text doubleValue]],@"2",fundId,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:[_amountTextField.text doubleValue]],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"]];
         }
         SSJFundingItem *item = [[SSJFundingItem alloc]init];
         item.fundingID = fundId;

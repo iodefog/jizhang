@@ -33,7 +33,6 @@
     [super viewDidLoad];
     _items = [[NSMutableArray alloc]init];
     [self getDateFromDb];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     // Do any additional setup after loading the view.
 }
 

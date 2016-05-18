@@ -61,7 +61,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     [self getCurrentDate];
     self.selectedYear = _currentYear;
     self.selectedMonth = _currentMonth;
@@ -73,9 +72,8 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:@"+" style:UIBarButtonItemStylePlain target:self action:@selector(leftButtonClicked:)];
-    [leftItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:30]} forState:UIControlStateNormal];
-    self.navigationItem.rightBarButtonItem = leftItem;
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
 
 }
 
@@ -307,7 +305,7 @@
 }
 
 
--(void)leftButtonClicked:(id)sender{
+-(void)rightButtonClicked:(id)sender{
     SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
     recordMakingVC.selectedDay = self.selectedDay;
     recordMakingVC.selectedMonth = self.selectedMonth;

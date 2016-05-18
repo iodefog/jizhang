@@ -46,7 +46,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = self.rightButton;
     [self.view addSubview:self.transferIntext];

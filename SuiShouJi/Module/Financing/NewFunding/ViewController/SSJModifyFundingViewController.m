@@ -47,7 +47,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self ssj_showBackButtonWithImage:[UIImage imageNamed:@"close"] target:self selector:@selector(closeButtonClicked:)];
     self.title = self.item.fundingName;
     _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择颜色"];
     _selectColor = self.item.fundingColor;
