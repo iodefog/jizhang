@@ -20,7 +20,7 @@
 @property(nonatomic) BOOL editeModel;
 
 //点击删除按钮的回调
-typedef void (^deleteButtonClickBlock)();
+typedef void (^deleteButtonClickBlock)(SSJFinancingHomeCell *cell);
 
 @property (nonatomic, copy) deleteButtonClickBlock deleteButtonClickBlock;
 

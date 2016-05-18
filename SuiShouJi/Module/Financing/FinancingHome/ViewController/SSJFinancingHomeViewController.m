@@ -128,9 +128,10 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
         cell.item = item;
         cell.editeModel = _editeModel;
-        cell.deleteButtonClickBlock = ^(){
-            [weakSelf.items removeObjectAtIndex:indexPath.item];
-            [weakSelf.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+        cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
+            NSIndexPath *deleteIndex = [self.collectionView indexPathForCell:cell];
+            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
+            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
         };
         return cell;
     }else{

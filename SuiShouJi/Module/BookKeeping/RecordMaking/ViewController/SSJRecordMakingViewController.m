@@ -374,9 +374,20 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 }
 
 - (void)selectPhotoAction {
-    if (_selectedImage) {
+    if (_selectedImage || self.item.chargeImage.length != 0) {
         SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        imageBrowserVC.DeleteImageBlock = ^(){
+            weakSelf.selectedImage = nil;
+            weakSelf.item.chargeImage = @"";
+            weakSelf.item.chargeThumbImage = @"";
+        };
+        imageBrowserVC.NewImageSelectedBlock = ^(UIImage *image){
+            weakSelf.selectedImage = image;
+        };
+        imageBrowserVC.type = SSJImageBrowseVcTypeEdite;
         imageBrowserVC.image = _selectedImage;
+        imageBrowserVC.item = self.item;
         [self.navigationController pushViewController:imageBrowserVC animated:YES];
     } else {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
@@ -650,7 +661,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
                             }
                         }
                     }
-                }else{
+                }else if(self.item.chargeImage.length == 0){
                     [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",@"",@"",weakSelf.item.ID,userid];
                     [db executeUpdate:@"delete from BK_IMG_SYNC where RID = ?",self.item.ID];
                 }

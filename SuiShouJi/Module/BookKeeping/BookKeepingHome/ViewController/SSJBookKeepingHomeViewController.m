@@ -349,6 +349,7 @@
     };
     bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
         SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
+        imageBrowserVC.type = SSJImageBrowseVcTypeBrowse;
         imageBrowserVC.item = item;
         [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
     };

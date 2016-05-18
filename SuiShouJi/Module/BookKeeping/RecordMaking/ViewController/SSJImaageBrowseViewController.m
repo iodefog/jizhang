@@ -47,9 +47,7 @@
     [self.view addSubview:self.moneyLabel];
     [self.view addSubview:self.memoLabel];
     [self.view addSubview:self.dateLabel];
-    if (self.item != nil) {
-        [self getImageAndDetails];
-    }
+//    [self getImageAndDetails];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -192,24 +190,48 @@
     self.imageBrowser.image = image;
 }
 
--(void)getImageAndDetails{
-    self.deleteButton.hidden = YES;
-    self.changeImageButton.hidden = YES;
-    self.comfirmButton.hidden = YES;
-    if (_item.incomeOrExpence) {
-        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
+-(void)setItem:(SSJBillingChargeCellItem *)item{
+    _item = item;
+    if (self.type == SSJImageBrowseVcTypeBrowse) {
+        self.deleteButton.hidden = YES;
+        self.changeImageButton.hidden = YES;
+        self.comfirmButton.hidden = YES;
+        if (_item.incomeOrExpence) {
+            self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
+        }else{
+            self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
+            
+        }
+        [self.moneyLabel sizeToFit];
+        if (_item.chargeMemo != nil && ![_item.chargeMemo isEqualToString:@""]) {
+            self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];
+            [self.memoLabel sizeToFit];
+        }
+        self.dateLabel.text = _item.billDate;
+        [self.dateLabel sizeToFit];
+        if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
+                    self.imageBrowser.width = self.view.width;
+                    self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
+                }else{
+                    self.imageBrowser.size = image.size;
+                }
+                self.imageBrowser.image = image;
+            }else{
+                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
+                        self.imageBrowser.width = self.view.width;
+                        self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
+                    }else{
+                        self.imageBrowser.size = image.size;
+                    }
+                }];
+            }
+        }
+        
     }else{
-        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
-
-    }
-    [self.moneyLabel sizeToFit];
-    if (_item.chargeMemo != nil && ![_item.chargeMemo isEqualToString:@""]) {
-        self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];
-        [self.memoLabel sizeToFit];
-    }
-    self.dateLabel.text = _item.billDate;
-    [self.dateLabel sizeToFit];
-    if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
             UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
             if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
@@ -229,8 +251,13 @@
                 }
             }];
         }
+        
     }
 }
+
+//-(void)getImageAndDetails{
+//
+//}
 
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -248,8 +275,8 @@
     }else{
         if (self.DeleteImageBlock) {
             self.DeleteImageBlock();
-            [self.navigationController popViewControllerAnimated:YES];
         }
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

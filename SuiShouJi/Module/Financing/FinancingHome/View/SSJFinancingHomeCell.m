@@ -120,7 +120,7 @@
 -(void)deleteButtonClicked:(id)sender{
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:self.item];
     if (self.deleteButtonClickBlock) {
-        self.deleteButtonClickBlock();
+        self.deleteButtonClickBlock(self);
     }
 }
 
