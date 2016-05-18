@@ -95,11 +95,19 @@ NSDate *SCYEnterBackgroundTime() {
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:^{
+        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified){
+            // 没有进入手势密码，直接进入首页的话，就调用reloadWithAnimation显示首页数据加载动画;
+            // 因为从手势密码返回到首页会触发首页的viewWillAppear，在这个方法中也做了数据刷新，会把加载动画覆盖掉
             UITabBarController *tabVC = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
             UINavigationController *navi = [tabVC.viewControllers firstObject];
             SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
-            if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+            if (![homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+                return;
+            }
+            if (isVerified) {
+                homeVC.allowRefresh = YES;
+                homeVC.hasLoad = NO;
+            } else {
                 [homeVC reloadWithAnimation];
             }
         }];

@@ -135,7 +135,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         return cell;
     }else{
         SSJFinancingHomeAddCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingAddCellIdentifier forIndexPath:indexPath];
-        return cell;;
+        return cell;
     }
 }
 
