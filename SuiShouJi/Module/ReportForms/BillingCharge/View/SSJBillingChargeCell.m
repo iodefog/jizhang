@@ -80,7 +80,7 @@
         UIImageView *displayedView = self.photo.hidden ? self.memo : self.photo;
         displayedView.leftTop = CGPointMake(self.imageView.right + 10, self.imageView.centerY + 5);
         if (!self.memoLab.hidden) {
-            self.memoLab.width = 200;
+            self.memoLab.width = 100;
             self.memoLab.leftBottom = CGPointMake(displayedView.right + 12, displayedView.bottom);
         }
     } else {

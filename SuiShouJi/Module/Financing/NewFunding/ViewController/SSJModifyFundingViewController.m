@@ -260,7 +260,7 @@
         if ([db intForQuery:@"SELECT OPERATORTYPE FROM BK_FUND_INFO WHERE CFUNDID = ? AND CUSERID = ?",weakSelf.item.fundingID,SSJUSERID()] == 2) {
             return ;
         }
-        if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ?",_nameTextField.text,weakSelf.item.fundingID,SSJUSERID()] > 0){
+        if([db intForQuery:@"SELECT COUNT(1) FROM BK_FUND_INFO WHERE CACCTNAME = ? AND CFUNDID <> ? AND CUSERID = ? AND OPERATORTYPE <> 2",_nameTextField.text,weakSelf.item.fundingID,SSJUSERID()] > 0){
             dispatch_async(dispatch_get_main_queue(), ^(){
                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"已有同名称账户，请换个名称吧。" delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
