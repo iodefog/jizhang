@@ -42,6 +42,7 @@
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
+@property(nonatomic, strong) UIImageView *noDataHeader;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -487,6 +488,14 @@
     return _homeButton;
 }
 
+-(UIImageView *)noDataHeader{
+    if (!_noDataHeader) {
+        _noDataHeader = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 294)];
+        _noDataHeader.image = [UIImage imageNamed:@"home_none"];
+    }
+    return _noDataHeader;
+}
+
 //-(UILabel *)statusLabel{
 //    if (!_statusLabel) {
 //        _statusLabel = [[UILabel alloc]init];
@@ -548,12 +557,12 @@
                 [weakSelf.tableView reloadData];
                 [weakSelf.tableView ssj_hideLoadingIndicator];
                 if (((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count == 0) {
-                    [weakSelf.tableView ssj_showWatermarkWithImageName:@"home_none" animated:NO target:nil action:nil];
+                    weakSelf.tableView.tableHeaderView = self.noDataHeader;
                 }else{
-                    [weakSelf.tableView ssj_hideWatermark:YES];
+                    weakSelf.tableView.tableHeaderView = nil;
                 }
             }else{
-                [weakSelf.tableView ssj_hideWatermark:YES];
+                weakSelf.tableView.tableHeaderView = nil;
                 weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                 NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
                 NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
