@@ -108,6 +108,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJFundingItem *item = [self.items objectAtIndex:indexPath.item];
     if (!KHasEnterFinancingHome) {
         SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
         currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
@@ -116,6 +117,24 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         } completion:^(BOOL finished) {
             KHasEnterFinancingHome = YES;
         }];
+    }
+    if ([item.fundingID isEqualToString:self.newlyAddFundId]) {
+        CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
+        anim.keyPath = @"transform.scale";
+        
+        anim.values = @[@(1.08),@(1),@(1.08)];
+        anim.duration = 0.3;
+        // 动画的重复执行次数
+        anim.repeatCount = 1;
+        
+        anim.delegate = self;
+        
+        // 保持动画执行完毕后的状态
+        anim.removedOnCompletion = YES;
+        
+        anim.fillMode = kCAFillModeForwards;
+        
+        [cell.layer addAnimation:anim forKey:nil];
     }
 }
 
@@ -223,6 +242,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     return _headerView;
 }
 
+#pragma mark - CAAnimationDelegate
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
+    if (flag) {
+        self.newlyAddFundId = nil;
+    }
+}
+
 #pragma mark - Private
 -(void)getDateFromDateBase{
     __weak typeof(self) weakSelf = self;
@@ -236,6 +262,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         [weakSelf.collectionView reloadData];
+        if (weakSelf.newlyAddFundId) {
+            [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+        }
         [weakSelf.collectionView ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         [weakSelf.collectionView ssj_hideLoadingIndicator];
