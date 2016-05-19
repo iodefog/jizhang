@@ -22,7 +22,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 @interface SSJADDNewTypeViewController () <SCYSlidePagingHeaderViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic,strong) NSMutableArray *items;
-@property (nonatomic,strong) UIView *rightbuttonView;
 
 @property (nonnull, strong) NSArray *customItems;
 
@@ -160,22 +159,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
         
-//        __weak typeof(self) weakSelf = self;
-//        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-//            if ([db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],item.categoryID,SSJUSERID()]) {
-//                dispatch_async(dispatch_get_main_queue(), ^(){
-//                    [weakSelf.navigationController popViewControllerAnimated:YES];
-//                    if (weakSelf.addNewCategoryAction) {
-//                        weakSelf.addNewCategoryAction(item.categoryID);
-//                    }
-//                });
-//            } else {
-//                dispatch_async(dispatch_get_main_queue(), ^(){
-//                    [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-//                });
-//            }
-//        }];
-        
     } else if (_titleSegmentView.selectedIndex == 1) {
         NSString *name = _customTypeInputView.text;
         if (name.length == 0) {
@@ -203,18 +186,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 #pragma mark - Getter
--(UIView *)rightbuttonView{
-    if (!_rightbuttonView) {
-        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-        UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_rightbuttonView addSubview:comfirmButton];
-    }
-    return _rightbuttonView;
-}
-
 - (SCYSlidePagingHeaderView *)titleSegmentView {
     if (!_titleSegmentView) {
         _titleSegmentView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, 204, 44)];
