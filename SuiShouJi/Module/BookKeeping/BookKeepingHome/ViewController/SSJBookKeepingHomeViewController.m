@@ -198,6 +198,10 @@
     if ([self.newlyAddIndexArr containsObject:@(indexPath.row)]) {
         if (item.operatorType == 0) {
             currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0,  - currentCell.height / 2);
+            currentCell.expenditureLabel.alpha = 0;
+            currentCell.expentureMemoLabel.alpha = 0;
+            currentCell.incomeLabel.alpha = 0;
+            currentCell.incomeMemoLabel.alpha = 0;
             if (item.incomeOrExpence) {
                 currentCell.expenditureLabel.transform = CGAffineTransformMakeScale(0, 0);
                 currentCell.expentureMemoLabel.transform = CGAffineTransformMakeScale(0, 0);
@@ -208,6 +212,10 @@
                 currentCell.IncomeImage.layer.transform = CATransform3DMakeRotation(degreesToRadians(90) , -1, -1, 0);
             }
             [UIView animateWithDuration:0.7 animations:^{
+                currentCell.expenditureLabel.alpha = 1;
+                currentCell.expentureMemoLabel.alpha = 1;
+                currentCell.incomeLabel.alpha = 1;
+                currentCell.incomeMemoLabel.alpha = 1;
                 currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
                 currentCell.expenditureLabel.transform = CGAffineTransformIdentity;
                 currentCell.incomeLabel.transform = CGAffineTransformIdentity;
@@ -234,8 +242,7 @@
             self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
             self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
             currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
-            currentCell.dotView.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
-            [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionNone animations:^{
                 currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             } completion:^(BOOL finished) {
                 [currentCell shake];
@@ -571,8 +578,7 @@
                             [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
                         }
                         [weakSelf.tableView endUpdates];
-                        [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[startIndex objectForKey:item.billDate] integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
-                        [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[sumDic valueForKey:item.billDate] intValue] inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+                        [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[startIndex objectForKey:item.billDate] integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                     }else{
                         weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                         SSJBillingChargeCellItem *editeItem = [[result objectForKey:SSJNewAddChargeArrKey] objectAtIndex:i];

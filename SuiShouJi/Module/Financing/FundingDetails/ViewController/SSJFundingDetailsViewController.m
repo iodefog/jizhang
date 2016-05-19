@@ -69,7 +69,6 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     _header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
     
@@ -185,7 +184,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 -(void)getTotalIcomeAndExpence{
     __weak typeof(self) weakSelf = self;
     __block NSString *titleStr;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
         NSString *userid = SSJUSERID();
         _totalIncome = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = 0 AND A.IFUNSID = '%@' AND A.OPERATORTYPE != 2 and A.cuserid = '%@' and A.CBILLDATE <= '%@'",weakSelf.item.fundingID,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
         _totalExpence = [db doubleForQuery:[NSString stringWithFormat:@"SELECT SUM(IMONEY) FROM BK_USER_CHARGE A , BK_BILL_TYPE B WHERE A.IBILLID = B.ID AND B.ITYPE = 1 AND A.IFUNSID = '%@' AND A.OPERATORTYPE != 2 and A.cuserid = '%@' and A.CBILLDATE <= '%@'",weakSelf.item.fundingID,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
@@ -197,6 +196,8 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
             weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
             [weakSelf.header.totalExpenceLabel sizeToFit];
             weakSelf.title = titleStr;
+            [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:weakSelf.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+            weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
         });
     }];
 }
