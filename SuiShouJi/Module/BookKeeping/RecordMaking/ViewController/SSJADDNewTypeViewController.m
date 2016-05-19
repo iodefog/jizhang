@@ -150,22 +150,31 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 -(void)comfirmButtonClick:(id)sender{
     if (_titleSegmentView.selectedIndex == 0) {
-        __weak typeof(self) weakSelf = self;
         SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:_newCategorySelectedIndex];
-        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-            if ([db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],item.categoryID,SSJUSERID()]) {
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                    if (weakSelf.addNewCategoryAction) {
-                        weakSelf.addNewCategoryAction(item.categoryID);
-                    }
-                });
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-                });
+        [SSJCategoryListHelper addNewCategoryWithidentifier:item.categoryID incomeOrExpenture:_incomeOrExpence success:^{
+            [self.navigationController popViewControllerAnimated:YES];
+            if (self.addNewCategoryAction) {
+                self.addNewCategoryAction(item.categoryID);
             }
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
+        
+//        __weak typeof(self) weakSelf = self;
+//        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+//            if ([db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1 , CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithLongLong:SSJSyncVersion()],item.categoryID,SSJUSERID()]) {
+//                dispatch_async(dispatch_get_main_queue(), ^(){
+//                    [weakSelf.navigationController popViewControllerAnimated:YES];
+//                    if (weakSelf.addNewCategoryAction) {
+//                        weakSelf.addNewCategoryAction(item.categoryID);
+//                    }
+//                });
+//            } else {
+//                dispatch_async(dispatch_get_main_queue(), ^(){
+//                    [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+//                });
+//            }
+//        }];
         
     } else if (_titleSegmentView.selectedIndex == 1) {
         NSString *name = _customTypeInputView.text;
