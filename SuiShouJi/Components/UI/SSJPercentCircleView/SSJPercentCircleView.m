@@ -47,6 +47,8 @@
         self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
         self.skinView.hidden = YES;
         [self addSubview:self.skinView];
+        
+        [self updateCircleFrame];
     }
     return self;
 }
