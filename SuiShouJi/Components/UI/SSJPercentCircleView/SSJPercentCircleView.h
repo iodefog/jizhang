@@ -27,6 +27,8 @@
 
 @property (nonatomic, readonly) CGFloat circleThickness;
 
+@property (nonatomic, readonly) CGRect circleFrame;
+
 @property (nonatomic, weak) id <SSJReportFormsPercentCircleDataSource> dataSource;
 
 - (void)reloadData;

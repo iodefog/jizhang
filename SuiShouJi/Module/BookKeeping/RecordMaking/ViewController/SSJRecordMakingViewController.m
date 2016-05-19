@@ -29,6 +29,8 @@
 
 static const NSTimeInterval kAnimationDuration = 0.25;
 
+static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
+
 @interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate, YYKeyboardObserver>
 
 @property (nonatomic,strong) SSJSegmentedControl *titleSegment;
@@ -52,6 +54,8 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 @property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *billTypeSelectionView;
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
+
+@property (nonatomic, strong) UIImageView *guideView;
 
 
 @property (nonatomic) long currentYear;
@@ -410,6 +414,17 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
+- (void)hideGuideView {
+    if (_guideView.superview) {
+        [UIView transitionWithView:_guideView.superview duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [_guideView removeFromSuperview];
+            _guideView = nil;
+        } completion:^(BOOL finished) {
+            [_billTypeInputView.moneyInput becomeFirstResponder];
+        }];
+    }
+}
+
 #pragma mark - private
 - (void)initData {
     NSDate *now = [NSDate date];
@@ -467,7 +482,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         __block NSInteger selectedIndex = 0;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if (_item && [item.ID isEqualToString:_item.billId]) {
+            if (_categoryID && [item.ID isEqualToString:_categoryID]) {
                 selectedIndex = index;
             }
         });
@@ -479,7 +494,10 @@ static const NSTimeInterval kAnimationDuration = 0.25;
             weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
         }];
         weakSelf.billTypeInputView.billTypeName = selectedItem.title;
-        [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+        
+        if (![self showGuideViewIfNeeded]) {
+            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+        }
         
         if (!_item) {
             _categoryID = selectedItem.ID;
@@ -803,6 +821,27 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
         _accessoryView.periodBtn.selected = YES;
     }
+}
+
+- (BOOL)showGuideViewIfNeeded {
+    BOOL isEverEntered = [[NSUserDefaults standardUserDefaults] boolForKey:kIsEverEnteredKey];
+    if (!isEverEntered) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsEverEnteredKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        if (!_guideView) {
+            _guideView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"record_making_guide"]];
+            _guideView.userInteractionEnabled = YES;
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideGuideView)];
+            [_guideView addGestureRecognizer:tap];
+        }
+        
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        [UIView transitionWithView:window duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [window addSubview:_guideView];
+        } completion:NULL];
+    }
+    return !isEverEntered;
 }
 
 //-(void)closeButtonClicked:(id)sender{

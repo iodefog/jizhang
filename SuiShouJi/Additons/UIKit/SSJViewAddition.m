@@ -246,7 +246,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         UIScrollView *scrollView = (UIScrollView *)self;
         objc_setAssociatedObject(self, kOriginalContentSizeKey, [NSValue valueWithCGSize:scrollView.contentSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         CGSize contentSize = scrollView.contentSize;
-        contentSize.height = MAX(watermark.height, scrollView.contentSize.height);
+        contentSize.height = MAX(watermark.height, CGRectGetHeight(UIEdgeInsetsInsetRect(scrollView.bounds, scrollView.contentInset)));
         scrollView.contentSize = contentSize;
         watermark.center = CGPointMake(contentSize.width * 0.5, contentSize.height * 0.5);
     } else {
@@ -289,7 +289,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         UIScrollView *scrollView = (UIScrollView *)self;
         objc_setAssociatedObject(self, kOriginalContentSizeKey, [NSValue valueWithCGSize:scrollView.contentSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         CGSize contentSize = scrollView.contentSize;
-        contentSize.height = MAX(watermark.height, scrollView.contentSize.height);
+        contentSize.height = MAX(watermark.height, CGRectGetHeight(UIEdgeInsetsInsetRect(scrollView.bounds, scrollView.contentInset)));
         scrollView.contentSize = contentSize;
         watermark.center = CGPointMake(contentSize.width * 0.5, contentSize.height * 0.5);
     } else {
