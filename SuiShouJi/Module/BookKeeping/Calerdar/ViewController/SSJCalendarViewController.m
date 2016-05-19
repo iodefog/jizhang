@@ -96,12 +96,6 @@
     self.calendarView.frame = CGRectMake(0, 64, self.view.width, self.calendarView.viewHeight);
     self.tableView.top = self.calendarView.bottom;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.calendarView.viewHeight - 64);
-    _firstLineLabel.top = 20;
-    _firstLineLabel.centerX = _noDateView.width / 2;
-    _secondLineLabel.top = _firstLineLabel.bottom + 10;
-    _secondLineLabel.centerX = _noDateView.width / 2;
-    _recordMakingButton.centerX = _noDateView.width / 2;
-    _recordMakingButton.top = _secondLineLabel.bottom + 10;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -247,6 +241,7 @@
     if (!_nodataHeader) {
         __weak typeof(self) weakSelf = self;
         _nodataHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
+        _nodataHeader.size = CGSizeMake(self.view.width, 300);
         _nodataHeader.RecordMakingButtonBlock = ^(){
             SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
             recordMakingVC.selectedDay = weakSelf.selectedDay;
@@ -305,9 +300,9 @@
         if (weakSelf.selectedYear == [selectedYear integerValue] && weakSelf.selectedMonth == [selectedMonth integerValue]) {
             weakSelf.items = [[NSMutableArray alloc]initWithArray:[data objectForKey:weakSelf.selectDate]];
             if (((NSArray *)[data objectForKey:weakSelf.selectDate]).count == 0) {
-                [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.nodataHeader animated:NO target:nil action:nil];
+                self.tableView.tableHeaderView = self.nodataHeader;
             }else{
-                [weakSelf.tableView ssj_hideWatermark:YES];
+                self.tableView.tableHeaderView = nil;
             }
             [weakSelf reloadWithAnimation];
         }
