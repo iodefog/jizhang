@@ -88,10 +88,10 @@ static id _instance;
     self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);
     self.ZeroButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.ZeroButton.leftBottom = CGPointMake(self.DecimalButton.right, self.bottom);
-    self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.MinusButton.rightTop = CGPointMake(self.right, 0);
     self.PlusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
-    self.PlusButton.rightTop = CGPointMake(self.width, self.MinusButton.bottom);
+    self.PlusButton.rightTop = CGPointMake(self.right, 0);
+    self.MinusButton.size = CGSizeMake(_buttonWight, _buttonHeight);
+    self.MinusButton.rightTop = CGPointMake(self.width, self.PlusButton.bottom);
     self.BackspaceButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.BackspaceButton.leftBottom = CGPointMake(self.ZeroButton.right, self.bottom);
     self.ComfirmButton.size = CGSizeMake(_buttonWight, _buttonHeight * 2);
@@ -295,7 +295,6 @@ static id _instance;
                 self.rightNum = 0;
             }else{
                 self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
-                self.leftNum = 0;
             }
         }
         self.leftNum = self.leftNum + self.rightNum;
@@ -304,7 +303,7 @@ static id _instance;
         inputString = [resultNum stringValue];
         self.rightNum = 0;
         self.PlusOrMinusModel = YES;
-        self.plusOrMinusKeyHasPressed = NO;
+        self.plusOrMinusKeyHasPressed = YES;
         [self.ComfirmButton setTitle:@"=" forState:UIControlStateNormal];
         self.lastPressTag = 13;
     }else if (sender.tag == 14){
@@ -314,7 +313,6 @@ static id _instance;
                 self.rightNum = 0;
             }else{
                 self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
-                self.leftNum = 0;
             }
         }
         self.leftNum = self.leftNum - self.rightNum;

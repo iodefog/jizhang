@@ -545,6 +545,7 @@
                     weakSelf.bookKeepingHeader.expenditureView.alpha = 1;
                     weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
                     weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+                    weakSelf.hasLoad = YES;
                 });
             }
             
