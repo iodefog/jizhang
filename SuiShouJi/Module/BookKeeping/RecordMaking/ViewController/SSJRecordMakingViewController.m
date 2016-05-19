@@ -285,6 +285,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [super textFieldDidBeginEditing:textField];
     _currentInput = textField;
 }
 
