@@ -482,7 +482,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         __block NSInteger selectedIndex = 0;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if (_item && _categoryID && [item.ID isEqualToString:_categoryID]) {
+            if (_categoryID && [item.ID isEqualToString:_categoryID]) {
                 selectedIndex = index;
             }
         });

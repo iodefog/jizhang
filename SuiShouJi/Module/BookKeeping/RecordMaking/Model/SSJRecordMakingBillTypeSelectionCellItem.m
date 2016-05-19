@@ -19,4 +19,11 @@
     return item;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@", @{@"ID":(_ID ?: [NSNull null]),
+                                               @"title":(_title ?: [NSNull null]),
+                                               @"imageName":(_imageName ?: [NSNull null]),
+                                               @"colorValue":(_colorValue ?: [NSNull null])}];
+}
+
 @end
