@@ -19,7 +19,7 @@ static const CGFloat kMaxSpeed = 100;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 
-@property (nonatomic) BOOL editable;
+@property (nonatomic) BOOL editing;
 
 @property (nonatomic) BOOL movable;
 
@@ -83,7 +83,7 @@ static const CGFloat kMaxSpeed = 100;
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer == _tapGesture) {
-        return _editable;
+        return _editing;
     } else if (gestureRecognizer == _panGesture) {
         return _movable;
     }
@@ -99,7 +99,7 @@ static const CGFloat kMaxSpeed = 100;
 
 #pragma mark - UIResponder
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-    if (_editable) {
+    if (_editing) {
         return;
     }
     
@@ -237,8 +237,8 @@ static const CGFloat kMaxSpeed = 100;
 - (void)endEditing {
     [self endMovingCell];
     
-    if (_editable) {
-        _editable = NO;
+    if (_editing) {
+        _editing = NO;
         
         if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionViewDidEndEditing:)]) {
             [_editDelegate collectionViewDidEndEditing:self];
@@ -327,8 +327,8 @@ static const CGFloat kMaxSpeed = 100;
 
 #pragma mark - Private
 - (void)beginEditingIfNeededWithTouchPressIndex:(NSIndexPath *)indexPath {
-    if (!_editable) {
-        _editable = YES;
+    if (!_editing) {
+        _editing = YES;
         
         if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
             [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:indexPath];

@@ -58,14 +58,15 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     _deleteBtn.center = CGPointMake(_imageView.right - 2, _imageView.top + 2);
 }
 
-- (void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
-}
-
 - (void)setItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
     [self setNeedsLayout];
     _item = item;
-    _imageView.image = [UIImage imageNamed:_item.imageName];
+    if (_item.colorValue.length) {
+        _imageView.image = [[UIImage imageNamed:_item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
+    } else {
+        _imageView.image = [UIImage imageNamed:_item.imageName];
+    }
     _label.text = _item.title;
     [_label sizeToFit];
     [self updateState];

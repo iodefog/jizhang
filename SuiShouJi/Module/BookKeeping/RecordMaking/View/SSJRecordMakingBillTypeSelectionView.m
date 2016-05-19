@@ -126,6 +126,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         item.editable = NO;
     }
     [_collectionView reloadData];
+    
+    if (_endEditingAction) {
+        _endEditingAction(self);
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -194,6 +198,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
             _selectAction(self, currentSelectedItem);
         }
     }
+}
+
+- (BOOL)isEditing {
+    return _collectionView.editing;
 }
 
 #pragma mark - Getter

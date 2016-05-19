@@ -44,18 +44,21 @@
                              Success:(void(^)(BOOL result))success
                              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"update bk_user_bill set istate = 0 where cbillid = '%@' and cuserid = '%@'",categoryId,userid];
-        BOOL deletesucess = [db executeUpdate:sql];
-        if (failure) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-        }else{
-            SSJDispatch_main_async_safe(^{
-                success(deletesucess);
-            });
+        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = 0, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
+        if (deletesucess) {
+            if (success){
+                SSJDispatch_main_async_safe(^{
+                    success(deletesucess);
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
         }
+        
     }];
 }
 
@@ -117,6 +120,37 @@
             SSJDispatch_main_async_safe(^{
                 success(tempArray);
             });
+        }
+    }];
+}
+
++ (void)addNewCategoryWithidentifier:(NSString *)identifier
+                   incomeOrExpenture:(int)incomeOrExpenture
+                             success:(void(^)())success
+                             failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
+        int order = 0;
+        if ([identifier isEqualToString:@"1042"]
+            || [identifier isEqualToString:@"2018"]) {
+            order = 1;
+        } else {
+            // 查询已添加类别最大序号
+            order = [db intForQuery:@"select max(iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
+            order ++;
+        }
+        
+        if ([db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1, IORDER = ?, CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?", @(order), [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), identifier, SSJUSERID()]) {
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
         }
     }];
 }

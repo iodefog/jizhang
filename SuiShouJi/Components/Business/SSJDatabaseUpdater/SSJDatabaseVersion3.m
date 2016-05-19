@@ -141,7 +141,7 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2013','收款',0,NULL,'bt_shouzhai','#63671a',0,0,NULL,1)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2014','贷款',0,NULL,'bt_daikuan','#7b8d42',0,0,NULL,2)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2015','营业',0,NULL,'bt_yingye','#b47100',0,0,NULL,3)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2017','其他',0,NULL,'bt_others','#626262',0,0,NULL,NULL)",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2017','其他',0,NULL,'bt_others','#626262',0,0,NULL,11)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1','平账收入',0,NULL,'bt_pignzhangshouru','#9382ad',2,0,NULL,NULL)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2','平账支出',1,NULL,'bt_pingzhangzhichu','#5889c5',2,0,NULL,NULL)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3','转入',0,NULL,'bt_zhuanchu','#993f84',2,0,NULL,NULL)",

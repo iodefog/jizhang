@@ -60,6 +60,19 @@
 /**
  *  新增自定义收支类型
  *
+ *  @param identifier           收支类型id
+ *  @param incomeOrExpenture    收入还是支出(1为支出,0为收入)
+ *  @param success              查询成功的回调
+ *  @param failure              查询失败的回调
+ */
++ (void)addNewCategoryWithidentifier:(NSString *)identifier
+                   incomeOrExpenture:(int)incomeOrExpenture
+                             success:(void(^)())success
+                             failure:(void (^)(NSError *error))failure;
+
+/**
+ *  新增自定义收支类型
+ *
  *  @param incomeOrExpenture 收入还是支出(1为支出,0为收入)
  *  @param name         类型名称
  *  @param icon         类型图标
