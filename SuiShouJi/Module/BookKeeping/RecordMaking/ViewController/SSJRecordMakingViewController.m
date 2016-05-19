@@ -247,7 +247,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             if (isDragUp) {
                 [wself.billTypeInputView.moneyInput resignFirstResponder];
             } else {
-                [wself.billTypeInputView.moneyInput becomeFirstResponder];
+                if (!wself.billTypeSelectionView.isEditing) {
+                    [wself.billTypeInputView.moneyInput becomeFirstResponder];
+                }
             }
         };
         _billTypeSelectionView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {

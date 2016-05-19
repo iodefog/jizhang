@@ -45,15 +45,20 @@
                              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = 0, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
-        if (failure) {
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
-        }else{
-            SSJDispatch_main_async_safe(^{
-                success(deletesucess);
-            });
+        if (deletesucess) {
+            if (success){
+                SSJDispatch_main_async_safe(^{
+                    success(deletesucess);
+                });
+            }
+        } else {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
         }
+        
     }];
 }
 

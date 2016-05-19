@@ -200,6 +200,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
 }
 
+- (BOOL)isEditing {
+    return _collectionView.editing;
+}
+
 #pragma mark - Getter
 - (SSJEditableCollectionView *)collectionView {
     if (!_collectionView) {

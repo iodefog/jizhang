@@ -115,6 +115,11 @@
 @property (nonatomic) CGFloat movedCellScale;
 
 /**
+ *  是否正在编辑状态
+ */
+@property (nonatomic, readonly) BOOL editing;
+
+/**
  *  将当前移动的cell保持在屏幕可视范围内;editDelegate需要在scrollViewDidScroll方法中调用此方法
  */
 - (void)keepCurrentMovedCellVisible;
