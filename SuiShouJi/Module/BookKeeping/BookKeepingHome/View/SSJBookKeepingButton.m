@@ -214,33 +214,6 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 }
 
 
--(void)setRefreshSuccessOrNot:(BOOL)refreshSuccessOrNot{
-    _refreshSuccessOrNot = refreshSuccessOrNot;
-    if (_refreshSuccessOrNot) {
-        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
-        [self.recordMakingButton setImage:[UIImage imageNamed:@"home_pen_smile"] forState:UIControlStateNormal];
-    }else{
-        [self.recordMakingButton setImage:[UIImage imageNamed:@"home_pen_sad"] forState:UIControlStateNormal];
-        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e95464"].CGColor;
-    }
-    __weak typeof(self) weakSelf = self;
-    dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
-    dispatch_after(time, dispatch_get_main_queue(), ^{
-        [weakSelf.recordMakingButton setImage:[UIImage imageNamed:@"home_pen_nor"] forState:UIControlStateNormal];
-        
-        weakSelf.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
-    });
-}
-
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
-    if (flag) {
-        self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"26dcc5"].CGColor;
-        
-        self.pointView.hidden = YES;
-        
-        self.loadingLayer.hidden = YES;
-    }
-}
 
 /*
 // Only override drawRect: if you perform custom drawing.

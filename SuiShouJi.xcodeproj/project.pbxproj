@@ -3785,8 +3785,7 @@
 				9C9471471CEB224C00D69079 /* FundingDetails */,
 				9C9471651CEB224C00D69079 /* NewFunding */,
 			);
-			name = Financing;
-			path = ../Financing;
+			path = Financing;
 			sourceTree = "<group>";
 		};
 		9C9471311CEB224C00D69079 /* FinancingHome */ = {
@@ -4158,6 +4157,7 @@
 		BD04336F1C1A8DA50051E7AB /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				9C9471301CEB224C00D69079 /* Financing */,
 				7D5F323F1CEAE6C10086B67E /* BookKeeping */,
 				BD0433701C1A8DA50051E7AB /* Base */,
 				BD70DF2D1C4751EA000E6CC9 /* Common */,
@@ -4468,7 +4468,6 @@
 		BD70DF2D1C4751EA000E6CC9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				9C9471301CEB224C00D69079 /* Financing */,
 				7D05C2FD1CBC96F8008467DC /* Start */,
 				BD70DF2E1C4751EA000E6CC9 /* ForgotPassWord */,
 				BD70DF3D1C4751EA000E6CC9 /* Guide */,
