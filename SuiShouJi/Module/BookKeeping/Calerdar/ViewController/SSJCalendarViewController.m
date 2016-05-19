@@ -247,7 +247,8 @@
             recordMakingVC.selectedDay = weakSelf.selectedDay;
             recordMakingVC.selectedMonth = weakSelf.selectedMonth;
             recordMakingVC.selectedYear = weakSelf.selectedYear;
-            [weakSelf.navigationController pushViewController:recordMakingVC animated:YES];
+            UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
+            [weakSelf presentViewController:recordNav animated:YES completion:NULL];
         };
     }
     return _nodataHeader;
@@ -321,7 +322,8 @@
     recordMakingVC.selectedMonth = self.selectedMonth;
     recordMakingVC.selectedYear = self.selectedYear;
     UINavigationController *recordNav = [[UINavigationController alloc]initWithRootViewController:recordMakingVC];
-    [self presentViewController:recordNav animated:YES completion:NULL];}
+    [self presentViewController:recordNav animated:YES completion:NULL];
+}
 
 //-(void)getHaveRecordOrNotForDate:(NSString *)date WithSuccess:(void(^)(bool result))success
 //                         failure:(void (^)(NSError * _Nullable error))failure{

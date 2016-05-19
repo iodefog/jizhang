@@ -252,6 +252,7 @@ static id _instance;
 
 - (void)keyboardBtnTouched:(UIButton *)sender{
     NSCharacterSet *set=[NSCharacterSet characterSetWithCharactersInString:kspecialString];
+    NSNumber *resultNum;
     if (self.textField==nil) {
         return;
     }
@@ -282,7 +283,7 @@ static id _instance;
         }else{
             self.leftNum = self.leftNum - self.rightNum;
         }
-        NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+        resultNum = [NSNumber numberWithFloat:self.leftNum];
         _lastPressTag = 16;
         inputString = [resultNum stringValue];
         [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
@@ -297,8 +298,12 @@ static id _instance;
                 self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
             }
         }
-        self.leftNum = self.leftNum + self.rightNum;
-        NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
+        if (self.PlusOrMinusModel == YES) {
+            self.leftNum = self.leftNum + self.rightNum;
+        }else{
+            self.leftNum = self.leftNum - self.rightNum;
+        }
+        resultNum = [NSNumber numberWithFloat:self.leftNum];
         self.textField.text = [resultNum stringValue];
         inputString = [resultNum stringValue];
         self.rightNum = 0;
@@ -315,7 +320,11 @@ static id _instance;
                 self.rightNum = [[self.textField.text stringByTrimmingCharactersInSet:set] floatValue];
             }
         }
-        self.leftNum = self.leftNum - self.rightNum;
+        if (self.PlusOrMinusModel == YES) {
+            self.leftNum = self.leftNum + self.rightNum;
+        }else{
+            self.leftNum = self.leftNum - self.rightNum;
+        }
         NSNumber *resultNum = [NSNumber numberWithFloat:self.leftNum];
         self.textField.text = [resultNum stringValue];
         inputString = [resultNum stringValue];

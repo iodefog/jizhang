@@ -814,8 +814,6 @@
 		BDF069A91C5B4CE1001430BB /* founds_pop2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */; };
 		BDF069AB1C5B4CFD001430BB /* white_jiantou@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */; };
 		BDF069AD1C5B4D01001430BB /* white_jiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */; };
-		BDF318701C5F0A9400302DD6 /* record_ok@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */; };
-		BDF318721C5F0AA900302DD6 /* record_ok@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDF318711C5F0AA800302DD6 /* record_ok@2x.png */; };
 		BDF5038C1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */; };
 		BDF5038F1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF5038E1C85924200DCFA99 /* SSJCircleChargeSettingViewController.m */; };
 		BDF503921C85A00100DCFA99 /* SSJCircleChargeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF503911C85A00100DCFA99 /* SSJCircleChargeCell.m */; };
@@ -2036,8 +2034,6 @@
 		BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_pop2@3x.png"; sourceTree = "<group>"; };
 		BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_jiantou@3x.png"; sourceTree = "<group>"; };
 		BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_jiantou@2x.png"; sourceTree = "<group>"; };
-		BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_ok@3x.png"; sourceTree = "<group>"; };
-		BDF318711C5F0AA800302DD6 /* record_ok@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_ok@2x.png"; sourceTree = "<group>"; };
 		BDF5038A1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingReminderViewController.h; sourceTree = "<group>"; };
 		BDF5038B1C853FB400DCFA99 /* SSJBookkeepingReminderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingReminderViewController.m; sourceTree = "<group>"; };
 		BDF5038D1C85924200DCFA99 /* SSJCircleChargeSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCircleChargeSettingViewController.h; sourceTree = "<group>"; };
@@ -3002,8 +2998,6 @@
 				BDF069A81C5B4CE1001430BB /* founds_pop2@3x.png */,
 				BDF069AA1C5B4CFD001430BB /* white_jiantou@3x.png */,
 				BDF069AC1C5B4D01001430BB /* white_jiantou@2x.png */,
-				BDF3186F1C5F0A9400302DD6 /* record_ok@3x.png */,
-				BDF318711C5F0AA800302DD6 /* record_ok@2x.png */,
 				BDF510B01C92E78C00A49D74 /* calender_star@2x.png */,
 				BDF510B21C92E7B200A49D74 /* calender_star@3x.png */,
 				9CEB85BB1CC5D8FC00AE8F8D /* mark_jilu@2x.png */,
@@ -5129,7 +5123,6 @@
 				9C3277831CE5878600109C4C /* more_arrow@3x.png in Resources */,
 				7DD7D6981C4C8E6A00ACE71A /* bt_deficit@2x.png in Resources */,
 				9C991E471CE0A79F0031CD02 /* bt_youyuan@2x.png in Resources */,
-				BDF318721C5F0AA900302DD6 /* record_ok@2x.png in Resources */,
 				9C991E351CE0A79F0031CD02 /* bt_shengyi@3x.png in Resources */,
 				9C32776A1CE47F4A00109C4C /* home_edit@3x.png in Resources */,
 				9C991DFB1CE0A79F0031CD02 /* bt_chong@3x.png in Resources */,
@@ -5318,7 +5311,6 @@
 				7DD7D6CF1C4C8E6A00ACE71A /* bt_service@3x.png in Resources */,
 				7DD7D6E71C4C8E6A00ACE71A /* bt_yingye@3x.png in Resources */,
 				9C991E551CE0BC120031CD02 /* bt_fenhong@3x.png in Resources */,
-				BDF318701C5F0A9400302DD6 /* record_ok@3x.png in Resources */,
 				9C40780E1CE1B84000A61956 /* more_tongbu@2x.png in Resources */,
 				7DD7D6D11C4C8E6A00ACE71A /* bt_shebao@3x.png in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,

@@ -27,6 +27,9 @@
 //#import "SSJStartView.h"
 #import "SSJStartViewManager.h"
 
+#warning test
+#import "JPEngine.h"
+
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -57,6 +60,11 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+//#warning test
+//    [JPEngine startEngine];
+//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"];
+//    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
+//    [JPEngine evaluateScript:script];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
