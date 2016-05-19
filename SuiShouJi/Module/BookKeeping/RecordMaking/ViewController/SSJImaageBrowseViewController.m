@@ -25,9 +25,6 @@
 }
 
 #pragma mark - Lifecycle
-- (void)dealloc {
-    
-}
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -209,7 +206,7 @@
         }
         self.dateLabel.text = _item.billDate;
         [self.dateLabel sizeToFit];
-        if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
+        if (self.item.chargeImage.length != 0) {
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
                 if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
@@ -232,24 +229,27 @@
         }
         
     }else{
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-            UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-            if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                self.imageBrowser.width = self.view.width;
-                self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-            }else{
-                self.imageBrowser.size = image.size;
-            }
-            self.imageBrowser.image = image;
-        }else{
-            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (self.item.chargeImage.length != 0) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
                 if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
                     self.imageBrowser.width = self.view.width;
                     self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
                 }else{
                     self.imageBrowser.size = image.size;
                 }
-            }];
+                self.imageBrowser.image = image;
+            }else{
+                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
+                        self.imageBrowser.width = self.view.width;
+                        self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
+                    }else{
+                        self.imageBrowser.size = image.size;
+                    }
+                }];
+            }
+
         }
         
     }

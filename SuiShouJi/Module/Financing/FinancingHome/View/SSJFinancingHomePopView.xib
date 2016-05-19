@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -11,34 +11,21 @@
             <rect key="frame" x="0.0" y="0.0" width="327" height="602"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="founds_yindao_top.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jh2-Cc-VYS">
-                    <rect key="frame" x="0.0" y="151" width="327" height="175"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="175" id="Dpo-A7-7pt"/>
-                    </constraints>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="founds_yindao_bottom.png" translatesAutoresizingMaskIntoConstraints="NO" id="621-xd-sJM">
-                    <rect key="frame" x="0.0" y="406" width="327" height="137"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="137" id="zJx-tB-9NQ"/>
-                    </constraints>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wk2-8X-jXX">
+                    <rect key="frame" x="0.0" y="0.0" width="327" height="602"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="621-xd-sJM" secondAttribute="bottom" constant="59" id="7Fq-bQ-btl"/>
-                <constraint firstItem="Jh2-Cc-VYS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="CLl-AB-98w"/>
-                <constraint firstAttribute="trailing" secondItem="Jh2-Cc-VYS" secondAttribute="trailing" id="Gfk-UU-Yzn"/>
-                <constraint firstItem="621-xd-sJM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="leI-vI-kMw"/>
-                <constraint firstAttribute="trailing" secondItem="621-xd-sJM" secondAttribute="trailing" id="qd6-Tm-ndK"/>
-                <constraint firstItem="Jh2-Cc-VYS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="151" id="zdV-Ri-Hw2"/>
+                <constraint firstAttribute="bottom" secondItem="Wk2-8X-jXX" secondAttribute="bottom" id="6Ff-ZE-ky6"/>
+                <constraint firstItem="Wk2-8X-jXX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="a1T-Mg-duT"/>
+                <constraint firstItem="Wk2-8X-jXX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="yQi-W9-Yo1"/>
+                <constraint firstAttribute="trailing" secondItem="Wk2-8X-jXX" secondAttribute="trailing" id="zfa-Fw-xAr"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="backImage" destination="Wk2-8X-jXX" id="JmA-lM-RvG"/>
+            </connections>
             <point key="canvasLocation" x="-48.5" y="27"/>
         </view>
     </objects>
-    <resources>
-        <image name="founds_yindao_bottom.png" width="375" height="137"/>
-        <image name="founds_yindao_top.png" width="375" height="175"/>
-    </resources>
 </document>

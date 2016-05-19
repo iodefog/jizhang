@@ -8,19 +8,14 @@
 
 #import "SSJFinancingHomePopView.h"
 @interface SSJFinancingHomePopView()
-@property (weak, nonatomic) IBOutlet UIImageView *cashImage;
-@property (weak, nonatomic) IBOutlet UIImageView *addImage;
-@property (weak, nonatomic) IBOutlet UIButton *knowButton;
+@property (weak, nonatomic) IBOutlet UIImageView *backImage;
+
 @end
 
 @implementation SSJFinancingHomePopView
 
 -(void)awakeFromNib{
-    self.cashImage.image = [[UIImage imageNamed:@"ft_cash"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.addImage.image = [[UIImage imageNamed:@"add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.knowButton.layer.cornerRadius = 3.f;
-    self.knowButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.knowButton.layer.borderWidth = 1.f;
+    self.backImage.image = [UIImage ssj_compatibleImageNamed:@"founds_yindao"];
 }
 
 

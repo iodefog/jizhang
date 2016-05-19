@@ -119,22 +119,12 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         }];
     }
     if ([item.fundingID isEqualToString:self.newlyAddFundId]) {
-        CAKeyframeAnimation *anim = [CAKeyframeAnimation animation];
-        anim.keyPath = @"transform.scale";
-        
-        anim.values = @[@(1.08),@(1),@(1.08)];
-        anim.duration = 0.3;
-        // 动画的重复执行次数
-        anim.repeatCount = 1;
-        
-        anim.delegate = self;
-        
-        // 保持动画执行完毕后的状态
-        anim.removedOnCompletion = YES;
-        
-        anim.fillMode = kCAFillModeForwards;
-        
-        [cell.layer addAnimation:anim forKey:nil];
+        cell.transform = CGAffineTransformMakeTranslation( - 1000 , 0);
+        [UIView animateWithDuration:10 delay:0 options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            cell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            self.newlyAddFundId = nil;
+        }];
     }
 }
 
@@ -180,6 +170,16 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     return UIEdgeInsetsMake(15, 10, 5, 10);
 }
 
+- (UICollectionViewLayoutAttributes*)initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath
+{
+    UICollectionViewLayoutAttributes *attr = [self.collectionView layoutAttributesForItemAtIndexPath:itemIndexPath];
+    
+    attr.transform = CGAffineTransformRotate(CGAffineTransformMakeScale(0.2, 0.2), M_PI);
+    attr.center = CGPointMake(CGRectGetMidX(self.collectionView.bounds), CGRectGetMaxY(self.collectionView.bounds));
+    
+    return attr;
+}
+
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row != self.items.count - 1) {
@@ -206,6 +206,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
     
+}
+
+- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
+    [self collectionViewEndEditing];
+    return YES;
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
@@ -242,13 +247,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     return _headerView;
 }
 
-#pragma mark - CAAnimationDelegate
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag{
-    if (flag) {
-        self.newlyAddFundId = nil;
-    }
-}
-
 #pragma mark - Private
 -(void)getDateFromDateBase{
     __weak typeof(self) weakSelf = self;
@@ -261,9 +259,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        [weakSelf.collectionView reloadData];
         if (weakSelf.newlyAddFundId) {
+            [weakSelf.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 2 inSection:0]]];
             [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+        }else{
+            [weakSelf.collectionView reloadData];
         }
         [weakSelf.collectionView ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {

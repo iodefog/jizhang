@@ -390,8 +390,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.selectedImage = image;
         };
         imageBrowserVC.type = SSJImageBrowseVcTypeEdite;
-        imageBrowserVC.image = _selectedImage;
         imageBrowserVC.item = self.item;
+        imageBrowserVC.image = _selectedImage;
         [self.navigationController pushViewController:imageBrowserVC animated:YES];
     } else {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
