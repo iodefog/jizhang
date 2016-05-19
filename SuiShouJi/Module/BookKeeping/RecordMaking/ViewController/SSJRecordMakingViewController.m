@@ -57,6 +57,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic, strong) UIImageView *guideView;
 
+@property (nonatomic, strong) UITextField *currentInput;
+
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -251,6 +253,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _billTypeSelectionView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
             UIBarButtonItem *endEditingItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:wself action:@selector(endEditingAction)];
             [wself.navigationItem setRightBarButtonItem:endEditingItem animated:YES];
+            [wself.currentInput resignFirstResponder];
+        };
+        _billTypeSelectionView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
+            [wself.currentInput becomeFirstResponder];
         };
     }
     return _billTypeSelectionView;
@@ -276,6 +282,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 #pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    _currentInput = textField;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (_billTypeInputView.moneyInput == textField) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
