@@ -15,11 +15,15 @@
 }
 
 + (NSArray *)columns {
-    return @[@"cbillid", @"cuserid", @"cwritedate", @"iversion", @"operatortype", @"istate"];
+    return @[@"cbillid", @"cuserid", @"cwritedate", @"iorder", @"iversion", @"operatortype", @"istate"];
 }
 
 + (NSArray *)primaryKeys {
     return @[@"cbillid", @"cuserid"];
+}
+
++ (NSArray *)optionalColumns {
+    return @[@"iorder"];
 }
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
