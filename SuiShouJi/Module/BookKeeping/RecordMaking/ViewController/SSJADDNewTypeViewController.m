@@ -137,16 +137,17 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField == _customTypeInputView) {
-        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        if (newText.length > 4) {
-            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
-            return NO;
-        }
-    }
-    return YES;
-}
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+//    NSLog(@"%@", [[textField textInputMode] primaryLanguage]);
+//    if (textField == _customTypeInputView) {
+//        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//        if (newText.length > 4) {
+//            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
+//            return NO;
+//        }
+//    }
+//    return YES;
+//}
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
