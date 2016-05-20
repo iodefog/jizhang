@@ -21,13 +21,13 @@
 static const NSTimeInterval kLoadStartAPITimeout = 1;
 
 // 请求签到接口超时时间
-static const NSTimeInterval kLoadCheckInAPITimeout = 1;
+static const NSTimeInterval kLoadCheckInAPITimeout = 60;
 
 // 加载服务器下发启动页超时时间
 static const NSTimeInterval kLoadStartImgTimeout = 2;
 
 // 加载记账树图片超时时间
-static const NSTimeInterval kLoadTreeImgTimeout = 2;
+static const NSTimeInterval kLoadTreeImgTimeout = 60;
 
 // 启动页、记账树图片、引导页之间过渡时间
 static const NSTimeInterval kTransitionDuration = 0.3;
@@ -36,7 +36,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 @property (nonatomic, strong) SSJServerLaunchView *launchView;
 
-@property (nonatomic, strong) SSJBookkeepingTreeView *treeView;
+//@property (nonatomic, strong) SSJBookkeepingTreeView *treeView;
 
 @property (nonatomic, strong) SSJGuideView *guideView;
 
@@ -46,7 +46,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 @property (nonatomic, strong) void (^completion)(SSJStartViewManager *);
 
-@property (nonatomic) BOOL shouldRequestCheckIn;
+//@property (nonatomic) BOOL shouldRequestCheckIn;
 
 @end
 
@@ -75,8 +75,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     }];
     
     // 如果没有userid，就不调用签到接口，签到接口需要userid（第一次启动初始化数据库未完成前，userid为空）
-    _shouldRequestCheckIn = hasUserTreeTable && SSJUSERID().length;
-    if (_shouldRequestCheckIn) {
+    if (hasUserTreeTable && SSJUSERID().length) {
         [self requestCheckIn];
     }
 }
@@ -85,30 +84,12 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 - (void)requestStartAPI {
     __weak typeof(self) wself = self;
     [[SSJStartChecker sharedInstance] checkWithTimeoutInterval:kLoadStartAPITimeout success:^(BOOL isInReview, SSJAppUpdateType type) {
-        // 签到接口没有请求，直接显示引导页或首页
-        if (!_shouldRequestCheckIn) {
+        NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
+        [wself.launchView downloadImgWithUrl:startImgUrl timeout:kLoadStartImgTimeout completion:^{
             [wself showGuideViewIfNeeded];
-            return;
-        }
-        
-        // 新版本第一次启动，不显示服务端下发启动页
-        if (!SSJIsFirstLaunchForCurrentVersion()) {
-            NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
-            [wself.launchView downloadImgWithUrl:startImgUrl timeout:kLoadStartImgTimeout completion:^{
-                [wself showTreeViewIfNeeded];
-            }];
-        }
+        }];
     } failure:^(NSString *message) {
-        // 签到接口没有请求，直接显示引导页或首页
-        if (!_shouldRequestCheckIn) {
-            [wself showGuideViewIfNeeded];
-            return;
-        }
-        
-        // 新版本第一次启动，不显示服务端下发启动页
-        if (!SSJIsFirstLaunchForCurrentVersion()) {
-            [wself showTreeViewIfNeeded];
-        }
+        [wself showGuideViewIfNeeded];
     }];
 }
 
@@ -135,6 +116,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         
         _checkInModel = _checkInService.checkInModel;
         [SSJBookkeepingTreeStore saveCheckInModel:_checkInModel error:nil];
+        [self loadTreeViewIfNeeded];
         
     } else if ([_checkInService.returnCode isEqualToString:@"2"]) {
         
@@ -143,27 +125,9 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         if (![_checkInModel.lastCheckInDate isEqualToString:_checkInService.checkInModel.lastCheckInDate]) {
             _checkInModel = _checkInService.checkInModel;
             [SSJBookkeepingTreeStore saveCheckInModel:_checkInService.checkInModel error:nil];
+            [self loadTreeViewIfNeeded];
         }
         
-    } else {
-        // 根据本地保存的签到记录，显示记账树等级
-        _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    }
-    
-    // 根据本地保存的签到记录，显示记账树等级
-    _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    if (_checkInModel) {
-        if (SSJIsFirstLaunchForCurrentVersion()) {
-            [self showTreeViewIfNeeded];
-        } else {
-            // 启动页显示完成或者启动接口请求失败，显示记账树
-            if (_launchView.isCompleted
-                || ([SSJStartChecker sharedInstance].isChecked && ![SSJStartChecker sharedInstance].isCheckedSuccess)) {
-                [self showTreeViewIfNeeded];
-            }
-        }
-    } else {
-        [self showGuideViewIfNeeded];
     }
 }
 
@@ -171,48 +135,17 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 #ifdef DEBUG
     [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"签到接口请求失败,error:%@", [error localizedDescription]]];
 #endif
-    // 根据本地保存的签到记录，显示记账树等级
-    _checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
-    if (_checkInModel) {
-        if (SSJIsFirstLaunchForCurrentVersion()) {
-            [self showTreeViewIfNeeded];
-        } else {
-            // 启动页显示完成或者启动接口请求失败，显示记账树
-            if (_launchView.isCompleted
-                || ([SSJStartChecker sharedInstance].isChecked && ![SSJStartChecker sharedInstance].isCheckedSuccess)) {
-                [self showTreeViewIfNeeded];
-            }
-        }
-    } else {
-        [self showGuideViewIfNeeded];
-    }
 }
 
-- (void)showTreeViewIfNeeded {
+- (void)loadTreeViewIfNeeded {
     // 签到接口没有请求完成，直接返回
     if (!_checkInService.isLoaded) {
         return;
     }
     
     if (_checkInModel) {
-        __weak typeof(self) wself = self;
         // 加载记账树启动图
-        [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_checkInModel.treeImgUrl timeout:kLoadTreeImgTimeout finish:^(UIImage *image, BOOL success) {
-            if (success && image) {
-                wself.treeView = [[SSJBookkeepingTreeView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-                [wself.treeView setTreeImg:image];
-                [wself.treeView setMuteButtonShowed:NO];
-                [wself.treeView setCheckTimes:wself.checkInModel.checkInTimes];
-                [UIView transitionFromView:wself.launchView toView:wself.treeView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [wself showGuideViewIfNeeded];
-                    });
-                }];
-            } else {
-                [wself showGuideViewIfNeeded];
-            }
-        }];
-        
+        [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_checkInModel.treeImgUrl timeout:kLoadTreeImgTimeout finish:NULL];
         // 加载记账树gif图片
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:NULL];
     }
@@ -220,7 +153,8 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 // 当前版本第一次启动显示引导页
 - (void)showGuideViewIfNeeded {
-    UIView *currentView = _treeView ?: _launchView;
+//    UIView *currentView = _treeView ?: _launchView;
+    UIView *currentView = _launchView;
     if (SSJIsFirstLaunchForCurrentVersion()) {
         if (!_guideView) {
             _guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
