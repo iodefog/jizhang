@@ -66,7 +66,7 @@
 -(UIImageView *)circleImage{
     if (!_circleImage) {
         _circleImage = [[UIImageView alloc]init];
-        _circleImage.image = [UIImage imageNamed:@"xuhuan_sel"];
+        _circleImage.image = [UIImage imageNamed:@"zhouqi"];
         
     }
     return _circleImage;

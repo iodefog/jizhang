@@ -530,6 +530,8 @@
 		9C762FB71CE9B21200ED88BE /* dian_nor@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C762FAF1CE9B21200ED88BE /* dian_nor@3x.png */; };
 		9C762FB81CE9B21200ED88BE /* dian_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C762FB01CE9B21200ED88BE /* dian_sel@2x.png */; };
 		9C762FB91CE9B21200ED88BE /* dian_sel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C762FB11CE9B21200ED88BE /* dian_sel@3x.png */; };
+		9C9081641CEEB3D600FF5450 /* zhouqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9081621CEEB3D600FF5450 /* zhouqi@2x.png */; };
+		9C9081651CEEB3D600FF5450 /* zhouqi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9081631CEEB3D600FF5450 /* zhouqi@3x.png */; };
 		9C9471761CEB224C00D69079 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */; };
 		9C9471771CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471371CEB224C00D69079 /* SSJFinancingHomeHelper.m */; };
 		9C9471781CEB224C00D69079 /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */; };
@@ -1633,6 +1635,8 @@
 		9C762FAF1CE9B21200ED88BE /* dian_nor@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dian_nor@3x.png"; sourceTree = "<group>"; };
 		9C762FB01CE9B21200ED88BE /* dian_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dian_sel@2x.png"; sourceTree = "<group>"; };
 		9C762FB11CE9B21200ED88BE /* dian_sel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dian_sel@3x.png"; sourceTree = "<group>"; };
+		9C9081621CEEB3D600FF5450 /* zhouqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zhouqi@2x.png"; path = "../zhouqi@2x.png"; sourceTree = "<group>"; };
+		9C9081631CEEB3D600FF5450 /* zhouqi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zhouqi@3x.png"; path = "../zhouqi@3x.png"; sourceTree = "<group>"; };
 		9C9471331CEB224C00D69079 /* SSJFinancingHomeitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeitem.h; sourceTree = "<group>"; };
 		9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeitem.m; sourceTree = "<group>"; };
 		9C9471361CEB224C00D69079 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
@@ -3750,6 +3754,8 @@
 		9C4077FD1CE1B84000A61956 /* MoreImage */ = {
 			isa = PBXGroup;
 			children = (
+				9C9081621CEEB3D600FF5450 /* zhouqi@2x.png */,
+				9C9081631CEEB3D600FF5450 /* zhouqi@3x.png */,
 				9C32777E1CE5878600109C4C /* more_arrow@2x.png */,
 				9C32777F1CE5878600109C4C /* more_arrow@3x.png */,
 				9C3277801CE5878600109C4C /* more_tongbuing@2x.png */,
@@ -4871,6 +4877,7 @@
 				7DDDA7C71CBE1BFD0029ADAC /* help_tree_level_9@3x.png in Resources */,
 				7DD7D7271C4C8E6A00ACE71A /* tab_founds_nor@3x.png in Resources */,
 				9C4078481CE2190800A61956 /* tianjia_border@3x.png in Resources */,
+				9C9081651CEEB3D600FF5450 /* zhouqi@3x.png in Resources */,
 				7DF8DEDC1C59BFE700CC5DFA /* guide_3-667@2x.png in Resources */,
 				9C4078391CE1FC3100A61956 /* tab_more_sel@3x.png in Resources */,
 				BD976FB01C4F1AC200B0E26D /* add@2x.png in Resources */,
@@ -5226,6 +5233,7 @@
 				9C564F111CEDBBE5009F7A30 /* founds_yindao-667@2x.png in Resources */,
 				7D893F2C1C91144D00886995 /* budget_left@3x.png in Resources */,
 				7DD7D6871C4C8E6A00ACE71A /* bt_shenghuofei@3x.png in Resources */,
+				9C9081641CEEB3D600FF5450 /* zhouqi@2x.png in Resources */,
 				7DD7D6921C4C8E6A00ACE71A /* bt_clothes@2x.png in Resources */,
 				7DDDA7BD1CBE1BFD0029ADAC /* help_tree_level_4@3x.png in Resources */,
 				7D893F2D1C91144D00886995 /* budget_left_disable@2x.png in Resources */,
@@ -5922,7 +5930,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -5962,7 +5970,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
+				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
