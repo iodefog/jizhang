@@ -182,6 +182,7 @@
         };
         _imageFooter.ImageClickedBlock = ^(){
             SSJImaageBrowseViewController *imageBrowseVc = [[SSJImaageBrowseViewController alloc]init];
+            imageBrowseVc.type = SSJImageBrowseVcTypeBrowse;
             imageBrowseVc.item = weakSelf.item;
             [weakSelf.navigationController pushViewController:imageBrowseVc animated:YES];
         };
