@@ -72,6 +72,11 @@
         }
     }
     
+    // 更新排序字段
+    if (![db executeUpdate:@"update bk_user_bill set iorder = (select defaultOrder from bk_bill_type where bk_user_bill.billId = bk_bill_type.id)"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
