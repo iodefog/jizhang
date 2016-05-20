@@ -286,6 +286,7 @@ static id _instance;
         resultNum = [NSNumber numberWithFloat:self.leftNum];
         _lastPressTag = 16;
         inputString = [resultNum stringValue];
+        self.plusOrMinusKeyHasPressed = NO;
         [self.ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
     }else if (sender.tag <= 10 || sender.tag == 15){
         inputString = sender.titleLabel.text;
