@@ -72,7 +72,7 @@
     
     //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___') and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
+        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
         
         if (!amountResultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -98,7 +98,9 @@
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and cbilldate <= datetime('now', 'localtime') and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
+//        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and cbilldate <= datetime('now', 'localtime') and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ? and b.istate <> 2", billDate, SSJUSERID(), incomeOrPayType];
+        
+        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate like ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 group by b.id", SSJUSERID(), billDate, incomeOrPayType];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -112,12 +114,12 @@
         NSMutableArray *result = [@[] mutableCopy];
         while ([resultSet next]) {
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-            item.ID = [resultSet stringForColumn:@"IBILLID"];
-            item.money = [resultSet doubleForColumn:@"AMOUNT"];
+            item.ID = [resultSet stringForColumn:@"id"];
+            item.money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             item.scale = item.money / amount;
-            item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
-            item.imageName = [resultSet stringForColumn:@"CCOIN"];
-            item.incomeOrPayName = [resultSet stringForColumn:@"CNAME"];
+            item.colorValue = [resultSet stringForColumn:@"ccolor"];
+            item.imageName = [resultSet stringForColumn:@"ccoin"];
+            item.incomeOrPayName = [resultSet stringForColumn:@"cname"];
             [result addObject:item];
         }
         
@@ -133,7 +135,7 @@
                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select sum(IMONEY), ITYPE from (select a.IMONEY, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and (a.IBILLID like '1___' or a.IBILLID like '2___')) group by ITYPE order by ITYPE desc", billDate, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate like ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 group by b.itype order by b.itype desc", SSJUSERID(), billDate];
         
         if (!resultSet) {
 //            [[SSJDatabaseQueue sharedInstance] close];
@@ -153,7 +155,7 @@
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
             item.type = type;
-            item.money = [resultSet doubleForColumn:@"SUM(IMONEY)"];
+            item.money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             item.colorValue = type == 0 ? @"#f56262" : @"#59ae65";
             item.imageName = type == 0 ? @"reportForms_income" : @"reportForms_expenses";
             [result addObject:item];
