@@ -215,12 +215,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
             [self.calendarUtil nextMonth];
-            [MobClick event:@"12"];
             break;
             
         case SSJReportFormsPeriodTypeYear:
             [self.calendarUtil nextYear];
-            [MobClick event:@"13"];
             break;
     }
     [self updateSwithDateControlTitle];
