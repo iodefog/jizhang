@@ -109,7 +109,8 @@
 
 #pragma mark - Notification
 - (void)reloadDataIfNeeded {
-    if (SSJVisibalController() == self) {
+    if (SSJVisibalController() == self
+        && self.isDatabaseInitFinished) {
         [self reloadDataAfterSync];
     }
 }
