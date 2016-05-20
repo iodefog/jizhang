@@ -118,7 +118,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             SSJBillingChargeCellItem *item = [newAddChargeArr objectAtIndex:i];
             int chargeCount = [[summaryDic valueForKey:item.billDate] intValue];
             [summaryDic setValue:@(chargeCount - 1) forKey:item.billDate];
-            [originalChargeArr removeObject:[newAddChargeArr objectAtIndex:i]];
         }
         [tempDic setObject:originalChargeArr forKey:SSJOrginalChargeArrKey];
         [tempDic setObject:newAddChargeArr forKey:SSJNewAddChargeArrKey];

@@ -95,6 +95,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (collectionView == _newCategoryCollectionView) {
+        if (self.incomeOrExpence) {
+            [MobClick event:@"add_user_bill_in"];
+        }else{
+            [MobClick event:@"add_user_bill_out"];
+        }
         _newCategorySelectedIndex = indexPath.item;
         for (int i = 0; i < _items.count; i ++) {
             SSJRecordMakingCategoryItem *item = _items[i];
@@ -102,6 +107,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         }
         [_newCategoryCollectionView reloadData];
     } else if (collectionView == _customCategoryCollectionView) {
+        if (self.incomeOrExpence) {
+            [MobClick event:@"add_user_bill_in_custom"];
+        }else{
+            [MobClick event:@"add_user_bill_out_custom"];
+        }
         _customCategorySelectedIndex = indexPath.item;
         for (int i = 0; i < _customItems.count; i ++) {
             SSJRecordMakingCategoryItem *item = _customItems[i];
@@ -141,6 +151,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 #pragma mark - Event
 - (void)selectColorAction {
+    [MobClick event:@"add_user_bill_color"];
     NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
     _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:colorValue];
     [_customItems makeObjectsPerformSelector:@selector(setCategoryColor:) withObject:colorValue];

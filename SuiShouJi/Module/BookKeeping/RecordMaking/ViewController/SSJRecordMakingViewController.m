@@ -310,6 +310,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     if (textField == _billTypeInputView.moneyInput
         || textField == _accessoryView.memoView) {
         [self makeArecord];
+        [MobClick event:@"addRecord_save"];
     }
     return YES;
 }
@@ -367,9 +368,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 -(void)segmentPressed:(id)sender{
     self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
     if (self.titleSegment.selectedSegmentIndex == 0) {
-        [MobClick event:@"7"];
+        [MobClick event:@"addRecord_type_out"];
     }else{
-        [MobClick event:@"6"];
+        [MobClick event:@"addRecord_type_in"];
     }
     [self getCategoryList];
     [_billTypeSelectionView endEditing];
@@ -377,14 +378,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectFundAccountAction {
-    [MobClick event:@"4"];
+    [MobClick event:@"addRecord_fund"];
     [self.FundingTypeSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
 }
 
 - (void)selectBillDateAction {
-    [MobClick event:@"5"];
+    [MobClick event:@"addRecord_calendar"];
     [self.DateSelectedView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -394,6 +395,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     if (_selectedImage || self.item.chargeImage.length != 0) {
         SSJImaageBrowseViewController *imageBrowserVC = [[SSJImaageBrowseViewController alloc]init];
         __weak typeof(self) weakSelf = self;
+        [MobClick event:@"addRecord_camera"];
         imageBrowserVC.DeleteImageBlock = ^(){
             weakSelf.selectedImage = nil;
             weakSelf.item.chargeImage = @"";
@@ -415,7 +417,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectPeriodAction {
-    [MobClick event:@"3"];
+    [MobClick event:@"addRecord_cycle"];
     self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
     [self.ChargeCircleSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
@@ -589,6 +591,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         return;
     }
     self.chargeMemo = _accessoryView.memoView.text;
+    [MobClick event:@"addRecord_memo"];
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSMutableArray *editeChargeArr = [NSMutableArray arrayWithCapacity:0];
         double chargeMoney = [self.billTypeInputView.moneyInput.text doubleValue];
