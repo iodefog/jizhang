@@ -324,8 +324,10 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
     budgetModel.isRemind = [set boolForColumn:@"iremind"];
     budgetModel.isAlreadyReminded = [set boolForColumn:@"ihasremind"];
-    NSString *query = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and b.id in %@", [self queryStringForBillIds:budgetModel.billIds]];
-    budgetModel.payMoney = [db doubleForQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
+    budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
+    
+//    NSString *query = [NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and b.id in %@", [self queryStringForBillIds:budgetModel.billIds]];
+//    budgetModel.payMoney = [db doubleForQuery:query, SSJUSERID(), budgetModel.beginDate, budgetModel.endDate];
     
     return budgetModel;
 }
