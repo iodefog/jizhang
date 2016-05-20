@@ -24,6 +24,8 @@
 
 @property (nonatomic, strong) UIView *endDateBaseLineView;
 
+@property (nonatomic, strong) UIImageView *arrowView;
+
 @end
 
 @implementation SSJMagicExportSelectDateView
@@ -33,10 +35,12 @@
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
         [self addSubview:self.beginDateBaseLineView];
+        [self addSubview:self.endDateBaseLineView];
         [self addSubview:self.beginDateTitleLab];
         [self addSubview:self.beginDateLab];
         [self addSubview:self.endDateTitleLab];
         [self addSubview:self.endDateLab];
+        [self addSubview:self.arrowView];
     }
     return self;
 }
@@ -46,6 +50,11 @@
     [self.titleLab sizeToFit];
     self.titleLab.top = 14;
     self.titleLab.centerX = self.width * 0.5;
+    
+//    self.arrowView
+    
+    self.beginDateBaseLineView.frame = CGRectMake(10, 108, self.width - 20, 45);
+    [self.beginDateBaseLineView ssj_relayoutBorder];
     
     self.beginDateBaseLineView.frame = CGRectMake(10, 108, self.width - 20, 45);
     [self.beginDateBaseLineView ssj_relayoutBorder];
@@ -155,13 +164,20 @@
         _endDateBaseLineView = [[UIView alloc] init];
         _endDateBaseLineView.backgroundColor = [UIColor whiteColor];
         [_endDateBaseLineView ssj_setBorderWidth:1];
-        [_beginDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_beginDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"00c6ad"]];
+        [_endDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_endDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"00c6ad"]];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDateAction)];
-        [_beginDateBaseLineView addGestureRecognizer:tap];
+        [_endDateBaseLineView addGestureRecognizer:tap];
     }
-    return _beginDateBaseLineView;
+    return _endDateBaseLineView;
+}
+
+- (UIImageView *)arrowView {
+    if (!_arrowView) {
+        _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow"]];
+    }
+    return _arrowView;
 }
 
 @end
