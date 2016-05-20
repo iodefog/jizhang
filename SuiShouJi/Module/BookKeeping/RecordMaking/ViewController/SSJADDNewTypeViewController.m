@@ -127,6 +127,16 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 #pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField == _customTypeInputView) {
+        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        if (newText.length > 4) {
+            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
+            return NO;
+        }
+    }
+    return YES;
+}
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
@@ -164,8 +174,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         if (name.length == 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
             return;
-        } else if (name.length > 5) {
-            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
+        } else if (name.length > 4) {
+            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
             return;
         }
         
