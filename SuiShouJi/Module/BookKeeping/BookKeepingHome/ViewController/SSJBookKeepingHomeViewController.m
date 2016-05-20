@@ -271,6 +271,8 @@
     if (scrollView.contentOffset.y < - 80) {
         _isRefreshing = NO;
         
+        [MobClick event:@"pull_add_record"];
+
         __weak typeof(self) weakSelf = self;
         SSJRecordMakingViewController *recordmakingVC = [[SSJRecordMakingViewController alloc]init];
         recordmakingVC.addNewChargeBlock = ^(NSArray *chargeIdArr){
@@ -347,6 +349,8 @@
     };
     bookKeepingCell.editeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell)
     {
+        [MobClick event:@"main_record_delete"];
+
         SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
         recordMakingVc.item = cell.item;
         recordMakingVc.addNewChargeBlock = ^(NSArray *chargeIdArr){
@@ -362,6 +366,8 @@
         [weakSelf.navigationController pushViewController:imageBrowserVC animated:YES];
     };
     bookKeepingCell.deleteButtonClickBlock = ^{
+        [MobClick event:@"main_record_edit"];
+
         weakSelf.selectIndex = nil;
         [weakSelf getDateFromDatebase];
         [weakSelf.tableView reloadData];
@@ -580,7 +586,7 @@
                         //                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                         //                    }
                         //                }
-                        [weakSelf.items insertObject:item atIndex:item.chargeIndex];
+//                        [weakSelf.items insertObject:item atIndex:item.chargeIndex];
                         [weakSelf.tableView beginUpdates];
                         if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
                             [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
