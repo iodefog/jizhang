@@ -235,7 +235,7 @@
     long year = billDate.year;
     long currentMonth = [NSDate date].month;
     long currentYear = [NSDate date].year;
-    if ([item.billId isEqualToString:@"-1"]) {
+    if ([_item.billId isEqualToString:@"-1"]) {
         _IncomeImage.userInteractionEnabled = NO;
         _expentureImage.userInteractionEnabled = NO;
         _categoryImageButton.layer.borderWidth = 0;
@@ -249,7 +249,7 @@
         _expentureImage.image = nil;
         _incomeMemoLabel.text = @"";
         _expentureMemoLabel.text = @"";
-        if ([item.money doubleValue] < 0) {
+        if ([_item.money doubleValue] < 0) {
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
@@ -257,7 +257,13 @@
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             if (month == currentMonth) {
-                self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
+                if (day == [NSDate date].day) {
+                    self.incomeLabel.text = [NSString stringWithFormat:@"今天"];
+                }else if (day == [NSDate date].day - 1){
+                    self.incomeLabel.text = [NSString stringWithFormat:@"昨天"];
+                }else{
+                    self.incomeLabel.text = [NSString stringWithFormat:@"%ld日",day];
+                }
             }else if(year == currentYear){
                 self.incomeLabel.text = [NSString stringWithFormat:@"%ld月%ld日",month,day];
             }else{
@@ -267,11 +273,17 @@
 
         }else{
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-            self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
+            self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[_item.money doubleValue]];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.incomeLabel sizeToFit];
             if (month == currentMonth) {
-                self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
+                if (day == [NSDate date].day) {
+                    self.expenditureLabel.text = [NSString stringWithFormat:@"今天"];
+                }else if (day == [NSDate date].day - 1){
+                    self.expenditureLabel.text = [NSString stringWithFormat:@"昨天"];
+                }else{
+                    self.expenditureLabel.text = [NSString stringWithFormat:@"%ld日",day];
+                }
             }else if(year == currentYear){
                 self.expenditureLabel.text = [NSString stringWithFormat:@"%ld月%ld日",month,day];
             }else{
@@ -281,27 +293,28 @@
         }
     }else{
         [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        if (!item.incomeOrExpence) {
-            self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",item.typeName,[item.money doubleValue]];
+        if (!_item.incomeOrExpence) {
+            self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
             [self.incomeLabel sizeToFit];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             self.expenditureLabel.text = @"";
-            self.incomeMemoLabel.text = self.item.chargeMemo;
+            self.incomeMemoLabel.text = _item.chargeMemo;
             [self.incomeMemoLabel sizeToFit];
             self.expentureMemoLabel.text = @"";
         }else{
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",item.typeName,[item.money doubleValue]];
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.text = @"";
-            self.expentureMemoLabel.text = self.item.chargeMemo;
+            self.expentureMemoLabel.text = _item.chargeMemo;
             [self.expentureMemoLabel sizeToFit];
             self.incomeMemoLabel.text = @"";
         }
-        UIImage *image = [UIImage imageWithCGImage:[UIImage imageNamed:item.imageName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+        UIImage *image = [[UIImage imageWithCGImage:[UIImage imageNamed:_item.imageName].CGImage scale:1.5*[UIScreen mainScreen].scale orientation:UIImageOrientationUp] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _categoryImageButton.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
         _categoryImageButton.contentMode = UIViewContentModeCenter;
         [_categoryImageButton setImage:image forState:UIControlStateNormal];
-        _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+        _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
         _categoryImageButton.layer.borderWidth = 1;
         _categoryImageButton.backgroundColor = [UIColor clearColor];
         _categoryImageButton.userInteractionEnabled = YES;
@@ -310,28 +323,28 @@
             _IncomeImage.userInteractionEnabled = YES;
             _expentureImage.userInteractionEnabled = YES;
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-                if (self.item.incomeOrExpence) {
+                if (_item.incomeOrExpence) {
                     _IncomeImage.hidden = YES;
                     _expentureImage.hidden = NO;
-                    [self.expentureImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)]];
+                    [self.expentureImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_item.chargeImage)]];
                     self.IncomeImage.image = nil;
                 }else{
                     _expentureImage.hidden = YES;
 
                     _IncomeImage.hidden = NO;
-                    [self.IncomeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)]];
+                    [self.IncomeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_item.chargeImage)]];
                     self.expentureImage.image = nil;
                 }
             }else{
                 if (self.item.incomeOrExpence) {
                     _IncomeImage.hidden = YES;
                     _expentureImage.hidden = NO;
-                    [self.expentureImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
+                    [self.expentureImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)]];
                     self.IncomeImage.image = nil;
                 }else{
                     _expentureImage.hidden = YES;
                     _IncomeImage.hidden = NO;
-                    [self.IncomeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeThumbImage)]];
+                    [self.IncomeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)]];
                     self.expentureImage.image = nil;
                 }
             }
