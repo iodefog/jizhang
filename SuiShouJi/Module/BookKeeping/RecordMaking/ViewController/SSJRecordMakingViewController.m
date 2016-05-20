@@ -211,7 +211,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     if (!_billTypeInputView) {
         _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 91)];
         _billTypeInputView.moneyInput.delegate = self;
-        _billTypeInputView.moneyInput.text = _item.money;
+        if (_item.money) {
+            _billTypeInputView.moneyInput.text = [NSString stringWithFormat:@"%.2f", [_item.money doubleValue]];
+        }
     }
     return _billTypeInputView;
 }

@@ -72,6 +72,11 @@
         }
     }
     
+    // 更新排序字段
+    if (![db executeUpdate:@"update bk_user_bill set iorder = (select defaultOrder from bk_bill_type where bk_user_bill.cbillId = bk_bill_type.id)"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
@@ -103,7 +108,7 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1008','医药',1,NULL,'bt_medicine','#f25c5c',0,0,NULL,19)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1009','住房',1,NULL,'bt_house','#b05c5c',1,0,NULL,18)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1010','水电煤',1,NULL,'bt_water','#a66e16',1,0,NULL,19)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('1011','食材',1,NULL,'bt_purchase','#f86e3c',0,0,NULL,2)",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('1011','食材',1,NULL,'bt_shicai','#f86e3c',0,0,NULL,2)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1012','水果',1,NULL,'bt_fruit','#66b34a',1,0,NULL,8)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1013','零食',1,NULL,'bt_snack','#d969ba',1,0,NULL,9)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1014','汽车',1,NULL,'bt_car','#83aa3f',0,0,NULL,13)",
@@ -126,13 +131,13 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1031','还钱',1,NULL,'bt_huankuan','#7b529b',0,0,NULL,31)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1032','交税',1,NULL,'bt_jiaoshui','#e16b6b',0,0,NULL,8)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1033','其它',1,NULL,'bt_others','#626262',0,0,NULL,33)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2001','工资',0,NULL,'bt_wage','#e1861b',1,0,NULL,2)",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2001','工资',0,NULL,'bt_wages','#e1861b',1,0,NULL,2)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2002','奖金',0,NULL,'bt_bouns','#66b34a',1,0,NULL,3)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2003','福利',0,NULL,'bt_fuli','#2bbeb2',1,0,NULL,4)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2004','投资收益',0,NULL,'bt_investment','#d44f4f',1,0,NULL,5)",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2004','投资收益',0,NULL,'bt_invest','#d44f4f',1,0,NULL,5)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2005','收红包',0,NULL,'bt_hongbao','#e15534',1,0,NULL,6)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2006','兼职',0,NULL,'bt_jianzhi','#78a543',1,0,NULL,7)",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2007','生活费',0,NULL,'bt_alimoney','#be7330',1,0,NULL,8)",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('2007','生活费',0,NULL,'bt_shenghuofei','#be7330',1,0,NULL,8)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2008','报销',0,NULL,'bt_baoxiao','#6691e9',1,0,NULL,9)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2009','退款',0,NULL,'bt_tuikuan','#68b58a',1,0,NULL,10)",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('2010','公积金',0,NULL,'bt_gongjijin','#766bc8',1,0,NULL,13)",
@@ -217,7 +222,7 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3038','',1,'','bt_deficit','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3039','',1,'','bt_recharge','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3040','',1,'','bt_service','',NULL,NULL,'root','')",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('3041','',1,'','bt_purchase','',NULL,NULL,'root','')",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('3041','',1,'','bt_shicai','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3042','',1,'','bt_tourism','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3043','',1,'','bt_chuchai','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3044','',1,'','bt_jiudian','',NULL,NULL,'root','')",
@@ -242,7 +247,7 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3063','',1,'','bt_huankuan','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('3064','',1,'','bt_jiechu','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4001','',0,'','bt_yingye','',NULL,NULL,'root','')",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('4002','',0,'','bt_wage','',NULL,NULL,'root','')",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('4002','',0,'','bt_wages','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4003','',0,'','bt_jianzhi','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4004','',0,'','bt_gift','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4005','',0,'','bt_fuli','',NULL,NULL,'root','')",
@@ -252,8 +257,8 @@
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4009','',0,'','bt_interest','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4010','',0,'','bt_fenhong','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4011','',0,'','bt_bouns','',NULL,NULL,'root','')",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('4012','',0,'','bt_investment','',NULL,NULL,'root','')",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('4013','',0,'','bt_alimoney','',NULL,NULL,'root','')",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('4012','',0,'','bt_invest','',NULL,NULL,'root','')",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('4013','',0,'','bt_shenghuofei','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4014','',0,'','bt_baoxiao','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4015','',0,'','bt_tuikuan','',NULL,NULL,'root','')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('4016','',0,'','bt_gift','',NULL,NULL,'root','')",
