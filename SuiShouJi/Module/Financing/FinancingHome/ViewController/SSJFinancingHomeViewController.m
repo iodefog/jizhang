@@ -24,6 +24,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJFinancingHomeHelper.h"
 #import "SSJFinancingHomeHeader.h"
 #import "SSJFinancingHomeAddCell.h"
+#import "SSJDataSynchronizer.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -119,12 +120,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         }];
     }
     if ([item.fundingID isEqualToString:self.newlyAddFundId]) {
-        cell.transform = CGAffineTransformMakeTranslation( - 1000 , 0);
-        [UIView animateWithDuration:10 delay:0 options:UIViewAnimationOptionTransitionCurlUp animations:^{
-            cell.transform = CGAffineTransformIdentity;
-        } completion:^(BOOL finished) {
-            self.newlyAddFundId = nil;
-        }];
+        self.newlyAddFundId = nil;
     }
 }
 
@@ -172,6 +168,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    [MobClick event:@"fund_sort"];
     if (indexPath.row != self.items.count - 1) {
         return YES;
     }else{
@@ -250,12 +247,16 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         if (weakSelf.newlyAddFundId) {
-            [weakSelf.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 2 inSection:0]]];
             [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+            [weakSelf.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 2 inSection:0]]];
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            }
         }else{
             [weakSelf.collectionView reloadData];
         }
         [weakSelf.collectionView ssj_hideLoadingIndicator];
+        
     } failure:^(NSError *error) {
         [weakSelf.collectionView ssj_hideLoadingIndicator];
     }];
@@ -272,6 +273,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)transferButtonClicked{
     SSJFundingTransferViewController *fundingTransferVC = [[SSJFundingTransferViewController alloc]init];
     [self.navigationController pushViewController:fundingTransferVC animated:YES];
+    [MobClick event:@"fund_transform"];
 }
 
 -(void)reloadDataAfterSync{

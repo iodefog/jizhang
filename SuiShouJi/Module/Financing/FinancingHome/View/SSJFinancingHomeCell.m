@@ -118,6 +118,7 @@
 }
 
 -(void)deleteButtonClicked:(id)sender{
+    [MobClick event:@"fund_delete"];
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:self.item];
     if (self.deleteButtonClickBlock) {
         self.deleteButtonClickBlock(self);

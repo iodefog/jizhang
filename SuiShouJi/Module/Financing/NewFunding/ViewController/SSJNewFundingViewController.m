@@ -265,9 +265,6 @@
             self.finishBlock(item);
         }
     }
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-    }
     [db close];
     [self.navigationController popViewControllerAnimated:YES];
 }
