@@ -157,7 +157,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 #pragma mark - Event
 //  切换周期（年、月）
 - (void)filterAction {
-    [MobClick event:@"8"];
+    [MobClick event:@"form_filter"];
     if ([self.periodSelectionView isShowed]) {
         [self.periodSelectionView dismiss:YES];
     } else {
@@ -183,11 +183,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         self.tableView.tableFooterView = self.surplusView;
     }
     if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
-        [MobClick event:@"9"];
+        [MobClick event:@"form_out"];
     }else if ([selectedTitle isEqualToString:kSegmentTitleIncome]){
-        [MobClick event:@"10"];
+        [MobClick event:@"form_in"];
     }else{
-        [MobClick event:@"11"];
+        [MobClick event:@"form_total"];
     }
 }
 
@@ -196,12 +196,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
             [self.calendarUtil preMonth];
-            [MobClick event:@"12"];
+            [MobClick event:@"forms_cycle_year"];
             break;
             
         case SSJReportFormsPeriodTypeYear:
             [self.calendarUtil preYear];
-            [MobClick event:@"13"];
+            [MobClick event:@"forms_cycle_month"];
             break;
     }
     [self updateSwithDateControlTitle];

@@ -207,7 +207,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     self.item.fundingAmount = _totalIncome - _totalExpence;
     newFundingVC.item = self.item;
     [self.navigationController pushViewController:newFundingVC animated:YES];
-    [MobClick event:@"14"];
+    [MobClick event:@"fund_edit"];
 }
 
 -(void)reloadDataAfterSync{

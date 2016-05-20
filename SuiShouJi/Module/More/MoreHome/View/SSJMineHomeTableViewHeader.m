@@ -210,12 +210,14 @@
 }
 
 - (void)checkInButtonClicked:(id)sender{
+    [MobClick event:@"account_tree"];
     if (self.checkInButtonClickBlock) {
         self.checkInButtonClickBlock();
     }
 }
 
 - (void)syncButtonClicked:(id)sender{
+    [MobClick event:@"account_sync"];
     if (self.syncButtonClickBlock) {
         self.syncButtonClickBlock();
     }

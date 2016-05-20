@@ -172,6 +172,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    [MobClick event:@"fund_sort"];
     if (indexPath.row != self.items.count - 1) {
         return YES;
     }else{
@@ -272,6 +273,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)transferButtonClicked{
     SSJFundingTransferViewController *fundingTransferVC = [[SSJFundingTransferViewController alloc]init];
     [self.navigationController pushViewController:fundingTransferVC animated:YES];
+    [MobClick event:@"fund_transform"];
 }
 
 -(void)reloadDataAfterSync{

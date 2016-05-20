@@ -285,6 +285,8 @@
 
 -(void)forgetButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_forget_pwd"];
+
     SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
     forgetVC.backController = self.backController;
     forgetVC.finishHandle = ^(UIViewController *controller){
@@ -295,6 +297,8 @@
 
 -(void)registerButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_register"];
+
     SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
     registerVc.finishHandle = ^(UIViewController *controller){
         //  如果是忘记密码，就返回到登录页面
@@ -320,6 +324,8 @@
 }
 
 -(void)qqLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_qq"];
+
     [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
@@ -328,6 +334,8 @@
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_weichat"];
+
     [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
