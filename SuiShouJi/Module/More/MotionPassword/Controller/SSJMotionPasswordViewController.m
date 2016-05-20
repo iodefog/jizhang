@@ -439,7 +439,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _portraitView.layer.borderWidth = 1;
         _portraitView.layer.borderColor = [UIColor whiteColor].CGColor;
         
-        CGRect imageFrame = CGRectInset(_portraitView.bounds, 1, 1);
+        CGRect imageFrame = CGRectInset(_portraitView.bounds, 3, 3);
         UIImageView *imageView = [[UIImageView alloc] initWithCornerRadiusAdvance:CGRectGetWidth(imageFrame) * 0.5 rectCornerType:UIRectCornerAllCorners];
         imageView.frame = imageFrame;
         NSString *iconUrlStr = [_userItem.icon hasPrefix:@"http"] ? _userItem.icon : SSJImageURLWithAPI(_userItem.icon);
