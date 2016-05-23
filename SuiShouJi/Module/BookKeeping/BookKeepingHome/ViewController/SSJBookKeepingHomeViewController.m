@@ -243,7 +243,7 @@
             self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
             self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
             currentCell.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, self.view.height + indexPath.row * 130);
-            [UIView animateWithDuration:0.7 delay:0.1 * indexPath.row options:UIViewAnimationOptionTransitionNone animations:^{
+            [UIView animateWithDuration:0.7 delay:0.2 * (indexPath.row + 1) options:UIViewAnimationOptionTransitionNone animations:^{
                 currentCell.categoryImageButton.transform = CGAffineTransformIdentity;
             } completion:^(BOOL finished) {
                 [currentCell shake];

@@ -90,10 +90,10 @@
     self.dateLabel.text = dateStr;
     [self.dateLabel sizeToFit];
     if (_item.income - _item.expenture > 0) {
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
         self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",_item.income - _item.expenture];
     }else if (_item.income - _item.expenture < 0){
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",_item.income - _item.expenture];
     }else{
         self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];

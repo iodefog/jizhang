@@ -385,6 +385,7 @@
         image.center = CGPointMake(20, 23);
         
         _tfPhoneNum = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47) contentHeight:34];
+        _tfPhoneNum.tintColor = [UIColor whiteColor];
         _tfPhoneNum.textColor = [UIColor whiteColor];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
@@ -405,6 +406,7 @@
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         _tfPassword = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47) contentHeight:34];
+        _tfPassword.tintColor = [UIColor whiteColor];
         _tfPassword.textColor = [UIColor whiteColor];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
