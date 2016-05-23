@@ -34,12 +34,15 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
         _imageView.layer.borderWidth = 1;
         _imageView.layer.cornerRadius = _imageView.width * 0.5;
+        _imageView.layer.borderColor = [UIColor clearColor].CGColor;
         _imageView.contentMode = UIViewContentModeCenter;
+        _imageView.transform = CGAffineTransformIdentity;
         [self.contentView addSubview:_imageView];
         
         _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
         _label.fontSize = 16;
         _label.textAlignment = NSTextAlignmentCenter;
+        _label.textColor = [UIColor blackColor];
         [self.contentView addSubview:_label];
         
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -70,7 +73,6 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     _label.text = _item.title;
     [_label sizeToFit];
     [self updateState];
-    _item.animated = NO;
 }
 
 - (void)deleteButtonAction {
@@ -99,6 +101,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     UIColor *selectedColor = [UIColor ssj_colorWithHex:_item.colorValue];
     CGColorRef borderColor = (_item.selected ? selectedColor.CGColor : [UIColor clearColor].CGColor);
     if (_item.animated) {
+        _item.animated = NO;
         CABasicAnimation *borderColorAnimation = [CABasicAnimation animationWithKeyPath:@"borderColor"];
         borderColorAnimation.duration = kDuration;
         borderColorAnimation.delegate = self;
@@ -125,7 +128,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         
     } else {
         _imageView.layer.borderColor = borderColor;
-        _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformMakeScale(1, 1);
+        _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformIdentity;
         _label.textColor = _item.selected ? selectedColor : [UIColor blackColor];
     }
 }
@@ -137,7 +140,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [_imageView.layer removeAnimationForKey:kBorderColorAnimationKey];
         
     } else if (anim == [_imageView.layer animationForKey:kTransformAnimationKey]) {
-        _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformMakeScale(1, 1);
+        _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformIdentity;
         [_imageView.layer removeAnimationForKey:kTransformAnimationKey];
         
     } else if (anim == [_label.layer animationForKey:kTextColorAnimationKey]) {
