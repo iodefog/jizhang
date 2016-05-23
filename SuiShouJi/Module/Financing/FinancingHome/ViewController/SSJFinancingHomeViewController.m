@@ -109,7 +109,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJFundingItem *item = [self.items objectAtIndex:indexPath.item];
     if (!KHasEnterFinancingHome) {
         SSJFinancingHomeCell * currentCell = (SSJFinancingHomeCell *)cell;
         currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);

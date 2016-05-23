@@ -27,7 +27,6 @@
 //#import "SSJStartView.h"
 #import "SSJStartViewManager.h"
 
-#warning test
 #import "SSJPatchUpdateService.h"
 #import "SSJJspatchAnalyze.h"
 #import "SSJJsPatchItem.h"
@@ -63,9 +62,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-#warning test
-    
+        
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
