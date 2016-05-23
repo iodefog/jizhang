@@ -51,6 +51,24 @@ NSString *SSJAppVersion();
 float SSJSystemVersion();
 
 /**
+ *  本地补丁最新的版本号
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJLastPatchVersion();
+
+
+/**
+ *  保存补丁当前版本号
+ *
+ *  @param patchVersion 补丁版本号
+ *
+ *  @return (void)
+ */
+BOOL SSJSavePatchVersion(NSInteger patchVersion);
+
+
+/**
  *  返回当前控制器
  *
  *  @return (UIViewController *)
@@ -185,6 +203,7 @@ NSString *SSJImagePath(NSString *imageName);
  *  @return (NSString *) 图片url地址
  */
 NSString *SSJGetChargeImageUrl(NSString *imageName);
+
 
 void SSJDispatchMainSync(void (^block)(void));
 

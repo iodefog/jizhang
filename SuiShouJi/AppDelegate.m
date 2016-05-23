@@ -242,7 +242,9 @@ NSDate *SCYEnterBackgroundTime() {
     if ([service.returnCode isEqualToString:@"1"]) {
         for (int i = 0; i < self.service.patchArray.count; i ++) {
             SSJJsPatchItem *item = [self.service.patchArray objectAtIndex:i];
-            [SSJJspatchAnalyze SSJJsPatchAnalyzeWithUrl:item.patchUrl MD5:item.patchMD5];
+            if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
+                [SSJJspatchAnalyze SSJJsPatchAnalyzeWithUrl:item.patchUrl MD5:item.patchMD5 patchVersion:item.patchVersion];
+            }
         }
     }
 }

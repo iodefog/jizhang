@@ -105,6 +105,9 @@ extern NSString *const SSJHaveEnterFundingHomeKey;
 //用户的登录方式
 extern NSString *const SSJUserLoginTypeKey;
 
+//上一次下载的补丁的key
+extern NSString *const SSJLastPatchVersionKey;
+
 
 /** --------------- Notification --------------- */
 //  数据同步成功通知

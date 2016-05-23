@@ -16,7 +16,7 @@
 
 - (void)requestPatchWithCurrentVersion:(NSString *)version{
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
-    [dict setObject:@"1.2.0" forKey:@"version"];
+    [dict setObject:version forKey:@"version"];
     [self request:SSJURLWithAPI(@"/maintenance/maintenance.go") params:dict];
 }
 

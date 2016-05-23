@@ -44,6 +44,9 @@ NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";
 
 NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";
 
+NSString *const SSJLastPatchVersionKey = @"lastPatchVersionKey";
+
+
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
 NSString *const SSJUserLoginTypeKey = @"SSJUserLoginTypeKey";

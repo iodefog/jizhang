@@ -73,6 +73,7 @@
                     _isLoadSuccess = NO;
                     
                     [self p_taskDidFail:task error:error];
+                    
                 }
             }];
             
