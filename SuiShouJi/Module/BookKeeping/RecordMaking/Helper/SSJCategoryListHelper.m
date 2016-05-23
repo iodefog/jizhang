@@ -212,6 +212,37 @@
     }];
 }
 
++ (void)updateCategoryOrderWithItems:(NSArray <SSJRecordMakingBillTypeSelectionCellItem *>*)items
+                             success:(void (^)())success
+                             failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        dispatch_apply([items count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = items[index];
+            if (item.ID.length == 0) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"类别id为空"}];
+                        SSJDispatch_main_async_safe(^{
+                            failure(error);
+                        });
+                    });
+                }
+                return;
+            }
+            
+            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(index + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    });
+                }
+            }
+        });
+    }];
+}
+
 + (NSArray *)payOutColors {
     return @[@"c55553", @"c6632f", @"a90868", @"d29361", @"a8a67e", @"006f5f", @"ac3b2b", @"6293b0", @"ab94c6", @"d96421", @"a74257", @"c1af65"];
 }
