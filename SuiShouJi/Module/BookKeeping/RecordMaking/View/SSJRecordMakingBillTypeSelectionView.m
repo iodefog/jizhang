@@ -59,6 +59,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         [sself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
         if (deleteIndexPath.item == sself.selectedIndex && sself.internalItems.count > 1) {
             sself -> _selectedIndex = 0;
+            sself -> _lastSelectedIndex = NSIntegerMin;
         }
         if (sself.deleteAction) {
             sself.deleteAction(sself, cell.item);
@@ -132,7 +133,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     for (int i = 0; i < _internalItems.count; i ++) {
         SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[i];
         item.selected = i == _selectedIndex;
-        item.animated = YES;
+        item.deselected = i == _lastSelectedIndex;
         item.editable = NO;
     }
     
@@ -158,6 +159,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 - (void)setItems:(NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *)items {
     _selectedIndex = 0;
+    _lastSelectedIndex = NSIntegerMin;
     [_internalItems removeAllObjects];
     if (items) {
         [_internalItems addObjectsFromArray:items];
@@ -177,6 +179,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
     NSInteger tempIndex = MIN(selectedIndex, _internalItems.count - 2);
     if (_selectedIndex != tempIndex) {
+        _lastSelectedIndex = _selectedIndex;
         _selectedIndex = tempIndex;
         [self updateSelectedItem];
     }
@@ -195,7 +198,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     for (int i = 0; i < _internalItems.count; i ++) {
         SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[i];
         item.selected = i == _selectedIndex;
-        item.animated = YES;
+        item.deselected = i == _lastSelectedIndex;
         if (item.selected) {
             selectedItem = item;
         }

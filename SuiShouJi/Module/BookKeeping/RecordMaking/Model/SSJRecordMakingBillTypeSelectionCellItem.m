@@ -26,7 +26,7 @@
                                                @"colorValue":(_colorValue ?: [NSNull null]),
                                                @"selected":@(_selected),
                                                @"editable":@(_editable),
-                                               @"animated":@(_animated)}];
+                                               @"deselected":@(_deselected)}];
 }
 
 @end
