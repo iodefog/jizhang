@@ -160,20 +160,11 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             __weak typeof(self) wself = self;
             _guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
             _guideView.beginHandle = ^(SSJGuideView *guideView) {
-                if (SSJIsUserLogined()) {
-                    
-                } else {
-                    [guideView dismiss:YES];
-                    if (wself.completion) {
-                        wself.completion(wself);
-                        wself.completion = nil;
-                    }
-                }
-                
-                if ([self verifyMotionPasswordIfNeeded]) {
-                    
-                } else {
-                    
+                [guideView dismiss:YES];
+//                [wself verifyMotionPasswordIfNeeded];
+                if (wself.completion) {
+                    wself.completion(wself);
+                    wself.completion = nil;
                 }
             };
         }
@@ -183,24 +174,25 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         [UIView animateWithDuration:0.5f animations:^(void){
             _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
             _launchView.alpha = 0;
-        } completion:^(BOOL finished){
-            [_launchView removeFromSuperview];
-            _launchView = nil;
+//            [self verifyMotionPasswordIfNeeded];
             if (_completion) {
                 _completion(self);
                 _completion = nil;
             }
+        } completion:^(BOOL finished){
+            [_launchView removeFromSuperview];
+            _launchView = nil;
         }];
     }
 }
 
-- (BOOL)verifyMotionPasswordIfNeeded {
+- (void)verifyMotionPasswordIfNeeded {
     if (!SSJIsUserLogined()) {
         if (_completion) {
             _completion(self);
             _completion = nil;
         }
-        return NO;
+        return;
     }
     
     //  如果当前页面已经是手势密码，直接返回
@@ -222,9 +214,9 @@ static const NSTimeInterval kTransitionDuration = 0.3;
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
             UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
-            [currentVC presentViewController:naviVC animated:YES completion:NULL];
+            [currentVC presentViewController:naviVC animated:NO completion:NULL];
             
-            return YES;
+            return;
         }
     }
     
@@ -232,7 +224,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         _completion(self);
         _completion = nil;
     }
-    return NO;
+    return;
 }
 
 @end

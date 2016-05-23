@@ -289,6 +289,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [super textFieldDidBeginEditing:textField];
     _currentInput = textField;
+    [_billTypeSelectionView endEditing];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
