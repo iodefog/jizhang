@@ -261,6 +261,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         };
         _billTypeSelectionView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
             [wself.currentInput becomeFirstResponder];
+            [wself.navigationItem setRightBarButtonItem:nil animated:YES];
         };
     }
     return _billTypeSelectionView;
@@ -377,7 +378,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     }
     [self getCategoryList];
     [_billTypeSelectionView endEditing];
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+//    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
 - (void)selectFundAccountAction {
@@ -429,7 +430,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (void)endEditingAction {
     [_billTypeSelectionView endEditing];
-    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+//    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
 - (void)hideGuideView {
