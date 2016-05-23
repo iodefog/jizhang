@@ -22,9 +22,11 @@
 
 @property (nonatomic) BOOL selected;
 
+@property (nonatomic) BOOL deselected;
+
 @property (nonatomic) BOOL editable;
 
-@property (nonatomic) BOOL animated;
+//@property (nonatomic) BOOL animated;
 
 + (instancetype)itemWithTitle:(NSString *)title
                     imageName:(NSString *)imageName

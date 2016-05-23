@@ -27,6 +27,11 @@
         return error;
     }
     
+    error = [self upgradeFundInfoTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -93,6 +98,15 @@
         }
     }
     
+    return nil;
+}
+
++ (NSError *)upgradeFundInfoTableWithDatabase:(FMDatabase *)db {
+    if (![db columnExists:@"iorder" inTableWithName:@"bk_fund_info"]) {
+        if (![db executeUpdate:@"alter table bk_fund_info add iorder integer"]) {
+            return [db lastError];
+        }
+    }
     return nil;
 }
 
