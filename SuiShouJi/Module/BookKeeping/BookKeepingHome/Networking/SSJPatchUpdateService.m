@@ -7,7 +7,25 @@
 //
 
 #import "SSJPatchUpdateService.h"
+#import "SSJJsPatchItem.h"
 
+@interface SSJPatchUpdateService()
+
+@end
 @implementation SSJPatchUpdateService
+
+- (void)requestPatchWithCurrentVersion:(NSString *)version{
+    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
+    [dict setObject:@"1.2.0" forKey:@"version"];
+    [self request:SSJURLWithAPI(@"/maintenance/maintenance.go") params:dict];
+}
+
+- (void)requestDidFinish:(NSDictionary *)rootElement{
+    [super requestDidFinish:rootElement];
+    if ([self.returnCode isEqualToString:@"1"]) {
+        self.patchArray = [NSArray array];
+        self.patchArray = [SSJJsPatchItem mj_objectArrayWithKeyValuesArray:[rootElement objectForKey:@"results"]];
+    }
+}
 
 @end

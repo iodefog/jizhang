@@ -28,7 +28,9 @@
 #import "SSJStartViewManager.h"
 
 #warning test
-#import "JPEngine.h"
+#import "SSJPatchUpdateService.h"
+#import "SSJJspatchAnalyze.h"
+#import "SSJJsPatchItem.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -54,17 +56,17 @@ NSDate *SCYEnterBackgroundTime() {
 
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
+@property(nonatomic, strong) SSJPatchUpdateService *service;
 @end
 
 @implementation AppDelegate
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-//#warning test
-//    [JPEngine startEngine];
-//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"];
-//    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
-//    [JPEngine evaluateScript:script];
+    
+#warning test
+    
+    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -151,6 +153,14 @@ NSDate *SCYEnterBackgroundTime() {
     }
 }
 
+#pragma mark - Getter
+-(SSJPatchUpdateService *)service{
+    if (!_service) {
+        _service = [[SSJPatchUpdateService alloc]initWithDelegate:self];
+    }
+    return _service;
+}
+
 #pragma mark - Private
 //  初始化数据库
 - (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
@@ -226,6 +236,15 @@ NSDate *SCYEnterBackgroundTime() {
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     [UIApplication sharedApplication].keyWindow.rootViewController = tabBarVC;
+}
+
+- (void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if ([service.returnCode isEqualToString:@"1"]) {
+        for (int i = 0; i < self.service.patchArray.count; i ++) {
+            SSJJsPatchItem *item = [self.service.patchArray objectAtIndex:i];
+            [SSJJspatchAnalyze SSJJsPatchAnalyzeWithUrl:item.patchUrl MD5:item.patchMD5];
+        }
+    }
 }
 
 #pragma mark - qq快登
