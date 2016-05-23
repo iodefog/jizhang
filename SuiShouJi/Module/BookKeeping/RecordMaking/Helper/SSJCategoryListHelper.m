@@ -41,10 +41,27 @@
 }
 
 + (void)deleteCategoryWithCategoryId:(NSString *)categoryId
+                   incomeOrExpenture:(int)incomeOrExpenture
                              Success:(void(^)(BOOL result))success
                              failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = 0, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *result = [db executeQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
+        if (!result) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        int order = 0;
+        while ([result next]) {
+            order = [result intForColumn:@"max(a.iorder)"];
+            order++;
+        }
+        
+        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = 0, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
         if (deletesucess) {
             if (success){
                 SSJDispatch_main_async_safe(^{
@@ -66,7 +83,7 @@
                                                 success:(void(^)(NSMutableArray<SSJRecordMakingCategoryItem *> *result))success
                                                 failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID", @(incomeOrExpenture), SSJUSERID()];
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.IORDER", @(incomeOrExpenture), SSJUSERID()];
         if (!rs) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
