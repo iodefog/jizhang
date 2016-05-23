@@ -62,8 +62,8 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
+        
+//    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
