@@ -94,7 +94,8 @@
 
 - (void)setItem:(SSJBillingChargeCellItem *)item {
     _item = item;
-    self.imageView.image = [UIImage imageNamed:item.imageName];
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
+    self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
     
     if ([item.typeName isEqualToString:@"平账收入"] || [item.typeName isEqualToString:@"平账支出"]) {
