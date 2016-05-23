@@ -262,6 +262,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _billTypeSelectionView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
             [wself.currentInput becomeFirstResponder];
             [wself.navigationItem setRightBarButtonItem:nil animated:YES];
+            [SSJCategoryListHelper updateCategoryOrderWithItems:wself.billTypeSelectionView.items success:NULL failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
         };
     }
     return _billTypeSelectionView;
@@ -366,6 +369,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 #pragma mark - Event
 - (void)goBackAction {
     [super goBackAction];
+    [_billTypeSelectionView endEditing];
     [self.view endEditing:YES];
 }
 

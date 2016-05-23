@@ -89,6 +89,17 @@
                                           failure:(void (^)(NSError *error))failure;
 
 /**
+ *  更新收支类型的排序
+ *
+ *  @param items        模型数组
+ *  @param success      查询成功的回调
+ *  @param failure      查询失败的回调
+ */
++ (void)updateCategoryOrderWithItems:(NSArray <SSJRecordMakingBillTypeSelectionCellItem *>*)items
+                             success:(void (^)())success
+                             failure:(void(^)(NSError *error))failure;
+
+/**
  *  自定义支出类型颜色
  */
 + (NSArray *)payOutColors;

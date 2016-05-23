@@ -53,11 +53,15 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     cell.item = _internalItems[indexPath.row];
     __weak typeof(self) wself = self;
     cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
-        [wself.internalItems removeObject:cell.item];
-        NSIndexPath *deleteIndexPath = [wself.collectionView indexPathForCell:cell];
-        [wself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
-        if (wself.deleteAction) {
-            wself.deleteAction(wself, cell.item);
+        __strong typeof(wself) sself = wself;
+        [sself.internalItems removeObject:cell.item];
+        NSIndexPath *deleteIndexPath = [sself.collectionView indexPathForCell:cell];
+        [sself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
+        if (deleteIndexPath.item == sself.selectedIndex && sself.internalItems.count > 1) {
+            sself -> _selectedIndex = 0;
+        }
+        if (sself.deleteAction) {
+            sself.deleteAction(sself, cell.item);
         }
     };
     return cell;
@@ -159,7 +163,9 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 }
 
 - (NSArray *)items {
-    return [_internalItems copy];
+    NSMutableArray *tempItems = [_internalItems mutableCopy];
+    [tempItems removeLastObject];
+    return tempItems;
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
