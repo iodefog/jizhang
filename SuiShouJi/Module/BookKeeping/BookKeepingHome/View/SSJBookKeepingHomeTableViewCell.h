@@ -49,6 +49,8 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 
 @property(nonatomic, strong) UIView *dotView;
 
+@property(nonatomic) BOOL isAnimating;
+
 //抖动动画
 -(void)shake;
 

@@ -248,14 +248,15 @@
             } completion:^(BOOL finished) {
                 [currentCell shake];
                 [UIView animateWithDuration:0.4 animations:^{
-                    currentCell.incomeLabel.alpha = 1;
-                    currentCell.expenditureLabel.alpha = 1;
-                    currentCell.incomeMemoLabel.alpha = 1;
-                    currentCell.expentureMemoLabel.alpha = 1;
-                    currentCell.IncomeImage.alpha = 1;
-                    currentCell.expentureImage.alpha = 1;
-                    weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
-                    weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
+                currentCell.isAnimating = YES;
+                currentCell.incomeLabel.alpha = 1;
+                currentCell.expenditureLabel.alpha = 1;
+                currentCell.incomeMemoLabel.alpha = 1;
+                currentCell.expentureMemoLabel.alpha = 1;
+                currentCell.IncomeImage.alpha = 1;
+                currentCell.expentureImage.alpha = 1;
+                weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
+                weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
                 } completion:^(BOOL finished) {
                     weakSelf.hasLoad = YES;
                 }];
