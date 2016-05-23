@@ -54,4 +54,5 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 //抖动动画
 -(void)shake;
 
+-(void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion;
 @end
