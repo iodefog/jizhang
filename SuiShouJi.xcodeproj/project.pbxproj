@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		7D035FC31CC4AE5A0030C48B /* no_network_alert@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */; };
 		7D035FC41CC4AE5A0030C48B /* no_network_alert@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */; };
+		7D1874161CEF223E00C30AB3 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D1874141CEF223E00C30AB3 /* arrow@2x.png */; };
+		7D1874171CEF223E00C30AB3 /* arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D1874151CEF223E00C30AB3 /* arrow@3x.png */; };
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
 		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
 		7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
@@ -929,6 +931,8 @@
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_network_alert@2x.png"; sourceTree = "<group>"; };
 		7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_network_alert@3x.png"; sourceTree = "<group>"; };
+		7D1874141CEF223E00C30AB3 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
+		7D1874151CEF223E00C30AB3 /* arrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@3x.png"; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
 		7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserChargePeriodConfigSyncTable.m; sourceTree = "<group>"; };
 		7D1D7F441C86DB520001F72A /* SSJUserBudgetSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserBudgetSyncTable.h; sourceTree = "<group>"; };
@@ -3071,6 +3075,8 @@
 				9C991D891CE0742D0031CD02 /* zhuanzhang@2x.png */,
 				9C4078451CE2190800A61956 /* tianjia_border@2x.png */,
 				9C4078461CE2190800A61956 /* tianjia_border@3x.png */,
+				7D1874141CEF223E00C30AB3 /* arrow@2x.png */,
+				7D1874151CEF223E00C30AB3 /* arrow@3x.png */,
 				7DD7D6731C4C8E6A00ACE71A /* ReportForms */,
 				7DD7D6791C4C8E6A00ACE71A /* tabbarimage */,
 			);
@@ -5091,8 +5097,10 @@
 				9C991E311CE0A79F0031CD02 /* bt_ren@3x.png in Resources */,
 				7DD7D6A11C4C8E6A00ACE71A /* bt_food@3x.png in Resources */,
 				BDA3FDF71C58CAC400FB57B1 /* ft_huobijijin@2x.png in Resources */,
+				7D1874171CEF223E00C30AB3 /* arrow@3x.png in Resources */,
 				9C2BCFC41CBF8DC400D8D8D3 /* home_add@3x.png in Resources */,
 				7DD7D6DB1C4C8E6A00ACE71A /* bt_tobacco@3x.png in Resources */,
+				7D1874161CEF223E00C30AB3 /* arrow@2x.png in Resources */,
 				7DE69C5D1C8EDF34001D31C1 /* motion_circle_error@3x.png in Resources */,
 				BD1EE5F21C9807EF00814A05 /* calendar_norecord@3x.png in Resources */,
 				9C991DF41CE0A79F0031CD02 /* bt_chaopiao@2x.png in Resources */,
@@ -5964,7 +5972,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -6004,7 +6012,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "95c538ab-2a3f-4a76-b388-fc9bca47457c";
+				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

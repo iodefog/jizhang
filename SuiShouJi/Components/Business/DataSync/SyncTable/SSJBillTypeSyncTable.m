@@ -22,7 +22,7 @@
         return nil;
     }
     
-    FMResultSet *result = [db executeQuery:@"select id, cname, itype, ccoin, ccolor, icustom from bk_bill_type as a, bk_user_bill as b where a.id = b.cbillid and a.icustom = 1 and b.cuserid = ? and b.iversion > ?", userId, @(version)];
+    FMResultSet *result = [db executeQuery:@"select a.id, a.cname, a.itype, a.ccoin, a.ccolor, a.icustom, a.istate from bk_bill_type as a, bk_user_bill as b where a.id = b.cbillid and a.icustom = 1 and b.cuserid = ? and b.iversion > ?", userId, @(version)];
     if (!result) {
         *error = [db lastError];
         return nil;
@@ -36,12 +36,14 @@
         NSString *ccoin = [result stringForColumn:@"ccoin"];
         NSString *ccolor = [result stringForColumn:@"ccolor"];
         NSString *icustom = [result stringForColumn:@"icustom"];
+        NSString *istate = [result stringForColumn:@"istate"];
         [syncRecords addObject:@{@"id":ID,
                                  @"cname":cname,
                                  @"itype":itype,
                                  @"ccoin":ccoin,
                                  @"ccolor":ccolor,
-                                 @"icustom":icustom}];
+                                 @"icustom":icustom,
+                                 @"istate":istate}];
     }
     return syncRecords;
 }
@@ -57,7 +59,7 @@
         NSString *itype = recordInfo[@"itype"];
         NSString *ccoin = recordInfo[@"ccoin"];
         NSString *ccolor = recordInfo[@"ccolor"];
-        if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom) values (?, ?, ?, ?, ?, 1)", ID, cname, itype, ccoin, ccolor]) {
+        if (![db executeUpdate:@"insert into bk_bill_type (id, cname, itype, ccoin, ccolor, icustom, istate) values (?, ?, ?, ?, ?, 1, 1)", ID, cname, itype, ccoin, ccolor]) {
             *error = [db lastError];
             return NO;
         }

@@ -137,16 +137,17 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField == _customTypeInputView) {
-        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        if (newText.length > 4) {
-            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
-            return NO;
-        }
-    }
-    return YES;
-}
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+//    NSLog(@"%@", [[textField textInputMode] primaryLanguage]);
+//    if (textField == _customTypeInputView) {
+//        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//        if (newText.length > 4) {
+//            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
+//            return NO;
+//        }
+//    }
+//    return YES;
+//}
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
@@ -249,11 +250,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UICollectionViewFlowLayout *)newCategoryLayout {
     if (!_newCategoryLayout) {
         _newCategoryLayout = [[UICollectionViewFlowLayout alloc] init];
-        [_newCategoryLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         _newCategoryLayout.minimumInteritemSpacing = 0;
         _newCategoryLayout.minimumLineSpacing = 0;
         CGFloat width = (self.view.width - 16) * 0.2;
-        _newCategoryLayout.itemSize = CGSizeMake(width, 94);
+        _newCategoryLayout.itemSize = CGSizeMake(floor(width), 94);
         _newCategoryLayout.sectionInset = UIEdgeInsetsMake(0, 8, 0, 8);
     }
     return _newCategoryLayout;
@@ -262,11 +262,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (UICollectionViewFlowLayout *)customCategoryLayout {
     if (!_customCategoryLayout) {
         _customCategoryLayout = [[UICollectionViewFlowLayout alloc] init];
-        [_customCategoryLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         _customCategoryLayout.minimumInteritemSpacing = 0;
         _customCategoryLayout.minimumLineSpacing = 0;
         CGFloat width = (self.view.width - 16) * 0.2;
-        _customCategoryLayout.itemSize = CGSizeMake(width, 60);
+        _customCategoryLayout.itemSize = CGSizeMake(floor(width), 60);
         _customCategoryLayout.sectionInset = UIEdgeInsetsMake(10, 8, 0, 8);
     }
     return _customCategoryLayout;

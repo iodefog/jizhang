@@ -457,7 +457,8 @@ static BOOL KHasEnterMineHome;
 
 - (void)loginButtonClicked{
     if (!SSJIsUserLogined()) {
-        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+        loginVc.backController = self;
         [self.navigationController pushViewController:loginVc animated:YES];
     }else{
         SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
