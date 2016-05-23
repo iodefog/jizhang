@@ -428,4 +428,41 @@
     [self.categoryImageButton.layer addAnimation:anim forKey:@"shake"];
 }
 
+-(void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion{
+    if (!self.isAnimating) {
+        self.incomeLabel.alpha = 0;
+        self.expenditureLabel.alpha = 0;
+        self.incomeMemoLabel.alpha = 0;
+        self.expentureMemoLabel.alpha = 0;
+        self.IncomeImage.alpha = 0;
+        self.expentureImage.alpha = 0;
+        //    self.bookKeepingHeader.expenditureTitleLabel.alpha = 0;
+        //    self.bookKeepingHeader.incomeTitleLabel.alpha = 0;
+        self.categoryImageButton.transform = CGAffineTransformMakeTranslation(0, distance);
+        __weak typeof(self) weakSelf = self;
+        [UIView animateWithDuration:0.7 delay:delay options:UIViewAnimationOptionTransitionNone animations:^{
+            weakSelf.categoryImageButton.transform = CGAffineTransformIdentity;
+            weakSelf.isAnimating = YES;
+        } completion:^(BOOL finished) {
+            [weakSelf shake];
+            [UIView animateWithDuration:0.4 animations:^{
+                weakSelf.isAnimating = YES;
+                weakSelf.incomeLabel.alpha = 1;
+                weakSelf.expenditureLabel.alpha = 1;
+                weakSelf.incomeMemoLabel.alpha = 1;
+                weakSelf.expentureMemoLabel.alpha = 1;
+                weakSelf.IncomeImage.alpha = 1;
+                weakSelf.expentureImage.alpha = 1;
+                //            weakSelf.bookKeepingHeader.expenditureTitleLabel.alpha = 1;
+                //            weakSelf.bookKeepingHeader.incomeTitleLabel.alpha = 1;
+            } completion:^(BOOL finished) {
+                if (completion) {
+                    completion();
+                }
+            }];
+        }];
+    }
+
+}
+
 @end
