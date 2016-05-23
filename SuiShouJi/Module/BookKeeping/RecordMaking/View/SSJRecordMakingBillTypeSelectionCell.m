@@ -90,11 +90,13 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     if (_item.editable) {
         _imageView.transform = CGAffineTransformMakeScale(1, 1);
         _imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"C4C4C4"].CGColor;
+        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : [UIColor blackColor];
         
         self.contentView.transform = CGAffineTransformMakeRotation(-M_PI_4 * 0.06);
         [UIView animateWithDuration:0.12 delay:0 options:(UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction) animations:^{
             self.contentView.transform = CGAffineTransformMakeRotation(+M_PI_4 * 0.06);
         } completion:NULL];
+        
     } else if (_item.selected) {
         [self animateSelectState:YES];
     } else if (_item.deselected) {

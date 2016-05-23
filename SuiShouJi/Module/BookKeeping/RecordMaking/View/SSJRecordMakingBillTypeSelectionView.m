@@ -22,10 +22,6 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 @property (nonatomic, strong) NSMutableArray *internalItems;
 
-//@property (nonatomic, copy) NSString *selectedId;
-//
-//@property (nonatomic, copy) NSString *lastSelectedId;
-
 @end
 
 @implementation SSJRecordMakingBillTypeSelectionView
@@ -116,7 +112,6 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     item.editable = YES;
     [_collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
-
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     if (fromIndexPath.item != _internalItems.count - 1

@@ -227,6 +227,15 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex Success:NULL failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }];
+            
+            for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
+                if (item.selected) {
+                    [UIView animateWithDuration:kAnimationDuration animations:^{
+                        wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                    }];
+                    wself.billTypeInputView.billTypeName = item.title;
+                }
+            }
         };
         _billTypeSelectionView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
             [wself.billTypeInputView.moneyInput becomeFirstResponder];
@@ -241,7 +250,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
             addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
                 wself.categoryID = categoryId;
-//                [wself getCategoryList];
             };
             [wself.navigationController pushViewController:addNewTypeVc animated:YES];
         };
