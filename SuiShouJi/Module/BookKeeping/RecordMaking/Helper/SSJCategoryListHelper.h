@@ -32,6 +32,7 @@
  *  @param failure    删除失败的回调
  */
 + (void)deleteCategoryWithCategoryId:(NSString *)categoryId
+                   incomeOrExpenture:(int)incomeOrExpenture
                              Success:(void(^)(BOOL result))success
                              failure:(void (^)(NSError *error))failure;
 

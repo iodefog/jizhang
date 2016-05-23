@@ -540,6 +540,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _incomeAndPaymentMoneyLab = [[UILabel alloc] initWithFrame:CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18)];
         _incomeAndPaymentMoneyLab.backgroundColor = [UIColor clearColor];
         _incomeAndPaymentMoneyLab.font = [UIFont systemFontOfSize:18];
+        _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
+        _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
         _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
     }
     return _incomeAndPaymentMoneyLab;

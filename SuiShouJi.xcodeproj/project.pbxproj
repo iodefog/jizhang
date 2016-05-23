@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		7D035FC31CC4AE5A0030C48B /* no_network_alert@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */; };
 		7D035FC41CC4AE5A0030C48B /* no_network_alert@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */; };
+		7D07B68B1CF2A72C00B9C390 /* SSJJspatchAnalyze.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B68A1CF2A72C00B9C390 /* SSJJspatchAnalyze.m */; };
+		7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */; };
+		7D07B6981CF2C1F300B9C390 /* SSJLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */; };
 		7D1874161CEF223E00C30AB3 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D1874141CEF223E00C30AB3 /* arrow@2x.png */; };
 		7D1874171CEF223E00C30AB3 /* arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D1874151CEF223E00C30AB3 /* arrow@3x.png */; };
 		7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */; };
@@ -448,8 +451,6 @@
 		9C2229371CC78D9D0040DD54 /* pic_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2229361CC78D9D0040DD54 /* pic_back@3x.png */; };
 		9C262C7B1CBCDB4000368B48 /* home_calender@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */; };
 		9C29319C1CEEFFD300484F6E /* SSJPatchUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */; };
-		9C2931A01CEF1B4800484F6E /* SSJJsPatchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C29319F1CEF1B4800484F6E /* SSJJsPatchItem.m */; };
-		9C2931A31CF292B900484F6E /* SSJJspatchAnalyze.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2931A21CF292B900484F6E /* SSJJspatchAnalyze.m */; };
 		9C2BCFBE1CBF793500D8D8D3 /* ft_shouqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2BCFBA1CBF793500D8D8D3 /* ft_shouqi@2x.png */; };
 		9C2BCFBF1CBF793500D8D8D3 /* ft_shouqi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2BCFBB1CBF793500D8D8D3 /* ft_shouqi@3x.png */; };
 		9C2BCFC01CBF793500D8D8D3 /* ft_zhankai@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2BCFBC1CBF793500D8D8D3 /* ft_zhankai@2x.png */; };
@@ -931,6 +932,12 @@
 		23B83FFE131DF4DCD7E711C8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7D035FC11CC4AE5A0030C48B /* no_network_alert@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_network_alert@2x.png"; sourceTree = "<group>"; };
 		7D035FC21CC4AE5A0030C48B /* no_network_alert@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no_network_alert@3x.png"; sourceTree = "<group>"; };
+		7D07B6891CF2A72C00B9C390 /* SSJJspatchAnalyze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJJspatchAnalyze.h; sourceTree = "<group>"; };
+		7D07B68A1CF2A72C00B9C390 /* SSJJspatchAnalyze.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJJspatchAnalyze.m; sourceTree = "<group>"; };
+		7D07B6931CF2AC4900B9C390 /* SSJJsPatchItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJJsPatchItem.h; sourceTree = "<group>"; };
+		7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJJsPatchItem.m; sourceTree = "<group>"; };
+		7D07B6961CF2C1F300B9C390 /* SSJLoginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginHelper.h; sourceTree = "<group>"; };
+		7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginHelper.m; sourceTree = "<group>"; };
 		7D1874141CEF223E00C30AB3 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
 		7D1874151CEF223E00C30AB3 /* arrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@3x.png"; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
@@ -1555,10 +1562,6 @@
 		9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home_calender@3x.png"; path = "SuiShouJi/Resource/Image/homeImage/home_calender@3x.png"; sourceTree = SOURCE_ROOT; };
 		9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPatchUpdateService.h; sourceTree = "<group>"; };
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
-		9C29319E1CEF1B4800484F6E /* SSJJsPatchItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJJsPatchItem.h; sourceTree = "<group>"; };
-		9C29319F1CEF1B4800484F6E /* SSJJsPatchItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJJsPatchItem.m; sourceTree = "<group>"; };
-		9C2931A11CF292B900484F6E /* SSJJspatchAnalyze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJJspatchAnalyze.h; sourceTree = "<group>"; };
-		9C2931A21CF292B900484F6E /* SSJJspatchAnalyze.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJJspatchAnalyze.m; sourceTree = "<group>"; };
 		9C2BCFBA1CBF793500D8D8D3 /* ft_shouqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shouqi@2x.png"; sourceTree = "<group>"; };
 		9C2BCFBB1CBF793500D8D8D3 /* ft_shouqi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shouqi@3x.png"; sourceTree = "<group>"; };
 		9C2BCFBC1CBF793500D8D8D3 /* ft_zhankai@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_zhankai@2x.png"; sourceTree = "<group>"; };
@@ -3733,8 +3736,8 @@
 		9C2931921CEEFFB000484F6E /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				9C2931A11CF292B900484F6E /* SSJJspatchAnalyze.h */,
-				9C2931A21CF292B900484F6E /* SSJJspatchAnalyze.m */,
+				7D07B6891CF2A72C00B9C390 /* SSJJspatchAnalyze.h */,
+				7D07B68A1CF2A72C00B9C390 /* SSJJspatchAnalyze.m */,
 				9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */,
 				9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */,
 			);
@@ -3744,8 +3747,8 @@
 		9C29319D1CEF1B1F00484F6E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9C29319E1CEF1B4800484F6E /* SSJJsPatchItem.h */,
-				9C29319F1CEF1B4800484F6E /* SSJJsPatchItem.m */,
+				7D07B6931CF2AC4900B9C390 /* SSJJsPatchItem.h */,
+				7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3759,6 +3762,8 @@
 				BD542B551CB544F700655EE2 /* SSJQQLoginHelper.m */,
 				BD542B5E1CB5457800655EE2 /* SSJThirdPartyLoginManger.h */,
 				BD542B5F1CB5457800655EE2 /* SSJThirdPartyLoginManger.m */,
+				7D07B6961CF2C1F300B9C390 /* SSJLoginHelper.h */,
+				7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -5606,6 +5611,7 @@
 				7D5F332B1CEAE6C10086B67E /* SSJBookKeepingHomePopView.m in Sources */,
 				7DB428FB1CAE0F5B00B46F32 /* SSJMagicExportViewController.m in Sources */,
 				7D5F33721CEAE6C10086B67E /* SSJFundingItem.m in Sources */,
+				7D07B6981CF2C1F300B9C390 /* SSJLoginHelper.m in Sources */,
 				7D72D9261CBDEF2A00ACEE2D /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				7D5F33781CEAE6C10086B67E /* SSJChargeCircleSelectView.m in Sources */,
 				7D21352F1CB3E7C900D7E8D2 /* SSJMagicExportCalendarViewCell.m in Sources */,
@@ -5650,7 +5656,6 @@
 				9C0E8C281CB645900093F79E /* UMChatToolBar.m in Sources */,
 				7DD902971CE202790076929F /* SCYSlidePagingHeaderView.m in Sources */,
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
-				9C2931A01CEF1B4800484F6E /* SSJJsPatchItem.m in Sources */,
 				9C9471861CEB224C00D69079 /* SSJFundingDetailHeader.m in Sources */,
 				7D5F33531CEAE6C10086B67E /* SSJCalenderDetailViewController.m in Sources */,
 				7D5F33371CEAE6C10086B67E /* SSJBudgetDetailViewController.m in Sources */,
@@ -5691,8 +5696,10 @@
 				7D5F33871CEAE6C10086B67E /* SSJSmallCalendarView.m in Sources */,
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,
 				BD04331B1C1A78B40051E7AB /* NSString+MoneyDisplayFormat.m in Sources */,
+				7D07B68B1CF2A72C00B9C390 /* SSJJspatchAnalyze.m in Sources */,
 				7D5F33731CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
 				7D72D92B1CBDEF2F00ACEE2D /* SSJBookkeepingTreeHelpViewController.m in Sources */,
+				7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
@@ -5765,7 +5772,6 @@
 				7D79FDDA1CC8CDDD00843C27 /* SSJMagicExportAnnouncementViewController.m in Sources */,
 				BD774A971C88348B001E11FB /* SSJBookkeepingRiminderCell.m in Sources */,
 				7D5848741CE4557D0027DAFA /* SSJDatabaseVersion3.m in Sources */,
-				9C2931A31CF292B900484F6E /* SSJJspatchAnalyze.m in Sources */,
 				7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */,
 				7D5F337D1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m in Sources */,
 				9C9471901CEB224C00D69079 /* SSJModifyFundingViewController.m in Sources */,

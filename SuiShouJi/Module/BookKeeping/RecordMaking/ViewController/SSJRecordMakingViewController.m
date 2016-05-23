@@ -224,7 +224,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _billTypeSelectionView = [[SSJRecordMakingBillTypeSelectionView alloc] initWithFrame:CGRectMake(0, self.billTypeInputView.bottom, self.view.width, self.view.height - self.billTypeInputView.bottom)];
         _billTypeSelectionView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
         _billTypeSelectionView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-            [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID Success:NULL failure:^(NSError *error) {
+            [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex Success:NULL failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
             }];
         };
@@ -289,6 +289,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [super textFieldDidBeginEditing:textField];
     _currentInput = textField;
+    [_billTypeSelectionView endEditing];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

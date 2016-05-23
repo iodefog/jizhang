@@ -53,7 +53,7 @@ static const int kVerifyFailureTimesLimit = 5;
 @implementation SSJMotionPasswordViewController
 
 #pragma mark - Lifecycle
-+ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish {
++ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish animated:(BOOL)animated {
     if (!SSJIsUserLogined()) {
         if (finish) {
             finish(NO);
@@ -85,7 +85,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
             UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
-            [currentVC presentViewController:naviVC animated:YES completion:NULL];
+            [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
             return;
         }

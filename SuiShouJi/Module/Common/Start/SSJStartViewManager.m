@@ -16,6 +16,8 @@
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBookkeepingTreeHelper.h"
+#import "SSJMotionPasswordViewController.h"
+#import "SSJUserTableManager.h"
 
 // 请求启动接口超时时间
 static const NSTimeInterval kLoadStartAPITimeout = 1;
@@ -153,33 +155,76 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 // 当前版本第一次启动显示引导页
 - (void)showGuideViewIfNeeded {
-//    UIView *currentView = _treeView ?: _launchView;
-    UIView *currentView = _launchView;
     if (SSJIsFirstLaunchForCurrentVersion()) {
         if (!_guideView) {
+            __weak typeof(self) wself = self;
             _guideView = [[SSJGuideView alloc] initWithFrame:[UIScreen mainScreen].bounds];
             _guideView.beginHandle = ^(SSJGuideView *guideView) {
                 [guideView dismiss:YES];
+//                [wself verifyMotionPasswordIfNeeded];
+                if (wself.completion) {
+                    wself.completion(wself);
+                    wself.completion = nil;
+                }
             };
         }
-        [UIView transitionFromView:currentView toView:_guideView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-            if (_completion) {
-                _completion(self);
-                _completion = nil;
-            }
-        }];
+        [UIView transitionFromView:_launchView toView:_guideView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
+        _launchView = nil;
     } else {
         [UIView animateWithDuration:0.5f animations:^(void){
-            currentView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
-            currentView.alpha = 0;
-        } completion:^(BOOL finished){
-            [currentView removeFromSuperview];
+            _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
+            _launchView.alpha = 0;
+//            [self verifyMotionPasswordIfNeeded];
             if (_completion) {
                 _completion(self);
                 _completion = nil;
             }
+        } completion:^(BOOL finished){
+            [_launchView removeFromSuperview];
+            _launchView = nil;
         }];
     }
+}
+
+- (void)verifyMotionPasswordIfNeeded {
+    if (!SSJIsUserLogined()) {
+        if (_completion) {
+            _completion(self);
+            _completion = nil;
+        }
+        return;
+    }
+    
+    //  如果当前页面已经是手势密码，直接返回
+    UIViewController *currentVC = SSJVisibalController();
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+    
+    // 手势密码开启
+    if ([userItem.motionPWDState boolValue]) {
+        //  验证手势密码页面
+        if (userItem.motionPWD.length) {
+            __weak typeof(self) wself = self;
+            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+            motionVC.finishHandle = ^(UIViewController *controller) {
+                if (wself.completion) {
+                    wself.completion(self);
+                    wself.completion = nil;
+                }
+                [controller dismissViewControllerAnimated:YES completion:NULL];
+            };
+            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+            [currentVC presentViewController:naviVC animated:NO completion:NULL];
+            
+            return;
+        }
+    }
+    
+    if (_completion) {
+        _completion(self);
+        _completion = nil;
+    }
+    return;
 }
 
 @end

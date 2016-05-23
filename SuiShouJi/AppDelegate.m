@@ -120,7 +120,7 @@ NSDate *SCYEnterBackgroundTime() {
             } else {
                 [homeVC reloadWithAnimation];
             }
-        }];
+        } animated:NO];
         manager = nil;
     }];
 
@@ -149,7 +149,7 @@ NSDate *SCYEnterBackgroundTime() {
     NSTimeInterval interval = [backgroundTime timeIntervalSinceDate:[NSDate date]];
     interval = ABS(interval);
     if (interval >= kLockScreenDelay) {
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL];
+        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL animated:NO];
     }
 }
 
