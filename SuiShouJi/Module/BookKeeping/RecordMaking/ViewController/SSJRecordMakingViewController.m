@@ -241,7 +241,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
             addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
                 wself.categoryID = categoryId;
-                [wself getCategoryList];
+//                [wself getCategoryList];
             };
             [wself.navigationController pushViewController:addNewTypeVc animated:YES];
         };
@@ -502,17 +502,21 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
-        __block NSInteger selectedIndex = 0;
+        __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
             if (_categoryID && [item.ID isEqualToString:_categoryID]) {
-                selectedIndex = index;
+                item.selected = YES;
+                selectedItem = item;
             }
         });
-        weakSelf.billTypeSelectionView.items = result;
-        weakSelf.billTypeSelectionView.selectedIndex = selectedIndex;
+        if (!selectedItem) {
+            selectedItem = [result firstObject];
+            selectedItem.selected = YES;
+        }
         
-        SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [weakSelf.billTypeSelectionView.items ssj_safeObjectAtIndex:selectedIndex];
+        weakSelf.billTypeSelectionView.items = result;
+        
         [UIView animateWithDuration:kAnimationDuration animations:^{
             weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
         }];

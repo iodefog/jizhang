@@ -216,8 +216,8 @@
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        dispatch_apply([items count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
-            SSJRecordMakingBillTypeSelectionCellItem *item = items[index];
+        for (int i = 0; i < items.count; i ++) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = items[i];
             if (item.ID.length == 0) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -230,7 +230,7 @@
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(index + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
+            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(i + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         SSJDispatch_main_async_safe(^{
@@ -239,7 +239,7 @@
                     });
                 }
             }
-        });
+        }
     }];
 }
 

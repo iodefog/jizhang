@@ -22,7 +22,9 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 @property (nonatomic, strong) NSMutableArray *internalItems;
 
-@property (nonatomic) NSInteger lastSelectedIndex;
+//@property (nonatomic, copy) NSString *selectedId;
+//
+//@property (nonatomic, copy) NSString *lastSelectedId;
 
 @end
 
@@ -57,9 +59,10 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         [sself.internalItems removeObject:cell.item];
         NSIndexPath *deleteIndexPath = [sself.collectionView indexPathForCell:cell];
         [sself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
-        if (deleteIndexPath.item == sself.selectedIndex && sself.internalItems.count > 1) {
-            sself -> _selectedIndex = 0;
-            sself -> _lastSelectedIndex = NSIntegerMin;
+       
+        if (cell.item.selected && sself.internalItems.count > 1) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = [sself.internalItems firstObject];
+            item.selected = YES;
         }
         if (sself.deleteAction) {
             sself.deleteAction(sself, cell.item);
@@ -77,10 +80,18 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         return;
     }
     
-    if (_selectedIndex != indexPath.item) {
-        _lastSelectedIndex = _selectedIndex;
-        _selectedIndex = indexPath.item;
-        [self updateSelectedItem];
+    SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [_internalItems ssj_safeObjectAtIndex:indexPath.item];
+    if (selectedItem.selected) {
+        return;
+    }
+    for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
+        item.deselected = item.selected;
+        item.selected = [item.ID isEqualToString:selectedItem.ID];
+    }
+    [_collectionView reloadData];
+    
+    if (_selectAction) {
+        _selectAction(self, selectedItem);
     }
 }
 
@@ -130,10 +141,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView {
-    for (int i = 0; i < _internalItems.count; i ++) {
-        SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[i];
-        item.selected = i == _selectedIndex;
-        item.deselected = i == _lastSelectedIndex;
+    for (SSJRecordMakingBillTypeSelectionCellItem *item in _internalItems) {
         item.editable = NO;
     }
     
@@ -158,15 +166,11 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 }
 
 - (void)setItems:(NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *)items {
-    _selectedIndex = 0;
-    _lastSelectedIndex = NSIntegerMin;
     [_internalItems removeAllObjects];
     if (items) {
         [_internalItems addObjectsFromArray:items];
     }
     [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@""]];
-    SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [_internalItems ssj_safeObjectAtIndex:_selectedIndex];
-    selectedItem.selected = YES;
     [_collectionView reloadData];
 }
 
@@ -176,39 +180,12 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     return tempItems;
 }
 
-- (void)setSelectedIndex:(NSInteger)selectedIndex {
-    NSInteger tempIndex = MIN(selectedIndex, _internalItems.count - 2);
-    if (_selectedIndex != tempIndex) {
-        _lastSelectedIndex = _selectedIndex;
-        _selectedIndex = tempIndex;
-        [self updateSelectedItem];
-    }
-}
-
 - (void)setContentInsets:(UIEdgeInsets)contentInsets {
     _collectionView.contentInset = contentInsets;
 }
 
 - (void)endEditing {
     [_collectionView endEditing];
-}
-
-- (void)updateSelectedItem {
-    SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-    for (int i = 0; i < _internalItems.count; i ++) {
-        SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[i];
-        item.selected = i == _selectedIndex;
-        item.deselected = i == _lastSelectedIndex;
-        if (item.selected) {
-            selectedItem = item;
-        }
-    }
-    
-    [_collectionView reloadData];
-    
-    if (_selectAction) {
-        _selectAction(self, selectedItem);
-    }
 }
 
 - (BOOL)isEditing {

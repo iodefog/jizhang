@@ -26,8 +26,6 @@
 
 @property (nonatomic, copy) void (^endEditingAction)(SSJRecordMakingBillTypeSelectionView *);
 
-@property (nonatomic) NSInteger selectedIndex;
-
 @property (nonatomic) UIEdgeInsets contentInsets;
 
 @property (nonatomic) BOOL isEditing;
