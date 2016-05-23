@@ -119,9 +119,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             KHasEnterFinancingHome = YES;
         }];
     }
-    if ([item.fundingID isEqualToString:self.newlyAddFundId]) {
-        self.newlyAddFundId = nil;
-    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -247,11 +244,10 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         if (weakSelf.newlyAddFundId) {
-            [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
             [weakSelf.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 2 inSection:0]]];
-            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+            weakSelf.newlyAddFundId = nil;
+
         }else{
             [weakSelf.collectionView reloadData];
         }
