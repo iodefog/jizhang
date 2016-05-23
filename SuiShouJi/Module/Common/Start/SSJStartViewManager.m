@@ -175,13 +175,13 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
             _launchView.alpha = 0;
 //            [self verifyMotionPasswordIfNeeded];
+        } completion:^(BOOL finished){
+            [_launchView removeFromSuperview];
+            _launchView = nil;
             if (_completion) {
                 _completion(self);
                 _completion = nil;
             }
-        } completion:^(BOOL finished){
-            [_launchView removeFromSuperview];
-            _launchView = nil;
         }];
     }
 }
