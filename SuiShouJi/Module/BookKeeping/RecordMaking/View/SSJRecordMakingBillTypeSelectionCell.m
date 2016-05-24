@@ -87,6 +87,10 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     [self.contentView.layer removeAllAnimations];
     self.contentView.transform = CGAffineTransformMakeRotation(0);
     
+    [_imageView.layer removeAnimationForKey:kBorderColorAnimationKey];
+    [_imageView.layer removeAnimationForKey:kTransformAnimationKey];
+    [_label.layer removeAnimationForKey:kTextColorAnimationKey];
+    
     if (_item.editable) {
         _imageView.transform = CGAffineTransformMakeScale(1, 1);
         _imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"C4C4C4"].CGColor;
