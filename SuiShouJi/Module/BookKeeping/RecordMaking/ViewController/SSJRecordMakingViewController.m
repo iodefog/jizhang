@@ -292,6 +292,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _accessoryView.memoView.delegate = self;
         _accessoryView.memoView.text = _item.chargeMemo;
         _accessoryView.dateBtn.selected = YES;
+        _accessoryView.photoBtn.selected = _item.chargeImage.length;
         [self updatePeriodButtonTitle];
     }
     return _accessoryView;
@@ -416,13 +417,17 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.selectedImage = nil;
             weakSelf.item.chargeImage = @"";
             weakSelf.item.chargeThumbImage = @"";
+            weakSelf.accessoryView.photoBtn.selected = NO;
         };
         imageBrowserVC.NewImageSelectedBlock = ^(UIImage *image){
             weakSelf.selectedImage = image;
         };
         imageBrowserVC.type = SSJImageBrowseVcTypeEdite;
-        imageBrowserVC.item = self.item;
-        imageBrowserVC.image = _selectedImage;
+        if (_selectedImage) {
+            imageBrowserVC.image = _selectedImage;
+        } else {
+            imageBrowserVC.item = self.item;
+        }
         [self.navigationController pushViewController:imageBrowserVC animated:YES];
     } else {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
