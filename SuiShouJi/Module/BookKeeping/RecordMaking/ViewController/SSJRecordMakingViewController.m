@@ -521,6 +521,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         if (!selectedItem) {
             selectedItem = [result firstObject];
             selectedItem.selected = YES;
+            _categoryID = selectedItem.ID;
         }
         
         weakSelf.billTypeSelectionView.items = result;
@@ -532,10 +533,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         
         if (![self showGuideViewIfNeeded]) {
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
-        }
-        
-        if (!_item) {
-            _categoryID = selectedItem.ID;
         }
         
         [self.view ssj_hideLoadingIndicator];

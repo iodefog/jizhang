@@ -31,16 +31,20 @@
 }
 
 //授权后回调 WXApiDelegate
--(void)onResp:(BaseReq *)resp
+-(void)onResp:(BaseResp *)resp
 {
-    SendAuthResp *aresp=(SendAuthResp *)resp;
-    if (aresp.errCode == 0)
+    
+    if (resp.errCode == 0)
     {
         NSLog(@"用户同意");
-        [self getAccessTokenWithCode:aresp.code];
-    }else if (aresp.errCode == -4){
+        if([resp isKindOfClass:[SendAuthResp class]]) {
+            SendAuthResp *aresp=(SendAuthResp *)resp;
+            [self getAccessTokenWithCode:aresp.code];
+        }
+        
+    }else if (resp.errCode == -4){
         NSLog(@"用户拒绝");
-    }else if (aresp.errCode == -2){
+    }else if (resp.errCode == -2){
         NSLog(@"用户取消");;
     }
 }
