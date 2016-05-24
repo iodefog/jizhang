@@ -178,13 +178,21 @@
 #pragma mark - Setter
 -(void)setImage:(UIImage *)image{
     _image = image;
-    if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-        self.imageBrowser.width = self.view.width;
-        self.imageBrowser.height = (self.view.width / self.image.size.width)*self.image.size.height;
+    self.imageBrowser.image = image;
+    [self updateImageSize];
+}
+
+- (void)updateImageSize {
+    UIImage *image = self.imageBrowser.image;
+    if (image.size.height > self.view.size.height || image.size.width > self.view.size.width) {
+        CGFloat widthScale = image.size.width / self.view.size.width;
+        CGFloat heightScale = image.size.height / self.view.size.height;
+        CGFloat scale = MAX(widthScale, heightScale);
+        self.imageBrowser.width = image.size.width / scale;
+        self.imageBrowser.height = image.size.height / scale;
     }else{
         self.imageBrowser.size = image.size;
     }
-    self.imageBrowser.image = image;
 }
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{
@@ -209,21 +217,11 @@
         if (self.item.chargeImage.length != 0) {
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-                if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                    self.imageBrowser.width = self.view.width;
-                    self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-                }else{
-                    self.imageBrowser.size = image.size;
-                }
                 self.imageBrowser.image = image;
+                [self updateImageSize];
             }else{
                 [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                    if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                        self.imageBrowser.width = self.view.width;
-                        self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-                    }else{
-                        self.imageBrowser.size = image.size;
-                    }
+                    [self updateImageSize];
                 }];
             }
         }
@@ -232,21 +230,11 @@
         if (self.item.chargeImage.length != 0) {
             if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
                 UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-                if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                    self.imageBrowser.width = self.view.width;
-                    self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-                }else{
-                    self.imageBrowser.size = image.size;
-                }
                 self.imageBrowser.image = image;
+                [self updateImageSize];
             }else{
                 [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                    if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                        self.imageBrowser.width = self.view.width;
-                        self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-                    }else{
-                        self.imageBrowser.size = image.size;
-                    }
+                    [self updateImageSize];
                 }];
             }
 
