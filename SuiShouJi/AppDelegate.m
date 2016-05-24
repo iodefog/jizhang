@@ -30,6 +30,7 @@
 #import "SSJPatchUpdateService.h"
 #import "SSJJspatchAnalyze.h"
 #import "SSJJsPatchItem.h"
+#import "JPEngine.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -62,7 +63,8 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-        
+    [self analyzeJspatch];
+    
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
@@ -202,6 +204,7 @@ NSDate *SCYEnterBackgroundTime() {
     });
 }
 
+
 // 设置根控制器
 - (void)setRootViewController {
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
@@ -244,6 +247,21 @@ NSDate *SCYEnterBackgroundTime() {
             }
         }
     }
+}
+
+-(void)analyzeJspatch{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (SSJLastPatchVersion()) {
+            for (int i = 1; i < [SSJLastPatchVersion() integerValue]; i ++) {
+                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%d",i]];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    [JPEngine startEngine];
+                    NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+                    [JPEngine evaluateScript:script];
+                }
+            }
+        }
+    });
 }
 
 #pragma mark - qq快登
