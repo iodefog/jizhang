@@ -182,19 +182,6 @@
     [self updateImageSize];
 }
 
-- (void)updateImageSize {
-    UIImage *image = self.imageBrowser.image;
-    if (image.size.height > self.view.size.height || image.size.width > self.view.size.width) {
-        CGFloat widthScale = image.size.width / self.view.size.width;
-        CGFloat heightScale = image.size.height / self.view.size.height;
-        CGFloat scale = MAX(widthScale, heightScale);
-        self.imageBrowser.width = image.size.width / scale;
-        self.imageBrowser.height = image.size.height / scale;
-    }else{
-        self.imageBrowser.size = image.size;
-    }
-}
-
 -(void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
     if (self.type == SSJImageBrowseVcTypeBrowse) {
@@ -328,19 +315,17 @@
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)updateImageSize {
+    UIImage *image = self.imageBrowser.image;
+    if (image.size.height > self.view.size.height || image.size.width > self.view.size.width) {
+        CGFloat widthScale = image.size.width / self.view.size.width;
+        CGFloat heightScale = image.size.height / self.view.size.height;
+        CGFloat scale = MAX(widthScale, heightScale);
+        self.imageBrowser.width = image.size.width / scale;
+        self.imageBrowser.height = image.size.height / scale;
+    }else{
+        self.imageBrowser.size = image.size;
+    }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
