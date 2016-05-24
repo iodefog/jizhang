@@ -252,8 +252,8 @@ NSDate *SCYEnterBackgroundTime() {
 -(void)analyzeJspatch{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (SSJLastPatchVersion()) {
-            for (int i = 1; i < [SSJLastPatchVersion() integerValue]; i ++) {
-                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%d",i]];
+            for (int i = 0; i <= [SSJLastPatchVersion() integerValue]; i ++) {
+                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%d.js",i]];
                 if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
                     [JPEngine startEngine];
                     NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];

@@ -15,7 +15,9 @@
 +(void)SSJJsPatchAnalyzeWithUrl:(NSString *)urlStr MD5:(NSString *)md5 patchVersion:(NSString *)version{
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-    
+    if (![urlStr hasPrefix:@"http"]) {
+        urlStr = [NSString stringWithFormat:@"http://%@",urlStr];
+    }
     NSURL *URL = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
@@ -31,15 +33,12 @@
             NSLog(@"%@",[error localizedDescription]);
         }else{
             NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/%@",response.suggestedFilename]];
-            NSData *data = [[NSFileManager defaultManager] contentsAtPath:path];
-            if ([[data md5Hash] isEqualToString:md5]) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [JPEngine startEngine];
-                    NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-                    [JPEngine evaluateScript:script];
-                    SSJSavePatchVersion([version integerValue]);
-                });
-            }
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [JPEngine startEngine];
+                NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+                [JPEngine evaluateScript:script];
+                SSJSavePatchVersion([version integerValue]);
+            });
         }
     }];
     [downloadTask resume];
