@@ -234,7 +234,7 @@
         _intervalTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         _intervalTitleLab.textColor = [UIColor whiteColor];
         _intervalTitleLab.font = [UIFont systemFontOfSize:12];
-        _intervalTitleLab.text = @"据结算日";
+        _intervalTitleLab.text = @"距结算日";
         [_intervalTitleLab sizeToFit];
     }
     return _intervalTitleLab;
