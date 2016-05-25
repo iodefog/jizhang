@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIImageView *memo;
 
+@property(nonatomic, strong) UILabel *memoLab;
+
 @end
 
 @implementation SSJBillingChargeCell
@@ -45,6 +47,7 @@
 //        _memo.layer.borderWidth = 1;
         
         [self.contentView addSubview:self.moneyLab];
+        [self.contentView addSubview:self.memoLab];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
@@ -57,7 +60,7 @@
     
     self.imageView.left = 10;
     self.imageView.size = CGSizeMake(imageDiam, imageDiam);
-    self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
+    self.imageView.left = 10;
     self.imageView.layer.cornerRadius = imageDiam * 0.5;
     self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
 
@@ -68,20 +71,25 @@
     self.textLabel.left = self.imageView.right + 10;
     
     if (self.photo.hidden && self.memo.hidden) {
+        self.imageView.centerY = self.contentView.height * 0.5;
         self.textLabel.left = self.imageView.right + 10;
         self.textLabel.centerY = self.contentView.height * 0.5;
     } else if (self.photo.hidden || self.memo.hidden) {
-        CGFloat gap = 10;
-        CGFloat top = (self.contentView.height - self.textLabel.height - self.photo.height - gap) * 0.5;
-        self.textLabel.top = top;
+        self.imageView.top = 27;
+        self.textLabel.bottom = self.imageView.centerY - 5;
         UIImageView *displayedView = self.photo.hidden ? self.memo : self.photo;
-        displayedView.leftTop = CGPointMake(self.imageView.right + 10, self.textLabel.bottom + gap);
+        displayedView.leftTop = CGPointMake(self.imageView.right + 10, self.imageView.centerY + 5);
+        if (!self.memoLab.hidden) {
+            self.memoLab.width = 100;
+            self.memoLab.leftBottom = CGPointMake(displayedView.right + 12, displayedView.bottom);
+        }
     } else {
-        CGFloat gap = 10;
-        CGFloat top = (self.contentView.height - self.textLabel.height - self.photo.height - gap) * 0.5;
-        self.textLabel.top = top;
-        self.photo.leftTop = CGPointMake(self.imageView.right + 10, self.textLabel.bottom + gap);
-        self.memo.leftTop = CGPointMake(self.photo.right + 10, self.textLabel.bottom + gap);
+        self.imageView.top = 17;
+        self.textLabel.bottom = self.imageView.centerY - 5;
+        self.photo.leftTop = CGPointMake(self.imageView.right + 10, self.imageView.centerY + 5);
+        self.memo.leftTop = CGPointMake(self.photo.left , self.photo.bottom + 10);
+        self.memoLab.width = 200;
+        self.memoLab.leftBottom = CGPointMake(self.memo.right + 12, self.memo.bottom);
     }
 }
 
@@ -93,7 +101,8 @@
     
     SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem *)cellItem;
     
-    self.imageView.image = [UIImage imageNamed:item.imageName];
+    self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:item.colorValue];
     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
     
     self.textLabel.text = item.typeName;
@@ -103,6 +112,9 @@
     
     _photo.hidden = item.chargeImage.length == 0;
     _memo.hidden = item.chargeMemo.length == 0;
+    
+    self.memoLab.text = item.chargeMemo;
+    [self.memoLab sizeToFit];
     
     [self setNeedsLayout];
 }
@@ -114,6 +126,16 @@
         _moneyLab.font = [UIFont systemFontOfSize:20];
     }
     return _moneyLab;
+}
+
+-(UILabel *)memoLab{
+    if (!_memoLab) {
+        _memoLab = [[UILabel alloc]init];
+        _memoLab.backgroundColor = [UIColor whiteColor];
+        _memoLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _memoLab.font = [UIFont systemFontOfSize:13];
+    }
+    return _memoLab;
 }
 
 @end

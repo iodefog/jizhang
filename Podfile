@@ -7,7 +7,7 @@ pod 'YYKeyboardManager'
 
 platform :ios, '6.0'
 pod 'JSPatch'
-pod 'RESideMenu', '~> 4.0.7'
+#pod 'RESideMenu', '~> 4.0.7'
 
 platform :ios, '6.1'
 pod 'SDWebImage', '~>3.7'

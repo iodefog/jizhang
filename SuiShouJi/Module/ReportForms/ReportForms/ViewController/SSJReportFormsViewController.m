@@ -47,6 +47,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 //
 @property (nonatomic, strong) UITableView *tableView;
 
+@property (nonatomic, strong) UILabel *incomeAndPaymentTitleLab;
+
+@property (nonatomic, strong) UILabel *incomeAndPaymentMoneyLab;
+
 //  数据源
 @property (nonatomic, strong) NSArray *datas;
 
@@ -84,10 +88,17 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.switchDateControl];
     
+    UIView *headerView = [[UIView alloc] initWithFrame:self.chartView.frame];
+    [headerView addSubview:self.chartView];
+    [headerView addSubview:self.incomeAndPaymentTitleLab];
+    [headerView addSubview:self.incomeAndPaymentMoneyLab];
+    
+    self.tableView.tableHeaderView = headerView;
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     
     [self updateSurplusViewTitle];
     [self updateSwithDateControlTitle];
+    [self updateIncomeAndPaymentLabels];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -146,7 +157,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 #pragma mark - Event
 //  切换周期（年、月）
 - (void)filterAction {
-    [MobClick event:@"8"];
+    [MobClick event:@"form_filter"];
     if ([self.periodSelectionView isShowed]) {
         [self.periodSelectionView dismiss:YES];
     } else {
@@ -160,6 +171,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self.periodSelectionView dismiss:YES];
     [self reloadDatas];
     [self updateSwithDateControlTitle];
+    [self updateIncomeAndPaymentLabels];
     
     NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
     if ([selectedTitle isEqualToString:kSegmentTitlePay]
@@ -171,11 +183,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         self.tableView.tableFooterView = self.surplusView;
     }
     if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
-        [MobClick event:@"9"];
+        [MobClick event:@"form_out"];
     }else if ([selectedTitle isEqualToString:kSegmentTitleIncome]){
-        [MobClick event:@"10"];
+        [MobClick event:@"form_in"];
     }else{
-        [MobClick event:@"11"];
+        [MobClick event:@"form_total"];
     }
 }
 
@@ -184,12 +196,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
             [self.calendarUtil preMonth];
-            [MobClick event:@"12"];
+            [MobClick event:@"forms_cycle_year"];
             break;
             
         case SSJReportFormsPeriodTypeYear:
             [self.calendarUtil preYear];
-            [MobClick event:@"13"];
+            [MobClick event:@"forms_cycle_month"];
             break;
     }
     [self updateSwithDateControlTitle];
@@ -203,12 +215,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     switch (self.periodSelectionView.periodType) {
         case SSJReportFormsPeriodTypeMonth:
             [self.calendarUtil nextMonth];
-            [MobClick event:@"12"];
             break;
             
         case SSJReportFormsPeriodTypeYear:
             [self.calendarUtil nextYear];
-            [MobClick event:@"13"];
             break;
     }
     [self updateSwithDateControlTitle];
@@ -287,6 +297,35 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
+//  更新总收入\总支出
+- (void)updateIncomeAndPaymentLabels {
+    if (_segmentControl.selectedSegmentIndex == 0) {
+        _incomeAndPaymentTitleLab.hidden = _incomeAndPaymentMoneyLab.hidden = NO;
+        _incomeAndPaymentTitleLab.text = @"总支出";
+        [_incomeAndPaymentMoneyLab ssj_showLoadingIndicator];
+    } else if (_segmentControl.selectedSegmentIndex == 1) {
+        _incomeAndPaymentTitleLab.hidden = _incomeAndPaymentMoneyLab.hidden = NO;
+        _incomeAndPaymentTitleLab.text = @"总收入";
+        [_incomeAndPaymentMoneyLab ssj_showLoadingIndicator];
+    } else if (_segmentControl.selectedSegmentIndex == 2) {
+        _incomeAndPaymentTitleLab.hidden = _incomeAndPaymentMoneyLab.hidden = YES;
+    }
+}
+
+//  计算总收入\支出
+- (void)caculateIncomeOrPayment {
+    if (_segmentControl.selectedSegmentIndex == 0
+        || _segmentControl.selectedSegmentIndex == 1) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSNumber *payment = [self.datas valueForKeyPath:@"@sum.money"];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [_incomeAndPaymentMoneyLab ssj_hideLoadingIndicator];
+                _incomeAndPaymentMoneyLab.text = [NSString stringWithFormat:@"%.2f", [payment doubleValue]];
+            });
+        });
+    }
+}
+
 //  重新加载数据
 - (void)reloadDatas {
     [self.view ssj_showLoadingIndicator];
@@ -313,6 +352,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             }
         }];
         [self.tableView reloadData];
+        [self caculateIncomeOrPayment];
         
         //  将比例小于0.01的item过滤掉
         NSMutableArray *filterItems = [NSMutableArray array];
@@ -337,6 +377,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                 circleItem.imageName = item.imageName;
                 circleItem.colorValue = item.colorValue;
                 circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+                circleItem.imageBorderShowed = YES;
                 [self.circleItems addObject:circleItem];
                 
             } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
@@ -348,6 +389,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
                     circleItem.imageName = item.imageName;
                     circleItem.colorValue = item.colorValue;
                     circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
+                    circleItem.imageBorderShowed = NO;
                     [self.circleItems addObject:circleItem];
                 }
             }
@@ -410,9 +452,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJSegmentedControl *)segmentControl {
     if (!_segmentControl) {
         _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
+        _segmentControl.size = CGSizeMake(225, 30);
         _segmentControl.font = [UIFont systemFontOfSize:15];
-        _segmentControl.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
-        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#47cfbe"]} forState:UIControlStateSelected];
+        _segmentControl.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"];
+        _segmentControl.selectedBorderColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#eb4a64"]} forState:UIControlStateSelected];
         [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
     }
     return _segmentControl;
@@ -460,7 +504,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.contentInset = UIEdgeInsetsMake(self.switchDateControl.bottom, 0, self.tabBarController.tabBar.height, 0);
-        _tableView.tableHeaderView = self.chartView;
         _tableView.tableFooterView = [[UIView alloc] init];
     }
     return _tableView;
@@ -478,6 +521,30 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         [_noDataRemindView addSubview:noDataLab];
     }
     return _noDataRemindView;
+}
+
+- (UILabel *)incomeAndPaymentTitleLab {
+    if (!_incomeAndPaymentTitleLab) {
+        CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
+        _incomeAndPaymentTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y, hollowFrame.size.width, 15)];
+        _incomeAndPaymentTitleLab.backgroundColor = [UIColor clearColor];
+        _incomeAndPaymentTitleLab.font = [UIFont systemFontOfSize:15];
+        _incomeAndPaymentTitleLab.textAlignment = NSTextAlignmentCenter;
+    }
+    return _incomeAndPaymentTitleLab;
+}
+
+- (UILabel *)incomeAndPaymentMoneyLab {
+    if (!_incomeAndPaymentMoneyLab) {
+        CGRect hollowFrame = UIEdgeInsetsInsetRect(self.chartView.circleFrame, UIEdgeInsetsMake(self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness, self.chartView.circleThickness));
+        _incomeAndPaymentMoneyLab = [[UILabel alloc] initWithFrame:CGRectMake(hollowFrame.origin.x, (hollowFrame.size.height - 38) * 0.5 + hollowFrame.origin.y + 20, hollowFrame.size.width, 18)];
+        _incomeAndPaymentMoneyLab.backgroundColor = [UIColor clearColor];
+        _incomeAndPaymentMoneyLab.font = [UIFont systemFontOfSize:18];
+        _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
+        _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
+        _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
+    }
+    return _incomeAndPaymentMoneyLab;
 }
 
 @end

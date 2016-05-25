@@ -7,7 +7,9 @@
 //
 
 #import "SSJNewBaseTableViewController.h"
+#import "UMSocial.h"
 
-@interface SSJSettingViewController : SSJNewBaseTableViewController
+
+@interface SSJSettingViewController : SSJNewBaseTableViewController<UMSocialUIDelegate>
 
 @end

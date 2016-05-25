@@ -15,11 +15,11 @@
 @property (nonatomic,strong) UILabel *titleLabel;
 @property (nonatomic,strong) UIButton *closeButton;
 @property (nonatomic,strong) UIButton *comfirmButton;
+@property (nonatomic, copy) NSString *selectedPeriod;
 @end
 
 @implementation SSJChargeCircleSelectView{
     NSArray *_titleArray;
-    NSInteger _selectedCircle;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -55,7 +55,7 @@
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
     self.top = keyWindow.height;
-    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
+    [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismissIfNeeded) animation:^{
         self.bottom = keyWindow.height;
     } timeInterval:0.25 fininshed:NULL];
 }
@@ -69,7 +69,11 @@
     
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:NULL];
+    } timeInterval:0.25 fininshed:^(BOOL complation) {
+        if (_dismissAction) {
+            _dismissAction(self);
+        }
+    }];
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
@@ -126,7 +130,8 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    _selectedCircle = row - 1;
+    _selectCircleType = row - 1;
+    _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType + 1)];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
@@ -152,6 +157,7 @@
 
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
     _selectCircleType = selectCircleType;
+    _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType + 1)];
     [self.pickerView selectRow:_selectCircleType + 1 inComponent:0 animated:NO];
 }
 
@@ -167,17 +173,19 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     if (self.chargeCircleSelectBlock) {
-        self.chargeCircleSelectBlock(_selectedCircle);
+        self.chargeCircleSelectBlock(_selectCircleType);
     }
-    [self dismiss];
+    [self dismissIfNeeded];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (void)dismissIfNeeded {
+    BOOL shouldDismiss = YES;
+    if (_shouldDismissWhenSureButtonClick) {
+        shouldDismiss = _shouldDismissWhenSureButtonClick(self);
+    }
+    if (shouldDismiss) {
+        [self dismiss];
+    }
 }
-*/
 
 @end

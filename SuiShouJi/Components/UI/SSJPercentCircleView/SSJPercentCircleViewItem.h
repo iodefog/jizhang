@@ -19,6 +19,9 @@
 //  圆环组件图片
 @property (nonatomic, copy) NSString *imageName;
 
+//  圆环组件图片的边框是否显示
+@property (nonatomic) BOOL imageBorderShowed;
+
 //  附加文本
 @property (nonatomic, copy) NSString *additionalText;
 

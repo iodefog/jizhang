@@ -28,11 +28,17 @@
 
 @property (nonatomic,strong) SSJUserItem *item;
 
+@property (nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
+
+@property (nonatomic, copy) NSString *loginPassword;
+
 @end
 
 @implementation SSJLoginService
 
 - (void)loadLoginModelWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount{
+    _loginPassword = password;
+    
     self.loginType = SSJLoginTypeNormal;
     self.showLodingIndicator = YES;
     NSString *strAcctID=@"130313003";
@@ -85,7 +91,6 @@
     [super requestDidFinish:rootElement];
 
     if ([self.returnCode isEqualToString:@"1"]) {
-        self.item = [[SSJUserItem alloc]init];
         NSDictionary *dict=[rootElement objectForKey:@"results"];
         self.appid = [dict objectForKey:@"appId"];
         self.accesstoken = [dict  objectForKey:@"accessToken"];
@@ -98,9 +103,11 @@
                      @"icon":@"cicon"};
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
+        self.item.loginPWD = [_loginPassword ssj_md5HexDigest];
         
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
+        self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }
 }
 

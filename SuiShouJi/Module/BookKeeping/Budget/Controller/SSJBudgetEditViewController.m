@@ -85,7 +85,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -340,7 +340,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (void)updateRemindMoneyWithCell:(SSJBudgetEditTextFieldCell *)cell {
     NSString *remindMoney = [NSString stringWithFormat:@"%.2f", self.model.remindMoney];
     NSMutableAttributedString *detailText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"当预算金额剩余%@元时，即会提醒您哦！", remindMoney]];
-    [detailText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]} range:NSMakeRange(7, remindMoney.length)];
+    [detailText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"eb4a64"]} range:NSMakeRange(7, remindMoney.length)];
     cell.detailTextLabel.attributedText = detailText;
     [cell.detailTextLabel sizeToFit];
     [cell setNeedsLayout];
@@ -546,7 +546,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         _saveBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
         [_saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         [_saveBtn addTarget:self action:@selector(saveButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _saveBtn;

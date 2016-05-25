@@ -155,6 +155,22 @@ static const void *kBorderLayerKey  = &kBorderLayerKey;
 
 @implementation UIView (SSJBorder)
 
+- (void)ssj_setCornerStyle:(UIRectCorner)cornerStyle {
+    [[self ssj_borderLayer] setCornerStyle:cornerStyle];
+}
+
+- (UIRectCorner)ssj_cornerStyle {
+    return [[self ssj_borderLayer] cornerStyle];
+}
+
+- (void)ssj_setCornerRadius:(CGFloat)cornerRadius {
+    [self ssj_borderLayer].customCornerRadius = cornerRadius;
+}
+
+- (CGFloat)ssj_cornerRadius {
+    return [self ssj_borderLayer].customCornerRadius;
+}
+
 - (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle {
     [[self ssj_borderLayer] setCustomBorderStyle:customBorderStyle];
 }
@@ -230,7 +246,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         UIScrollView *scrollView = (UIScrollView *)self;
         objc_setAssociatedObject(self, kOriginalContentSizeKey, [NSValue valueWithCGSize:scrollView.contentSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         CGSize contentSize = scrollView.contentSize;
-        contentSize.height = MAX(watermark.height, scrollView.contentSize.height);
+        contentSize.height = MAX(watermark.height, CGRectGetHeight(UIEdgeInsetsInsetRect(scrollView.bounds, scrollView.contentInset)));
         scrollView.contentSize = contentSize;
         watermark.center = CGPointMake(contentSize.width * 0.5, contentSize.height * 0.5);
     } else {
@@ -273,7 +289,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
         UIScrollView *scrollView = (UIScrollView *)self;
         objc_setAssociatedObject(self, kOriginalContentSizeKey, [NSValue valueWithCGSize:scrollView.contentSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         CGSize contentSize = scrollView.contentSize;
-        contentSize.height = MAX(watermark.height, scrollView.contentSize.height);
+        contentSize.height = MAX(watermark.height, CGRectGetHeight(UIEdgeInsetsInsetRect(scrollView.bounds, scrollView.contentInset)));
         scrollView.contentSize = contentSize;
         watermark.center = CGPointMake(contentSize.width * 0.5, contentSize.height * 0.5);
     } else {

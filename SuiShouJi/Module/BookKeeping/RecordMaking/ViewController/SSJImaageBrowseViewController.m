@@ -25,9 +25,6 @@
 }
 
 #pragma mark - Lifecycle
-- (void)dealloc {
-    
-}
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -47,7 +44,7 @@
     [self.view addSubview:self.moneyLabel];
     [self.view addSubview:self.memoLabel];
     [self.view addSubview:self.dateLabel];
-    [self getImageAndDetails];
+//    [self getImageAndDetails];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -111,9 +108,9 @@
     if (!_comfirmButton) {
         _comfirmButton = [[UIButton alloc]init];
         [_comfirmButton setTitle:@"OK" forState:UIControlStateNormal];
-        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         _comfirmButton.layer.cornerRadius = 29;
-        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
         _comfirmButton.layer.borderWidth = 1;
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -181,54 +178,61 @@
 #pragma mark - Setter
 -(void)setImage:(UIImage *)image{
     _image = image;
-    if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-        self.imageBrowser.width = self.view.width;
-        self.imageBrowser.height = (self.view.width / self.image.size.width)*self.image.size.height;
-    }else{
-        self.imageBrowser.size = image.size;
-    }
     self.imageBrowser.image = image;
+    [self updateImageSize];
 }
 
--(void)getImageAndDetails{
-    self.deleteButton.hidden = YES;
-    self.changeImageButton.hidden = YES;
-    self.comfirmButton.hidden = YES;
-    if (_item.incomeOrExpence) {
-        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
-    }else{
-        self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
-
-    }
-    [self.moneyLabel sizeToFit];
-    if (_item.chargeMemo != nil && ![_item.chargeMemo isEqualToString:@""]) {
-        self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];
-        [self.memoLabel sizeToFit];
-    }
-    self.dateLabel.text = _item.billDate;
-    [self.dateLabel sizeToFit];
-    if (!(self.item.chargeImage == nil || [self.item.chargeImage isEqualToString:@""])) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-            UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-            if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                self.imageBrowser.width = self.view.width;
-                self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-            }else{
-                self.imageBrowser.size = image.size;
-            }
-            self.imageBrowser.image = image;
+-(void)setItem:(SSJBillingChargeCellItem *)item{
+    _item = item;
+    if (self.type == SSJImageBrowseVcTypeBrowse) {
+        self.deleteButton.hidden = YES;
+        self.changeImageButton.hidden = YES;
+        self.comfirmButton.hidden = YES;
+        if (_item.incomeOrExpence) {
+            self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
         }else{
-            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                if (image.size.height > self.view.size.height && image.size.width > self.view.size.width) {
-                    self.imageBrowser.width = self.view.width;
-                    self.imageBrowser.height = (self.view.width / image.size.width)* image.size.height;
-                }else{
-                    self.imageBrowser.size = image.size;
-                }
-            }];
+            self.moneyLabel.text = [NSString stringWithFormat:@"%@ : ￥%.2f",_item.typeName,[_item.money doubleValue]];
+            
         }
+        [self.moneyLabel sizeToFit];
+        if (_item.chargeMemo != nil && ![_item.chargeMemo isEqualToString:@""]) {
+            self.memoLabel.text = [NSString stringWithFormat:@"备注 : %@",_item.chargeMemo];
+            [self.memoLabel sizeToFit];
+        }
+        self.dateLabel.text = _item.billDate;
+        [self.dateLabel sizeToFit];
+        if (self.item.chargeImage.length != 0) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                self.imageBrowser.image = image;
+                [self updateImageSize];
+            }else{
+                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    [self updateImageSize];
+                }];
+            }
+        }
+        
+    }else{
+        if (self.item.chargeImage.length != 0) {
+            if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
+                UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
+                self.imageBrowser.image = image;
+                [self updateImageSize];
+            }else{
+                [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:SDWebImageProgressiveDownload completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    [self updateImageSize];
+                }];
+            }
+
+        }
+        
     }
 }
+
+//-(void)getImageAndDetails{
+//
+//}
 
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -246,8 +250,8 @@
     }else{
         if (self.DeleteImageBlock) {
             self.DeleteImageBlock();
-            [self.navigationController popViewControllerAnimated:YES];
         }
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -311,19 +315,17 @@
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)updateImageSize {
+    UIImage *image = self.imageBrowser.image;
+    if (image.size.height > self.view.size.height || image.size.width > self.view.size.width) {
+        CGFloat widthScale = image.size.width / self.view.size.width;
+        CGFloat heightScale = image.size.height / self.view.size.height;
+        CGFloat scale = MAX(widthScale, heightScale);
+        self.imageBrowser.width = image.size.width / scale;
+        self.imageBrowser.height = image.size.height / scale;
+    }else{
+        self.imageBrowser.size = image.size;
+    }
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

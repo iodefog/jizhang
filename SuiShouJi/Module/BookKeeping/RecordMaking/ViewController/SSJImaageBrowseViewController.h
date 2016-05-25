@@ -10,9 +10,21 @@
 #import "SSJBillingChargeCellItem.h"
 
 @interface SSJImaageBrowseViewController : SSJBaseViewController<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+typedef NS_ENUM(NSInteger, SSJImageBrowseVcType){
+    
+    //编辑图片
+    SSJImageBrowseVcTypeEdite,
+    
+    //浏览图片
+    SSJImageBrowseVcTypeBrowse
+};
+
 @property (nonatomic,strong) UIImage *image;
 
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
+
+@property (nonatomic, assign) SSJImageBrowseVcType type;
 
 
 /**

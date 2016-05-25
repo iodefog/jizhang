@@ -31,8 +31,28 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 
 @property (nonatomic) BOOL isEdite;
 
-@property (nonatomic,strong) UIView *bottomlineView;
-
 @property (nonatomic) BOOL isLastRowOrNot;
 
+@property (nonatomic,strong) UILabel *incomeLabel;
+
+@property (nonatomic,strong) UILabel *expenditureLabel;
+
+@property (nonatomic,strong) UILabel *incomeMemoLabel;
+
+@property (nonatomic,strong) UILabel *expentureMemoLabel;
+
+@property (nonatomic,strong) UIImageView *IncomeImage;
+
+@property (nonatomic,strong) UIImageView *expentureImage;
+
+@property (nonatomic,strong) UIButton *categoryImageButton;
+
+@property(nonatomic, strong) UIView *dotView;
+
+@property(nonatomic) BOOL isAnimating;
+
+//抖动动画
+-(void)shake;
+
+-(void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion;
 @end

@@ -66,10 +66,10 @@
     if (!_modifyButton) {
         _modifyButton = [[UIButton alloc]init];
         [_modifyButton setTitle:@"修改此记录" forState:UIControlStateNormal];
-        [_modifyButton setTitleColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [_modifyButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         _modifyButton.layer.borderWidth = 1.f;
         _modifyButton.layer.cornerRadius = 2.f;
-        _modifyButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+        _modifyButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
         [_modifyButton addTarget:self action:@selector(modifyButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _modifyButton;

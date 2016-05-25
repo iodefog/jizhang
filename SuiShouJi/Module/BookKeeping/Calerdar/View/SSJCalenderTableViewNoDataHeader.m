@@ -20,7 +20,7 @@
 
 -(void)awakeFromNib{
     self.recordMakingButton.layer.cornerRadius = 20;
-    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"47cfbe"].CGColor;
+    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
     self.recordMakingButton.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
 }
 

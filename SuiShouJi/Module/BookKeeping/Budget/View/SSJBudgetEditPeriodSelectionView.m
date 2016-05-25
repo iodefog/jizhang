@@ -151,7 +151,7 @@ static NSString *kCellID = @"cellID";
         
         [_tableView ssj_setBorderWidth:1];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#47cfbe"]];
+        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
     }
     return _tableView;
 }

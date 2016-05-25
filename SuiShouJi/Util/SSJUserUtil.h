@@ -99,3 +99,21 @@ SSJSyncSettingType SSJSyncSetting();
 
 BOOL SSJSaveSyncSetting(SSJSyncSettingType setting);
 
+///**
+// *  获取用户是否忘记手势密码
+// *
+// *  @param userId 新版本号
+// *  @return (BOOL) 是否忘记手势密码
+// */
+//BOOL SSJIsUserForgetMotionPassword(NSString *userId);
+//
+///**
+// *  更新用户是否忘记手势密码
+// *
+// *  @param forgeted 是否忘记手势密码
+// *  @return (BOOL) 是否更新成功
+// */
+//BOOL SSJSetUserForgetMotionPassword(BOOL forgeted);
+
+//BOOL
+

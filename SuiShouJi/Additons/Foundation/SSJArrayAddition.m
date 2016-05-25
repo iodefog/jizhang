@@ -24,7 +24,7 @@
 
 - (id)ssj_safeObjectAtIndex:(NSUInteger)index {
     if (self.count <= index) {
-//        SSJPRINT(@"<<< 警告：数组越界 >>>");
+        SSJPRINT(@"<<< 警告：数组越界 >>>");
         return nil;
     }
     return [self objectAtIndex:index];

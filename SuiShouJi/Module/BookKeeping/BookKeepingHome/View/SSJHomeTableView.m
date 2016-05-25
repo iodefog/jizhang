@@ -8,15 +8,18 @@
 
 #import "SSJHomeTableView.h"
 
+@interface SSJHomeTableView()
+@property(nonatomic, strong) UIView *lineView;
+@end
+
 @implementation SSJHomeTableView
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundView = nil;
+        [self addSubview:self.lineView];
         self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        self.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
         [self ssj_clearExtendSeparator];
         if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
             [self setSeparatorInset:UIEdgeInsetsZero];
@@ -25,18 +28,45 @@
     return self;
 }
 
+-(void)layoutSubviews{
+    [super layoutSubviews];
+//    self.lineView.top = 0;
+    self.lineView.height = 0;
+    self.lineView.centerX = self.width / 2;
+    self.lineView.height = self.lineHeight;
+    self.lineView.top = -self.lineHeight;
+}
+
+
+-(UIView *)lineView{
+    if (!_lineView) {
+        _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1, 0)];
+        _lineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+    }
+    return _lineView;
+}
+
+-(void)setLineHeight:(float)lineHeight{
+    _lineHeight = lineHeight;
+    [self setNeedsLayout];
+}
+
+-(void)setHasData:(BOOL)hasData{
+    _hasData = hasData;
+    if (!_hasData) {
+        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        self.lineView.width = 1.5f;
+    }else{
+        self.lineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        self.lineView.width = 1.f;
+    }
+}
+
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [super touchesBegan:touches withEvent:event];
     if (self.tableViewClickBlock) {
         self.tableViewClickBlock();
     }
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

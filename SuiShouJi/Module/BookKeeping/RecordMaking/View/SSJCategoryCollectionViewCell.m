@@ -28,6 +28,9 @@
         if (![self.item.categoryTitle isEqualToString:@"添加"]) {
             [self addLongPressGesture];
         }
+        
+//        self.contentView.layer.borderColor = [UIColor redColor].CGColor;
+//        self.contentView.layer.borderWidth = 1;
     }
     return self;
 }
@@ -40,37 +43,27 @@
     self.categoryName.centerX = self.width / 2;
 }
 
--(UIImageView*)categoryImage{
-    if (!_categoryImage) {
-        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 58, 58)];
-        _categoryImage.layer.cornerRadius = 29;
-        _categoryImage.layer.masksToBounds = YES;
-        _categoryImage.contentMode = UIViewContentModeCenter;
-    }
-    return _categoryImage;
-}
+//- (void)setSelected:(BOOL)selected {
+//    [super setSelected:selected];
+//    [self updateCategoryImage];
+//}
 
--(UILabel*)categoryName{
-    if (!_categoryName) {
-        _categoryName = [[UILabel alloc]init];
-        [_categoryName sizeToFit];
-        _categoryName.font = [UIFont systemFontOfSize:14];
-        _categoryName.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        _categoryName.textAlignment = NSTextAlignmentCenter;        
+- (void)updateCategoryImage {
+    if (_item.selected) {
+        _categoryImage.tintColor = [UIColor whiteColor];
+        _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _categoryImage.backgroundColor = [UIColor ssj_colorWithHex:_item.categoryColor];
+    } else {
+        if (_item.categoryTintColor.length) {
+            _categoryImage.tintColor = [UIColor ssj_colorWithHex:_item.categoryTintColor];
+            _categoryImage.backgroundColor = [UIColor clearColor];
+            _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        } else {
+            _categoryImage.tintColor = [UIColor whiteColor];
+            _categoryImage.backgroundColor = [UIColor clearColor];
+            _categoryImage.image = [[UIImage imageNamed:self.item.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        }
     }
-    return _categoryName;
-}
-
--(UIButton *)editButton{
-    if (!_editButton) {
-        _editButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 12, 12)];
-        [_editButton setImage:[UIImage imageNamed:@"bt_delete"] forState:UIControlStateNormal];
-        _editButton.layer.cornerRadius = 6.0f;
-        _editButton.layer.masksToBounds = YES;
-        _editButton.hidden = YES;
-        [_editButton addTarget:self action:@selector(removeCategory:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _editButton;
 }
 
 -(void)setItem:(SSJRecordMakingCategoryItem *)item{
@@ -78,7 +71,8 @@
     [self setNeedsLayout];
     _categoryName.text = _item.categoryTitle;
     [_categoryName sizeToFit];
-    _categoryImage.image = [UIImage imageNamed:self.item.categoryImage];
+    [self updateCategoryImage];
+//    _categoryImage.image = [UIImage imageNamed:self.item.categoryImage];
 }
 
 -(void)addLongPressGesture{
@@ -124,6 +118,39 @@
     }else{
         self.categoryImage.layer.borderWidth = 0;
     }
+}
+
+-(UIImageView*)categoryImage{
+    if (!_categoryImage) {
+        _categoryImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 58, 58)];
+        _categoryImage.layer.cornerRadius = 29;
+        _categoryImage.layer.masksToBounds = YES;
+        _categoryImage.contentMode = UIViewContentModeCenter;
+    }
+    return _categoryImage;
+}
+
+-(UILabel*)categoryName{
+    if (!_categoryName) {
+        _categoryName = [[UILabel alloc]init];
+        [_categoryName sizeToFit];
+        _categoryName.font = [UIFont systemFontOfSize:14];
+        _categoryName.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _categoryName.textAlignment = NSTextAlignmentCenter;
+    }
+    return _categoryName;
+}
+
+-(UIButton *)editButton{
+    if (!_editButton) {
+        _editButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 12, 12)];
+        [_editButton setImage:[UIImage imageNamed:@"bt_delete"] forState:UIControlStateNormal];
+        _editButton.layer.cornerRadius = 6.0f;
+        _editButton.layer.masksToBounds = YES;
+        _editButton.hidden = YES;
+        [_editButton addTarget:self action:@selector(removeCategory:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _editButton;
 }
 
 @end

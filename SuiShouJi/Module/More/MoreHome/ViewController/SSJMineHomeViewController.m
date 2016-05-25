@@ -8,7 +8,7 @@
 
 #import "SSJMineHomeViewController.h"
 #import "SSJMineHomeTableViewHeader.h"
-#import "SSJMineHomeTabelviewCell.h"
+#import "SSJMineHomeImageCell.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "SSJLoginViewController.h"
@@ -28,19 +28,25 @@
 #import "SSJForgetPasswordSecondStepViewController.h"
 #import "SSJPersonalDetailViewController.h"
 #import "SSJBookkeepingTreeViewController.h"
+#import "SSJMagicExportViewController.h"
+#import "SSJBookkeepingTreeHelper.h"
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
+#import <YWFeedbackFMWK/YWFeedbackKit.h>
 
-static NSString *const kTitle1 = @"手势密码";
-static NSString *const kTitle2 = @"记账提醒";
-static NSString *const kTitle3 = @"周期记账";
-static NSString *const kTitle4 = @"记账树";
-static NSString *const kTitle5 = @"把APP推荐给好友";
-static NSString *const kTitle6 = @"给个好评";
 
-static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
+static NSString *const kTitle1 = @"记账提醒";
+static NSString *const kTitle2 = @"周期记账";
+static NSString *const kTitle3 = @"数据文件导出";
+static NSString *const kTitle4 = @"意见反馈";
+static NSString *const kTitle5 = @"给个好评";
+static NSString *const kTitle6 = @"设置";
+
+static BOOL KHasEnterMineHome;
 
 
 @interface SSJMineHomeViewController ()
@@ -50,8 +56,13 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 @property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
 @property (nonatomic, strong) NSArray *titles;
+@property (nonatomic, strong) NSArray *images;
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
+
+@property (nonatomic, strong) YWFeedbackKit *feedbackKit;
+
+
 
 //  手势密码开关
 @property (nonatomic, strong) UISwitch *motionSwitch;
@@ -59,7 +70,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 @end
 
 @implementation SSJMineHomeViewController{
-    NSArray *_titleForSectionTwoArray;
+    NSArray *_titleArr;
+    SSJUserInfoItem *_userItem;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -72,45 +84,31 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.tableHeaderView = self.header;
-    [self.tableView reloadData];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more_setup"] style:UIBarButtonItemStylePlain target:self action:@selector(setttingButtonClick:)];
-    self.navigationItem.rightBarButtonItem = rightItem;
+    [self.view addSubview:self.header];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝
+    //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2, kTitle3],@[kTitle4],@[kTitle5]];
+        self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
+        self.titles = @[@[kTitle1 , kTitle2], @[kTitle3],@[kTitle4 , kTitle6]];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle6];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2, kTitle3], @[kTitle4],@[kTitle5],@[kTitle6]];
+        self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]];
+        self.titles = @[@[kTitle1 , kTitle2], @[kTitle3], @[kTitle4 , kTitle5 , kTitle6]];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle5 , kTitle4 , kTitle6];
+
     }
-    
+
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
-        if (SSJIsUserLogined()) {
-            NSString *iconStr;
-            if ([item.cicon hasPrefix:@"http"]) {
-                iconStr = item.cicon;
-            }else{
-                iconStr = SSJImageURLWithAPI(item.cicon);
-            }
-            if (item.realName == nil || [item.realName isEqualToString:@""]) {
-                //手机号登陆
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                weakSelf.header.nicknameLabel.text = phoneNum;
-            }else{
-                //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
-            }
-            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        } else {
-            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            weakSelf.header.nicknameLabel.text = @"待君登录";
-        }
-        [weakSelf.tableView reloadData];
+        weakSelf.header.item = item;
+        _userItem = item;
     }];
+    
+    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+    self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
     
     //  查询手势密码是否开启
     if (SSJIsUserLogined()) {
@@ -120,7 +118,15 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         [self.motionSwitch setOn:NO];
     }
     [self getCircleChargeState];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+}
+
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    self.header.size = CGSizeMake(self.view.width, 155);
+    self.header.leftTop = CGPointMake(0, 64);
+    self.tableView.top = self.header.bottom - 64;
+    self.tableView.height = self.view.height - 155;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -130,6 +136,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle4]) {
+        return 65;
+    }
     return 55;
 }
 
@@ -151,7 +161,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     //  给个好评
-    if ([title isEqualToString:kTitle6]) {
+    if ([title isEqualToString:kTitle5]) {
         NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
@@ -160,47 +170,99 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     
     //  记账提醒
-    if ([title isEqualToString:kTitle2]) {
+    if ([title isEqualToString:kTitle1]) {
         SSJBookkeepingReminderViewController *BookkeepingReminderVC = [[SSJBookkeepingReminderViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
     
     //  周期记账
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle2]) {
         SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
     }
     
-    //  记账树
-    if ([title isEqualToString:kTitle4]) {
-        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
-        [self.navigationController pushViewController:treeVC animated:YES];
-        return;
-    }
+//    //  记账树
+//    if ([title isEqualToString:kTitle4]) {
+//        SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+//        [self.navigationController pushViewController:treeVC animated:YES];
+//        return;
+//    }
 
-    //  把APP推荐给好友
-    if ([title isEqualToString:kTitle5]) {
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                             appKey:kUMAppKey
-                                          shareText:@"财务管理第一步，从记录消费生活开始!"
-                                         shareImage:[UIImage imageNamed:@"icon"]
-                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                           delegate:self];
+//    //  把APP推荐给好友
+//    if ([title isEqualToString:kTitle5]) {
+//        [UMSocialSnsService presentSnsIconSheetView:self
+//                                             appKey:kUMAppKey
+//                                          shareText:@"财务管理第一步，从记录消费生活开始!"
+//                                         shareImage:[UIImage imageNamed:@"icon"]
+//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+//                                           delegate:self];
+//    }
+    
+    //意见反馈
+    if ([title isEqualToString:kTitle4]) {
+        __weak typeof(self) weakSelf = self;
+        [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
+            if ( viewController != nil ) {
+
+                viewController.title = @"用户反馈";
+                
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [weakSelf presentViewController:nav animated:YES completion:nil];
+                
+                viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reportForms_left"] style:UIBarButtonItemStylePlain target:self action:@selector(backButtonClicked:)];
+                viewController.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+                
+                __weak typeof(nav) weakNav = nav;
+                
+                [viewController setOpenURLBlock:^(NSString *aURLString, UIViewController *aParentController) {
+                    UIViewController *webVC = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+                    UIWebView *webView = [[UIWebView alloc] initWithFrame:webVC.view.bounds];
+                    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+                    
+                    [webVC.view addSubview:webView];
+                    [weakNav pushViewController:webVC animated:YES];
+                    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:aURLString]]];
+                }];
+            } else {
+                NSString *title = [error.userInfo objectForKey:@"msg"]?:@"接口调用失败，请保持网络通畅！";
+                [CDAutoHideMessageHUD showMessage:title];
+            }
+        }];
+
     }
     
-//    //意见反馈
-//    if ([title isEqualToString:kTitle6]) {
-//        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
-//                                             animated:YES];
-//    }
+    //数据导出
+    if ([title isEqualToString:kTitle3]) {
+        SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
+        [self.navigationController pushViewController:magicExportVC animated:YES];
+    }
+    
+    //设置
+    if ([title isEqualToString:kTitle6]) {
+        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:settingVC animated:YES];
+    }
     
 //    if ([title isEqualToString:kTitle7]) {
 //        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
 //        [self.navigationController pushViewController:settingVC animated:YES];
 //    }
 }
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    SSJMineHomeImageCell * currentCell = (SSJMineHomeImageCell *)cell;
+    if (!KHasEnterMineHome) {
+        currentCell.transform = CGAffineTransformMakeTranslation( - self.view.width , 0);
+        [UIView animateWithDuration:0.3 delay:0.1 * [_titleArr indexOfObject:currentCell.cellTitle] options:UIViewAnimationOptionTransitionCurlUp animations:^{
+            currentCell.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            KHasEnterMineHome = YES;
+        }];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.titles[section] count];
@@ -212,53 +274,61 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJMineHomeCell";
-    SSJMineHomeTabelviewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJMineHomeImageCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
-        mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        mineHomeCell = [[SSJMineHomeImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     
+    mineHomeCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];
+    
     if ([mineHomeCell.cellTitle isEqualToString:kTitle1]) {
-        mineHomeCell.accessoryView = self.motionSwitch;
-    } else {
-        mineHomeCell.accessoryView = nil;
-    }
-    if ([mineHomeCell.cellTitle isEqualToString:kTitle2]) {
-        mineHomeCell.detailLabel.text = self.circleChargeState;
-        [mineHomeCell.detailLabel sizeToFit];
+        mineHomeCell.cellDetail = self.circleChargeState;
     }else{
-        mineHomeCell.detailLabel.text = @"";
+        mineHomeCell.cellDetail = @"";
     }
-
+    
+    if ([mineHomeCell.cellTitle isEqualToString:kTitle4]) {
+        mineHomeCell.cellSubTitle = @"反馈交流QQ群:552563622";
+    }
     return mineHomeCell;
 }
 
-#pragma mark - UMSocialUIDelegate
--(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
-{
-    //根据`responseCode`得到发送结果,如果分享成功
-    if(response.responseCode == UMSResponseCodeSuccess)
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
-    }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享失败"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
+#pragma mark - Getter
+-(SSJMineHomeTableViewHeader *)header{
+    if (!_header) {
+        __weak typeof(self) weakSelf = self;
+        _header = [[SSJMineHomeTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 135)];
+        _header.HeaderClickedBlock = ^(){
+            [weakSelf loginButtonClicked];
+        };
+        _header.checkInButtonClickBlock = ^(){
+            SSJBookkeepingTreeViewController *treeVC = [[SSJBookkeepingTreeViewController alloc] init];
+            [weakSelf.navigationController pushViewController:treeVC animated:YES];
+        };
     }
+    return _header;
 }
 
--(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
-{
-    if (platformName == UMShareToSina) {
-        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://5.9188.com/note/d/";
-        socialData.shareImage = [UIImage imageNamed:@"weibo_banner"];
+-(YWFeedbackKit *)feedbackKit{
+    if (!_feedbackKit) {
+        NSString *avtarUrl;
+        if ([_userItem.cicon hasPrefix:@"http"]) {
+            avtarUrl = _userItem.cicon;
+        }else{
+            avtarUrl = SSJImageURLWithAPI(_userItem.cicon);
+        }
+        _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:SSJYWAppKey];
+        _feedbackKit.customUIPlist = @{@"bgColor":@"#ffffff",
+                                       @"color":@"#393939",
+                                       @"avatar":avtarUrl ?: @""};
+        _feedbackKit.extInfo = @{@"userid":_userItem.cuserid ,
+                                 @"loginType":@(SSJUserLoginType()),
+                                 @"mobileNo":_userItem.cmobileno ?: @""};
     }
-    else{
-        socialData.shareText = @"财务管理第一步，从记录消费生活开始!";
-    }
+    return _feedbackKit;
 }
-
 
 #pragma mark - Event
 -(void)takePhoto{
@@ -306,26 +376,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 -(void)reloadDataAfterSync{
     __weak typeof(self) weakSelf = self;
     [self getUserInfo:^(SSJUserInfoItem *item){
-        if (SSJIsUserLogined()) {
-            NSString *iconStr;
-            if ([item.cicon hasPrefix:@"http"]) {
-                iconStr = item.cicon;
-            }else{
-                iconStr = SSJImageURLWithAPI(item.cicon);
-            }
-            if (item.cmobileno == nil || [item.cmobileno isEqualToString:@""]) {
-                //三方登录
-                weakSelf.header.nicknameLabel.text = item.realName;
-            }else{
-                //手机号登陆
-                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                weakSelf.header.nicknameLabel.text = phoneNum;
-            }
-            [weakSelf.header.headPotraitImage.headerImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-        } else {
-            weakSelf.header.headPotraitImage.headerImage.image = [UIImage imageNamed:@"defualt_portrait"];
-            weakSelf.header.nicknameLabel.text = @"待君登录";
-        }
+        weakSelf.header.item = item;
+        _userItem = item;
     }];
 }
 
@@ -387,10 +439,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [SSJUserTableManager saveUserItem:item];
 }
 
-- (void)setttingButtonClick:(id)sender{
-        SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        [self.navigationController pushViewController:settingVC animated:YES];
-}
 
 -(void)getCircleChargeState{
     __weak typeof(self) weakSelf = self;
@@ -407,6 +455,17 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }];
 }
 
+- (void)loginButtonClicked{
+    if (!SSJIsUserLogined()) {
+        SSJLoginViewController *loginVc = [[SSJLoginViewController alloc] init];
+        loginVc.backController = self;
+        [self.navigationController pushViewController:loginVc animated:YES];
+    }else{
+        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+        [self.navigationController pushViewController:personalDetailVc animated:YES];
+    }
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -415,7 +474,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     self.portraitUploadService=[[SSJPortraitUploadNetworkService alloc]init];
     __weak typeof(self) weakSelf = self;
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        weakSelf.header.headPotraitImage.headerImage.image = image;
+//        weakSelf.header.headPotraitImage.headerImage.image = image;
         [weakSelf.tableView reloadData];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
@@ -423,6 +482,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
         userItem.icon = icon;
         [SSJUserTableManager saveUserItem:userItem];
     }];
+}
+
+-(void)backButtonClicked:(id)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Getter
@@ -435,34 +498,34 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 }
 
 
--(SSJMineHomeTableViewHeader *)header{
-    if (!_header) {
-        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
-        _header.frame = CGRectMake(0, 0, self.view.width, 125);
-        __weak typeof(self) weakSelf = self;
-        _header.HeaderButtonClickedBlock = ^(){
-            if (SSJIsUserLogined()) {
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-            }else{
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }
-        };
-        _header.HeaderClickedBlock = ^(){
-            if (!SSJIsUserLogined()) {
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            }else{
-                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
-            }
-        };
-    }
-    return _header;
-}
+//-(SSJMineHomeTableViewHeader *)header{
+//    if (!_header) {
+//        _header = [SSJMineHomeTableViewHeader MineHomeHeader];
+//        _header.frame = CGRectMake(0, 0, self.view.width, 125);
+//        __weak typeof(self) weakSelf = self;
+//        _header.HeaderButtonClickedBlock = ^(){
+//            if (SSJIsUserLogined()) {
+//                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+//                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+//            }else{
+//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+//                loginVC.backController = weakSelf;
+//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+//            }
+//        };
+//        _header.HeaderClickedBlock = ^(){
+//            if (!SSJIsUserLogined()) {
+//                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+//                loginVC.backController = weakSelf;
+//                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+//            }else{
+//                SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+//                [weakSelf.navigationController pushViewController:personalDetailVc animated:YES];
+//            }
+//        };
+//    }
+//    return _header;
+//}
 
 
 @end

@@ -47,6 +47,8 @@
         self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
         self.skinView.hidden = YES;
         [self addSubview:self.skinView];
+        
+        [self updateCircleFrame];
     }
     return self;
 }
@@ -113,6 +115,7 @@
             additionViewItem.lineLength = 20;
             additionViewItem.imageName = item.imageName;
             additionViewItem.imageRadius = 13;
+            additionViewItem.imageBorderShowed = item.imageBorderShowed;
             additionViewItem.borderColorValue = item.colorValue;
             additionViewItem.gapBetweenImageAndText = 0;
             additionViewItem.text = item.additionalText;
@@ -139,7 +142,7 @@
             //  渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 UIImage *screentShot = [weakSelf ssj_takeScreenShot];
-                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
+//                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     weakSelf.skinView.hidden = NO;
                     weakSelf.skinView.image = screentShot;

@@ -155,7 +155,7 @@
     if (balance >= 0) {
         NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"距结算日前，您每天还可花%@元哦", money]];
-        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]} range:NSMakeRange(12, money.length)];
+        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"eb4a64"]} range:NSMakeRange(12, money.length)];
         self.bottomLab.attributedText = text;
         [self.bottomLab sizeToFit];
     } else {
@@ -170,7 +170,7 @@
 - (UIView *)topView {
     if (!_topView) {
         _topView = [[UIView alloc] init];
-        _topView.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _topView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         [_topView addSubview:self.budgetMoneyTitleLab];
         [_topView addSubview:self.budgetMoneyLab];
         [_topView addSubview:self.intervalTitleLab];
@@ -194,7 +194,7 @@
 - (UILabel *)budgetMoneyTitleLab {
     if (!_budgetMoneyTitleLab) {
         _budgetMoneyTitleLab = [[UILabel alloc] init];
-        _budgetMoneyTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _budgetMoneyTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         _budgetMoneyTitleLab.textColor = [UIColor whiteColor];
         _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:12];
     }
@@ -204,7 +204,7 @@
 - (UILabel *)budgetMoneyLab {
     if (!_budgetMoneyLab) {
         _budgetMoneyLab = [[UILabel alloc] init];
-        _budgetMoneyLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _budgetMoneyLab.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         _budgetMoneyLab.textColor = [UIColor whiteColor];
         _budgetMoneyLab.font = [UIFont systemFontOfSize:18];
     }
@@ -231,10 +231,10 @@
 - (UILabel *)intervalTitleLab {
     if (!_intervalTitleLab) {
         _intervalTitleLab = [[UILabel alloc] init];
-        _intervalTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _intervalTitleLab.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         _intervalTitleLab.textColor = [UIColor whiteColor];
         _intervalTitleLab.font = [UIFont systemFontOfSize:12];
-        _intervalTitleLab.text = @"据结算日";
+        _intervalTitleLab.text = @"距结算日";
         [_intervalTitleLab sizeToFit];
     }
     return _intervalTitleLab;
@@ -243,7 +243,7 @@
 - (UILabel *)intervalLab {
     if (!_intervalLab) {
         _intervalLab = [[UILabel alloc] init];
-        _intervalLab.backgroundColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+        _intervalLab.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         _intervalLab.textColor = [UIColor whiteColor];
         _intervalLab.font = [UIFont systemFontOfSize:18];
     }

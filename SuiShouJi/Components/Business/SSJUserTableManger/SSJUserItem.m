@@ -27,7 +27,9 @@
                     @"defaultFundAcctState":@"cdefaultfundacctstate",
                     @"icon":@"cicons",
                     @"signature":@"usersignature",
-                    @"writeDate":@"cwritedate"};
+                    @"writeDate":@"cwritedate",
+                    @"motionTrackState":@"cmotionPwdTrackState",
+                    @"fingerPrintState":@"cfingerPrintState"};
     }
     return mapping;
 }

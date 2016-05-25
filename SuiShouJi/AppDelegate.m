@@ -27,6 +27,11 @@
 //#import "SSJStartView.h"
 #import "SSJStartViewManager.h"
 
+#import "SSJPatchUpdateService.h"
+#import "SSJJspatchAnalyze.h"
+#import "SSJJsPatchItem.h"
+#import "JPEngine.h"
+
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -51,12 +56,16 @@ NSDate *SCYEnterBackgroundTime() {
 
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
+@property(nonatomic, strong) SSJPatchUpdateService *service;
 @end
 
 @implementation AppDelegate
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self analyzeJspatch];
+    
+    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -95,7 +104,22 @@ NSDate *SCYEnterBackgroundTime() {
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL];
+        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified){
+            // 没有进入手势密码，直接进入首页的话，就调用reloadWithAnimation显示首页数据加载动画;
+            // 因为从手势密码返回到首页会触发首页的viewWillAppear，在这个方法中也做了数据刷新，会把加载动画覆盖掉
+            UITabBarController *tabVC = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+            UINavigationController *navi = [tabVC.viewControllers firstObject];
+            SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
+            if (![homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+                return;
+            }
+            if (isVerified) {
+                homeVC.allowRefresh = YES;
+                homeVC.hasLoad = NO;
+            } else {
+                [homeVC reloadWithAnimation];
+            }
+        } animated:NO];
         manager = nil;
     }];
 
@@ -124,8 +148,16 @@ NSDate *SCYEnterBackgroundTime() {
     NSTimeInterval interval = [backgroundTime timeIntervalSinceDate:[NSDate date]];
     interval = ABS(interval);
     if (interval >= kLockScreenDelay) {
-        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL];
+        [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:NULL animated:NO];
     }
+}
+
+#pragma mark - Getter
+-(SSJPatchUpdateService *)service{
+    if (!_service) {
+        _service = [[SSJPatchUpdateService alloc]initWithDelegate:self];
+    }
+    return _service;
 }
 
 #pragma mark - Private
@@ -172,33 +204,64 @@ NSDate *SCYEnterBackgroundTime() {
     });
 }
 
+
 // 设置根控制器
 - (void)setRootViewController {
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
     bookKeepingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_accounte_nor"];
+    bookKeepingNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_accounte_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal                                                                                                                                                                                                                                                                                                                                                                                               ];
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
     reportFormsNavi.tabBarItem.image = [UIImage imageNamed:@"tab_form_nor"];
+    reportFormsNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_form_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
     financingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_founds_nor"];
+    financingNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_founds_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"更多";
     moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_more_nor"];
+    moreNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_more_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
-    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#47cfbe"];
+    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     [UIApplication sharedApplication].keyWindow.rootViewController = tabBarVC;
+}
+
+- (void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if ([service.returnCode isEqualToString:@"1"]) {
+        for (int i = 0; i < self.service.patchArray.count; i ++) {
+            SSJJsPatchItem *item = [self.service.patchArray objectAtIndex:i];
+            if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
+                [SSJJspatchAnalyze SSJJsPatchAnalyzeWithUrl:item.patchUrl MD5:item.patchMD5 patchVersion:item.patchVersion];
+            }
+        }
+    }
+}
+
+-(void)analyzeJspatch{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (SSJLastPatchVersion()) {
+            for (int i = 0; i <= [SSJLastPatchVersion() integerValue]; i ++) {
+                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%d.js",i]];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                    [JPEngine startEngine];
+                    NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+                    [JPEngine evaluateScript:script];
+                }
+            }
+        }
+    });
 }
 
 #pragma mark - qq快登

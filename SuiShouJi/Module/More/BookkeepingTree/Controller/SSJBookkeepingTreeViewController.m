@@ -118,7 +118,7 @@
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
     [super motionBegan:motion withEvent:event];
     
-    [MobClick event:@"16"];
+    [MobClick event:@"account_tree_shake"];
     // 如果正在请求签到接口，直接返回
     if (_checkInService.isLoading) {
         return;
@@ -135,7 +135,7 @@
     if ([self saveCheckInModel]) {
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
             if (success) {
-                [MobClick event:@"17"];
+                [MobClick event:@"account_tree_sign"];
                 [_treeView startRainWithGifData:data completion:^{
                     _checkInStateLab.text = @"Yeah,浇水成功啦！";
                     [self showWaterSuccessAlert];
@@ -298,9 +298,9 @@
     [self.alertView sizeToFit];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.alertView popupInView:window completion:^(BOOL finished) {
+    [self.alertView ssj_popupInView:window completion:^(BOOL finished) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.alertView dismiss:NULL];
+            [self.alertView ssj_dismiss:NULL];
         });
     }];
 }
@@ -311,9 +311,9 @@
     [self.alertView sizeToFit];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.alertView popupInView:window completion:^(BOOL finished) {
+    [self.alertView ssj_popupInView:window completion:^(BOOL finished) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.alertView dismiss:NULL];
+            [self.alertView ssj_dismiss:NULL];
         });
     }];
 }
@@ -324,9 +324,9 @@
     [self.alertView sizeToFit];
     
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [self.alertView popupInView:window completion:^(BOOL finished) {
+    [self.alertView ssj_popupInView:window completion:^(BOOL finished) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.alertView dismiss:NULL];
+            [self.alertView ssj_dismiss:NULL];
         });
     }];
 }

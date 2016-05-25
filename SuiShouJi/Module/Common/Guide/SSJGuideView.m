@@ -89,7 +89,7 @@
     }
     
     NSArray *images = @[@"guide_1",@"guide_2",@"guide_3"];
-    for (int i = 0; i < 3; i ++) {
+    for (int i = 0; i < images.count; i ++) {
         UIImage *image = [UIImage ssj_compatibleImageNamed:images[i]];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         [self.scrollView addSubview:imageView];
@@ -121,10 +121,9 @@
     if (!_pageControl) {
         _pageControl = [[SSJPageControl alloc] init];
         _pageControl.numberOfPages = self.contentViews.count;
-        _pageControl.pageImage = [[UIImage imageNamed:@"circle"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _pageControl.currentPageImage = [[UIImage imageNamed:@"solid_circle"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _pageControl.pageImage = [UIImage imageNamed:@"dian_nor"];
+        _pageControl.currentPageImage = [UIImage imageNamed:@"dian_sel"];
         _pageControl.spaceBetweenPages = 20.0;
-        _pageControl.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         [_pageControl addTarget:self action:@selector(pageControlAction) forControlEvents:UIControlEventValueChanged];
     }
     return _pageControl;
@@ -136,11 +135,11 @@
         [_beginButton setCornerRadius:20];
         [_beginButton setFontSize:18];
         [_beginButton setTitle:@"立即体验" forState:SSJBorderButtonStateNormal];
-        [_beginButton setTitleColor:[UIColor ssj_colorWithHex:@"#0ccdb5"] forState:SSJBorderButtonStateNormal];
+        [_beginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
         [_beginButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [_beginButton setBorderColor:[UIColor ssj_colorWithHex:@"#0ccdb5"] forState:SSJBorderButtonStateNormal];
+        [_beginButton setBorderColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
         [_beginButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
-        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#0ccdb5"] forState:SSJBorderButtonStateHighlighted];
+        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateHighlighted];
         [_beginButton addTarget:self action:@selector(beginButtonAciton)];
     }
     return _beginButton;

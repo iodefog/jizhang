@@ -11,7 +11,7 @@
 #import "SSJCustomKeyboard.h"
 #import "SSJBillingChargeCellItem.h"
 
-@interface SSJRecordMakingViewController : SSJBaseViewController<UIScrollViewDelegate,UITextFieldDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate>
+@interface SSJRecordMakingViewController : SSJBaseViewController
 
 //当前选中的年
 @property (nonatomic) long selectedYear;
@@ -30,5 +30,8 @@
 @property (nonatomic) BOOL isModifyCofig;
 
 
+typedef void (^addNewChargeBlock)(NSArray *chargeIdArr);
 
+
+@property (nonatomic, copy) addNewChargeBlock addNewChargeBlock;
 @end

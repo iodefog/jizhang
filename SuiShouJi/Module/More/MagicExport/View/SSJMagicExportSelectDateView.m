@@ -20,7 +20,11 @@
 
 @property (nonatomic, strong) UILabel *endDateLab;
 
-@property (nonatomic, strong) UIView *baseLineView;
+@property (nonatomic, strong) UIView *beginDateBaseLineView;
+
+@property (nonatomic, strong) UIView *endDateBaseLineView;
+
+@property (nonatomic, strong) UIImageView *arrowView;
 
 @end
 
@@ -30,11 +34,13 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.titleLab];
-        [self addSubview:self.baseLineView];
+        [self addSubview:self.beginDateBaseLineView];
+        [self addSubview:self.endDateBaseLineView];
         [self addSubview:self.beginDateTitleLab];
         [self addSubview:self.beginDateLab];
         [self addSubview:self.endDateTitleLab];
         [self addSubview:self.endDateLab];
+        [self addSubview:self.arrowView];
     }
     return self;
 }
@@ -45,9 +51,6 @@
     self.titleLab.top = 14;
     self.titleLab.centerX = self.width * 0.5;
     
-    self.baseLineView.frame = CGRectMake(10, 108, self.width - 20, 45);
-    [self.baseLineView ssj_relayoutBorder];
-    
     self.beginDateTitleLab.leftTop = CGPointMake(10, 84);
     [self.beginDateLab sizeToFit];
     self.beginDateLab.leftTop = CGPointMake(10, 116);
@@ -55,6 +58,15 @@
     self.endDateTitleLab.rightTop = CGPointMake(self.width - 10, 84);
     [self.endDateLab sizeToFit];
     self.endDateLab.rightTop = CGPointMake(self.width - 10, 116);
+    
+    self.arrowView.center = CGPointMake(self.width * 0.5, self.endDateLab.height * 0.5 + self.endDateLab.top);
+    
+    CGFloat baseLineViewWidth = (self.width - self.arrowView.width - 40) * 0.5;
+    self.beginDateBaseLineView.frame = CGRectMake(10, 108, baseLineViewWidth, 45);
+    [self.beginDateBaseLineView ssj_relayoutBorder];
+    
+    self.endDateBaseLineView.frame = CGRectMake(self.arrowView.right + 10, 108, baseLineViewWidth, 45);
+    [self.endDateBaseLineView ssj_relayoutBorder];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -65,7 +77,7 @@
     [self setNeedsLayout];
     
     NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"亲爱的用户，您在"];
-    [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"47cfbe"]}]];
+    [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"eb4a64"]}]];
     [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"开启了记账之旅"]];
     self.titleLab.attributedText = title;
     
@@ -134,18 +146,39 @@
     return _endDateLab;
 }
 
-- (UIView *)baseLineView {
-    if (!_baseLineView) {
-        _baseLineView = [[UIView alloc] init];
-        _baseLineView.backgroundColor = [UIColor whiteColor];
-        [_baseLineView ssj_setBorderWidth:1];
-        [_baseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_baseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"00c6ad"]];
+- (UIView *)beginDateBaseLineView {
+    if (!_beginDateBaseLineView) {
+        _beginDateBaseLineView = [[UIView alloc] init];
+        _beginDateBaseLineView.backgroundColor = [UIColor whiteColor];
+        [_beginDateBaseLineView ssj_setBorderWidth:1];
+        [_beginDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_beginDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDateAction)];
-        [_baseLineView addGestureRecognizer:tap];
+        [_beginDateBaseLineView addGestureRecognizer:tap];
     }
-    return _baseLineView;
+    return _beginDateBaseLineView;
+}
+
+- (UIView *)endDateBaseLineView {
+    if (!_endDateBaseLineView) {
+        _endDateBaseLineView = [[UIView alloc] init];
+        _endDateBaseLineView.backgroundColor = [UIColor whiteColor];
+        [_endDateBaseLineView ssj_setBorderWidth:1];
+        [_endDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_endDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDateAction)];
+        [_endDateBaseLineView addGestureRecognizer:tap];
+    }
+    return _endDateBaseLineView;
+}
+
+- (UIImageView *)arrowView {
+    if (!_arrowView) {
+        _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow"]];
+    }
+    return _arrowView;
 }
 
 @end

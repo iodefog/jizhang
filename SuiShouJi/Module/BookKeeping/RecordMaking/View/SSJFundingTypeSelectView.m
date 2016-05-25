@@ -73,7 +73,11 @@
     
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
-    } timeInterval:0.25 fininshed:NULL];
+    } timeInterval:0.25 fininshed:^(BOOL complation) {
+        if (_dismissBlock) {
+            _dismissBlock();
+        }
+    }];
 }
 
 #pragma mark - UITableViewDelegate
@@ -175,7 +179,7 @@
     [_items removeAllObjects];
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ?",SSJUSERID()];
+        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CPARENT != 'root' AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? ORDER BY A.IORDER",SSJUSERID()];
         _items = [[NSMutableArray alloc]init];
         while ([rs next]) {
             SSJFundingItem *item = [[SSJFundingItem alloc]init];

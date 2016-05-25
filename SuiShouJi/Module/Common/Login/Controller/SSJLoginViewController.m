@@ -26,6 +26,9 @@
 #import "SSJFundAccountTable.h"
 #import "SSJThirdPartyLoginManger.h"
 #import <WXApi.h>
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJBookkeepingTreeHelper.h"
+#import "SSJLoginHelper.h"
 
 
 @interface SSJLoginViewController () <UITextFieldDelegate>
@@ -205,6 +208,9 @@
         //  检测缺少哪个收支类型就创建
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
         
+        //  更新排序字段为空的收支类型
+        [SSJLoginHelper updateBillTypeOrderIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
+        
         //  如果登录没有返回任何资金帐户，说明服务器没有保存任何资金记录，就给用户创建默认的
         if (self.loginService.fundInfoArray.count == 0) {
             [SSJUserDefaultDataCreater createDefaultFundAccountsForUserId:SSJUSERID() inDatabase:db];
@@ -213,6 +219,14 @@
         //  更新资金帐户余额
         [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];
+    
+    // 如果本地保存的最近一次签到时间和服务端返回的不一致，说明本地没有保存最新的签到记录
+    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+    if (![checkInModel.lastCheckInDate isEqualToString:_loginService.checkInModel.lastCheckInDate]) {
+        [SSJBookkeepingTreeStore saveCheckInModel:_loginService.checkInModel error:nil];
+        [SSJBookkeepingTreeHelper loadTreeImageWithUrlPath:_loginService.checkInModel.treeImgUrl finish:NULL];
+        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_loginService.checkInModel.treeGifUrl finish:NULL];
+    }
     
     //  登陆成功后强制同步一次
     [[NSNotificationCenter defaultCenter] postNotificationName:SSJShowSyncLoadingNotification object:self];
@@ -275,6 +289,8 @@
 
 -(void)forgetButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_forget_pwd"];
+
     SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
     forgetVC.backController = self.backController;
     forgetVC.finishHandle = ^(UIViewController *controller){
@@ -285,6 +301,8 @@
 
 -(void)registerButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_register"];
+
     SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
     registerVc.finishHandle = ^(UIViewController *controller){
         //  如果是忘记密码，就返回到登录页面
@@ -310,6 +328,8 @@
 }
 
 -(void)qqLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_qq"];
+
     [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
@@ -318,6 +338,8 @@
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_weichat"];
+
     [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
@@ -350,7 +372,7 @@
 -(UIImageView *)backGroundImage{
     if (!_backGroundImage) {
         _backGroundImage = [[UIImageView alloc]init];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
     }
     return _backGroundImage;
 }
@@ -363,6 +385,7 @@
         image.center = CGPointMake(20, 23);
         
         _tfPhoneNum = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47) contentHeight:34];
+        _tfPhoneNum.tintColor = [UIColor whiteColor];
         _tfPhoneNum.textColor = [UIColor whiteColor];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
@@ -383,6 +406,7 @@
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         _tfPassword = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47) contentHeight:34];
+        _tfPassword.tintColor = [UIColor whiteColor];
         _tfPassword.textColor = [UIColor whiteColor];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
@@ -406,7 +430,7 @@
         _loginButton.layer.cornerRadius = 3;
         _loginButton.enabled = NO;
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         _loginButton.backgroundColor = [UIColor whiteColor];
         [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

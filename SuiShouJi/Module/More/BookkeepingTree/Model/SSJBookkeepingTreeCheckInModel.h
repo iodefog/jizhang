@@ -19,8 +19,10 @@
 // 签到的用户id
 @property (nonatomic, copy) NSString *userId;
 
+// 记账树图片url
 @property (nonatomic, copy) NSString *treeImgUrl;
 
+// 记账树下雨gif图片url
 @property (nonatomic, copy) NSString *treeGifUrl;
 
 // 是否摇一摇签过到

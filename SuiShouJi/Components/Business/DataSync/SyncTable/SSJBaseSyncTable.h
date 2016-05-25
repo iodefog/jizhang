@@ -69,10 +69,6 @@
  */
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
-///----------------------------------
-/// @name 只能调用，子类不可覆写！！！
-///----------------------------------
-
 /**
  *  查询需要同步的记录
  *

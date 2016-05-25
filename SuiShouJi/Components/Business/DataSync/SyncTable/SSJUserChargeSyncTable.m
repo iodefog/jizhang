@@ -66,19 +66,6 @@
             
             //  本地有相同configid和billdate的流水
             while ([resultSet next]) {
-                //            //  如果本地流水已经删除，则忽略将要合并的流水
-                //            if ([resultSet intForColumn:@"operatortype"] == 2) {
-                //                [resultSet close];
-                //                return NO;
-                //            }
-                //
-                //            //  如果将要合并的流水的operatortype是2，就将本地流水的operatortype改为2，并且忽略这条记录
-                //            if ([record[@"operatortype"] intValue] == 2) {
-                //                [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
-                //                [resultSet close];
-                //                return NO;
-                //            }
-                
                 //  本地记录修改时间晚于将要合并数据的修改时间，保留本地记录，忽略合并记录
                 NSString *localDateStr = [resultSet stringForColumn:@"cwritedate"];
                 NSDate *localDate = [NSDate dateWithString:localDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];

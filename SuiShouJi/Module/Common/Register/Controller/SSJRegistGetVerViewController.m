@@ -177,7 +177,7 @@
 -(UIImageView *)backGroundImage{
     if (!_backGroundImage) {
         _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
     }
     return _backGroundImage;
 }

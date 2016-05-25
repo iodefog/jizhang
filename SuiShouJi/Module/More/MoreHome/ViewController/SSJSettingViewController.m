@@ -15,16 +15,17 @@
 #import "SSJSyncSettingViewController.h"
 #import "SSJNormalWebViewController.h"
 #import "SSJMagicExportViewController.h"
+#import "SSJAboutusViewController.h"
 #import "SSJStartChecker.h"
 #import "UMFeedback.h"
 
 
-static NSString *const kTitle1 = @"同步设置";
-static NSString *const kTitle2 = @"意见反馈";
-static NSString *const kTitle3 = @"数据文件导出";
-static NSString *const kTitle4 = @"用户协议与隐私说明";
-static NSString *const kTitle5 = @"检查更新";
-static NSString *const kTitle6 = @"关于我们";
+static NSString *const kTitle1 = @"自动同步设置";
+static NSString *const kTitle2 = @"分享APP";
+static NSString *const kTitle3 = @"关于我们";
+static NSString *const kTitle4 = @"检查更新";
+
+static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 
 @interface SSJSettingViewController ()
@@ -52,12 +53,13 @@ static NSString *const kTitle6 = @"关于我们";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2] , @[kTitle3] , @[kTitle4] , @[kTitle6]];
+        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2] , @[kTitle3] , @[kTitle4] , @[kTitle5 , kTitle6]];
+        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4]];
     }
+    
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -94,15 +96,15 @@ static NSString *const kTitle6 = @"关于我们";
         [self.navigationController pushViewController:syncSettingVC animated:YES];
     }
     
-    //  用户协议与隐私说明
-    if ([title isEqualToString:kTitle4]) {
-        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
-        webVc.title = @"用户协议与隐私说明";
-        [self.navigationController pushViewController:webVc animated:YES];
-    }
-    
+//    //  用户协议与隐私说明
+//    if ([title isEqualToString:kTitle4]) {
+//        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
+//        webVc.title = @"用户协议与隐私说明";
+//        [self.navigationController pushViewController:webVc animated:YES];
+//    }
+//    
     //  检查更新
-    if ([title isEqualToString:kTitle5]) {
+    if ([title isEqualToString:kTitle4]) {
         [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
             if (type == SSJAppUpdateTypeNone) {
                 [CDAutoHideMessageHUD showMessage:@"当前已经是最新版本,不需要更新"];
@@ -113,22 +115,21 @@ static NSString *const kTitle6 = @"关于我们";
     }
     
     //  关于我们
-    if ([title isEqualToString:kTitle6]) {
-        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://1.9188.com/h5/about_shq/about.html"]];
-        webVc.title = @"关于我们";
-        [self.navigationController pushViewController:webVc animated:YES];
-    }
-    
-    //  意见反馈
-    if ([title isEqualToString:kTitle2]) {
-        [self.navigationController pushViewController:[UMFeedback feedbackViewController]
-                                             animated:YES];
-    }
-    
     if ([title isEqualToString:kTitle3]) {
-        SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
-        [self.navigationController pushViewController:magicExportVC animated:YES];
+        SSJAboutusViewController *aboutUsVc = [[SSJAboutusViewController alloc] init];
+        [self.navigationController pushViewController:aboutUsVc animated:YES];
     }
+    
+    //  把APP推荐给好友
+    if ([title isEqualToString:kTitle2]) {
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                        appKey:kUMAppKey
+                                        shareText:@"财务管理第一步，从记录消费生活开始!"
+                                        shareImage:[UIImage imageNamed:@"icon"]
+                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+                                        delegate:self];
+        }
+
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -148,11 +149,37 @@ static NSString *const kTitle6 = @"关于我们";
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
-        mineHomeCell.cellDetail = SSJAppVersion();
+        mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
     }
     
     return mineHomeCell;
 }
+
+#pragma mark - UMSocialUIDelegate
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享失败"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alert show];
+    }
+}
+
+-(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
+{
+    if (platformName == UMShareToSina) {
+        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://5.9188.com/note/d/";
+        socialData.shareImage = [UIImage imageNamed:@"weibo_banner"];
+    }
+    else{
+        socialData.shareText = @"财务管理第一步，从记录消费生活开始!";
+    }
+}
+
 
 #pragma mark - Getter
 //-(UIView *)loggedFooterView{
@@ -162,7 +189,7 @@ static NSString *const kTitle6 = @"关于我们";
 //        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
 //        quitLogButton.layer.cornerRadius = 3.f;
 //        quitLogButton.layer.masksToBounds = YES;
-//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
 //        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 //        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 //        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);

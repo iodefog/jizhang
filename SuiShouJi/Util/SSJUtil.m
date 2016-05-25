@@ -297,3 +297,14 @@ void SSJDispatchMainAsync(void (^block)(void)) {
     }
 }
 
+BOOL SSJSavePatchVersion(NSInteger patchVersion){
+    [[NSUserDefaults standardUserDefaults] setObject:@(patchVersion) forKey:SSJLastPatchVersionKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+NSString *SSJLastPatchVersion(){
+    return [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastPatchVersionKey];
+}
+
+
+

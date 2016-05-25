@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseNetworkService.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJUserItem.h"
 
 @interface SSJLoginService : SSJBaseNetworkService
@@ -27,6 +28,8 @@
 @property (readonly, nonatomic,strong) NSString *appid;
 
 @property (readonly, nonatomic,strong) SSJUserItem *item;
+
+@property (readonly, nonatomic, strong) SSJBookkeepingTreeCheckInModel *checkInModel;
 
 /**
  *  普通登录

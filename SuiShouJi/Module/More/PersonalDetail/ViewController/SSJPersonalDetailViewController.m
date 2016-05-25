@@ -10,7 +10,10 @@ static NSString *const kTitle1 = @"更换头像";
 static NSString *const kTitle2 = @"昵称";
 static NSString *const kTitle3 = @"个性签名";
 static NSString *const kTitle4 = @"手机号";
-static NSString *const kTitle5 = @"修改密码";
+static NSString *const kTitle5 = @"我的等级";
+static NSString *const kTitle6 = @"修改登录密码";
+static NSString *const kTitle7 = @"手势密码";
+
 
 #import "SSJPersonalDetailViewController.h"
 #import "SSJMineHomeTabelviewCell.h"
@@ -24,7 +27,10 @@ static NSString *const kTitle5 = @"修改密码";
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJPasswordModifyViewController.h"
 #import "SSJNickNameModifyView.h"
-
+#import "SSJMotionPasswordSettingViewController.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJBookkeepingTreeHelper.h"
 
 @interface SSJPersonalDetailViewController ()
 @property (nonatomic, strong) NSArray *titles;
@@ -33,6 +39,7 @@ static NSString *const kTitle5 = @"修改密码";
 @property(nonatomic, strong) UIView *loggedFooterView;
 @property(nonatomic, strong) SSJNickNameModifyView *nickNameModifyView;
 @property(nonatomic, strong) SSJNickNameModifyView *signatureModifyView;
+@property(nonatomic, strong) NSString *checkInLevel;
 @end
 
 @implementation SSJPersonalDetailViewController
@@ -53,6 +60,7 @@ static NSString *const kTitle5 = @"修改密码";
     [SSJPersonalDetailHelper queryUserDetailWithsuccess:^(SSJPersonalDetailItem *data) {
         weakSelf.item = [[SSJPersonalDetailItem alloc]init];
         weakSelf.item = data;
+        [weakSelf getCheckInLevel];
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
         
@@ -62,16 +70,16 @@ static NSString *const kTitle5 = @"修改密码";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (SSJUserLoginType() != SSJLoginTypeNormal) {
-        self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3]];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle5],@[kTitle7]];
     }else{
-        self.titles = @[@[kTitle1], @[kTitle2], @[kTitle3],@[kTitle4],@[kTitle5]];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5],@[kTitle6 , kTitle7]];
     }
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"47cfbe"];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && indexPath.row == 0) {
         return 80;
     }
     return 55;
@@ -104,7 +112,7 @@ static NSString *const kTitle5 = @"修改密码";
         sheet = [[UIActionSheet alloc] initWithTitle:@"上传头像" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
         [sheet showInView:self.view];
     }
-    if ([title isEqualToString:kTitle5]) {
+    if ([title isEqualToString:kTitle6]) {
         SSJPasswordModifyViewController *passwordModifyVC = [[SSJPasswordModifyViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:passwordModifyVC animated:YES];
     }
@@ -113,6 +121,10 @@ static NSString *const kTitle5 = @"修改密码";
     }
     if ([title isEqualToString:kTitle3]) {
         [self.signatureModifyView show];
+    }
+    if ([title isEqualToString:kTitle7]) {
+        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
     }
 }
 #pragma mark - UITableViewDataSource
@@ -152,8 +164,12 @@ static NSString *const kTitle5 = @"修改密码";
         }
     }else if ([title isEqualToString:kTitle4]){
         mineHomeCell.cellDetail = self.item.mobileNo;
-    }else if ([title isEqualToString:kTitle5]){
+    }else if ([title isEqualToString:kTitle6]){
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else if ([title isEqualToString:kTitle7]) {
+        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    } else if ([title isEqualToString:kTitle5]){
+        mineHomeCell.cellDetail = self.checkInLevel;
     }
     return mineHomeCell;
 }
@@ -236,7 +252,7 @@ static NSString *const kTitle5 = @"修改密码";
         [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
         quitLogButton.layer.cornerRadius = 3.f;
         quitLogButton.layer.masksToBounds = YES;
-        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"47cfbe"] forState:UIControlStateNormal];
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
         [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
@@ -295,6 +311,12 @@ static NSString *const kTitle5 = @"修改密码";
         };
     }
     return _signatureModifyView;
+}
+
+- (void)getCheckInLevel{
+    SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
+    self.checkInLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:[SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes]];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -260,7 +260,7 @@
                 }
                 if ([item.dateStr isEqualToString:self.selectDateStr]) {
                     if ([item.dateStr isEqualToString:currentDateStr]) {
-                        item.backGroundColor = @"47cfbe";
+                        item.backGroundColor = @"eb4a64";
                         item.titleColor = @"FFFFFF";
                         item.isSelectable = YES;
                         [self.items addObject:item];
@@ -273,7 +273,7 @@
                 }else{
                     if ([item.dateStr isEqualToString:currentDateStr]) {
                         item.backGroundColor = @"FFFFFF";
-                        item.titleColor = @"47cfbe";
+                        item.titleColor = @"eb4a64";
                         item.isSelectable = YES;
                         [self.items addObject:item];
                     }else{

@@ -12,6 +12,8 @@
 
 @property (nonatomic) NSInteger selectCircleType;
 
+@property (nonatomic, copy, readonly) NSString *selectedPeriod;
+
 @property (nonatomic) BOOL incomeOrExpenture;
 
 //点击按钮的回调
@@ -19,6 +21,10 @@ typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType);
 
 
 @property(nonatomic, copy) chargeCircleSelectBlock chargeCircleSelectBlock;
+
+@property (nonatomic, copy) BOOL (^shouldDismissWhenSureButtonClick)(SSJChargeCircleSelectView *);
+
+@property (nonatomic, copy) void (^dismissAction)(SSJChargeCircleSelectView *);
 
 
 - (void)show;

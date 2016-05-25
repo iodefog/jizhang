@@ -65,7 +65,7 @@
     }else{
         self.dateLabel.text = [NSString stringWithFormat:@"%d",[[[self.item.dateStr componentsSeparatedByString:@"-"] lastObject] intValue]];
     }
-    if ([_item.backGroundColor isEqualToString:@"47cfbe"]) {
+    if ([_item.backGroundColor isEqualToString:@"eb4a64"]) {
         self.starImage.tintColor = [UIColor whiteColor];
     }else{
         self.starImage.tintColor = [UIColor ssj_colorWithHex:@"ffa81c"];
@@ -75,7 +75,7 @@
     }else{
         self.starImage.hidden = YES;
     }
-    if ([_item.backGroundColor isEqualToString:@"47cfbe"] || [_item.backGroundColor isEqualToString:@"cccccc"]) {
+    if ([_item.backGroundColor isEqualToString:@"eb4a64"] || [_item.backGroundColor isEqualToString:@"cccccc"]) {
         self.layer.cornerRadius = self.height / 2;
     }
 }

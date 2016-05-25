@@ -19,7 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIFont *font;
 
 //  边框颜色、标题默认颜色
-@property (null_resettable, nonatomic, strong) UIColor *tintColor;
+@property (null_resettable, nonatomic, strong) UIColor *borderColor;
+
+@property (null_resettable, nonatomic, strong) UIColor *selectedBorderColor;
 
 /**
  *  指定初始化化方法

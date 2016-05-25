@@ -59,7 +59,8 @@
     }
     
     SSJBillingChargeCellItem *item = (SSJBillingChargeCellItem *)cellItem;
-    self.imageView.image = [UIImage imageNamed:item.imageName];
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:item.colorValue];
+    self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
     self.textLabel.text = item.typeName;
     [self.textLabel sizeToFit];

@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (SSJViewAnimatioin)
 
-- (void)popupInView:(UIView *)view completion:(void (^ __nullable)(BOOL finished))completion;
+- (void)ssj_popupInView:(UIView *)view completion:(void (^ __nullable)(BOOL finished))completion;
 
-- (void)dismiss:(void (^ __nullable)(BOOL finished))completion;
+- (void)ssj_dismiss:(void (^ __nullable)(BOOL finished))completion;
 
 @end
 

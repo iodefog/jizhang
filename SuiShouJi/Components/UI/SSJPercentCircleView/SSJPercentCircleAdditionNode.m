@@ -250,16 +250,19 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 - (UIImageView *)imageView {
     if (!_imageView) {
-        UIImage *image = [UIImage imageNamed:self.item.imageName];
+        UIImage *image = [[UIImage imageNamed:self.item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         CGFloat scale = image.size.width / (self.item.imageRadius * 0.75 * 2);
         
         _imageView = [[UIImageView alloc] initWithImage:image];
         _imageView.size = CGSizeMake(self.item.imageRadius * 2, self.item.imageRadius * 2);
         _imageView.contentScaleFactor = _imageView.contentScaleFactor * scale;
         _imageView.contentMode = UIViewContentModeCenter;
-        _imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
-        _imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
-        _imageView.layer.cornerRadius = _imageView.width * 0.5;
+        _imageView.tintColor = [UIColor ssj_colorWithHex:self.item.borderColorValue];
+        if (self.item.imageBorderShowed) {
+            _imageView.layer.borderColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
+            _imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+            _imageView.layer.cornerRadius = _imageView.width * 0.5;
+        }
         _imageView.transform = CGAffineTransformMakeScale(0, 0);
     }
     return _imageView;

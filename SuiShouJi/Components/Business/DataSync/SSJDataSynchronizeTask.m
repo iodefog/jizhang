@@ -7,6 +7,7 @@
 //
 
 #import "SSJDataSynchronizeTask.h"
+#import "SSJBillTypeSyncTable.h"
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
@@ -47,7 +48,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.syncTableClasses = @[[SSJUserBillSyncTable class],
+        self.syncTableClasses = @[[SSJBillTypeSyncTable class],
+                                  [SSJUserBillSyncTable class],
                                   [SSJFundInfoSyncTable class],
                                   [SSJUserChargePeriodConfigSyncTable class],
                                   [SSJUserChargeSyncTable class],
@@ -328,7 +330,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
     __block BOOL updateVersionSuccess = YES;
     
     for (Class syncTable in self.syncTableClasses) {
-        //  收支类型
         [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
             if (![syncTable mergeRecords:tableInfo[[syncTable tableName]] forUserId:self.userId inDatabase:db error:error]) {
                 *rollback = YES;

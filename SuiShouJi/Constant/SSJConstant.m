@@ -44,6 +44,9 @@ NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";
 
 NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";
 
+NSString *const SSJLastPatchVersionKey = @"lastPatchVersionKey";
+
+
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
 NSString *const SSJUserLoginTypeKey = @"SSJUserLoginTypeKey";
@@ -69,5 +72,7 @@ NSString *const SSJWeiXinDescription = @"weixinLogin";
 NSString *const SSJWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 
 NSString *const SSJQQAppKey = @"1105086761";
+
+NSString *const SSJYWAppKey = @"23359906";
 
 

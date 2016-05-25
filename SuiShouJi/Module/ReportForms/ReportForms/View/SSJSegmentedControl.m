@@ -22,8 +22,6 @@
     }
     
     if (self = [super initWithFrame:CGRectZero]) {
-        self.layer.cornerRadius = 3;
-        self.layer.borderWidth = 1;
         self.font = [UIFont systemFontOfSize:15];
         self.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         self.buttons = [NSMutableArray arrayWithCapacity:items.count];
@@ -31,7 +29,7 @@
         for (int i = 0; i < items.count; i ++) {
             NSString *title = items[i];
             if (![title isKindOfClass:[NSString class]]) {
-                continue;
+                return nil;
             }
             
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -40,10 +38,21 @@
             [button setTitle:title forState:UIControlStateNormal];
             [button setTitleColor:self.tintColor forState:UIControlStateNormal];
             [button addTarget:self action:@selector(buttonClickAction:) forControlEvents:UIControlEventTouchUpInside];
-            if (i < items.count - 1) {
-                [button ssj_setBorderStyle:SSJBorderStyleRight];
-                [button ssj_setBorderWidth:2];
+            
+            [button ssj_setBorderWidth:1];
+            [button ssj_setBorderStyle:SSJBorderStyleAll];
+            if (i == 0) {
+                button.cornerRadius = 3;
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(1, 1, 1, 0)];
+                [button ssj_setCornerStyle:(UIRectCornerTopLeft | UIRectCornerBottomLeft)];
+            } else if (i == items.count - 1) {
+                button.cornerRadius = 3;
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(1, 0, 1, 1)];
+                [button ssj_setCornerStyle:(UIRectCornerTopRight | UIRectCornerBottomRight)];
+            } else {
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(1, 0, 1, 0)];
             }
+            
             [self addSubview:button];
             [self.buttons addObject:button];
         }
@@ -66,17 +75,20 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    CGFloat width = 0.0;
-    CGFloat height = 0.0;
-    CGFloat horizontalGap = 16.0;
-    CGFloat verticalGap = 10.0;
-    for (UIButton *button in self.buttons) {
-        NSString *title = [button titleForState:button.state];
-        CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:self.font}];
-        width = MAX(width, titleSize.width + horizontalGap);
-        height = MAX(height, titleSize.height + verticalGap);
+    if (CGSizeEqualToSize(self.size, CGSizeZero)) {
+        CGFloat width = 0.0;
+        CGFloat height = 0.0;
+        CGFloat horizontalGap = 16.0;
+        CGFloat verticalGap = 10.0;
+        for (UIButton *button in self.buttons) {
+            NSString *title = [button titleForState:button.state];
+            CGSize titleSize = [title sizeWithAttributes:@{NSFontAttributeName:self.font}];
+            width = MAX(width, titleSize.width + horizontalGap);
+            height = MAX(height, titleSize.height + verticalGap);
+        }
+        return CGSizeMake(width * self.buttons.count, height);
     }
-    return CGSizeMake(width * self.buttons.count, height);
+    return self.size;
 }
 
 - (nullable NSString *)titleForSegmentAtIndex:(NSUInteger)segment {
@@ -103,6 +115,8 @@
         for (int i = 0; i < self.buttons.count; i ++) {
             UIButton *button = self.buttons[i];
             button.selected = (i == selectedSegmentIndex);
+            UIColor *borderColor = (i == selectedSegmentIndex) ? _selectedBorderColor : _borderColor;
+            [button ssj_setBorderColor:borderColor];
         }
     }
 }
@@ -115,15 +129,23 @@
     [self sizeToFit];
 }
 
-- (void)setTintColor:(UIColor *)tintColor {
-    [super setTintColor:tintColor];
-    
-    if (!CGColorEqualToColor(self.tintColor.CGColor, tintColor.CGColor)) {
-        self.layer.borderColor = tintColor.CGColor;
-        for (UIButton *button in self.buttons) {
-            [button setTitleColor:tintColor forState:UIControlStateNormal];
-            [button ssj_setBorderColor:tintColor];
+- (void)setBorderColor:(UIColor *)borderColor {
+    if (!CGColorEqualToColor(_borderColor.CGColor, borderColor.CGColor)) {
+        _borderColor = borderColor;
+        for (int i = 0; i < [self.buttons count]; i ++) {
+            if (i != _selectedSegmentIndex) {
+                UIButton *button = self.buttons[i];
+                [button ssj_setBorderColor:_borderColor];
+            }
         }
+    }
+}
+
+- (void)setSelectedBorderColor:(UIColor *)selectedBorderColor {
+    if (!CGColorEqualToColor(_selectedBorderColor.CGColor, selectedBorderColor.CGColor)) {
+        _selectedBorderColor = selectedBorderColor;
+        UIButton *btn = [self.buttons ssj_safeObjectAtIndex:_selectedSegmentIndex];
+        [btn ssj_setBorderColor:_selectedBorderColor];
     }
 }
 

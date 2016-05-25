@@ -14,4 +14,8 @@
 @property (nonatomic,strong) NSString *categoryColor;
 @property (nonatomic,strong) NSString *categoryID;
 
+@property (nonatomic,strong) NSString *categoryTintColor;
+
+@property (nonatomic) BOOL selected;
+
 @end

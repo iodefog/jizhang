@@ -285,7 +285,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 //        _nextButton.titleLabel.font = [UIFont systemFontOfSize:20];
 //        [_nextButton setTitle:@"下一步" forState:UIControlStateNormal];
 //        [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#47cfbe"] forState:UIControlStateNormal];
+//        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
 //        [_nextButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateDisabled];
 //        [_nextButton addTarget:self action:@selector(nextBtnAction) forControlEvents:UIControlEventTouchUpInside];
 //    }
@@ -308,7 +308,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 - (UIImageView *)backGroundImage{
     if (!_backGroundImage) {
         _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg.jpg"];
+        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
     }
     return _backGroundImage;
 }
