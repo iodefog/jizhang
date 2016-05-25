@@ -34,7 +34,7 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.deleteButton.size = CGSizeMake(30, 30);
+    self.deleteButton.size = CGSizeMake(50, 50);
     self.deleteButton.center = CGPointMake(self.width - 10, 5);
     if (!_item.fundingMemo.length) {
         self.fundingNameLabel.left = 25;
