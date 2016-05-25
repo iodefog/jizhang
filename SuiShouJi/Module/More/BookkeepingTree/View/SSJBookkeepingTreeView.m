@@ -157,14 +157,14 @@ static const NSTimeInterval kRaninDuration = 3;
 - (NSString *)descriptionForDays:(NSInteger)days {
     SSJBookkeepingTreeLevel level = [SSJBookkeepingTreeHelper treeLevelForDays:days];
     if (level == SSJBookkeepingTreeLevelCrownTree) {
-        return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n终于成顶级皇冠树了。", (long)days];
+        return [NSString stringWithFormat:@"您的记账树已成长%ld天了,\n终于成顶级皇冠树了。", (long)days];
     } else {
         NSInteger daysToUpgrade = [SSJBookkeepingTreeHelper maxDaysForLevel:level] - days;
         NSString *nextLevel = [SSJBookkeepingTreeHelper treeLevelNameForLevel:level + 1];
         if (daysToUpgrade == 0) {
-            return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n明天就可以长成%@啦。", (long)days, nextLevel];
+            return [NSString stringWithFormat:@"您的记账树已成长%ld天了,\n明天就可以长成%@啦。", (long)days, nextLevel];
         } else {
-            return [NSString stringWithFormat:@"这是你坚持记账的第%ld天,\n还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
+            return [NSString stringWithFormat:@"您的记账树已成长%ld天了,\n还有%ld天就可以长成%@啦。", (long)days, (long)daysToUpgrade, nextLevel];
         }
     }
 }

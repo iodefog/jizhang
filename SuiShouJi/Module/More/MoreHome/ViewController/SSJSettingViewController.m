@@ -52,7 +52,12 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4]];
+    if ([SSJStartChecker sharedInstance].isInReview) {
+        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3]];
+    } else {
+        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4]];
+    }
+    
     [self.navigationController setNavigationBarHidden:NO];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
