@@ -65,6 +65,7 @@ NSDate *SCYEnterBackgroundTime() {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self analyzeJspatch];
     
+    
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
