@@ -7,6 +7,7 @@
 //
 
 #import "SSJDatePeriod.h"
+#import "DateTools.h"
 
 static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalendarUnitQuarter | NSCalendarUnitMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitWeekOfMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond | NSCalendarUnitEra | NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal | NSCalendarUnitWeekOfYear;
 
@@ -73,6 +74,19 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     return [[self alloc] initWithPeriodType:type date:date];
 }
 
+- (instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {
+    if (self = [super init]) {
+        self.startDate = startDate;
+        self.endDate = endDate;
+        self.periodType = SSJDatePeriodTypeCustom;
+    }
+    return self;
+}
+
++ (instancetype)datePeriodWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {
+    return [[self alloc] initWithStartDate:startDate endDate:endDate];
+}
+
 + (SSJDatePeriodComparisonResult)compareDate:(NSDate *)date withAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type {
     SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:type date:date];
     SSJDatePeriod *anotherPeriod = [SSJDatePeriod datePeriodWithPeriodType:type date:anotherDate];
@@ -127,6 +141,8 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
             case SSJDatePeriodTypeUnknown:
                 [components setWeekOfYear:i];
                 break;
+            case SSJDatePeriodTypeCustom:
+                break;
         }
         
         NSDate *startDate = [calendar dateByAddingComponents:components toDate:earlierPeriod.startDate options:0];
@@ -170,7 +186,7 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
 
 - (NSInteger)periodCountFromPeriod:(SSJDatePeriod *)period {
     if (!period || self.periodType != period.periodType) {
-        SSJPRINT(@">>> SSJ Warning:period为空或周期类型不匹配");
+        NSLog(@">>> SSJ Warning:period为空或周期类型不匹配");
         return 0;
     }
     
@@ -193,7 +209,8 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
         }
             break;
             
-        case SSJDatePeriodTypeUnknown: {
+        case SSJDatePeriodTypeUnknown:
+        case SSJDatePeriodTypeCustom: {
             return 0;
         }
             break;

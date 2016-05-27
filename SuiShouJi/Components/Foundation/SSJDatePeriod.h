@@ -14,7 +14,8 @@ typedef NS_ENUM(NSUInteger, SSJDatePeriodType) {
     SSJDatePeriodTypeUnknown = 0,
     SSJDatePeriodTypeWeek = NSCalendarUnitWeekOfYear,
     SSJDatePeriodTypeMonth = NSCalendarUnitMonth,
-    SSJDatePeriodTypeYear = NSCalendarUnitYear
+    SSJDatePeriodTypeYear = NSCalendarUnitYear,
+    SSJDatePeriodTypeCustom = NSUIntegerMax
 };
 
 typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
@@ -35,6 +36,10 @@ typedef NS_ENUM(NSInteger, SSJDatePeriodComparisonResult) {
 - (instancetype)initWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date;
 
 + (instancetype)datePeriodWithPeriodType:(SSJDatePeriodType)type date:(NSDate *)date;
+
+- (instancetype)initWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+
++ (instancetype)datePeriodWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 
 + (SSJDatePeriodComparisonResult)compareDate:(NSDate *)date withAnotherDate:(NSDate *)anotherDate periodType:(SSJDatePeriodType)type;
 

@@ -8,6 +8,7 @@
 
 #import "SSJReportFormsUtil.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJReportFormsPeriodModel.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,31 +16,81 @@
 
 @implementation SSJReportFormsDatabaseUtil
 
++ (void)queryForPeriodListWithIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
+                                      success:(void (^)(NSArray<SSJDatePeriod *> *))success
+                                      failure:(void (^)(NSError *))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *result = nil;
+        switch (type) {
+            case SSJReportFormsIncomeOrPayTypeIncome:
+            case SSJReportFormsIncomeOrPayTypePay: {
+                NSString *incomeOrPayType = type == SSJReportFormsIncomeOrPayTypeIncome ? @"0" : @"1";
+                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where  a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), incomeOrPayType];
+            }   break;
+                
+            case SSJReportFormsIncomeOrPayTypeSurplus: {
+                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where  a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
+            }   break;
+                
+            case SSJReportFormsIncomeOrPayTypeUnknown:
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure(nil);
+                    });
+                }
+                break;
+        }
+        
+        if (!result) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSInteger year = 0;
+        NSMutableArray *list = [NSMutableArray array];
+        while ([result next]) {
+            NSString *dateStr = [result stringForColumnIndex:0];
+            NSDate *date = [NSDate dateWithString:dateStr formatString:@"yyyy-MM"];
+            if (year && year != [date year]) {
+                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:date];
+                [list addObject:period];
+                year = [date year];
+            }
+            
+            SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
+            [list addObject:period];
+        }
+        SSJDatePeriod *firstPeriod = [list firstObject];
+        SSJDatePeriod *lastPeriod = [list lastObject];
+        [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(list);
+            });
+        }
+    }];
+}
+
 + (void)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
-                         inYear:(NSInteger)year
-                          month:(NSInteger)month
-                        success:(void(^)(NSArray<SSJReportFormsItem *> *))success
+                      startDate:(NSDate *)startDate
+                        endDate:(NSDate *)endDate
+                        success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure {
-    
-    if (year <= 0 || month > 12) {
-        failure(nil);
-    }
-    
-    NSString *dateStr = nil;
-    if (month > 0 && month <= 12) {
-        dateStr = [NSString stringWithFormat:@"%04d-%02d-__",(int)year,(int)month];
-    } else {
-        dateStr = [NSString stringWithFormat:@"%04d-__-__",(int)year];
-    }
     
     switch (type) {
         case SSJReportFormsIncomeOrPayTypeIncome:
         case SSJReportFormsIncomeOrPayTypePay:
-            [self queryForIncomeOrPay:type billDate:dateStr success:success failure:failure];
+            [self queryForIncomeOrPayChargeWithType:type startDate:startDate endDate:endDate success:success failure:failure];
             break;
             
         case SSJReportFormsIncomeOrPayTypeSurplus:
-            [self queryForSurplusWithBillDate:dateStr success:success failure:failure];
+            [self queryForSurplusWithStartDate:startDate endDate:endDate success:success failure:failure];
             break;
             
         case SSJReportFormsIncomeOrPayTypeUnknown:
@@ -49,10 +100,11 @@
 }
 
 //  查询收支数据
-+ (void)queryForIncomeOrPay:(SSJReportFormsIncomeOrPayType)type
-                   billDate:(NSString *)billDate
-                    success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
-                    failure:(void (^)(NSError *error))failure {
++ (void)queryForIncomeOrPayChargeWithType:(SSJReportFormsIncomeOrPayType)type
+                                startDate:(NSDate *)startDate
+                                  endDate:(NSDate *)endDate
+                                  success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                                  failure:(void (^)(NSError *error))failure {
     
     NSString *incomeOrPayType = nil;
     switch (type) {
@@ -70,12 +122,14 @@
             return;
     }
     
+    NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    
     //  查询不同收支类型的总额
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and b.ITYPE = ?", billDate, SSJUSERID(), incomeOrPayType];
+        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and b.istate <> 2 and b.ITYPE = ?", beginDateStr , endDateStr, SSJUSERID(), incomeOrPayType];
         
         if (!amountResultSet) {
-//            [[SSJDatabaseQueue sharedInstance] close];
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -89,7 +143,6 @@
         }
         
         if (amount == 0) {
-//            [[SSJDatabaseQueue sharedInstance] close];
             SSJDispatch_main_async_safe(^{
                 success(nil);
             });
@@ -98,12 +151,9 @@
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-//        FMResultSet *resultSet = [db executeQuery:@"select a.IBILLID, a.AMOUNT, b.CNAME, b.CCOIN, b.CCOLOR from (select sum(IMONEY) as AMOUNT, IBILLID from BK_USER_CHARGE where CBILLDATE like ? and cbilldate <= datetime('now', 'localtime') and CUSERID = ? and OPERATORTYPE <> 2 and (IBILLID like '1___' or IBILLID like '2___') group by IBILLID) as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and b.ITYPE = ? and b.istate <> 2", billDate, SSJUSERID(), incomeOrPayType];
-        
-        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate like ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 group by b.id", SSJUSERID(), billDate, incomeOrPayType];
+        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 group by b.id", SSJUSERID(), beginDateStr, endDateStr, incomeOrPayType];
         
         if (!resultSet) {
-//            [[SSJDatabaseQueue sharedInstance] close];
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -130,15 +180,19 @@
 }
 
 //  查询结余数据
-+ (void)queryForSurplusWithBillDate:(NSString *)billDate
-                            success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
-                            failure:(void (^)(NSError *error))failure {
++ (void)queryForSurplusWithStartDate:(NSDate *)startDate
+                             endDate:(NSDate *)endDate
+                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate like ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 group by b.itype order by b.itype desc", SSJUSERID(), billDate];
+        
+        NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        
+        FMResultSet *resultSet = [db executeQuery:@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 group by b.itype order by b.itype desc", SSJUSERID(), beginDateStr, endDateStr];
         
         if (!resultSet) {
-//            [[SSJDatabaseQueue sharedInstance] close];
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);

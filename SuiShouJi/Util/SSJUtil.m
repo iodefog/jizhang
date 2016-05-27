@@ -7,9 +7,8 @@
 //
 
 #import "SSJUtil.h"
-//#import <CommonCrypto/CommonDigest.h>
-//#import "SFHFKeychainUtils.h"
 #import "SDWebImageManager.h"
+#import "MMDrawerController.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
     return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
@@ -51,12 +50,16 @@ UIViewController* SSJFindTopModelViewController(UIViewController* vc){
         while (vc.presentedViewController) {
             vc = vc.presentedViewController;
         }
-    }else {
-        vc = nil;
+    }
+    
+    if ([vc isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabController = (UITabBarController *)vc;
+        vc = SSJFindTopModelViewController(tabController.selectedViewController);
     }
     
     if ([vc isKindOfClass:[UINavigationController class]]) {
-        vc = [(UINavigationController*)vc visibleViewController];
+        UINavigationController *navController = (UINavigationController*)vc;
+        vc = SSJFindTopModelViewController([navController visibleViewController]);
     }
     
     return vc;
@@ -65,27 +68,29 @@ UIViewController* SSJFindTopModelViewController(UIViewController* vc){
 UIViewController* SSJVisibalController() {
     
     UIViewController* appRootViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-    if ([appRootViewController isKindOfClass:[UITabBarController class]]) {
-        UITabBarController* tableBarVC = (UITabBarController*)appRootViewController;
-        if (tableBarVC.presentedViewController) {
-            return SSJFindTopModelViewController(tableBarVC);
-        }else {
-            UINavigationController* selectedNav = (UINavigationController*)tableBarVC.selectedViewController;
-            
-            if (selectedNav.presentedViewController) {
-                return SSJFindTopModelViewController(selectedNav);
-            }else {
-                return selectedNav.topViewController;
+    if ([appRootViewController isKindOfClass:[MMDrawerController class]]) {
+        MMDrawerController *drawerController = (MMDrawerController *)appRootViewController;
+        if (drawerController.presentedViewController) {
+            return SSJFindTopModelViewController(drawerController);
+        } else {
+            switch (drawerController.openSide) {
+                case MMDrawerSideNone:
+                    return SSJFindTopModelViewController(drawerController.centerViewController);
+                    
+                case MMDrawerSideLeft:
+                    return SSJFindTopModelViewController(drawerController.leftDrawerViewController);
+                    
+                case MMDrawerSideRight:
+                    return SSJFindTopModelViewController(drawerController.rightDrawerViewController);
+                    
             }
         }
-    }else {
-        if (appRootViewController.presentedViewController) {
-            return SSJFindTopModelViewController(appRootViewController);
-        }else {
-            return appRootViewController;
-        }
+    } else {
+        return appRootViewController;
     }
 }
+
+
 
 NSString* SSJProjectSettingsPath(){
     return [[NSBundle mainBundle] pathForResource:@"ProjectSettings" ofType:@"plist"];
