@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) NSDate *endDate;
 
-@property (nonatomic, copy) void (^selectDateBlock)(void);
+@property (nonatomic, copy) void (^beginDateAction)(void);
+
+@property (nonatomic, copy) void (^endDateAction)(void);
 
 @end

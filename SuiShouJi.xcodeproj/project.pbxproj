@@ -42,6 +42,7 @@
 		7D3D0E771CED8EE200A8609B /* record_making_guide-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3D0E731CED8EE200A8609B /* record_making_guide-667@2x.png */; };
 		7D3D0E781CED8EE200A8609B /* record_making_guide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3D0E741CED8EE200A8609B /* record_making_guide@2x.png */; };
 		7D3D0E791CED8EE200A8609B /* record_making_guide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3D0E751CED8EE200A8609B /* record_making_guide@3x.png */; };
+		7D49C9D61CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D49C9D51CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m */; };
 		7D4A42F81CC5E210002F0264 /* check_state_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A42F71CC5E210002F0264 /* check_state_bg@2x.png */; };
 		7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43091CC63755002F0264 /* rain_sound.wav */; };
 		7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
@@ -996,6 +997,8 @@
 		7D3D0E731CED8EE200A8609B /* record_making_guide-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_guide-667@2x.png"; sourceTree = "<group>"; };
 		7D3D0E741CED8EE200A8609B /* record_making_guide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_guide@2x.png"; sourceTree = "<group>"; };
 		7D3D0E751CED8EE200A8609B /* record_making_guide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_guide@3x.png"; sourceTree = "<group>"; };
+		7D49C9D41CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarSwitchStartAndEndDateControl.h; sourceTree = "<group>"; };
+		7D49C9D51CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarSwitchStartAndEndDateControl.m; sourceTree = "<group>"; };
 		7D4A42F71CC5E210002F0264 /* check_state_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check_state_bg@2x.png"; sourceTree = "<group>"; };
 		7D4A43091CC63755002F0264 /* rain_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rain_sound.wav; sourceTree = "<group>"; };
 		7D4A431D1CC86F51002F0264 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -2938,6 +2941,8 @@
 				7D2135111CB3594100D7E8D2 /* SSJMagicExportSelectDateView.m */,
 				7DE27FB11CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.h */,
 				7DE27FB21CB518EC00D5EB41 /* SSJMagicExportResultCheckMarkView.m */,
+				7D49C9D41CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.h */,
+				7D49C9D51CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5811,6 +5816,7 @@
 				7D5F33471CEAE6C10086B67E /* SSJBudgetListCell.m in Sources */,
 				7D5F334C1CEAE6C10086B67E /* SSJCalendarView.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
+				7D49C9D61CF81E000097C883 /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
 				7DE69C3A1C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				9C4C52821CF6EEEB006A0CD6 /* SSJBooksTypeStore.m in Sources */,
 				9CD5C38A1CB3A427004CC3FE /* SSJPersonalDetailHelper.m in Sources */,

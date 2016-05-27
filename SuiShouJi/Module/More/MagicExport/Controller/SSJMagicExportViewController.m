@@ -166,10 +166,10 @@
 }
 
 #pragma mark - Event
-- (void)selectDateAction {
+- (void)selectDateActionWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.beginDate = _beginDate;
-    calendarVC.endDate = _endDate;
+    calendarVC.beginDate = beginDate;
+    calendarVC.endDate = endDate;
     __weak typeof(self) weakSelf = self;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         weakSelf.beginDate = selectedBeginDate;
@@ -221,11 +221,12 @@
     if (!_selectDateView) {
         _selectDateView = [[SSJMagicExportSelectDateView alloc] initWithFrame:CGRectMake(0, self.dateLabel.bottom, self.view.width, 176)];
         __weak typeof(self) weakSelf = self;
-        _selectDateView.selectDateBlock = ^{
-            [weakSelf selectDateAction];
+        _selectDateView.beginDateAction = ^{
+            [weakSelf selectDateActionWithBeginDate:nil endDate:nil];
         };
-//        _selectDateView.beginDate = [NSDate date];
-//        _selectDateView.endDate = [NSDate date];
+        _selectDateView.endDateAction = ^{
+            [weakSelf selectDateActionWithBeginDate:weakSelf.beginDate endDate:nil];
+        };
     }
     return _selectDateView;
 }
