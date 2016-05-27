@@ -22,6 +22,7 @@
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "MMDrawerController.h"
+#import "SSJGradientMaskView.h"
 
 
 #import "SSJLocalNotificationHelper.h"
@@ -61,6 +62,8 @@ NSDate *SCYEnterBackgroundTime() {
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
 @property(nonatomic, strong) SSJPatchUpdateService *service;
+
+@property(nonatomic, strong) SSJGradientMaskView *maskView;
 @end
 
 @implementation AppDelegate
@@ -165,6 +168,13 @@ NSDate *SCYEnterBackgroundTime() {
     return _service;
 }
 
+-(SSJGradientMaskView *)maskView{
+    if (!_maskView) {
+        _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
+    }
+    return _maskView;
+}
+
 #pragma mark - Private
 //  初始化数据库
 - (void)initializeDatabaseWithFinishHandler:(void (^)(void))finishHandler {
@@ -244,6 +254,7 @@ NSDate *SCYEnterBackgroundTime() {
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
+    tabBarVC.view.backgroundColor = [UIColor redColor];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
     UINavigationController *booksNav = [[UINavigationController alloc] initWithRootViewController:booksTypeVC];
@@ -253,15 +264,18 @@ NSDate *SCYEnterBackgroundTime() {
                              leftDrawerViewController:booksNav
                              rightDrawerViewController:nil];
     [drawerController setShowsShadow:NO];
-    [drawerController setMaximumLeftDrawerWidth:[UIApplication sharedApplication].keyWindow.frame.size.width * 0.8];
-    [drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeBezelPanningCenterView];
+    [drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
     [drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
     drawerController.view.backgroundColor = [UIColor whiteColor];
+    
+//    drawerController.showsShadow = YES;
     [drawerController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
-        if (drawerSide == MMDrawerSideLeft) {
-            drawerController.centerViewController.view.alpha = 0.2;
+        self.maskView.currentAplha = percentVisible;
+        if (percentVisible > 0.f) {
+            [drawerController.centerViewController.view addSubview:self.maskView];
         }else{
-            drawerController.centerViewController.view.alpha = 1;
+            [self.maskView removeFromSuperview];
         }
     }];
     

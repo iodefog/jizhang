@@ -38,7 +38,6 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
-    NSLog(@"left view appear");
     [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
         weakSelf.items = [NSMutableArray arrayWithArray:result];
         [weakSelf.collectionView reloadData];
@@ -84,6 +83,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    float collectionViewWith = SSJSCREENWITH * 0.8;
     return CGSizeMake(80, 100);
 }
 
