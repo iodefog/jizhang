@@ -3435,10 +3435,10 @@
 		7DD9D0C11CF6E2A6005AF735 /* SSJReportFormsScaleAxisView */ = {
 			isa = PBXGroup;
 			children = (
-				7DD9D0C21CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.h */,
-				7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */,
 				7DD9D0C41CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.h */,
 				7DD9D0C51CF6E2A6005AF735 /* SSJReportFormsScaleAxisView.m */,
+				7DD9D0C21CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.h */,
+				7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */,
 			);
 			path = SSJReportFormsScaleAxisView;
 			sourceTree = "<group>";

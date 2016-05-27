@@ -87,6 +87,10 @@ static NSString *const kGrayScaleColor = @"CCCCCC";
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    _selectedIndex = indexPath.item;
+    if (_delegate && [_delegate respondsToSelector:@selector(scaleAxisView:didSelectedScaleAxisAtIndex:)]) {
+        [_delegate scaleAxisView:self didSelectedScaleAxisAtIndex:indexPath.item];
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -105,6 +109,7 @@ static NSString *const kGrayScaleColor = @"CCCCCC";
         if (!decelerate) {
             NSIndexPath *indexPath = [_collectionView indexPathForItemAtPoint:CGPointMake(scrollView.contentOffset.x + _collectionView.width * 0.5, 0)];
             [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+            _selectedIndex = indexPath.item;
             if (_delegate && [_delegate respondsToSelector:@selector(scaleAxisView:didSelectedScaleAxisAtIndex:)]) {
                 [_delegate scaleAxisView:self didSelectedScaleAxisAtIndex:indexPath.item];
             }
@@ -116,6 +121,7 @@ static NSString *const kGrayScaleColor = @"CCCCCC";
     if (scrollView == _collectionView) {
         NSIndexPath *indexPath = [_collectionView indexPathForItemAtPoint:CGPointMake(scrollView.contentOffset.x + _collectionView.width * 0.5, 0)];
         [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        _selectedIndex = indexPath.item;
         if (_delegate && [_delegate respondsToSelector:@selector(scaleAxisView:didSelectedScaleAxisAtIndex:)]) {
             [_delegate scaleAxisView:self didSelectedScaleAxisAtIndex:indexPath.item];
         }
