@@ -54,6 +54,32 @@
  *  @param failure  失败的回调
  *  @return (void)
  */
++ (void)asyncCreateDefaultBooksTypeWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
+
+/**
+ *  创建当前用户默认的账本
+ *
+ *  @param db 数据库对象
+ *  @return (NSError *)
+ */
++ (NSError *)createDefaultBooksTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
+
+/**
+ *  同步创建当前用户默认的账本
+ *
+ *  @param success  成功的回调
+ *  @param failure  失败的回调
+ *  @return (void)
+ */
++ (void)createDefaultBooksTypeWithError:(NSError **)error;
+
+/**
+ *  异步创建当前用户默认的账本
+ *
+ *  @param success  成功的回调
+ *  @param failure  失败的回调
+ *  @return (void)
+ */
 + (void)asyncCreateDefaultFundAccountsWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
 /**

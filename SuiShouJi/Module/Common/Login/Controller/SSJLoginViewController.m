@@ -215,6 +215,10 @@
         if (self.loginService.fundInfoArray.count == 0) {
             [SSJUserDefaultDataCreater createDefaultFundAccountsForUserId:SSJUSERID() inDatabase:db];
         }
+        //  如果登录没有返回任何账本类型，说明服务器没有保存任何账本类型，就给用户创建默认的
+        if (self.loginService.booksTypeArray.count == 0) {
+            [SSJUserDefaultDataCreater createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
+        }
         
         //  更新资金帐户余额
         [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];

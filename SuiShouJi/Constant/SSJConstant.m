@@ -46,6 +46,8 @@ NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";
 
 NSString *const SSJLastPatchVersionKey = @"lastPatchVersionKey";
 
+NSString *const SSJCurrentBooksTypeKey = @"currentBooksTypeKey";
+
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
