@@ -61,11 +61,51 @@
     }];
 }
 
++ (void)createDefaultBooksTypeWithError:(NSError **)error {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSError *tError = [self createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
+        if (error) {
+            *error = tError;
+        }
+    }];
+}
+
++ (void)asyncCreateDefaultBooksTypeWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSError *error = [self createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+        } else {
+            if (success) {
+                success();
+            }
+        }
+    }];
+}
+
 + (void)createDefaultBillTypesIfNeededWithError:(NSError **)error {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSError *tError = [self createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
         if (error) {
             *error = tError;
+        }
+    }];
+}
+
++ (void)asyncCreateDefaultBillTypesIfNeededIfNeededWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    NSString *userId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSError *error = [self createDefaultBillTypesIfNeededForUserId:userId inDatabase:db];
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+        } else {
+            if (success) {
+                success();
+            }
         }
     }];
 }
@@ -104,6 +144,15 @@
             }
             return;
         }
+        
+        error = [self createDefaultBooksTypeForUserId:userId inDatabase:db];
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+            return;
+        }
+
         
         error = [self createDefaultBillTypesIfNeededForUserId:userId inDatabase:db];
         if (error) {
@@ -174,6 +223,49 @@
     
     //  根据默认的资金帐户创建资金帐户余额
     [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root' and cuserid = ?", userId, @0.00, userId];
+    
+    return nil;
+}
+
+//  如果当前用户没有创建过默认的账本，则创建默认账本
++ (NSError *)createDefaultBooksTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if (!userId.length) {
+        return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
+    }
+    
+    //  查询用户表中存储的默认资金帐户创建状态
+    FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTBOOKSTYPESTATE from BK_USER where CUSERID = ?", userId];
+    if (!reuslt) {
+        return [db lastError];
+    }
+    
+    NSError *error = nil;
+    if (![reuslt nextWithError:&error]) {
+        [reuslt close];
+        if (error) {
+            return error;
+        }
+        return nil;
+    }
+    
+    //  根据表中存储的状态判断是否需要创建以下默认资金帐户
+    BOOL defaultBooksTypeState = [reuslt boolForColumn:@"CDEFAULTBOOKSTYPESTATE"];
+    [reuslt close];
+    
+    if (defaultBooksTypeState) {
+        return nil;
+    }
+    
+    if (![db executeUpdate:@"update BK_USER set CDEFAULTBOOKSTYPESTATE = 1"]) {
+        return [db lastError];
+    }
+    
+    NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (0, ?, ?, ?, 0, ?, ?)", @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"生意账本", @"#F5A237", writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"旅行账本", @"#AD82DD", writeDate, @(SSJSyncVersion()), userId];
     
     return nil;
 }

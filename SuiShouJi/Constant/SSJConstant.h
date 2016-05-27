@@ -108,6 +108,9 @@ extern NSString *const SSJUserLoginTypeKey;
 //上一次下载的补丁的key
 extern NSString *const SSJLastPatchVersionKey;
 
+//当前使用的账本
+extern NSString *const SSJCurrentBooksTypeKey;
+
 
 /** --------------- Notification --------------- */
 //  数据同步成功通知

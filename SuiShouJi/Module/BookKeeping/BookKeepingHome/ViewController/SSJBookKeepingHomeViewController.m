@@ -17,6 +17,7 @@
 #import "SSJRegistGetVerViewController.h"
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
+#import "SSJBooksTypeSelectViewController.h"
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJBudgetModel.h"
@@ -106,7 +107,8 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-//    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.budgetButton];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"账本" style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonClicked:)];
+    self.navigationItem.leftBarButtonItem = leftButton;
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     rightSpace.width = -15;
 //    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
@@ -522,6 +524,11 @@
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
+}
+
+-(void)leftBarButtonClicked:(id)sender{
+    SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
+    [self.navigationController pushViewController:booksTypeVC animated:YES];
 }
 
 -(void)budgetButtonClicked:(id)sender{

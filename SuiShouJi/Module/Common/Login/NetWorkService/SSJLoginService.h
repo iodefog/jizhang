@@ -21,6 +21,10 @@
 //用户记账类型数据
 @property (readonly, nonatomic,strong) NSArray *userBillArray;
 
+//用户账本类型数据
+@property (readonly, nonatomic,strong) NSArray *booksTypeArray;
+
+
 //登录用户的accesstoken
 @property (readonly, nonatomic,strong) NSString *accesstoken;
 

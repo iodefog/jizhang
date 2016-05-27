@@ -21,15 +21,19 @@
 #import "SSJMineHomeViewController.h"
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
+#import "MMDrawerController.h"
+
 
 #import "SSJLocalNotificationHelper.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 //#import "SSJStartView.h"
 #import "SSJStartViewManager.h"
+#import "SSJStartViewManager.h"
 
 #import "SSJPatchUpdateService.h"
 #import "SSJJspatchAnalyze.h"
 #import "SSJJsPatchItem.h"
+#import "SSJBooksTypeSelectViewController.h"
 #import "JPEngine.h"
 
 //  进入后台超过的时限后进入锁屏
@@ -108,7 +112,7 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJMotionPasswordViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified){
             // 没有进入手势密码，直接进入首页的话，就调用reloadWithAnimation显示首页数据加载动画;
             // 因为从手势密码返回到首页会触发首页的viewWillAppear，在这个方法中也做了数据刷新，会把加载动画覆盖掉
-            UITabBarController *tabVC = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
             UINavigationController *navi = [tabVC.viewControllers firstObject];
             SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
             if (![homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
@@ -187,6 +191,10 @@ NSDate *SCYEnterBackgroundTime() {
             
             //  创建默认的资金帐户
             [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
+            
+            //  创建默认的账本
+            [SSJUserDefaultDataCreater createDefaultBooksTypeWithError:nil];
+
         } else {
             //  升级数据库
             [SSJDatabaseUpgrader upgradeDatabase];
@@ -236,7 +244,28 @@ NSDate *SCYEnterBackgroundTime() {
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
-    [UIApplication sharedApplication].keyWindow.rootViewController = tabBarVC;
+    
+    SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
+    UINavigationController *booksNav = [[UINavigationController alloc] initWithRootViewController:booksTypeVC];
+
+    MMDrawerController *drawerController = [[MMDrawerController alloc]
+                             initWithCenterViewController:tabBarVC
+                             leftDrawerViewController:booksNav
+                             rightDrawerViewController:nil];
+    [drawerController setShowsShadow:NO];
+    [drawerController setMaximumLeftDrawerWidth:[UIApplication sharedApplication].keyWindow.frame.size.width * 0.8];
+    [drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeBezelPanningCenterView];
+    [drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    drawerController.view.backgroundColor = [UIColor whiteColor];
+    [drawerController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
+        if (drawerSide == MMDrawerSideLeft) {
+            drawerController.centerViewController.view.alpha = 0.2;
+        }else{
+            drawerController.centerViewController.view.alpha = 1;
+        }
+    }];
+    
+    [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
 }
 
 - (void)serverDidFinished:(SSJBaseNetworkService *)service{
