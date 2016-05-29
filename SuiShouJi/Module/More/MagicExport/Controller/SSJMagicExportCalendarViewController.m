@@ -89,12 +89,11 @@
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date {
     if (!_beginDate) {
         _beginDate = date;
-        _dateSwitchControl.selectedIndex = 1;
-        _dateSwitchControl.beginDate = [_beginDate formattedDateWithFormat:@"yyyy年M月d日"];
+        _dateSwitchControl.beginDate = date;
         [_calendarView reload];
     } else {
         _endDate = date;
-        _dateSwitchControl.endDate = [_endDate formattedDateWithFormat:@"yyyy年M月d日"];
+        _dateSwitchControl.endDate = date;
         _calendarView.userInteractionEnabled = NO;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (_completion) {
@@ -110,25 +109,13 @@
     if (!_dateSwitchControl) {
         __weak typeof(self) wself = self;
         _dateSwitchControl = [[SSJMagicExportCalendarSwitchStartAndEndDateControl alloc] initWithFrame:CGRectMake(0, 10, self.view.width, 68)];
-        if (_beginDate) {
-            _dateSwitchControl.beginDate = [_beginDate formattedDateWithFormat:@"yyyy年M月d日"];
-        }
-        if (_endDate) {
-            _dateSwitchControl.endDate = [_endDate formattedDateWithFormat:@"yyyy年M月d日"];
-        }
-        _dateSwitchControl.shouldSelectAction = ^BOOL(NSInteger index) {
-            if (index == 1 && !wself.beginDate) {
-                return NO;
-            }
-            return YES;
-        };
-        _dateSwitchControl.didSelectAction = ^(NSInteger index) {
-            if (index == 0 && wself.beginDate) {
-                [wself.calendarView deselectDates:@[wself.beginDate]];
-                wself.beginDate = nil;
-                wself.dateSwitchControl.beginDate = nil;
-                [wself.calendarView reload];
-            }
+        _dateSwitchControl.beginDate = _beginDate;
+        _dateSwitchControl.endDate = _endDate;
+        _dateSwitchControl.clickBeginDateAction = ^{
+            [wself.calendarView deselectDates:@[wself.beginDate]];
+            wself.beginDate = nil;
+            wself.dateSwitchControl.beginDate = nil;
+            [wself.calendarView reload];
         };
     }
     return _dateSwitchControl;

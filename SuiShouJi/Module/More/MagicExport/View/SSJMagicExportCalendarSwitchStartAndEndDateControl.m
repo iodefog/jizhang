@@ -130,53 +130,40 @@
 - (void)layoutSubviews {
     _beginDateButton.frame = CGRectMake(0, 0, self.width * 0.5, self.height);
     _endDateButton.frame = CGRectMake(self.width * 0.5, 0, self.width * 0.5, self.height);
-    _tabView.frame = CGRectMake(_selectedIndex * self.width * 0.5, self.height - 2, self.width * 0.5, 2);
+    
+    _tabView.frame = CGRectMake((_beginDate ? self.width * 0.5 : 0), self.height - 2, self.width * 0.5, 2);
 }
 
 - (void)beginDateButtonAction {
-    if (_shouldSelectAction) {
-        BOOL shouldSelect = _shouldSelectAction(0);
-        if (!shouldSelect) {
-            return;
-        }
-    }
-    
-    self.selectedIndex = 0;
-    
-    if (_didSelectAction) {
-        _didSelectAction(0);
+    self.beginDate = nil;
+    if (_clickBeginDateAction) {
+        _clickBeginDateAction();
     }
 }
 
 - (void)endDateButtonAction {
-    if (_shouldSelectAction) {
-        BOOL shouldSelect = _shouldSelectAction(1);
-        if (!shouldSelect) {
-            return;
-        }
-    }
-    
-    self.selectedIndex = 1;
-    
-    if (_didSelectAction) {
-        _didSelectAction(1);
+    if (_clickEndDateAction) {
+        _clickEndDateAction();
     }
 }
 
-- (void)setBeginDate:(NSString *)beginDate {
-    _beginDateButton.bottomTitle = beginDate;
+- (void)setBeginDate:(NSDate *)beginDate {
+    if (!beginDate
+        || !_beginDate
+        || [_beginDate compare:beginDate] != NSOrderedSame) {
+        _beginDate = beginDate;
+        _beginDateButton.bottomTitle = [_beginDate formattedDateWithFormat:@"yyyy年M月d日"];
+        _tabView.left = _beginDate ? self.width * 0.5 : 0;
+    }
 }
 
-- (void)setEndDate:(NSString *)endDate {
-    _endDateButton.bottomTitle = endDate;
-}
-
-- (void)setSelectedIndex:(NSInteger)selectedIndex {
-    if (_selectedIndex != selectedIndex) {
-        _selectedIndex = selectedIndex;
-        [UIView animateWithDuration:0.25 animations:^{
-            _tabView.left = self.width * 0.5 * _selectedIndex;
-        }];
+- (void)setEndDate:(NSDate *)endDate {
+    if (!endDate
+        || !_endDate
+        || [_endDate compare:endDate] != NSOrderedSame) {
+        _endDate = endDate;
+        _endDateButton.bottomTitle = [_endDate formattedDateWithFormat:@"yyyy年M月d日"];
+        _tabView.left = _beginDate ? self.width * 0.5 : 0;
     }
 }
 

@@ -10,14 +10,12 @@
 
 @interface SSJMagicExportCalendarSwitchStartAndEndDateControl : UIView
 
-@property (nonatomic, copy) NSString *beginDate;
+@property (nonatomic, strong) NSDate *beginDate;
 
-@property (nonatomic, copy) NSString *endDate;
+@property (nonatomic, strong) NSDate *endDate;
 
-@property (nonatomic) NSInteger selectedIndex;
+@property (nonatomic, copy) void(^clickBeginDateAction)();
 
-@property (nonatomic, copy) BOOL(^shouldSelectAction)(NSInteger index);
-
-@property (nonatomic, copy) void(^didSelectAction)(NSInteger index);
+@property (nonatomic, copy) void(^clickEndDateAction)();
 
 @end
