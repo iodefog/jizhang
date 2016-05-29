@@ -45,6 +45,14 @@ typedef NS_ENUM(NSUInteger, SSJLoginType) {
     SSJLoginTypeWeiXin
 };
 
+//  收支类型
+typedef NS_ENUM(NSInteger, SSJBillType) {
+    SSJBillTypeUnknown = -1,  // 未知
+    SSJBillTypeIncome = 0,    // 收入
+    SSJBillTypePay = 1,       // 支出
+    SSJBillTypeSurplus = 2    // 结余
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

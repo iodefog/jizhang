@@ -259,17 +259,17 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 #pragma mark - Private
 //  返回当前收支类型
-- (SSJReportFormsIncomeOrPayType)currentType {
+- (SSJBillType)currentType {
     NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
 
     if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
-        return SSJReportFormsIncomeOrPayTypePay;
+        return SSJBillTypePay;
     } else if ([selectedTitle isEqualToString:kSegmentTitleIncome]) {
-        return SSJReportFormsIncomeOrPayTypeIncome;
+        return SSJBillTypeIncome;
     } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-        return SSJReportFormsIncomeOrPayTypeSurplus;
+        return SSJBillTypeSurplus;
     } else {
-        return SSJReportFormsIncomeOrPayTypeUnknown;
+        return SSJBillTypeUnknown;
     }
 }
 
