@@ -15,6 +15,7 @@
 #import "SSJReportFormsScaleAxisView.h"
 
 #import "SSJBillingChargeViewController.h"
+#import "SSJMagicExportCalendarViewController.h"
 #import "SSJReportFormsUtil.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
@@ -58,6 +59,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 //  圆环图表数据源
 @property (nonatomic, strong) NSMutableArray *circleItems;
 
+//  自定义时间周期
+@property (nonatomic, strong) SSJDatePeriod *customPeriod;
+
 @end
 
 @implementation SSJReportFormsViewController
@@ -77,8 +81,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCalendarAction)];
+    self.navigationItem.leftBarButtonItem = leftItem;
+    
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(filterAction)];
     self.navigationItem.rightBarButtonItem = rightItem;
+    
     self.navigationItem.titleView = self.segmentControl;
     
     [self.view addSubview:self.dateAxisView];
@@ -97,7 +105,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self reloadAllDatas];
+    [self reloadDatas];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -189,6 +197,18 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 #pragma mark - Event
+- (void)enterCalendarAction {
+    __weak typeof(self) wself = self;
+    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+    calendarVC.title = @"自定义时间";
+    calendarVC.billType = [self currentType];
+    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+        wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
+        wself.dateAxisView.hidden = YES;
+    };
+    [self.navigationController pushViewController:calendarVC animated:YES];
+}
+
 //  切换周期（年、月）
 - (void)filterAction {
     [MobClick event:@"form_filter"];
@@ -196,7 +216,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 //  切换支出、收入、结余
 - (void)segmentControlValueDidChange {
-    [self reloadAllDatas];
+    [self reloadDatas];
     [self updateIncomeAndPaymentLabels];
     
     NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
@@ -217,44 +237,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
-//  切换到上一个周期时间
-//- (void)switchDateControlPreAction {
-//    switch (self.periodSelectionView.periodType) {
-//        case SSJReportFormsPeriodTypeMonth:
-//            [self.calendarUtil preMonth];
-//            [MobClick event:@"forms_cycle_year"];
-//            break;
-//            
-//        case SSJReportFormsPeriodTypeYear:
-//            [self.calendarUtil preYear];
-//            [MobClick event:@"forms_cycle_month"];
-//            break;
-//    }
-//    [self updateSwithDateControlTitle];
-//    [self updateSurplusViewTitle];
-//    [self reloadDatas];
-//    [self updateSwitchDateControlNextBtnState];
-//}
-//
-////  切换到下一个周期时间
-//- (void)switchDateControlNextAction {
-//    switch (self.periodSelectionView.periodType) {
-//        case SSJReportFormsPeriodTypeMonth:
-//            [self.calendarUtil nextMonth];
-//            break;
-//            
-//        case SSJReportFormsPeriodTypeYear:
-//            [self.calendarUtil nextYear];
-//            break;
-//    }
-//    [self updateSwithDateControlTitle];
-//    [self updateSurplusViewTitle];
-//    [self reloadDatas];
-//    [self updateSwitchDateControlNextBtnState];
-//}
-
 - (void)reloadDataAfterSync {
-    [self reloadAllDatas];
+    [self reloadDatas];
 }
 
 #pragma mark - Private
@@ -315,6 +299,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
+// 如果当前是自定义时间，就查询自定义时间范围内的流水统计；反之就查询当前刻度时间的流水统计
+- (void)reloadDatas {
+    if (_dateAxisView.hidden) {
+        [self reloadDatasInPeriod:_customPeriod];
+    } else {
+        [self reloadAllDatas];
+    }
+}
+
 //  重新加载数据
 - (void)reloadAllDatas {
     
@@ -345,7 +338,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         [self updateSurplusViewTitle];
         
         // 查询当前月份的流水统计
-        [self reloadDatasInPeriod:currentPeriod];
+        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
         
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];

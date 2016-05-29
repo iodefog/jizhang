@@ -65,9 +65,12 @@
             SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
             [list addObject:period];
         }
-        SSJDatePeriod *firstPeriod = [list firstObject];
-        SSJDatePeriod *lastPeriod = [list lastObject];
-        [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
+        
+        if (list.count) {
+            SSJDatePeriod *firstPeriod = [list firstObject];
+            SSJDatePeriod *lastPeriod = [list lastObject];
+            [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
+        }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -120,6 +123,11 @@
         case SSJBillTypeUnknown:
             failure(nil);
             return;
+    }
+    
+    if (!startDate || !endDate) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"startDate or endDate must not be nil"}]);
+        return;
     }
     
     NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];

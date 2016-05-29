@@ -28,7 +28,8 @@ extern NSString *const SSJMagicExportStoreEndDateKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryAllBillDateWithSuccess:(void (^)(NSArray<NSDate *> *result))success
-                            failure:(void (^)(NSError *error))failure;
++ (void)queryAllBillDateWithBillType:(SSJBillType)billType
+                             success:(void (^)(NSArray<NSDate *> *result))success
+                             failure:(void (^)(NSError *error))failure;
 
 @end

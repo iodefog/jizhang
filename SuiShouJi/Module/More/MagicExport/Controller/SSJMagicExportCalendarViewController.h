@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJMagicExportCalendarViewController : SSJBaseViewController
 
+// 日历显示哪种收支类型的流水日期
+@property (nonatomic) SSJBillType billType;
+
 // 起始导出日期
 @property (nullable, nonatomic, strong) NSDate *beginDate;
 

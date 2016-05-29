@@ -27,6 +27,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"选择导出时间";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -35,17 +36,15 @@
     [super viewDidLoad];
     
     [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryAllBillDateWithSuccess:^(NSArray<NSDate *> *result) {
+    [SSJMagicExportStore queryAllBillDateWithBillType:_billType success:^(NSArray<NSDate *> *result) {
         [self.view ssj_hideLoadingIndicator];
-        _billDates = result;
-        if (_billDates) {
+        if (result.count) {
+            _billDates = result;
             [self.view addSubview:self.dateSwitchControl];
             [self.view addSubview:self.calendarView];
             
             [self.calendarView reload];
             [self.calendarView scrollToDate:_beginDate];
-        } else {
-            
         }
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
@@ -112,10 +111,12 @@
         _dateSwitchControl.beginDate = _beginDate;
         _dateSwitchControl.endDate = _endDate;
         _dateSwitchControl.clickBeginDateAction = ^{
-            [wself.calendarView deselectDates:@[wself.beginDate]];
-            wself.beginDate = nil;
-            wself.dateSwitchControl.beginDate = nil;
-            [wself.calendarView reload];
+            if (wself.beginDate) {
+                [wself.calendarView deselectDates:@[wself.beginDate]];
+                wself.beginDate = nil;
+                wself.dateSwitchControl.beginDate = nil;
+                [wself.calendarView reload];
+            }
         };
     }
     return _dateSwitchControl;

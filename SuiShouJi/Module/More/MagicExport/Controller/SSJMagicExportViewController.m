@@ -168,6 +168,7 @@
 #pragma mark - Event
 - (void)selectDateActionWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+    calendarVC.billType = SSJBillTypeUnknown;
     calendarVC.beginDate = beginDate;
     calendarVC.endDate = endDate;
     __weak typeof(self) weakSelf = self;

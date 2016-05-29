@@ -51,9 +51,29 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
     }];
 }
 
-+ (void)queryAllBillDateWithSuccess:(void (^)(NSArray<NSDate *> *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryAllBillDateWithBillType:(SSJBillType)billType
+                             success:(void (^)(NSArray<NSDate *> *result))success
+                             failure:(void (^)(NSError *error))failure {
+    
+    NSString *queryStr = nil;
+    switch (billType) {
+        case SSJBillTypeIncome:
+            queryStr = [NSString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 and b.itype = 0 order by a.cbilldate", SSJUSERID()];
+            break;
+        case SSJBillTypePay:
+            queryStr = [NSString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 and b.itype = 1 order by a.cbilldate", SSJUSERID()];
+            break;
+        case SSJBillTypeSurplus:
+            queryStr = [NSString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
+            break;
+            
+        case SSJBillTypeUnknown:
+            queryStr = [NSString stringWithFormat:@"select cbilldate from bk_user_charge where cuserid = '%@' and operatortype <> 2 and cbilldate <= datetime('now', 'localtime') order by cbilldate", SSJUSERID()];
+            break;
+    }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select cbilldate from bk_user_charge where cuserid = ? and operatortype <> 2 and cbilldate <= datetime('now', 'localtime') order by cbilldate", SSJUSERID()];
+        FMResultSet *result = [db executeQuery:queryStr];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{
