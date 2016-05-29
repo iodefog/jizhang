@@ -22,13 +22,11 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 
 - (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView shouldShowMarkerForDate:(NSDate *)date;
 
-//- (UIColor *)calendarView:(SSJMagicExportCalendarView *)calendarView titleColorForSelectedDate:(NSDate *)date;
-
 - (NSString *)calendarView:(SSJMagicExportCalendarView *)calendarView descriptionForSelectedDate:(NSDate *)date;
 
 - (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView canSelectDate:(NSDate *)date;
 
-- (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date;
+//- (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date;
 
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date;
 

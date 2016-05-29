@@ -41,6 +41,7 @@
         if (_billDates) {
             [self.view addSubview:self.dateSwitchControl];
             [self.view addSubview:self.calendarView];
+            
             [self.calendarView reload];
             [self.calendarView scrollToDate:_beginDate];
         } else {
@@ -68,10 +69,10 @@
 }
 
 - (NSString *)calendarView:(SSJMagicExportCalendarView *)calendarView descriptionForSelectedDate:(NSDate *)date {
-    if (_beginDate && [date isSameDay:_beginDate]) {
-        return @"开始";
-    } else if (_endDate && [date isSameDay:_endDate]) {
+    if (_endDate && [date isSameDay:_endDate]) {
         return @"结束";
+    } else if (_beginDate && [date isSameDay:_beginDate]) {
+        return @"开始";
     } else {
         return nil;
     }
@@ -85,7 +86,7 @@
     }
 }
 
-- (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date {
+- (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date {
     if (!_beginDate) {
         _beginDate = date;
         _dateSwitchControl.selectedIndex = 1;
@@ -94,8 +95,8 @@
     } else {
         _endDate = date;
         _dateSwitchControl.endDate = [_endDate formattedDateWithFormat:@"yyyy年M月d日"];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _calendarView.userInteractionEnabled = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (_completion) {
                 _completion(_beginDate, _endDate);
             }
@@ -126,6 +127,7 @@
                 [wself.calendarView deselectDates:@[wself.beginDate]];
                 wself.beginDate = nil;
                 wself.dateSwitchControl.beginDate = nil;
+                [wself.calendarView reload];
             }
         };
     }
