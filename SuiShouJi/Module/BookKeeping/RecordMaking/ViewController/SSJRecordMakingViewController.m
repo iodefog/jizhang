@@ -59,6 +59,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic, strong) UITextField *currentInput;
 
+@property (nonatomic, strong) UIScrollView *scrollView;
+
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -108,7 +110,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    _billTypeSelectionView.height = self.view.height - self.billTypeInputView.bottom;
+    _billTypeSelectionView.height = _scrollView.height = self.view.height - self.billTypeInputView.bottom;
 }
 
 #pragma mark - Getter
@@ -296,6 +298,13 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [self updatePeriodButtonTitle];
     }
     return _accessoryView;
+}
+
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    }
+    return _scrollView;
 }
 
 #pragma mark - UITextFieldDelegate

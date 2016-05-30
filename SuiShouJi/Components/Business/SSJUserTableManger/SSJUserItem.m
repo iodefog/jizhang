@@ -31,7 +31,7 @@
                     @"writeDate":@"cwritedate",
                     @"motionTrackState":@"cmotionPwdTrackState",
                     @"fingerPrintState":@"cfingerPrintState",
-                    @"currentBooksId":@"ccurrentbooksid"};
+                    @"currentBooksId":@"ccurrentBooksId"};
     }
     return mapping;
 }
