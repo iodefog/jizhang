@@ -51,7 +51,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputView *billTypeInputView;
 
-@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *billTypeSelectionView;
+@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *paymentTypeView;
+
+@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *incomeTypeView;
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
 
@@ -92,8 +94,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     self.view.backgroundColor = [UIColor whiteColor];
     [self settitleSegment];
     [self.view addSubview:self.billTypeInputView];
-    [self.view addSubview:self.billTypeSelectionView];
+    [self.view addSubview:self.scrollView];
     [self.view addSubview:self.accessoryView];
+    [self.scrollView addSubview:self.paymentTypeView];
+    [self.scrollView addSubview:self.incomeTypeView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -110,7 +114,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    _billTypeSelectionView.height = _scrollView.height = self.view.height - self.billTypeInputView.bottom;
+    _scrollView.contentSize = CGSizeMake(self.view.width * 2, self.view.height - self.billTypeInputView.bottom);
+    _paymentTypeView.height = _incomeTypeView.height = _scrollView.height = self.view.height - self.billTypeInputView.bottom;
 }
 
 #pragma mark - Getter
@@ -220,64 +225,30 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     return _billTypeInputView;
 }
 
-- (SSJRecordMakingBillTypeSelectionView *)billTypeSelectionView {
-    if (!_billTypeSelectionView) {
-        __weak typeof(self) wself = self;
-        _billTypeSelectionView = [[SSJRecordMakingBillTypeSelectionView alloc] initWithFrame:CGRectMake(0, self.billTypeInputView.bottom, self.view.width, self.view.height - self.billTypeInputView.bottom)];
-        _billTypeSelectionView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
-        _billTypeSelectionView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-            [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex Success:NULL failure:^(NSError *error) {
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }];
-            
-            for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
-                if (item.selected) {
-                    [UIView animateWithDuration:kAnimationDuration animations:^{
-                        wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
-                    }];
-                    wself.billTypeInputView.billTypeName = item.title;
-                }
-            }
-        };
-        _billTypeSelectionView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-            [wself.billTypeInputView.moneyInput becomeFirstResponder];
-            [UIView animateWithDuration:kAnimationDuration animations:^{
-                wself.billTypeInputView.billTypeName = item.title;
-                wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
-            }];
-            wself.categoryID = item.ID;
-        };
-        _billTypeSelectionView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-            SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
-            addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
-            addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
-                wself.categoryID = categoryId;
-            };
-            [wself.navigationController pushViewController:addNewTypeVc animated:YES];
-        };
-        _billTypeSelectionView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
-            if (isDragUp) {
-                [wself.billTypeInputView.moneyInput resignFirstResponder];
-            } else {
-                if (!wself.billTypeSelectionView.isEditing) {
-                    [wself.billTypeInputView.moneyInput becomeFirstResponder];
-                }
-            }
-        };
-        _billTypeSelectionView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-            UIBarButtonItem *endEditingItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:wself action:@selector(endEditingAction)];
-            [wself.navigationItem setRightBarButtonItem:endEditingItem animated:YES];
-            [wself.currentInput resignFirstResponder];
-        };
-        _billTypeSelectionView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-            [wself.currentInput becomeFirstResponder];
-            [wself.navigationItem setRightBarButtonItem:nil animated:YES];
-            [SSJCategoryListHelper updateCategoryOrderWithItems:wself.billTypeSelectionView.items success:NULL failure:^(NSError *error) {
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }];
-        };
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.billTypeInputView.bottom, self.view.width, self.view.height - self.billTypeInputView.bottom)];
+        _scrollView.pagingEnabled = YES;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.delegate = self;
     }
-    return _billTypeSelectionView;
+    return _scrollView;
+}
+
+- (SSJRecordMakingBillTypeSelectionView *)paymentTypeView {
+    if (!_paymentTypeView) {
+        _paymentTypeView = [[SSJRecordMakingBillTypeSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - self.billTypeInputView.bottom)];
+        [self initBillTypeView:_paymentTypeView];
+    }
+    return _paymentTypeView;
+}
+
+- (SSJRecordMakingBillTypeSelectionView *)incomeTypeView {
+    if (!_incomeTypeView) {
+        _incomeTypeView = [[SSJRecordMakingBillTypeSelectionView alloc] initWithFrame:CGRectMake(self.view.width, 0, self.view.width, self.view.height - self.billTypeInputView.bottom)];
+        [self initBillTypeView:_incomeTypeView];
+    }
+    return _incomeTypeView;
 }
 
 - (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
@@ -300,18 +271,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     return _accessoryView;
 }
 
-- (UIScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-    }
-    return _scrollView;
-}
-
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [super textFieldDidBeginEditing:textField];
     _currentInput = textField;
-    [_billTypeSelectionView endEditing];
+    [_paymentTypeView endEditing];
+    [_incomeTypeView endEditing];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -367,6 +332,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     _accessoryView.photoBtn.selected = YES;
 }
 
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (scrollView == _scrollView) {
+        _titleSegment.selectedSegmentIndex = scrollView.contentOffset.x / scrollView.width;
+        [self getCategoryList];
+    }
+}
+
 #pragma mark - YYKeyboardObserver
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
     if (transition.toVisible) {
@@ -387,7 +360,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 #pragma mark - Event
 - (void)goBackAction {
     [super goBackAction];
-    [_billTypeSelectionView endEditing];
+    [_paymentTypeView endEditing];
+    [_incomeTypeView endEditing];
     [self.view endEditing:YES];
 }
 
@@ -398,8 +372,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     }else{
         [MobClick event:@"addRecord_type_in"];
     }
+    [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
     [self getCategoryList];
-    [_billTypeSelectionView endEditing];
+    [_paymentTypeView endEditing];
+    [_incomeTypeView endEditing];
 //    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
@@ -455,7 +431,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)endEditingAction {
-    [_billTypeSelectionView endEditing];
+    [_paymentTypeView endEditing];
+    [_incomeTypeView endEditing];
 //    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
@@ -521,6 +498,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 -(void)getCategoryList{
+    if (self.titleSegment.selectedSegmentIndex != 0
+        && self.titleSegment.selectedSegmentIndex != 1) {
+        return;
+    }
+    
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
@@ -538,7 +520,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             _categoryID = selectedItem.ID;
         }
         
-        weakSelf.billTypeSelectionView.items = result;
+        if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
+            weakSelf.paymentTypeView.items = result;
+        } else if (weakSelf.titleSegment.selectedSegmentIndex == 1) {
+            weakSelf.incomeTypeView.items = result;
+        }
         
         [UIView animateWithDuration:kAnimationDuration animations:^{
             weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
@@ -843,6 +829,62 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         } completion:NULL];
     }
     return !isEverEntered;
+}
+
+- (void)initBillTypeView:(SSJRecordMakingBillTypeSelectionView *)billTypeView {
+    __weak typeof(self) wself = self;
+    billTypeView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
+    billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
+        [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex Success:NULL failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+        
+        for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
+            if (item.selected) {
+                [UIView animateWithDuration:kAnimationDuration animations:^{
+                    wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                }];
+                wself.billTypeInputView.billTypeName = item.title;
+            }
+        }
+    };
+    billTypeView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
+        [wself.billTypeInputView.moneyInput becomeFirstResponder];
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            wself.billTypeInputView.billTypeName = item.title;
+            wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+        }];
+        wself.categoryID = item.ID;
+    };
+    billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
+        SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
+        addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
+        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
+            wself.categoryID = categoryId;
+        };
+        [wself.navigationController pushViewController:addNewTypeVc animated:YES];
+    };
+    billTypeView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
+        if (isDragUp) {
+            [wself.billTypeInputView.moneyInput resignFirstResponder];
+        } else {
+            if (!selectionView.isEditing) {
+                [wself.billTypeInputView.moneyInput becomeFirstResponder];
+            }
+        }
+    };
+    billTypeView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
+        UIBarButtonItem *endEditingItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:wself action:@selector(endEditingAction)];
+        [wself.navigationItem setRightBarButtonItem:endEditingItem animated:YES];
+        [wself.currentInput resignFirstResponder];
+    };
+    billTypeView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
+        [wself.currentInput becomeFirstResponder];
+        [wself.navigationItem setRightBarButtonItem:nil animated:YES];
+        [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items success:NULL failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+    };
 }
 
 //-(void)closeButtonClicked:(id)sender{
