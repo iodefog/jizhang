@@ -19,30 +19,30 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
 
 @implementation SSJBookKeepingHomeHelper
 
-+ (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
-                              failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        NSString *userid = SSJUSERID();
-        NSMutableArray *chargeList = [NSMutableArray array];
-        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
-        if (!chargeResult) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        while ([chargeResult next]) {
-            [chargeList addObject:[self chargeItemWithResultSet:chargeResult inDatabase:db]];
-        }
-        if (success) {
-            SSJDispatch_main_async_safe(^{
-                success(chargeList);
-            });
-        }
-    }];
-}
+//+ (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
+//                              failure:(void (^)(NSError *error))failure {
+//    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+//        NSString *userid = SSJUSERID();
+//        NSMutableArray *chargeList = [NSMutableArray array];
+//        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID FROM BK_USER_CHARGE WHERE CBILLDATE IN (SELECT CBILLDATE FROM BK_DAILYSUM_CHARGE ORDER BY CBILLDATE DESC)  AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",SSJGetCurrentBooksType(),userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+//        if (!chargeResult) {
+//            if (failure) {
+//                SSJDispatch_main_async_safe(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//            return;
+//        }
+//        while ([chargeResult next]) {
+//            [chargeList addObject:[self chargeItemWithResultSet:chargeResult inDatabase:db]];
+//        }
+//        if (success) {
+//            SSJDispatch_main_async_safe(^{
+//                success(chargeList);
+//            });
+//        }
+//    }];
+//}
 
 + (void)queryForChargeListExceptNewCharge:(NSArray *)newCharge
                               Success:(void(^)(NSDictionary *result))success
@@ -58,7 +58,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         NSString *lastDate = @"";
         int count = 0;
         int chargeCount = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , A.OPERATORTYPE AS CHARGEOPERATORTYPE , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE , C.ITYPE AS CHARGECIRCLE , C.OPERATORTYPE  AS CONFIGOPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID , OPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID , OPERATORTYPE FROM BK_USER_CHARGE WHERE CBILLDATE AND OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL , '' AS ICONFIGID , 0 AS OPERATORTYPE  FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID LEFT JOIN BK_CHARGE_PERIOD_CONFIG AS C ON A.ICONFIGID = C.ICONFIGID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.CBILLDATE , A.IMONEY , A.ICHARGEID , A.IBILLID , A.CWRITEDATE  ,A.IFUNSID , A.CUSERID , A.CIMGURL ,  A.THUMBURL ,A.CMEMO , A.ICONFIGID , A.OPERATORTYPE AS CHARGEOPERATORTYPE , B.CNAME, B.CCOIN, B.CCOLOR, B.ITYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE  ,IFUNSID , CUSERID , CMEMO ,  CIMGURL ,  THUMBURL , ICONFIGID , OPERATORTYPE FROM (SELECT CBILLDATE , IMONEY , ICHARGEID , IBILLID , CWRITEDATE , IFUNSID , CUSERID , CMEMO ,  CIMGURL , THUMBURL , ICONFIGID , OPERATORTYPE , CBOOKSID FROM BK_USER_CHARGE WHERE OPERATORTYPE != 2) WHERE IBILLID != '1' AND IBILLID != '2' AND IBILLID != '3' AND IBILLID != '4' AND CUSERID = ? UNION SELECT * FROM (SELECT CBILLDATE , SUMAMOUNT AS IMONEY , ICHARGEID , IBILLID , '3'||substr(cwritedate,2) AS CWRITEDATE , IFUNSID , CUSERID , '' AS CMEMO , '' AS CIMGURL , '' AS THUMBURL ,  0 AS OPERATORTYPE , CBOOKSID FROM BK_DAILYSUM_CHARGE WHERE CUSERID = ? AND CBOOKSID = ? ORDER BY CBILLDATE DESC)) AS A LEFT JOIN BK_BILL_TYPE AS B ON A.IBILLID = B.ID WHERE A.CBILLDATE <= ?  ORDER BY A.CBILLDATE DESC , A.CWRITEDATE DESC",userid,userid,SSJGetCurrentBooksType(),[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -83,7 +83,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
             item.configId = [chargeResult stringForColumn:@"ICONFIGID"];
             item.operatorType = [chargeResult intForColumn:@"CHARGEOPERATORTYPE"];
-            int configOperatorType = [chargeResult intForColumn:@"CONFIGOPERATORTYPE"];
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
             if ([item.billId isEqualToString:@"-1"]) {
                 [startIndex setObject:@(count) forKey:item.billDate];
@@ -97,14 +96,6 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                 [summaryDic setValue:@(chargeCount) forKey:item.billDate];
             }
             item.chargeIndex = count;
-            if (configOperatorType == 2) {
-                item.chargeCircleType = - 1;
-            }else{
-                item.chargeCircleType = [chargeResult intForColumn:@"CHARGECIRCLE"];
-            }
-            if ([item.configId isEqualToString:@""] || item.configId == nil) {
-                item.chargeCircleType = - 1;
-            }
             for (int i = 0; i < newCharge.count; i++) {
                 SSJBillingChargeCellItem *newItem = [newCharge objectAtIndex:i];
                 if ([item.ID isEqualToString:newItem.ID]) {
@@ -177,16 +168,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
     item.chargeThumbImage = [set stringForColumn:@"THUMBURL"];
     item.chargeMemo = [set stringForColumn:@"CMEMO"];
     item.configId = [set stringForColumn:@"ICONFIGID"];
-    int configOperatorType = [set intForColumn:@"CONFIGOPERATORTYPE"];
     item.billDate = [set stringForColumn:@"CBILLDATE"];
-    if (configOperatorType == 2) {
-        item.chargeCircleType = - 1;
-    }else{
-        item.chargeCircleType = [set intForColumn:@"CHARGECIRCLE"];
-    }
-    if ([item.configId isEqualToString:@""] || item.configId == nil) {
-        item.chargeCircleType = - 1;
-    }
     return item;
 }
 @end

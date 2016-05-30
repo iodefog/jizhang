@@ -58,6 +58,9 @@
 //  指纹解锁（1为显示 0为隐藏）
 @property (nonatomic, copy) NSString *fingerPrintState;
 
+//  当前选中的账本id(默认为0)
+@property(nonatomic, strong) NSString *currentBooksId;
+
 + (NSDictionary *)propertyMapping;
 
 @end

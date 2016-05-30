@@ -52,6 +52,8 @@
 //循环记账配置ID
 @property (nonatomic,strong) NSString *configId;
 
+@property(nonatomic, strong) NSString *booksId;
+
 //循环记账类型
 @property (nonatomic) NSInteger chargeCircleType;
 
@@ -63,5 +65,6 @@
 
 //操作类型
 @property(nonatomic) int operatorType;
+
 
 @end

@@ -30,7 +30,8 @@
                     @"signature":@"usersignature",
                     @"writeDate":@"cwritedate",
                     @"motionTrackState":@"cmotionPwdTrackState",
-                    @"fingerPrintState":@"cfingerPrintState"};
+                    @"fingerPrintState":@"cfingerPrintState",
+                    @"currentBooksId":@"ccurrentbooksid"};
     }
     return mapping;
 }

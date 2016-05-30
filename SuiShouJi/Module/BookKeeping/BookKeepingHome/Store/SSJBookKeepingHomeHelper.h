@@ -25,14 +25,14 @@ extern NSString *const SSJChargeCountSummaryKey;
 
 extern NSString *const SSJDateStartIndexDicKey;
 
-/**
- *  查询首页所有记账记录
- *
- *  @param success 查询成功的回调
- *  @param failure 查询失败的回调
- */
-+ (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
-                              failure:(void (^)(NSError *error))failure;
+///**
+// *  查询首页所有记账记录
+// *
+// *  @param success 查询成功的回调
+// *  @param failure 查询失败的回调
+// */
+//+ (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
+//                              failure:(void (^)(NSError *error))failure;
 /**
  *  查询某月的总支出和总收入
  *

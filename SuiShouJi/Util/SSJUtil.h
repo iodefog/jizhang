@@ -158,22 +158,6 @@ NSArray *SSJQQList();
 BOOL SSJSaveQQList(NSArray *qqList);
 
 /**
- *  获取当前选中的账本
- *
- *  @return 账本id
- */
-NSString *SSJGetCurrentBooksType();
-
-/**
- *  选择当前的账本
- *
- *  @param booksId 账本的id
- *
- *  @return (BOOL) 是否保存成功
- */
-BOOL SSJSelectBooksType(NSString *booksId);
-
-/**
  *  获取用户唯一设备编号
  *
  *  @return (NSString *)

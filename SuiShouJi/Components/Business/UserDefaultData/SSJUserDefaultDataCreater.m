@@ -233,7 +233,7 @@
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
     
-    //  查询用户表中存储的默认资金帐户创建状态
+    //  查询用户表中存储的默认账本创建状态
     FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTBOOKSTYPESTATE from BK_USER where CUSERID = ?", userId];
     if (!reuslt) {
         return [db lastError];
@@ -248,7 +248,7 @@
         return nil;
     }
     
-    //  根据表中存储的状态判断是否需要创建以下默认资金帐户
+    //  根据表中存储的状态判断是否需要创建以下默认账本
     BOOL defaultBooksTypeState = [reuslt boolForColumn:@"CDEFAULTBOOKSTYPESTATE"];
     [reuslt close];
     
@@ -261,7 +261,10 @@
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (0, ?, ?, ?, 0, ?, ?)", @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId];
+    if (![db boolForQuery:@"select * from bk_books_type where CBOOKSID = 0"]) {
+        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (0, ?, ?, ?, 0, ?, ?)", @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId];
+
+    }
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"生意账本", @"#F5A237", writeDate, @(SSJSyncVersion()), userId];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId];
