@@ -8,6 +8,7 @@
 
 #import "SSJUserUtil.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kAppIdKey = @"kAppIdKey";
 
@@ -89,4 +90,16 @@ SSJSyncSettingType SSJSyncSetting() {
 BOOL SSJSaveSyncSetting(SSJSyncSettingType setting) {
     [[NSUserDefaults standardUserDefaults] setInteger:setting forKey:kSSJSyncSettingTypeKey];
     return [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+NSString *SSJGetCurrentBooksType(){
+    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+    return item.currentBooksId;
+}
+
+BOOL SSJSelectBooksType(NSString *booksId){
+    SSJUserItem *item = [[SSJUserItem alloc]init];
+    item.userId = SSJUSERID();
+    item.currentBooksId = booksId;
+    return [SSJUserTableManager saveUserItem:item];
 }

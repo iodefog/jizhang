@@ -311,12 +311,5 @@ NSString *SSJLastPatchVersion(){
     return [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastPatchVersionKey];
 }
 
-NSString *SSJGetCurrentBooksType(){
-    return [[NSUserDefaults standardUserDefaults] objectForKey:SSJCurrentBooksTypeKey];
-}
 
-BOOL SSJSelectBooksType(NSString *booksId){
-    [[NSUserDefaults standardUserDefaults] setObject:booksId forKey:SSJCurrentBooksTypeKey];
-    return [[NSUserDefaults standardUserDefaults] synchronize];
-}
 
