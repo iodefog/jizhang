@@ -30,6 +30,8 @@
 #import "FMDB.h"
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
+#import "UIViewController+MMDrawerController.h"
+
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -75,6 +77,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+ //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 //    _hasLoad = YES;
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
@@ -134,6 +137,7 @@
         }];
     }
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -527,8 +531,7 @@
 }
 
 -(void)leftBarButtonClicked:(id)sender{
-    SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
-    [self.navigationController pushViewController:booksTypeVC animated:YES];
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:NULL];
 }
 
 -(void)budgetButtonClicked:(id)sender{

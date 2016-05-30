@@ -12,6 +12,10 @@
 #import "MobClick.h"
 #import "SSJLoginViewController.h"
 #import "SSJUserTableManager.h"
+#import "UIViewController+MMDrawerController.h"
+#import "SSJBookKeepingHomeViewController.h"
+#import "SSJBooksTypeSelectViewController.h"
+
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -53,6 +57,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if ([self isKindOfClass:[SSJBookKeepingHomeViewController class]] || [self isKindOfClass:[SSJBooksTypeSelectViewController class]]) {
+        self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    }else{
+        self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
+    }
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 
     self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];

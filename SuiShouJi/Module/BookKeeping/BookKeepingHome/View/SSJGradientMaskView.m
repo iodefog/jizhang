@@ -16,6 +16,7 @@
     if (self) {
         self.backgroundColor = [UIColor blackColor];
         self.alpha = 0;
+
     }
     return self;
 }

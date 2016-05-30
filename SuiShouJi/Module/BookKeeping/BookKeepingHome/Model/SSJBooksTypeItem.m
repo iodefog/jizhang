@@ -9,5 +9,16 @@
 #import "SSJBooksTypeItem.h"
 
 @implementation SSJBooksTypeItem
-
++ (NSDictionary *)propertyMapping {
+    static NSDictionary *mapping = nil;
+    if (!mapping) {
+        mapping = @{@"booksId":@"cbooksid",
+                    @"booksName":@"cbooksname",
+                    @"booksColor":@"cbookscolor",
+                    @"userId":@"cuserid",
+                    @"cwriteDate":@"cwritedate",
+                    @"operatorType":@"operatortype"};
+    }
+    return mapping;
+}
 @end

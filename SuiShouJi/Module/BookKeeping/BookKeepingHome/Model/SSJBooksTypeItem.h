@@ -9,7 +9,22 @@
 #import "SSJBaseItem.h"
 
 @interface SSJBooksTypeItem : SSJBaseItem
+
+//账本id
 @property(nonatomic, strong) NSString *booksId;
+
+//账本名称
 @property(nonatomic, strong) NSString *booksName;
+
+//账本颜色
 @property(nonatomic, strong) NSString *booksColor;
+
+@property(nonatomic, strong) NSString *userId;
+
+@property(nonatomic, strong) NSString *cwriteDate;
+
+@property(nonatomic) NSInteger operatorType;
+
+
++ (NSDictionary *)propertyMapping;
 @end

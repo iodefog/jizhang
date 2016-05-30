@@ -42,4 +42,55 @@
         }
     }];
 }
+
++ (BOOL)saveBooksTypeItem:(SSJBooksTypeItem *)item {
+    NSString * typeId = item.booksId;
+    if (!typeId || !typeId.length) {
+        item.booksId = SSJUUID();
+    }
+    NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
+    if ([[typeInfo allKeys] containsObject:@"iversion"]) {
+        [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+    }
+    __block BOOL success = YES;
+    __block NSString * sql;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+    if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", typeId]) {
+        sql = [self inertSQLStatementWithTypeInfo:typeInfo];
+    } else {
+        sql = [self updateSQLStatementWithTypeInfo:typeInfo];
+    }
+        success = [db executeUpdate:sql withParameterDictionary:typeInfo];
+    }];
+    
+    return success;
+}
+
++ (NSDictionary *)fieldMapWithTypeItem:(SSJBooksTypeItem *)item {
+    [SSJBooksTypeItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
+        return [SSJBooksTypeItem propertyMapping];
+    }];
+    return item.mj_keyValues;
+}
+
+
++ (NSString *)inertSQLStatementWithTypeInfo:(NSDictionary *)typeInfo {
+    NSMutableArray *keys = [[typeInfo allKeys] mutableCopy];
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[keys count]];
+    for (NSString *key in keys) {
+        [values addObject:[NSString stringWithFormat:@":%@", key]];
+    }
+    
+    return [NSString stringWithFormat:@"insert into BK_BOOKS_TYPE (%@) values (%@)", [keys componentsJoinedByString:@","], [values componentsJoinedByString:@","]];
+}
+
++ (NSString *)updateSQLStatementWithTypeInfo:(NSDictionary *)typeInfo {
+    NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:[typeInfo count]];
+    for (NSString *key in [typeInfo allKeys]) {
+        [keyValues addObject:[NSString stringWithFormat:@"%@ =:%@", key, key]];
+    }
+    
+    return [NSString stringWithFormat:@"update BK_BOOKS_TYPE set %@ where cbooksid = :cbooksid", [keyValues componentsJoinedByString:@", "]];
+}
+
 @end

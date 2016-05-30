@@ -683,6 +683,7 @@
 		9CD5C38E1CB3A427004CC3FE /* SSJPersonalDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3891CB3A427004CC3FE /* SSJPersonalDetailViewController.m */; };
 		9CD5C3911CB3B24D004CC3FE /* SSJPasswordModifyService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3901CB3B24D004CC3FE /* SSJPasswordModifyService.m */; };
 		9CD5C3951CB3DE2B004CC3FE /* SSJNickNameModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5C3941CB3DE2B004CC3FE /* SSJNickNameModifyView.m */; };
+		9CD9BA401CF7FA780061803B /* SSJBooksTypeEditeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BA3F1CF7FA780061803B /* SSJBooksTypeEditeView.m */; };
 		9CE88A591CDA02650097409E /* SSJAboutusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE88A581CDA02650097409E /* SSJAboutusViewController.m */; };
 		9CE88A5C1CDA04710097409E /* SSJAboutusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE88A5B1CDA04710097409E /* SSJAboutusTableViewCell.m */; };
 		9CEB85B11CC4DFF300AE8F8D /* SSJMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CEB85B01CC4DFF300AE8F8D /* SSJMineHeaderView.m */; };
@@ -1847,6 +1848,8 @@
 		9CD5C3901CB3B24D004CC3FE /* SSJPasswordModifyService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPasswordModifyService.m; sourceTree = "<group>"; };
 		9CD5C3931CB3DE2B004CC3FE /* SSJNickNameModifyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNickNameModifyView.h; sourceTree = "<group>"; };
 		9CD5C3941CB3DE2B004CC3FE /* SSJNickNameModifyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNickNameModifyView.m; sourceTree = "<group>"; };
+		9CD9BA3E1CF7FA780061803B /* SSJBooksTypeEditeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeEditeView.h; sourceTree = "<group>"; };
+		9CD9BA3F1CF7FA780061803B /* SSJBooksTypeEditeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksTypeEditeView.m; sourceTree = "<group>"; };
 		9CE88A571CDA02650097409E /* SSJAboutusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAboutusViewController.h; sourceTree = "<group>"; };
 		9CE88A581CDA02650097409E /* SSJAboutusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAboutusViewController.m; sourceTree = "<group>"; };
 		9CE88A5A1CDA04710097409E /* SSJAboutusTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAboutusTableViewCell.h; sourceTree = "<group>"; };
@@ -2478,6 +2481,8 @@
 				9C4C527B1CF692FB006A0CD6 /* SSJBooksTypeCollectionViewCell.m */,
 				9C2ABB8B1CF7E969002FC79E /* SSJGradientMaskView.h */,
 				9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */,
+				9CD9BA3E1CF7FA780061803B /* SSJBooksTypeEditeView.h */,
+				9CD9BA3F1CF7FA780061803B /* SSJBooksTypeEditeView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5571,6 +5576,7 @@
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,
 				BD49343C1C35010200300D43 /* SSJMineHomeTabelviewCell.m in Sources */,
 				7DE27FBE1CB6771A00D5EB41 /* SSJMagicExportCalendarIndexPath.m in Sources */,
+				9CD9BA401CF7FA780061803B /* SSJBooksTypeEditeView.m in Sources */,
 				9C4C527F1CF6A017006A0CD6 /* SSJBooksTypeItem.m in Sources */,
 				9C9471911CEB224C00D69079 /* SSJNewFundingViewController.m in Sources */,
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,

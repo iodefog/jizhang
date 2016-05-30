@@ -269,6 +269,7 @@ NSDate *SCYEnterBackgroundTime() {
     [drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
     drawerController.view.backgroundColor = [UIColor whiteColor];
     
+
 //    drawerController.showsShadow = YES;
     [drawerController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
         self.maskView.currentAplha = percentVisible;

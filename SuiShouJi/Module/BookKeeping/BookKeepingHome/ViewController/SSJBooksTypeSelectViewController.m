@@ -13,10 +13,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJBooksTypeItem.h"
 #import "SSJBooksTypeCollectionViewCell.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJBooksTypeEditeView.h"
 
 @interface SSJBooksTypeSelectViewController ()
 @property(nonatomic, strong) UICollectionView *collectionView;
 @property(nonatomic, strong) NSMutableArray *items;
+@property(nonatomic, strong) SSJBooksTypeEditeView *booksEditeView;
 @end
 
 @implementation SSJBooksTypeSelectViewController
@@ -37,31 +39,22 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    __weak typeof(self) weakSelf = self;
-    [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
-        weakSelf.items = [NSMutableArray arrayWithArray:result];
-        [weakSelf.collectionView reloadData];
-    } failure:^(NSError *error) {
-        
-    }];
+//    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    [self getDateFromDB];
 }
 
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-//    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
-//        SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
-//        fundingDetailVC.item = item;
-//        [self.navigationController pushViewController:fundingDetailVC animated:YES];
-//    }else{
-//        SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
-//        __weak typeof(self) weakSelf = self;
-//        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-//            weakSelf.newlyAddFundId = newFundingItem.fundingID;
-//        };
-//        [self.navigationController pushViewController:newFundingVC animated:YES];
-//    }
+    SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    if (![item.booksName isEqualToString:@"添加账本"]) {
+        SSJSelectBooksType(item.booksId);
+        [self.collectionView reloadData];
+        [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+    }else{
+        self.booksEditeView.item = item;
+        [self.booksEditeView show];
+    }
 }
 
 
@@ -76,6 +69,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
 //    __weak typeof(self) weakSelf = self;
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
+    __weak typeof(self) weakSelf = self;
+    cell.longPressBlock = ^(){
+        weakSelf.booksEditeView.item = item;
+        [weakSelf.booksEditeView show];
+    };
     cell.item = item;
     return cell;
 }
@@ -84,7 +82,13 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     float collectionViewWith = SSJSCREENWITH * 0.8;
-    return CGSizeMake(80, 100);
+    float itemWidth;
+    if (SSJSCREENWITH == 320) {
+        itemWidth = (collectionViewWith - 24 - 30) / 3;
+    }else{
+        itemWidth = (collectionViewWith - 24 - 45) / 3;
+    }
+    return CGSizeMake(itemWidth, 100);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -92,14 +96,17 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     return UIEdgeInsetsMake(12, 18, 0, 12);
 }
 
-
 #pragma mark - Getter
 -(UICollectionView *)collectionView{
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-        flowLayout.minimumInteritemSpacing = 10;
-        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
+        if (SSJSCREENWITH == 320) {
+            flowLayout.minimumInteritemSpacing = 10;
+        }else{
+            flowLayout.minimumInteritemSpacing = 15;
+        }
+        _collectionView=[[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
         _collectionView.delegate=self;
         _collectionView.dataSource=self;
         _collectionView.backgroundColor = [UIColor whiteColor];
@@ -107,6 +114,29 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     return _collectionView;
 }
 
+-(SSJBooksTypeEditeView *)booksEditeView{
+    if (!_booksEditeView) {
+        _booksEditeView = [[SSJBooksTypeEditeView alloc]init];
+        __weak typeof(self) weakSelf = self;
+        _booksEditeView.comfirmButtonClickedBlock = ^(SSJBooksTypeItem *item){
+            item.cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            item.userId = SSJUSERID();
+            [SSJBooksTypeStore saveBooksTypeItem:item];
+            [weakSelf getDateFromDB];
+        };
+    }
+    return _booksEditeView;
+}
+
+-(void)getDateFromDB{
+    __weak typeof(self) weakSelf = self;
+    [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
+        weakSelf.items = [NSMutableArray arrayWithArray:result];
+        [weakSelf.collectionView reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

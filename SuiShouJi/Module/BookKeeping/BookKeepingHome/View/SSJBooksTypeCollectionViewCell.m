@@ -22,6 +22,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
+        longPressGr.minimumPressDuration = 0.5f;
+        [self addGestureRecognizer:longPressGr];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.seperatorLineView];
         [self.contentView addSubview:self.lineImage];
@@ -35,7 +38,7 @@
     [super layoutSubviews];
     self.seperatorLineView.size = CGSizeMake(2, self.height);
     self.seperatorLineView.leftTop = CGPointMake(22, 0);
-    self.titleLabel.right = self.width - 22;
+    self.titleLabel.centerX = self.width - (self.width - 24) / 2;
     self.titleLabel.centerY = self.height / 2;
 }
 
@@ -45,6 +48,7 @@
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.verticalForm = YES;
+        _titleLabel.textVerticalAlignment = YYTextVerticalAlignmentCenter;
     }
     return _titleLabel;
 }
@@ -76,6 +80,13 @@
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
+    [self setNeedsLayout];
+}
+
+-(void)longPressToDo:(id)sender{
+    if (self.longPressBlock) {
+        self.longPressBlock();
+    }
 }
 
 @end

@@ -11,4 +11,9 @@
 
 @interface SSJBooksTypeCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) SSJBooksTypeItem *item;
+
+typedef void (^longPressBlock)();
+
+@property(nonatomic,copy) longPressBlock longPressBlock;
+
 @end
