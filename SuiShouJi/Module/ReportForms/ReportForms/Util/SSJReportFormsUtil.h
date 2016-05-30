@@ -14,13 +14,6 @@
 /// ****  数据库查询工具类  **** //
 ///---------------------------------------------------------------------------------------------
 
-typedef NS_ENUM(NSInteger, SSJReportFormsIncomeOrPayType) {
-    SSJReportFormsIncomeOrPayTypeUnknown = -1,   // 未知
-    SSJReportFormsIncomeOrPayTypeIncome = 0,    // 收入
-    SSJReportFormsIncomeOrPayTypePay = 1,       // 支出
-    SSJReportFormsIncomeOrPayTypeSurplus = 2    // 结余
-};
-
 @interface SSJReportFormsDatabaseUtil : NSObject
 
 /**
@@ -30,7 +23,7 @@ typedef NS_ENUM(NSInteger, SSJReportFormsIncomeOrPayType) {
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryForPeriodListWithIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
++ (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
                                       success:(void (^)(NSArray<SSJDatePeriod *> *))success
                                       failure:(void (^)(NSError *))failure;
 
@@ -43,7 +36,7 @@ typedef NS_ENUM(NSInteger, SSJReportFormsIncomeOrPayType) {
  *  @param success      查询成功的回调
  *  @param failure      查询失败的回调
  */
-+ (void)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
++ (void)queryForIncomeOrPayType:(SSJBillType)type
                       startDate:(NSDate *)startDate
                         endDate:(NSDate *)endDate
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success

@@ -66,6 +66,9 @@ alpha:(a)]
 //  默认分割线颜色
 #define SSJ_DEFAULT_SEPARATOR_COLOR [UIColor ssj_colorWithHex:@"#e8e8e8"]
 
+//  主题红色
+#define SSJ_THEME_RED_COLOR [UIColor ssj_colorWithHex:@"#eb4a64"]
+
 //  密码过滤规则
 #define kAlphaNum @"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
 

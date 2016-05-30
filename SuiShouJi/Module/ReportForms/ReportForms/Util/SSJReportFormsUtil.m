@@ -16,24 +16,24 @@
 
 @implementation SSJReportFormsDatabaseUtil
 
-+ (void)queryForPeriodListWithIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
++ (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
                                       success:(void (^)(NSArray<SSJDatePeriod *> *))success
                                       failure:(void (^)(NSError *))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = nil;
         switch (type) {
-            case SSJReportFormsIncomeOrPayTypeIncome:
-            case SSJReportFormsIncomeOrPayTypePay: {
-                NSString *incomeOrPayType = type == SSJReportFormsIncomeOrPayTypeIncome ? @"0" : @"1";
+            case SSJBillTypeIncome:
+            case SSJBillTypePay: {
+                NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
                 result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where  a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), incomeOrPayType];
             }   break;
                 
-            case SSJReportFormsIncomeOrPayTypeSurplus: {
+            case SSJBillTypeSurplus: {
                 result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where  a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
             }   break;
                 
-            case SSJReportFormsIncomeOrPayTypeUnknown:
+            case SSJBillTypeUnknown:
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure(nil);
@@ -65,9 +65,12 @@
             SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
             [list addObject:period];
         }
-        SSJDatePeriod *firstPeriod = [list firstObject];
-        SSJDatePeriod *lastPeriod = [list lastObject];
-        [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
+        
+        if (list.count) {
+            SSJDatePeriod *firstPeriod = [list firstObject];
+            SSJDatePeriod *lastPeriod = [list lastObject];
+            [list addObject:[SSJDatePeriod datePeriodWithStartDate:firstPeriod.startDate endDate:lastPeriod.endDate]];
+        }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -77,30 +80,30 @@
     }];
 }
 
-+ (void)queryForIncomeOrPayType:(SSJReportFormsIncomeOrPayType)type
++ (void)queryForIncomeOrPayType:(SSJBillType)type
                       startDate:(NSDate *)startDate
                         endDate:(NSDate *)endDate
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure {
     
     switch (type) {
-        case SSJReportFormsIncomeOrPayTypeIncome:
-        case SSJReportFormsIncomeOrPayTypePay:
+        case SSJBillTypeIncome:
+        case SSJBillTypePay:
             [self queryForIncomeOrPayChargeWithType:type startDate:startDate endDate:endDate success:success failure:failure];
             break;
             
-        case SSJReportFormsIncomeOrPayTypeSurplus:
+        case SSJBillTypeSurplus:
             [self queryForSurplusWithStartDate:startDate endDate:endDate success:success failure:failure];
             break;
             
-        case SSJReportFormsIncomeOrPayTypeUnknown:
+        case SSJBillTypeUnknown:
             failure(nil);
             break;
     }
 }
 
 //  查询收支数据
-+ (void)queryForIncomeOrPayChargeWithType:(SSJReportFormsIncomeOrPayType)type
++ (void)queryForIncomeOrPayChargeWithType:(SSJBillType)type
                                 startDate:(NSDate *)startDate
                                   endDate:(NSDate *)endDate
                                   success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
@@ -108,18 +111,23 @@
     
     NSString *incomeOrPayType = nil;
     switch (type) {
-        case SSJReportFormsIncomeOrPayTypeIncome:
+        case SSJBillTypeIncome:
             incomeOrPayType = @"0";
             break;
             
-        case SSJReportFormsIncomeOrPayTypePay:
+        case SSJBillTypePay:
             incomeOrPayType = @"1";
             break;
             
-        case SSJReportFormsIncomeOrPayTypeSurplus:
-        case SSJReportFormsIncomeOrPayTypeUnknown:
+        case SSJBillTypeSurplus:
+        case SSJBillTypeUnknown:
             failure(nil);
             return;
+    }
+    
+    if (!startDate || !endDate) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"startDate or endDate must not be nil"}]);
+        return;
     }
     
     NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];

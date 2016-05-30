@@ -27,7 +27,7 @@
             lab.font = [UIFont systemFontOfSize:13];
             lab.text = week;
             lab.textAlignment = NSTextAlignmentCenter;
-            lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor ssj_colorWithHex:@"393939"];
+            lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? SSJ_THEME_RED_COLOR : [UIColor ssj_colorWithHex:@"393939"];
             [_labelArr addObject:lab];
             [self addSubview:lab];
         }

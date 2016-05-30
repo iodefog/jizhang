@@ -89,9 +89,15 @@
     self.endDateLab.text = [endDate formattedDateWithFormat:@"yyyy年M月d日"];
 }
 
-- (void)selectDateAction {
-    if (_selectDateBlock) {
-        _selectDateBlock();
+- (void)clickBeginDateAction {
+    if (_beginDateAction) {
+        _beginDateAction();
+    }
+}
+
+- (void)clickEndDateAction {
+    if (_endDateAction) {
+        _endDateAction();
     }
 }
 
@@ -154,7 +160,7 @@
         [_beginDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_beginDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
         
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDateAction)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBeginDateAction)];
         [_beginDateBaseLineView addGestureRecognizer:tap];
     }
     return _beginDateBaseLineView;
@@ -168,7 +174,7 @@
         [_endDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_endDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
         
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectDateAction)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickEndDateAction)];
         [_endDateBaseLineView addGestureRecognizer:tap];
     }
     return _endDateBaseLineView;
