@@ -14,6 +14,7 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJNoneCircleChargeView.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCircleChargeStore.h"
 
 
 @interface SSJCircleChargeSettingViewController ()
@@ -116,41 +117,56 @@
 -(void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
-        FMResultSet * result = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b where CUSERID = ? and OPERATORTYPE != 2 and a.IBILLID = b.ID order by A.ITYPE ASC , A.IMONEY DESC",SSJUSERID()];
-        while ([result next]) {
-            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-            item.imageName = [result stringForColumn:@"CCOIN"];
-            item.typeName = [result stringForColumn:@"CNAME"];
-            item.money = [result stringForColumn:@"IMONEY"];
-            item.colorValue = [result stringForColumn:@"CCOLOR"];
-            item.incomeOrExpence = [result boolForColumn:@"INCOMEOREXPENSE"];
-            item.fundId = [result stringForColumn:@"IFUNSID"];
-            item.billDate = [result stringForColumn:@"CBILLDATE"];
-            item.editeDate = [result stringForColumn:@"CWRITEDATE"];
-            item.billId = [result stringForColumn:@"IBILLID"];
-            item.chargeImage = [result stringForColumn:@"CIMGURL"];
-            item.chargeMemo = [result stringForColumn:@"CMEMO"];
-            item.configId = [result stringForColumn:@"ICONFIGID"];
-            item.chargeCircleType = [result intForColumn:@"ITYPE"];
-            item.isOnOrNot = [result intForColumn:@"ISTATE"];
-            [tempArray addObject:item];
+    [SSJCircleChargeStore queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
+        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        if (self.items.count == 0) {
+            [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+            self.navigationItem.rightBarButtonItem = nil;
+        }else{
+            UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
+            self.navigationItem.rightBarButtonItem = item;
+            self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         }
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
-            if (self.items.count == 0) {
-                [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
-                self.navigationItem.rightBarButtonItem = nil;
-            }else{
-                UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
-                self.navigationItem.rightBarButtonItem = item;
-                self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
-            }
-            [weakSelf.tableView ssj_hideLoadingIndicator];
-            [weakSelf.tableView reloadData];
-        });
+        [weakSelf.tableView ssj_hideLoadingIndicator];
+        [weakSelf.tableView reloadData];
+    } failure:^(NSError *error) {
+        
     }];
+//    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
+//        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
+//        FMResultSet * result = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b where CUSERID = ? and OPERATORTYPE != 2 and a.IBILLID = b.ID order by A.ITYPE ASC , A.IMONEY DESC",SSJUSERID()];
+//        while ([result next]) {
+//            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
+//            item.imageName = [result stringForColumn:@"CCOIN"];
+//            item.typeName = [result stringForColumn:@"CNAME"];
+//            item.money = [result stringForColumn:@"IMONEY"];
+//            item.colorValue = [result stringForColumn:@"CCOLOR"];
+//            item.incomeOrExpence = [result boolForColumn:@"INCOMEOREXPENSE"];
+//            item.fundId = [result stringForColumn:@"IFUNSID"];
+//            item.billDate = [result stringForColumn:@"CBILLDATE"];
+//            item.editeDate = [result stringForColumn:@"CWRITEDATE"];
+//            item.billId = [result stringForColumn:@"IBILLID"];
+//            item.chargeImage = [result stringForColumn:@"CIMGURL"];
+//            item.chargeMemo = [result stringForColumn:@"CMEMO"];
+//            item.configId = [result stringForColumn:@"ICONFIGID"];
+//            item.chargeCircleType = [result intForColumn:@"ITYPE"];
+//            item.isOnOrNot = [result intForColumn:@"ISTATE"];
+//            [tempArray addObject:item];
+//        }
+//        dispatch_async(dispatch_get_main_queue(), ^(){
+//            weakSelf.items = [[NSMutableArray alloc]initWithArray:tempArray];
+//            if (self.items.count == 0) {
+//                [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+//                self.navigationItem.rightBarButtonItem = nil;
+//            }else{
+//                UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
+//                self.navigationItem.rightBarButtonItem = item;
+//                self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+//            }
+//            [weakSelf.tableView ssj_hideLoadingIndicator];
+//            [weakSelf.tableView reloadData];
+//        });
+//    }];
     
 }
 

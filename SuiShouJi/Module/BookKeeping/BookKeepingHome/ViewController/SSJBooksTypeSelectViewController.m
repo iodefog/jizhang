@@ -43,6 +43,10 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [self getDateFromDB];
 }
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -51,6 +55,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         SSJSelectBooksType(item.booksId);
         [self.collectionView reloadData];
         [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
     }else{
         self.booksEditeView.item = item;
         [self.booksEditeView show];

@@ -150,6 +150,7 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.backgroundColor = [UIColor whiteColor];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -178,6 +179,10 @@
 
 -(BOOL)prefersStatusBarHidden{
     return YES;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UITableViewDelegate
@@ -640,6 +645,12 @@
 }
 
 - (void)reloadDataAfterInitDatabase {
+    [self getDateFromDatebase];
+    
+    [self reloadBudgetData];
+}
+
+- (void)reloadAfterBooksTypeChange{
     [self getDateFromDatebase];
     
     [self reloadBudgetData];
