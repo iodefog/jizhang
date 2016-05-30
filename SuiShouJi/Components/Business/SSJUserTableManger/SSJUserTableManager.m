@@ -71,7 +71,8 @@
 }
 
 + (SSJUserItem *)queryUserItemForID:(NSString *)userID {
-    return [self queryProperty:@[@"*"] forUserId:userID];
+    NSArray *properties = [[SSJUserItem propertyMapping] allKeys];
+    return [self queryProperty:properties forUserId:userID];
 }
 
 + (SSJUserItem *)queryProperty:(NSArray *)propertyNames forUserId:(NSString *)userId {
