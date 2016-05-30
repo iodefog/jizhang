@@ -93,7 +93,7 @@ BOOL SSJSaveSyncSetting(SSJSyncSettingType setting) {
 }
 
 NSString *SSJGetCurrentBooksType(){
-    SSJUserItem *item = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+    SSJUserItem *item = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
     return item.currentBooksId;
 }
 
