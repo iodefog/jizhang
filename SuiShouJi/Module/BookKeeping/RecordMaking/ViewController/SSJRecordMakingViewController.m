@@ -63,6 +63,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
+@property (nonatomic) NSInteger lastSelectedIndex;
+
 
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
@@ -335,8 +337,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (scrollView == _scrollView) {
-        _titleSegment.selectedSegmentIndex = scrollView.contentOffset.x / scrollView.width;
-        [self getCategoryList];
+        NSInteger currentSelectedIndex = scrollView.contentOffset.x / scrollView.width;
+        if (_lastSelectedIndex != currentSelectedIndex) {
+            _lastSelectedIndex = currentSelectedIndex;
+            _titleSegment.selectedSegmentIndex = currentSelectedIndex;
+            [_paymentTypeView endEditing];
+            [_incomeTypeView endEditing];
+            [self updateBillTypeSelectionViewAndInputView];
+        }
     }
 }
 
@@ -372,11 +380,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     }else{
         [MobClick event:@"addRecord_type_in"];
     }
-    [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
-    [self getCategoryList];
+    
     [_paymentTypeView endEditing];
     [_incomeTypeView endEditing];
-//    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
+    [self updateBillTypeSelectionViewAndInputView];
 }
 
 - (void)selectFundAccountAction {
@@ -885,6 +893,38 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
     };
+}
+
+- (void)updateBillTypeSelectionViewAndInputView {
+    if (_titleSegment.selectedSegmentIndex == 0) {
+        if (_paymentTypeView.items.count == 0) {
+            [self getCategoryList];
+        } else {
+            for (SSJRecordMakingBillTypeSelectionCellItem *item in _paymentTypeView.items) {
+                if (item.selected) {
+                    [UIView animateWithDuration:kAnimationDuration animations:^{
+                        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                    }];
+                    _billTypeInputView.billTypeName = item.title;
+                    break;
+                }
+            }
+        }
+    } else if (_titleSegment.selectedSegmentIndex == 1) {
+        if (_incomeTypeView.items.count == 0) {
+            [self getCategoryList];
+        } else {
+            for (SSJRecordMakingBillTypeSelectionCellItem *item in _incomeTypeView.items) {
+                if (item.selected) {
+                    [UIView animateWithDuration:kAnimationDuration animations:^{
+                        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                    }];
+                    _billTypeInputView.billTypeName = item.title;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 //-(void)closeButtonClicked:(id)sender{
