@@ -14,6 +14,7 @@
     SSJBudgetModel *model = [[SSJBudgetModel alloc] init];
     model.ID = self.ID;
     model.userId = self.userId;
+    model.booksId = self.booksId;
     model.billIds = self.billIds;
     model.type = self.type;
     model.budgetMoney = self.budgetMoney;

@@ -17,6 +17,9 @@
 //  用户id
 @property (nonatomic, copy) NSString *userId;
 
+//  账本类型id
+@property (nonatomic, copy) NSString *booksId;
+
 //  收支类型id拼接的字符串，从小到大排序，用','分隔；例如：1000,1001,1002
 @property (nonatomic, copy) NSArray *billIds;
 

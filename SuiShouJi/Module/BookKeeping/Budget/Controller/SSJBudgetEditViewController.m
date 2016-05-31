@@ -17,12 +17,14 @@
 #import "SSJCustomKeyboard.h"
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
 static NSString *const kBudgetEditTextFieldCellId = @"kBudgetEditTextFieldCellId";
 static NSString *const kBudgetEditSwitchCtrlCellId = @"kBudgetEditSwitchCtrlCellId";
 
 static NSString *const kBudgetTypeTitle = @"预算类别";
+static NSString *const kBooksTypeTitle = @"账本类型";
 static NSString *const kAutoContinueTitle = @"自动续用";
 static NSString *const kBudgetMoneyTitle = @"金额";
 static NSString *const kBudgetRemindTitle = @"预算提醒";
@@ -50,6 +52,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 @property (nonatomic, strong) NSArray *budgetTypeList;
 
 @property (nonatomic, strong) NSDictionary *budgetTypeMap;
+
+@property (nonatomic, copy) NSString *bookName;
 
 //  提醒百分比
 @property (nonatomic) double remindPercent;
@@ -79,6 +83,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.navigationItem.title = @"添加预算";
     }
     
+    //  如果是新建预算，需要重新创建个预算模型
+    if (!self.model) {
+        [self initBudgetModel];
+    }
+    _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
     [self queryBillTypeList];
     [self.view addSubview:self.tableView];
 }
@@ -118,6 +127,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     NSString *cellTitle = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([cellTitle isEqualToString:kBudgetTypeTitle]) {
         //  预算类别
+        return 54;
+    } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
+        //  账本类型
         return 54;
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
@@ -286,10 +298,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
         [self.view ssj_hideLoadingIndicator];
         self.budgetTypeMap = billTypeMap;
-        //  如果是新建预算，需要重新创建个预算模型
-        if (!self.model) {
-            [self initBudgetModel];
-        }
         [self updateCellTitles];
         
         [self.tableView reloadData];
@@ -306,10 +314,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)initBudgetModel {
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
     SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
     self.model = [[SSJBudgetModel alloc] init];
     self.model.ID = SSJUUID();
     self.model.userId = SSJUSERID();
+    self.model.booksId = userItem.currentBooksId;
     self.model.billIds = [self.budgetTypeMap allKeys];
     self.model.type = 1;
     self.model.budgetMoney = 3000;
@@ -355,13 +365,23 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if ([cellTitle isEqualToString:kBudgetTypeTitle]) {
         //  预算类别
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
-        budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
+        budgetTypeCell.subtitleLab.text = _bookName;
         budgetTypeCell.subtitleLab.textColor = [UIColor blackColor];
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
         budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         budgetTypeCell.accessoryType = UITableViewCellAccessoryNone;
 
+    } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
+        //  账本类型
+        SSJBudgetEditLabelCell *bookTypeCell = cell;
+        bookTypeCell.subtitleLab.text = [self budgetTypeNames];
+        bookTypeCell.subtitleLab.textColor = [UIColor blackColor];
+        bookTypeCell.detailTextLabel.text = nil;
+        [bookTypeCell.detailTextLabel sizeToFit];
+        bookTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        bookTypeCell.accessoryType = UITableViewCellAccessoryNone;
+        
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
         SSJBudgetEditSwitchCtrlCell *autoContinueCell = cell;
@@ -423,9 +443,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)updateCellTitles {
     if (self.model.isRemind) {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
     } else {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
     }
 }
 
