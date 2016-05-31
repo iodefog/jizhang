@@ -11,8 +11,10 @@
 @interface SCYSlidePagingHeaderView () <UIScrollViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *buttons;
+
 @property (nonatomic) CGSize tabSize;
-//@property (nonatomic, strong) UIView *bottomLine;
+
+@property (nonatomic) BOOL userTapped;
 
 @end
 
@@ -160,36 +162,8 @@
 }
 
 - (void)setSelectedIndex:(NSInteger)index animated:(BOOL)animated {
-    if (index >= _buttons.count) {
-        return;
-    }
-    
-    BOOL shouldAnimated = (animated && _selectedIndex != index);
-    _selectedIndex = index;
-    
-    [UIView animateWithDuration:(shouldAnimated ? 0.25 : 0.0) animations:^{
-        for (int idx = 0; idx < _buttons.count; idx ++) {
-            UIButton *button = _buttons[idx];
-            button.selected = idx == _selectedIndex;
-            if (button.selected) {
-                _tabView.centerX = button.centerX;
-            }
-        }
-    } completion:^(BOOL finished) {
-        UIButton *selectedButton = _buttons[_selectedIndex];
-        CGFloat targetPosition = self.contentOffset.x + self.width * 0.5;
-        CGFloat offSetX = self.contentOffset.x - (targetPosition - selectedButton.centerX);
-        offSetX = MAX(0, offSetX);
-        offSetX = MIN((self.contentSize.width - self.width), offSetX);
-        
-        if (offSetX > 0) {
-            [self setContentOffset:CGPointMake(offSetX, 0) animated:animated];
-        } else {
-            if (_customDelegate && [_customDelegate respondsToSelector:@selector(slidePagingHeaderView:didSelectButtonAtIndex:)]) {
-                [_customDelegate slidePagingHeaderView:self didSelectButtonAtIndex:_selectedIndex];
-            }
-        }
-    }];
+    _userTapped = NO;
+    [self p_setSelectedIndex:index animated:animated];
 }
 
 #pragma mark - Private
@@ -224,7 +198,8 @@
             [_customDelegate slidePagingHeaderView:self willSelectButtonAtIndex:selectedIndex];
         }
         
-        [self setSelectedIndex:selectedIndex animated:_buttonClickAnimated];
+        _userTapped = YES;
+        [self p_setSelectedIndex:selectedIndex animated:_buttonClickAnimated];
         
         if (!_buttonClickAnimated) {
             if (_customDelegate && [_customDelegate respondsToSelector:@selector(slidePagingHeaderView:didSelectButtonAtIndex:)]) {
@@ -232,6 +207,42 @@
             }
         }
     }
+}
+
+- (void)p_setSelectedIndex:(NSInteger)index animated:(BOOL)animated {
+    if (index >= _buttons.count) {
+        return;
+    }
+    
+    if (_selectedIndex == index) {
+        return;
+    }
+    
+    _selectedIndex = index;
+    
+    [UIView animateWithDuration:(animated ? 0.25 : 0.0) animations:^{
+        for (int idx = 0; idx < _buttons.count; idx ++) {
+            UIButton *button = _buttons[idx];
+            button.selected = idx == _selectedIndex;
+            if (button.selected) {
+                _tabView.centerX = button.centerX;
+            }
+        }
+    } completion:^(BOOL finished) {
+        UIButton *selectedButton = _buttons[_selectedIndex];
+        CGFloat targetPosition = self.contentOffset.x + self.width * 0.5;
+        CGFloat offSetX = self.contentOffset.x - (targetPosition - selectedButton.centerX);
+        offSetX = MAX(0, offSetX);
+        offSetX = MIN((self.contentSize.width - self.width), offSetX);
+        
+        if (offSetX == 0) {
+            if (_userTapped && self.customDelegate && [_customDelegate respondsToSelector:@selector(slidePagingHeaderView:didSelectButtonAtIndex:)]) {
+                [_customDelegate slidePagingHeaderView:self didSelectButtonAtIndex:_selectedIndex];
+            }
+        } else {
+            [self setContentOffset:CGPointMake(offSetX, 0) animated:animated];
+        }
+    }];
 }
 
 #pragma mark - ScrollView Delegate
@@ -282,7 +293,7 @@
         [self.customDelegate scrollViewDidEndScrollingAnimation:scrollView];
     }
     
-    if (self.customDelegate && [_customDelegate respondsToSelector:@selector(slidePagingHeaderView:didSelectButtonAtIndex:)]) {
+    if (_userTapped && self.customDelegate && [_customDelegate respondsToSelector:@selector(slidePagingHeaderView:didSelectButtonAtIndex:)]) {
         [_customDelegate slidePagingHeaderView:self didSelectButtonAtIndex:_selectedIndex];
     }
 }
