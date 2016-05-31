@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class SSJDatePeriod;
+
 //  对应日期的key
 extern NSString *const SSJBillingChargeDateKey;
 
@@ -29,8 +31,7 @@ extern NSString *const SSJBillingChargeRecordKey;
  *  @param failure   查询失败的回调
  */
 + (void)queryDataWithBillTypeID:(NSString *)ID
-                         InYear:(NSInteger)year
-                          month:(NSInteger)month
+                       inPeriod:(SSJDatePeriod *)period
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure;
 

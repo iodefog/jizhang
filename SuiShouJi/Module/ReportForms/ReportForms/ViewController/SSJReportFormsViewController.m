@@ -139,11 +139,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         SSJReportFormsItem *item = self.datas[indexPath.row];
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
         billingChargeVC.billTypeID = item.ID;
-//        billingChargeVC.year = self.calendarUtil.year;
         billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
-//        if (self.periodSelectionView.periodType == SSJReportFormsPeriodTypeMonth) {
-//            billingChargeVC.month = self.calendarUtil.month;
-//        }
+        billingChargeVC.period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
         [self.navigationController pushViewController:billingChargeVC animated:YES];
     }
 }

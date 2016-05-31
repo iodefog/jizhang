@@ -9,6 +9,7 @@
 #import "SSJBillingChargeHelper.h"
 #import "SSJBillingChargeCellItem.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDatePeriod.h"
 
 NSString *const SSJBillingChargeDateKey = @"SSJBillingChargeDateKey";
 NSString *const SSJBillingChargeSumKey = @"SSJBillingChargeSumKey";
@@ -17,31 +18,15 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
 @implementation SSJBillingChargeHelper
 
 + (void)queryDataWithBillTypeID:(NSString *)ID
-                         InYear:(NSInteger)year
-                          month:(NSInteger)month
+                       inPeriod:(SSJDatePeriod *)period
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure {
     
-    if (year < 0 || month > 12 || month < 0) {
-        SSJPRINT(@">>>SSJ warning: query data with wrong year or month (year < 0 || month > 12 || month < 0)");
-        failure(nil);
-        return;
-    }
-    
-    NSMutableString *dateStr = nil;
-    if (year == 0) {
-        dateStr = [NSMutableString stringWithString:@"____"];
-    } else {
-        dateStr = [NSMutableString stringWithFormat:@"%04d",(int)year];
-    }
-    if (month == 0) {
-        [dateStr appendFormat:@"-__-__"];
-    } else {
-        [dateStr appendFormat:@"-%02d-__",(int)month];
-    }
+    NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE like ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, dateStr, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE >= ? and a.CBILLDATE <= ? and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, beginDate, endDate, SSJUSERID()];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
