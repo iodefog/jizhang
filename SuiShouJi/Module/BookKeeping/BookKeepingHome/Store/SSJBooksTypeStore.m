@@ -15,7 +15,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableArray *booksList = [NSMutableArray array];
-        FMResultSet *booksResult = [db executeQuery:@"select * from bk_books_type where cbooksid = 0 or cuserid = ? and operatortype <> 2",userid];
+        FMResultSet *booksResult = [db executeQuery:@"select * from bk_books_type where cuserid = ? and operatortype <> 2",userid];
         if (!booksResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

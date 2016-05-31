@@ -261,10 +261,7 @@
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    if (![db boolForQuery:@"select * from bk_books_type where CBOOKSID = 0"]) {
-        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (0, ?, ?, ?, 0, ?, ?)", @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId];
-
-    }
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (0, ?, ?, ?, 0, ?, ?)", @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"生意账本", @"#F5A237", writeDate, @(SSJSyncVersion()), userId];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID) VALUES (?, ?, ?, ?, 0, ?, ?)", SSJUUID(), @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId];

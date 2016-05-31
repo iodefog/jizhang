@@ -67,6 +67,8 @@ NSString *const SSJInitDatabaseDidBeginNotification = @"SSJInitDatabaseDidBeginN
 
 NSString *const SSJInitDatabaseDidFinishNotification = @"SSJInitDatabaseDidFinishNotification";
 
+NSString *const SSJBooksTypeDidChangeNotification = @"SSJBooksTypeDidChangeNotification";
+
 NSString *const SSJWeiXinAppKey = @"wxf77f7a5867124dfd";
 
 NSString *const SSJWeiXinDescription = @"weixinLogin";

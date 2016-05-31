@@ -145,4 +145,7 @@ extern NSString *const SSJInitDatabaseDidBeginNotification;
 //  初始化数据库完成的通知
 extern NSString *const SSJInitDatabaseDidFinishNotification;
 
+//  切换账本的通知
+extern NSString *const SSJBooksTypeDidChangeNotification;
+
 

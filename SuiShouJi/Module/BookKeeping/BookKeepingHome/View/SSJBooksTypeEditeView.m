@@ -265,7 +265,7 @@
         self.nameInput.text = _item.booksName;
         _selectColor = _item.booksColor;
     }else{
-        self.nameInput.text = _item.booksName;
+        self.nameInput.text = @"";
         _selectColor = @"#7FB04F";
     }
     [self.colorSelectView reloadData];
