@@ -169,6 +169,7 @@
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
 		7DD3E5781CFBF2D1005A1ACB /* SSJDatabaseVersion4.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */; };
+		7DD3E5831CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E5821CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m */; };
 		7DD7D5CB1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */; };
 		7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */; };
 		7DD7D6861C4C8E6A00ACE71A /* bt_shenghuofei@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5DB1C4C8E6A00ACE71A /* bt_shenghuofei@2x.png */; };
@@ -1221,6 +1222,8 @@
 		7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterViewItem.m; sourceTree = "<group>"; };
 		7DD3E5761CFBF2D1005A1ACB /* SSJDatabaseVersion4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion4.h; sourceTree = "<group>"; };
 		7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion4.m; sourceTree = "<group>"; };
+		7DD3E5811CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeSyncTable.h; sourceTree = "<group>"; };
+		7DD3E5821CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksTypeSyncTable.m; sourceTree = "<group>"; };
 		7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsPeriodSelectionView.h; sourceTree = "<group>"; };
 		7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsPeriodSelectionView.m; sourceTree = "<group>"; };
 		7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
@@ -2312,6 +2315,8 @@
 				7D1D7F421C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m */,
 				7D1D7F441C86DB520001F72A /* SSJUserBudgetSyncTable.h */,
 				7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */,
+				7DD3E5811CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.h */,
+				7DD3E5821CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m */,
 			);
 			path = SyncTable;
 			sourceTree = "<group>";
@@ -5682,6 +5687,7 @@
 				9CD9BC371CFD2DAA0061803B /* SSJPasswordModifyService.m in Sources */,
 				7D5F33831CEAE6C10086B67E /* SSJRecordMakingBillTypeInputView.m in Sources */,
 				9C0E8C2A1CB645900093F79E /* UMPostTableViewCell.m in Sources */,
+				7DD3E5831CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m in Sources */,
 				7D5F33851CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				7D5F334E1CEAE6C10086B67E /* SSJCalenderDetailCell.m in Sources */,
 				7D5F334A1CEAE6C10086B67E /* SSJCalenderCellItem.m in Sources */,
