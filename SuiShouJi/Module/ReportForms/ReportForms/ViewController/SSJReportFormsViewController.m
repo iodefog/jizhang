@@ -301,7 +301,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 // 如果当前是自定义时间，就查询自定义时间范围内的流水统计；反之就查询当前刻度时间的流水统计
 - (void)reloadDatas {
-    if (_dateAxisView.hidden) {
+    if (_customPeriod) {
         [self reloadDatasInPeriod:_customPeriod];
     } else {
         [self reloadAllDatas];
@@ -316,12 +316,14 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [SSJReportFormsDatabaseUtil queryForPeriodListWithIncomeOrPayType:[self currentType] success:^(NSArray<SSJDatePeriod *> *periods) {
         
         if (periods.count == 0) {
+            _dateAxisView.hidden = YES;
             self.tableView.hidden = YES;
             [self.view ssj_hideLoadingIndicator];
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
             return;
         }
         
+        _dateAxisView.hidden = NO;
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
         _periods = periods;
