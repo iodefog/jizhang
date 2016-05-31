@@ -127,10 +127,11 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
                                           Year:(long)year
                                        Success:(void(^)(NSDictionary *result))success
                                        failure:(void (^)(NSError *error))failure {
+    __block NSString *booksid = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) , SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@'", year,month,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]];
+        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"SELECT SUM(INCOMEAMOUNT) , SUM(EXPENCEAMOUNT) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE LIKE '%04ld-%02ld-__' AND CUSERID = '%@' AND CBILLDATE <= '%@' AND CBOOKSID = '%@'", year,month,userid,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid]];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

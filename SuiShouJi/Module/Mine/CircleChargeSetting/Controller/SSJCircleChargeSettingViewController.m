@@ -15,6 +15,7 @@
 #import "SSJNoneCircleChargeView.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCircleChargeStore.h"
+#import "SSJChargeCicleModifyViewController.h"
 
 
 @interface SSJCircleChargeSettingViewController ()
@@ -35,11 +36,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightBarItem;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
     [self getDateFromDatebase];
 }
 
@@ -114,6 +116,11 @@
 }
 
 #pragma mark - Private
+-(void)addButtonClicked:(id)sender{
+    SSJChargeCicleModifyViewController *circleChargeModifyVC = [[SSJChargeCicleModifyViewController alloc]init];
+    [self.navigationController pushViewController:circleChargeModifyVC animated:YES];
+}
+
 -(void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
@@ -121,11 +128,6 @@
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         if (self.items.count == 0) {
             [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
-            self.navigationItem.rightBarButtonItem = nil;
-        }else{
-            UIBarButtonItem *item = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editeButtonClicked:)];
-            self.navigationItem.rightBarButtonItem = item;
-            self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
         }
         [weakSelf.tableView ssj_hideLoadingIndicator];
         [weakSelf.tableView reloadData];
