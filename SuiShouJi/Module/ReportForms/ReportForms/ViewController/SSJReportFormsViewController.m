@@ -59,6 +59,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 //  圆环图表数据源
 @property (nonatomic, strong) NSMutableArray *circleItems;
 
+//  选中的时间周期
+@property (nonatomic, strong) SSJDatePeriod *selectedPeriod;
+
 //  自定义时间周期
 @property (nonatomic, strong) SSJDatePeriod *customPeriod;
 
@@ -188,8 +191,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
-    SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
-    [self reloadDatasInPeriod:period];
+    _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
+    [self reloadDatasInPeriod:_selectedPeriod];
     [self updateSurplusViewTitle];
 }
 
@@ -326,11 +329,29 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _periods = periods;
         [_dateAxisView reloadData];
         
-        // 计算当前月份在日起刻度控件上的下标
+        // 如果流水周期列表包括之前选中的周期，周期刻度就默认选中之前的周期；
+        // 如果流水周期列表包括当前的周期，周期刻度就选中当前的周期；
+        // 以上两种情况都不成立就选中第一个周期刻度
+        NSUInteger selectedPeriodIndex = NSUIntegerMax;
+        NSUInteger currentPeriodIndex = NSUIntegerMax;
+        
         SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
         for (int i = 0; i < _periods.count; i ++) {
-            if ([_periods[i] compareWithPeriod:currentPeriod] == SSJDatePeriodComparisonResultSame) {
-                _dateAxisView.selectedIndex = i;
+            SSJDatePeriod *period = _periods[i];
+            if (_selectedPeriod && [period compareWithPeriod:_selectedPeriod] == SSJDatePeriodComparisonResultSame) {
+                selectedPeriodIndex = i;
+                break;
+            }
+            if ([period compareWithPeriod:currentPeriod] == SSJDatePeriodComparisonResultSame) {
+                currentPeriodIndex = i;
+            }
+        }
+        
+        if (selectedPeriodIndex != NSUIntegerMax) {
+            _dateAxisView.selectedIndex = selectedPeriodIndex;
+        } else {
+            if (currentPeriodIndex != NSUIntegerMax) {
+                _dateAxisView.selectedIndex = currentPeriodIndex;
             }
         }
         
