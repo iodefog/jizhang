@@ -254,7 +254,6 @@ NSDate *SCYEnterBackgroundTime() {
     tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
-    tabBarVC.view.backgroundColor = [UIColor redColor];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
     UINavigationController *booksNav = [[UINavigationController alloc] initWithRootViewController:booksTypeVC];

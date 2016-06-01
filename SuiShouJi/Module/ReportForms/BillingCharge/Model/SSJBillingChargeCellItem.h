@@ -34,6 +34,13 @@
 // 资金帐户编号
 @property (nonatomic,strong) NSString *fundId;
 
+// 资金帐户名称
+@property (nonatomic,strong) NSString *fundName;
+
+// 资金帐户图片名称
+@property (nonatomic,strong) NSString *fundImage;
+
+
 //记账编辑时间
 @property (nonatomic,strong) NSString *editeDate;
 
@@ -52,6 +59,7 @@
 //循环记账配置ID
 @property (nonatomic,strong) NSString *configId;
 
+//账本id
 @property(nonatomic, strong) NSString *booksId;
 
 //循环记账类型

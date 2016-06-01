@@ -12,7 +12,7 @@
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
-
+#import "SSJFundingTransferDetailViewController.h"
 #import "FMDB.h"
 
 @interface SSJFundingTransferViewController ()
@@ -27,6 +27,9 @@
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferInFundingTypeSelect;
 @property (nonatomic,strong) SSJFundingTypeSelectView *transferOutFundingTypeSelect;
 @property (nonatomic,strong) UILabel *transferLabel;
+@property (nonatomic,strong) UILabel *memoLabel;
+@property (nonatomic,strong) UITextField  *memoInput;
+@property(nonatomic, strong) UIButton *comfirmButton;
 @end
 
 @implementation SSJFundingTransferViewController{
@@ -46,30 +49,40 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     self.navigationItem.rightBarButtonItem = self.rightButton;
     [self.view addSubview:self.transferIntext];
     [self.view addSubview:self.transferOuttext];
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 10)];
-    view.backgroundColor = [UIColor ssj_colorWithHex:@"F5F5F5"];
-    [self.view addSubview:view];
     [self.view addSubview:self.transferLabel];
     [self.view addSubview:self.transferImage];
+    [self.view addSubview:self.memoInput];
+    [self.view addSubview:self.memoLabel];
+    [self.view addSubview:self.comfirmButton];
 }
 
 -(void)viewDidLayoutSubviews{
-    self.transferOuttext.size = CGSizeMake(self.view.width, 35);
-    self.transferOuttext.leftTop = CGPointMake(0, 45);
-    [self.transferOuttext ssj_relayoutBorder];
-    self.transferIntext.size = CGSizeMake(self.view.width, 35);
-    self.transferIntext.leftTop = CGPointMake(0, self.transferOuttext.bottom + 60);
-    [self.transferIntext ssj_relayoutBorder];
-    _transferImage.size = CGSizeMake(14, 24);
-    _transferImage.centerX = self.view.width / 2 - 14;
-    _transferImage.centerY = self.view.height / 2;
-    _transferImage.top = self.transferOuttext.bottom + 20;
-    _transferLabel.left = _transferImage.right;
-    _transferLabel.centerY = _transferImage.centerY;
+    self.transferOuttext.size = CGSizeMake(self.view.width, 60);
+    self.transferOuttext.leftTop = CGPointMake(0, 20);
+    self.transferIntext.size = CGSizeMake(self.view.width, 60);
+    self.transferIntext.leftTop = CGPointMake(0, self.transferOuttext.bottom + 85);
+    self.transferImage.size = CGSizeMake(14, 24);
+    self.transferImage.centerX = self.view.width / 2 - 14;
+    self.transferImage.centerY = self.transferOuttext.bottom + 42.5;
+    self.transferLabel.left = _transferImage.right;
+    self.transferLabel.centerY = _transferImage.centerY;
+    self.memoInput.size = CGSizeMake(self.view.width, 50);
+    self.memoInput.top = self.transferIntext.bottom;
+    [self.memoInput ssj_relayoutBorder];
+    self.memoLabel.centerY = self.memoInput.centerY;
+    self.memoLabel.left = 20;
+    self.comfirmButton.size = CGSizeMake(self.view.width - 40, 40);
+    self.comfirmButton.top = self.memoInput.bottom + 20;
+    self.comfirmButton.centerX = self.view.width / 2;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
 }
 
 -(void)dealloc{
@@ -79,7 +92,7 @@
 #pragma mark - Getter
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked)];
+        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
         _rightButton.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
     }
     return _rightButton;
@@ -89,8 +102,7 @@
     if (_transferIntext == nil) {
         _transferIntext = [[UITextField alloc]init];
 //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        [_transferIntext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
-        [_transferIntext ssj_setBorderStyle:SSJBorderStyleBottom];
+        _transferIntext.backgroundColor = [UIColor whiteColor];
         _transferIntext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferIntext.font = [UIFont systemFontOfSize:24];
         _transferIntext.placeholder = @"¥0.00";
@@ -110,8 +122,7 @@
     if (_transferOuttext == nil) {
         _transferOuttext = [[UITextField alloc]init];
         //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        [_transferOuttext ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
-        [_transferOuttext ssj_setBorderStyle:SSJBorderStyleBottom];
+        _transferOuttext.backgroundColor = [UIColor whiteColor];
         _transferOuttext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferOuttext.font = [UIFont systemFontOfSize:24];
         _transferOuttext.placeholder = @"¥0.00";
@@ -222,16 +233,61 @@
 -(UILabel *)transferLabel{
     if (!_transferLabel) {
         _transferLabel = [[UILabel alloc]init];
-        _transferLabel.font = [UIFont systemFontOfSize:12];
-        _transferLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _transferLabel.font = [UIFont systemFontOfSize:13];
+        _transferLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
         _transferLabel.text = @"转至";
         [_transferLabel sizeToFit];
     }
     return _transferLabel;
 }
 
+-(UILabel *)memoLabel{
+    if (!_memoLabel) {
+        _memoLabel = [[UILabel alloc]init];
+        _memoLabel.text = @"备注:";
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _memoLabel.font = [UIFont systemFontOfSize:15];
+        [_memoLabel sizeToFit];
+    }
+    return _memoLabel;
+}
+
+-(UITextField *)memoInput{
+    if (!_memoInput) {
+        _memoInput = [[UITextField alloc]init];
+        _memoInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _memoInput.font = [UIFont systemFontOfSize:15];
+        _memoInput.textAlignment = NSTextAlignmentLeft;
+        float textWidth = [@"备注:" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}].width;
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30 + textWidth, 0)];
+        _memoInput.leftView = view;
+        _memoInput.leftViewMode = UITextFieldViewModeAlways;
+        _memoInput.backgroundColor = [UIColor whiteColor];
+        [_memoInput ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_memoInput ssj_setBorderStyle:SSJBorderStyleTop];
+    }
+    return _memoInput;
+}
+
+-(UIButton *)comfirmButton{
+    if (!_comfirmButton) {
+        _comfirmButton = [[UIButton alloc]init];
+        [_comfirmButton setTitle:@"确认转账" forState:UIControlStateNormal];
+        [_comfirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+        _comfirmButton.layer.cornerRadius = 3.f;
+        [_comfirmButton addTarget:self action:@selector(saveClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _comfirmButton;
+}
+
 #pragma mark - Private
--(void)rightButtonClicked{
+-(void)rightButtonClicked:(id)sender{
+    SSJFundingTransferDetailViewController *transferDetailVc = [[SSJFundingTransferDetailViewController alloc]init];
+    [self.navigationController pushViewController:transferDetailVc animated:YES];
+}
+
+-(void)saveClicked:(id)sender{
     NSString *str = [_transferIntext.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
     if ([_transferOutItem.fundingID isEqualToString:_transferInItem.fundingID]) {
         [CDAutoHideMessageHUD showMessage:@"请选择不同账户"];
@@ -243,12 +299,15 @@
         [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
         return;
     }
+    __block NSString *booksid = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
-        if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),str,@"3",_transferInItem.fundingID,@"",@"",[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]])
+        NSString *userid = SSJUSERID();
+        NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"3",_transferInItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,self.memoInput.text])
         {
             *rollback = YES;
         }
-        if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE ) VALUES (?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),SSJUSERID(),str,@"4",_transferOutItem.fundingID,@"",@"",[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {
+        if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"4",_transferOutItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,self.memoInput.text]) {
             *rollback = YES;
         }
         if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
