@@ -79,7 +79,7 @@ extern NSString *const SSJBudgetMonthTitleKey;
                             failure:(void (^)(NSError *error))failure;
 
 /**
- *  检测是否有和model冲突的预算（即预算类别、开始时间、预算周期三者都相同）
+ *  检测是否有和model冲突的预算（即预算类别、开始时间、预算周期、账本类型三者都相同）
  *
  *  @param model     检测的预算模型
  *  @param success   检测成功的回调
@@ -99,6 +99,8 @@ extern NSString *const SSJBudgetMonthTitleKey;
 + (void)saveBudgetModel:(SSJBudgetModel *)model
                 success:(void(^)())success
                 failure:(void (^)(NSError *error))failure;
+
++ (NSString *)queryBookNameForBookId:(NSString *)ID;
 
 @end
 

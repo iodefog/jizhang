@@ -103,7 +103,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 #pragma mark - Private
 - (void)reloadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJBillingChargeHelper queryDataWithBillTypeID:self.billTypeID InYear:self.year month:self.month success:^(NSArray<NSDictionary *> *data) {
+    [SSJBillingChargeHelper queryDataWithBillTypeID:_billTypeID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
         [self.view ssj_hideLoadingIndicator];
         self.datas = data;
         [self.tableView reloadData];

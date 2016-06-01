@@ -13,6 +13,7 @@
 #import "SSJUserChargeSyncTable.h"
 #import "SSJUserChargePeriodConfigSyncTable.h"
 #import "SSJUserBudgetSyncTable.h"
+#import "SSJBooksTypeSyncTable.h"
 
 #import "SSJSyncTable.h"
 #import "SSJFundAccountTable.h"
@@ -48,7 +49,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.syncTableClasses = @[[SSJBillTypeSyncTable class],
+        self.syncTableClasses = @[[SSJBooksTypeSyncTable class],
+                                  [SSJBillTypeSyncTable class],
                                   [SSJUserBillSyncTable class],
                                   [SSJFundInfoSyncTable class],
                                   [SSJUserChargePeriodConfigSyncTable class],
