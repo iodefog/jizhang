@@ -9,5 +9,4 @@
 #import "SSJNewBaseTableViewController.h"
 
 @interface SSJFundingTransferDetailViewController : SSJNewBaseTableViewController
-
 @end

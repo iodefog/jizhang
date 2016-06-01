@@ -9,8 +9,6 @@
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJMineSyncButton.h"
 
-
-
 @interface SSJMineHomeTableViewHeader()
 @property (nonatomic, strong) SSJMineHeaderView *headPotraitImage;
 @property (nonatomic, strong) UILabel *nicknameLabel;

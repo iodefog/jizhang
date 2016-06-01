@@ -1,0 +1,59 @@
+//
+//  SSJTransferDetailHeader.m
+//  SuiShouJi
+//
+//  Created by ricky on 16/6/1.
+//  Copyright © 2016年 ___9188___. All rights reserved.
+//
+
+#import "SSJTransferDetailHeader.h"
+@interface SSJTransferDetailHeader()
+@property(nonatomic, strong) UILabel *dateLabel;
+@end
+@implementation SSJTransferDetailHeader
+
+- (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier{
+    if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+        [self addSubview:self.dateLabel];
+    }
+    return self;
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    self.dateLabel.left = 10;
+    self.dateLabel.centerY = self.contentView.height / 2;
+}
+
+-(UILabel *)dateLabel{
+    if (!_dateLabel) {
+        _dateLabel = [[UILabel alloc]init];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _dateLabel.font = [UIFont systemFontOfSize:15];
+    }
+    return _dateLabel;
+}
+
+-(void)setCurrentMonth:(NSString *)currentMonth{
+    _currentMonth = currentMonth;
+    NSInteger month = [[[_currentMonth componentsSeparatedByString:@"-"] lastObject] integerValue];
+    NSInteger year = [[[_currentMonth componentsSeparatedByString:@"-"] firstObject] integerValue];
+    if ([_currentMonth isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM"]]) {
+        self.dateLabel.text = @"本月";
+    }else if([_currentMonth hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]){
+        self.dateLabel.text = [NSString stringWithFormat:@"%ld月",month];
+    }else{
+        self.dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",year,month];
+    }
+    [self.dateLabel sizeToFit];
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end
