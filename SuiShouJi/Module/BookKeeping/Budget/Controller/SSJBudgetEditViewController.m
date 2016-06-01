@@ -83,11 +83,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.navigationItem.title = @"添加预算";
     }
     
-    //  如果是新建预算，需要重新创建个预算模型
-    if (!self.model) {
-        [self initBudgetModel];
-    }
-    _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
     [self queryBillTypeList];
     [self.view addSubview:self.tableView];
 }
@@ -300,6 +295,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.budgetTypeMap = billTypeMap;
         [self updateCellTitles];
         
+        //  如果是新建预算，需要重新创建个预算模型
+        if (!self.model) {
+            [self initBudgetModel];
+        }
+        
+        _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
+        
         [self.tableView reloadData];
         if (self.tableView.tableFooterView != self.footerView) {
             self.tableView.tableFooterView = self.footerView;
@@ -334,7 +336,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (NSString *)reuseCellIdForIndexPath:(NSIndexPath *)indexPath {
     NSString *cellTitle = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([cellTitle isEqualToString:kBudgetTypeTitle]
-        || [cellTitle isEqualToString:kBudgetPeriodTitle]) {
+        || [cellTitle isEqualToString:kBudgetPeriodTitle]
+        || [cellTitle isEqualToString:kBooksTypeTitle]) {
         return kBudgetEditLabelCellId;
     } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]
                || [cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
@@ -365,7 +368,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if ([cellTitle isEqualToString:kBudgetTypeTitle]) {
         //  预算类别
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
-        budgetTypeCell.subtitleLab.text = _bookName;
+        budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
         budgetTypeCell.subtitleLab.textColor = [UIColor blackColor];
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
@@ -375,7 +378,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
         SSJBudgetEditLabelCell *bookTypeCell = cell;
-        bookTypeCell.subtitleLab.text = [self budgetTypeNames];
+        bookTypeCell.subtitleLab.text = _bookName;
         bookTypeCell.subtitleLab.textColor = [UIColor blackColor];
         bookTypeCell.detailTextLabel.text = nil;
         [bookTypeCell.detailTextLabel sizeToFit];
