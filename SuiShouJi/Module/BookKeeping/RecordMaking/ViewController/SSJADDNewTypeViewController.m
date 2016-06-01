@@ -208,13 +208,12 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             if (self.addNewCategoryAction) {
                 self.addNewCategoryAction(categoryId);
             }
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+            }
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
         }];
-    }
-    
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     }
 }
 
