@@ -8,6 +8,8 @@
 
 #import "SSJFundingTransferEditeViewController.h"
 #import "SSJFundingTransferEdite.h"
+#import "SSJFundingTransferStore.h"
+#import "SSJFundingTransferViewController.h"
 
 static NSString *const kTitle1 = @"转账金额";
 static NSString *const kTitle2 = @"转出账户";
@@ -36,6 +38,8 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5]];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"929292"];
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
     // Do any additional setup after loading the view.
 }
@@ -77,7 +81,7 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     }else if ([title isEqualToString:kTitle2]) {
         cell.cellDetail = self.item.transferInName;
     }else if ([title isEqualToString:kTitle3]) {
-        cell.cellDetail = self.item.transferMoney;
+        cell.cellDetail = self.item.transferOutName;
     }else if ([title isEqualToString:kTitle4]) {
         cell.cellDetail = self.item.transferMemo;
     }else if ([title isEqualToString:kTitle5]) {
@@ -86,11 +90,15 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     return cell;
 }
 
-
-#pragma mark - Setter
--(void)setItem:(SSJFundingTransferDetailItem *)item{
-    _item = item;
-    [self.tableView reloadData];
+#pragma mark - UIActionSheetDelegate
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
+    __weak typeof(self) weakSelf = self;
+    [SSJFundingTransferStore deleteFundingTransferWithItem:self.item Success:^{
+        [CDAutoHideMessageHUD showMessage:@"删除成功"];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 #pragma mark - Getter
@@ -110,6 +118,17 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     return _modifyButtonView;
 }
 
+#pragma mark - Private
+-(void)rightBarButtonClicked:(id)sender{
+    UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"确定删除该项记录?" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除", nil];
+    [sheet showInView:self.view];
+}
+
+-(void)modifyButtonClicked:(id)sender{
+    SSJFundingTransferViewController *transferModifyVC = [[SSJFundingTransferViewController alloc]init];
+    transferModifyVC.item = self.item;
+    [self.navigationController pushViewController:transferModifyVC animated:YES];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

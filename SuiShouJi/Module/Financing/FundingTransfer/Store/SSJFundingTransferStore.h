@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJFundingTransferDetailItem.h"
 
 @interface SSJFundingTransferStore : NSObject
-+ (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success failure:(void (^)(NSError *error))failure;
++ (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success
+                                       failure:(void (^)(NSError *error))failure;
+
++ (void)deleteFundingTransferWithItem:(SSJFundingTransferDetailItem *)item
+                              Success:(void(^)())success
+                              failure:(void (^)(NSError *error))failure;
 @end

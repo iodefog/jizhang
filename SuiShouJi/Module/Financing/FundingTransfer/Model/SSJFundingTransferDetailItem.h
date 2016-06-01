@@ -37,4 +37,15 @@
 //转账的备注
 @property(nonatomic, strong) NSString *transferMemo;
 
+//转入的流水id
+@property(nonatomic, strong) NSString *transferInChargeId;
+
+//转出的流水id
+@property(nonatomic, strong) NSString *transferOutChargeId;
+
+//转入账户的操作类型
+@property(nonatomic) NSInteger *transferInFundOperatorType;
+
+//转出账户的操作类型
+@property(nonatomic) NSInteger *transferOutFundOperatorType;
 @end

@@ -69,7 +69,8 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSArray *items = [self.datas objectForKey:[[self.datas allKeys] objectAtIndex:indexPath.section]];
-    SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]init];
     transferEditeVc.item = item;
     [self.navigationController pushViewController:transferEditeVc animated:YES];

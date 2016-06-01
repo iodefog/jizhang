@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJFundingTransferDetailItem.h"
 
 @interface SSJFundingTransferViewController : SSJBaseViewController
-
+@property(nonatomic, strong) SSJFundingTransferDetailItem *item;
 @end

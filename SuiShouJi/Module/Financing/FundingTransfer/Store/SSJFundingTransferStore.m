@@ -9,7 +9,6 @@
 #import "SSJFundingTransferStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBillingChargeCellItem.h"
-#import "SSJFundingTransferDetailItem.h"
 
 @implementation SSJFundingTransferStore
 + (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success failure:(void (^)(NSError *error))failure {
@@ -99,7 +98,49 @@
     item.transferInImage = transferInItem.fundImage;
     item.transferOutImage = transferOutItem.fundImage;
     item.transferMemo = transferInItem.chargeMemo;
+    item.transferInChargeId = transferInItem.ID;
+    item.transferOutChargeId = transferOutItem.ID;
+
     return item;
+}
+
++ (void)deleteFundingTransferWithItem:(SSJFundingTransferDetailItem *)item
+                              Success:(void(^)())success
+                              failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *userid = SSJUSERID();
+        NSString *writeDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ichargeid in (?,?) and cuserid = ?",writeDate,@(SSJSyncVersion()),item.transferInChargeId,item.transferOutChargeId,userid]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            *rollback = YES;
+        }
+        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ?",item.transferMoney,item.transferOutId]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            *rollback = YES;
+        }
+        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cfundid = ?",item.transferMoney,item.transferInId]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                *rollback = YES;
+            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+    
 }
 
 @end
