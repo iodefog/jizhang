@@ -44,8 +44,8 @@
 @property(nonatomic, strong) NSString *transferOutChargeId;
 
 //转入账户的操作类型
-@property(nonatomic) NSInteger *transferInFundOperatorType;
+@property(nonatomic) NSInteger transferInFundOperatorType;
 
 //转出账户的操作类型
-@property(nonatomic) NSInteger *transferOutFundOperatorType;
+@property(nonatomic) NSInteger transferOutFundOperatorType;
 @end

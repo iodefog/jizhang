@@ -82,7 +82,9 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-
+    if (self.item != nil) {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 -(void)dealloc{

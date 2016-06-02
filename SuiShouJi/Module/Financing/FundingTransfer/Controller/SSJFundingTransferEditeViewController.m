@@ -93,12 +93,14 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 #pragma mark - UIActionSheetDelegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     __weak typeof(self) weakSelf = self;
-    [SSJFundingTransferStore deleteFundingTransferWithItem:self.item Success:^{
-        [CDAutoHideMessageHUD showMessage:@"删除成功"];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSError *error) {
-        
-    }];
+    if (buttonIndex == 0) {
+        [SSJFundingTransferStore deleteFundingTransferWithItem:self.item Success:^{
+            [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:@"删除失败"];
+        }];
+    }
 }
 
 #pragma mark - Getter
@@ -125,6 +127,14 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 }
 
 -(void)modifyButtonClicked:(id)sender{
+    if (self.item.transferInFundOperatorType == 2) {
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"%@账户已删除，不能编辑了哦。",self.item.transferInName]];
+        return;
+    }
+    if (self.item.transferOutFundOperatorType == 2) {
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"%@账户已删除，不能编辑了哦。",self.item.transferOutName]];
+        return;
+    }
     SSJFundingTransferViewController *transferModifyVC = [[SSJFundingTransferViewController alloc]init];
     transferModifyVC.item = self.item;
     [self.navigationController pushViewController:transferModifyVC animated:YES];
