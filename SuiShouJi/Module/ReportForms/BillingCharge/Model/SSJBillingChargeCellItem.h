@@ -65,6 +65,9 @@
 //账本id
 @property(nonatomic, strong) NSString *booksId;
 
+//账本名称
+@property(nonatomic, strong) NSString *booksName;
+
 //循环记账类型
 @property (nonatomic) NSInteger chargeCircleType;
 

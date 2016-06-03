@@ -18,6 +18,7 @@
 #import "SSJChargeCicleModifyViewController.h"
 
 
+
 @interface SSJCircleChargeSettingViewController ()
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) SSJNoneCircleChargeView *nodataView;

@@ -12,13 +12,17 @@ static NSString *const kTitle2 = @"收支类型";
 static NSString *const kTitle3 = @"类别";
 static NSString *const kTitle4 = @"金额";
 static NSString *const kTitle5 = @"备注";
-static NSString *const kTitle6 = @"循环周期";
-static NSString *const kTitle7 = @"资金账户";
-static NSString *const kTitle8 = @"起始日期";
-static NSString *const kTitle9 = @"不支持设置历史日期的周期账";
+static NSString *const kTitle6 = @"照片";
+static NSString *const kTitle7 = @"循环周期";
+static NSString *const kTitle8 = @"资金账户";
+static NSString *const kTitle9 = @"起始日期";
+static NSString *const kTitle10 = @"不支持设置历史日期的周期账";
+
+static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
+
 
 #import "SSJChargeCicleModifyViewController.h"
-#import "SSJMineHomeImageCell.h"
+#import "SSJChargeCircleModifyCell.h"
 
 @interface SSJChargeCicleModifyViewController ()
 @property(nonatomic, strong) NSArray *titles;
@@ -26,15 +30,37 @@ static NSString *const kTitle9 = @"不支持设置历史日期的周期账";
 
 @implementation SSJChargeCicleModifyViewController
 
+#pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.title = @"添加周期记账";
+        self.hidesBottomBarWhenPushed = YES;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8,kTitle9]];
+    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle6],@[kTitle7,kTitle8,kTitle9,kTitle10]];
+    [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if (self.item == nil) {
+        
+    }
 }
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 55;
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle10]) {
+        return 30;
+    }else{
+        return 55;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -67,13 +93,16 @@ static NSString *const kTitle9 = @"不支持设置历史日期的周期账";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    static NSString *cellId = @"SSJMineHomeCell";
-    SSJMineHomeImageCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJChargeCircleModifyCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:SSJChargeCircleEditeCellIdentifier];
     if (!mineHomeCell) {
-        mineHomeCell = [[SSJMineHomeImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        mineHomeCell = [[SSJChargeCircleModifyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SSJChargeCircleEditeCellIdentifier];
         mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    mineHomeCell.cellTitle = title;
+    if ([title isEqualToString:kTitle10]) {
+        mineHomeCell.cellSubTitle = title;
+    }else{
+        mineHomeCell.cellTitle = title;
+    }
     
     return mineHomeCell;
 }

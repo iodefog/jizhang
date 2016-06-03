@@ -718,6 +718,7 @@
 		9CD9BC541CFEAAAE0061803B /* SSJTransferDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC531CFEAAAE0061803B /* SSJTransferDetailHeader.m */; };
 		9CD9BC5E1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */; };
 		9CD9BC641CFEBCA40061803B /* SSJFundingTransferEdite.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */; };
+		9CD9BC681CFFD3600061803B /* SSJChargeCircleModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */; };
 		9CEB85BF1CC5D8FC00AE8F8D /* mark_jilu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BB1CC5D8FC00AE8F8D /* mark_jilu@2x.png */; };
 		9CEB85C01CC5D8FC00AE8F8D /* mark_jilu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */; };
 		9CEB85C11CC5D8FC00AE8F8D /* mark_pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */; };
@@ -1930,6 +1931,8 @@
 		9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferEditeViewController.m; sourceTree = "<group>"; };
 		9CD9BC621CFEBCA40061803B /* SSJFundingTransferEdite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferEdite.h; sourceTree = "<group>"; };
 		9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferEdite.m; sourceTree = "<group>"; };
+		9CD9BC661CFFD3600061803B /* SSJChargeCircleModifyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeCircleModifyCell.h; sourceTree = "<group>"; };
+		9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeCircleModifyCell.m; sourceTree = "<group>"; };
 		9CEB85BB1CC5D8FC00AE8F8D /* mark_jilu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_jilu@2x.png"; sourceTree = "<group>"; };
 		9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_jilu@3x.png"; sourceTree = "<group>"; };
 		9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@2x.png"; sourceTree = "<group>"; };
@@ -3995,6 +3998,7 @@
 		9CD9BB741CFD2DAA0061803B /* CircleChargeSetting */ = {
 			isa = PBXGroup;
 			children = (
+				9CD9BC701CFFD9E70061803B /* Model */,
 				9CD9BB751CFD2DAA0061803B /* Controller */,
 				9CD9BB7A1CFD2DAA0061803B /* Network */,
 				9CD9BB7B1CFD2DAA0061803B /* Store */,
@@ -4006,10 +4010,10 @@
 		9CD9BB751CFD2DAA0061803B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9BB761CFD2DAA0061803B /* SSJChargeCicleModifyViewController.h */,
-				9CD9BB771CFD2DAA0061803B /* SSJChargeCicleModifyViewController.m */,
 				9CD9BB781CFD2DAA0061803B /* SSJCircleChargeSettingViewController.h */,
 				9CD9BB791CFD2DAA0061803B /* SSJCircleChargeSettingViewController.m */,
+				9CD9BB761CFD2DAA0061803B /* SSJChargeCicleModifyViewController.h */,
+				9CD9BB771CFD2DAA0061803B /* SSJChargeCicleModifyViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4035,6 +4039,8 @@
 			children = (
 				9CD9BB7F1CFD2DAA0061803B /* SSJChargeCircleSelectView.h */,
 				9CD9BB801CFD2DAA0061803B /* SSJChargeCircleSelectView.m */,
+				9CD9BC661CFFD3600061803B /* SSJChargeCircleModifyCell.h */,
+				9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4359,6 +4365,13 @@
 			children = (
 				9CD9BC481CFDA4990061803B /* SSJFundingTransferDetailItem.h */,
 				9CD9BC491CFDA4990061803B /* SSJFundingTransferDetailItem.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9CD9BC701CFFD9E70061803B /* Model */ = {
+			isa = PBXGroup;
+			children = (
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5845,6 +5858,7 @@
 				7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */,
 				7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */,
 				9C9471811CEB224C00D69079 /* SSJFundingListDayItem.m in Sources */,
+				9CD9BC681CFFD3600061803B /* SSJChargeCircleModifyCell.m in Sources */,
 				7D768A801C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m in Sources */,
 				9C0E8C281CB645900093F79E /* UMChatToolBar.m in Sources */,
 				7DD902971CE202790076929F /* SCYSlidePagingHeaderView.m in Sources */,
