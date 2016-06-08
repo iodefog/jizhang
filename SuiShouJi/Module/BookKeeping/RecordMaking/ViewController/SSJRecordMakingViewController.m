@@ -748,7 +748,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [weakSelf goBackAction];
-//            [weakSelf.navigationController dismissViewControllerAnimated:YES completion:NULL];
         });
     }];
 }

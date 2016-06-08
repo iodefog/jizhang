@@ -49,6 +49,7 @@
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
         item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
         item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
+        item.chargeCircleType = 0;
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(item);
@@ -65,17 +66,35 @@
     item.money = [set stringForColumn:@"IMONEY"];
     item.colorValue = [set stringForColumn:@"CCOLOR"];
     item.incomeOrExpence = [set boolForColumn:@"ITYPE"];
-    item.ID = [set stringForColumn:@"ICHARGEID"];
     item.fundId = [set stringForColumn:@"IFUNSID"];
     item.editeDate = [set stringForColumn:@"CWRITEDATE"];
     item.billId = [set stringForColumn:@"IBILLID"];
     item.chargeImage = [set stringForColumn:@"CIMGURL"];
-    item.chargeThumbImage = [set stringForColumn:@"THUMBURL"];
     item.chargeMemo = [set stringForColumn:@"CMEMO"];
     item.configId = [set stringForColumn:@"ICONFIGID"];
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     item.booksName = [set stringForColumn:@"CBOOKSID"];
+    item.isOnOrNot = [set stringForColumn:@"ISTATE"];
     return item;
+}
+
++ (void)saveCircleChargeItem:(SSJBillingChargeCellItem *)item
+                     success:(void(^)())success
+                     failure:(void (^)(NSError *error))failure {
+    __block NSString *booksid = SSJGetCurrentBooksType();
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
+        NSString *cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",item.configId]) {
+            NSString *configId = SSJUUID();
+            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?)",configId,userid,item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+            }
+            if ([item.billDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, imoney, cimgurl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,0,?)",configId,userid,item.billId,item.fundId,item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+                }
+            }
+        }
+    }];
 }
 
 @end

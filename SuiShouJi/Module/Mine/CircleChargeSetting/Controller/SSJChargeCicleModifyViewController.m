@@ -172,6 +172,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else{
         circleModifyCell.cellInput.hidden = YES;
     }
+    if ([title isEqualToString:kTitle1]) {
+        circleModifyCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }else{
+        circleModifyCell.selectionStyle = UITableViewCellSelectionStyleGray;
+    }
     if ([title isEqualToString:kTitle10]) {
         circleModifyCell.cellSubTitle = title;
         circleModifyCell.cellSubTitleLabel.hidden = NO;
@@ -324,7 +329,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 }
 
 -(void)saveButtonClicked:(id)sender{
-    
+    [SSJCircleChargeStore saveCircleChargeItem:self.item success:^{
+        
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 /**

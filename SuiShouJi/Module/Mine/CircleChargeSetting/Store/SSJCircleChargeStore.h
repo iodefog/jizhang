@@ -16,4 +16,8 @@
 + (void)queryDefualtItemWithIncomeOrExpence:(BOOL)incomeOrExpence
                                     Success:(void(^)(SSJBillingChargeCellItem *item))success
                                     failure:(void (^)(NSError *error))failure;
+
++ (void)saveCircleChargeItem:(SSJBillingChargeCellItem *)item
+                     success:(void(^)())success
+                     failure:(void (^)(NSError *error))failure;
 @end
