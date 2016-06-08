@@ -150,7 +150,6 @@
             _amountTextField = NewFundingCell.cellDetail;
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellDetail.text = [NSString stringWithFormat:@"%.2f",_amountValue];
-            NewFundingCell.cellDetail.inputView = [SSJCustomKeyboard sharedInstance];
             _amountTextField.delegate = self;
 
         }

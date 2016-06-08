@@ -26,8 +26,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-        _titleArray = @[@"仅一次",@"每天",@"每个工作日",@"每个周末(六、日)",@"每周",@"每月",@"每月最后一天",@"每年"];
-        _selectCircleType = -1;
+        _titleArray = @[@"每天",@"每个工作日",@"每个周末(六、日)",@"每周",@"每月",@"每月最后一天",@"每年"];
+        _selectCircleType = 0;
         [self addSubview:self.pickerView];
         [self addSubview:self.topView];
         [self sizeToFit];
@@ -157,8 +157,8 @@
 
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
     _selectCircleType = selectCircleType;
-    _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType + 1)];
-    [self.pickerView selectRow:_selectCircleType + 1 inComponent:0 animated:NO];
+    _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType)];
+    [self.pickerView selectRow:_selectCircleType inComponent:0 animated:NO];
 }
 
 -(void)setIncomeOrExpenture:(BOOL)incomeOrExpenture{

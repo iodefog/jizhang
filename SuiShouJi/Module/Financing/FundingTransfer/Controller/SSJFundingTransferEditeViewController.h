@@ -9,6 +9,6 @@
 #import "SSJNewBaseTableViewController.h"
 #import "SSJFundingTransferDetailItem.h"
 
-@interface SSJFundingTransferEditeViewController : SSJNewBaseTableViewController
+@interface SSJFundingTransferEditeViewController : SSJNewBaseTableViewController<UIActionSheetDelegate>
 @property(nonatomic, strong) SSJFundingTransferDetailItem *item;
 @end

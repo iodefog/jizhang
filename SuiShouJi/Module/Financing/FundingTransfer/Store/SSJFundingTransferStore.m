@@ -9,14 +9,13 @@
 #import "SSJFundingTransferStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBillingChargeCellItem.h"
-#import "SSJFundingTransferDetailItem.h"
 
 @implementation SSJFundingTransferStore
 + (void)queryForFundingTransferListWithSuccess:(void(^)(NSMutableDictionary *result))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableDictionary *tempdic = [[NSMutableDictionary alloc]init];
-        FMResultSet * transferResult = [db executeQuery:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.cacctname , b.cfundid , b.cicoin from bk_user_charge as a, bk_fund_info as b where a.ibillid in (3,4) and a.operatortype != 2 and a.cuserid = ? and a.ifunsid = b.cfundid order by cbilldate desc , cwritedate desc , ibillid asc",userid];
+        FMResultSet * transferResult = [db executeQuery:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.cacctname , b.cfundid , b.cicoin , b.operatortype as fundoperatortype from bk_user_charge as a, bk_fund_info as b where a.ibillid in (3,4) and a.operatortype != 2 and a.cuserid = ? and a.ifunsid = b.cfundid order by cbilldate desc , cwritedate desc , ibillid asc",userid];
         if (!transferResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -41,6 +40,7 @@
             item.configId = [transferResult stringForColumn:@"ICONFIGID"];
             item.billDate = [transferResult stringForColumn:@"CBILLDATE"];
             item.fundName = [transferResult stringForColumn:@"CACCTNAME"];
+            item.fundOperatorType = [transferResult intForColumn:@"fundoperatortype"];
             NSString *month = [transferResult stringForColumn:@"cmonth"];
             SSJFundingTransferDetailItem *detailItem = [[SSJFundingTransferDetailItem alloc]init];
             if (tempArr.count == 1) {
@@ -99,7 +99,51 @@
     item.transferInImage = transferInItem.fundImage;
     item.transferOutImage = transferOutItem.fundImage;
     item.transferMemo = transferInItem.chargeMemo;
+    item.transferInChargeId = transferInItem.ID;
+    item.transferOutChargeId = transferOutItem.ID;
+    item.transferInFundOperatorType = transferInItem.fundOperatorType;
+    item.transferOutFundOperatorType = transferOutItem.fundOperatorType;
+
     return item;
+}
+
++ (void)deleteFundingTransferWithItem:(SSJFundingTransferDetailItem *)item
+                              Success:(void(^)())success
+                              failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *userid = SSJUSERID();
+        NSString *writeDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ichargeid in (?,?) and cuserid = ?",writeDate,@(SSJSyncVersion()),item.transferInChargeId,item.transferOutChargeId,userid]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            *rollback = YES;
+        }
+        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ?",item.transferMoney,item.transferOutId]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            *rollback = YES;
+        }
+        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cfundid = ?",item.transferMoney,item.transferInId]) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+                *rollback = YES;
+            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
+    
 }
 
 @end

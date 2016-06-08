@@ -82,7 +82,9 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-
+    if (self.item != nil) {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
 }
 
 -(void)dealloc{
@@ -105,6 +107,9 @@
         _transferIntext.backgroundColor = [UIColor whiteColor];
         _transferIntext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferIntext.font = [UIFont systemFontOfSize:24];
+        if (self.item != nil) {
+            _transferIntext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
+        }
         _transferIntext.placeholder = @"¥0.00";
         _transferIntext.leftView = self.transferInButtonView;
         _transferIntext.leftViewMode = UITextFieldViewModeAlways;
@@ -125,6 +130,9 @@
         _transferOuttext.backgroundColor = [UIColor whiteColor];
         _transferOuttext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferOuttext.font = [UIFont systemFontOfSize:24];
+        if (self.item != nil) {
+            _transferOuttext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
+        }
         _transferOuttext.placeholder = @"¥0.00";
         _transferOuttext.leftView = self.transferOutButtonView;
         _transferOuttext.leftViewMode = UITextFieldViewModeAlways;
@@ -144,8 +152,12 @@
         _transferInButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 30)];
         _transferInButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 30)];
         _transferInButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [_transferInButton setImage:[UIImage imageNamed:@"founds_zhuanru"] forState:UIControlStateNormal];
-        [_transferInButton setTitle:@"请选择转入账户" forState:UIControlStateNormal];
+        if (self.item == nil) {
+            [_transferInButton setTitle:@"请选择转入账户" forState:UIControlStateNormal];
+        }else{
+            [_transferInButton setTitle:self.item.transferInName forState:UIControlStateNormal];
+            [_transferInButton setImage:[UIImage imageNamed:self.item.transferInImage] forState:UIControlStateNormal];
+        }
         _transferInButton.titleLabel.textColor = [UIColor blackColor];
         [_transferInButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _transferInButton.titleLabel.font = [UIFont systemFontOfSize:18];
@@ -160,9 +172,12 @@
         _transferOutButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0 ,170, 30)];
         _transferOutButton = [[UIButton alloc]initWithFrame:CGRectMake(20, 0 ,150, 30)];
         _transferOutButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-
-        [_transferOutButton setImage:[UIImage imageNamed:@"founds_zhuanchu"] forState:UIControlStateNormal];
-        [_transferOutButton setTitle:@"请选择转出账户" forState:UIControlStateNormal];
+        if (self.item == nil) {
+            [_transferOutButton setTitle:@"请选择转出账户" forState:UIControlStateNormal];
+        }else{
+            [_transferOutButton setTitle:self.item.transferOutName forState:UIControlStateNormal];
+            [_transferOutButton setImage:[UIImage imageNamed:self.item.transferOutImage] forState:UIControlStateNormal];
+        }
         [_transferOutButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _transferOutButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_transferOutButton addTarget:self action:@selector(transferOutButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -176,6 +191,9 @@
     if (!_transferInFundingTypeSelect) {
         __weak typeof(self) weakSelf = self;
         _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        if (self.item != nil) {
+            _transferOutFundingTypeSelect.selectFundID = self.item.transferInId;
+        }
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
             {
@@ -201,6 +219,9 @@
     if (!_transferOutFundingTypeSelect) {
         __weak typeof(self) weakSelf = self;
         _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        if (self.item != nil) {
+            _transferOutFundingTypeSelect.selectFundID = self.item.transferOutId;
+        }
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
             {
@@ -258,6 +279,9 @@
         _memoInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _memoInput.font = [UIFont systemFontOfSize:15];
         _memoInput.textAlignment = NSTextAlignmentLeft;
+        if (self.item != nil) {
+            _memoInput.text = self.item.transferMemo;
+        }
         float textWidth = [@"备注:" sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}].width;
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30 + textWidth, 0)];
         _memoInput.leftView = view;
@@ -289,34 +313,65 @@
 
 -(void)saveClicked:(id)sender{
     NSString *str = [_transferIntext.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+    if (self.item == nil) {
+        if (_transferInItem == nil || _transferOutItem == nil) {
+            [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
+            return;
+        }
+    }
     if ([_transferOutItem.fundingID isEqualToString:_transferInItem.fundingID]) {
         [CDAutoHideMessageHUD showMessage:@"请选择不同账户"];
         return;
     }else if ([str doubleValue] == 0 || [self.transferIntext.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
         return;
-    }else if (_transferInItem == nil || _transferOutItem == nil) {
-        [CDAutoHideMessageHUD showMessage:@"请选择资金账户"];
-        return;
     }
     __block NSString *booksid = SSJGetCurrentBooksType();
+    __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
         NSString *userid = SSJUSERID();
         NSString *writedate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"3",_transferInItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,self.memoInput.text])
-        {
-            *rollback = YES;
+        if (self.item == nil) {
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"3",_transferInItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text])
+            {
+                *rollback = YES;
+            }
+            if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"4",_transferOutItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,weakSelf.memoInput.text]) {
+                *rollback = YES;
+            }
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
+                *rollback = YES;
+            }
+            SSJDispatch_main_async_safe(^(){
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            });
+        }else{
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],weakSelf.item.transferInId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId]) {
+                *rollback = YES;
+            }
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],weakSelf.item.transferOutId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId]) {
+                *rollback = YES;
+            }
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferOutId,SSJUSERID()]) {
+                *rollback = YES;
+            }
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
+                *rollback = YES;
+            }
+            weakSelf.item.transferOutId = _transferOutItem.fundingID;
+            weakSelf.item.transferInId = _transferInItem.fundingID;
+            weakSelf.item.transferMoney = str;
+            weakSelf.item.transferMemo = weakSelf.memoInput.text;
+            SSJDispatch_main_async_safe(^(){
+                if (weakSelf.editeCompleteBlock) {
+                    weakSelf.editeCompleteBlock(weakSelf.item);
+                }
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            });
         }
-        if (![db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE  , CBILLDATE , CBOOKSID , CMEMO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",SSJUUID(),userid,str,@"4",_transferOutItem.fundingID,@"",@"",writedate,@(SSJSyncVersion()),[NSNumber numberWithInt:0],[[NSDate date] ssj_systemCurrentDateWithFormat:@"YYYY-MM-dd"],booksid,self.memoInput.text]) {
-            *rollback = YES;
-        }
-        if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
-            *rollback = YES;
-        }
-        SSJDispatch_main_async_safe(^(){
-            [self.navigationController popViewControllerAnimated:YES];
-            
-        });
+
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];

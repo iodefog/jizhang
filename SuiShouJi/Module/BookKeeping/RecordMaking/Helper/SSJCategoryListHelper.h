@@ -99,6 +99,16 @@
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure;
 
+
+/**
+ *  获取第一个记账类型
+ *
+ *  @param incomeOrExpenture 收入还是支出
+ *
+ *  @return 收支类型
+ */
++ (SSJRecordMakingCategoryItem *)queryfirstCategoryItemWithIncomeOrExpence:(BOOL)incomeOrExpenture;
+
 /**
  *  自定义支出类型颜色
  */

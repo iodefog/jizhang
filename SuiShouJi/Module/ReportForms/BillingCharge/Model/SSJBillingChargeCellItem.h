@@ -40,6 +40,9 @@
 // 资金帐户图片名称
 @property (nonatomic,strong) NSString *fundImage;
 
+// 资金帐户操作类型
+@property (nonatomic) NSInteger fundOperatorType;
+
 
 //记账编辑时间
 @property (nonatomic,strong) NSString *editeDate;
@@ -61,6 +64,9 @@
 
 //账本id
 @property(nonatomic, strong) NSString *booksId;
+
+//账本名称
+@property(nonatomic, strong) NSString *booksName;
 
 //循环记账类型
 @property (nonatomic) NSInteger chargeCircleType;
