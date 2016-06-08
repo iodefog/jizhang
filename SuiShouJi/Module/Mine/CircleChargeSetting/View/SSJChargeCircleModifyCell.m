@@ -10,7 +10,6 @@
 
 @interface SSJChargeCircleModifyCell()
 @property(nonatomic, strong) UILabel *cellDetailLabel;
-@property(nonatomic, strong) UILabel *cellSubTitleLabel;
 @property(nonatomic, strong) UIImageView *cellImageView;
 @end
 
@@ -33,7 +32,11 @@
     self.cellTitleLabel.centerY = self.height / 2;
     self.cellSubTitleLabel.left = 10;
     self.cellSubTitleLabel.centerY = self.height / 2;
-    self.cellDetailLabel.right = self.width - 10;
+    if (self.contentView.width == self.width) {
+        self.cellDetailLabel.right = self.contentView.width - 10;
+    }else{
+        self.cellDetailLabel.right = self.contentView.width;
+    }
     self.cellDetailLabel.centerY = self.height / 2;
     self.cellImageView.right = self.width - 10;
     self.cellImageView.centerY = self.height / 2;
@@ -80,6 +83,7 @@
     if (!_cellInput) {
         _cellInput = [[UITextField alloc]init];
         _cellInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _cellInput.textAlignment = NSTextAlignmentRight;
         _cellInput.font = [UIFont systemFontOfSize:18];
         _cellInput.hidden = YES;
     }

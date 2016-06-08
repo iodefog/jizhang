@@ -243,6 +243,20 @@
     }];
 }
 
++ (SSJRecordMakingCategoryItem *)queryfirstCategoryItemWithIncomeOrExpence:(BOOL)incomeOrExpenture{
+    SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 1 AND B.CUSERID = ? AND A.ID = B.CBILLID AND B.IORDER = 1", @(incomeOrExpenture), SSJUSERID()];
+        while ([rs next]) {
+            item.categoryTitle = [rs stringForColumn:@"CNAME"];
+            item.categoryImage = [rs stringForColumn:@"CCOIN"];
+            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
+            item.categoryID = [rs stringForColumn:@"ID"];
+        }
+    }];
+    return item;
+}
+
 + (NSArray *)payOutColors {
     return @[@"c55553", @"c6632f", @"a90868", @"d29361", @"a8a67e", @"006f5f", @"ac3b2b", @"6293b0", @"ab94c6", @"d96421", @"a74257", @"c1af65"];
 }

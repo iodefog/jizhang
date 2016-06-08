@@ -18,7 +18,6 @@
 #import "SSJChargeCicleModifyViewController.h"
 
 
-
 @interface SSJCircleChargeSettingViewController ()
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) SSJNoneCircleChargeView *nodataView;
@@ -29,8 +28,8 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.hidesBottomBarWhenPushed = YES;
         self.title = @"周期记账";
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }

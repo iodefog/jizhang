@@ -15,9 +15,13 @@
 @property (nonatomic) long selectedDay;
 @property (nonatomic,strong) SSJCalendarView *calendarView;
 
+
+
 @property (nonatomic, copy) void(^dismissBlock)();
 
 - (instancetype)initWithFrame:(CGRect)frame forYear:(long)year Month:(long)month Day:(long)day;
+
 - (void)show;
+
 - (void)dismiss;
 @end

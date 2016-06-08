@@ -36,11 +36,25 @@
     }];
 }
 
-+ (void)queryDefualtItemWithSuccess:(void(^)(SSJBillingChargeCellItem *item))success
++ (void)queryDefualtItemWithIncomeOrExpence:(BOOL)incomeOrExpence
+                                    Success:(void(^)(SSJBillingChargeCellItem *item))success
                               failure:(void (^)(NSError *error))failure {
+    __block NSString *booksId = SSJGetCurrentBooksType();
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
-        FMResultSet *billTypeSet = [db executeQuery:@"select count(1) from"];
+        item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+        item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.iorder = 1 and b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ?",userid,@(incomeOrExpence)];
+        item.typeName = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.billId];
+        item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
+        item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
+        item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(item);
+            });
+        }
+
     }];
 }
 

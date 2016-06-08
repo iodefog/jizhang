@@ -36,7 +36,7 @@
 
 -(UIImageView *)fundingImage{
     if (!_fundingImage) {
-        _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 24, 24)];
     }
     return _fundingImage;
 }

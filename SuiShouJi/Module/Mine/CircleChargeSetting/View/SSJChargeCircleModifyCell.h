@@ -11,6 +11,7 @@
 @interface SSJChargeCircleModifyCell : SSJBaseTableViewCell
 @property(nonatomic, strong) UITextField * cellInput;
 @property(nonatomic, strong) UILabel *cellTitleLabel;
+@property(nonatomic, strong) UILabel *cellSubTitleLabel;
 
 @property(nonatomic, strong) NSString *cellTitle;
 @property(nonatomic, strong) NSString *cellDetail;

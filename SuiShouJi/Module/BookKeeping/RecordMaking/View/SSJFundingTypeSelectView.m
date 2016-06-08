@@ -27,6 +27,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self sizeToFit];
         [self getDateFromDb];
 
 //        UIView *backView = [[UIView alloc]initWithFrame:self.frame];
@@ -34,7 +35,6 @@
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
 //        [self addSubview:self.addNewTypeButtonView];
         [self addSubview:self.titleView];
-        [self sizeToFit];
     }
     return self;
 }      

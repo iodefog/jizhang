@@ -645,6 +645,9 @@
 		9C991E571CE0BC120031CD02 /* bt_zhongjiang@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C991E531CE0BC120031CD02 /* bt_zhongjiang@3x.png */; };
 		9C991E5B1CE0BD1B0031CD02 /* bt_zujin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C991E591CE0BD1B0031CD02 /* bt_zujin@2x.png */; };
 		9C991E5C1CE0BD1B0031CD02 /* bt_zujin@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C991E5A1CE0BD1B0031CD02 /* bt_zujin@3x.png */; };
+		9C9D0B7D1D01867D003A9F4E /* SSJBillTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B7C1D01867D003A9F4E /* SSJBillTypeSelectViewController.m */; };
+		9C9D0B801D01898E003A9F4E /* SSJBillTypeSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B7F1D01898E003A9F4E /* SSJBillTypeSelectCell.m */; };
+		9C9D0B831D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9D0B821D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m */; };
 		9CD9BA401CF7FA780061803B /* SSJBooksTypeEditeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BA3F1CF7FA780061803B /* SSJBooksTypeEditeView.m */; };
 		9CD9BBFC1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5A1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m */; };
 		9CD9BBFD1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5C1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m */; };
@@ -824,8 +827,6 @@
 		BDA2EF161C8EB89E007DD45F /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */; };
 		BDA3FDED1C58CAC400FB57B1 /* ft_cash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDD91C58CAC400FB57B1 /* ft_cash@2x.png */; };
 		BDA3FDEE1C58CAC400FB57B1 /* ft_cash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDDA1C58CAC400FB57B1 /* ft_cash@3x.png */; };
-		BDA3FDEF1C58CAC400FB57B1 /* ft_chongzhika@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDDB1C58CAC400FB57B1 /* ft_chongzhika@2x.png */; };
-		BDA3FDF01C58CAC400FB57B1 /* ft_chongzhika@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDDC1C58CAC400FB57B1 /* ft_chongzhika@3x.png */; };
 		BDA3FDF11C58CAC400FB57B1 /* ft_chuxuka@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDDD1C58CAC400FB57B1 /* ft_chuxuka@2x.png */; };
 		BDA3FDF21C58CAC400FB57B1 /* ft_chuxuka@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDDE1C58CAC400FB57B1 /* ft_chuxuka@3x.png */; };
 		BDA3FDF31C58CAC400FB57B1 /* ft_creditcard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BDA3FDDF1C58CAC400FB57B1 /* ft_creditcard@2x.png */; };
@@ -1786,6 +1787,12 @@
 		9C991E531CE0BC120031CD02 /* bt_zhongjiang@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_zhongjiang@3x.png"; sourceTree = "<group>"; };
 		9C991E591CE0BD1B0031CD02 /* bt_zujin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_zujin@2x.png"; sourceTree = "<group>"; };
 		9C991E5A1CE0BD1B0031CD02 /* bt_zujin@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_zujin@3x.png"; sourceTree = "<group>"; };
+		9C9D0B7B1D01867D003A9F4E /* SSJBillTypeSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillTypeSelectViewController.h; sourceTree = "<group>"; };
+		9C9D0B7C1D01867D003A9F4E /* SSJBillTypeSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillTypeSelectViewController.m; sourceTree = "<group>"; };
+		9C9D0B7E1D01898E003A9F4E /* SSJBillTypeSelectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillTypeSelectCell.h; sourceTree = "<group>"; };
+		9C9D0B7F1D01898E003A9F4E /* SSJBillTypeSelectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillTypeSelectCell.m; sourceTree = "<group>"; };
+		9C9D0B811D07B015003A9F4E /* SSJChargeCircleTimeSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeCircleTimeSelectView.h; sourceTree = "<group>"; };
+		9C9D0B821D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeCircleTimeSelectView.m; sourceTree = "<group>"; };
 		9CD9BA3E1CF7FA780061803B /* SSJBooksTypeEditeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeEditeView.h; sourceTree = "<group>"; };
 		9CD9BA3F1CF7FA780061803B /* SSJBooksTypeEditeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksTypeEditeView.m; sourceTree = "<group>"; };
 		9CD9BB591CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeHelpViewController.h; sourceTree = "<group>"; };
@@ -2106,8 +2113,6 @@
 		BDA2EF151C8EB89E007DD45F /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		BDA3FDD91C58CAC400FB57B1 /* ft_cash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_cash@2x.png"; sourceTree = "<group>"; };
 		BDA3FDDA1C58CAC400FB57B1 /* ft_cash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_cash@3x.png"; sourceTree = "<group>"; };
-		BDA3FDDB1C58CAC400FB57B1 /* ft_chongzhika@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_chongzhika@2x.png"; sourceTree = "<group>"; };
-		BDA3FDDC1C58CAC400FB57B1 /* ft_chongzhika@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_chongzhika@3x.png"; sourceTree = "<group>"; };
 		BDA3FDDD1C58CAC400FB57B1 /* ft_chuxuka@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_chuxuka@2x.png"; sourceTree = "<group>"; };
 		BDA3FDDE1C58CAC400FB57B1 /* ft_chuxuka@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_chuxuka@3x.png"; sourceTree = "<group>"; };
 		BDA3FDDF1C58CAC400FB57B1 /* ft_creditcard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_creditcard@2x.png"; sourceTree = "<group>"; };
@@ -3224,8 +3229,6 @@
 				9C2BCFBD1CBF793500D8D8D3 /* ft_zhankai@3x.png */,
 				BDA3FDD91C58CAC400FB57B1 /* ft_cash@2x.png */,
 				BDA3FDDA1C58CAC400FB57B1 /* ft_cash@3x.png */,
-				BDA3FDDB1C58CAC400FB57B1 /* ft_chongzhika@2x.png */,
-				BDA3FDDC1C58CAC400FB57B1 /* ft_chongzhika@3x.png */,
 				BDA3FDDD1C58CAC400FB57B1 /* ft_chuxuka@2x.png */,
 				BDA3FDDE1C58CAC400FB57B1 /* ft_chuxuka@3x.png */,
 				BDA3FDDF1C58CAC400FB57B1 /* ft_creditcard@2x.png */,
@@ -4014,6 +4017,8 @@
 				9CD9BB791CFD2DAA0061803B /* SSJCircleChargeSettingViewController.m */,
 				9CD9BB761CFD2DAA0061803B /* SSJChargeCicleModifyViewController.h */,
 				9CD9BB771CFD2DAA0061803B /* SSJChargeCicleModifyViewController.m */,
+				9C9D0B7B1D01867D003A9F4E /* SSJBillTypeSelectViewController.h */,
+				9C9D0B7C1D01867D003A9F4E /* SSJBillTypeSelectViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -4041,6 +4046,10 @@
 				9CD9BB801CFD2DAA0061803B /* SSJChargeCircleSelectView.m */,
 				9CD9BC661CFFD3600061803B /* SSJChargeCircleModifyCell.h */,
 				9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */,
+				9C9D0B7E1D01898E003A9F4E /* SSJBillTypeSelectCell.h */,
+				9C9D0B7F1D01898E003A9F4E /* SSJBillTypeSelectCell.m */,
+				9C9D0B811D07B015003A9F4E /* SSJChargeCircleTimeSelectView.h */,
+				9C9D0B821D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5249,7 +5258,6 @@
 				7DD7D69E1C4C8E6A00ACE71A /* bt_entertainment@2x.png in Resources */,
 				7DD7D6CD1C4C8E6A00ACE71A /* bt_repair@3x.png in Resources */,
 				7DD7D6D71C4C8E6A00ACE71A /* bt_snack@3x.png in Resources */,
-				BDA3FDF01C58CAC400FB57B1 /* ft_chongzhika@3x.png in Resources */,
 				BDF510B11C92E78C00A49D74 /* calender_star@2x.png in Resources */,
 				9C991E241CE0A79F0031CD02 /* bt_money@3x.png in Resources */,
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -5570,7 +5578,6 @@
 				9C991E191CE0A79F0031CD02 /* bt_ktv@3x.png in Resources */,
 				9C991E1F1CE0A79F0031CD02 /* bt_meizhuang@2x.png in Resources */,
 				9C991E0D1CE0A79F0031CD02 /* bt_huankuan@3x.png in Resources */,
-				BDA3FDEF1C58CAC400FB57B1 /* ft_chongzhika@2x.png in Resources */,
 				9C3276CD1CE339AC00109C4C /* home_line@3x.png in Resources */,
 				7DA4ACB51C919F38004E39E8 /* budget_red_wave_full@2x.png in Resources */,
 				7DD7D6931C4C8E6A00ACE71A /* bt_clothes@3x.png in Resources */,
@@ -5804,6 +5811,7 @@
 				7D5F33391CEAE6C10086B67E /* SSJBudgetListViewController.m in Sources */,
 				7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */,
 				9CD9BC0B1CFD2DAA0061803B /* SSJMagicExportAnnouncementViewController.m in Sources */,
+				9C9D0B801D01898E003A9F4E /* SSJBillTypeSelectCell.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,
 				7D5F33411CEAE6C10086B67E /* SSJBudgetDetailPeriodSwitchControl.m in Sources */,
 				9C9471771CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */,
@@ -5950,6 +5958,7 @@
 				7D5F33741CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m in Sources */,
 				9CD9BC4A1CFDA4990061803B /* SSJFundingTransferDetailItem.m in Sources */,
 				9CD9BC191CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m in Sources */,
+				9C9D0B831D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m in Sources */,
 				9CD9BC3A1CFD2DAA0061803B /* SSJPasswordModifyViewController.m in Sources */,
 				7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */,
 				7D2B23F91C3A18DF009A74A8 /* SSJBillingChargeCellItem.m in Sources */,
@@ -5963,6 +5972,7 @@
 				7D5F33381CEAE6C10086B67E /* SSJBudgetEditViewController.m in Sources */,
 				BD542B561CB544F700655EE2 /* SSJQQLoginHelper.m in Sources */,
 				BD0432F51C1A77BB0051E7AB /* TPKeyboardAvoidingScrollView.m in Sources */,
+				9C9D0B7D1D01867D003A9F4E /* SSJBillTypeSelectViewController.m in Sources */,
 				7D5F332D1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m in Sources */,
 				9C2E02781CAE419600C5F764 /* SSJQQUserInfoItem.m in Sources */,
 				7D5F33861CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionView.m in Sources */,

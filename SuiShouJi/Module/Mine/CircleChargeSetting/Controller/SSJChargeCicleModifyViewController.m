@@ -23,25 +23,41 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 #import "SSJChargeCicleModifyViewController.h"
 #import "SSJChargeCircleModifyCell.h"
+#import "SSJCircleChargeStore.h"
+#import "SSJCategoryListHelper.h"
+#import "TPKeyboardAvoidingTableView.h"
+#import "SSJFundingTypeSelectView.h"
+#import "SSJChargeCircleSelectView.h"
+#import "SSJBillTypeSelectViewController.h"
+#import "SSJChargeCircleTimeSelectView.h"
 
-@interface SSJChargeCicleModifyViewController ()
+@interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic, strong) NSArray *titles;
+@property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
+@property(nonatomic, strong) UIView *saveFooterView;
+@property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
+@property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
+@property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
 @end
 
-@implementation SSJChargeCicleModifyViewController
+@implementation SSJChargeCicleModifyViewController{
+    UIImage *selectedImage;
+}
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"添加周期记账";
         self.hidesBottomBarWhenPushed = YES;
+        self.hideKeyboradWhenTouch = YES;
     }
     return self;
-}
+} 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle6],@[kTitle7,kTitle8,kTitle9,kTitle10]];
+    [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     // Do any additional setup after loading the view.
 }
@@ -49,7 +65,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (self.item == nil) {
-        
+//        SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:0];
+        __weak typeof(self) weakSelf = self;
+        [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:0 Success:^(SSJBillingChargeCellItem *item) {
+            weakSelf.item = item;
+            [weakSelf.tableView reloadData];
+        } failure:^(NSError *error) {
+            
+        }];
     }
 }
 
@@ -68,17 +91,41 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
-    return footerView;
+    if (section == 2) {
+        return self.saveFooterView;
+    }
+    return nil;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (section == 2) {
+        return 80 ;
+    }
     return 0.1f;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle8]) {
+        [self.fundSelectView show];
+    }
+    if ([title isEqualToString:kTitle7]) {
+        [self.circleSelectView show];
+    }
+    if ([title isEqualToString:kTitle3]) {
+        SSJBillTypeSelectViewController *billTypeSelectVC = [[SSJBillTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        billTypeSelectVC.incomeOrExpenture = self.item.incomeOrExpence;
+        billTypeSelectVC.selectedId = self.item.billId;
+        [self.navigationController pushViewController:billTypeSelectVC animated:YES];
+    }
+    if ([title isEqualToString:kTitle9]) {
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate* date = [dateFormatter dateFromString:self.item.billDate];
+        self.chargeCircleTimeView.currentDate = date;
+        [self.chargeCircleTimeView show];
+    }
 }
 
 
@@ -93,22 +140,148 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    SSJChargeCircleModifyCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:SSJChargeCircleEditeCellIdentifier];
-    if (!mineHomeCell) {
-        mineHomeCell = [[SSJChargeCircleModifyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SSJChargeCircleEditeCellIdentifier];
-        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    SSJChargeCircleModifyCell *circleModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJChargeCircleEditeCellIdentifier];
+    if (!circleModifyCell) {
+        circleModifyCell = [[SSJChargeCircleModifyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SSJChargeCircleEditeCellIdentifier];
+    }
+    if ([title isEqualToString:kTitle4]) {
+        circleModifyCell.cellInput.hidden = NO;
+        circleModifyCell.cellInput.placeholder = @"￥0.00";
+        circleModifyCell.cellInput.delegate = self;
+        circleModifyCell.cellInput.tag = 100;
+
+    }else if ([title isEqualToString:kTitle5]) {
+        circleModifyCell.cellInput.placeholder = @"选填";
+        circleModifyCell.cellInput.delegate = self;
+        circleModifyCell.cellInput.hidden = NO;
+        circleModifyCell.cellInput.tag = 101;
+    }else{
+        circleModifyCell.cellInput.hidden = YES;
     }
     if ([title isEqualToString:kTitle10]) {
-        mineHomeCell.cellSubTitle = title;
+        circleModifyCell.cellSubTitle = title;
+        circleModifyCell.cellSubTitleLabel.hidden = NO;
     }else{
-        mineHomeCell.cellTitle = title;
+        circleModifyCell.cellTitle = title;
+        circleModifyCell.cellSubTitleLabel.hidden = YES;
     }
-    
-    return mineHomeCell;
+    if ([title isEqualToString:kTitle1]) {
+        circleModifyCell.cellDetail = self.item.booksName;
+    }else if ([title isEqualToString:kTitle2]) {
+        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (!self.item.incomeOrExpence) {
+            circleModifyCell.cellDetail = @"支出";
+        }else{
+            circleModifyCell.cellDetail = @"收入";
+        }
+    }else if ([title isEqualToString:kTitle3]) {
+        circleModifyCell.cellDetail = self.item.typeName;
+    }else if ([title isEqualToString:kTitle4]) {
+        circleModifyCell.cellDetail = self.item.money;
+    }else if ([title isEqualToString:kTitle5]) {
+        circleModifyCell.cellDetail = self.item.chargeMemo;
+    }else if ([title isEqualToString:kTitle7]) {
+        switch (self.item.chargeCircleType) {
+            case 0:
+                circleModifyCell.cellDetail = @"每天";
+                break;
+            case 1:
+                circleModifyCell.cellDetail = @"每个工作日";
+                break;
+            case 2:
+                circleModifyCell.cellDetail = @"每个周末";
+                break;
+            case 3:
+                circleModifyCell.cellDetail = @"每周";
+                break;
+            case 4:
+                circleModifyCell.cellDetail = @"每月";
+                break;
+            case 5:
+                circleModifyCell.cellDetail = @"每月最后一天";
+                break;
+            case 6:
+                circleModifyCell.cellDetail = @"每年";
+                break;
+            default:
+                break;
+        }
+    }else if ([title isEqualToString:kTitle8]) {
+        circleModifyCell.cellDetail = self.item.fundName;
+    }else if ([title isEqualToString:kTitle9]) {
+        circleModifyCell.cellDetail = self.item.billDate;
+    }
+    return circleModifyCell;
 }
 
--(void)setItem:(SSJBillingChargeCellItem *)item{
-    _item = item;
+#pragma mark - UITextFieldDelegate
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    
+}
+
+#pragma mark - Getter
+-(TPKeyboardAvoidingTableView *)tableView{
+    if (_tableView == nil) {
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+    return _tableView;
+}
+
+-(UIView *)saveFooterView{
+    if (_saveFooterView == nil) {
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        [quitLogButton setTitle:@"保存" forState:UIControlStateNormal];
+        quitLogButton.layer.cornerRadius = 3.f;
+        quitLogButton.layer.masksToBounds = YES;
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [quitLogButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        quitLogButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:quitLogButton];
+    }
+    return _saveFooterView;
+}
+
+-(SSJFundingTypeSelectView *)fundSelectView{
+    if (!_fundSelectView) {
+        _fundSelectView = [[SSJFundingTypeSelectView alloc]init];
+        __weak typeof(self) weakSelf = self;
+        _fundSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *item){
+            weakSelf.item.fundId = item.fundingID;
+            weakSelf.item.fundName = item.fundingName;
+            [weakSelf.tableView reloadData];
+            [weakSelf.fundSelectView dismiss];
+        };
+    }
+    return _fundSelectView;
+}
+
+-(SSJChargeCircleSelectView *)circleSelectView{
+    if (!_circleSelectView) {
+        _circleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        __weak typeof(self) weakSelf = self;
+        _circleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
+            weakSelf.item.chargeCircleType = chargeCircleType;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _circleSelectView;
+}
+
+-(SSJChargeCircleTimeSelectView *)chargeCircleTimeView{
+    if (!_chargeCircleTimeView) {
+        _chargeCircleTimeView = [[SSJChargeCircleTimeSelectView alloc]initWithFrame:self.view.bounds];
+        __weak typeof(self) weakSelf = self;
+        _chargeCircleTimeView.timerSetBlock = ^(NSString *dateStr){
+            weakSelf.item.billDate = dateStr;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _chargeCircleTimeView;
 }
 
 - (void)didReceiveMemoryWarning {
