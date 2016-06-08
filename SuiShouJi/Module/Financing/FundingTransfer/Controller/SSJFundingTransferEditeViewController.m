@@ -27,6 +27,7 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 
 @implementation SSJFundingTransferEditeViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"转账详情";
@@ -42,6 +43,10 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"929292"];
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
 }
 
 #pragma mark - UITableViewDelegate
@@ -137,6 +142,11 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     }
     SSJFundingTransferViewController *transferModifyVC = [[SSJFundingTransferViewController alloc]init];
     transferModifyVC.item = self.item;
+    __weak typeof(self) weakSelf = self;
+    transferModifyVC.editeCompleteBlock = ^(SSJFundingTransferDetailItem *item){
+        weakSelf.item = item;
+        [weakSelf.tableView reloadData];
+    };
     [self.navigationController pushViewController:transferModifyVC animated:YES];
 }
 

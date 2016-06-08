@@ -11,4 +11,9 @@
 
 @interface SSJFundingTransferViewController : SSJBaseViewController
 @property(nonatomic, strong) SSJFundingTransferDetailItem *item;
+
+//完成编辑的回调
+typedef void (^editeCompleteBlock)(SSJFundingTransferDetailItem *item);
+
+@property (nonatomic, copy) editeCompleteBlock editeCompleteBlock;
 @end

@@ -30,6 +30,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJChargeCircleSelectView.h"
 #import "SSJBillTypeSelectViewController.h"
 #import "SSJChargeCircleTimeSelectView.h"
+#import "SSJCircleChargeTypeSelectView.h"
+#import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic, strong) NSArray *titles;
@@ -38,10 +40,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
 @property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
+@property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
 @end
 
 @implementation SSJChargeCicleModifyViewController{
-    UIImage *selectedImage;
+    UIImage *_selectedImage;
+    UITextField *_moneyInput;
 }
 
 #pragma mark - Lifecycle
@@ -59,15 +63,15 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle6],@[kTitle7,kTitle8,kTitle9,kTitle10]];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if (self.item == nil) {
-//        SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:0];
         __weak typeof(self) weakSelf = self;
-        [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:0 Success:^(SSJBillingChargeCellItem *item) {
+        [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:1 Success:^(SSJBillingChargeCellItem *item) {
             weakSelf.item = item;
             [weakSelf.tableView reloadData];
         } failure:^(NSError *error) {
@@ -115,8 +119,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }
     if ([title isEqualToString:kTitle3]) {
         SSJBillTypeSelectViewController *billTypeSelectVC = [[SSJBillTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        billTypeSelectVC.incomeOrExpenture = self.item.incomeOrExpence;
+        __weak typeof(self) weakSelf = self;
+        billTypeSelectVC.incomeOrExpenture = !self.item.incomeOrExpence;
         billTypeSelectVC.selectedId = self.item.billId;
+        billTypeSelectVC.typeSelectBlock = ^(NSString *typeId , NSString *typeName){
+            weakSelf.item.typeName = typeName;
+            weakSelf.item.billId = typeId;
+            [weakSelf.tableView reloadData];
+        };
         [self.navigationController pushViewController:billTypeSelectVC animated:YES];
     }
     if ([title isEqualToString:kTitle9]) {
@@ -125,6 +135,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         NSDate* date = [dateFormatter dateFromString:self.item.billDate];
         self.chargeCircleTimeView.currentDate = date;
         [self.chargeCircleTimeView show];
+    }
+    if ([title isEqualToString:kTitle2]) {
+        [self.chargeTypeSelectView show];
     }
 }
 
@@ -147,9 +160,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.placeholder = @"￥0.00";
+        circleModifyCell.cellInput.keyboardType = UIKeyboardTypeNumberPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
-
+        _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTitle5]) {
         circleModifyCell.cellInput.placeholder = @"选填";
         circleModifyCell.cellInput.delegate = self;
@@ -216,7 +230,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 #pragma mark - UITextFieldDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField{
-    
+    if (textField.tag == 100) {
+        self.item.money = textField.text;
+    }else if (textField.tag == 101){
+        self.item.chargeMemo = textField.text;
+    }
 }
 
 #pragma mark - Getter
@@ -282,6 +300,63 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
     }
     return _chargeCircleTimeView;
+}
+
+-(SSJCircleChargeTypeSelectView *)chargeTypeSelectView{
+    if (!_chargeTypeSelectView) {
+        _chargeTypeSelectView = [[SSJCircleChargeTypeSelectView alloc]init];
+        __weak typeof(self) weakSelf = self;
+        
+        _chargeTypeSelectView.chargeTypeSelectBlock = ^(NSInteger selectType){
+            weakSelf.item.incomeOrExpence = selectType;
+            SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:!weakSelf.item.incomeOrExpence];
+            weakSelf.item.typeName = categoryItem.categoryTitle;
+            weakSelf.item.billId = categoryItem.categoryID;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _chargeTypeSelectView;
+}
+
+#pragma mark - Private
+-(void)transferTextDidChange{
+    [self setupTextFiledNum:_moneyInput num:2];
+}
+
+-(void)saveButtonClicked:(id)sender{
+    
+}
+
+/**
+ *   限制输入框小数点(输入框只改变时候调用valueChange)
+ *
+ *  @param TF  输入框
+ *  @param num 小数点后限制位数
+ */
+-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+{
+    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
+        TF.text = @"0.";
+    }else if (str.length == 2) {
+        if ([str floatValue] == 0) {
+            TF.text = @"0";
+        }else if(arr.count < 2){
+            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
+        }
+    }
+    
+    if (arr.count > 2) {
+        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+    }
+    
+    if (arr.count == 2) {
+        NSString * lastStr = arr.lastObject;
+        if (lastStr.length > num) {
+            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

@@ -1,24 +1,23 @@
 //
-//  SSJBudgetEditPeriodSelectionView.m
+//  SSJCircleChargeTypeSelectView.m
 //  SuiShouJi
 //
-//  Created by old lang on 16/2/25.
+//  Created by ricky on 16/6/8.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBudgetEditPeriodSelectionView.h"
-#import "SSJBaseTableViewCell.h"
+#import "SSJCircleChargeTypeSelectView.h"
+#import "SSJFundingTypeTableViewCell.h"
 
 static const CGFloat kTitleHeight = 50;
 static const CGFloat kRowHeight = 45;
 
-static NSString *const kWeekTitle = @"每周";
-static NSString *const kMonthTitle = @"每月";
-static NSString *const kYearTitle = @"每年";
+static NSString *const kTitle1 = @"支出";
+static NSString *const kTitle2 = @"收入";
 
 static NSString *kCellID = @"cellID";
 
-@interface SSJBudgetEditPeriodSelectionView () <UITableViewDataSource, UITableViewDelegate>
+@interface SSJCircleChargeTypeSelectView () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UILabel *titleLab;
 
@@ -30,11 +29,11 @@ static NSString *kCellID = @"cellID";
 
 @end
 
-@implementation SSJBudgetEditPeriodSelectionView
+@implementation SSJCircleChargeTypeSelectView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.titles = @[kWeekTitle, kMonthTitle, kYearTitle];
+        self.titles = @[kTitle1, kTitle2];
         [self addSubview:self.titleLab];
         [self addSubview:self.tableView];
         [self sizeToFit];
@@ -90,7 +89,7 @@ static NSString *kCellID = @"cellID";
     }
     NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
     cell.textLabel.text = title;
-    cell.accessoryView = [title isEqualToString:[self selectedTitle]] ? self.accessoryView : nil;
+    cell.accessoryView = indexPath.row == self.selectIndex ? self.accessoryView : nil;
     return cell;
 }
 
@@ -98,40 +97,22 @@ static NSString *kCellID = @"cellID";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
-    if ([title isEqualToString:kWeekTitle]) {
-        self.periodType = SSJBudgetPeriodTypeWeek;
-    } else if ([title isEqualToString:kMonthTitle]) {
-        self.periodType = SSJBudgetPeriodTypeMonth;
-    } else if ([title isEqualToString:kYearTitle]) {
-        self.periodType = SSJBudgetPeriodTypeYear;
-    }
+    self.selectIndex = indexPath.row;
     
     [self.tableView reloadData];
     [self dismiss];
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    if (self.chargeTypeSelectBlock) {
+        self.chargeTypeSelectBlock(indexPath.row);
+    }
 }
 
-- (NSString *)selectedTitle {
-    switch (self.periodType) {
-        case SSJBudgetPeriodTypeWeek:
-            return kWeekTitle;
-            
-        case SSJBudgetPeriodTypeMonth:
-            return kMonthTitle;
-            
-        case SSJBudgetPeriodTypeYear:
-            return kYearTitle;
-    }
-    return nil;
-}
 
 #pragma mark - Getter
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.backgroundColor = [UIColor whiteColor];
-        _titleLab.text = @"周期";
+        _titleLab.text = @"收支类别";
         _titleLab.textColor = [UIColor blackColor];
         _titleLab.textAlignment = NSTextAlignmentCenter;
     }

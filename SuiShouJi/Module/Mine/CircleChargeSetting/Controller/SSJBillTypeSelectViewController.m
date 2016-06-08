@@ -9,6 +9,7 @@
 #import "SSJBillTypeSelectViewController.h"
 #import "SSJCategoryListHelper.h"
 #import "SSJBillTypeSelectCell.h"
+#import "SSJADDNewTypeViewController.h"
 
 static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifier";
 
@@ -16,25 +17,21 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 @property(nonatomic, strong) NSMutableArray *items;
 @end
 
-@implementation SSJBillTypeSelectViewController
+@implementation SSJBillTypeSelectViewController{
+    NSString *_selectTypeName;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView registerClass:[SSJBillTypeSelectCell class] forCellReuseIdentifier:SSJBillTypeSelectCellIdentifier];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(comfirmButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    __weak typeof(self) weakSelf = self;
-    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.incomeOrExpenture Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result) {
-        SSJRecordMakingBillTypeSelectionCellItem *item = [SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"cccccc" ID:@""];
-        [result addObject:item];
-        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        [weakSelf.tableView reloadData];
-    } failure:^(NSError *error) {
-        
-    }];
+    [self getdataFromDb];
 }
 
 #pragma mark - UITableViewDelegate
@@ -56,6 +53,21 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SSJRecordMakingBillTypeSelectionCellItem *item = [self.items objectAtIndex:indexPath.row];
+    if ([item.title isEqualToString:@"添加"]) {
+        SSJADDNewTypeViewController *newTypeVc = [[SSJADDNewTypeViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        newTypeVc.addNewCategoryAction = ^(NSString *categoryId){
+            weakSelf.selectedId = categoryId;
+            [weakSelf getdataFromDb];
+        };
+        newTypeVc.incomeOrExpence = self.incomeOrExpenture;
+        [self.navigationController pushViewController:newTypeVc animated:YES];
+    }else{
+        self.selectedId = item.ID;
+        _selectTypeName = item.title;
+        [self.tableView reloadData];
+    }
 }
 
 
@@ -78,6 +90,26 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
     }
     cell.item = item;
     return cell;
+}
+
+#pragma mark - Private
+-(void)getdataFromDb{
+    __weak typeof(self) weakSelf = self;
+    [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.incomeOrExpenture Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result) {
+        SSJRecordMakingBillTypeSelectionCellItem *item = [SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"cccccc" ID:@""];
+        [result addObject:item];
+        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
+        [weakSelf.tableView reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+-(void)comfirmButtonClicked:(id)sender{
+    if (self.typeSelectBlock) {
+        self.typeSelectBlock(self.selectedId,_selectTypeName);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

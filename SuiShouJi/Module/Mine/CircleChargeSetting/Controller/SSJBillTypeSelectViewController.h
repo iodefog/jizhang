@@ -12,4 +12,10 @@
 @interface SSJBillTypeSelectViewController : SSJNewBaseTableViewController
 @property (nonatomic) BOOL incomeOrExpenture;
 @property(nonatomic, strong) NSString *selectedId;
+
+
+typedef void (^typeSelectBlock)(NSString *typeId , NSString *typeName);
+
+
+@property(nonatomic, copy) typeSelectBlock typeSelectBlock;
 @end
