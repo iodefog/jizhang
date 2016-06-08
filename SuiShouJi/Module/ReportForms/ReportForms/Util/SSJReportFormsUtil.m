@@ -11,10 +11,6 @@
 #import "SSJReportFormsPeriodModel.h"
 #import "SSJUserTableManager.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - 数据库查询工具类
-
 @implementation SSJReportFormsDatabaseUtil
 
 + (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
@@ -241,85 +237,37 @@
     }];
 }
 
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - 日历工具类
-
-@interface SSJReportFormsCalendarUtil ()
-
-@property (nonatomic, strong) NSCalendar *calendar;
-
-@end
-
-@implementation SSJReportFormsCalendarUtil
-
-- (instancetype)init {
-    if (self = [super init]) {
-        self.calendar = [NSCalendar currentCalendar];
-        NSDateComponents *dateComponent = [self.calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[NSDate date]];
-        self.year = [dateComponent year];
-        self.month = [dateComponent month];
++ (void)queryForBillStatisticsWithType:(int)type
+                             startDate:(NSDate *)startDate
+                               endDate:(NSDate *)endDate
+                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
+                               failure:(void (^)(NSError *error))failure {
+    switch (type) {
+        case 0:
+            
+            break;
+            
+        case 1:
+            
+            break;
+            
+        case 2:
+            
+            break;
+            
+        default:
+            break;
     }
-    return self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        [db executeQuery:@"select "]
+    }];
 }
 
-- (NSInteger)currentYear {
-    NSDateComponents *dateComponent = [self.calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[NSDate date]];
-    return [dateComponent year];
-}
-
-- (NSInteger)currentMonth {
-    NSDateComponents *dateComponent = [self.calendar components:(NSYearCalendarUnit | NSMonthCalendarUnit) fromDate:[NSDate date]];
-    return [dateComponent month];
-}
-
-- (NSInteger)nextYear {
-    if (self.year < [self currentYear]) {
-        self.year ++;
-        if (self.year == [self currentYear]) {
-            self.month = MIN(self.month, [self currentMonth]);
-        }
-    }
-    return self.year;
-}
-
-- (NSInteger)preYear {
-    if (self.year > 1) {
-        self.year --;
-    }
-    return self.year;
-}
-
-- (NSInteger)nextMonth {
-    if (self.year < [self currentYear]) {
-        self.month ++;
-        if (self.month > 12) {
-            self.year ++;
-            self.month = 1;
-        }
-    } else {
-        if (self.month < [self currentMonth]) {
-            self.month ++;
-        }
-    }
-    return self.month;
-}
-
-- (NSInteger)preMonth {
-    if (self.year > 1) {
-        self.month --;
-        if (self.month == 0) {
-            self.month = 12;
-            self.year --;
-        }
-    } else {
-        if (self.month > 1) {
-            self.month --;
-        }
-    }
-    return self.month;
++ (void)queryForBillStatisticsWithstartDate:(NSDate *)startDate
+                               endDate:(NSDate *)endDate
+                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
+                                    failure:(void (^)(NSError *error))failure {
+    
 }
 
 @end

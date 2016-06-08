@@ -10,9 +10,7 @@
 #import "SSJReportFormsItem.h"
 #import "SSJDatePeriod.h"
 
-///---------------------------------------------------------------------------------------------
-/// ****  数据库查询工具类  **** //
-///---------------------------------------------------------------------------------------------
+@class SSJReportFormsCurveModel;
 
 @interface SSJReportFormsDatabaseUtil : NSObject
 
@@ -42,36 +40,11 @@
                         success:(void(^)(NSArray<SSJReportFormsItem *> *result))success
                         failure:(void (^)(NSError *error))failure;
 
-@end
 
-///---------------------------------------------------------------------------------------------
-/// ****  日历工具类  **** //
-///---------------------------------------------------------------------------------------------
-
-@interface SSJReportFormsCalendarUtil : NSObject
-
-// 更改后的月份
-@property (nonatomic) NSInteger year;
-
-// 更改后的年份
-@property (nonatomic) NSInteger month;
-
-// 当前时间年份
-- (NSInteger)currentYear;
-
-// 当前时间月份
-- (NSInteger)currentMonth;
-
-// 下一年
-- (NSInteger)nextYear;
-
-// 上一年
-- (NSInteger)preYear;
-
-// 下个月，如果横跨一年，则年份自动递增，最大年份不超过今年
-- (NSInteger)nextMonth;
-
-// 上个月，如果横跨一年，则年份自动递减
-- (NSInteger)preMonth;
++ (void)queryForBillStatisticsWithType:(int)type
+                             startDate:(NSDate *)startDate
+                               endDate:(NSDate *)endDate
+                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
+                               failure:(void (^)(NSError *error))failure;
 
 @end
