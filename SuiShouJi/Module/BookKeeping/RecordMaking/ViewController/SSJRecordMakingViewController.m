@@ -31,7 +31,7 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
-@interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate, YYKeyboardObserver>
+@interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, YYKeyboardObserver>
 
 @property (nonatomic,strong) SSJSegmentedControl *titleSegment;
 
@@ -197,11 +197,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
             
             if (weakSelf.selectedDay > 28 && circleView.selectCircleType == 6 && circleView.selectCircleType == 4){
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." delegate:weakSelf cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
                 weakSelf.selectChargeCircleType = -1;
                 [weakSelf updatePeriodButtonTitle];
-                [alert show];
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
                 return NO;
             }
             
