@@ -16,6 +16,7 @@
 
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
+#import "SSJReportFormsCurveViewController.h"
 #import "SSJReportFormsUtil.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
@@ -87,7 +88,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCalendarAction)];
     self.navigationItem.leftBarButtonItem = leftItem;
     
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(filterAction)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
     self.navigationItem.rightBarButtonItem = rightItem;
     
     self.navigationItem.titleView = self.segmentControl;
@@ -210,8 +211,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 //  切换周期（年、月）
-- (void)filterAction {
-    [MobClick event:@"form_filter"];
+- (void)enterCurveVewController {
+    SSJReportFormsCurveViewController *curveVC = [[SSJReportFormsCurveViewController alloc] init];
+    [self.navigationController pushViewController:curveVC animated:YES];
 }
 
 //  切换支出、收入、结余
