@@ -330,6 +330,16 @@
         }
     }else{
         _isRefreshing = NO;
+        CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
+        NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
+        SSJBillingChargeCellItem *item = [self.items objectAtIndex:currentRow];
+        NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(6, 2)] integerValue];
+        NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
+        if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
+            self.currentYear = currentYear;
+            self.currentMonth = currentMonth;
+            [self reloadCurrentMonthData];
+        }
     }
 }
 
@@ -382,7 +392,6 @@
     };
     bookKeepingCell.deleteButtonClickBlock = ^{
         [MobClick event:@"main_record_edit"];
-
         weakSelf.selectIndex = nil;
         [weakSelf getDateFromDatebase];
         [weakSelf.tableView reloadData];
@@ -529,7 +538,7 @@
 //    return _statusLabel;
 //}
 
-#pragma mark - Private
+#pragma mark - Event
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
@@ -549,6 +558,7 @@
     }
 }
 
+#pragma mark - Private
 -(void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
@@ -629,6 +639,19 @@
             
         }];
     }
+}
+
+-(void)reloadCurrentMonthData{
+    __weak typeof(self) weakSelf = self;
+    [SSJBookKeepingHomeHelper queryForIncomeAndExpentureSumWithMonth:_currentMonth Year:_currentYear Success:^(NSDictionary *result) {
+        self.bookKeepingHeader.currentMonth = self.currentMonth;
+        weakSelf.bookKeepingHeader.incomeView.scrollAble = NO;
+        weakSelf.bookKeepingHeader.expenditureView.scrollAble = NO;
+        weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
+        weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 -(void)getCurrentDate{
