@@ -40,6 +40,6 @@
 #import "UIImageView+WebCache.h"
 #import "NSDate+DateTools.h"
 #import "UMFeedback.h"
-#import "MobClick.h"
+#import <UMMobClick/MobClick.h>
 
 #endif

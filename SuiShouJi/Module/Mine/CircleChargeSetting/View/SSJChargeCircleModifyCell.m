@@ -10,7 +10,6 @@
 
 @interface SSJChargeCircleModifyCell()
 @property(nonatomic, strong) UILabel *cellDetailLabel;
-@property(nonatomic, strong) UIImageView *cellImageView;
 @end
 
 @implementation SSJChargeCircleModifyCell
@@ -38,6 +37,7 @@
         self.cellDetailLabel.right = self.contentView.width;
     }
     self.cellDetailLabel.centerY = self.height / 2;
+    self.cellImageView.size = CGSizeMake(30, 30);
     self.cellImageView.right = self.width - 10;
     self.cellImageView.centerY = self.height / 2;
     self.cellInput.size = CGSizeMake(self.width / 2, self.height);
@@ -106,11 +106,6 @@
     _cellSubTitle = cellSubTitle;
     self.cellSubTitleLabel.text = _cellSubTitle;
     [self.cellSubTitleLabel sizeToFit];
-}
-
--(void)setCellImage:(NSString *)cellImage{
-    _cellImage = cellImage;
-    self.cellImageView.image = [UIImage imageNamed:_cellImage];
 }
 
 /*

@@ -244,18 +244,16 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    NSInteger imageHeight = image.size.height;
-    NSInteger imageWidth = image.size.width;
-    if (imageHeight > 2500) {
-        imageHeight = 2500;
-        imageWidth = 2500*imageWidth/imageHeight;
-    }
-    if (imageWidth > 2500) {
-        imageWidth = 2500;
-        imageHeight = 2500*imageHeight/imageWidth;
+    float imageHeight = image.size.height;
+    float imageWidth = image.size.width;
+    float maxLegth = MAX(imageHeight , imageWidth);
+    if (maxLegth > 2500) {
+        float scale = 2500 / maxLegth;
+        imageHeight = imageHeight * scale;
+        imageWidth = imageWidth * scale;
     }
     UIImage *resizeImage = [image ssj_scaleImageWithSize:CGSizeMake(imageWidth, imageHeight)];
-    NSString *fullImageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+    NSString *fullImageName = [imageName hasSuffix:@".jpg"] ? imageName : [NSString stringWithFormat:@"%@.jpg",imageName];
     NSData *imageData = UIImageJPEGRepresentation(resizeImage, 0.4);
     NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
@@ -272,6 +270,9 @@ BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
 }
 
 NSString *SSJImagePath(NSString *imageName){
+    if (![imageName hasSuffix:@".jpg"]) {
+        imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+    }
     NSString *fullImageName = [NSString stringWithFormat:@"%@",imageName];
     NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return fullPath;

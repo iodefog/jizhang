@@ -1893,8 +1893,8 @@
 		9CD9BBC01CFD2DAA0061803B /* SSJBookKeepingRiminderCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingRiminderCircleView.m; sourceTree = "<group>"; };
 		9CD9BBC11CFD2DAA0061803B /* SSJChargeReminderTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeReminderTimeView.h; sourceTree = "<group>"; };
 		9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeReminderTimeView.m; sourceTree = "<group>"; };
-		9CD9BBC31CFD2DAA0061803B /* SSJCircleChargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCircleChargeCell.h; sourceTree = "<group>"; };
-		9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCircleChargeCell.m; sourceTree = "<group>"; };
+		9CD9BBC31CFD2DAA0061803B /* SSJCircleChargeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCircleChargeCell.h; path = ../../MoreHome/View/SSJCircleChargeCell.h; sourceTree = "<group>"; };
+		9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCircleChargeCell.m; path = ../../MoreHome/View/SSJCircleChargeCell.m; sourceTree = "<group>"; };
 		9CD9BBC51CFD2DAA0061803B /* SSJMineHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHeaderView.h; sourceTree = "<group>"; };
 		9CD9BBC61CFD2DAA0061803B /* SSJMineHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMineHeaderView.m; sourceTree = "<group>"; };
 		9CD9BBC71CFD2DAA0061803B /* SSJMineHomeImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMineHomeImageCell.h; sourceTree = "<group>"; };
@@ -4086,6 +4086,8 @@
 				9C9D0B821D07B015003A9F4E /* SSJChargeCircleTimeSelectView.m */,
 				9C9D0B841D080E09003A9F4E /* SSJCircleChargeTypeSelectView.h */,
 				9C9D0B851D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m */,
+				9CD9BBC31CFD2DAA0061803B /* SSJCircleChargeCell.h */,
+				9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -4223,8 +4225,6 @@
 				9CD9BBC01CFD2DAA0061803B /* SSJBookKeepingRiminderCircleView.m */,
 				9CD9BBC11CFD2DAA0061803B /* SSJChargeReminderTimeView.h */,
 				9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */,
-				9CD9BBC31CFD2DAA0061803B /* SSJCircleChargeCell.h */,
-				9CD9BBC41CFD2DAA0061803B /* SSJCircleChargeCell.m */,
 				9CD9BBC51CFD2DAA0061803B /* SSJMineHeaderView.h */,
 				9CD9BBC61CFD2DAA0061803B /* SSJMineHeaderView.m */,
 				9CD9BBC71CFD2DAA0061803B /* SSJMineHomeImageCell.h */,

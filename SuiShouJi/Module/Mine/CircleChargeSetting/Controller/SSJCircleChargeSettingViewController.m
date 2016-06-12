@@ -11,7 +11,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJBillingChargeCellItem.h"
 #import "SSJCircleChargeCell.h"
-#import "SSJRecordMakingViewController.h"
+#import "SSJChargeCicleModifyViewController.h"
 #import "SSJNoneCircleChargeView.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCircleChargeStore.h"
@@ -42,6 +42,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+
     [self getDateFromDatebase];
 }
 
@@ -93,18 +94,18 @@
     circleChargeCell.item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     __weak typeof(self) weakSelf = self;
     circleChargeCell.openSpecialCircle = ^(SSJBillingChargeCellItem *item){
-        SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
-        recordMakingVc.item = item;
-        [weakSelf.navigationController pushViewController:recordMakingVc animated:YES];
+        SSJChargeCicleModifyViewController *circleModifyVc = [[SSJChargeCicleModifyViewController alloc]init];
+        circleModifyVc.item = item;
+        [weakSelf.navigationController pushViewController:circleModifyVc animated:YES];
     };
     return circleChargeCell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
-    SSJRecordMakingViewController *RecordMakingVC = [[SSJRecordMakingViewController alloc]init];
-    RecordMakingVC.item = item;
-    [self.navigationController pushViewController:RecordMakingVC animated:YES];
+    SSJChargeCicleModifyViewController *circleModifyVc = [[SSJChargeCicleModifyViewController alloc]init];
+    circleModifyVc.item = item;
+    [self.navigationController pushViewController:circleModifyVc animated:YES];
 }
 
 #pragma mark - Getter
