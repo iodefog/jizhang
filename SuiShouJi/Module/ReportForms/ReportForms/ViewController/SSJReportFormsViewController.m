@@ -315,7 +315,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     [self.view ssj_showLoadingIndicator];
     
-    [SSJReportFormsDatabaseUtil queryForPeriodListWithIncomeOrPayType:[self currentType] success:^(NSArray<SSJDatePeriod *> *periods) {
+    [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:[self currentType] success:^(NSArray<SSJDatePeriod *> *periods) {
         
         if (periods.count == 0) {
             _dateAxisView.hidden = YES;
@@ -373,7 +373,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     [self.view ssj_showLoadingIndicator];
     
-    [SSJReportFormsDatabaseUtil queryForIncomeOrPayType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+    [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
         
         [self.view ssj_hideLoadingIndicator];
         

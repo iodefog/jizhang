@@ -10,7 +10,7 @@
 #import "SSJReportFormsCurveView.h"
 #import "SSJReportFormsCurveAxisView.h"
 
-static const CGFloat kTopSpaceHeight = 84;
+static const CGFloat kTopSpaceHeight = 106;
 static const CGFloat kBottomSpaceHeight = 32;
 
 @interface SSJReportFormsCurveGraphView () <UIScrollViewDelegate>
@@ -90,18 +90,21 @@ static const CGFloat kBottomSpaceHeight = 32;
         
         _verticalLine = [[UIView alloc] init];
         _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
+        _verticalLine.hidden = YES;
         [self addSubview:_verticalLine];
         
         _paymentPoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
         _paymentPoint.layer.cornerRadius = 4;
         _paymentPoint.clipsToBounds = YES;
         _paymentPoint.backgroundColor = [UIColor ssj_colorWithHex:@"59ae65"];
+        _paymentPoint.hidden = YES;
         [self addSubview:_paymentPoint];
         
         _incomePoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
         _incomePoint.layer.cornerRadius = 4;
         _incomePoint.clipsToBounds = YES;
         _incomePoint.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
+        _incomePoint.hidden = YES;
         [self addSubview:_incomePoint];
         
         _paymentLabel = [[UILabel alloc] init];
@@ -134,6 +137,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         
         _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         _balloonView.backgroundColor = [UIColor redColor];
+        _balloonView.hidden = YES;
         [self addSubview:_balloonView];
         
         _surplusLabel = [[UILabel alloc] init];
@@ -320,11 +324,17 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self adjustOffSetXToCenter];
+    if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
+        [_delegate curveGraphView:self didScrollToAxisXIndex:_selectedAxisXIndex];
+    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (!decelerate) {
         [self adjustOffSetXToCenter];
+        if (_delegate && [_delegate respondsToSelector:@selector(curveGraphView:didScrollToAxisXIndex:)]) {
+            [_delegate curveGraphView:self didScrollToAxisXIndex:_selectedAxisXIndex];
+        }
     }
 }
 
@@ -345,6 +355,10 @@ static const CGFloat kBottomSpaceHeight = 32;
 }
 
 - (void)adjustPaymentAndIncomePoint {
+    if (_axisXCount == 0) {
+        return;
+    }
+    
     CGFloat paymentHeight = [_paymentValues[_selectedAxisXIndex] floatValue] / _maxValue * (self.height - kTopSpaceHeight - kBottomSpaceHeight);
     CGFloat paymentY = self.height - paymentHeight - kBottomSpaceHeight;
     _paymentPoint.center = CGPointMake(self.width * 0.5, paymentY);

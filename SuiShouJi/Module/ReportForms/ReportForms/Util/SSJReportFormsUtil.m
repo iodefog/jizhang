@@ -10,8 +10,9 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJReportFormsPeriodModel.h"
 #import "SSJUserTableManager.h"
+#import "SSJReportFormsCurveModel.h"
 
-@implementation SSJReportFormsDatabaseUtil
+@implementation SSJReportFormsUtil
 
 + (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
                                       success:(void (^)(NSArray<SSJDatePeriod *> *))success
@@ -237,37 +238,167 @@
     }];
 }
 
+//+ (void)queryForBillStatisticsWithType:(int)type
+//                             startDate:(NSDate *)startDate
+//                               endDate:(NSDate *)endDate
+//                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
+//                               failure:(void (^)(NSError *error))failure {
+//    switch (type) {
+//        case 0:
+//            
+//            break;
+//            
+//        case 1:
+//            
+//            break;
+//            
+//        case 2:
+//            
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    
+//    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+//    NSMutableString *sqlStr = [@"select sum(a.imoney), strftime('%Y-%m', a.cbilldate), b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2  and a.cbilldate <= datetime('now', 'localtime') group by strftime('%Y-%m', a.cbilldate), b.itype" mutableCopy];
+//    if (startDate) {
+//        NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+//        [sqlStr appendFormat:@" and a.cbilldate >= %@", startDateStr];
+//    }
+//    if (endDate) {
+//        NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+//        [sqlStr appendFormat:@" and a.cbilldate <= %@", endDateStr];
+//    }
+//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        [db executeQuery:@"select sum(a.imoney), strftime('%Y-%m', a.cbilldate), b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 group by strftime('%Y-%m', a.cbilldate), b.itype"];
+//    }];
+//}
+
 + (void)queryForBillStatisticsWithType:(int)type
                              startDate:(NSDate *)startDate
                                endDate:(NSDate *)endDate
                                success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
                                failure:(void (^)(NSError *error))failure {
-    switch (type) {
-        case 0:
-            
-            break;
-            
-        case 1:
-            
-            break;
-            
-        case 2:
-            
-            break;
-            
-        default:
-            break;
+    
+    if (type != 0 && type != 1 && type != 2) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1、2"}]);
+        return;
     }
+    
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbooksid = '%@' and b.istate <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID(), userItem.currentBooksId];
+    
+    if (startDate) {
+        NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        [sqlStr appendFormat:@" and a.cbilldate >= '%@'", startDateStr];
+    }
+    
+    if (endDate) {
+        NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        [sqlStr appendFormat:@" and a.cbilldate <= '%@'", endDateStr];
+    }
+    
+    [sqlStr appendString:@"order by a.cbilldate"];
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-//        [db executeQuery:@"select "]
+        FMResultSet *result = [db executeQuery:sqlStr];
+        if (!result) {
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        
+        SSJDatePeriod *period = nil;
+        double payment = 0;
+        double income = 0;
+        int weekOrder = 0;
+        SSJDatePeriodType periodType = SSJDatePeriodTypeUnknown;
+        
+        NSMutableArray *list = [NSMutableArray array];
+        
+        while ([result next]) {
+            NSString *billDateStr = [result stringForColumn:@"cbilldate"];
+            NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
+            double money = [result doubleForColumn:@"imoney"];
+            BOOL isPayment = [result boolForColumn:@"itype"];
+            
+            switch (type) {
+                case 0:
+                    periodType = SSJDatePeriodTypeMonth;
+                    break;
+                    
+                case 1:
+                    periodType = SSJDatePeriodTypeWeek;
+                    break;
+                    
+                case 2:
+                    periodType = SSJDatePeriodTypeDay;
+                    break;
+            }
+            
+            if (!period) {
+                period = [SSJDatePeriod datePeriodWithPeriodType:periodType date:billDate];
+            }
+            
+            if ([period containDate:billDate]) {
+                if (isPayment) {
+                    payment += money;
+                } else {
+                    income += money;
+                }
+            } else {
+                
+                weekOrder++;
+                [list addObject:[self modelWithPayment:payment income:income weekOrder:weekOrder period:period]];
+                
+                SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:billDate];
+                NSArray *periods = [currentPeriod periodsFromPeriod:period];
+                for (int i = 0; i < periods.count - 1; i ++) {
+                    SSJDatePeriod *addPeriod = periods[i];
+                    weekOrder++;
+                    [list addObject:[self modelWithPayment:0 income:0 weekOrder:weekOrder period:addPeriod]];
+                }
+                
+                period = currentPeriod;
+                payment = 0;
+                income = 0;
+                if (isPayment) {
+                    payment += money;
+                } else {
+                    income += money;
+                }
+            }
+        }
+        
+        SSJReportFormsCurveModel *lastModel = [list lastObject];
+        if (!lastModel || [lastModel.period compareWithPeriod:period] != SSJDatePeriodComparisonResultSame) {
+            weekOrder++;
+            [list addObject:[self modelWithPayment:payment income:income weekOrder:weekOrder period:period]];
+        }
+        
+        SSJDispatch_main_async_safe(^{
+            success(list);
+        });
     }];
 }
 
-+ (void)queryForBillStatisticsWithstartDate:(NSDate *)startDate
-                               endDate:(NSDate *)endDate
-                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
-                                    failure:(void (^)(NSError *error))failure {
++ (SSJReportFormsCurveModel *)modelWithPayment:(double)payment income:(double)income weekOrder:(int)weekOrder period:(SSJDatePeriod *)period {
+    NSString *paymentStr = [NSString stringWithFormat:@"%f", payment];
+    NSString *incomeStr = [NSString stringWithFormat:@"%f", income];
+    NSString *timeStr = nil;
     
+    if (period.periodType == SSJDatePeriodTypeMonth) {
+        timeStr = [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
+    } else if (period.periodType == SSJDatePeriodTypeWeek) {
+        timeStr = [NSString stringWithFormat:@"%d周", weekOrder];
+    } else if (period.periodType == SSJDatePeriodTypeDay) {
+        
+    }
+    
+    return [SSJReportFormsCurveModel modelWithPayment:paymentStr income:incomeStr time:timeStr period:period];
 }
 
 @end

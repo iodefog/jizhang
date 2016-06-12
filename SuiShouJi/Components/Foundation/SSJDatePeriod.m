@@ -127,6 +127,10 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     NSInteger periodCount = [latestPeriod periodCountFromPeriod:earlierPeriod];
     for (NSInteger i = 1; i <= periodCount; i++) {
         switch (period.periodType) {
+            case SSJDatePeriodTypeDay:
+                [components setDay:i];
+                break;
+                
             case SSJDatePeriodTypeWeek:
                 [components setWeekOfYear:i];
                 break;
@@ -191,6 +195,12 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     }
     
     switch (period.periodType) {
+        case SSJDatePeriodTypeDay: {
+            NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitDay fromDate:period.startDate toDate:self.startDate options:0];
+            return tComponents.day;
+        }
+            break;
+            
         case SSJDatePeriodTypeWeek: {
             NSDateComponents *tComponents = [[[self class] calendar] components:NSCalendarUnitWeekOfYear fromDate:period.startDate toDate:self.startDate options:0];
             return tComponents.weekOfYear;
@@ -226,6 +236,14 @@ static const unsigned int kAllCalendarUnitFlags = NSCalendarUnitYear | NSCalenda
     NSCalendar *calendar = [[self class] calendar];
     NSRange daysRange = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:(NSCalendarUnit)_periodType forDate:_startDate];
     return daysRange.length;
+}
+
+- (BOOL)containDate:(NSDate *)date {
+    if ([self.startDate compare:date] != NSOrderedDescending
+        && [self.endDate compare:date] != NSOrderedAscending) {
+        return YES;
+    }
+    return NO;
 }
 
 - (NSString *)debugDescription {

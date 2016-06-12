@@ -31,7 +31,7 @@
             UILabel *label = _labels[i];
             label.center = CGPointMake(unitWidth * i + _margin, self.height * 0.5);
         }
-    } else {
+    } else if (_labels.count == 1) {
         UILabel *label = _labels[0];
         label.center = CGPointMake(self.width, self.height * 0.5);
     }

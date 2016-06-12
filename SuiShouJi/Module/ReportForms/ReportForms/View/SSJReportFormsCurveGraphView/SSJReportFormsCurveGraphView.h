@@ -20,6 +20,8 @@
 
 - (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView incomeValueAtAxisXIndex:(NSUInteger)index;
 
+- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index;
+
 @end
 
 @interface SSJReportFormsCurveGraphView : UIView

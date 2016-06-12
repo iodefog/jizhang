@@ -8,9 +8,6 @@
 
 #import "SSJReportFormsScaleAxisCell.h"
 
-#warning test
-#import "SSJViewAddition.h"
-
 @interface SSJReportFormsScaleAxisCell ()
 
 @property (nonatomic, strong) UIView *tickMark;

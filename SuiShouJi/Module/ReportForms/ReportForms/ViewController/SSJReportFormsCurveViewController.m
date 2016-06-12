@@ -25,6 +25,10 @@
 
 @property (nonatomic, strong) NSArray *datas;
 
+@property (nonatomic, strong) NSDate *startDate;
+
+@property (nonatomic, strong) NSDate *endDate;
+
 @end
 
 @implementation SSJReportFormsCurveViewController
@@ -32,7 +36,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
+        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -45,11 +49,28 @@
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.periodLabel];
     [self.scrollView addSubview:self.curveView];
+    
+    [self reloadData];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     self.scrollView.frame = self.view.bounds;
+}
+
+- (void)reloadData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate success:^(NSArray<SSJReportFormsCurveModel *> *result) {
+        [self.view ssj_hideLoadingIndicator];
+        _datas = result;
+        [_curveView reloadData];
+        if (_datas.count >= 4) {
+            [_curveView scrollToAxisXAtIndex:_datas.count - 4 animated:NO];
+        }
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
@@ -72,16 +93,20 @@
     return [model.income floatValue];
 }
 
+- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
+    
+}
+
 #pragma mark - Event
 - (void)segmentControlValueDidChange {
-    
+    [self reloadData];
 }
 
 #pragma mark - Getter
 - (SSJSegmentedControl *)segmentControl {
     if (!_segmentControl) {
-        _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[@"月", @"周", @"日"]];
-        _segmentControl.size = CGSizeMake(225, 30);
+        _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[@"月", @"周"]];
+        _segmentControl.size = CGSizeMake(150, 30);
         _segmentControl.font = [UIFont systemFontOfSize:15];
         _segmentControl.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         _segmentControl.selectedBorderColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
@@ -101,7 +126,7 @@
 
 - (UILabel *)periodLabel {
     if (!_periodLabel) {
-        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 32)];
+        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 30)];
         _periodLabel.textAlignment = NSTextAlignmentCenter;
         _periodLabel.font = [UIFont systemFontOfSize:15];
     }
