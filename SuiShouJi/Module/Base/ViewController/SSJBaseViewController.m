@@ -9,7 +9,7 @@
 
 #import "SSJBaseViewController.h"
 #import "UIViewController+SSJPageFlow.h"
-#import "MobClick.h"
+#import <UMMobClick/MobClick.h>
 #import "SSJLoginViewController.h"
 #import "SSJUserTableManager.h"
 #import "UIViewController+MMDrawerController.h"

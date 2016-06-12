@@ -93,15 +93,18 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback){
         NSString *userid = SSJUSERID();
         NSString *cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *originImageName = [db stringForQuery:@"select cimgurl from bk_charge_period_config where iconfigid = ?",item.configId];
         //如果有图片,插入图片表
-        if (item.chargeImage.length) {
-            if (![db executeUpdate:@"insert into bk_img_sync (rid,cimgname,cwritedate,operatortype,isynctype,isyncstate) values (?,?,?,0,0,0)",item.configId,item.chargeImage,cwriteDate]) {
-                if (failure) {
-                    SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
-                    });
+        if (![item.chargeImage isEqualToString:originImageName]) {
+            if (item.chargeImage.length) {
+                if (![db executeUpdate:@"insert into bk_img_sync (rid,cimgname,cwritedate,operatortype,isynctype,isyncstate) values (?,?,?,0,0,0)",item.configId,item.chargeImage,cwriteDate]) {
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    *rollback = YES;
                 }
-                *rollback = YES;
             }
         }
         //插入周期记账表

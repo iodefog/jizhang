@@ -126,7 +126,6 @@
  */
 + (instancetype)mj_objectWithKeyValues:(id)keyValues context:(NSManagedObjectContext *)context;
 
-
 /**
  *  通过plist来创建一个模型
  *  @param filename 文件名(仅限于mainBundle中的文件)
