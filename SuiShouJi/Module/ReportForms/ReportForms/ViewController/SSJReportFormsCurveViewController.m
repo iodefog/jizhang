@@ -8,8 +8,8 @@
 
 #import "SSJReportFormsCurveViewController.h"
 #import "SSJSegmentedControl.h"
-#import "TPKeyboardAvoidingScrollView.h"
 #import "SSJReportFormsCurveGraphView.h"
+#import "SSJReportFormsCurveGridView.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJReportFormsUtil.h"
 
@@ -17,11 +17,19 @@
 
 @property (nonatomic, strong) SSJSegmentedControl *segmentControl;
 
-@property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
 @property (nonatomic, strong) UILabel *periodLabel;
 
+@property (nonatomic, strong) UIButton *editPeriodBtn;
+
 @property (nonatomic, strong) SSJReportFormsCurveGraphView *curveView;
+
+@property (nonatomic, strong) UIView *questionBackView;
+
+@property (nonatomic, strong) UIButton *questionBtn;
+
+@property (nonatomic, strong) SSJReportFormsCurveGridView *gridView;
 
 @property (nonatomic, strong) NSArray *datas;
 
@@ -48,7 +56,12 @@
     
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.periodLabel];
+    [self.scrollView addSubview:self.editPeriodBtn];
     [self.scrollView addSubview:self.curveView];
+    [self.scrollView addSubview:self.questionBackView];
+    [self.scrollView addSubview:self.gridView];
+    
+    self.scrollView.contentSize = CGSizeMake(self.view.width, self.gridView.bottom);
     
     [self reloadData];
 }
@@ -60,13 +73,15 @@
 
 - (void)reloadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate success:^(NSArray<SSJReportFormsCurveModel *> *result) {
+    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate success:^(NSDictionary *result) {
         [self.view ssj_hideLoadingIndicator];
-        _datas = result;
+        _datas = result[SSJReportFormsCurveModelListKey];
         [_curveView reloadData];
         if (_datas.count >= 4) {
             [_curveView scrollToAxisXAtIndex:_datas.count - 4 animated:NO];
         }
+        [self updatePeriodLabelWithResult:result];
+        [self updateGirdViewWithResult:result];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
@@ -102,6 +117,47 @@
     [self reloadData];
 }
 
+- (void)editPeriodBtnAction {
+    
+}
+
+- (void)questionBtnAction {
+    
+}
+
+- (void)updatePeriodLabelWithResult:(NSDictionary *)result {
+    NSString *beginDateStr = result[SSJReportFormsCurveModelBeginDateKey];
+    NSString *endDateStr = result[SSJReportFormsCurveModelEndDateKey];
+    _periodLabel.text = [NSString stringWithFormat:@"%@--%@", beginDateStr, endDateStr];
+    CGSize textSize = [_periodLabel.text sizeWithAttributes:@{NSFontAttributeName:_periodLabel.font}];
+    _periodLabel.width = textSize.width + 28;
+    _periodLabel.center = CGPointMake(self.view.width * 0.5, 25);
+}
+
+- (void)updateGirdViewWithResult:(NSDictionary *)result {
+    double income = 0;
+    double payment = 0;
+    for (SSJReportFormsCurveModel *model in _datas) {
+        income += [model.income doubleValue];
+        payment += [model.payment doubleValue];
+    }
+    _gridView.income = income;
+    _gridView.payment = payment;
+    _gridView.surplus = income - payment;
+    
+    int dayCount = 0;
+    if (_startDate && _endDate) {
+        dayCount = [_endDate timeIntervalSinceDate:_startDate] / 24 * 60 * 60;
+    } else {
+        NSString *startDateStr = result[SSJReportFormsCurveModelBeginDateKey];
+        NSString *endDateStr = result[SSJReportFormsCurveModelEndDateKey];
+        NSDate *startDate = [NSDate dateWithString:startDateStr formatString:@"yyyy-MM-dd"];
+        NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
+        dayCount = [endDate timeIntervalSinceDate:startDate] / 24 * 60 * 60;
+    }
+    _gridView.dailyPayment = payment / dayCount;
+}
+
 #pragma mark - Getter
 - (SSJSegmentedControl *)segmentControl {
     if (!_segmentControl) {
@@ -116,9 +172,9 @@
     return _segmentControl;
 }
 
-- (TPKeyboardAvoidingScrollView *)scrollView {
+- (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+        _scrollView = [[UIScrollView alloc] init];
         _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
     }
     return _scrollView;
@@ -126,19 +182,58 @@
 
 - (UILabel *)periodLabel {
     if (!_periodLabel) {
-        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 30)];
+        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
         _periodLabel.textAlignment = NSTextAlignmentCenter;
         _periodLabel.font = [UIFont systemFontOfSize:15];
+        _periodLabel.layer.borderColor = SSJ_DEFAULT_SEPARATOR_COLOR.CGColor;
+        _periodLabel.layer.borderWidth = 1;
+        _periodLabel.layer.cornerRadius = 15;
     }
     return _periodLabel;
 }
 
+- (UIButton *)editPeriodBtn {
+    if (!_editPeriodBtn) {
+        _editPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _editPeriodBtn.frame = CGRectMake(self.view.width - 50, 0, 50, 50);
+        [_editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_editPeriodBtn addTarget:self action:@selector(editPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _editPeriodBtn;
+}
+
 - (SSJReportFormsCurveGraphView *)curveView {
     if (!_curveView) {
-        _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 32, self.view.width, 384)];
+        _curveView = [[SSJReportFormsCurveGraphView alloc] initWithFrame:CGRectMake(0, 50, self.view.width, 384)];
         _curveView.delegate = self;
     }
     return _curveView;
+}
+
+- (UIView *)questionBackView {
+    if (!_questionBackView) {
+        _questionBackView = [[UIView alloc] initWithFrame:CGRectMake(0, self.curveView.bottom, self.view.width, 30)];
+        _questionBackView.backgroundColor = [UIColor whiteColor];
+        [_questionBackView addSubview:self.questionBtn];
+    }
+    return _questionBackView;
+}
+
+- (UIButton *)questionBtn {
+    if (!_questionBtn) {
+        _questionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _questionBtn.frame = CGRectMake(8, 0, 30, 30);
+        [_questionBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_questionBtn addTarget:self action:@selector(questionBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _questionBtn;
+}
+
+- (SSJReportFormsCurveGridView *)gridView {
+    if (!_gridView) {
+        _gridView = [[SSJReportFormsCurveGridView alloc] initWithFrame:CGRectMake(0, self.questionBackView.bottom + 10, self.view.width, 254)];
+    }
+    return _gridView;
 }
 
 @end
