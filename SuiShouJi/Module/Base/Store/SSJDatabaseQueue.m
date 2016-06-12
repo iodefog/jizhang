@@ -29,8 +29,8 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
     return queue;
 }
 
-- (instancetype)initWithPath:(NSString*)aPath flags:(int)openFlags {
-    if (self = [super initWithPath:aPath flags:openFlags]) {
+- (instancetype)initWithPath:(NSString*)aPath flags:(int)openFlags vfs:(NSString *)vfsName {
+    if (self = [super initWithPath:aPath flags:openFlags vfs:vfsName]) {
         self.dataBaseQueue = dispatch_queue_create("com.ShuiShouJi.SSJDatabaseQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_queue_set_specific(self.dataBaseQueue, kSSJDatabaseQueueSpecificKey, (__bridge void *)self, NULL);
     }
@@ -47,6 +47,13 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         });
     }
 }
+
+//- (void)setDataBaseQueue:(dispatch_queue_t)dataBaseQueue {
+//    if (dataBaseQueue == NULL || dataBaseQueue == nil) {
+//        
+//    }
+//    _dataBaseQueue = dataBaseQueue;
+//}
 
 - (void)asyncInTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
     SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);

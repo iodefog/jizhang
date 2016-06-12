@@ -113,12 +113,14 @@ static const CGFloat kBottomSpaceHeight = 32;
         _paymentLabel.textColor = [UIColor ssj_colorWithHex:@"389F47"];
         _paymentLabel.text = @"支出";
         [_paymentLabel sizeToFit];
+        _paymentLabel.hidden = YES;
         [self addSubview:_paymentLabel];
         
         _paymentValueLabel = [[UILabel alloc] init];
         _paymentValueLabel.backgroundColor = [UIColor clearColor];
         _paymentValueLabel.font = [UIFont systemFontOfSize:12];
         _paymentValueLabel.textColor = [UIColor ssj_colorWithHex:@"389F47"];
+        _paymentValueLabel.hidden = YES;
         [self addSubview:_paymentValueLabel];
         
         _incomeLabel = [[UILabel alloc] init];
