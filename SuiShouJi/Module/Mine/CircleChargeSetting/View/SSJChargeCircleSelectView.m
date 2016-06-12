@@ -173,7 +173,7 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     if (self.chargeCircleSelectBlock) {
-        self.chargeCircleSelectBlock(_selectCircleType);
+        self.chargeCircleSelectBlock(_selectCircleType + 1);
     }
     [self dismissIfNeeded];
 }

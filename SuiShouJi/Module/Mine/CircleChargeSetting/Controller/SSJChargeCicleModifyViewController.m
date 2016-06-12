@@ -31,9 +31,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJBillTypeSelectViewController.h"
 #import "SSJChargeCircleTimeSelectView.h"
 #import "SSJCircleChargeTypeSelectView.h"
+#import "SSJImaageBrowseViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
+#import "SSJDatabaseQueue.h"
 
-@interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic, strong) NSArray *titles;
 @property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 @property(nonatomic, strong) UIView *saveFooterView;
@@ -41,17 +43,17 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
 @property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
+@property(nonatomic, strong) UIImage *selectedImage;
+
 @end
 
 @implementation SSJChargeCicleModifyViewController{
-    UIImage *_selectedImage;
     UITextField *_moneyInput;
 }
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.title = @"添加周期记账";
         self.hidesBottomBarWhenPushed = YES;
         self.hideKeyboradWhenTouch = YES;
     }
@@ -64,6 +66,13 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
+    if (self.item != nil) {
+        self.title = @"编辑周期记账";
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked:)];
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }else{
+        self.title = @"添加周期记账";
+    }
     // Do any additional setup after loading the view.
 }
 
@@ -77,6 +86,30 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         } failure:^(NSError *error) {
             
         }];
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    self.selectedImage = image;
+    [self.tableView reloadData];
+}
+
+
+#pragma mark - UIActionSheetDelegate
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex)
+    {
+        case 0:  //打开照相机拍照
+            [self takePhoto];
+            break;
+        case 1:  //打开本地相册
+            [self localPhoto];
+            break;
     }
 }
 
@@ -115,6 +148,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.fundSelectView show];
     }
     if ([title isEqualToString:kTitle7]) {
+        self.circleSelectView.selectCircleType = self.item.chargeCircleType;
         [self.circleSelectView show];
     }
     if ([title isEqualToString:kTitle3]) {
@@ -139,6 +173,28 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle2]) {
         [self.chargeTypeSelectView show];
     }
+    if ([title isEqualToString:kTitle6]) {
+        if (self.item.chargeImage.length || self.selectedImage != nil) {
+            __weak typeof(self) weakSelf = self;
+            SSJImaageBrowseViewController *imageBrowseVc = [[SSJImaageBrowseViewController alloc]init];
+            imageBrowseVc.type = SSJImageBrowseVcTypeEdite;
+            imageBrowseVc.image = self.selectedImage;
+            imageBrowseVc.item = self.item;
+            imageBrowseVc.NewImageSelectedBlock = ^(UIImage *image){
+                weakSelf.selectedImage = image;
+                [weakSelf.tableView reloadData];
+            };
+            imageBrowseVc.DeleteImageBlock = ^(){
+                weakSelf.selectedImage = nil;
+                weakSelf.item.chargeImage = @"";
+                [weakSelf.tableView reloadData];
+            };
+            [self.navigationController pushViewController:imageBrowseVc animated:YES];
+        }else{
+            UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片" ,@"从相册选择", nil];
+            [sheet showInView:self.view];
+        }
+    }
 }
 
 
@@ -159,6 +215,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
+        circleModifyCell.cellInput.text = self.item.money;
         circleModifyCell.cellInput.placeholder = @"￥0.00";
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeNumberPad;
         circleModifyCell.cellInput.delegate = self;
@@ -169,6 +226,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.tag = 101;
+        circleModifyCell.cellInput.text = self.item.chargeMemo;
     }else{
         circleModifyCell.cellInput.hidden = YES;
     }
@@ -195,10 +253,6 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         }
     }else if ([title isEqualToString:kTitle3]) {
         circleModifyCell.cellDetail = self.item.typeName;
-    }else if ([title isEqualToString:kTitle4]) {
-        circleModifyCell.cellDetail = self.item.money;
-    }else if ([title isEqualToString:kTitle5]) {
-        circleModifyCell.cellDetail = self.item.chargeMemo;
     }else if ([title isEqualToString:kTitle7]) {
         switch (self.item.chargeCircleType) {
             case 0:
@@ -229,6 +283,15 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellDetail = self.item.fundName;
     }else if ([title isEqualToString:kTitle9]) {
         circleModifyCell.cellDetail = self.item.billDate;
+    }
+    if ([title isEqualToString:kTitle6]) {
+        if (self.item.chargeImage.length || self.selectedImage != nil) {
+            circleModifyCell.cellImageView.image = [UIImage imageNamed:@"mark_pic"];
+        }else{
+            circleModifyCell.cellImageView.image = nil;
+        }
+    }else{
+        circleModifyCell.cellImageView.image = nil;
     }
     return circleModifyCell;
 }
@@ -324,15 +387,61 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 }
 
 #pragma mark - Private
+-(void)takePhoto{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = sourceType;
+        [self presentViewController:picker animated:YES completion:^{}];
+    }else{
+        NSLog(@"模拟其中无法打开照相机,请在真机中使用");
+    }
+}
+
+-(void)localPhoto{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+    picker.allowsEditing = YES;
+    [self presentViewController:picker animated:YES completion:^{}];
+}
+
+
 -(void)transferTextDidChange{
     [self setupTextFiledNum:_moneyInput num:2];
 }
 
 -(void)saveButtonClicked:(id)sender{
+    if (self.selectedImage != nil) {
+        NSString *imageName = SSJUUID();
+        if (SSJSaveImage(self.selectedImage , imageName) && SSJSaveThumbImage(self.selectedImage, imageName)) {
+            self.item.chargeImage = imageName;
+            self.item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb",imageName];
+        }
+    }
+    [self.navigationController popViewControllerAnimated:YES];
     [SSJCircleChargeStore saveCircleChargeItem:self.item success:^{
-        
+        [CDAutoHideMessageHUD showMessage:@"周期记账保存成功"];
     } failure:^(NSError *error) {
-        
+        [CDAutoHideMessageHUD showMessage:@"周期记账保存失败"];
+    }];
+}
+
+-(void)deleteButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.configId]) {
+            [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.configId];
+        }
+        SSJDispatch_main_async_safe(^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        });
     }];
 }
 

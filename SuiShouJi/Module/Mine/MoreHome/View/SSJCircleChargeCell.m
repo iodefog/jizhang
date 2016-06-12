@@ -117,7 +117,7 @@
     self.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:_item.colorValue];
     self.categoryLabel.text = _item.typeName;
     [self.categoryLabel sizeToFit];
-    if (_item.incomeOrExpence) {
+    if ( _item.incomeOrExpence) {
         self.moneyLabel.text = [NSString stringWithFormat:@"-%.2f",[_item.money doubleValue]];
     }else{
         self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",[_item.money doubleValue]];
