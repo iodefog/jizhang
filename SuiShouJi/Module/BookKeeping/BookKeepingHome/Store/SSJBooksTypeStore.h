@@ -36,5 +36,7 @@
  */
 +(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid;
 
+
 + (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error;
+
 @end
