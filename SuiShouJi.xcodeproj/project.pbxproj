@@ -173,6 +173,8 @@
 		7DABCA621D0E5784002886E8 /* reportForms_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA5E1D0E5784002886E8 /* reportForms_question@2x.png */; };
 		7DABCA631D0E5784002886E8 /* reportForms_question@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA5F1D0E5784002886E8 /* reportForms_question@3x.png */; };
 		7DABCA661D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */; };
+		7DABCA6A1D0EA171002886E8 /* reportForms_curve@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA681D0EA171002886E8 /* reportForms_curve@2x.png */; };
+		7DABCA6B1D0EA171002886E8 /* reportForms_curve@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA691D0EA171002886E8 /* reportForms_curve@3x.png */; };
 		7DAD4A5E1C4F552F004B7FF0 /* reportForms_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */; };
 		7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */; };
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
@@ -1259,6 +1261,8 @@
 		7DABCA5F1D0E5784002886E8 /* reportForms_question@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_question@3x.png"; sourceTree = "<group>"; };
 		7DABCA641D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveDescriptionView.h; sourceTree = "<group>"; };
 		7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveDescriptionView.m; sourceTree = "<group>"; };
+		7DABCA681D0EA171002886E8 /* reportForms_curve@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_curve@2x.png"; sourceTree = "<group>"; };
+		7DABCA691D0EA171002886E8 /* reportForms_curve@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_curve@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@2x.png"; sourceTree = "<group>"; };
 		7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@3x.png"; sourceTree = "<group>"; };
@@ -3328,6 +3332,8 @@
 		7DD7D6731C4C8E6A00ACE71A /* ReportForms */ = {
 			isa = PBXGroup;
 			children = (
+				7DABCA681D0EA171002886E8 /* reportForms_curve@2x.png */,
+				7DABCA691D0EA171002886E8 /* reportForms_curve@3x.png */,
 				7DABCA5C1D0E5784002886E8 /* reportForms_balloon@2x.png */,
 				7DABCA5D1D0E5784002886E8 /* reportForms_balloon@3x.png */,
 				7DABCA5E1D0E5784002886E8 /* reportForms_question@2x.png */,
@@ -5241,6 +5247,7 @@
 				BDA3FDFF1C58CAC400FB57B1 /* ft_yingshouqian@2x.png in Resources */,
 				BD37D2D81C523ABB0050BDAA /* bt_calender@2x.png in Resources */,
 				BDA3FE001C58CAC400FB57B1 /* ft_yingshouqian@3x.png in Resources */,
+				7DABCA6A1D0EA171002886E8 /* reportForms_curve@2x.png in Resources */,
 				9C991E571CE0BC120031CD02 /* bt_zhongjiang@3x.png in Resources */,
 				BDFBDAC51C7EB0E80049F179 /* bt_baby@2x.png in Resources */,
 				7DF8DEDA1C59BFE700CC5DFA /* guide_2@3x.png in Resources */,
@@ -5488,6 +5495,7 @@
 				7DD7D6DE1C4C8E6A00ACE71A /* bt_traffic@2x.png in Resources */,
 				BDA2EEFC1C8B16FB007DD45F /* icon.png in Resources */,
 				9C4078351CE1FC3100A61956 /* tab_form_sel@3x.png in Resources */,
+				7DABCA6B1D0EA171002886E8 /* reportForms_curve@3x.png in Resources */,
 				7DD7D6D21C4C8E6A00ACE71A /* bt_shopping@2x.png in Resources */,
 				9C4078111CE1B84000A61956 /* more_weixin@3x.png in Resources */,
 				7DD7D72D1C4C8FCF00ACE71A /* reportForms_period@2x.png in Resources */,

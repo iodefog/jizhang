@@ -51,6 +51,14 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 //  圆环中间顶部的总收入、总支出金额
 @property (nonatomic, strong) UILabel *incomeAndPaymentMoneyLab;
 
+//  自定义时间
+@property (nonatomic, strong) UILabel *customPeriodLab;
+
+@property (nonatomic, strong) UIView *customPeriodBackView;
+
+//  编辑、删除自定义时间按钮
+@property (nonatomic, strong) UIButton *customPeriodBtn;
+
 //  数据源
 @property (nonatomic, strong) NSArray *datas;
 
@@ -85,15 +93,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCalendarAction)];
-    self.navigationItem.leftBarButtonItem = leftItem;
-    
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_filter"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_curve"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
     self.navigationItem.rightBarButtonItem = rightItem;
     
     self.navigationItem.titleView = self.segmentControl;
     
+    [self.view addSubview:self.customPeriodBackView];
     [self.view addSubview:self.dateAxisView];
+    [self.view addSubview:self.customPeriodLab];
+    [self.view addSubview:self.customPeriodBtn];
     [self.view addSubview:self.tableView];
     
     UIView *headerView = [[UIView alloc] initWithFrame:self.chartView.frame];
@@ -206,6 +214,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
         wself.dateAxisView.hidden = YES;
+        wself.customPeriodLab.hidden = NO;
+        [wself updateCustomPeriodLab];
     };
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
@@ -239,6 +249,29 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
 }
 
+- (void)customPeriodBtnAction {
+    if (_customPeriod) {
+        _customPeriod = nil;
+        _dateAxisView.hidden = NO;
+        _customPeriodLab.hidden = YES;
+        [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [self reloadDatas];
+    } else {
+        __weak typeof(self) wself = self;
+        SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+        calendarVC.title = @"自定义时间";
+        calendarVC.billType = [self currentType];
+        calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+            wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
+            wself.dateAxisView.hidden = YES;
+            wself.customPeriodLab.hidden = NO;
+            [wself updateCustomPeriodLab];
+            [wself.customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
+        };
+        [self.navigationController pushViewController:calendarVC animated:YES];
+    }
+}
+
 - (void)reloadDataAfterSync {
     [self reloadDatas];
 }
@@ -269,6 +302,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     } else if (selectedPeriod.periodType == SSJDatePeriodTypeCustom) {
         [self.surplusView setTitle:@"合计结余"];
     }
+}
+
+- (void)updateCustomPeriodLab {
+    NSString *startDateStr = [_customPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    _customPeriodLab.text = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
+    CGSize textSize = [_customPeriodLab.text sizeWithAttributes:@{NSFontAttributeName:_customPeriodLab.font}];
+    _customPeriodLab.width = textSize.width + 28;
+    _customPeriodLab.center = CGPointMake(self.view.width * 0.5, 25);
 }
 
 //  更新总收入\总支出
@@ -484,7 +526,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 60)];
+        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
         _dateAxisView.delegate = self;
     }
     return _dateAxisView;
@@ -562,6 +604,37 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
     }
     return _incomeAndPaymentMoneyLab;
+}
+
+- (UILabel *)customPeriodLab {
+    if (!_customPeriodLab) {
+        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
+        _customPeriodLab.textAlignment = NSTextAlignmentCenter;
+        _customPeriodLab.font = [UIFont systemFontOfSize:15];
+        _customPeriodLab.layer.borderColor = SSJ_DEFAULT_SEPARATOR_COLOR.CGColor;
+        _customPeriodLab.layer.borderWidth = 1;
+        _customPeriodLab.layer.cornerRadius = 15;
+        _customPeriodLab.hidden = YES;
+    }
+    return _customPeriodLab;
+}
+
+- (UIView *)customPeriodBackView {
+    if (!_customPeriodBackView) {
+        _customPeriodBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
+        _customPeriodBackView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    }
+    return _customPeriodBackView;
+}
+
+- (UIButton *)customPeriodBtn {
+    if (!_customPeriodBtn) {
+        _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, 0, 50, 50);
+        [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_customPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _customPeriodBtn;
 }
 
 @end
