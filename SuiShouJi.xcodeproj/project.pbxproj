@@ -163,6 +163,11 @@
 		7DA4ACB21C918F57004E39E8 /* budget_no_data@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */; };
 		7DA4ACB51C919F38004E39E8 /* budget_red_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */; };
 		7DA4ACB61C919F38004E39E8 /* budget_red_wave_full@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB41C919F38004E39E8 /* budget_red_wave_full@3x.png */; };
+		7DABCA4E1D0D74E6002886E8 /* reportForms_delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA4A1D0D74E6002886E8 /* reportForms_delete@2x.png */; };
+		7DABCA4F1D0D74E6002886E8 /* reportForms_delete@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA4B1D0D74E6002886E8 /* reportForms_delete@3x.png */; };
+		7DABCA501D0D74E6002886E8 /* reportForms_edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA4C1D0D74E6002886E8 /* reportForms_edit@2x.png */; };
+		7DABCA511D0D74E6002886E8 /* reportForms_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DABCA4D1D0D74E6002886E8 /* reportForms_edit@3x.png */; };
+		7DABCA5B1D0D7994002886E8 /* SSJReportFormsCurveGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DABCA5A1D0D7994002886E8 /* SSJReportFormsCurveGridView.m */; };
 		7DAD4A5E1C4F552F004B7FF0 /* reportForms_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */; };
 		7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */; };
 		7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */; };
@@ -1234,6 +1239,12 @@
 		7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_no_data@3x.png"; sourceTree = "<group>"; };
 		7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_red_wave_full@2x.png"; sourceTree = "<group>"; };
 		7DA4ACB41C919F38004E39E8 /* budget_red_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_red_wave_full@3x.png"; sourceTree = "<group>"; };
+		7DABCA4A1D0D74E6002886E8 /* reportForms_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_delete@2x.png"; sourceTree = "<group>"; };
+		7DABCA4B1D0D74E6002886E8 /* reportForms_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_delete@3x.png"; sourceTree = "<group>"; };
+		7DABCA4C1D0D74E6002886E8 /* reportForms_edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_edit@2x.png"; sourceTree = "<group>"; };
+		7DABCA4D1D0D74E6002886E8 /* reportForms_edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_edit@3x.png"; sourceTree = "<group>"; };
+		7DABCA591D0D7994002886E8 /* SSJReportFormsCurveGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsCurveGridView.h; sourceTree = "<group>"; };
+		7DABCA5A1D0D7994002886E8 /* SSJReportFormsCurveGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsCurveGridView.m; sourceTree = "<group>"; };
 		7DAD4A5A1C4F552F004B7FF0 /* reportForms_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@2x.png"; sourceTree = "<group>"; };
 		7DAD4A5B1C4F552F004B7FF0 /* reportForms_left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left@3x.png"; sourceTree = "<group>"; };
 		7DAD4A5C1C4F552F004B7FF0 /* reportForms_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right@3x.png"; sourceTree = "<group>"; };
@@ -2804,6 +2815,8 @@
 				7D99D4641C357703006EB113 /* SSJSegmentedControl.m */,
 				7DD7D5C91C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.h */,
 				7DD7D5CA1C4BB8D300ACE71A /* SSJReportFormsPeriodSelectionView.m */,
+				7DABCA591D0D7994002886E8 /* SSJReportFormsCurveGridView.h */,
+				7DABCA5A1D0D7994002886E8 /* SSJReportFormsCurveGridView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3299,6 +3312,10 @@
 		7DD7D6731C4C8E6A00ACE71A /* ReportForms */ = {
 			isa = PBXGroup;
 			children = (
+				7DABCA4A1D0D74E6002886E8 /* reportForms_delete@2x.png */,
+				7DABCA4B1D0D74E6002886E8 /* reportForms_delete@3x.png */,
+				7DABCA4C1D0D74E6002886E8 /* reportForms_edit@2x.png */,
+				7DABCA4D1D0D74E6002886E8 /* reportForms_edit@3x.png */,
 				7D6BEA7C1CC886AE00D4046B /* reportForms_left_disable@2x.png */,
 				7D6BEA7D1CC886AE00D4046B /* reportForms_left_disable@3x.png */,
 				7D6BEA7E1CC886AE00D4046B /* reportForms_right_diable@2x.png */,
@@ -5278,6 +5295,7 @@
 				9C991DF91CE0A79F0031CD02 /* bt_child@3x.png in Resources */,
 				BDA3FDF81C58CAC400FB57B1 /* ft_huobijijin@3x.png in Resources */,
 				9C564F0D1CEDBBDD009F7A30 /* founds_yindao-568@2x.png in Resources */,
+				7DABCA4F1D0D74E6002886E8 /* reportForms_delete@3x.png in Resources */,
 				9C991DF21CE0A79F0031CD02 /* bt_chae@2x.png in Resources */,
 				BDCE42471C9F8C6800682B27 /* zhouqi_none@2x.png in Resources */,
 				7DD7D6F31C4C8E6A00ACE71A /* checkmark@3x.png in Resources */,
@@ -5385,6 +5403,7 @@
 				9C991E321CE0A79F0031CD02 /* bt_riyong@2x.png in Resources */,
 				7DDDA7C21CBE1BFD0029ADAC /* help_tree_level_7@2x.png in Resources */,
 				9C991E231CE0A79F0031CD02 /* bt_money@2x.png in Resources */,
+				7DABCA501D0D74E6002886E8 /* reportForms_edit@2x.png in Resources */,
 				7DD7D6AC1C4C8E6A00ACE71A /* bt_hongbao@2x.png in Resources */,
 				7DD7D6E61C4C8E6A00ACE71A /* bt_yingye@2x.png in Resources */,
 				7D4A42F81CC5E210002F0264 /* check_state_bg@2x.png in Resources */,
@@ -5457,6 +5476,7 @@
 				9C991E371CE0A79F0031CD02 /* bt_shouxufei@3x.png in Resources */,
 				7DD7D6EA1C4C8E6A00ACE71A /* bt_youfei@2x.png in Resources */,
 				9C991E391CE0A79F0031CD02 /* bt_shu@3x.png in Resources */,
+				7DABCA4E1D0D74E6002886E8 /* reportForms_delete@2x.png in Resources */,
 				9C2229371CC78D9D0040DD54 /* pic_back@3x.png in Resources */,
 				9C991E3E1CE0A79F0031CD02 /* bt_wanju@3x.png in Resources */,
 				9C3277831CE5878600109C4C /* more_arrow@3x.png in Resources */,
@@ -5482,6 +5502,7 @@
 				7D6BEA821CC886AE00D4046B /* reportForms_right_diable@2x.png in Resources */,
 				7DD7D7331C4CA8BD00ACE71A /* reportForms_expenses@2x.png in Resources */,
 				9C4078241CE1B92E00A61956 /* more_shezhi@2x.png in Resources */,
+				7DABCA511D0D74E6002886E8 /* reportForms_edit@3x.png in Resources */,
 				7DE69C591C8EDF34001D31C1 /* motion_circle_default@2x.png in Resources */,
 				7DF8DED91C59BFE700CC5DFA /* guide_2-667@2x.png in Resources */,
 				7D035FC31CC4AE5A0030C48B /* no_network_alert@2x.png in Resources */,
@@ -6086,6 +6107,7 @@
 				7DE69C3B1C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9CD9BC311CFD2DAA0061803B /* SSJSyncSettingViewController.m in Sources */,
 				7D5F33881CEAE6C10086B67E /* SSJADDNewTypeViewController.m in Sources */,
+				7DABCA5B1D0D7994002886E8 /* SSJReportFormsCurveGridView.m in Sources */,
 				9CD9BC161CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m in Sources */,
 				9C94718C1CEB224C00D69079 /* SSJModifyFundingTableViewCell.m in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,

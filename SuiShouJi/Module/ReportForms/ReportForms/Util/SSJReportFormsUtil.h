@@ -10,6 +10,10 @@
 #import "SSJReportFormsItem.h"
 #import "SSJDatePeriod.h"
 
+extern NSString *const SSJReportFormsCurveModelListKey;
+extern NSString *const SSJReportFormsCurveModelBeginDateKey;
+extern NSString *const SSJReportFormsCurveModelEndDateKey;
+
 @class SSJReportFormsCurveModel;
 
 @interface SSJReportFormsUtil : NSObject
@@ -53,7 +57,7 @@
 + (void)queryForBillStatisticsWithType:(int)type
                              startDate:(NSDate *)startDate
                                endDate:(NSDate *)endDate
-                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
+                               success:(void(^)(NSDictionary *result))success
                                failure:(void (^)(NSError *error))failure;
 
 @end

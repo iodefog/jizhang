@@ -90,21 +90,18 @@ static const CGFloat kBottomSpaceHeight = 32;
         
         _verticalLine = [[UIView alloc] init];
         _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
-        _verticalLine.hidden = YES;
         [self addSubview:_verticalLine];
         
         _paymentPoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
         _paymentPoint.layer.cornerRadius = 4;
         _paymentPoint.clipsToBounds = YES;
         _paymentPoint.backgroundColor = [UIColor ssj_colorWithHex:@"59ae65"];
-        _paymentPoint.hidden = YES;
         [self addSubview:_paymentPoint];
         
         _incomePoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
         _incomePoint.layer.cornerRadius = 4;
         _incomePoint.clipsToBounds = YES;
         _incomePoint.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
-        _incomePoint.hidden = YES;
         [self addSubview:_incomePoint];
         
         _paymentLabel = [[UILabel alloc] init];
@@ -113,14 +110,12 @@ static const CGFloat kBottomSpaceHeight = 32;
         _paymentLabel.textColor = [UIColor ssj_colorWithHex:@"389F47"];
         _paymentLabel.text = @"支出";
         [_paymentLabel sizeToFit];
-        _paymentLabel.hidden = YES;
         [self addSubview:_paymentLabel];
         
         _paymentValueLabel = [[UILabel alloc] init];
         _paymentValueLabel.backgroundColor = [UIColor clearColor];
         _paymentValueLabel.font = [UIFont systemFontOfSize:12];
         _paymentValueLabel.textColor = [UIColor ssj_colorWithHex:@"389F47"];
-        _paymentValueLabel.hidden = YES;
         [self addSubview:_paymentValueLabel];
         
         _incomeLabel = [[UILabel alloc] init];
@@ -139,7 +134,6 @@ static const CGFloat kBottomSpaceHeight = 32;
         
         _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         _balloonView.backgroundColor = [UIColor redColor];
-        _balloonView.hidden = YES;
         [self addSubview:_balloonView];
         
         _surplusLabel = [[UILabel alloc] init];
@@ -156,8 +150,28 @@ static const CGFloat kBottomSpaceHeight = 32;
         _surplusValueLabel.font = [UIFont systemFontOfSize:12];
         _surplusValueLabel.textColor = [UIColor whiteColor];
         [_balloonView addSubview:_surplusValueLabel];
+        
+        [self updateSubviewHidden];
     }
     return self;
+}
+
+- (void)updateSubviewHidden {
+    if (_axisXCount > 0) {
+        _verticalLine.hidden = NO;
+        _paymentPoint.hidden = NO;
+        _incomePoint.hidden = NO;
+        _paymentLabel.hidden = NO;
+        _paymentValueLabel.hidden = NO;
+        _balloonView.hidden = NO;
+    } else {
+        _verticalLine.hidden = YES;
+        _paymentPoint.hidden = YES;
+        _incomePoint.hidden = YES;
+        _paymentLabel.hidden = YES;
+        _paymentValueLabel.hidden = YES;
+        _balloonView.hidden = YES;
+    }
 }
 
 - (void)layoutSubviews {
@@ -301,6 +315,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_horizontalLines addObject:line];
     }
     
+    [self updateSubviewHidden];
     [self setNeedsLayout];
 }
 

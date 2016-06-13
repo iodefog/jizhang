@@ -12,6 +12,10 @@
 #import "SSJUserTableManager.h"
 #import "SSJReportFormsCurveModel.h"
 
+NSString *const SSJReportFormsCurveModelListKey = @"SSJReportFormsCurveModelListKey";
+NSString *const SSJReportFormsCurveModelBeginDateKey = @"SSJReportFormsCurveModelBeginDateKey";
+NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelEndDateKey";
+
 @implementation SSJReportFormsUtil
 
 + (void)queryForPeriodListWithIncomeOrPayType:(SSJBillType)type
@@ -238,47 +242,10 @@
     }];
 }
 
-//+ (void)queryForBillStatisticsWithType:(int)type
-//                             startDate:(NSDate *)startDate
-//                               endDate:(NSDate *)endDate
-//                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
-//                               failure:(void (^)(NSError *error))failure {
-//    switch (type) {
-//        case 0:
-//            
-//            break;
-//            
-//        case 1:
-//            
-//            break;
-//            
-//        case 2:
-//            
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//    
-//    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-//    NSMutableString *sqlStr = [@"select sum(a.imoney), strftime('%Y-%m', a.cbilldate), b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2  and a.cbilldate <= datetime('now', 'localtime') group by strftime('%Y-%m', a.cbilldate), b.itype" mutableCopy];
-//    if (startDate) {
-//        NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-//        [sqlStr appendFormat:@" and a.cbilldate >= %@", startDateStr];
-//    }
-//    if (endDate) {
-//        NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-//        [sqlStr appendFormat:@" and a.cbilldate <= %@", endDateStr];
-//    }
-//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-//        [db executeQuery:@"select sum(a.imoney), strftime('%Y-%m', a.cbilldate), b.itype from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 group by strftime('%Y-%m', a.cbilldate), b.itype"];
-//    }];
-//}
-
 + (void)queryForBillStatisticsWithType:(int)type
                              startDate:(NSDate *)startDate
                                endDate:(NSDate *)endDate
-                               success:(void(^)(NSArray <SSJReportFormsCurveModel *>*result))success
+                               success:(void(^)(NSDictionary *result))success
                                failure:(void (^)(NSError *error))failure {
     
     if (type != 0 && type != 1 && type != 2) {
@@ -302,8 +269,8 @@
     [sqlStr appendString:@"order by a.cbilldate"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:sqlStr];
-        if (!result) {
+        FMResultSet *resultSet = [db executeQuery:sqlStr];
+        if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -318,12 +285,19 @@
         SSJDatePeriodType periodType = SSJDatePeriodTypeUnknown;
         
         NSMutableArray *list = [NSMutableArray array];
+        NSString *startDateStr = nil;
+        NSString *endDateStr = nil;
         
-        while ([result next]) {
-            NSString *billDateStr = [result stringForColumn:@"cbilldate"];
+        while ([resultSet next]) {
+            NSString *billDateStr = [resultSet stringForColumn:@"cbilldate"];
             NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
-            double money = [result doubleForColumn:@"imoney"];
-            BOOL isPayment = [result boolForColumn:@"itype"];
+            double money = [resultSet doubleForColumn:@"imoney"];
+            BOOL isPayment = [resultSet boolForColumn:@"itype"];
+            
+            if (!startDateStr) {
+                startDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            }
+            endDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
             switch (type) {
                 case 0:
@@ -380,7 +354,9 @@
         }
         
         SSJDispatch_main_async_safe(^{
-            success(list);
+            success(@{SSJReportFormsCurveModelListKey:list,
+                      SSJReportFormsCurveModelBeginDateKey:startDateStr,
+                      SSJReportFormsCurveModelEndDateKey:endDateStr});
         });
     }];
 }
