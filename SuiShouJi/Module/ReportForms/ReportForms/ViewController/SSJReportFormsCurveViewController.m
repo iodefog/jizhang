@@ -7,9 +7,11 @@
 //
 
 #import "SSJReportFormsCurveViewController.h"
+#import "SSJMagicExportCalendarViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJReportFormsCurveGraphView.h"
 #import "SSJReportFormsCurveGridView.h"
+#import "SSJReportFormsCurveDescriptionView.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJReportFormsUtil.h"
 
@@ -28,6 +30,8 @@
 @property (nonatomic, strong) UIView *questionBackView;
 
 @property (nonatomic, strong) UIButton *questionBtn;
+
+@property (nonatomic, strong) SSJReportFormsCurveDescriptionView *descView;
 
 @property (nonatomic, strong) SSJReportFormsCurveGridView *gridView;
 
@@ -62,7 +66,10 @@
     [self.scrollView addSubview:self.gridView];
     
     self.scrollView.contentSize = CGSizeMake(self.view.width, self.gridView.bottom);
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self reloadData];
 }
 
@@ -82,6 +89,7 @@
         }
         [self updatePeriodLabelWithResult:result];
         [self updateGirdViewWithResult:result];
+        [self updateDescViewWithResult:result];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
@@ -115,14 +123,28 @@
 #pragma mark - Event
 - (void)segmentControlValueDidChange {
     [self reloadData];
+    _questionBtn.hidden = _segmentControl.selectedSegmentIndex == 0;
 }
 
 - (void)editPeriodBtnAction {
-    
+    __weak typeof(self) wself = self;
+    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+    calendarVC.title = @"自定义时间";
+    calendarVC.billType = SSJBillTypeSurplus;
+    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+        wself.startDate = selectedBeginDate;
+        wself.endDate = selectedEndDate;
+    };
+    [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
 - (void)questionBtnAction {
-    
+    if (_descView.superview) {
+        [_descView dismiss];
+    } else {
+        CGPoint showPoint = [_questionBtn convertPoint:CGPointMake(_questionBtn.width * 0.5, 22) toView:_scrollView];
+        [_descView showInView:_scrollView atPoint:showPoint];
+    }
 }
 
 - (void)updatePeriodLabelWithResult:(NSDictionary *)result {
@@ -147,15 +169,35 @@
     
     int dayCount = 0;
     if (_startDate && _endDate) {
-        dayCount = [_endDate timeIntervalSinceDate:_startDate] / 24 * 60 * 60;
+        dayCount = [_endDate timeIntervalSinceDate:_startDate] / (24 * 60 * 60);
     } else {
         NSString *startDateStr = result[SSJReportFormsCurveModelBeginDateKey];
         NSString *endDateStr = result[SSJReportFormsCurveModelEndDateKey];
         NSDate *startDate = [NSDate dateWithString:startDateStr formatString:@"yyyy-MM-dd"];
         NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
-        dayCount = [endDate timeIntervalSinceDate:startDate] / 24 * 60 * 60;
+        dayCount = [endDate timeIntervalSinceDate:startDate] / (24 * 60 * 60);
     }
     _gridView.dailyPayment = payment / dayCount;
+}
+
+- (void)updateDescViewWithResult:(NSDictionary *)result {
+    SSJReportFormsCurveModel *model = [_datas firstObject];
+    if (model.period.periodType != SSJDatePeriodTypeWeek) {
+        return;
+    }
+    
+    NSDate *beginDate = nil;
+    if (_startDate) {
+        beginDate = _startDate;
+    } else {
+        NSString *beginDateStr = result[SSJReportFormsCurveModelBeginDateKey];
+        beginDate = [NSDate dateWithString:beginDateStr formatString:@"yyyy-MM-dd"];
+    }
+    
+    if (!_descView) {
+        _descView = [[SSJReportFormsCurveDescriptionView alloc] init];
+    }
+    _descView.period = [SSJDatePeriod datePeriodWithStartDate:beginDate endDate:model.period.endDate];
 }
 
 #pragma mark - Getter
@@ -222,8 +264,9 @@
 - (UIButton *)questionBtn {
     if (!_questionBtn) {
         _questionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _questionBtn.hidden = YES;
         _questionBtn.frame = CGRectMake(8, 0, 30, 30);
-        [_questionBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_questionBtn setImage:[UIImage imageNamed:@"reportForms_question"] forState:UIControlStateNormal];
         [_questionBtn addTarget:self action:@selector(questionBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _questionBtn;

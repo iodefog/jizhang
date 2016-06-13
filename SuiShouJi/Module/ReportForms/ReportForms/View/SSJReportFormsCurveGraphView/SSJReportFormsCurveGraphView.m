@@ -132,8 +132,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         _incomeValueLabel.textColor = [UIColor ssj_colorWithHex:@"D73939"];
         [self addSubview:_incomeValueLabel];
         
-        _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
-        _balloonView.backgroundColor = [UIColor redColor];
+        _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_balloon"]];
         [self addSubview:_balloonView];
         
         _surplusLabel = [[UILabel alloc] init];
@@ -213,7 +212,8 @@ static const CGFloat kBottomSpaceHeight = 32;
     
     _verticalLine.frame = CGRectMake(self.width * 0.5, 60, 1 / [UIScreen mainScreen].scale, self.height - 60 - kBottomSpaceHeight);
     
-    _balloonView.frame = CGRectMake((self.width - 46) * 0.5, 10, 46, 52);
+    _balloonView.centerX = self.width * 0.5;
+    _balloonView.top = 10;
     _surplusLabel.top = 10;
     _surplusLabel.centerX = _balloonView.width * 0.5;
     _surplusValueLabel.size = CGSizeMake(100, 12);
