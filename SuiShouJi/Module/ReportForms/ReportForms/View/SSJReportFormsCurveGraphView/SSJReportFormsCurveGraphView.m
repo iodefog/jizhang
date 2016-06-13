@@ -400,8 +400,29 @@ static const CGFloat kBottomSpaceHeight = 32;
     _incomeLabel.centerX = self.width * 0.5;
     _incomeLabel.bottom = _incomeValueLabel.top;
     
+    [self checkIfIncomeAndPaymentPointIntersect];
+    
     float surplus = [_incomeValues[_selectedAxisXIndex] floatValue] - [_paymentValues[_selectedAxisXIndex] floatValue];
     _surplusValueLabel.text = [NSString stringWithFormat:@"%.2f", surplus];
+}
+
+- (void)checkIfIncomeAndPaymentPointIntersect {
+    
+    CGRect incomeTextRect = CGRectUnion(_incomeLabel.frame, _incomeValueLabel.frame);
+    CGRect paymentTextRect = CGRectUnion(_paymentLabel.frame, _paymentValueLabel.frame);
+    
+    if (CGRectIntersectsRect(_incomePoint.frame, paymentTextRect)) {
+        _paymentLabel.centerX = _paymentValueLabel.centerX = self.width * 0.5 + paymentTextRect.size.width * 0.5;
+    }
+    
+    if (CGRectIntersectsRect(_paymentPoint.frame, incomeTextRect)) {
+        _incomeLabel.centerX = _incomeValueLabel.centerX = self.width * 0.5 - incomeTextRect.size.width * 0.5;
+    }
+    
+    if (CGRectIntersectsRect(incomeTextRect, paymentTextRect)) {
+        _paymentLabel.centerX = _paymentValueLabel.centerX = self.width * 0.5 + paymentTextRect.size.width * 0.5;
+        _incomeLabel.centerX = _incomeValueLabel.centerX = self.width * 0.5 - incomeTextRect.size.width * 0.5;
+    }
 }
 
 @end
