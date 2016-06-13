@@ -100,7 +100,11 @@
     
     if ([item.typeName isEqualToString:@"平账收入"] || [item.typeName isEqualToString:@"平账支出"]) {
         self.typeLabel.text = [NSString stringWithFormat:@"余额变更(%@)",item.typeName];
-    }else{
+    }else if([item.typeName isEqualToString:@"转入"]){
+        self.typeLabel.text = [NSString stringWithFormat:@"由%@转入",item.transferSource];
+    }else if([item.typeName isEqualToString:@"转出"]){
+        self.typeLabel.text = [NSString stringWithFormat:@"转出至%@",item.transferSource];
+    }else if([item.typeName isEqualToString:@"转入"]){
         self.typeLabel.text = item.typeName;
     }
     [self.typeLabel sizeToFit];

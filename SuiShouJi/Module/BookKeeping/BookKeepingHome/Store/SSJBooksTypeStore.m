@@ -93,4 +93,17 @@
     return [NSString stringWithFormat:@"update BK_BOOKS_TYPE set %@ where cbooksid = :cbooksid", [keyValues componentsJoinedByString:@", "]];
 }
 
++(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid{
+    __block SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_books_type where cbooksid = ?",booksid];
+        while ([resultSet next]) {
+            item.booksId = [resultSet stringForColumn:@"cbooksid"];
+            item.booksName = [resultSet stringForColumn:@"cbooksname"];
+            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+        }
+    }];
+    return item;
+}
+
 @end

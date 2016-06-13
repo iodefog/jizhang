@@ -21,7 +21,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 @property(nonatomic, strong) SSJBooksTypeEditeView *booksEditeView;
 @end
 
-@implementation SSJBooksTypeSelectViewController
+@implementation SSJBooksTypeSelectViewController{
+    NSString *_selectBooksId;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -41,6 +43,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [super viewWillAppear:animated];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
     [self getDateFromDB];
+    
 }
 
 -(void)dealloc {
@@ -71,9 +74,15 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
 //    __weak typeof(self) weakSelf = self;
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
+    if ([item.booksId isEqualToString:booksid]) {
+        cell.isSelected = YES;
+    }else{
+        cell.isSelected = NO;
+    }
     __weak typeof(self) weakSelf = self;
     cell.longPressBlock = ^(){
         weakSelf.booksEditeView.item = item;
