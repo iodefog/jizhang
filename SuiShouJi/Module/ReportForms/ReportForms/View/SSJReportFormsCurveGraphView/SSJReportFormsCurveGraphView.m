@@ -286,6 +286,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         index ++;
     }
     
+    BOOL showScaleValue = topDigit > 0;
     _maxValue = (topDigit + 1) * pow(10, index);
     
     _curveView.maxValue = _maxValue;
@@ -305,6 +306,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         label.font = [UIFont systemFontOfSize:12];
         label.textColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
         label.text = [NSString stringWithFormat:@"%ld", _maxValue - i * unitValue];
+        label.hidden = !showScaleValue;
         [label sizeToFit];
         [self addSubview:label];
         [_axisYLabels addObject:label];
