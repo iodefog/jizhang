@@ -80,5 +80,6 @@
 //操作类型
 @property(nonatomic) int operatorType;
 
+@property(nonatomic, strong) NSString *transferSource;
 
 @end

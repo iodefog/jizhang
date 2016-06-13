@@ -26,4 +26,15 @@
  *  @return (BOOL) 是否保存成功
  */
 + (BOOL)saveBooksTypeItem:(SSJBooksTypeItem *)item;
+
+/**
+ *  查询当前的账本
+ *
+ *  @param booksid 账本id
+ *
+ *  @return @return (SSJBooksTypeItem *) 账本信息模型
+ */
++(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid;
+
++ (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error;
 @end

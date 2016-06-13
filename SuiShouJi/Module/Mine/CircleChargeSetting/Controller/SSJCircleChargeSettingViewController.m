@@ -16,11 +16,11 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCircleChargeStore.h"
 #import "SSJChargeCicleModifyViewController.h"
-
+#import "SSJChargeCircleNoneView.h"
 
 @interface SSJCircleChargeSettingViewController ()
 @property (nonatomic,strong) NSMutableArray *items;
-@property (nonatomic,strong) SSJNoneCircleChargeView *nodataView;
+@property (nonatomic,strong) SSJChargeCircleNoneView *nodataView;
 @end
 
 @implementation SSJCircleChargeSettingViewController
@@ -36,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked:)];
+    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
     self.navigationItem.rightBarButtonItem = rightBarItem;
 }
 
@@ -72,18 +72,6 @@
     return self.items.count;
 }
 
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
-    [self.items removeObjectAtIndex:indexPath.section];
-    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
-    [self deleteConfigWithConfigId:item.configId];
-    if (self.items.count == 0) {
-        [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
-        
-    }
-    [self.tableView reloadData];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJCircleChargeCell";
     SSJCircleChargeCell *circleChargeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
@@ -109,15 +97,19 @@
 }
 
 #pragma mark - Getter
--(SSJNoneCircleChargeView *)nodataView{
+-(SSJChargeCircleNoneView *)nodataView{
     if (!_nodataView) {
-        _nodataView = [[SSJNoneCircleChargeView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 10)];
+        _nodataView = [[SSJChargeCircleNoneView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
+        __weak typeof(self) weakSelf = self;
+        _nodataView.makeChargeCircleBlock = ^(){
+            [weakSelf addButtonClicked];
+        };
     }
     return _nodataView;
 }
 
 #pragma mark - Private
--(void)addButtonClicked:(id)sender{
+-(void)addButtonClicked{
     SSJChargeCicleModifyViewController *circleChargeModifyVC = [[SSJChargeCicleModifyViewController alloc]init];
     [self.navigationController pushViewController:circleChargeModifyVC animated:YES];
 }
@@ -126,14 +118,16 @@
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     [SSJCircleChargeStore queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
-        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        if (self.items.count == 0) {
-            [self.view ssj_showWatermarkWithImageName:@"zhouqi_none" animated:YES target:self action:nil];
+        if (result.count == 0) {
+            [self.tableView ssj_showWatermarkWithCustomView:self.nodataView animated:NO target:self action:NULL];
+        }else{
+            [self.tableView ssj_hideWatermark:YES];
         }
+        weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         [weakSelf.tableView ssj_hideLoadingIndicator];
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
-        
+        [weakSelf.tableView ssj_hideLoadingIndicator];
     }];
 //    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db , BOOL *rollback){
 //        NSMutableArray *tempArray = [[NSMutableArray alloc]init];
@@ -171,28 +165,6 @@
 //        });
 //    }];
     
-}
-
--(void)editeButtonClicked:(id)sender{
-    if ([self.navigationItem.rightBarButtonItem.title isEqualToString:@"编辑"]) {
-        self.navigationItem.rightBarButtonItem.title = @"完成";
-    }else{
-        self.navigationItem.rightBarButtonItem.title = @"编辑";
-    }
-    [self.tableView setEditing:!self.tableView.editing animated:YES];
-}
-
--(void)deleteConfigWithConfigId:(NSString *)configId{
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        BOOL success = [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? where ICONFIGID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),configId];
-        
-        if (success && SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-        }
-    }];
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-    }
 }
 
 -(void)reloadDataAfterSync{

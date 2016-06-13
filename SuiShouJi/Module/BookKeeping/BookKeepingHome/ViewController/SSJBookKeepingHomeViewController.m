@@ -27,6 +27,8 @@
 #import "SSJBudgetModel.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJBooksTypeStore.h"
+#import "SSJBooksTypeItem.h"
 #import "FMDB.h"
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
@@ -110,7 +112,7 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithTitle:@"账本" style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonClicked:)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"home_books"] style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonClicked:)];
     self.navigationItem.leftBarButtonItem = leftButton;
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     rightSpace.width = -15;
@@ -135,6 +137,9 @@
         } failure:^(NSError * _Nullable error) {
             NSLog(@"%@",error.localizedDescription);
         }];
+        NSString *booksid = SSJGetCurrentBooksType();
+        SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     }
 }
 
@@ -345,21 +350,30 @@
 
     }else {
         _isRefreshing = NO;
-        CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
-        NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
-        SSJBillingChargeCellItem *item = [self.items objectAtIndex:currentRow];
-        NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(6, 2)] integerValue];
-        NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
-        if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
-            self.currentYear = currentYear;
-            self.currentMonth = currentMonth;
-            [self reloadCurrentMonthData];
+        if (self.items.count == 0) {
+            return;
+        }else{
+            CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
+            NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
+            SSJBillingChargeCellItem *item = [self.items objectAtIndex:currentRow];
+            NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(6, 2)] integerValue];
+            NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
+            if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
+                self.currentYear = currentYear;
+                self.currentMonth = currentMonth;
+                [self reloadCurrentMonthData];
+            }
         }
+
     }
 }
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    [self reloadCurrentMonthData];
+    if (self.items.count == 0) {
+        return;
+    }else{
+        [self reloadCurrentMonthData];
+    }
 }
 
 //-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
@@ -702,18 +716,29 @@
 -(void)reloadDataAfterSync{
     [self getDateFromDatebase];
     [self reloadBudgetData];
+    NSString *booksid = SSJGetCurrentBooksType();
+    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
 }
 
 - (void)reloadDataAfterInitDatabase {
     [self getDateFromDatebase];
     
     [self reloadBudgetData];
+    
+    NSString *booksid = SSJGetCurrentBooksType();
+    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
 }
 
 - (void)reloadAfterBooksTypeChange{
     [self getDateFromDatebase];
     
     [self reloadBudgetData];
+    
+    NSString *booksid = SSJGetCurrentBooksType();
+    SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
 }
 
 - (void)reloadBudgetData {

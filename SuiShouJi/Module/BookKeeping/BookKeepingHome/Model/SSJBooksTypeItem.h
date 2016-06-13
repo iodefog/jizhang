@@ -25,6 +25,5 @@
 
 @property(nonatomic) NSInteger operatorType;
 
-
 + (NSDictionary *)propertyMapping;
 @end

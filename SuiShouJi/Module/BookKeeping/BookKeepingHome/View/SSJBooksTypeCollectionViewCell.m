@@ -40,6 +40,9 @@
     self.seperatorLineView.leftTop = CGPointMake(22, 0);
     self.titleLabel.centerX = self.width - (self.width - 24) / 2;
     self.titleLabel.centerY = self.height / 2;
+    self.lineImage.size = CGSizeMake(7, 56);
+    self.lineImage.center = CGPointMake(12, self.height / 2);
+    self.selectImage.rightBottom = CGPointMake(self.width, self.height - 10);
 }
 
 -(YYLabel *)titleLabel{
@@ -64,15 +67,17 @@
 -(UIImageView *)lineImage{
     if (!_lineImage) {
         _lineImage = [[UIImageView alloc]init];
+        _lineImage.image = [UIImage imageNamed:@"zhangben_bian"];
     }
     return _lineImage;
 }
 
 -(UIImageView *)selectImage{
     if (!_selectImage) {
-        _selectImage = [[UIImageView alloc]init];
+        _selectImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 18, 9)];
+        _selectImage.image = [UIImage imageNamed:@"zhangben_mark"];
     }
-    return _lineImage;
+    return _selectImage;
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{
@@ -87,6 +92,11 @@
     if (self.longPressBlock) {
         self.longPressBlock();
     }
+}
+
+-(void)setIsSelected:(BOOL)isSelected{
+    _isSelected = isSelected;
+    self.selectImage.hidden = !_isSelected;
 }
 
 @end

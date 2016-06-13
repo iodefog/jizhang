@@ -93,4 +93,27 @@
     return [NSString stringWithFormat:@"update BK_BOOKS_TYPE set %@ where cbooksid = :cbooksid", [keyValues componentsJoinedByString:@", "]];
 }
 
++(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid{
+    __block SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_books_type where cbooksid = ?",booksid];
+        while ([resultSet next]) {
+            item.booksId = [resultSet stringForColumn:@"cbooksid"];
+            item.booksName = [resultSet stringForColumn:@"cbooksname"];
+            item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+        }
+    }];
+    return item;
+}
+
++ (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error {
+    __block BOOL success = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        success = [db executeQuery:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),booksId];
+        if (!success && error) {
+            *error = [db lastError];
+        }
+    }];
+    return success;
+}
 @end

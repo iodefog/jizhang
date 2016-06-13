@@ -23,6 +23,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                          success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
                          failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
         NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
@@ -52,6 +53,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+            }
+            if ([item.typeName isEqualToString:@"转入"] || [item.typeName isEqualToString:@"转出"]) {
+                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where a.cwritedate = ? and a.cuserid = ? and a.ifunsid = b.cfundid",item.editeDate,userid];
             }
             NSString *month = [resultSet stringForColumn:@"cmonth"];
             if ([month isEqualToString:lastDate]) {

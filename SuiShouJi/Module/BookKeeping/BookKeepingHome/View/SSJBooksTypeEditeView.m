@@ -9,15 +9,17 @@
 #import "SSJBooksTypeEditeView.h"
 #import "YYKeyboardManager.h"
 #import "SSJColorSelectCollectionViewCell.h"
+#import "SSJDatabaseQueue.h"
+#import "SSJBooksTypeStore.h"
 
 @interface SSJBooksTypeEditeView()<YYKeyboardObserver,UICollectionViewDataSource,UICollectionViewDelegate>
-
 
 @property(nonatomic, strong) UILabel *titleLabel;
 @property(nonatomic, strong) UIView *seperatorLine;
 @property(nonatomic, strong) UITextField *nameInput;
 @property(nonatomic, strong) UICollectionView *colorSelectView;
 @property(nonatomic, strong) UIButton *comfirmButton;
+@property(nonatomic, strong) UIButton *deleteButton;
 @property(nonatomic, strong) UIButton *cancelButton;
 @property(nonatomic, strong) NSArray *colors;
 @end
@@ -37,6 +39,7 @@
         [self addSubview:self.colorSelectView];
         [self addSubview:self.comfirmButton];
         [self addSubview:self.cancelButton];
+        [self addSubview:self.deleteButton];
         [[YYKeyboardManager defaultManager] addObserver:self];
         [self sizeToFit];
     }
@@ -104,6 +107,8 @@
     [self.comfirmButton ssj_relayoutBorder];
     self.colorSelectView.size = CGSizeMake(self.width, self.comfirmButton.top - self.nameInput.bottom);
     self.colorSelectView.leftTop = CGPointMake(0, self.nameInput.bottom);
+    self.deleteButton.rightTop = CGPointMake(self.width - 10 , 0);
+    self.deleteButton.centerY = self.titleLabel.centerY;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -240,7 +245,16 @@
     return _cancelButton;
 }
 
-#pragma mark - Private
+-(UIButton *)deleteButton{
+    if (!_deleteButton) {
+        _deleteButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [_deleteButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
+        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _deleteButton;
+}
+
+#pragma mark - Event
 -(void)cancelButtonClicked:(id)sender{
     [self dismiss];
 }
@@ -255,6 +269,15 @@
     self.item.booksColor = _selectColor;
     if (self.comfirmButtonClickedBlock) {
         self.comfirmButtonClickedBlock(self.item);
+    }
+}
+
+-(void)deleteButtonClicked:(id)sender{
+    [self dismiss];
+    if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:self.item.booksId error:NULL]) {
+        if (self.deleteButtonClickedBlock) {
+            self.deleteButtonClickedBlock();
+        }
     }
 }
 

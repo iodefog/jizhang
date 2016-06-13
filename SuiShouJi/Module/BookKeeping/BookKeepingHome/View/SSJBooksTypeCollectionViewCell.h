@@ -16,4 +16,6 @@ typedef void (^longPressBlock)();
 
 @property(nonatomic,copy) longPressBlock longPressBlock;
 
+@property(nonatomic) BOOL isSelected;
+
 @end
