@@ -276,7 +276,7 @@
     [self dismiss];
     if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:self.item.booksId error:NULL]) {
         if (self.deleteButtonClickedBlock) {
-            self.deleteButtonClickedBlock();
+            self.deleteButtonClickedBlock(self.item);
         }
     }
 }
@@ -290,6 +290,11 @@
     }else{
         self.nameInput.text = @"";
         _selectColor = @"#7FB04F";
+    }
+    if ([_item.booksId isEqualToString:@"0"] || [_item.booksName isEqualToString:@"添加账本"]) {
+        self.deleteButton.hidden = YES;
+    }else{
+        self.deleteButton.hidden = NO;
     }
     [self.colorSelectView reloadData];
 }

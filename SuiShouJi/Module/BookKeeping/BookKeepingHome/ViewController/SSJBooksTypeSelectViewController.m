@@ -138,8 +138,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             [SSJBooksTypeStore saveBooksTypeItem:item];
             [weakSelf getDateFromDB];
         };
-        _booksEditeView.deleteButtonClickedBlock = ^(){
-//            [weakSelf getDateFromDB];
+        __block NSString *booksid = SSJGetCurrentBooksType();
+        _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
+            if ([item.booksId isEqualToString:booksid]) {
+                SSJSelectBooksType(@"0");
+            }
+            [weakSelf getDateFromDB];
         };
     }
     return _booksEditeView;

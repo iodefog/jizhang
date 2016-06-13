@@ -17,6 +17,8 @@
 #import "SSJChargeDetailMemoCell.h"
 #import "SSJCalenderDetaiImagelFooterView.h"
 #import "SSJImaageBrowseViewController.h"
+#import "SSJBooksTypeStore.h"
+#import "SSJBooksTypeItem.h"
 #import "FMDB.h"
 
 @interface SSJCalenderDetailViewController ()
@@ -64,7 +66,7 @@
     if (indexPath.row == 0) {
         return 55;
     }
-    if (indexPath.row == 3) {
+    if (indexPath.row == 4) {
         return 85;
     }
     return 50;
@@ -93,9 +95,9 @@
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
-        return 4;
+        return 5;
     }
-    return 3;
+    return 4;
 }
 
 
@@ -120,6 +122,16 @@
         detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundId];
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"资金类型";
+        [detailcell.cellLabel sizeToFit];
+        return detailcell;
+    }else if(indexPath.row == 3){
+        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
+        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
+        NSString *booksid = SSJGetCurrentBooksType();
+        SSJBooksTypeItem *booksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
+        detailcell.detailLabel.text = booksItem.booksName;
+        [detailcell.detailLabel sizeToFit];
+        detailcell.cellLabel.text = @"账本类型";
         [detailcell.cellLabel sizeToFit];
         return detailcell;
     }else{

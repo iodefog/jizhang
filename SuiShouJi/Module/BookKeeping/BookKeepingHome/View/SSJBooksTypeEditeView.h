@@ -20,7 +20,7 @@ typedef void (^comfirmButtonClickedBlock)(SSJBooksTypeItem *item);
 
 @property(nonatomic,copy) comfirmButtonClickedBlock comfirmButtonClickedBlock;
 
-typedef void (^deleteButtonClickedBlock)();
+typedef void (^deleteButtonClickedBlock)(SSJBooksTypeItem *item);
 
 @property(nonatomic,copy) deleteButtonClickedBlock deleteButtonClickedBlock;
 @end
