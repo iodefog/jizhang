@@ -42,6 +42,11 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
     [SSJFundingTransferStore queryForFundingTransferListWithSuccess:^(NSMutableDictionary *result) {
+        if ([result allKeys].count) {
+            [self.tableView ssj_hideWatermark:YES];
+        }else{
+            [self.tableView ssj_showWatermarkWithImageName:@"founds_transfer_none" animated:NO target:self action:NULL];
+        }
         weakSelf.datas = [NSDictionary dictionaryWithDictionary:result];
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
@@ -68,9 +73,9 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSArray *items = [self.datas objectForKey:[[self.datas allKeys] objectAtIndex:indexPath.section]];
     SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     transferEditeVc.item = item;
     [self.navigationController pushViewController:transferEditeVc animated:YES];

@@ -41,6 +41,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [MobClick setAppVersion:SSJAppVersion()]; //参数为NSString * 类型,自定义app版本信息，如果不设置，默认从CFBundleVersion里取
     //  reportPolicy为枚举类型,可以为 REALTIME, BATCH,SENDDAILY,SENDWIFIONLY几种
     //  channelId 为NSString * 类型，channelId 为nil或@""时,默认会被被当作@"App Store"渠道
+    UMConfigInstance.appKey = kUMAppKey;
+    UMConfigInstance.ePolicy = (ReportPolicy)BATCH;
+    UMConfigInstance.channelId = SSJDefaultSource();
+    [MobClick startWithConfigure:UMConfigInstance]; 
 //    [MobClick startWithAppkey:kUMAppKey reportPolicy:(ReportPolicy)BATCH channelId:SSJDefaultSource()];
 }
 

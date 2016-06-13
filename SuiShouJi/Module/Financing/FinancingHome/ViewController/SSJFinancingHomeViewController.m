@@ -32,6 +32,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) SSJFinancingHomeHeader *headerView;
 @property(nonatomic, strong) NSString *newlyAddFundId;
+@property(nonatomic, strong) UIButton *hiddenButton;
 @end
 
 @implementation SSJFinancingHomeViewController{
@@ -49,6 +50,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [super viewDidLoad];
     _editeModel = NO;
     [self.view addSubview:self.headerView];
+    [self.view addSubview:self.hiddenButton];
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier];
     [self.collectionView registerClass:[SSJFinancingHomeAddCell class] forCellWithReuseIdentifier:SSJFinancingAddCellIdentifier];
@@ -70,6 +72,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 85);
     self.headerView.leftTop = CGPointMake(0, 10);
+    self.hiddenButton.right = self.view.width - 120;
+    self.hiddenButton.centerY = self.headerView.centerY;
 //    self.profitAmountLabel.left = self.profitLabel.right + 20;
 //    self.transferButton.size = CGSizeMake(65, 30);
     [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
@@ -230,13 +234,44 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     return _headerView;
 }
 
+-(UIButton *)hiddenButton{
+    if (!_hiddenButton) {
+        _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 19, 19)];
+        [_hiddenButton setImage:[UIImage imageNamed:@"founds_yingcang"] forState:UIControlStateNormal];
+        [_hiddenButton setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [_hiddenButton addTarget:self action:@selector(hiddenButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _hiddenButton;
+}
+
+#pragma mark - Event
+-(void)hiddenButtonClicked:(id)sender{
+    self.hiddenButton.selected = !self.hiddenButton.selected;
+    if (self.hiddenButton.selected) {
+        __weak typeof(self) weakSelf = self;
+        [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
+            weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
+            [weakSelf.view setNeedsLayout];
+        } failure:^(NSError *error) {
+            
+        }];
+    }else{
+        self.headerView.balanceAmount = @"******";
+        [self .view setNeedsLayout];
+    }
+}
+
 #pragma mark - Private
 -(void)getDateFromDateBase{
     __weak typeof(self) weakSelf = self;
     [self.collectionView ssj_showLoadingIndicator];
     [SSJFinancingHomeHelper queryForFundingSumMoney:^(double result) {
-        weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
-        [weakSelf.view setNeedsLayout];
+        if (weakSelf.hiddenButton.selected) {
+            weakSelf.headerView.balanceAmount = [NSString stringWithFormat:@"%.2f",result];
+            [weakSelf.view setNeedsLayout];
+        }else{
+            self.headerView.balanceAmount = @"******";
+        }
     } failure:^(NSError *error) {
         
     }];

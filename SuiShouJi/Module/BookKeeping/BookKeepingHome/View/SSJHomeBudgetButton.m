@@ -49,6 +49,9 @@
 
 -(void)setModel:(SSJBudgetModel *)model{
     _model = model;
+    [self.button setTitleColor:[UIColor ssj_colorWithHex:@"a7a7a7"] forState:UIControlStateNormal];
+    [self.button setBackgroundColor:[UIColor whiteColor]];
+    self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"a7a7a7"].CGColor;
     if (_model == nil) {
         [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
     }else{
@@ -57,6 +60,20 @@
         }else{
             [self.button setTitle:[NSString stringWithFormat:@"超支 %.2f",_model.payMoney - _model.budgetMoney] forState:UIControlStateNormal];
         }
+    }
+}
+
+-(void)setCurrentBalance:(double)currentBalance{
+    _currentBalance = currentBalance;
+    [self.button setTitle:[NSString stringWithFormat:@"结余 %.2f",_currentBalance] forState:UIControlStateNormal];
+    if (_currentBalance > 0) {
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:@"fc5252"] forState:UIControlStateNormal];
+        [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"ffdddd"]];
+        self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"fc5252"].CGColor;
+    }else{
+        [self.button setTitleColor:[UIColor ssj_colorWithHex:@"59ae65"] forState:UIControlStateNormal];
+        [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"d7fddd"]];
+        self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"59ae65"].CGColor;
     }
 }
 
