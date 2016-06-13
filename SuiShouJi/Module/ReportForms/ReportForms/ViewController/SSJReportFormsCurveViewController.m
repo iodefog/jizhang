@@ -116,9 +116,9 @@
     return [model.income floatValue];
 }
 
-- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-    
-}
+//- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
+//    
+//}
 
 #pragma mark - Event
 - (void)segmentControlValueDidChange {
@@ -127,15 +127,23 @@
 }
 
 - (void)editPeriodBtnAction {
-    __weak typeof(self) wself = self;
-    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.title = @"自定义时间";
-    calendarVC.billType = SSJBillTypeSurplus;
-    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-        wself.startDate = selectedBeginDate;
-        wself.endDate = selectedEndDate;
-    };
-    [self.navigationController pushViewController:calendarVC animated:YES];
+    if (_startDate && _endDate) {
+        _startDate = nil;
+        _endDate = nil;
+        [self reloadData];
+        [_editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+    } else {
+        __weak typeof(self) wself = self;
+        SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+        calendarVC.title = @"自定义时间";
+        calendarVC.billType = SSJBillTypeSurplus;
+        calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+            wself.startDate = selectedBeginDate;
+            wself.endDate = selectedEndDate;
+            [wself.editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
+        };
+        [self.navigationController pushViewController:calendarVC animated:YES];
+    }
 }
 
 - (void)questionBtnAction {

@@ -174,6 +174,10 @@ static const CGFloat kBottomSpaceHeight = 32;
 }
 
 - (void)layoutSubviews {
+    if (_axisXCount == 0) {
+        return;
+    }
+    
     CGFloat unitHeight = (self.height - kTopSpaceHeight - kBottomSpaceHeight) * 0.2;
     
     for (int i = 0; i < _axisYLabels.count; i ++) {

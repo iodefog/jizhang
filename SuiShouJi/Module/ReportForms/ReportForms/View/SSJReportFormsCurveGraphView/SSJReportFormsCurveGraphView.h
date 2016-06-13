@@ -12,6 +12,7 @@
 
 @protocol SSJReportFormsCurveGraphViewDelegate <NSObject>
 
+@required
 - (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView;
 
 - (NSString *)curveGraphView:(SSJReportFormsCurveGraphView *)graphView titleAtAxisXIndex:(NSUInteger)index;
@@ -20,6 +21,7 @@
 
 - (CGFloat)curveGraphView:(SSJReportFormsCurveGraphView *)graphView incomeValueAtAxisXIndex:(NSUInteger)index;
 
+@optional
 - (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index;
 
 @end
