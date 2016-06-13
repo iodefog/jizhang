@@ -185,6 +185,7 @@
         NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
         dayCount = [endDate timeIntervalSinceDate:startDate] / (24 * 60 * 60);
     }
+    dayCount ++;
     _gridView.dailyPayment = payment / dayCount;
 }
 

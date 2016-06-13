@@ -361,15 +361,24 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         
         if (periods.count == 0) {
             _dateAxisView.hidden = YES;
+            _customPeriodBackView.hidden = YES;
+            _customPeriodLab.hidden = YES;
+            _customPeriodBtn.hidden = YES;
             self.tableView.hidden = YES;
+            
             [self.view ssj_hideLoadingIndicator];
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            
             return;
         }
         
         _dateAxisView.hidden = NO;
+        _customPeriodBackView.hidden = NO;
+        _customPeriodLab.hidden = !_customPeriod;
+        _customPeriodBtn.hidden = NO;
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
+        
         _periods = periods;
         [_dateAxisView reloadData];
         
@@ -570,14 +579,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (UIImageView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_no_data"]];
-        UILabel *noDataLab = [[UILabel alloc] init];
-        noDataLab.textColor = [UIColor whiteColor];
-        noDataLab.font = [UIFont systemFontOfSize:18];
-        noDataLab.text = @"报表空空如也";
-        [noDataLab sizeToFit];
-        noDataLab.center = CGPointMake(_noDataRemindView.width * 0.5, _noDataRemindView.height * 0.737);
-        [_noDataRemindView addSubview:noDataLab];
+        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_nodata"]];
     }
     return _noDataRemindView;
 }
