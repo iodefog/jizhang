@@ -18,4 +18,5 @@ typedef void(^budgetButtonClickBlock)(SSJBudgetModel *model);
 
 @property (nonatomic, copy) budgetButtonClickBlock budgetButtonClickBlock;
 
+@property(nonatomic) double currentBalance;
 @end

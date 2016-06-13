@@ -12,6 +12,7 @@
 @interface SSJFinancingHomeCell()
 @property(nonatomic, strong) UILabel *fundingNameLabel;
 @property(nonatomic, strong) UILabel *fundingMemoLabel;
+@property(nonatomic, strong) UIImageView *fundingImage;
 @property(nonatomic, strong) UIView *backView;
 @property(nonatomic, strong) UIButton *deleteButton;
 @end
@@ -24,6 +25,7 @@
     if (self) {
         self.layer.cornerRadius = 8.f;
         [self.contentView addSubview:self.deleteButton];
+        [self.contentView addSubview:self.fundingImage];
         [self.contentView addSubview:self.fundingBalanceLabel];
         [self.contentView addSubview:self.fundingNameLabel];
         [self.contentView addSubview:self.fundingMemoLabel];
@@ -34,16 +36,18 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.fundingImage.left = 10;
+    self.fundingImage.centerY = self.contentView.height / 2;
     self.deleteButton.size = CGSizeMake(50, 50);
     self.deleteButton.center = CGPointMake(self.width - 10, 5);
     if (!_item.fundingMemo.length) {
-        self.fundingNameLabel.left = 25;
+        self.fundingNameLabel.left = self.fundingImage.right + 10;
         self.fundingNameLabel.centerY = self.contentView.height / 2;
     }else{
         self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
-        self.fundingNameLabel.left = 25;
+        self.fundingNameLabel.left = self.fundingImage.right + 10;
         self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
-        self.fundingMemoLabel.left = 25;
+        self.fundingMemoLabel.left = self.fundingImage.right + 10;
     }
     self.fundingBalanceLabel.centerY = self.contentView.height / 2;
     self.fundingBalanceLabel.right = self.contentView.width - 10;
@@ -95,6 +99,14 @@
     return _deleteButton;
 }
 
+-(UIImageView *)fundingImage{
+    if (!_fundingImage) {
+        _fundingImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 24, 24)];
+        _fundingImage.tintColor = [UIColor whiteColor];
+    }
+    return _fundingImage;
+}
+
 -(void)setItem:(SSJFinancingHomeitem *)item{
     _item = item;
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.fundingColor];
@@ -109,6 +121,7 @@
     }
     self.fundingMemoLabel.text = _item.fundingMemo;
     [self.fundingMemoLabel sizeToFit];
+    self.fundingImage.image = [[UIImage imageNamed:_item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self setNeedsLayout];
 }
 

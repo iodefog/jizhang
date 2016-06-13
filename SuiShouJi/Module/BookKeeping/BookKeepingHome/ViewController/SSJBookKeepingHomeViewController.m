@@ -316,6 +316,20 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y <= -46) {
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            self.budgetButton.model = [result firstObject];
+            for (int i = 0; i < result.count; i++) {
+                if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
+                    self.remindView.model = [result objectAtIndex:i];
+                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+                    break;
+                }
+            }
+        } failure:^(NSError * _Nullable error) {
+            NSLog(@"%@",error.localizedDescription);
+        }];
+    }
     if (scrollView.contentOffset.y < - 46) {
         self.tableView.lineHeight = - scrollView.contentOffset.y;
         if (self.items.count == 0) {
@@ -328,7 +342,8 @@
 
             _isRefreshing = YES;
         }
-    }else{
+
+    }else {
         _isRefreshing = NO;
         CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
         NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
@@ -342,6 +357,27 @@
         }
     }
 }
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self reloadCurrentMonthData];
+}
+
+//-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+//    if (scrollView.contentOffset.y < 46 && targetContentOffset->y < 46) {
+//        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+//            self.budgetButton.model = [result firstObject];
+//            for (int i = 0; i < result.count; i++) {
+//                if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
+//                    self.remindView.model = [result objectAtIndex:i];
+//                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+//                    break;
+//                }
+//            }
+//        } failure:^(NSError * _Nullable error) {
+//            NSLog(@"%@",error.localizedDescription);
+//        }];
+//    }
+//}
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -649,6 +685,7 @@
         weakSelf.bookKeepingHeader.expenditureView.scrollAble = NO;
         weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
         weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+        weakSelf.budgetButton.currentBalance = [result[SSJIncomeSumlKey] doubleValue] - [result[SSJExpentureSumKey] doubleValue];
     } failure:^(NSError *error) {
         
     }];
