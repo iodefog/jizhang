@@ -106,4 +106,14 @@
     return item;
 }
 
++ (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error {
+    __block BOOL success = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        success = [db executeQuery:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),booksId];
+        if (!success && error) {
+            *error = [db lastError];
+        }
+    }];
+    return success;
+}
 @end

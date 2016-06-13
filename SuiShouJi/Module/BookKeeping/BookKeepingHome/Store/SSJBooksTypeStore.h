@@ -35,4 +35,6 @@
  *  @return @return (SSJBooksTypeItem *) 账本信息模型
  */
 +(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid;
+
++ (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error;
 @end
