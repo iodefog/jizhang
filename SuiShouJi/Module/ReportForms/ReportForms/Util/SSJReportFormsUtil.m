@@ -249,7 +249,9 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                failure:(void (^)(NSError *error))failure {
     
     if (type != 0 && type != 1 && type != 2) {
-        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1、2"}]);
+        if (failure) {
+            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"type参数错误，只能为0、1、2"}]);
+        }
         return;
     }
     
@@ -272,9 +274,11 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         FMResultSet *resultSet = [db executeQuery:sqlStr];
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
-            SSJDispatch_main_async_safe(^{
-                failure([db lastError]);
-            });
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
             return;
         }
         
@@ -353,11 +357,13 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             [list addObject:[self modelWithPayment:payment income:income weekOrder:weekOrder period:period]];
         }
         
-        SSJDispatch_main_async_safe(^{
-            success(@{SSJReportFormsCurveModelListKey:list,
-                      SSJReportFormsCurveModelBeginDateKey:startDateStr,
-                      SSJReportFormsCurveModelEndDateKey:endDateStr});
-        });
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(@{SSJReportFormsCurveModelListKey:list,
+                          SSJReportFormsCurveModelBeginDateKey:startDateStr,
+                          SSJReportFormsCurveModelEndDateKey:endDateStr});
+            });
+        }
     }];
 }
 
