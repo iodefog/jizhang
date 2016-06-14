@@ -16,7 +16,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableArray *chargeList = [NSMutableArray array];
-        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID , c.cbooksname , d.cacctname from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b , bk_books_type as c , bk_fund_info as d where a.CUSERID = ? and a.OPERATORTYPE != 2 and a.IBILLID = b.ID and c.cbooksid = ? and a.cbooksid = c.cbooksid and a.ifunsid = d.cfundid order by A.ITYPE ASC , A.IMONEY DESC",userid,booksId];
+        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID , c.cbooksname , d.cacctname from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b , bk_books_type as c , bk_fund_info as d where a.CUSERID = ? and a.OPERATORTYPE != 2 and a.IBILLID = b.ID and c.cbooksid = ? and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.ITYPE ASC , A.IMONEY DESC",userid,booksId];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
