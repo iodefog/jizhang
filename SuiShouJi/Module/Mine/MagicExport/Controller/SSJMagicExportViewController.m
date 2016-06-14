@@ -18,6 +18,8 @@
 #import "SSJBorderButton.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJUserTableManager.h"
+//#import "SSJBaseTableViewCell.h"
+#import "SSJMagicExportBookTypeSelectionCell.h"
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -29,6 +31,8 @@
 @property (nonatomic, strong) UIButton *bookTypeBtn;
 
 @property (nonatomic, strong) UITableView *bookTypeSelectionView;
+
+@property (nonatomic, strong) CAShapeLayer *triangle;
 
 //
 @property (nonatomic, strong) UILabel *dateLabel;
@@ -117,22 +121,31 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"cellId";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJMagicExportBookTypeSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        cell.textLabel.font = [UIFont systemFontOfSize:16];
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        cell.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        cell = [[SSJMagicExportBookTypeSelectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    cell.textLabel.text = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
+    SSJBooksTypeItem *bookItem = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
+    cell.bookName = bookItem.booksName;
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 30;
+//}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     _selectedBookItem = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
     [_bookTypeBtn setTitle:_selectedBookItem.booksName forState:UIControlStateNormal];
     [self loadExportPeriod];
+    [self hideBookTypeSelectionView];
+}
+
+#pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [self hideBookTypeSelectionView];
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -279,20 +292,33 @@
 }
 
 - (void)selectionBookTypeAction {
+    [self.view endEditing:YES];
     if (self.bookTypeSelectionView.superview) {
-        [UIView animateWithDuration:0.25 animations:^{
-            self.bookTypeSelectionView.transform = CGAffineTransformMakeScale(1, 0);
-        } completion:^(BOOL finished) {
-            [self.bookTypeSelectionView removeFromSuperview];
-        }];
+        [self hideBookTypeSelectionView];
     } else {
-        [self.view addSubview:self.bookTypeSelectionView];
-        self.bookTypeSelectionView.transform = CGAffineTransformMakeScale(1, 0);
-        [UIView animateWithDuration:0.25 animations:^{
-            self.bookTypeSelectionView.transform = CGAffineTransformMakeScale(1, 1);
-        }];
+        [self showBookTypeSelectionView];
     }
-    
+}
+
+- (void)showBookTypeSelectionView {
+    [self.view addSubview:self.bookTypeSelectionView];
+    self.bookTypeSelectionView.height = 0;
+    [UIView animateWithDuration:0.25 animations:^{
+        self.bookTypeSelectionView.top = 70;
+        self.bookTypeSelectionView.height = 130;
+        self.triangle.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+    }];
+}
+
+- (void)hideBookTypeSelectionView {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.bookTypeSelectionView.top = 70;
+        self.bookTypeSelectionView.height = 0;
+        self.triangle.transform = CATransform3DIdentity;
+    } completion:^(BOOL finished) {
+        [self.bookTypeSelectionView removeFromSuperview];
+    }];
+//    [self.bookTypeSelectionView removeFromSuperview];
 }
 
 #pragma mark - Getter
@@ -318,7 +344,7 @@
     if (!_bookTypeView) {
         _bookTypeView = [[UIView alloc] initWithFrame:CGRectMake(0, self.announcementLab.bottom, self.view.width, 50)];
         _bookTypeView.backgroundColor = [UIColor whiteColor];
-        [_bookTypeView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_bookTypeView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"b7b7b7"]];
         [_bookTypeView ssj_setBorderStyle:SSJBorderStyleTop];
         [_bookTypeView ssj_setBorderWidth:1];
         
@@ -331,6 +357,7 @@
         titleLab.centerY = _bookTypeView.height * 0.5;
         [_bookTypeView addSubview:titleLab];
         [_bookTypeView addSubview:self.bookTypeBtn];
+        [_bookTypeView.layer addSublayer:self.triangle];
     }
     return _bookTypeView;
 }
@@ -348,12 +375,30 @@
 
 - (UITableView *)bookTypeSelectionView {
     if (!_bookTypeSelectionView) {
-        _bookTypeSelectionView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.width - 94, 108, 84, 130)];
+        _bookTypeSelectionView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.width - 94, 70, 84, 130)];
+        _bookTypeSelectionView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
         _bookTypeSelectionView.dataSource = self;
         _bookTypeSelectionView.delegate = self;
         _bookTypeSelectionView.rowHeight = 30;
+        _bookTypeSelectionView.separatorInset = UIEdgeInsetsZero;
+        _bookTypeSelectionView.separatorColor = [UIColor ssj_colorWithHex:@"b7b7b7"];
     }
     return _bookTypeSelectionView;
+}
+
+- (CAShapeLayer *)triangle {
+    if (!_triangle) {
+        _triangle = [CAShapeLayer layer];
+        _triangle.frame = CGRectMake(self.view.width - 17, 30, 7, 5);
+        _triangle.fillColor = [UIColor blackColor].CGColor;
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointMake(0, 0)];
+        [path addLineToPoint:CGPointMake(_triangle.width, 0)];
+        [path addLineToPoint:CGPointMake(_triangle.width * 0.5, _triangle.height)];
+        [path closePath];
+        _triangle.path = path.CGPath;
+    }
+    return _triangle;
 }
 
 - (UILabel *)dateLabel {
@@ -440,7 +485,7 @@
 
 - (UIView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIView alloc] initWithFrame:self.view.bounds];
+        _noDataRemindView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bookTypeView.bottom, self.view.width, self.view.height - self.bookTypeView.bottom)];
         
         UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calendar_norecord"]];
         imgView.centerX = _noDataRemindView.width * 0.5;
