@@ -115,7 +115,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     //  查询当前用户所有有效定期记账最近一次的流水记录
-    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
+    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid, a.cbooksid", userId, userId];
     if (!resultSet) {
         return NO;
     }
@@ -132,6 +132,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = [resultSet stringForColumn:@"thumburl"];
+        NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
         
         [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
         
@@ -142,7 +143,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         for (NSDate *billDate in billDates) {
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, @(SSJSyncVersion()), writeDate]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksId, @(SSJSyncVersion()), writeDate]) {
                 *rollback = YES;
                 return NO;
             }
@@ -151,7 +152,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     
     //  查询没有生成过流水的定期记账
     NSString *tConfigIdStr = [configIdArr componentsJoinedByString:@","];
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
     if (tConfigIdStr.length) {
         [query appendFormat:@" and iconfigid not in (%@)", tConfigIdStr];
     }
@@ -174,6 +175,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
             thumbUrl = [imgName stringByAppendingPathExtension:imgExtension];
         }
+        NSString *booksid = [resultSet stringForColumn:@"cbooksid"];
         
         int periodType = [resultSet intForColumn:@"itype"];
         NSString *billDateStr = [resultSet stringForColumn:@"cbilldate"];
@@ -182,7 +184,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         for (NSDate *billDate in billDates) {
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, @(SSJSyncVersion()), writeDate, @0]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksid, @(SSJSyncVersion()), writeDate, @0]) {
                 *rollback = YES;
                 return NO;
             }
@@ -196,13 +198,12 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
-    
     return YES;
 }
 
 + (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
     //  根据周期类型、支出类型分类，查询离今天最近的一次预算
-    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype", userId];
+    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
     if (!resultSet) {
         [resultSet close];
         return NO;
@@ -232,13 +233,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *cbilltype = [resultSet stringForColumn:@"cbilltype"];
         int iremind = [resultSet intForColumn:@"iremind"];
         NSString *currentDateStr = [tDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
         
         NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
+        
         for (SSJDatePeriod *period in periodArr) {
             NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
-            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), currentDateStr, @(SSJSyncVersion())]) {
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;
                 [resultSet close];
                 return NO;
