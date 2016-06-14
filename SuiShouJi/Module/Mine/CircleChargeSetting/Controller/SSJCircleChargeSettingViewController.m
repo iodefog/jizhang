@@ -36,8 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
-    self.navigationItem.rightBarButtonItem = rightBarItem;
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -120,8 +119,11 @@
     [SSJCircleChargeStore queryForChargeListWithSuccess:^(NSArray<SSJBillingChargeCellItem *> *result) {
         if (result.count == 0) {
             [self.tableView ssj_showWatermarkWithCustomView:self.nodataView animated:NO target:self action:NULL];
+            self.navigationItem.rightBarButtonItem = nil;
         }else{
             [self.tableView ssj_hideWatermark:YES];
+            UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
+            self.navigationItem.rightBarButtonItem = rightBarItem;
         }
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         [weakSelf.tableView ssj_hideLoadingIndicator];
