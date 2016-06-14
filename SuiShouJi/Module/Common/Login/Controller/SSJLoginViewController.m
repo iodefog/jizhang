@@ -18,6 +18,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJUserBillSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
+#import "SSJBooksTypeSyncTable.h"
 #import "SSJUserItem.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJUserTableManager.h"
@@ -201,9 +202,10 @@
     }
     
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        //  merge登陆接口返回的收支类型和资金帐户
+        //  merge登陆接口返回的收支类型、资金帐户、账本
         [SSJUserBillSyncTable mergeRecords:self.loginService.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJFundInfoSyncTable mergeRecords:self.loginService.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [SSJBooksTypeSyncTable mergeRecords:self.loginService.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         
         //  检测缺少哪个收支类型就创建
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];

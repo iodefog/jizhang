@@ -20,6 +20,8 @@
 //用户记账类型数据
 @property (nonatomic,strong) NSArray *userBillArray;
 
+@property (nonatomic,strong) NSArray *booksTypeArray;
+
 //登录用户的accesstoken
 @property (nonatomic,strong) NSString *accesstoken;
 
@@ -130,6 +132,7 @@
         
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
+        self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"booksType"]];
         self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }
 }

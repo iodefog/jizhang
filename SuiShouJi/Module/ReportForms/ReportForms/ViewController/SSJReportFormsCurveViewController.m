@@ -35,6 +35,8 @@
 
 @property (nonatomic, strong) SSJReportFormsCurveGridView *gridView;
 
+@property (nonatomic, strong) UIImageView *noDataRemindView;
+
 @property (nonatomic, strong) NSArray *datas;
 
 @property (nonatomic, strong) NSDate *startDate;
@@ -78,24 +80,6 @@
     self.scrollView.frame = self.view.bounds;
 }
 
-- (void)reloadData {
-    [self.view ssj_showLoadingIndicator];
-    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate success:^(NSDictionary *result) {
-        [self.view ssj_hideLoadingIndicator];
-        _datas = result[SSJReportFormsCurveModelListKey];
-        [_curveView reloadData];
-        if (_datas.count >= 4) {
-            [_curveView scrollToAxisXAtIndex:_datas.count - 4 animated:NO];
-        }
-        [self updatePeriodLabelWithResult:result];
-        [self updateGirdViewWithResult:result];
-        [self updateDescViewWithResult:result];
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-    }];
-}
-
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
 - (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
     return _datas.count;
@@ -124,6 +108,9 @@
 - (void)segmentControlValueDidChange {
     [self reloadData];
     _questionBtn.hidden = _segmentControl.selectedSegmentIndex == 0;
+    if (_descView.superview) {
+        [_descView dismiss];
+    }
 }
 
 - (void)editPeriodBtnAction {
@@ -155,6 +142,7 @@
     }
 }
 
+#pragma mark - Private
 - (void)updatePeriodLabelWithResult:(NSDictionary *)result {
     NSString *beginDateStr = result[SSJReportFormsCurveModelBeginDateKey];
     NSString *endDateStr = result[SSJReportFormsCurveModelEndDateKey];
@@ -207,6 +195,35 @@
         _descView = [[SSJReportFormsCurveDescriptionView alloc] init];
     }
     _descView.period = [SSJDatePeriod datePeriodWithStartDate:beginDate endDate:model.period.endDate];
+}
+
+- (void)reloadData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJReportFormsUtil queryForBillStatisticsWithType:(int)_segmentControl.selectedSegmentIndex startDate:_startDate endDate:_endDate success:^(NSDictionary *result) {
+        
+        [self.view ssj_hideLoadingIndicator];
+        _datas = result[SSJReportFormsCurveModelListKey];
+        
+        if (_datas.count > 0) {
+            [_curveView reloadData];
+            if (_datas.count >= 4) {
+                [_curveView scrollToAxisXAtIndex:_datas.count - 4 animated:NO];
+            }
+            [self updatePeriodLabelWithResult:result];
+            [self updateGirdViewWithResult:result];
+            [self updateDescViewWithResult:result];
+            
+            _scrollView.hidden = NO;
+            [self.view ssj_hideWatermark:YES];
+        } else {
+            _scrollView.hidden = YES;
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        }
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
 #pragma mark - Getter
@@ -286,6 +303,13 @@
         _gridView = [[SSJReportFormsCurveGridView alloc] initWithFrame:CGRectMake(0, self.questionBackView.bottom + 10, self.view.width, 254)];
     }
     return _gridView;
+}
+
+- (UIImageView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_nodata"]];
+    }
+    return _noDataRemindView;
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "SSJBillingChargeCellItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDatePeriod.h"
+#import "SSJUserTableManager.h"
 
 NSString *const SSJBillingChargeDateKey = @"SSJBillingChargeDateKey";
 NSString *const SSJBillingChargeSumKey = @"SSJBillingChargeSumKey";
@@ -22,11 +23,13 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure {
     
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+    
     NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE >= ? and a.CBILLDATE <= ? and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 order by a.CBILLDATE desc", ID, beginDate, endDate, SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.ICHARGEID, a.IMONEY, a.CBILLDATE , a.CWRITEDATE , a.IFUNSID, a.IBILLID, a.cmemo, a.cimgurl, a.thumburl, a.iconfigid, b.CNAME, b.CCOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IBILLID = ? and a.CBILLDATE >= ? and a.CBILLDATE <= ? and a.CBILLDATE <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and a.CBOOKSID = ? order by a.CBILLDATE desc", ID, beginDate, endDate, SSJUSERID(), userItem.currentBooksId];
         
         if (!resultSet) {
             SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
@@ -65,6 +68,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
+            item.booksId = userItem.currentBooksId;
             
             if ([tempDate isEqualToString:item.billDate]) {
                 NSMutableArray *items = subDic[SSJBillingChargeRecordKey];
@@ -107,17 +111,6 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
 }
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
-//    switch (weekday) {
-//        case 1: return @"星期一";
-//        case 2: return @"星期二";
-//        case 3: return @"星期三";
-//        case 4: return @"星期四";
-//        case 5: return @"星期五";
-//        case 6: return @"星期六";
-//        case 7: return @"星期日";
-//            
-//        default: return nil;
-//    }
     switch (weekday) {
         case 1: return @"星期日";
         case 2: return @"星期一";

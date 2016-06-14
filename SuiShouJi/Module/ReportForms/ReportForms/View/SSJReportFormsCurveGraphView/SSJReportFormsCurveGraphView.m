@@ -78,6 +78,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         
         _scrollView = [[UIScrollView alloc] init];
         _scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
+        _scrollView.showsHorizontalScrollIndicator = NO;
 //        _scrollView.bounces = NO;
         _scrollView.delegate = self;
         [self addSubview:_scrollView];

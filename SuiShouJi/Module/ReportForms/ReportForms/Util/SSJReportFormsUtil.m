@@ -400,9 +400,17 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(@{SSJReportFormsCurveModelListKey:list,
-                          SSJReportFormsCurveModelBeginDateKey:startDateStr,
-                          SSJReportFormsCurveModelEndDateKey:endDateStr});
+                NSMutableDictionary *result = [NSMutableDictionary dictionary];
+                if (list) {
+                    [result setObject:list forKey:SSJReportFormsCurveModelListKey];
+                }
+                if (startDateStr) {
+                    [result setObject:startDateStr forKey:SSJReportFormsCurveModelBeginDateKey];
+                }
+                if (endDateStr) {
+                    [result setObject:endDateStr forKey:SSJReportFormsCurveModelEndDateKey];
+                }
+                success(result);
             });
         }
     }];
