@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <WXApi.h>
+#import "WXApi.h"
 
 @interface SSJWeiXinLoginHelper : NSObject<WXApiDelegate>
 

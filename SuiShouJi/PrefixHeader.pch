@@ -39,7 +39,6 @@
 #import "SSJAlertViewAdapter.h"
 #import "UIImageView+WebCache.h"
 #import "NSDate+DateTools.h"
-#import "UMFeedback.h"
 #import <UMMobClick/MobClick.h>
 
 #endif

@@ -1,7 +1,7 @@
 platform :ios, '7.0'
 pod 'AFNetworking', '~> 2.5'
 
-pod 'UMengSocial', '~> 4.3'
+#pod 'UMengSocial'
 
 pod 'YYKeyboardManager'
 

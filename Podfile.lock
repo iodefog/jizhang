@@ -74,7 +74,6 @@ PODS:
     - libwebp
     - SDWebImage/Core
   - UMengAnalytics-NO-IDFA (4.0.5)
-  - UMengSocial (4.4)
   - YYKeyboardManager (1.0.1)
   - YYText (1.0.5)
   - ZYCornerRadius (0.5.1)
@@ -91,7 +90,6 @@ DEPENDENCIES:
   - SDWebImage (~> 3.7)
   - SDWebImage/WebP
   - UMengAnalytics-NO-IDFA
-  - UMengSocial (~> 4.3)
   - YYKeyboardManager
   - YYText
   - ZYCornerRadius (~> 0.5.1)
@@ -108,7 +106,6 @@ SPEC CHECKSUMS:
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
   UMengAnalytics-NO-IDFA: 965a219b05475ff2a4c09a164139a27bbaa0e25b
-  UMengSocial: aba7296602310385114d82c255539a7bef3b7ab0
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
   YYText: ac09660c9ccd9b817f409a20caa6f5587444d2ae
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0

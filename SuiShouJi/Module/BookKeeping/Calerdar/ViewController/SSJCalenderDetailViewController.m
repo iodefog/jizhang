@@ -127,8 +127,7 @@
     }else if(indexPath.row == 3){
         SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
         detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
-        NSString *booksid = SSJGetCurrentBooksType();
-        SSJBooksTypeItem *booksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
+        SSJBooksTypeItem *booksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:self.item.booksId];
         detailcell.detailLabel.text = booksItem.booksName;
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"账本类型";

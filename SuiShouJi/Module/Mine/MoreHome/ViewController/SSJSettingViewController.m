@@ -17,7 +17,6 @@
 #import "SSJMagicExportViewController.h"
 #import "SSJAboutusViewController.h"
 #import "SSJStartChecker.h"
-#import "UMFeedback.h"
 
 
 static NSString *const kTitle1 = @"自动同步设置";
