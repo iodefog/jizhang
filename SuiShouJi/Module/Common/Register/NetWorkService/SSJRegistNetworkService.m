@@ -84,7 +84,10 @@
             [self request:@"/user/mobregister.go" params:@{@"mobileNo":mobileNo ?: @"",
                                                            @"cuserid":SSJUSERID() ?: @"",
                                                                @"yzm":authCode ?: @"",
-                                                               @"pwd":password ?: @""}];
+                                                               @"pwd":password ?: @"",
+                                                           @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                                           @"cmodel":SSJPhoneModel(),
+                                                           @"cphoneos":SSJPhoneModel()}];
             break;
             
         case SSJRegistAndForgetPasswordTypeForgetPassword:

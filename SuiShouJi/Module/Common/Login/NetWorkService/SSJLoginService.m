@@ -45,6 +45,15 @@
     NSString *strSignType=@"1";
     NSString *strKey=@"A9FK25RHT487ULMI";
     
+    //imei
+    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
+    //手机型号
+    NSString* phoneModel = SSJPhoneModel();
+    
+    //手机系统版本
+    NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];
+    
     NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     
@@ -58,6 +67,9 @@
     [dict setObject:encryptPassword forKey:@"pwd"];
     [dict setObject:strmd5Sign forKey:@"signMsg"];
     [dict setObject:SSJUSERID() forKey:@"cuserid"];
+    [dict setObject:imei forKey:@"cimei"];
+    [dict setObject:phoneModel forKey:@"cmodel"];
+    [dict setObject:phoneVersion forKey:@"cphoneos"];
     [self request:SSJURLWithAPI(@"/user/login.go") params:dict];
 }
 
@@ -76,6 +88,14 @@
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&auth_token=%@&key=%@",strSignType,strAcctID,openID,strKey];
     NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
+    //imei
+    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    
+    //手机型号
+    NSString* phoneModel = SSJPhoneModel();
+    
+    //手机系统版本
+    NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];
     [dict setObject:strAcctID forKey:@"merchantacctId"];
     [dict setObject:strSignType forKey:@"signType"];
     [dict setObject:strmd5Sign forKey:@"signMsg"];
@@ -84,6 +104,9 @@
     [dict setObject:icon forKey:@"cicon"];
     [dict setObject:type forKey:@"type"];
     [dict setObject:[realName ssj_emojiFilter] forKey:@"crealname"];
+    [dict setObject:imei forKey:@"cimei"];
+    [dict setObject:phoneModel forKey:@"cmodel"];
+    [dict setObject:phoneVersion forKey:@"cphoneos"];
     [self request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict];
 }
 
