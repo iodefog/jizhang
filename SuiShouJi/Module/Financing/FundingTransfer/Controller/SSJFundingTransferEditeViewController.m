@@ -81,12 +81,10 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     cell.cellTitle = title;
     if ([title isEqualToString:kTitle1]) {
         cell.cellDetail = self.item.transferMoney;
-    }else if ([title isEqualToString:kTitle1]) {
-        cell.cellDetail = self.item.transferInName;
     }else if ([title isEqualToString:kTitle2]) {
         cell.cellDetail = self.item.transferOutName;
     }else if ([title isEqualToString:kTitle3]) {
-        cell.cellDetail = self.item.transferOutName;
+        cell.cellDetail = self.item.transferInName;
     }else if ([title isEqualToString:kTitle4]) {
         cell.cellDetail = self.item.transferMemo;
     }else if ([title isEqualToString:kTitle5]) {

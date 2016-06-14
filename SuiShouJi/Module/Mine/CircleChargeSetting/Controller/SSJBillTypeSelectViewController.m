@@ -17,9 +17,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 @property(nonatomic, strong) NSMutableArray *items;
 @end
 
-@implementation SSJBillTypeSelectViewController{
-    NSString *_selectTypeName;
-}
+@implementation SSJBillTypeSelectViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,7 +63,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
         [self.navigationController pushViewController:newTypeVc animated:YES];
     }else{
         self.selectedId = item.ID;
-        _selectTypeName = item.title;
+        self.selectTypeName = item.title;
         [self.tableView reloadData];
     }
 }
@@ -107,7 +105,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 -(void)comfirmButtonClicked:(id)sender{
     if (self.typeSelectBlock) {
-        self.typeSelectBlock(self.selectedId,_selectTypeName);
+        self.typeSelectBlock(self.selectedId,self.selectTypeName);
     }
     [self.navigationController popViewControllerAnimated:YES];
 }

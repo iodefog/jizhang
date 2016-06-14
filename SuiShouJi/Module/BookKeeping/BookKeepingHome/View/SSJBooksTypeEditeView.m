@@ -149,16 +149,6 @@
     return UIEdgeInsetsMake(20, 30, 30, 14);
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    string = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if (string.length > 5) {
-        [CDAutoHideMessageHUD showMessage:@"账本名称最多输入五个字"];
-        return NO;
-    }
-    return YES;
-}
-
 #pragma mark - @protocol YYKeyboardObserver
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
     [UIView animateWithDuration:transition.animationCurve delay:0 options:transition.animationOption animations:^{
@@ -262,6 +252,10 @@
 -(void)comfirmButtonClicked:(id)sender{
     if (!self.nameInput.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
+        return;
+    }
+    if (self.nameInput.text.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"账本名称最多输入五个字"];
         return;
     }
     [self dismiss];

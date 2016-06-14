@@ -18,4 +18,7 @@ typedef void (^typeSelectBlock)(NSString *typeId , NSString *typeName);
 
 
 @property(nonatomic, copy) typeSelectBlock typeSelectBlock;
+
+@property(nonatomic, strong) NSString *selectTypeName;
+
 @end
