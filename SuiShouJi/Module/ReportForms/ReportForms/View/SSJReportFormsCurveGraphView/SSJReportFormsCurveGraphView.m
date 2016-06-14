@@ -174,6 +174,10 @@ static const CGFloat kBottomSpaceHeight = 32;
 }
 
 - (void)layoutSubviews {
+    if (_axisXCount == 0) {
+        return;
+    }
+    
     CGFloat unitHeight = (self.height - kTopSpaceHeight - kBottomSpaceHeight) * 0.2;
     
     for (int i = 0; i < _axisYLabels.count; i ++) {
@@ -286,6 +290,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         index ++;
     }
     
+    BOOL showScaleValue = topDigit > 0;
     _maxValue = (topDigit + 1) * pow(10, index);
     
     _curveView.maxValue = _maxValue;
@@ -305,6 +310,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         label.font = [UIFont systemFontOfSize:12];
         label.textColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
         label.text = [NSString stringWithFormat:@"%ld", _maxValue - i * unitValue];
+        label.hidden = !showScaleValue;
         [label sizeToFit];
         [self addSubview:label];
         [_axisYLabels addObject:label];
@@ -400,8 +406,29 @@ static const CGFloat kBottomSpaceHeight = 32;
     _incomeLabel.centerX = self.width * 0.5;
     _incomeLabel.bottom = _incomeValueLabel.top;
     
+    [self checkIfIncomeAndPaymentPointIntersect];
+    
     float surplus = [_incomeValues[_selectedAxisXIndex] floatValue] - [_paymentValues[_selectedAxisXIndex] floatValue];
     _surplusValueLabel.text = [NSString stringWithFormat:@"%.2f", surplus];
+}
+
+- (void)checkIfIncomeAndPaymentPointIntersect {
+    
+    CGRect incomeTextRect = CGRectUnion(_incomeLabel.frame, _incomeValueLabel.frame);
+    CGRect paymentTextRect = CGRectUnion(_paymentLabel.frame, _paymentValueLabel.frame);
+    
+    if (CGRectIntersectsRect(_incomePoint.frame, paymentTextRect)) {
+        _paymentLabel.centerX = _paymentValueLabel.centerX = self.width * 0.5 + paymentTextRect.size.width * 0.5;
+    }
+    
+    if (CGRectIntersectsRect(_paymentPoint.frame, incomeTextRect)) {
+        _incomeLabel.centerX = _incomeValueLabel.centerX = self.width * 0.5 - incomeTextRect.size.width * 0.5;
+    }
+    
+    if (CGRectIntersectsRect(incomeTextRect, paymentTextRect)) {
+        _paymentLabel.centerX = _paymentValueLabel.centerX = self.width * 0.5 + paymentTextRect.size.width * 0.5;
+        _incomeLabel.centerX = _incomeValueLabel.centerX = self.width * 0.5 - incomeTextRect.size.width * 0.5;
+    }
 }
 
 @end
