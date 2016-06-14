@@ -236,7 +236,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(UIButton *)hiddenButton{
     if (!_hiddenButton) {
-        _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 19, 19)];
+        _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
         [_hiddenButton setImage:[UIImage imageNamed:@"founds_yingcang"] forState:UIControlStateNormal];
         [_hiddenButton setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
         [_hiddenButton addTarget:self action:@selector(hiddenButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
