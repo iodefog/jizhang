@@ -196,7 +196,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                     [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
                     weakSelf.ChargeCircleSelectView.selectCircleType = -1;
                     weakSelf.selectChargeCircleType = -1;
-                    [weakSelf updatePeriodButtonTitle];
                     return NO;
                 }
             }
@@ -204,13 +203,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             if (weakSelf.selectedDay > 28 && circleView.selectCircleType == 6 && circleView.selectCircleType == 4){
                 weakSelf.ChargeCircleSelectView.selectCircleType = -1;
                 weakSelf.selectChargeCircleType = -1;
-                [weakSelf updatePeriodButtonTitle];
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
                 return NO;
             }
             
             weakSelf.selectChargeCircleType = circleView.selectCircleType;
-            [weakSelf updatePeriodButtonTitle];
             return YES;
         };
         _ChargeCircleSelectView.dismissAction = ^(SSJChargeCircleSelectView *circleView) {
@@ -265,14 +262,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
-        [_accessoryView.periodBtn addTarget:self action:@selector(selectPeriodAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:UIControlStateNormal];
         [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
         _accessoryView.memoView.delegate = self;
         _accessoryView.memoView.text = _item.chargeMemo;
         _accessoryView.dateBtn.selected = YES;
         _accessoryView.photoBtn.selected = _item.chargeImage.length;
-        [self updatePeriodButtonTitle];
     }
     return _accessoryView;
 }
@@ -434,13 +429,13 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     }
 }
 
-- (void)selectPeriodAction {
-    [MobClick event:@"addRecord_cycle"];
-    self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
-    [self.ChargeCircleSelectView show];
-    [_billTypeInputView.moneyInput resignFirstResponder];
-    [_accessoryView.memoView resignFirstResponder];
-}
+//- (void)selectPeriodAction {
+//    [MobClick event:@"addRecord_cycle"];
+//    self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
+//    [self.ChargeCircleSelectView show];
+//    [_billTypeInputView.moneyInput resignFirstResponder];
+//    [_accessoryView.memoView resignFirstResponder];
+//}
 
 - (void)endEditingAction {
     [_paymentTypeView endEditing];
@@ -806,16 +801,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     _originaldYear= selectDate.year;
     _originaldDay = selectDate.day;
     _originaldMonth = selectDate.month;
-}
-
-- (void)updatePeriodButtonTitle {
-    if (self.ChargeCircleSelectView.selectCircleType == -1) {
-        [_accessoryView.periodBtn setTitle:@"设置循环" forState:UIControlStateNormal];
-        _accessoryView.periodBtn.selected = NO;
-    } else {
-        [_accessoryView.periodBtn setTitle:self.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
-        _accessoryView.periodBtn.selected = YES;
-    }
 }
 
 - (BOOL)showGuideViewIfNeeded {
