@@ -10,6 +10,7 @@
 
 #import "UMSocialWechatHandler.h"
 #import "UMSocialQQHandler.h"
+#import "UMSocialSinaSSOHandler.h"
 #import <UMMobClick/MobClick.h>
 #import "UMSocial.h"
 
@@ -26,10 +27,8 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     //  添加友盟分享
     [self umengShare];
     
-    //  添加友盟反馈
-    [self umengFeedBack];
     
-//    NSLog(@">>> 友盟加载时间：%f", [[NSDate date] timeIntervalSinceDate:beginDate]);
+//    NSLog(@">>> 友盟加载时间：%f",  ,[[NSDate date] timeIntervalSinceDate:beginDate]);
 }
 
 /* 友盟统计 */
@@ -55,16 +54,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账，一种快速实现财务自由的方式。";
     [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账，一种快速实现财务自由的方式。";
     [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://5.9188.com/note/d/";
-    //    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695"
-    //
-    //                                         RedirectURL:SSJAppStoreAddress];
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"4058368695" secret:@"b0584e24371e5ad6118dfa0e3de3197c" RedirectURL:SSJAppStoreAddress];
     [UMSocialQQHandler setQQWithAppId:@"1105086761" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://5.9188.com/note/d/"];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账，一种快速实现财务自由的方式。";
 }
 
-/* 友盟意见反馈 */
-+ (void)umengFeedBack{
-    [UMFeedback setAppkey:kUMAppKey];
-}
 
 @end

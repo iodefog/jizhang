@@ -26,7 +26,7 @@
 #import "SSJBorderButton.h"
 #import "SSJFundAccountTable.h"
 #import "SSJThirdPartyLoginManger.h"
-#import <WXApi.h>
+#import "WXApi.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJLoginHelper.h"

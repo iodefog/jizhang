@@ -205,11 +205,6 @@ THE SOFTWARE.
 Copyright 2011 - 2015 UMeng.com. All rights reserved.
 
 
-## UMengSocial
-
-Copyright 2011 - 2015 UMeng.com. All rights reserved.
-
-
 ## YYKeyboardManager
 
 The MIT License (MIT)

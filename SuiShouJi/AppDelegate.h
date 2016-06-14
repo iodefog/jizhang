@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <WeiboSDK.h>
-#import <WXApi.h>
+#import "WeiboSDK.h"
+#import "WXApi.h"
 #import "SSJWeiXinLoginHelper.h"
 #import "SSJBaseNetworkService.h"
 
