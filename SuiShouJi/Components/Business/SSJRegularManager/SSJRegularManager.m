@@ -143,7 +143,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         for (NSDate *billDate in billDates) {
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksId, @(SSJSyncVersion()), writeDate]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksId, @(SSJSyncVersion()), writeDate]) {
                 *rollback = YES;
                 return NO;
             }
