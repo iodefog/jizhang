@@ -29,11 +29,7 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 @property (nonatomic, strong) UILabel *paymentLabel;
 
-@property (nonatomic, strong) UILabel *paymentValueLabel;
-
 @property (nonatomic, strong) UILabel *incomeLabel;
-
-@property (nonatomic, strong) UILabel *incomeValueLabel;
 
 @property (nonatomic, strong) UILabel *surplusLabel;
 
@@ -113,12 +109,6 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_paymentLabel sizeToFit];
         [self addSubview:_paymentLabel];
         
-        _paymentValueLabel = [[UILabel alloc] init];
-        _paymentValueLabel.backgroundColor = [UIColor clearColor];
-        _paymentValueLabel.font = [UIFont systemFontOfSize:12];
-        _paymentValueLabel.textColor = [UIColor ssj_colorWithHex:@"389F47"];
-        [self addSubview:_paymentValueLabel];
-        
         _incomeLabel = [[UILabel alloc] init];
         _incomeLabel.backgroundColor = [UIColor clearColor];
         _incomeLabel.font = [UIFont systemFontOfSize:10];
@@ -126,12 +116,6 @@ static const CGFloat kBottomSpaceHeight = 32;
         _incomeLabel.text = @"收入";
         [_incomeLabel sizeToFit];
         [self addSubview:_incomeLabel];
-        
-        _incomeValueLabel = [[UILabel alloc] init];
-        _incomeValueLabel.backgroundColor = [UIColor clearColor];
-        _incomeValueLabel.font = [UIFont systemFontOfSize:12];
-        _incomeValueLabel.textColor = [UIColor ssj_colorWithHex:@"D73939"];
-        [self addSubview:_incomeValueLabel];
         
         _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_balloon"]];
         [self addSubview:_balloonView];
@@ -162,14 +146,12 @@ static const CGFloat kBottomSpaceHeight = 32;
         _paymentPoint.hidden = NO;
         _incomePoint.hidden = NO;
         _paymentLabel.hidden = NO;
-        _paymentValueLabel.hidden = NO;
         _balloonView.hidden = NO;
     } else {
         _verticalLine.hidden = YES;
         _paymentPoint.hidden = YES;
         _incomePoint.hidden = YES;
         _paymentLabel.hidden = YES;
-        _paymentValueLabel.hidden = YES;
         _balloonView.hidden = YES;
     }
 }
@@ -221,9 +203,6 @@ static const CGFloat kBottomSpaceHeight = 32;
     _balloonView.top = 10;
     _surplusLabel.top = 10;
     _surplusLabel.centerX = _balloonView.width * 0.5;
-    _surplusValueLabel.size = CGSizeMake(100, 12);
-    _surplusValueLabel.top = _surplusLabel.bottom + 2;
-    _surplusValueLabel.centerX = _balloonView.width * 0.5;
     
     [self adjustPaymentAndIncomePoint];
 }
@@ -391,45 +370,21 @@ static const CGFloat kBottomSpaceHeight = 32;
     CGFloat incomeY = self.height - incomeHeight - kBottomSpaceHeight;
     _incomePoint.center = CGPointMake(self.width * 0.5, incomeY);
     
-    _paymentValueLabel.text = [NSString stringWithFormat:@"%@", _paymentValues[_selectedAxisXIndex]];
-    [_paymentValueLabel sizeToFit];
-    _paymentValueLabel.centerX = self.width * 0.5;
-    _paymentValueLabel.bottom = _paymentPoint.top;
+    _paymentLabel.text = [NSString stringWithFormat:@"支出 %@", _paymentValues[_selectedAxisXIndex]];
+    [_paymentLabel sizeToFit];
+    _paymentLabel.rightBottom = CGPointMake(_paymentPoint.left - 2, _paymentPoint.top + 2);
     
-    _paymentLabel.centerX = self.width * 0.5;
-    _paymentLabel.bottom = _paymentValueLabel.top;
-    
-    _incomeValueLabel.text = [NSString stringWithFormat:@"%@", _incomeValues[_selectedAxisXIndex]];
-    [_incomeValueLabel sizeToFit];
-    _incomeValueLabel.centerX = self.width * 0.5;
-    _incomeValueLabel.bottom = _incomePoint.top;
-    
-    _incomeLabel.centerX = self.width * 0.5;
-    _incomeLabel.bottom = _incomeValueLabel.top;
-    
-    [self checkIfIncomeAndPaymentPointIntersect];
+    _incomeLabel.text = [NSString stringWithFormat:@"收入 %@", _incomeValues[_selectedAxisXIndex]];
+    [_incomeLabel sizeToFit];
+    _incomeLabel.leftBottom = CGPointMake(_incomePoint.right + 2, _incomePoint.top + 2);
     
     float surplus = [_incomeValues[_selectedAxisXIndex] floatValue] - [_paymentValues[_selectedAxisXIndex] floatValue];
     _surplusValueLabel.text = [NSString stringWithFormat:@"%.2f", surplus];
-}
-
-- (void)checkIfIncomeAndPaymentPointIntersect {
+    [_surplusValueLabel sizeToFit];
+    _surplusValueLabel.top = _surplusLabel.bottom + 2;
+    _surplusValueLabel.centerX = _balloonView.width * 0.5;
     
-    CGRect incomeTextRect = CGRectUnion(_incomeLabel.frame, _incomeValueLabel.frame);
-    CGRect paymentTextRect = CGRectUnion(_paymentLabel.frame, _paymentValueLabel.frame);
-    
-    if (CGRectIntersectsRect(_incomePoint.frame, paymentTextRect)) {
-        _paymentLabel.centerX = _paymentValueLabel.centerX = self.width * 0.5 + paymentTextRect.size.width * 0.5;
-    }
-    
-    if (CGRectIntersectsRect(_paymentPoint.frame, incomeTextRect)) {
-        _incomeLabel.centerX = _incomeValueLabel.centerX = self.width * 0.5 - incomeTextRect.size.width * 0.5;
-    }
-    
-    if (CGRectIntersectsRect(incomeTextRect, paymentTextRect)) {
-        _paymentLabel.centerX = _paymentValueLabel.centerX = self.width * 0.5 + paymentTextRect.size.width * 0.5;
-        _incomeLabel.centerX = _incomeValueLabel.centerX = self.width * 0.5 - incomeTextRect.size.width * 0.5;
-    }
+    _balloonView.width = MAX(54, _surplusValueLabel.width + 4);
 }
 
 @end
