@@ -74,7 +74,7 @@
     item.configId = [set stringForColumn:@"ICONFIGID"];
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     item.booksName = [set stringForColumn:@"CBOOKSNAME"];
-    item.isOnOrNot = [set stringForColumn:@"ISTATE"];
+    item.isOnOrNot = [set boolForColumn:@"ISTATE"];
     item.chargeCircleType = [set intForColumn:@"ITYPE"];
     item.fundName = [set stringForColumn:@"CACCTNAME"];
     return item;
