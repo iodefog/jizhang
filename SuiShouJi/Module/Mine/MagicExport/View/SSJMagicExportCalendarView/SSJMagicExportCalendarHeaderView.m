@@ -15,7 +15,7 @@
         self.textLabel.textColor = [UIColor whiteColor];
         self.textLabel.font = [UIFont systemFontOfSize:18];
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        self.contentView.backgroundColor = SSJ_THEME_RED_COLOR;
+        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
     return self;
 }
