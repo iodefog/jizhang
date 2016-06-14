@@ -101,7 +101,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setShadowImage:nil];
-    [self loadData];
+    [self loadExportPeriod];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -111,7 +111,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    _scrollView.frame = CGRectMake(0, self.bookTypeView.bottom, self.view.width, self.view.height - self.announcementLab.bottom);
+    _scrollView.frame = CGRectMake(0, self.announcementLab.bottom, self.view.width, self.view.height - self.announcementLab.bottom);
 }
 
 #pragma mark - UITableViewDataSource
@@ -192,7 +192,11 @@
 }
 
 - (void)loadExportPeriod {
+    [self.view ssj_showLoadingIndicator];
     [SSJMagicExportStore queryBillPeriodWithBookId:_selectedBookItem.booksId success:^(NSDictionary<NSString *,NSDate *> *result) {
+        
+        [self.view ssj_hideLoadingIndicator];
+        
         _firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
         _lastRecordDate = result[SSJMagicExportStoreEndDateKey];
         
@@ -204,6 +208,7 @@
         }
         
         if (_firstRecordDate && _lastRecordDate) {
+            self.announcementLab.hidden = NO;
             self.scrollView.hidden = NO;
             [self updateBeginAndEndButton];
             
@@ -213,6 +218,7 @@
                 } completion:NULL];
             }
         } else {
+            self.announcementLab.hidden = YES;
             self.scrollView.hidden = YES;
             [self.view ssj_hideLoadingIndicator];
             
@@ -235,7 +241,7 @@
     }
     
     [self.view addSubview:self.announcementLab];
-    [self.view addSubview:self.bookTypeView];
+//    [self.view addSubview:self.bookTypeView];
     [self.view addSubview:_scrollView];
     
     [_scrollView addSubview:self.dateLabel];
@@ -257,6 +263,7 @@
 - (void)selectDateActionWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate {
     SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVC.billType = SSJBillTypeUnknown;
+    calendarVC.booksId = _selectedBookItem.booksId;
     calendarVC.beginDate = beginDate;
     calendarVC.endDate = endDate;
     __weak typeof(self) weakSelf = self;
@@ -485,7 +492,7 @@
 
 - (UIView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIView alloc] initWithFrame:CGRectMake(0, self.bookTypeView.bottom, self.view.width, self.view.height - self.bookTypeView.bottom)];
+        _noDataRemindView = [[UIView alloc] initWithFrame:self.view.bounds];
         
         UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calendar_norecord"]];
         imgView.centerX = _noDataRemindView.width * 0.5;

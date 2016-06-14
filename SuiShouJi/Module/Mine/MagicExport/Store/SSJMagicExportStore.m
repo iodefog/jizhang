@@ -18,8 +18,13 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
                           success:(void (^)(NSDictionary<NSString *, NSDate *> *result))success
                           failure:(void (^)(NSError *error))failure {
     
+    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select max(cbilldate), min(cbilldate) from bk_user_charge where cuserid = '%@' and operatortype <> 2 and cbilldate <= datetime('now', 'localtime')", SSJUSERID()] mutableCopy];
+    if (bookId.length) {
+        [sqlStr appendFormat:@" and cbooksid = '%@'", bookId];
+    }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select max(cbilldate), min(cbilldate) from bk_user_charge where cuserid = ? and operatortype <> 2 and cbilldate <= datetime('now', 'localtime') and cbooksid = ?", SSJUSERID(), bookId];
+        FMResultSet *result = [db executeQuery:sqlStr];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -55,25 +60,33 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 }
 
 + (void)queryAllBillDateWithBillType:(SSJBillType)billType
+                             booksId:(NSString *)booksId
                              success:(void (^)(NSArray<NSDate *> *result))success
                              failure:(void (^)(NSError *error))failure {
     
-    NSString *queryStr = nil;
+    NSMutableString *queryStr = nil;
     switch (billType) {
         case SSJBillTypeIncome:
-            queryStr = [NSString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 and b.itype = 0 order by a.cbilldate", SSJUSERID()];
+            queryStr = [NSMutableString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 and b.itype = 0", SSJUSERID()];
             break;
+            
         case SSJBillTypePay:
-            queryStr = [NSString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 and b.itype = 1 order by a.cbilldate", SSJUSERID()];
+            queryStr = [NSMutableString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 and b.itype = 1", SSJUSERID()];
             break;
+            
         case SSJBillTypeSurplus:
-            queryStr = [NSString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2 order by a.cbilldate", SSJUSERID()];
+            queryStr = [NSMutableString stringWithFormat:@"select a.cbilldate from bk_user_charge as a, bk_bill_type as b where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') and a.ibillid = b.id and b.istate <> 2", SSJUSERID()];
             break;
             
         case SSJBillTypeUnknown:
-            queryStr = [NSString stringWithFormat:@"select cbilldate from bk_user_charge where cuserid = '%@' and operatortype <> 2 and cbilldate <= datetime('now', 'localtime') order by cbilldate", SSJUSERID()];
+            queryStr = [NSMutableString stringWithFormat:@"select a.cbilldate from bk_user_charge as a where a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
             break;
     }
+    
+    if (booksId.length) {
+        [queryStr appendFormat:@" and a.cbooksid = '%@'", booksId];
+    }
+    [queryStr appendString:@" order by a.cbilldate"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:queryStr];

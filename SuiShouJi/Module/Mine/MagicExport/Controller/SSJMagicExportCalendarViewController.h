@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 日历显示哪种收支类型的流水日期
 @property (nonatomic) SSJBillType billType;
 
+// 账本类型id
+@property (nonatomic, copy) NSString *booksId;
+
 // 起始导出日期
 @property (nullable, nonatomic, strong) NSDate *beginDate;
 

@@ -10,6 +10,7 @@
 #import "SSJMagicExportCalendarSwitchStartAndEndDateControl.h"
 #import "SSJMagicExportCalendarView.h"
 #import "SSJMagicExportStore.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJMagicExportCalendarViewController () <SSJMagicExportCalendarViewDelegate>
 
@@ -36,7 +37,7 @@
     [super viewDidLoad];
     
     [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryAllBillDateWithBillType:_billType success:^(NSArray<NSDate *> *result) {
+    [SSJMagicExportStore queryAllBillDateWithBillType:_billType booksId:_booksId success:^(NSArray<NSDate *> *result) {
         [self.view ssj_hideLoadingIndicator];
         if (result.count) {
             _billDates = result;
