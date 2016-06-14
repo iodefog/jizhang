@@ -14,6 +14,7 @@
 #import "SSJReportFormsCurveDescriptionView.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJReportFormsUtil.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJReportFormsCurveViewController () <SSJReportFormsCurveGraphViewDelegate>
 
@@ -120,10 +121,12 @@
         [self reloadData];
         [_editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
     } else {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
         __weak typeof(self) wself = self;
         SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
         calendarVC.title = @"自定义时间";
         calendarVC.billType = SSJBillTypeSurplus;
+        calendarVC.booksId = userItem.currentBooksId;
         calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
             wself.startDate = selectedBeginDate;
             wself.endDate = selectedEndDate;

@@ -18,6 +18,7 @@
 #import "SSJMagicExportCalendarViewController.h"
 #import "SSJReportFormsCurveViewController.h"
 #import "SSJReportFormsUtil.h"
+#import "SSJUserTableManager.h"
 
 static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
@@ -206,20 +207,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 #pragma mark - Event
-- (void)enterCalendarAction {
-    __weak typeof(self) wself = self;
-    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-    calendarVC.title = @"自定义时间";
-    calendarVC.billType = [self currentType];
-    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-        wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-        wself.dateAxisView.hidden = YES;
-        wself.customPeriodLab.hidden = NO;
-        [wself updateCustomPeriodLab];
-    };
-    [self.navigationController pushViewController:calendarVC animated:YES];
-}
-
 //  切换周期（年、月）
 - (void)enterCurveVewController {
     SSJReportFormsCurveViewController *curveVC = [[SSJReportFormsCurveViewController alloc] init];
@@ -257,10 +244,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
         [self reloadDatas];
     } else {
+        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
         __weak typeof(self) wself = self;
         SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
         calendarVC.title = @"自定义时间";
         calendarVC.billType = [self currentType];
+        calendarVC.booksId = userItem.currentBooksId;
         calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
             wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
             wself.dateAxisView.hidden = YES;
