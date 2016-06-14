@@ -68,6 +68,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
+            item.booksId = userItem.currentBooksId;
             
             if ([tempDate isEqualToString:item.billDate]) {
                 NSMutableArray *items = subDic[SSJBillingChargeRecordKey];
