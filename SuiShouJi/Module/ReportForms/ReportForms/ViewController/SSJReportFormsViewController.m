@@ -371,30 +371,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _periods = periods;
         [_dateAxisView reloadData];
         
-        // 如果流水周期列表包括之前选中的周期，周期刻度就默认选中之前的周期；
-        // 如果流水周期列表包括当前的周期，周期刻度就选中当前的周期；
-        // 以上两种情况都不成立就选中第一个周期刻度
-        NSUInteger selectedPeriodIndex = NSUIntegerMax;
-        NSUInteger currentPeriodIndex = NSUIntegerMax;
-        
-        SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-        for (int i = 0; i < _periods.count; i ++) {
-            SSJDatePeriod *period = _periods[i];
-            if (_selectedPeriod && [period compareWithPeriod:_selectedPeriod] == SSJDatePeriodComparisonResultSame) {
-                selectedPeriodIndex = i;
-                break;
-            }
-            if ([period compareWithPeriod:currentPeriod] == SSJDatePeriodComparisonResultSame) {
-                currentPeriodIndex = i;
-            }
-        }
-        
-        if (selectedPeriodIndex != NSUIntegerMax) {
-            _dateAxisView.selectedIndex = selectedPeriodIndex;
-        } else {
-            if (currentPeriodIndex != NSUIntegerMax) {
-                _dateAxisView.selectedIndex = currentPeriodIndex;
-            }
+        if (_periods.count >= 2) {
+            _dateAxisView.selectedIndex = _periods.count - 2;
         }
         
         [self updateSurplusViewTitle];
