@@ -56,6 +56,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
         self.hideKeyboradWhenTouch = YES;
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 } 
@@ -156,6 +157,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         __weak typeof(self) weakSelf = self;
         billTypeSelectVC.incomeOrExpenture = !self.item.incomeOrExpence;
         billTypeSelectVC.selectedId = self.item.billId;
+        billTypeSelectVC.selectTypeName = self.item.typeName;
         billTypeSelectVC.typeSelectBlock = ^(NSString *typeId , NSString *typeName){
             weakSelf.item.typeName = typeName;
             weakSelf.item.billId = typeId;
@@ -230,7 +232,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else{
         circleModifyCell.cellInput.hidden = YES;
     }
-    if ([title isEqualToString:kTitle1]) {
+    if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle4] || [title isEqualToString:kTitle5] || [title isEqualToString:kTitle10]) {
         circleModifyCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }else{
         circleModifyCell.selectionStyle = UITableViewCellSelectionStyleGray;
@@ -252,8 +254,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             circleModifyCell.cellDetail = @"收入";
         }
     }else if ([title isEqualToString:kTitle3]) {
+        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.typeName;
     }else if ([title isEqualToString:kTitle7]) {
+        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
             case 0:
                 circleModifyCell.cellDetail = @"每天";
@@ -280,11 +284,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 break;
         }
     }else if ([title isEqualToString:kTitle8]) {
+        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.fundName;
     }else if ([title isEqualToString:kTitle9]) {
+        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
     }
     if ([title isEqualToString:kTitle6]) {
+        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.chargeImage.length || self.selectedImage != nil) {
             circleModifyCell.cellImageView.image = [UIImage imageNamed:@"mark_pic"];
         }else{
@@ -309,6 +316,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(TPKeyboardAvoidingTableView *)tableView{
     if (_tableView == nil) {
         _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

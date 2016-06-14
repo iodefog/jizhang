@@ -56,7 +56,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }
             if ([item.typeName isEqualToString:@"转入"] || [item.typeName isEqualToString:@"转出"]) {
-                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where a.cwritedate = ? and a.cuserid = ? and a.ifunsid = b.cfundid",item.editeDate,userid];
+                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where a.cwritedate = ? and a.cuserid = ? and a.ifunsid = b.cfundid and ifunsid <> ?",item.editeDate,userid,item.fundId];
             }
             NSString *month = [resultSet stringForColumn:@"cmonth"];
             if ([month isEqualToString:lastDate]) {
