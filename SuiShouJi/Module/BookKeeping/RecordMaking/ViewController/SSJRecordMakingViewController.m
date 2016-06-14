@@ -41,7 +41,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 
-@property (nonatomic,strong) SSJChargeCircleSelectView *ChargeCircleSelectView;
 @property (nonatomic) NSInteger selectChargeCircleType;
 @property (nonatomic,strong) NSString *chargeMemo;
 @property (nonatomic,strong) NSString *categoryID;
@@ -182,39 +181,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         };
     }
     return _FundingTypeSelectView;
-}
-
--(SSJChargeCircleSelectView *)ChargeCircleSelectView{
-    if (!_ChargeCircleSelectView) {
-        __weak typeof(self) weakSelf = self;
-        _ChargeCircleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        _ChargeCircleSelectView.selectCircleType = self.selectChargeCircleType;
-        _ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
-        _ChargeCircleSelectView.shouldDismissWhenSureButtonClick =  ^BOOL(SSJChargeCircleSelectView *circleView) {
-            if (weakSelf.selectedYear < weakSelf.currentYear || (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth < weakSelf.currentMonth) ||  (weakSelf.selectedYear == weakSelf.currentYear && weakSelf.selectedMonth == weakSelf.currentMonth && weakSelf.selectedDay < weakSelf.currentDay)) {
-                if (circleView.selectCircleType != -1) {
-                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-                    weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-                    weakSelf.selectChargeCircleType = -1;
-                    return NO;
-                }
-            }
-            
-            if (weakSelf.selectedDay > 28 && circleView.selectCircleType == 6 && circleView.selectCircleType == 4){
-                weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-                weakSelf.selectChargeCircleType = -1;
-                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,每月天数不固定,暂不支持每月设置次日期." action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
-                return NO;
-            }
-            
-            weakSelf.selectChargeCircleType = circleView.selectCircleType;
-            return YES;
-        };
-        _ChargeCircleSelectView.dismissAction = ^(SSJChargeCircleSelectView *circleView) {
-            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
-        };
-    }
-    return _ChargeCircleSelectView;
 }
 
 - (SSJRecordMakingBillTypeInputView *)billTypeInputView {
@@ -373,7 +339,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 -(void)segmentPressed:(id)sender{
-    self.ChargeCircleSelectView.incomeOrExpenture = self.titleSegment.selectedSegmentIndex;
     if (self.titleSegment.selectedSegmentIndex == 0) {
         [MobClick event:@"addRecord_type_out"];
     }else{
