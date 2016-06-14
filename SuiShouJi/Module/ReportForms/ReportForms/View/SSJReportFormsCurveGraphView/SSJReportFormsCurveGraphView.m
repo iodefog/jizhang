@@ -56,6 +56,10 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 @property (nonatomic) CGFloat margin;
 
+@property (nonatomic) CGFloat maxSurplusValue;
+
+@property (nonatomic) CGFloat minSurplusValue;
+
 @end
 
 @implementation SSJReportFormsCurveGraphView
@@ -124,8 +128,6 @@ static const CGFloat kBottomSpaceHeight = 32;
         _surplusLabel.backgroundColor = [UIColor clearColor];
         _surplusLabel.font = [UIFont systemFontOfSize:10];
         _surplusLabel.textColor = [UIColor whiteColor];
-        _surplusLabel.text = @"结余";
-        [_surplusLabel sizeToFit];
         [_balloonView addSubview:_surplusLabel];
         
         _surplusValueLabel = [[UILabel alloc] init];
@@ -205,6 +207,7 @@ static const CGFloat kBottomSpaceHeight = 32;
     _surplusLabel.centerX = _balloonView.width * 0.5;
     
     [self adjustPaymentAndIncomePoint];
+    [self updateSurplus];
 }
 
 - (void)reloadData {
@@ -246,12 +249,16 @@ static const CGFloat kBottomSpaceHeight = 32;
         }
         [_paymentValues addObject:@(paymentValue)];
         
+        
         CGFloat incomeValue = [_delegate curveGraphView:self incomeValueAtAxisXIndex:idx];
         if (incomeValue < 0) {
             NSLog(@"收入value不能为负数");
             return;
         }
         [_incomeValues addObject:@(incomeValue)];
+        
+        _maxSurplusValue = MAX(incomeValue - paymentValue, _maxSurplusValue);
+        _minSurplusValue = MIN(incomeValue - paymentValue, _minSurplusValue);
         
         NSString *title = [_delegate curveGraphView:self titleAtAxisXIndex:idx];
         if (!title) {
@@ -319,9 +326,11 @@ static const CGFloat kBottomSpaceHeight = 32;
     if (scrollView.contentOffset.x == -scrollView.contentInset.left) {
         _selectedAxisXIndex = 1;
         [self adjustPaymentAndIncomePoint];
+        [self updateSurplus];
     } else if (scrollView.contentOffset.x == _axisXView.width - _scrollView.width * 0.5) {
         _selectedAxisXIndex = _axisXCount;
         [self adjustPaymentAndIncomePoint];
+        [self updateSurplus];
     }
 }
 
@@ -343,6 +352,7 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
     [self adjustPaymentAndIncomePoint];
+    [self updateSurplus];
 }
 
 - (void)adjustOffSetXToCenter {
@@ -377,14 +387,31 @@ static const CGFloat kBottomSpaceHeight = 32;
     _incomeLabel.text = [NSString stringWithFormat:@"收入 %@", _incomeValues[_selectedAxisXIndex]];
     [_incomeLabel sizeToFit];
     _incomeLabel.leftBottom = CGPointMake(_incomePoint.right + 2, _incomePoint.top + 2);
-    
+}
+
+- (void)updateSurplus {
     float surplus = [_incomeValues[_selectedAxisXIndex] floatValue] - [_paymentValues[_selectedAxisXIndex] floatValue];
+    if (_minSurplusValue != _maxSurplusValue) {
+        if (surplus == _minSurplusValue) {
+            _surplusLabel.text = @"结余最低";
+        } else if (surplus == _maxSurplusValue) {
+            _surplusLabel.text = @"结余最高";
+        } else {
+            _surplusLabel.text = @"结余";
+        }
+    } else {
+        _surplusLabel.text = @"结余";
+    }
+    
+    [_surplusLabel sizeToFit];
+    _surplusLabel.centerX = _balloonView.width * 0.5;
+    
     _surplusValueLabel.text = [NSString stringWithFormat:@"%.2f", surplus];
     [_surplusValueLabel sizeToFit];
     _surplusValueLabel.top = _surplusLabel.bottom + 2;
     _surplusValueLabel.centerX = _balloonView.width * 0.5;
     
-    _balloonView.width = MAX(54, _surplusValueLabel.width + 4);
+    _balloonView.width = MAX(54, MAX(_surplusValueLabel.width + 4, _surplusLabel.width));
 }
 
 @end
