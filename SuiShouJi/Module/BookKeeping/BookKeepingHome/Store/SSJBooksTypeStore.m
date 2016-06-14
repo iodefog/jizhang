@@ -56,10 +56,11 @@
     __block NSString * sql;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        if ([db intForQuery:@"select count(1) from BK_BOOKS_TYPE where cbooksname = ? and cuserid = ?",userid,item.booksName]) {
+        if ([db intForQuery:@"select count(1) from BK_BOOKS_TYPE where cbooksname = ? and cuserid = ? and cbooksid <> ?",item.booksName,userid,item.booksId]) {
             SSJDispatch_main_async_safe(^{
                 [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
             });
+            return;
         }
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", typeId]) {
             sql = [self inertSQLStatementWithTypeInfo:typeInfo];

@@ -7,10 +7,9 @@
 //
 
 #import "SSJBooksTypeCollectionViewCell.h"
-#import <YYText/YYText.h>
 
 @interface SSJBooksTypeCollectionViewCell()
-@property(nonatomic, strong) YYLabel *titleLabel;
+@property(nonatomic, strong) UILabel *titleLabel;
 @property(nonatomic, strong) UIView *seperatorLineView;
 @property(nonatomic, strong) UIImageView *lineImage;
 @property(nonatomic, strong) UIImageView *selectImage;
@@ -38,6 +37,12 @@
     [super layoutSubviews];
     self.seperatorLineView.size = CGSizeMake(2, self.height);
     self.seperatorLineView.leftTop = CGPointMake(22, 0);
+    if (self.titleLabel.text.length >= 4) {
+        self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * 4;
+    }else{
+        self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * self.titleLabel.text.length;
+    }
+    self.titleLabel.width = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].width;
     self.titleLabel.centerX = self.width - (self.width - 24) / 2;
     self.titleLabel.centerY = self.height / 2;
     self.lineImage.size = CGSizeMake(7, 56);
@@ -45,13 +50,12 @@
     self.selectImage.rightBottom = CGPointMake(self.width, self.height - 10);
 }
 
--(YYLabel *)titleLabel{
+-(UILabel *)titleLabel{
     if (!_titleLabel) {
-        _titleLabel = [[YYLabel alloc]init];
+        _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.font = [UIFont systemFontOfSize:18];
-        _titleLabel.verticalForm = YES;
-        _titleLabel.textVerticalAlignment = YYTextVerticalAlignmentCenter;
+        _titleLabel.numberOfLines = 0;
     }
     return _titleLabel;
 }
