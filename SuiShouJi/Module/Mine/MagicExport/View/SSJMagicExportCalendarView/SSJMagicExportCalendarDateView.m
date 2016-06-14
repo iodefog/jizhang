@@ -54,7 +54,7 @@
     self.dateLabel.clipsToBounds = _item.selected;
     self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor whiteColor];
     self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
-    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : [UIColor ssj_colorWithHex:@"ffa81c"];
+    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : SSJ_THEME_RED_COLOR;
 }
 
 #pragma mark - UIResponder
@@ -71,7 +71,7 @@
     
     _item.selected = YES;
     self.dateLabel.clipsToBounds = _item.selected;
-    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : [UIColor ssj_colorWithHex:@"ffa81c"];
+    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : SSJ_THEME_RED_COLOR;
     [UIView transitionWithView:self duration:0.15 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         self.dateLabel.backgroundColor = _item.selected ? SSJ_THEME_RED_COLOR : [UIColor whiteColor];
         self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;

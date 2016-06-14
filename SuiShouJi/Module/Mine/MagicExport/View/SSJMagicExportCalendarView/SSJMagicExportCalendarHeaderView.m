@@ -12,10 +12,10 @@
 
 - (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
-        self.textLabel.textColor = [UIColor whiteColor];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         self.textLabel.font = [UIFont systemFontOfSize:18];
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"f6f6f6"];
     }
     return self;
 }

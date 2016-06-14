@@ -19,8 +19,9 @@ extern NSString *const SSJMagicExportStoreEndDateKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryBillPeriodWithSuccess:(void (^)(NSDictionary<NSString *, NSDate *> *result))success
-                           failure:(void (^)(NSError *error))failure;
++ (void)queryBillPeriodWithBookId:(NSString *)bookId
+                          success:(void (^)(NSDictionary<NSString *, NSDate *> *result))success
+                          failure:(void (^)(NSError *error))failure;
 
 /**
  *  查询所有有效的记账时间(截止到当前系统时间)

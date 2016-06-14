@@ -14,9 +14,12 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
 
 @implementation SSJMagicExportStore
 
-+ (void)queryBillPeriodWithSuccess:(void (^)(NSDictionary<NSString *, NSDate *> *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryBillPeriodWithBookId:(NSString *)bookId
+                          success:(void (^)(NSDictionary<NSString *, NSDate *> *result))success
+                          failure:(void (^)(NSError *error))failure {
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select max(cbilldate), min(cbilldate) from bk_user_charge where cuserid = ? and operatortype <> 2 and cbilldate <= datetime('now', 'localtime')", SSJUSERID()];
+        FMResultSet *result = [db executeQuery:@"select max(cbilldate), min(cbilldate) from bk_user_charge where cuserid = ? and operatortype <> 2 and cbilldate <= datetime('now', 'localtime') and cbooksid = ?", SSJUSERID(), bookId];
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{

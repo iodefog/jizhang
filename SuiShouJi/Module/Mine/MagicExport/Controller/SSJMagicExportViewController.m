@@ -16,11 +16,19 @@
 #import "SSJMagicExportService.h"
 #import "SSJMagicExportStore.h"
 #import "SSJBorderButton.h"
+#import "SSJBooksTypeStore.h"
+#import "SSJUserTableManager.h"
 
-@interface SSJMagicExportViewController () <UITextFieldDelegate>
+@interface SSJMagicExportViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
+
+@property (nonatomic, strong) UIView *bookTypeView;
+
+@property (nonatomic, strong) UIButton *bookTypeBtn;
+
+@property (nonatomic, strong) UITableView *bookTypeSelectionView;
 
 //
 @property (nonatomic, strong) UILabel *dateLabel;
@@ -52,6 +60,10 @@
 // 导出结束时间
 @property (nonatomic, strong) NSDate *endDate;
 
+@property (nonatomic, strong) NSArray *bookTypes;
+
+@property (nonatomic, strong) SSJBooksTypeItem *selectedBookItem;
+
 @property (nonatomic, strong) SSJMagicExportService *service;
 
 @property (nonatomic, strong) UIView *noDataRemindView;
@@ -75,8 +87,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpView];
+    
     // 现隐藏视图，等数据加载出来在显示
     self.announcementLab.hidden = YES;
+    self.bookTypeView.hidden = YES;
     self.scrollView.hidden = YES;
 }
 
@@ -93,7 +107,32 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    _scrollView.frame = CGRectMake(0, self.announcementLab.bottom, self.view.width, self.view.height - self.announcementLab.bottom);
+    _scrollView.frame = CGRectMake(0, self.bookTypeView.bottom, self.view.width, self.view.height - self.announcementLab.bottom);
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _bookTypes.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *cellId = @"cellId";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell.textLabel.font = [UIFont systemFontOfSize:16];
+        cell.textLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        cell.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"cccccc"];
+    }
+    cell.textLabel.text = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _selectedBookItem = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
+    [_bookTypeBtn setTitle:_selectedBookItem.booksName forState:UIControlStateNormal];
+    [self loadExportPeriod];
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -109,9 +148,38 @@
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryBillPeriodWithSuccess:^(NSDictionary<NSString *,NSDate *> *result) {
+    
+    [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {
+        
         [self.view ssj_hideLoadingIndicator];
         
+        _bookTypes = result;
+        if (!_selectedBookItem) {
+            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+            for (SSJBooksTypeItem *bookItem in _bookTypes) {
+                if ([bookItem.booksId isEqualToString:userItem.currentBooksId]) {
+                    _selectedBookItem = bookItem;
+                    break;
+                }
+            }
+        }
+        
+        self.bookTypeView.hidden = NO;
+        self.announcementLab.hidden = NO;
+        
+        [self.bookTypeSelectionView reloadData];
+        [self.bookTypeBtn setTitle:_selectedBookItem.booksName forState:UIControlStateNormal];
+        
+        [self loadExportPeriod];
+        
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
+}
+
+- (void)loadExportPeriod {
+    [SSJMagicExportStore queryBillPeriodWithBookId:_selectedBookItem.booksId success:^(NSDictionary<NSString *,NSDate *> *result) {
         _firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
         _lastRecordDate = result[SSJMagicExportStoreEndDateKey];
         
@@ -123,15 +191,23 @@
         }
         
         if (_firstRecordDate && _lastRecordDate) {
-            self.announcementLab.hidden = NO;
             self.scrollView.hidden = NO;
             [self updateBeginAndEndButton];
-            [self.view ssj_hideWatermark:YES];
+            
+            if (self.noDataRemindView.superview) {
+                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                    [self.noDataRemindView removeFromSuperview];
+                } completion:NULL];
+            }
         } else {
-            // 没有记账流水
-            self.announcementLab.hidden = YES;
             self.scrollView.hidden = YES;
-            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            [self.view ssj_hideLoadingIndicator];
+            
+            if (!self.noDataRemindView.superview) {
+                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                    [self.view addSubview:self.noDataRemindView];
+                } completion:NULL];
+            }
         }
         
     } failure:^(NSError *error) {
@@ -146,7 +222,9 @@
     }
     
     [self.view addSubview:self.announcementLab];
+    [self.view addSubview:self.bookTypeView];
     [self.view addSubview:_scrollView];
+    
     [_scrollView addSubview:self.dateLabel];
     [_scrollView addSubview:self.selectDateView];
     [_scrollView addSubview:self.emailLabel];
@@ -155,9 +233,6 @@
     [self.emailView addSubview:self.emailTextField];
     
     _scrollView.contentSize = CGSizeMake(self.scrollView.width, self.commitBtn.bottom + 20);
-    
-//    _scrollView.layer.borderWidth = 5;
-//    _scrollView.layer.borderColor = [UIColor redColor].CGColor;
 }
 
 - (void)updateBeginAndEndButton {
@@ -203,7 +278,84 @@
     [self.navigationController pushViewController:announcementVC animated:YES];
 }
 
+- (void)selectionBookTypeAction {
+    if (self.bookTypeSelectionView.superview) {
+        [UIView animateWithDuration:0.25 animations:^{
+            self.bookTypeSelectionView.transform = CGAffineTransformMakeScale(1, 0);
+        } completion:^(BOOL finished) {
+            [self.bookTypeSelectionView removeFromSuperview];
+        }];
+    } else {
+        [self.view addSubview:self.bookTypeSelectionView];
+        self.bookTypeSelectionView.transform = CGAffineTransformMakeScale(1, 0);
+        [UIView animateWithDuration:0.25 animations:^{
+            self.bookTypeSelectionView.transform = CGAffineTransformMakeScale(1, 1);
+        }];
+    }
+    
+}
+
 #pragma mark - Getter
+- (UILabel *)announcementLab {
+    if (!_announcementLab) {
+        _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 35)];
+        _announcementLab.backgroundColor = [UIColor whiteColor];
+        _announcementLab.font = [UIFont systemFontOfSize:14];
+        
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.firstLineHeadIndent = 10;
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"【公告】关于邮箱收件问题的通知" attributes:@{NSParagraphStyleAttributeName:style}];
+        _announcementLab.attributedText = text;
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAnnouncement)];
+        [_announcementLab addGestureRecognizer:tap];
+        _announcementLab.userInteractionEnabled = YES;
+    }
+    return _announcementLab;
+}
+
+- (UIView *)bookTypeView {
+    if (!_bookTypeView) {
+        _bookTypeView = [[UIView alloc] initWithFrame:CGRectMake(0, self.announcementLab.bottom, self.view.width, 50)];
+        _bookTypeView.backgroundColor = [UIColor whiteColor];
+        [_bookTypeView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_bookTypeView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_bookTypeView ssj_setBorderWidth:1];
+        
+        UILabel *titleLab = [[UILabel alloc] init];
+        titleLab.font = [UIFont systemFontOfSize:16];
+        titleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        titleLab.text = @"导出账本类型";
+        [titleLab sizeToFit];
+        titleLab.left = 10;
+        titleLab.centerY = _bookTypeView.height * 0.5;
+        [_bookTypeView addSubview:titleLab];
+        [_bookTypeView addSubview:self.bookTypeBtn];
+    }
+    return _bookTypeView;
+}
+
+- (UIButton *)bookTypeBtn {
+    if (!_bookTypeBtn) {
+        _bookTypeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _bookTypeBtn.frame = CGRectMake(self.view.width - 116, 0, 116, 50);
+        _bookTypeBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+        [_bookTypeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_bookTypeBtn addTarget:self action:@selector(selectionBookTypeAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _bookTypeBtn;
+}
+
+- (UITableView *)bookTypeSelectionView {
+    if (!_bookTypeSelectionView) {
+        _bookTypeSelectionView = [[UITableView alloc] initWithFrame:CGRectMake(self.view.width - 94, 108, 84, 130)];
+        _bookTypeSelectionView.dataSource = self;
+        _bookTypeSelectionView.delegate = self;
+        _bookTypeSelectionView.rowHeight = 30;
+    }
+    return _bookTypeSelectionView;
+}
+
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
@@ -316,24 +468,6 @@
         [_noDataRemindView addSubview:recordBtn];
     }
     return _noDataRemindView;
-}
-
-- (UILabel *)announcementLab {
-    if (!_announcementLab) {
-        _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 35)];
-        _announcementLab.backgroundColor = [UIColor whiteColor];
-        _announcementLab.font = [UIFont systemFontOfSize:14];
-        
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.firstLineHeadIndent = 10;
-        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"【公告】关于邮箱收件问题的通知" attributes:@{NSParagraphStyleAttributeName:style}];
-        _announcementLab.attributedText = text;
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAnnouncement)];
-        [_announcementLab addGestureRecognizer:tap];
-        _announcementLab.userInteractionEnabled = YES;
-    }
-    return _announcementLab;
 }
 
 @end
