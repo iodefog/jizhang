@@ -51,6 +51,13 @@ NSString *SSJAppVersion();
 float SSJSystemVersion();
 
 /**
+ *  当前手机型号
+ *
+ *  @return (NSString *)
+ */
+NSString *SSJPhoneModel();
+
+/**
  *  本地补丁最新的版本号
  *
  *  @return (NSString *)
