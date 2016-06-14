@@ -62,7 +62,6 @@
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     NSArray *localNotifications = [[NSArray alloc]init];
     localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    NSLog(@"-----------%lu",(unsigned long)localNotifications.count);
 }
 
 +(void)cancelLocalNotificationWithKey:(NSString *)key{
@@ -82,7 +81,6 @@
         }  
     }
     NSArray *NewlocalNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    NSLog(@"-----------%lu",(unsigned long)NewlocalNotifications.count);
 }
 
 
