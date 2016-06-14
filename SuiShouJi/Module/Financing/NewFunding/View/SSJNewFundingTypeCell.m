@@ -33,7 +33,7 @@
     self.colorView.layer.cornerRadius = 15;
     self.colorView.right = self.contentView.width - 10;
     self.colorView.centerY = self.contentView.height / 2;
-    self.typeImage.size = CGSizeMake(30, 30);
+    self.typeImage.size = CGSizeMake(18, 18);
     self.typeImage.right = self.typeLabel.left - 10;
     self.typeImage.centerY = self.height / 2;
 }

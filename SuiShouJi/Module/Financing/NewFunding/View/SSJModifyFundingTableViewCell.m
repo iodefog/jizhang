@@ -36,7 +36,7 @@
     self.colorView.centerY = self.height / 2;
     self.typeTitle.right = self.cellDetail.right;
     self.typeTitle.centerY = self.height / 2;
-    self.typeImage.size = CGSizeMake(25, 25);
+    self.typeImage.size = CGSizeMake(18, 18);
     self.typeImage.right = self.typeTitle.left - 10;
     self.typeImage.centerY = self.height / 2;
 

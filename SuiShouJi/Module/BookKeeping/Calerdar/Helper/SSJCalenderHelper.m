@@ -50,6 +50,7 @@
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
             NSString *billDate = [resultSet stringForColumn:@"CBILLDATE"];
+            item.booksId = [resultSet stringForColumn:@"cbooksid"];
             if ([result objectForKey:billDate] == nil) {
                 NSMutableArray *items = [[NSMutableArray alloc]init];
                 [items addObject:item];
