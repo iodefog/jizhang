@@ -84,7 +84,7 @@
     if (![db executeUpdate:@"alter table bk_user add cdefaultbookstypestate integer default 0"]) {
         return [db lastError];
     }
-    if (![db executeUpdate:@"alter table bk_user add ccurrentbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_user add ccurrentbooksid text"]) {
         return [db lastError];
     }
     return nil;

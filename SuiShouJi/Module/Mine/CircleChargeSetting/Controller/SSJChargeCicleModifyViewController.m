@@ -222,8 +222,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.text = self.item.money;
-        circleModifyCell.cellInput.placeholder = @"￥0.00";
-        circleModifyCell.cellInput.keyboardType = UIKeyboardTypeNumberPad;
+        circleModifyCell.cellInput.placeholder = @"0.00";
+        circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
         _moneyInput = circleModifyCell.cellInput;
@@ -316,14 +316,18 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableView{
     if (_tableView == nil) {
         _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     }
     return _tableView;
 }

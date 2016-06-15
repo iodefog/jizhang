@@ -285,7 +285,7 @@
         self.nameInput.text = @"";
         _selectColor = @"#7FB04F";
     }
-    if ([_item.booksId isEqualToString:@"0"] || [_item.booksName isEqualToString:@"添加账本"]) {
+    if ([_item.booksId isEqualToString:_item.userId] || [_item.booksName isEqualToString:@"添加账本"]) {
         self.deleteButton.hidden = YES;
     }else{
         self.deleteButton.hidden = NO;

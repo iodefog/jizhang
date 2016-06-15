@@ -295,7 +295,7 @@
     }else{
         [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
         if (!_item.incomeOrExpence) {
-            self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
+            self.incomeLabel.text = [NSString stringWithFormat:@"%@+%.2f",_item.typeName,[_item.money doubleValue]];
             [self.incomeLabel sizeToFit];
             self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             self.expenditureLabel.text = @"";
@@ -303,7 +303,7 @@
             [self.incomeMemoLabel sizeToFit];
             self.expentureMemoLabel.text = @"";
         }else{
-            self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
+            self.expenditureLabel.text = [NSString stringWithFormat:@"%@-%.2f",_item.typeName,[_item.money doubleValue]];
             self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.text = @"";

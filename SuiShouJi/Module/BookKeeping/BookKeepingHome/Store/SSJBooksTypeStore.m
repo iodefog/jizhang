@@ -29,6 +29,7 @@
             item.booksId = [booksResult stringForColumn:@"cbooksid"];
             item.booksName = [booksResult stringForColumn:@"cbooksname"];
             item.booksColor = [booksResult stringForColumn:@"cbookscolor"];
+            item.userId = [booksResult stringForColumn:@"cuserid"];
             [booksList addObject:item];
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];

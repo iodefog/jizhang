@@ -113,7 +113,7 @@
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString* dateStr = [dateFormatter stringFromDate:[self.datePicker date]];
-    if ([[self.datePicker date] isEarlierThan:[NSDate date]]) {
+    if ([self.datePicker date].year < [NSDate date].year || ([self.datePicker date].year == [NSDate date].year && [self.datePicker date].month < [NSDate date].month) || ([self.datePicker date].year == [NSDate date].year && [self.datePicker date].month == [NSDate date].month && [self.datePicker date].day < [NSDate date].day)) {
         [self.datePicker setDate:[NSDate date] animated:YES];
         [CDAutoHideMessageHUD showMessage:@"不能设置历史日期的周期记账哦"];
         return;

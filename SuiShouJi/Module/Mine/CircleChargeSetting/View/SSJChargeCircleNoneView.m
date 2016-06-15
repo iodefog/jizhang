@@ -12,6 +12,7 @@
 @property(nonatomic, strong) UIImageView *noneImage;
 @property(nonatomic, strong) UIButton *makeChargeCircleButton;
 @property(nonatomic, strong) UILabel *nodataLabel;
+@property(nonatomic, strong) UIView *seperatorLine;
 @end
 
 @implementation SSJChargeCircleNoneView
@@ -20,6 +21,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
+        [self addSubview:self.seperatorLine];
         [self addSubview:self.noneImage];
         [self addSubview:self.nodataLabel];
         [self addSubview:self.makeChargeCircleButton];
@@ -29,6 +31,8 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.seperatorLine.size = CGSizeMake(self.width, 10);
+    self.seperatorLine.leftTop = CGPointMake(0, 0);
     self.noneImage.bottom = self.height / 2 - 10;
     self.noneImage.centerX = self.width / 2;
     self.nodataLabel.top = self.noneImage.bottom + 5;
@@ -67,6 +71,14 @@
         [_nodataLabel sizeToFit];
     }
     return _nodataLabel;
+}
+
+-(UIView *)seperatorLine{
+    if (!_seperatorLine) {
+        _seperatorLine = [[UIView alloc]init];
+        _seperatorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+    }
+    return _seperatorLine;
 }
 
 -(void)makeChargeCircleButtonClicked:(id)sender{

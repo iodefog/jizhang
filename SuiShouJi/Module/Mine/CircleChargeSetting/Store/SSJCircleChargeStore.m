@@ -109,7 +109,7 @@
         }
         //插入周期记账表
         if (![db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",item.configId]) {
-            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+            if (![db executeUpdate:@"insert into bk_charge_period_config (iconfigid, cuserid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, istate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,1,?,?,0,?)",item.configId,userid,item.billId,item.fundId,@(item.chargeCircleType),@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -131,7 +131,7 @@
                     
                 }else{
                     //修改流水表
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, iconfigid, imoney, cimgurl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userid,item.billId,item.fundId,item.configId,item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, iconfigid, imoney, cimgurl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userid,item.billId,item.fundId,item.configId,@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
@@ -142,7 +142,7 @@
                     //修改每日汇总表
                     if (!item.incomeOrExpence) {
                         if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cbilldate = ? and cbooksid = ?",item.billDate,item.booksId]) {
-                            if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ?",item.money,item.money]) {
+                            if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ? where cbooksid = ? and cbilldate = ? and cuserid = ?",@([item.money doubleValue]),@([item.money doubleValue]),item.booksId,item.billDate,userid]) {
                                 if (failure) {
                                     SSJDispatch_main_async_safe(^{
                                         failure([db lastError]);
@@ -151,7 +151,7 @@
                                 *rollback = YES;
                             }
                         }else{
-                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount  , sumamount, ibillid , cwritedate , cuserid ,cbooksid) values(?,?,0,?,-1,?,?,?)",item.billDate,item.money,@(-[item.money integerValue]),cwriteDate,userid,item.booksId]) {
+                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount  , sumamount, ibillid , cwritedate , cuserid ,cbooksid) values(?,?,0,?,-1,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
                                 if (failure) {
                                     SSJDispatch_main_async_safe(^{
                                         failure([db lastError]);
@@ -162,7 +162,7 @@
                         }
                     }else{
                         if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cbilldate = ? and cbooksid = ?",item.billDate,item.booksId]) {
-                            if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ?",item.money,item.money]) {
+                            if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? where cbooksid = ? and cbilldate = ? and cuserid = ?",@([item.money doubleValue]),@([item.money doubleValue]),item.booksId,item.billDate,userid]) {
                                 if (failure) {
                                     SSJDispatch_main_async_safe(^{
                                         failure([db lastError]);
@@ -171,7 +171,7 @@
                                 *rollback = YES;
                             }
                         }else{
-                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount, sumamount, ibillid , cwritedate , cuserid ,cbooksid) values(?,0,?,?,-1,?,?,?)",item.billDate,item.money,@(-[item.money integerValue]),cwriteDate,userid,item.booksId]) {
+                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount, sumamount, ibillid , cwritedate , cuserid ,cbooksid) values(?,0,?,?,-1,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
                                 if (failure) {
                                     SSJDispatch_main_async_safe(^{
                                         failure([db lastError]);
@@ -183,7 +183,7 @@
                     }
                     //修改账户余额表
                     if (!item.incomeOrExpence) {
-                        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cfundid = ?",item.money,item.fundId]) {
+                        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cfundid = ?",@([item.money doubleValue]),item.fundId]) {
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{
                                     failure([db lastError]);
@@ -205,7 +205,7 @@
             }
         }else{
             //修改周期记账
-            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate]) {
+            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,userid,item.booksId,item.configId]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
