@@ -113,7 +113,7 @@
 - (void)setIncome:(double)income {
     if (_income != income) {
         _income = income;
-        _incomeCell.bottomLabel.text = [[NSString stringWithFormat:@"%.2f", _income] ssj_moneyDisplayFormat];
+        _incomeCell.bottomLabel.text = [NSString stringWithFormat:@"%.2f", _income];
         [_incomeCell setNeedsLayout];
     }
 }
@@ -121,7 +121,7 @@
 - (void)setPayment:(double)payment {
     if (_payment != payment) {
         _payment = payment;
-        _paymentCell.bottomLabel.text = [[NSString stringWithFormat:@"%.2f", _payment] ssj_moneyDisplayFormat];
+        _paymentCell.bottomLabel.text = [NSString stringWithFormat:@"%.2f", _payment];
         [_paymentCell setNeedsLayout];
     }
 }
@@ -129,7 +129,7 @@
 - (void)setSurplus:(double)surplus {
     if (_surplus != surplus) {
         _surplus = surplus;
-        _surplusCell.bottomLabel.text = [[NSString stringWithFormat:@"%.2f", _surplus] ssj_moneyDisplayFormat];
+        _surplusCell.bottomLabel.text = [NSString stringWithFormat:@"%.2f", _surplus];
         [_surplusCell setNeedsLayout];
     }
 }
@@ -137,7 +137,7 @@
 - (void)setDailyPayment:(double)dailyPayment {
     if (_dailyPayment != dailyPayment) {
         _dailyPayment = dailyPayment;
-        _dailyPaymentCell.bottomLabel.text = [[NSString stringWithFormat:@"%.2f", _dailyPayment] ssj_moneyDisplayFormat];
+        _dailyPaymentCell.bottomLabel.text = [NSString stringWithFormat:@"%.2f", _dailyPayment];
         [_dailyPaymentCell setNeedsLayout];
     }
 }
