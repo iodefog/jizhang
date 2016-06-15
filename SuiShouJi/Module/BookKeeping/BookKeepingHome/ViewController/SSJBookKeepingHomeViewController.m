@@ -405,7 +405,7 @@
         bookKeepingCell = [[SSJBookKeepingHomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     bookKeepingCell.isEdite = ([indexPath compare:self.selectIndex] == NSOrderedSame);
-    if (indexPath.row == self.items.count - 1) {
+    if (indexPath.row == [self.tableView numberOfRowsInSection:0] - 1) {
         bookKeepingCell.isLastRowOrNot = NO;
     }else{
         bookKeepingCell.isLastRowOrNot = YES;

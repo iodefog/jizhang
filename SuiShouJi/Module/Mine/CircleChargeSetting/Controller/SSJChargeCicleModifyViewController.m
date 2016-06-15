@@ -49,6 +49,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 @implementation SSJChargeCicleModifyViewController{
     UITextField *_moneyInput;
+    NSArray *_images;
 }
 
 #pragma mark - Lifecycle
@@ -64,6 +65,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle6],@[kTitle7,kTitle8,kTitle9,kTitle10]];
+    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao"],@[@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@""]];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
@@ -211,10 +213,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    NSString *image = [_images ssj_objectAtIndexPath:indexPath];
     SSJChargeCircleModifyCell *circleModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJChargeCircleEditeCellIdentifier];
     if (!circleModifyCell) {
         circleModifyCell = [[SSJChargeCircleModifyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     }
+    circleModifyCell.cellImageName = image;
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.text = self.item.money;
@@ -425,6 +429,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 }
 
 -(void)saveButtonClicked:(id)sender{
+    if (!_moneyInput.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入金额"];
+    }
     if (self.selectedImage != nil) {
         NSString *imageName = SSJUUID();
         if (SSJSaveImage(self.selectedImage , imageName) && SSJSaveThumbImage(self.selectedImage, imageName)) {

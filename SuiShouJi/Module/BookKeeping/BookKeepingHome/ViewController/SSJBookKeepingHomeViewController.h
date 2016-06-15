@@ -16,9 +16,7 @@
 
 @property(nonatomic, strong) SSJHomeTableView *tableView;
 
-
 //首页动画加载
 -(void)reloadWithAnimation;
-
 
 @end

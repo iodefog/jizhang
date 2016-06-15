@@ -10,6 +10,7 @@
 
 @interface SSJChargeCircleModifyCell()
 @property(nonatomic, strong) UILabel *cellDetailLabel;
+@property(nonatomic, strong) UIImageView *cellImage;
 @end
 
 @implementation SSJChargeCircleModifyCell
@@ -21,13 +22,16 @@
         [self.contentView addSubview:self.cellSubTitleLabel];
         [self.contentView addSubview:self.cellImageView];
         [self.contentView addSubview:self.cellInput];
+        [self.contentView addSubview:self.cellImage];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.cellTitleLabel.left = 10;
+    self.cellImage.left = 10;
+    self.cellImage.centerY = self.height / 2;
+    self.cellTitleLabel.left = self.cellImage.right + 10;
     self.cellTitleLabel.centerY = self.height / 2;
     self.cellSubTitleLabel.left = 10;
     self.cellSubTitleLabel.centerY = self.height / 2;
@@ -90,6 +94,13 @@
     return _cellInput;
 }
 
+-(UIImageView *)cellImage{
+    if (!_cellImage) {
+        _cellImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 21, 21)];
+    }
+    return _cellImage;
+}
+
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     self.cellTitleLabel.text = _cellTitle;
@@ -106,6 +117,12 @@
     _cellSubTitle = cellSubTitle;
     self.cellSubTitleLabel.text = _cellSubTitle;
     [self.cellSubTitleLabel sizeToFit];
+}
+
+-(void)setCellImageName:(NSString *)cellImageName{
+    _cellImageName = cellImageName;
+    self.cellImage.image = [UIImage imageNamed:_cellImageName];
+    [self setNeedsLayout];
 }
 
 /*
