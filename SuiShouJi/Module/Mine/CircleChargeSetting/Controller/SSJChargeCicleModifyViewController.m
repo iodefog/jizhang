@@ -335,15 +335,15 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(UIView *)saveFooterView{
     if (_saveFooterView == nil) {
         _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
-        [quitLogButton setTitle:@"保存" forState:UIControlStateNormal];
-        quitLogButton.layer.cornerRadius = 3.f;
-        quitLogButton.layer.masksToBounds = YES;
-        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
-        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [quitLogButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        quitLogButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
-        [_saveFooterView addSubview:quitLogButton];
+        UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        saveButton.layer.cornerRadius = 3.f;
+        saveButton.layer.masksToBounds = YES;
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:saveButton];
     }
     return _saveFooterView;
 }
@@ -435,6 +435,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(void)saveButtonClicked:(id)sender{
     if (!_moneyInput.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
+        return;
     }
     if (self.selectedImage != nil) {
         NSString *imageName = SSJUUID();

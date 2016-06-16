@@ -50,14 +50,14 @@
         item.booksId = SSJUUID();
     }
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
-    if ([[typeInfo allKeys] containsObject:@"iversion"]) {
+    if (![[typeInfo allKeys] containsObject:@"iversion"]) {
         [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
     }
     __block BOOL success = YES;
     __block NSString * sql;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        if ([db intForQuery:@"select count(1) from BK_BOOKS_TYPE where cbooksname = ? and cuserid = ? and cbooksid <> ?",item.booksName,userid,item.booksId]) {
+        if ([db intForQuery:@"select count(1) from BK_BOOKS_TYPE where cbooksname = ? and cuserid = ? and cbooksid <> ? and operatortype <> 2",item.booksName,userid,item.booksId]) {
             SSJDispatch_main_async_safe(^{
                 [CDAutoHideMessageHUD showMessage:@"已有相同账本名称了，换一个吧"];
             });

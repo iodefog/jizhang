@@ -169,6 +169,9 @@
         _bookTypes = result;
         if (!_selectedBookItem) {
             SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+            if (!userItem.currentBooksId.length) {
+                userItem.currentBooksId = SSJUSERID();
+            }
             for (SSJBooksTypeItem *bookItem in _bookTypes) {
                 if ([bookItem.booksId isEqualToString:userItem.currentBooksId]) {
                     _selectedBookItem = bookItem;

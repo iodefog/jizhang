@@ -305,7 +305,7 @@
     return _comfirmButton;
 }
 
-#pragma mark - Private
+#pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
     SSJFundingTransferDetailViewController *transferDetailVc = [[SSJFundingTransferDetailViewController alloc]init];
     [self.navigationController pushViewController:transferDetailVc animated:YES];
@@ -344,16 +344,15 @@
             }
             SSJDispatch_main_async_safe(^(){
                 [self.navigationController popViewControllerAnimated:YES];
-                
             });
         }else{
             if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],weakSelf.item.transferInId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],weakSelf.item.transferOutId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferOutId,SSJUSERID()]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
                 *rollback = YES;
             }
             if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
@@ -361,6 +360,8 @@
             }
             weakSelf.item.transferOutId = _transferOutItem.fundingID;
             weakSelf.item.transferInId = _transferInItem.fundingID;
+            weakSelf.item.transferOutName = _transferOutItem.fundingName;
+            weakSelf.item.transferInName = _transferInItem.fundingName;
             weakSelf.item.transferMoney = str;
             weakSelf.item.transferMemo = weakSelf.memoInput.text;
             SSJDispatch_main_async_safe(^(){
@@ -371,12 +372,14 @@
                 
             });
         }
-
+        
     }];
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
     }
 }
+
+#pragma mark - Private
 
 -(void)transferTextDidChange{
     [self setupTextFiledNum:self.transferIntext num:2];

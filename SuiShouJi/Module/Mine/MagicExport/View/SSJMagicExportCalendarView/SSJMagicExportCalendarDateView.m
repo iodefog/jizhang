@@ -52,7 +52,7 @@
     self.descLabel.text = _item.selected ? _item.desc : nil;
     
     self.dateLabel.clipsToBounds = _item.selected;
-    self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:@"00ccb3"] : [UIColor whiteColor];
+    self.dateLabel.backgroundColor = _item.selected ? SSJ_THEME_RED_COLOR : [UIColor whiteColor];
     self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
     self.marker.tintColor = _item.selected ? [UIColor whiteColor] : SSJ_THEME_RED_COLOR;
 }

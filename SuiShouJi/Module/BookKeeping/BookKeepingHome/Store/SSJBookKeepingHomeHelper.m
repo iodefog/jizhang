@@ -91,7 +91,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             if (![item.billDate isEqualToString:lastDate]) {
                 lastDate = item.billDate;
                 chargeCount = 0;
-                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
+//                [summaryDic setValue:@(chargeCount) forKey:item.billDate];
             }else{
                 chargeCount = [[summaryDic valueForKey:item.billDate] intValue] + 1;
                 [summaryDic setValue:@(chargeCount) forKey:item.billDate];

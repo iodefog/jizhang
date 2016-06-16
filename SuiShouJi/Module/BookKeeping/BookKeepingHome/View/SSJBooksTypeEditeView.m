@@ -40,6 +40,7 @@
         [self addSubview:self.comfirmButton];
         [self addSubview:self.cancelButton];
         [self addSubview:self.deleteButton];
+        self.layer.cornerRadius = 8.f;
         [[YYKeyboardManager defaultManager] addObserver:self];
         [self sizeToFit];
     }
@@ -268,6 +269,7 @@
 
 -(void)deleteButtonClicked:(id)sender{
     [self dismiss];
+
     if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:self.item.booksId error:NULL]) {
         if (self.deleteButtonClickedBlock) {
             self.deleteButtonClickedBlock(self.item);

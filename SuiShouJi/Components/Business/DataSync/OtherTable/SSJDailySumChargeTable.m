@@ -33,6 +33,9 @@
 
 + (BOOL)updateDailySumChargeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?", userId];
+    if (!booksId.length) {
+        booksId = userId;
+    }
     
     //  查询不同日期的收入、支出总金额
     __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY) from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and A.CBOOKSID = ? and B.istate <> 2 group by A.CBILLDATE, B.ITYPE", userId, booksId];

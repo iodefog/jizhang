@@ -25,6 +25,10 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
     
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
     
+    if (!userItem.currentBooksId.length) {
+        userItem.currentBooksId = SSJUSERID();
+    }
+    
     NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     

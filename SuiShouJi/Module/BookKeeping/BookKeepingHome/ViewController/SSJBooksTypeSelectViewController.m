@@ -14,6 +14,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJBooksTypeCollectionViewCell.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeEditeView.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJBooksTypeSelectViewController ()
 @property(nonatomic, strong) UICollectionView *collectionView;
@@ -137,6 +138,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             item.userId = SSJUSERID();
             [SSJBooksTypeStore saveBooksTypeItem:item];
             [weakSelf getDateFromDB];
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            }
         };
         __block NSString *booksid = SSJGetCurrentBooksType();
         _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
@@ -144,6 +148,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
                 SSJSelectBooksType(@"0");
             }
             [weakSelf getDateFromDB];
+            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
+                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
+            }
         };
     }
     return _booksEditeView;

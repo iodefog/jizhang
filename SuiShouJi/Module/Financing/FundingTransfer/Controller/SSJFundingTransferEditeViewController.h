@@ -11,4 +11,5 @@
 
 @interface SSJFundingTransferEditeViewController : SSJNewBaseTableViewController<UIActionSheetDelegate>
 @property(nonatomic, strong) SSJFundingTransferDetailItem *item;
+
 @end

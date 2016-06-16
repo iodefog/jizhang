@@ -31,6 +31,7 @@
         [self.contentView addSubview:self.circleImage];
         [self.contentView addSubview:self.circleLabel];
         [self.contentView addSubview:self.switchButton];
+        [self.contentView addSubview:self.timeLabel];
     }
     return self;
 }
@@ -39,18 +40,20 @@
     [super layoutSubviews];
     self.categoryImage.size = CGSizeMake(46, 46);
     self.categoryImage.left = self.contentView.left + 10;
-    self.categoryImage.centerY = self.height / 2;
+    self.categoryImage.top = 22;
     self.categoryLabel.left = self.categoryImage.right + 10;
-    self.categoryLabel.top= 13;
+    self.categoryLabel.bottom = self.categoryImage.centerY - 8;
     self.moneyLabel.left = self.categoryLabel.right + 10;
     self.moneyLabel.centerY = self.categoryLabel.centerY;
     self.circleImage.size = CGSizeMake(20, 20);
     self.circleImage.left = self.categoryLabel.left;
-    self.circleImage.top = self.categoryLabel.bottom + 15;
+    self.circleImage.top = self.categoryImage.centerY + 8;
     self.circleLabel.centerY = self.circleImage.centerY;
     self.circleLabel.left = self.circleImage.right + 10;
     self.switchButton.right = self.contentView.width - 10;
     self.switchButton.centerY = self.height / 2;
+    self.timeLabel.left = self.categoryLabel.left;
+    self.timeLabel.top = self.circleLabel.bottom + 10;
 }
 
 -(UIImageView *)categoryImage{
@@ -108,6 +111,15 @@
         [_switchButton addTarget:self action:@selector(switchButtonClicked:) forControlEvents:UIControlEventValueChanged];
     }
     return _switchButton;
+}
+
+-(UILabel *)timeLabel{
+    if (!_timeLabel) {
+        _timeLabel = [[UILabel alloc]init];
+        _timeLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _timeLabel.font = [UIFont systemFontOfSize:14];
+    }
+    return _timeLabel;
 }
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{

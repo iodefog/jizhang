@@ -245,6 +245,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         [self reloadDatas];
     } else {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+        
+        if (!userItem.currentBooksId.length) {
+            userItem.currentBooksId = SSJUSERID();
+        }
         __weak typeof(self) wself = self;
         SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
         calendarVC.title = @"自定义时间";
