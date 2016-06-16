@@ -28,7 +28,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self sizeToFit];
-        [self getDateFromDb];
 
 //        UIView *backView = [[UIView alloc]initWithFrame:self.frame];
         [self addSubview:self.tableview];
@@ -51,6 +50,9 @@
     if (self.superview) {
         return;
     }
+    
+    [self getDateFromDb];
+
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     

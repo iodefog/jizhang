@@ -76,13 +76,21 @@
         return nil;
     }
     SSJFundingTransferDetailItem *item = [[SSJFundingTransferDetailItem alloc]init];
-    SSJBillingChargeCellItem *transferInItem = [array firstObject];
-    SSJBillingChargeCellItem *transferOutItem = [array lastObject];
-    if (![transferInItem.money isEqualToString:transferOutItem.money]) {
+    SSJBillingChargeCellItem *transferInItem;
+    SSJBillingChargeCellItem *transferOutItem;
+    for (int i = 0; i < array.count; i ++) {
+        SSJBillingChargeCellItem *item = [array objectAtIndex:i];
+        if ([item.billId isEqualToString:@"3"]) {
+            transferInItem = [array objectAtIndex:i];
+        }else{
+            transferOutItem = [array objectAtIndex:i];
+        }
+    }
+    if (![transferInItem.billId isEqualToString:@"3"]) {
         NSLog(@"匹配失败,请检查数据");
         return nil;
     }
-    if (![transferInItem.billId isEqualToString:@"3"]) {
+    if (![transferInItem.money isEqualToString:transferOutItem.money]) {
         NSLog(@"匹配失败,请检查数据");
         return nil;
     }

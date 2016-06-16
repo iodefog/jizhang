@@ -8,8 +8,9 @@
 
 #import "SSJNewBaseTableViewController.h"
 #import "SSJFundingTransferDetailItem.h"
+#import "SSJBillingChargeCellItem.h"
 
 @interface SSJFundingTransferEditeViewController : SSJNewBaseTableViewController<UIActionSheetDelegate>
 @property(nonatomic, strong) SSJFundingTransferDetailItem *item;
-
+@property(nonatomic, strong) SSJBillingChargeCellItem *chargeItem;
 @end

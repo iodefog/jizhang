@@ -14,11 +14,10 @@
 @property(nonatomic, strong) NSString *selectedId;
 
 
-typedef void (^typeSelectBlock)(NSString *typeId , NSString *typeName);
+typedef void (^typeSelectBlock)(SSJRecordMakingBillTypeSelectionCellItem *item);
 
 
 @property(nonatomic, copy) typeSelectBlock typeSelectBlock;
 
-@property(nonatomic, strong) NSString *selectTypeName;
 
 @end

@@ -15,6 +15,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 @interface SSJBillTypeSelectViewController ()
 @property(nonatomic, strong) NSMutableArray *items;
+@property(nonatomic, strong) SSJRecordMakingBillTypeSelectionCellItem *selectedItem;
 @end
 
 @implementation SSJBillTypeSelectViewController
@@ -72,7 +73,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
         [self.navigationController pushViewController:newTypeVc animated:YES];
     }else{
         self.selectedId = item.ID;
-        self.selectTypeName = item.title;
+        self.selectedItem = item;
         [self.tableView reloadData];
     }
 }
@@ -99,6 +100,14 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
     return cell;
 }
 
+#pragma mark - Event
+-(void)comfirmButtonClicked:(id)sender{
+    if (self.typeSelectBlock) {
+        self.typeSelectBlock(self.selectedItem);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Private
 -(void)getdataFromDb{
     __weak typeof(self) weakSelf = self;
@@ -112,12 +121,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
     }];
 }
 
--(void)comfirmButtonClicked:(id)sender{
-    if (self.typeSelectBlock) {
-        self.typeSelectBlock(self.selectedId,self.selectTypeName);
-    }
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

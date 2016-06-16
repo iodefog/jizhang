@@ -11,6 +11,7 @@
 #import "SSJBudgetWaveWaterView.h"
 
 @interface SSJHomeBudgetButton()
+
 @end
 @implementation SSJHomeBudgetButton
 
@@ -65,7 +66,11 @@
 
 -(void)setCurrentBalance:(double)currentBalance{
     _currentBalance = currentBalance;
-    [self.button setTitle:[NSString stringWithFormat:@"结余 %.2f",_currentBalance] forState:UIControlStateNormal];
+    if (self.currentMonth == 0) {
+        [self.button setTitle:[NSString stringWithFormat:@"结余 %.2f",_currentBalance] forState:UIControlStateNormal];
+    }else{
+        [self.button setTitle:[NSString stringWithFormat:@"%ld月结余 %.2f",self.currentMonth,_currentBalance] forState:UIControlStateNormal];
+    }
     if (_currentBalance > 0) {
         [self.button setTitleColor:[UIColor ssj_colorWithHex:@"fc5252"] forState:UIControlStateNormal];
         [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"ffdddd"]];
@@ -75,6 +80,10 @@
         [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"d7fddd"]];
         self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"59ae65"].CGColor;
     }
+}
+
+-(void)setCurrentMonth:(long)currentMonth{
+    _currentMonth = currentMonth;
 }
 
 -(void)budgetButtonClick:(id)sender{

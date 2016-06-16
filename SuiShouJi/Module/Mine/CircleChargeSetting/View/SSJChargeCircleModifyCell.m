@@ -11,6 +11,7 @@
 @interface SSJChargeCircleModifyCell()
 @property(nonatomic, strong) UILabel *cellDetailLabel;
 @property(nonatomic, strong) UIImageView *cellImage;
+@property(nonatomic, strong) UIImageView *typeImageView;
 @end
 
 @implementation SSJChargeCircleModifyCell
@@ -23,6 +24,8 @@
         [self.contentView addSubview:self.cellImageView];
         [self.contentView addSubview:self.cellInput];
         [self.contentView addSubview:self.cellImage];
+        [self.contentView addSubview:self.typeImageView];
+
     }
     return self;
 }
@@ -47,6 +50,8 @@
     self.cellInput.size = CGSizeMake(self.width / 2, self.height);
     self.cellInput.right = self.width - 10;
     self.cellInput.centerY = self.height / 2;
+    self.typeImageView.right = self.cellDetailLabel.left - 10;
+    self.typeImageView.centerY = self.height / 2;
 }
 
 -(UILabel *)cellTitleLabel{
@@ -94,6 +99,13 @@
     return _cellInput;
 }
 
+-(UIImageView *)typeImageView{
+    if (!_typeImageView) {
+        _typeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
+    }
+    return _typeImageView;
+}
+
 -(UIImageView *)cellImage{
     if (!_cellImage) {
         _cellImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 21, 21)];
@@ -122,6 +134,13 @@
 -(void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
     self.cellImage.image = [UIImage imageNamed:_cellImageName];
+    [self setNeedsLayout];
+}
+
+
+-(void)setCellTypeImageName:(NSString *)cellTypeImageName{
+    _cellTypeImageName = cellTypeImageName;
+    self.typeImageView.image = [UIImage imageNamed:_cellTypeImageName];
     [self setNeedsLayout];
 }
 

@@ -10,6 +10,7 @@
 #import "SSJFundingTransferEdite.h"
 #import "SSJFundingTransferStore.h"
 #import "SSJFundingTransferViewController.h"
+#import "SSJDatabaseQueue.h"
 
 static NSString *const kTitle1 = @"转账金额";
 static NSString *const kTitle2 = @"转出账户";
@@ -39,6 +40,9 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5]];
+    if (self.item == nil && self.chargeItem != nil) {
+        [self getTransferItemForCharge];
+    }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"929292"];
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
@@ -123,21 +127,13 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     return _modifyButtonView;
 }
 
-#pragma mark - Private
+#pragma mark - Event
 -(void)rightBarButtonClicked:(id)sender{
     UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"确定删除该项记录?" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"删除", nil];
     [sheet showInView:self.view];
 }
 
 -(void)modifyButtonClicked:(id)sender{
-    if (self.item.transferInFundOperatorType == 2) {
-        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"%@账户已删除，不能编辑了哦。",self.item.transferInName]];
-        return;
-    }
-    if (self.item.transferOutFundOperatorType == 2) {
-        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"%@账户已删除，不能编辑了哦。",self.item.transferOutName]];
-        return;
-    }
     SSJFundingTransferViewController *transferModifyVC = [[SSJFundingTransferViewController alloc]init];
     transferModifyVC.item = self.item;
     __weak typeof(self) weakSelf = self;
@@ -146,6 +142,45 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
         [weakSelf.tableView reloadData];
     };
     [self.navigationController pushViewController:transferModifyVC animated:YES];
+}
+
+#pragma mark - Private
+-(void)getTransferItemForCharge{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        SSJFundingTransferDetailItem *tansferItem = [[SSJFundingTransferDetailItem alloc]init];
+        NSString *userId = SSJUSERID();
+        if ([weakSelf.chargeItem.billId integerValue] == 3) {
+            tansferItem.transferDate = weakSelf.chargeItem.billDate;
+            tansferItem.transferInId = weakSelf.chargeItem.fundId;
+            tansferItem.transferOutId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+            tansferItem.transferMoney = [weakSelf.chargeItem.money stringByTrimmingCharactersInSet:set];            tansferItem.transferInName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            tansferItem.transferOutName = weakSelf.chargeItem.transferSource;
+            tansferItem.transferInImage = weakSelf.chargeItem.imageName;
+            tansferItem.transferOutImage = [db stringForQuery:@"select a.ccoin from bk_bill_type as a, bk_user_charge as b where a.id = b.ibillid and b.cwritedate = ?",weakSelf.chargeItem.editeDate];
+            tansferItem.transferMemo = weakSelf.chargeItem.chargeMemo;
+            tansferItem.transferInChargeId = weakSelf.chargeItem.ID;
+            tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+        }else{
+            tansferItem.transferDate = weakSelf.chargeItem.billDate;
+            tansferItem.transferOutId = weakSelf.chargeItem.fundId;
+            NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+            tansferItem.transferMoney = [weakSelf.chargeItem.money stringByTrimmingCharactersInSet:set];
+            tansferItem.transferInId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+            tansferItem.transferOutName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            tansferItem.transferInName = weakSelf.chargeItem.transferSource;
+            tansferItem.transferOutImage = weakSelf.chargeItem.imageName;
+            tansferItem.transferInImage = [db stringForQuery:@"select a.ccoin from bk_bill_type as a, bk_user_charge as b where a.id = b.ibillid and b.cwritedate = ?",weakSelf.chargeItem.editeDate];
+            tansferItem.transferMemo = weakSelf.chargeItem.chargeMemo;
+            tansferItem.transferOutChargeId = weakSelf.chargeItem.ID;
+            tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+        }
+        self.item = tansferItem;
+        SSJDispatchMainSync(^(){
+            [weakSelf.tableView reloadData];
+        });
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

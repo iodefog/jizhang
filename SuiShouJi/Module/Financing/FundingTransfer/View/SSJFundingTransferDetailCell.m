@@ -36,22 +36,21 @@
         self.dateLabel.centerY = self.contentView.height / 2;
         self.fundImage.left = self.dateLabel.right + 10;
         self.fundImage.centerY = self.contentView.height / 2;
-        self.moneyLabel.left = self.fundImage.right + 10;
-        self.moneyLabel.bottom = self.contentView.height / 2 - 5;
+        self.moneyLabel.right = self.contentView.width - 10;
+        self.moneyLabel.centerY = self.contentView.height / 2;
         self.transferSourceLabel.left = self.fundImage.right + 10;
-        self.transferSourceLabel.top = self.contentView.height / 2 + 5;
+        self.transferSourceLabel.centerY = self.contentView.height / 2;
     }else{
-        float moneyHeight = [self.moneyLabel.text sizeWithAttributes:@{NSFontAttributeName:self.moneyLabel.font}].height;
         self.dateLabel.left = 20;
-        self.dateLabel.centerY = moneyHeight + 27;
+        self.dateLabel.centerY = self.contentView.height / 2;
         self.fundImage.left = self.dateLabel.right + 10;
-        self.fundImage.centerY = moneyHeight + 27;;
-        self.moneyLabel.left = self.fundImage.right + 10;
-        self.moneyLabel.top = 17;
+        self.fundImage.centerY = self.contentView.height / 2;
+        self.moneyLabel.right = self.contentView.width - 10;
+        self.moneyLabel.centerY = self.contentView.height / 2;
         self.transferSourceLabel.left = self.fundImage.right + 10;
-        self.transferSourceLabel.top = self.moneyLabel.bottom + 10;
+        self.transferSourceLabel.bottom = self.fundImage.centerY - 5;
         self.memoLabel.left = self.fundImage.right + 10;
-        self.memoLabel.top = self.transferSourceLabel.bottom + 10;
+        self.memoLabel.top = self.fundImage.centerY + 5;
     }
 }
 
@@ -66,7 +65,7 @@
 
 -(UIImageView *)fundImage{
     if (!_fundImage) {
-        _fundImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
+        _fundImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
     }
     return _fundImage;
 }
@@ -100,9 +99,9 @@
 
 -(void)setItem:(SSJFundingTransferDetailItem *)item{
     _item = item;
-    self.dateLabel.text = _item.transferDate;
+    self.dateLabel.text = [_item.transferDate substringWithRange:NSMakeRange(5, 5)];
     [self.dateLabel sizeToFit];
-    self.moneyLabel.text = _item.transferMoney;
+    self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",[_item.transferMoney floatValue]];
     [self.moneyLabel sizeToFit];
     self.transferSourceLabel.text = [NSString stringWithFormat:@"%@转到%@",_item.transferOutName,_item.transferInName];
     [self.transferSourceLabel sizeToFit];

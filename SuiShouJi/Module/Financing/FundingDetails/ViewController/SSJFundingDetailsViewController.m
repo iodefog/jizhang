@@ -19,6 +19,7 @@
 #import "SSJFundingDetailListFirstLineCell.h"
 #import "SSJFundingDailySumCell.h"
 #import "SSJCalenderDetailViewController.h"
+#import "SSJFundingTransferEditeViewController.h"
 
 #import "FMDB.h"
 
@@ -147,10 +148,17 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0) {
         SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
-        if (([item isKindOfClass:[SSJBillingChargeCellItem class]] && [((SSJBillingChargeCellItem*)item).billId integerValue] >= 1000) ||  ([item isKindOfClass:[SSJBillingChargeCellItem class]] &&  ((SSJBillingChargeCellItem*)item).billId.length > 4)) {
-            SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-            calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
-            [self.navigationController pushViewController:calenderDetailVC animated:YES];
+        if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
+            if ([((SSJBillingChargeCellItem*)item).billId integerValue] >= 1000 || ((SSJBillingChargeCellItem*)item).billId.length > 4) {
+                SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+                [self.navigationController pushViewController:calenderDetailVC animated:YES];
+            }
+            if (([((SSJBillingChargeCellItem*)item).billId integerValue] == 3 || [((SSJBillingChargeCellItem*)item).billId integerValue] == 4) && [((SSJBillingChargeCellItem*)item).transferSource isEqualToString:((SSJBillingChargeCellItem*)item).typeName]) {
+                SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
+                transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
+                [self.navigationController pushViewController:transferVc animated:YES];
+            }
         }
     }
 }

@@ -33,6 +33,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJCircleChargeTypeSelectView.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
+#import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -148,6 +149,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle8]) {
+        self.fundSelectView.selectFundID = self.item.fundId;
         [self.fundSelectView show];
     }
     if ([title isEqualToString:kTitle7]) {
@@ -159,10 +161,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         __weak typeof(self) weakSelf = self;
         billTypeSelectVC.incomeOrExpenture = !self.item.incomeOrExpence;
         billTypeSelectVC.selectedId = self.item.billId;
-        billTypeSelectVC.selectTypeName = self.item.typeName;
-        billTypeSelectVC.typeSelectBlock = ^(NSString *typeId , NSString *typeName){
-            weakSelf.item.typeName = typeName;
-            weakSelf.item.billId = typeId;
+        billTypeSelectVC.typeSelectBlock = ^(SSJRecordMakingBillTypeSelectionCellItem *item){
+            weakSelf.item.typeName = item.title;
+            weakSelf.item.billId = item.ID;
+            weakSelf.item.imageName = item.imageName;
             [weakSelf.tableView reloadData];
         };
         [self.navigationController pushViewController:billTypeSelectVC animated:YES];
@@ -260,6 +262,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else if ([title isEqualToString:kTitle3]) {
         circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.typeName;
+        circleModifyCell.cellTypeImageName = self.item.imageName;
     }else if ([title isEqualToString:kTitle7]) {
         circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
@@ -290,6 +293,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else if ([title isEqualToString:kTitle8]) {
         circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.fundName;
+        circleModifyCell.cellTypeImageName = self.item.fundImage;
     }else if ([title isEqualToString:kTitle9]) {
         circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
@@ -353,10 +357,23 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         _fundSelectView = [[SSJFundingTypeSelectView alloc]init];
         __weak typeof(self) weakSelf = self;
         _fundSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *item){
-            weakSelf.item.fundId = item.fundingID;
-            weakSelf.item.fundName = item.fundingName;
-            [weakSelf.tableView reloadData];
-            [weakSelf.fundSelectView dismiss];
+            if (item.fundingID.length) {
+                weakSelf.item.fundId = item.fundingID;
+                weakSelf.item.fundName = item.fundingName;
+                weakSelf.item.fundImage = item.fundingIcon;
+                [weakSelf.tableView reloadData];
+                [weakSelf.fundSelectView dismiss];
+            }else{
+                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
+                NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                    weakSelf.item.fundId = newFundingItem.fundingID;
+                    weakSelf.item.fundName = newFundingItem.fundingName;
+                    weakSelf.item.fundImage = newFundingItem.fundingIcon;
+                    [weakSelf.tableView reloadData];
+                };
+                [weakSelf.fundSelectView dismiss];
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+            }
         };
     }
     return _fundSelectView;

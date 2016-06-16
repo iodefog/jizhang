@@ -58,6 +58,16 @@
     [self.view addSubview:self.memoInput];
     [self.view addSubview:self.memoLabel];
     [self.view addSubview:self.comfirmButton];
+    if (self.item != nil) {
+        _transferOutItem = [[SSJFundingItem alloc]init];
+        _transferInItem = [[SSJFundingItem alloc]init];
+        _transferInItem.fundingID = self.item.transferInId;
+        _transferInItem.fundingIcon = self.item.transferInImage;
+        _transferInItem.fundingName = self.item.transferInName;
+        _transferOutItem.fundingID = self.item.transferOutId;
+        _transferOutItem.fundingIcon = self.item.transferOutImage;
+        _transferOutItem.fundingName = self.item.transferOutName;
+    }
 }
 
 -(void)viewDidLayoutSubviews{
@@ -346,22 +356,22 @@
                 [self.navigationController popViewControllerAnimated:YES];
             });
         }else{
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],weakSelf.item.transferInId,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferInChargeId,userid]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId]) {
+            if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId,userid]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID(),booksid] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],_transferOutItem.fundingID,SSJUSERID(),booksid]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID(),booksid] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID(),booksid]) {
                 *rollback = YES;
             }
-            weakSelf.item.transferOutId = _transferOutItem.fundingID;
-            weakSelf.item.transferInId = _transferInItem.fundingID;
-            weakSelf.item.transferOutName = _transferOutItem.fundingName;
-            weakSelf.item.transferInName = _transferInItem.fundingName;
+            weakSelf.item.transferOutId = _transferOutItem.fundingID ? : weakSelf.item.transferOutId;
+            weakSelf.item.transferInId = _transferInItem.fundingID ? : weakSelf.item.transferInId;
+            weakSelf.item.transferOutName = _transferOutItem.fundingName ? : weakSelf.item.transferOutName;
+            weakSelf.item.transferInName = _transferInItem.fundingName ? : weakSelf.item.transferInName;
             weakSelf.item.transferMoney = str;
             weakSelf.item.transferMemo = weakSelf.memoInput.text;
             SSJDispatch_main_async_safe(^(){

@@ -514,7 +514,7 @@
 
 -(SSJHomeBudgetButton *)budgetButton{
     if (!_budgetButton) {
-        _budgetButton = [[SSJHomeBudgetButton alloc]initWithFrame:CGRectMake(0, 0, 100, 46)];
+        _budgetButton = [[SSJHomeBudgetButton alloc]initWithFrame:CGRectMake(0, 0, 200, 46)];
         __weak typeof(self) weakSelf = self;
         _budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
             if (model == nil) {
@@ -699,6 +699,7 @@
         weakSelf.bookKeepingHeader.expenditureView.scrollAble = NO;
         weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
         weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
+        self.budgetButton.currentMonth = self.currentMonth;
         weakSelf.budgetButton.currentBalance = [result[SSJIncomeSumlKey] doubleValue] - [result[SSJExpentureSumKey] doubleValue];
     } failure:^(NSError *error) {
         

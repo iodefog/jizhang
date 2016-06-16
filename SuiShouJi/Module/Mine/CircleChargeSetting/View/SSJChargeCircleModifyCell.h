@@ -18,4 +18,6 @@
 @property(nonatomic, strong) NSString *cellDetail;
 @property(nonatomic, strong) NSString *cellSubTitle;
 @property(nonatomic, strong) NSString *cellImageName;
+@property(nonatomic, strong) NSString *cellTypeImageName;
+
 @end

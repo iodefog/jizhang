@@ -49,6 +49,9 @@
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
         item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
         item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
+        item.fundImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",item.fundId ];
+        item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.billId];
+        
         item.chargeCircleType = 0;
         if (success) {
             SSJDispatch_main_async_safe(^{

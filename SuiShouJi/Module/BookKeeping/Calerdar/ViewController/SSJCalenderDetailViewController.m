@@ -244,7 +244,6 @@
     SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
     SSJAlertViewAction *sureAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action){
         [weakSelf deleteCharge];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
     [SSJAlertViewAdapter showAlertViewWithTitle:@"提示" message:@"你确定要删除这条流水吗" action: cancelAction , sureAction, nil];
 }
@@ -255,7 +254,8 @@
 -(void)deleteCharge{
     __block NSString *booksid = SSJGetCurrentBooksType();
     __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db){
+    __block int chargeCount = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db){
         NSString *userId = SSJUSERID();
         [db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),weakSelf.item.ID];
         if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId]) {
@@ -268,13 +268,17 @@
             }
         }
         [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-        if ([[self.navigationController.viewControllers firstObject] isKindOfClass:[SSJReportFormsViewController class]]) {
-            if (![db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cbooksid = ?",weakSelf.item.booksId,userId]) {
-                [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-            }
-        }
-        
+        chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cbooksid = ? and cbilldate like ? and operatortype <> 2",weakSelf.item.booksId,userId,[NSString stringWithFormat:@"%@__",[weakSelf.item.billDate substringWithRange:NSMakeRange(0, 8)]]];
     }];
+    if ([[self.navigationController.viewControllers firstObject] isKindOfClass:[SSJReportFormsViewController class]]) {
+        if (chargeCount == 0) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }else{
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
         [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
     }

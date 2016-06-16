@@ -104,10 +104,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 - (void)reloadData {
     [self.view ssj_showLoadingIndicator];
     [SSJBillingChargeHelper queryDataWithBillTypeID:_billTypeID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
-        if (![data count]) {
-            [self.navigationController popViewControllerAnimated:YES];
-            return;
-        }
         [self.view ssj_hideLoadingIndicator];
         self.datas = data;
         [self.tableView reloadData];

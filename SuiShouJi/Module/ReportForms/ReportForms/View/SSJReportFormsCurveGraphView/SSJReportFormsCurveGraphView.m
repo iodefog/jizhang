@@ -380,11 +380,11 @@ static const CGFloat kBottomSpaceHeight = 32;
     CGFloat incomeY = self.height - incomeHeight - kBottomSpaceHeight;
     _incomePoint.center = CGPointMake(self.width * 0.5, incomeY);
     
-    _paymentLabel.text = [NSString stringWithFormat:@"支出 %@", _paymentValues[_selectedAxisXIndex]];
+    _paymentLabel.text = [NSString stringWithFormat:@"支出 %.2f", [_paymentValues[_selectedAxisXIndex] doubleValue]];
     [_paymentLabel sizeToFit];
     _paymentLabel.rightBottom = CGPointMake(_paymentPoint.left - 2, _paymentPoint.top + 2);
     
-    _incomeLabel.text = [NSString stringWithFormat:@"收入 %@", _incomeValues[_selectedAxisXIndex]];
+    _incomeLabel.text = [NSString stringWithFormat:@"收入 %.2f", [_incomeValues[_selectedAxisXIndex] doubleValue]];
     [_incomeLabel sizeToFit];
     _incomeLabel.leftBottom = CGPointMake(_incomePoint.right + 2, _incomePoint.top + 2);
 }
