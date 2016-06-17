@@ -335,6 +335,9 @@
     }else if ([str doubleValue] == 0 || [self.transferIntext.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
         return;
+    }else if (self.memoInput.text.length > 15){
+        [CDAutoHideMessageHUD showMessage:@"备注最多输入15个字哦"];
+        return;
     }
     __block NSString *booksid = SSJGetCurrentBooksType();
     __weak typeof(self) weakSelf = self;
@@ -362,10 +365,10 @@
             if (![db executeUpdate:@"update bk_user_charge set imoney = ? , ifunsid = ? , cwritedate = ? , iversion = ? , operatortype = 1 , cmemo = ? where ichargeid = ? and cuserid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,writedate,@(SSJSyncVersion()),weakSelf.memoInput.text,weakSelf.item.transferOutChargeId,userid]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID(),booksid] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],_transferOutItem.fundingID,SSJUSERID(),booksid]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],weakSelf.item.transferInId,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.transferMoney doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
                 *rollback = YES;
             }
-            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID(),booksid] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID(),booksid]) {
+            if (![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferInItem.fundingID,SSJUSERID()] || ![db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[str doubleValue]],_transferOutItem.fundingID,SSJUSERID()]) {
                 *rollback = YES;
             }
             weakSelf.item.transferOutId = _transferOutItem.fundingID ? : weakSelf.item.transferOutId;

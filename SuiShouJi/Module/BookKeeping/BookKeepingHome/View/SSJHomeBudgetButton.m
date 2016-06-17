@@ -26,11 +26,18 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake(200, 44);
+    if ([self.button.titleLabel.text isEqualToString:@"添加预算"]) {
+        return CGSizeMake(200, 44);
+    }
+    return CGSizeMake([self.button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}].width + 20, 44);
 }
 
 -(void)layoutSubviews{
-    self.button.size = CGSizeMake(120, 26);
+    if ([self.button.titleLabel.text isEqualToString:@"添加预算"]) {
+        self.button.size = CGSizeMake(120, 26);
+    }else{
+        self.button.size = CGSizeMake(self.width, 26);
+    }
     self.button.bottom = self.height;
     self.button.centerX = self.width / 2;
 }
@@ -80,6 +87,7 @@
         [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"d7fddd"]];
         self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"59ae65"].CGColor;
     }
+    [self sizeToFit];
 }
 
 -(void)setCurrentMonth:(long)currentMonth{

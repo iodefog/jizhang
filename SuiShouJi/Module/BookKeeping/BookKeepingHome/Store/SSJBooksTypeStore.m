@@ -47,7 +47,7 @@
 + (BOOL)saveBooksTypeItem:(SSJBooksTypeItem *)item {
     NSString * typeId = item.booksId;
     if (!typeId || !typeId.length) {
-        item.booksId = SSJUSERID();
+        item.booksId = SSJUUID();
     }
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
     if (![[typeInfo allKeys] containsObject:@"iversion"]) {
