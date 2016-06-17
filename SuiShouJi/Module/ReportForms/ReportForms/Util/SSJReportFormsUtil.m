@@ -36,7 +36,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             }   break;
                 
             case SSJBillTypeSurplus: {
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where  a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId];
+                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.istate <> 2 order by a.cbilldate", SSJUSERID(), userItem.currentBooksId];
             }   break;
                 
             case SSJBillTypeUnknown:
@@ -57,16 +57,16 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             return;
         }
         
-        NSInteger year = 0;
+//        NSInteger year = 0;
         NSMutableArray *list = [NSMutableArray array];
         while ([result next]) {
             NSString *dateStr = [result stringForColumnIndex:0];
             NSDate *date = [NSDate dateWithString:dateStr formatString:@"yyyy-MM"];
-            if (year && year != [date year]) {
-                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:date];
-                [list addObject:period];
-                year = [date year];
-            }
+//            if (year && year != [date year]) {
+//                SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeYear date:date];
+//                [list addObject:period];
+//                year = [date year];
+//            }
             
             SSJDatePeriod *period = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:date];
             [list addObject:period];
