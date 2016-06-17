@@ -64,6 +64,11 @@
             });
             return;
         }
+        int booksOrder = [db intForQuery:@"select max(iorder) from bk_books_type where cuserid = ?",userid] + 1;
+        if ([item.booksId isEqualToString:userid]) {
+            booksOrder = 1;
+        }
+        [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", typeId]) {
             sql = [self inertSQLStatementWithTypeInfo:typeInfo];
         } else {

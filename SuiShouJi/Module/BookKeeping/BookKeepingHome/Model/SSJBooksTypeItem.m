@@ -17,7 +17,8 @@
                     @"booksColor":@"cbookscolor",
                     @"userId":@"cuserid",
                     @"cwriteDate":@"cwritedate",
-                    @"operatorType":@"operatortype"};
+                    @"operatorType":@"operatortype",
+                    @"booksOrder":@"iorder"};
     }
     return mapping;
 }
