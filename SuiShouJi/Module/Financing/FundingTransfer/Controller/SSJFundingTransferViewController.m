@@ -94,6 +94,8 @@
     [super viewWillAppear:animated];
     if (self.item != nil) {
         self.navigationItem.rightBarButtonItem = nil;
+    }else{
+        self.title = @"编辑转账";
     }
 }
 

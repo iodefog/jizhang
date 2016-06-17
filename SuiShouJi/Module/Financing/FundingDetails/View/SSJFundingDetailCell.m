@@ -51,6 +51,7 @@
     self.memoLabel.width = 200;
     
     if (_item.chargeMemo.length == 0 && _item.chargeImage.length == 0){
+        self.memoLabel.hidden = YES;
         self.imageView.left = 10;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
@@ -59,6 +60,7 @@
         self.typeLabel.left = self.imageView.right + 10;
         self.typeLabel.centerY = self.height * 0.5;
     }else{
+        self.memoLabel.hidden = NO;
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 10;
         self.imageView.layer.cornerRadius = imageDiam * 0.5;

@@ -43,6 +43,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    [MobClick event:@"main_account_book"];
     [self getDateFromDB];
     
 }
@@ -56,11 +57,13 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 {
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (![item.booksName isEqualToString:@"添加账本"]) {
+        [MobClick event:@"change_account_book"];
         SSJSelectBooksType(item.booksId);
         [self.collectionView reloadData];
         [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
     }else{
+        [MobClick event:@"add_account_book"];
         self.booksEditeView.item = item;
         [self.booksEditeView show];
     }
@@ -86,6 +89,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     }
     __weak typeof(self) weakSelf = self;
     cell.longPressBlock = ^(){
+        [MobClick event:@"edit_account_book"];
         weakSelf.booksEditeView.item = item;
         [weakSelf.booksEditeView show];
     };
