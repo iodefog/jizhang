@@ -43,6 +43,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    [MobClick event:@"main_account_book"];
     [self getDateFromDB];
     
 }
@@ -61,6 +62,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
         [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
     }else{
+        [MobClick event:@"change_account_book"];
         self.booksEditeView.item = item;
         [self.booksEditeView show];
     }

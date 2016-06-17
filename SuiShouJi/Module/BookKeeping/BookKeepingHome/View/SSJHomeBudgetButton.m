@@ -69,6 +69,7 @@
             [self.button setTitle:[NSString stringWithFormat:@"超支 %.2f",_model.payMoney - _model.budgetMoney] forState:UIControlStateNormal];
         }
     }
+    [self sizeToFit];
 }
 
 -(void)setCurrentBalance:(double)currentBalance{
