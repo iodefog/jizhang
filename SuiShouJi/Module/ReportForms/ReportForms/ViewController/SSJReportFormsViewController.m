@@ -178,9 +178,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (NSString *)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView titleForAxisAtIndex:(NSUInteger)index {
     SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
     if (period.periodType == SSJDatePeriodTypeMonth) {
+        if (period.startDate.year != [NSDate date].year) {
+            return [period.startDate formattedDateWithFormat:@"yyyy年M月"];
+        }
         return [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
-    } else if (period.periodType == SSJDatePeriodTypeMonth) {
-        return [NSString stringWithFormat:@"%d", (int)period.startDate.year];
     } else if (period.periodType == SSJDatePeriodTypeCustom) {
         return @"合计";
     } else {

@@ -49,6 +49,24 @@
     if (![db executeUpdate:@"create table if not exists bk_books_type (cbooksid text not null, cbooksname text not null, cbookscolor text, cwritedate text, operatortype integer, iversion integer, cuserid text, iorder integer, cicoin text, primary key(cbooksid, cuserid))"]) {
         return [db lastError];
     }
+    
+    FMResultSet *resultSet = [db executeQuery:@"select cuserid from bk_user"];
+    if (!resultSet) {
+        return [db lastError];
+    }
+    
+    NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    while ([resultSet next]) {
+        NSString *userId = [resultSet stringForColumnIndex:0];
+        
+        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)",userId, @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId,@(1),@""];
+        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"生意账本", @"#F5A237", writeDate, @(SSJSyncVersion()), userId,@(2),@"books_shengyi"];
+        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"books_jiehun"];
+        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId,@(4),@"books_zhuangxiu"];
+        [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"旅行账本", @"#AD82DD", writeDate, @(SSJSyncVersion()), userId,@(5),@"books_lvxing"];
+    }
+    
     return nil;
 }
 
