@@ -166,6 +166,9 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 + (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:userid];
+    if (!userItem.currentBooksId.length) {
+        userItem.currentBooksId = SSJUSERID();
+    }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         

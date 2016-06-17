@@ -53,28 +53,40 @@
 }
 
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_charge add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_user_charge add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_user_charge set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateUserBudgetTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_budget add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_user_budget add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_user_budget set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateDailySumChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_dailysum_charge add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_dailysum_charge add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_dailysum_charge set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateChargePeriodConfigTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_charge_period_config add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_charge_period_config add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_charge_period_config set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
@@ -85,6 +97,9 @@
         return [db lastError];
     }
     if (![db executeUpdate:@"alter table bk_user add ccurrentbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_user set ccurrentbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
