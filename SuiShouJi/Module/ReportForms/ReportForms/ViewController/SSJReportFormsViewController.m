@@ -26,7 +26,7 @@ static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
 static NSString *const kSegmentTitleSurplus = @"结余";
 
-@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate>
+@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate>
 
 //  收入、支出、结余切换控件
 @property (nonatomic, strong) SSJSegmentedControl *segmentControl;
@@ -93,6 +93,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    self.tabBarController.delegate = self;
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_curve"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -114,16 +115,28 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     
     [self updateIncomeAndPaymentLabels];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    
     [self reloadDatas];
 }
+
+//- (void)viewWillAppear:(BOOL)animated {
+//    [super viewWillAppear:animated];
+//    [self reloadDatas];
+//}
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     self.tableView.height = self.view.height - self.dateAxisView.height;
+}
+
+#pragma mark - UITabBarControllerDelegate
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    if ([viewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *naviController = (UINavigationController *)viewController;
+        if (naviController.topViewController == self) {
+            [self reloadDatas];
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource
