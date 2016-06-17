@@ -19,6 +19,12 @@
 //账本颜色
 @property(nonatomic, strong) NSString *booksColor;
 
+//账本图标
+@property(nonatomic, strong) NSString *booksIcoin;
+
+//账本顺序
+@property(nonatomic) int booksOrder;
+
 @property(nonatomic, strong) NSString *userId;
 
 @property(nonatomic, strong) NSString *cwriteDate;

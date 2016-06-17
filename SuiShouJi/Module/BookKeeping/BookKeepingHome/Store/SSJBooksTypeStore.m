@@ -15,7 +15,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableArray *booksList = [NSMutableArray array];
-        FMResultSet *booksResult = [db executeQuery:@"select * from bk_books_type where cuserid = ? and operatortype <> 2",userid];
+        FMResultSet *booksResult = [db executeQuery:@"select * from bk_books_type where cuserid = ? and operatortype <> 2 order by iorder asc , cwritedate asc",userid];
         if (!booksResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -30,6 +30,7 @@
             item.booksName = [booksResult stringForColumn:@"cbooksname"];
             item.booksColor = [booksResult stringForColumn:@"cbookscolor"];
             item.userId = [booksResult stringForColumn:@"cuserid"];
+            item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             [booksList addObject:item];
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
