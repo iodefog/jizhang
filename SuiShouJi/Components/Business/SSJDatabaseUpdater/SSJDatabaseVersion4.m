@@ -46,35 +46,47 @@
 }
 
 + (NSError *)createBooksTypeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists bk_books_type (cbooksid text not null, cbooksname text not null, cbookscolor text, cwritedate text, operatortype integer, iversion integer, cuserid text, primary key(cbooksid, cuserid))"]) {
+    if (![db executeUpdate:@"create table if not exists bk_books_type (cbooksid text not null, cbooksname text not null, cbookscolor text, cwritedate text, operatortype integer, iversion integer, cuserid text, iorder integer, cicoin text, primary key(cbooksid, cuserid))"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_charge add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_user_charge add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_user_charge set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateUserBudgetTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_user_budget add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_user_budget add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_user_budget set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateDailySumChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_dailysum_charge add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_dailysum_charge add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_dailysum_charge set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)updateChargePeriodConfigTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_charge_period_config add cbooksid text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_charge_period_config add cbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_charge_period_config set cbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;
@@ -85,6 +97,9 @@
         return [db lastError];
     }
     if (![db executeUpdate:@"alter table bk_user add ccurrentbooksid text"]) {
+        return [db lastError];
+    }
+    if (![db executeUpdate:@"update bk_user set ccurrentbooksid = cuserid"]) {
         return [db lastError];
     }
     return nil;

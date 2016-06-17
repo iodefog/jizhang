@@ -40,7 +40,7 @@
         }
         
         tUserId = SSJUUID();
-        if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE, CWRITEDATE) values (?, 0, 0, ?)", tUserId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+        if (![db executeUpdate:@"insert into BK_USER (CUSERID, CREGISTERSTATE, CDEFAULTFUNDACCTSTATE, CDEFAULTBOOKSTYPESTATE, CCURRENTBOOKSID, CWRITEDATE) values (?, 0, 0, 0, ?, ?)", tUserId, tUserId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
             tError = [db lastError];
             if (error) {
                 *error = tError;
