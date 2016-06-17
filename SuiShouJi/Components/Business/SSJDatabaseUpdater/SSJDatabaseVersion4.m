@@ -46,7 +46,7 @@
 }
 
 + (NSError *)createBooksTypeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists bk_books_type (cbooksid text not null, cbooksname text not null, cbookscolor text, cwritedate text, operatortype integer, iversion integer, cuserid text, primary key(cbooksid, cuserid))"]) {
+    if (![db executeUpdate:@"create table if not exists bk_books_type (cbooksid text not null, cbooksname text not null, cbookscolor text, cwritedate text, operatortype integer, iversion integer, cuserid text, iorder integer, cicoin text, primary key(cbooksid, cuserid))"]) {
         return [db lastError];
     }
     return nil;
