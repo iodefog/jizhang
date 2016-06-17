@@ -270,6 +270,8 @@ static const CGFloat kBottomSpaceHeight = 32;
         tMaxValue = MAX(MAX(tMaxValue, paymentValue), incomeValue);
     }
     
+    _selectedAxisXIndex = MIN(_selectedAxisXIndex, _incomeValues.count - 1);
+    
     int index = 0;
     int topDigit = tMaxValue;
     while (topDigit >= 10) {
@@ -404,14 +406,15 @@ static const CGFloat kBottomSpaceHeight = 32;
     }
     
     [_surplusLabel sizeToFit];
-    _surplusLabel.centerX = _balloonView.width * 0.5;
     
     _surplusValueLabel.text = [NSString stringWithFormat:@"%.2f", surplus];
     [_surplusValueLabel sizeToFit];
     _surplusValueLabel.top = _surplusLabel.bottom + 2;
-    _surplusValueLabel.centerX = _balloonView.width * 0.5;
     
     _balloonView.width = MAX(54, MAX(_surplusValueLabel.width + 4, _surplusLabel.width));
+    _balloonView.centerX = self.width * 0.5;
+    _surplusValueLabel.centerX = _balloonView.width * 0.5;
+    _surplusLabel.centerX = _balloonView.width * 0.5;
 }
 
 @end
