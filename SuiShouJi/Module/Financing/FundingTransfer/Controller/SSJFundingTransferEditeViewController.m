@@ -157,28 +157,29 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
         if ([weakSelf.chargeItem.billId integerValue] == 3) {
             tansferItem.transferDate = weakSelf.chargeItem.billDate;
             tansferItem.transferInId = weakSelf.chargeItem.fundId;
-            tansferItem.transferOutId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+            tansferItem.transferOutId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ? limit 1",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
             NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
-            tansferItem.transferMoney = [weakSelf.chargeItem.money stringByTrimmingCharactersInSet:set];            tansferItem.transferInName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            tansferItem.transferMoney = [weakSelf.chargeItem.money stringByTrimmingCharactersInSet:set];
+            tansferItem.transferInName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferInId];
             tansferItem.transferOutName = weakSelf.chargeItem.transferSource;
-            tansferItem.transferInImage = weakSelf.chargeItem.imageName;
-            tansferItem.transferOutImage = [db stringForQuery:@"select a.ccoin from bk_bill_type as a, bk_user_charge as b where a.id = b.ibillid and b.cwritedate = ?",weakSelf.chargeItem.editeDate];
+            tansferItem.transferInImage = weakSelf.chargeItem.fundImage;
+            tansferItem.transferOutImage = [db stringForQuery:@"select a.ccoin from bk_fund_info as a, bk_user_charge as b where a.cfunid = b.ifundid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferInId];
             tansferItem.transferMemo = weakSelf.chargeItem.chargeMemo;
             tansferItem.transferInChargeId = weakSelf.chargeItem.ID;
-            tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+            tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifundid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
         }else{
             tansferItem.transferDate = weakSelf.chargeItem.billDate;
             tansferItem.transferOutId = weakSelf.chargeItem.fundId;
             NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
             tansferItem.transferMoney = [weakSelf.chargeItem.money stringByTrimmingCharactersInSet:set];
-            tansferItem.transferInId = [db stringForQuery:@"select ifunsid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+            tansferItem.transferInId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
             tansferItem.transferOutName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
             tansferItem.transferInName = weakSelf.chargeItem.transferSource;
             tansferItem.transferOutImage = weakSelf.chargeItem.imageName;
-            tansferItem.transferInImage = [db stringForQuery:@"select a.ccoin from bk_bill_type as a, bk_user_charge as b where a.id = b.ibillid and b.cwritedate = ?",weakSelf.chargeItem.editeDate];
+            tansferItem.transferInImage = [db stringForQuery:@"select a.ccoin from bk_bill_type as a, bk_user_charge as b where a.id = b.ibillid and substr(b.cwritedate,1,19) = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferOutId];
             tansferItem.transferMemo = weakSelf.chargeItem.chargeMemo;
             tansferItem.transferOutChargeId = weakSelf.chargeItem.ID;
-            tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate = ? and cuserid = ?",weakSelf.chargeItem.editeDate,userId];
+            tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
         }
         self.item = tansferItem;
         SSJDispatchMainSync(^(){
