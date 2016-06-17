@@ -24,7 +24,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                          failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype != 2 and a.cbilldate <= '%@' order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -43,7 +43,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];
             item.fundId = [resultSet stringForColumn:@"IFUNSID"];
             item.billDate = [resultSet stringForColumn:@"CBILLDATE"];
-            item.editeDate = [resultSet stringForColumn:@"CWRITEDATE"];
+            item.editeDate = [resultSet stringForColumn:@"chargedate"];
             item.billId = [resultSet stringForColumn:@"IBILLID"];
             item.chargeMemo = [resultSet stringForColumn:@"cmemo"];
             item.chargeImage = [resultSet stringForColumn:@"cimgurl"];
@@ -56,9 +56,14 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }
             if ([item.typeName isEqualToString:@"转入"]) {
-                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,20) = ? and a.cuserid = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = 4 limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
-            }else{
-                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,20) = ? and a.cuserid = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = 3 limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
+                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,0,20) = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = '4' limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
+            }else if ([item.typeName isEqualToString:@"转出"]){
+                NSString *sql1 = [NSString stringWithFormat:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,0,20) = '%@' and a.cuserid = '%@' and a.ifunsid = b.cfundid and b.cfundid <> '%@' and a.ibillid = '3' limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
+                FMResultSet *set = [db executeQuery:sql1];
+                while ([set next]) {
+                    item.transferSource = [db stringForQuery:sql1];
+                }
+                [set close];
             }
             NSString *month = [resultSet stringForColumn:@"cmonth"];
             if ([month isEqualToString:lastDate]) {
