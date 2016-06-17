@@ -103,13 +103,13 @@
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    if (textField == self.memoInput) {
+    if (textField == self.transferIntext || textField == self.transferOuttext) {
         NSInteger existedLength = textField.text.length;
         NSInteger selectedLength = range.length;
         NSInteger replaceLength = string.length;
         if (existedLength - selectedLength + replaceLength > 10) {
             [CDAutoHideMessageHUD showMessage:@"金额不能超过10位"];
-            return NO; 
+            return NO;
         }
     }
     return YES;
@@ -143,6 +143,7 @@
         _transferIntext.rightView = rightView;
         _transferIntext.rightViewMode = UITextFieldViewModeAlways;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
+        _transferIntext.delegate = self;
     }
     return _transferIntext;
 }
@@ -166,7 +167,7 @@
         _transferOuttext.rightView = rightView;
         _transferOuttext.rightViewMode = UITextFieldViewModeAlways;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
-        
+        _transferOuttext.delegate = self;
     }
     return _transferOuttext;
 }

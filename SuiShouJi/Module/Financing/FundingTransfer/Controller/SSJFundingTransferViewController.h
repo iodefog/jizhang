@@ -9,7 +9,7 @@
 #import "SSJBaseViewController.h"
 #import "SSJFundingTransferDetailItem.h"
 
-@interface SSJFundingTransferViewController : SSJBaseViewController
+@interface SSJFundingTransferViewController : SSJBaseViewController<UITextFieldDelegate>
 @property(nonatomic, strong) SSJFundingTransferDetailItem *item;
 
 //完成编辑的回调
