@@ -16,6 +16,7 @@
 #import "AFNetworkReachabilityManager.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "CDPointActivityIndicator.h"
+#import <CoreMotion/CoreMotion.h>
 
 @interface SSJBookkeepingTreeViewController ()
 
@@ -38,6 +39,8 @@
 
 @property (nonatomic) BOOL isViewSetuped;
 
+@property (nonatomic, strong) CMMotionManager *motionManager;
+
 @end
 
 @implementation SSJBookkeepingTreeViewController
@@ -56,10 +59,6 @@
 }
 
 #pragma mark - Lifecycle
-- (void)dealloc {
-    
-}
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"记账树";
@@ -91,18 +90,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateNavigationBar];
-}
-
-- (void)updateNavigationBar {
-    if (_isViewSetuped) {
-        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
-    } else {
-        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-        [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
-    }
+    [self beginMotionUpdate];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -113,40 +101,42 @@
     if (self.isMovingFromParentViewController || self.isBeingDismissed) {
         [_checkInService cancel];
     }
+    
+    [_motionManager stopDeviceMotionUpdates];
 }
 
-#pragma mark - UIResponder
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
-    [super motionBegan:motion withEvent:event];
-    
-    [MobClick event:@"account_tree_shake"];
-    // 如果正在请求签到接口，直接返回
-    if (_checkInService.isLoading) {
-        return;
-    }
-    
-    // 今天已经浇过水
-    if (_checkInModel.hasShaked) {
-        [self showAlreadyWaterAlert];
-        return;
-    }
-    
-    // 没浇过水
-    _checkInModel.hasShaked = YES;
-    if ([self saveCheckInModel]) {
-        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
-            if (success) {
-                [MobClick event:@"account_tree_sign"];
-                [_treeView startRainWithGifData:data completion:^{
-                    _checkInStateLab.text = @"Yeah,浇水成功啦！";
-                    [self showWaterSuccessAlert];
-                }];
-            } else {
-                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-            }
-        }];
-    }
-}
+//#pragma mark - UIResponder
+//- (void)motionBegan:(UIEventSubtype)motion withEvent:(nullable UIEvent *)event {
+//    [super motionBegan:motion withEvent:event];
+//    
+//    [MobClick event:@"account_tree_shake"];
+//    // 如果正在请求签到接口，直接返回
+//    if (_checkInService.isLoading) {
+//        return;
+//    }
+//    
+//    // 今天已经浇过水
+//    if (_checkInModel.hasShaked) {
+//        [self showAlreadyWaterAlert];
+//        return;
+//    }
+//    
+//    // 没浇过水
+//    _checkInModel.hasShaked = YES;
+//    if ([self saveCheckInModel]) {
+//        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
+//            if (success) {
+//                [MobClick event:@"account_tree_sign"];
+//                [_treeView startRainWithGifData:data completion:^{
+//                    _checkInStateLab.text = @"Yeah,浇水成功啦！";
+//                    [self showWaterSuccessAlert];
+//                }];
+//            } else {
+//                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+//            }
+//        }];
+//    }
+//}
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidStart:(SSJBaseNetworkService *)service {
@@ -189,6 +179,65 @@
 - (void)checkHelpAction {
     SSJBookkeepingTreeHelpViewController *helpVC = [[SSJBookkeepingTreeHelpViewController alloc] init];
     [self.navigationController pushViewController:helpVC animated:YES];
+}
+
+- (void)beginMotionUpdate {
+    if (!_motionManager) {
+        _motionManager = [[CMMotionManager alloc] init];
+    }
+    if(!_motionManager.deviceMotionActive && _motionManager.deviceMotionAvailable) {
+        [_motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue mainQueue]
+                                            withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
+                                                CGFloat devicevalue = 1.3;
+                                                CMAcceleration acceleration = deviceMotion.userAcceleration;
+                                                
+                                                CMAcceleration a ;
+                                                a.x = ABS(acceleration.x);
+                                                a.y = ABS(acceleration.y);
+                                                a.z = ABS(acceleration.z);
+                                                
+                                                static BOOL shouldStartMotion = YES;
+                                                if ((a.x>devicevalue &&a.x<10)||a.y>devicevalue||a.z>devicevalue){
+                                                    if (shouldStartMotion){
+                                                        shouldStartMotion = NO;
+                                                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                            shouldStartMotion = YES;
+                                                        });
+                                                        [self startMotion];
+                                                    }
+                                                }
+                                            }];
+    }
+}
+
+- (void)startMotion {
+    [MobClick event:@"account_tree_shake"];
+    // 如果正在请求签到接口，直接返回
+    if (_checkInService.isLoading) {
+        return;
+    }
+    
+    // 今天已经浇过水
+    if (_checkInModel.hasShaked) {
+        [self showAlreadyWaterAlert];
+        return;
+    }
+    
+    // 没浇过水
+    _checkInModel.hasShaked = YES;
+    if ([self saveCheckInModel]) {
+        [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:^(NSData *data, BOOL success) {
+            if (success) {
+                [MobClick event:@"account_tree_sign"];
+                [_treeView startRainWithGifData:data completion:^{
+                    _checkInStateLab.text = @"Yeah,浇水成功啦！";
+                    [self showWaterSuccessAlert];
+                }];
+            } else {
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }
+        }];
+    }
 }
 
 #pragma mark - Private
@@ -344,6 +393,18 @@
     }
     
     return MIN(_checkInModel.checkInTimes - 1, 0);
+}
+
+- (void)updateNavigationBar {
+    if (_isViewSetuped) {
+        [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+    } else {
+        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    }
 }
 
 #pragma mark - Getter
