@@ -22,6 +22,7 @@
     item.chargeImage = self.chargeImage;
     item.chargeThumbImage = self.chargeThumbImage;
     item.configId = self.configId;
+    item.transferSource = self.transferSource;
     return item;
 }
 
