@@ -462,6 +462,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         }
     }
     [self.navigationController popViewControllerAnimated:YES];
+    if (!self.item.money.length) {
+        self.item.money = _moneyInput.text;
+    }
     [SSJCircleChargeStore saveCircleChargeItem:self.item success:^{
         [CDAutoHideMessageHUD showMessage:@"周期记账保存成功"];
     } failure:^(NSError *error) {

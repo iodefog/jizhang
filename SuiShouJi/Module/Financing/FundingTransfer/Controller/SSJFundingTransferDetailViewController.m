@@ -74,7 +74,12 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSArray *items = [self.datas objectForKey:[[self.datas allKeys] objectAtIndex:indexPath.section]];
+    NSArray* arr = [self.datas allKeys];
+    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        NSComparisonResult result = [obj1 compare:obj2];
+        return result==NSOrderedAscending;
+    }];
+    NSArray *items = [self.datas objectForKey:[arr objectAtIndex:indexPath.section]];
     SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
     SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     transferEditeVc.item = item;
@@ -84,7 +89,12 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSArray *items = [self.datas objectForKey:[[self.datas allKeys] objectAtIndex:section]];
+    NSArray* arr = [self.datas allKeys];
+    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        NSComparisonResult result = [obj1 compare:obj2];
+        return result==NSOrderedAscending;
+    }];
+    NSArray *items = [self.datas objectForKey:[arr objectAtIndex:section]];
     return items.count;
 }
 
@@ -93,8 +103,12 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *items = [self.datas objectForKey:[[self.datas allKeys] objectAtIndex:indexPath.section]];
-    SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
+    NSArray* arr = [self.datas allKeys];
+    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        NSComparisonResult result = [obj1 compare:obj2];
+        return result==NSOrderedAscending;
+    }];
+    NSArray *items = [self.datas objectForKey:[arr objectAtIndex:indexPath.section]];    SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
     SSJFundingTransferDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
     cell.item = item;
     return cell;
@@ -102,7 +116,12 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     SSJTransferDetailHeader *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SSJTransferDetailHeaderIdentifier];
-    header.currentMonth = [[self.datas allKeys] objectAtIndex:section];
+    NSArray* arr = [self.datas allKeys];
+    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        NSComparisonResult result = [obj1 compare:obj2];
+        return result==NSOrderedAscending;
+    }];
+    header.currentMonth = [arr objectAtIndex:section];
     return header;
 }
 

@@ -205,6 +205,16 @@
                         }
                     }
                 }
+            }else{
+                //修改流水表
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, iconfigid, imoney, cimgurl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userid,item.billId,item.fundId,item.configId,@([item.money doubleValue]),item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,booksid]) {
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    *rollback = YES;
+                }
             }
         }else{
             //修改周期记账

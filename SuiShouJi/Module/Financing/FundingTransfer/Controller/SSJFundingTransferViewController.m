@@ -213,8 +213,8 @@
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-                    [weakSelf.transferOutButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
-                    [weakSelf.transferOutButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
+                    [weakSelf.transferInButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
+                    [weakSelf.transferInButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
                     _transferInItem = newFundingItem;
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
@@ -241,8 +241,8 @@
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-                    [weakSelf.transferOutButton setTitle:fundingItem.fundingName forState:UIControlStateNormal];
-                    [weakSelf.transferOutButton setImage:[UIImage imageNamed:fundingItem.fundingIcon] forState:UIControlStateNormal];
+                    [weakSelf.transferOutButton setTitle:newFundingItem.fundingName forState:UIControlStateNormal];
+                    [weakSelf.transferOutButton setImage:[UIImage imageNamed:newFundingItem.fundingIcon] forState:UIControlStateNormal];
                     _transferOutItem = newFundingItem;
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
