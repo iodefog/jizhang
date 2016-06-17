@@ -154,7 +154,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
                 calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
                 [self.navigationController pushViewController:calenderDetailVC animated:YES];
             }
-            if (([((SSJBillingChargeCellItem*)item).billId integerValue] == 3 || [((SSJBillingChargeCellItem*)item).billId integerValue] == 4) && [((SSJBillingChargeCellItem*)item).transferSource isEqualToString:((SSJBillingChargeCellItem*)item).typeName]) {
+            if (([((SSJBillingChargeCellItem*)item).billId integerValue] == 3 || [((SSJBillingChargeCellItem*)item).billId integerValue] == 4) && ![((SSJBillingChargeCellItem*)item).transferSource isEqualToString:((SSJBillingChargeCellItem*)item).typeName]) {
                 SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
                 transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                 [self.navigationController pushViewController:transferVc animated:YES];

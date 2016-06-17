@@ -55,11 +55,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
                 item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }
-            if ([item.typeName isEqualToString:@"转入"] || [item.typeName isEqualToString:@"转出"]) {
-                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where a.cwritedate = ? and a.cuserid = ? and a.ifunsid = b.cfundid and ifunsid <> ?",item.editeDate,userid,item.fundId];
-                if (!item.transferSource.length) {
-                    item.transferSource = item.typeName;
-                }
+            if ([item.typeName isEqualToString:@"转入"]) {
+                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,20) = ? and a.cuserid = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = 4 limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
+            }else{
+                item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,20) = ? and a.cuserid = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = 3 limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
             }
             NSString *month = [resultSet stringForColumn:@"cmonth"];
             if ([month isEqualToString:lastDate]) {

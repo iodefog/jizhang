@@ -101,6 +101,20 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField == self.memoInput) {
+        NSInteger existedLength = textField.text.length;
+        NSInteger selectedLength = range.length;
+        NSInteger replaceLength = string.length;
+        if (existedLength - selectedLength + replaceLength > 10) {
+            [CDAutoHideMessageHUD showMessage:@"金额不能超过10位"];
+            return NO; 
+        }
+    }
+    return YES;
+}
+
 #pragma mark - Getter
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
