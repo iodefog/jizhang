@@ -194,7 +194,7 @@
             if (textField == _nameTextField) {
                 [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
             }else{
-                [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+                [CDAutoHideMessageHUD showMessage:@"备注不能超过13个字"];
             }
             return NO;
         }

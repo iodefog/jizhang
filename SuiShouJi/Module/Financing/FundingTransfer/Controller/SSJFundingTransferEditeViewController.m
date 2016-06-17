@@ -39,9 +39,13 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5]];
     if (self.item == nil && self.chargeItem != nil) {
         [self getTransferItemForCharge];
+    }
+    if (self.item.transferMemo.length) {
+        self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle4,kTitle5]];
+    }else{
+        self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
     }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"929292"];
@@ -84,7 +88,7 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     cell.cellTitle = title;
     if ([title isEqualToString:kTitle1]) {
-        cell.cellDetail = self.item.transferMoney;
+        cell.cellDetail = [NSString stringWithFormat:@"%.2f",[self.item.transferMoney doubleValue]];
     }else if ([title isEqualToString:kTitle2]) {
         cell.cellDetail = self.item.transferOutName;
     }else if ([title isEqualToString:kTitle3]) {
