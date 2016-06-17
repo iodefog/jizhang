@@ -9,7 +9,7 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJPercentCircleView.h"
 #import "SSJPageControl.h"
-#import "SSJSegmentedControl.h"
+#import "SCYSlidePagingHeaderView.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsScaleAxisView.h"
@@ -26,10 +26,10 @@ static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
 static NSString *const kSegmentTitleSurplus = @"结余";
 
-@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate>
+@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate, SCYSlidePagingHeaderViewDelegate>
 
 //  收入、支出、结余切换控件
-@property (nonatomic, strong) SSJSegmentedControl *segmentControl;
+@property (nonatomic, strong) SCYSlidePagingHeaderView *segmentControl;
 
 //  切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
@@ -141,7 +141,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];
     
     if ([selectedTitle isEqualToString:kSegmentTitlePay]
         || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
@@ -220,19 +220,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self updateSurplusViewTitle];
 }
 
-#pragma mark - Event
-//  切换周期（年、月）
-- (void)enterCurveVewController {
-    SSJReportFormsCurveViewController *curveVC = [[SSJReportFormsCurveViewController alloc] init];
-    [self.navigationController pushViewController:curveVC animated:YES];
-}
-
-//  切换支出、收入、结余
-- (void)segmentControlValueDidChange {
+#pragma mark - SCYSlidePagingHeaderViewDelegate
+- (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     [self reloadDatas];
     [self updateIncomeAndPaymentLabels];
     
-    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];
     if ([selectedTitle isEqualToString:kSegmentTitlePay]
         || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
         
@@ -248,6 +241,13 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }else{
         [MobClick event:@"form_total"];
     }
+}
+
+#pragma mark - Event
+//  切换周期（年、月）
+- (void)enterCurveVewController {
+    SSJReportFormsCurveViewController *curveVC = [[SSJReportFormsCurveViewController alloc] init];
+    [self.navigationController pushViewController:curveVC animated:YES];
 }
 
 - (void)customPeriodBtnAction {
@@ -286,7 +286,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 #pragma mark - Private
 //  返回当前收支类型
 - (SSJBillType)currentType {
-    NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+    NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];
 
     if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
         return SSJBillTypePay;
@@ -322,21 +322,21 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 //  更新总收入\总支出
 - (void)updateIncomeAndPaymentLabels {
-    if (_segmentControl.selectedSegmentIndex == 0) {
+    if (_segmentControl.selectedIndex == 0) {
         _incomeAndPaymentTitleLab.hidden = _incomeAndPaymentMoneyLab.hidden = NO;
         _incomeAndPaymentTitleLab.text = @"总支出";
-    } else if (_segmentControl.selectedSegmentIndex == 1) {
+    } else if (_segmentControl.selectedIndex == 1) {
         _incomeAndPaymentTitleLab.hidden = _incomeAndPaymentMoneyLab.hidden = NO;
         _incomeAndPaymentTitleLab.text = @"总收入";
-    } else if (_segmentControl.selectedSegmentIndex == 2) {
+    } else if (_segmentControl.selectedIndex == 2) {
         _incomeAndPaymentTitleLab.hidden = _incomeAndPaymentMoneyLab.hidden = YES;
     }
 }
 
 //  计算总收入\支出
 - (void)caculateIncomeOrPayment {
-    if (_segmentControl.selectedSegmentIndex == 0
-        || _segmentControl.selectedSegmentIndex == 1) {
+    if (_segmentControl.selectedIndex == 0
+        || _segmentControl.selectedIndex == 1) {
         
         [_incomeAndPaymentMoneyLab ssj_showLoadingIndicator];
         
@@ -441,7 +441,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         //  将 SSJReportFormsItem 转换成 SSJReportFormsPercentCircleItem 存入数组
         [self.circleItems removeAllObjects];
         for (SSJReportFormsItem *item in filterItems) {
-            NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+            NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];
             
             if ([selectedTitle isEqualToString:kSegmentTitlePay]
                 || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
@@ -479,7 +479,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [self.view ssj_hideWatermark:YES];
         }
         
-        NSString *selectedTitle = [self.segmentControl titleForSegmentAtIndex:self.segmentControl.selectedSegmentIndex];
+        NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];
         if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
             double pay = 0;
             double income = 0;
@@ -505,15 +505,15 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 }
 
 #pragma mark - Getter
-- (SSJSegmentedControl *)segmentControl {
+- (SCYSlidePagingHeaderView *)segmentControl {
     if (!_segmentControl) {
-        _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[kSegmentTitlePay,kSegmentTitleIncome,kSegmentTitleSurplus]];
-        _segmentControl.size = CGSizeMake(225, 30);
-        _segmentControl.font = [UIFont systemFontOfSize:15];
-        _segmentControl.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"];
-        _segmentControl.selectedBorderColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
-        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#eb4a64"]} forState:UIControlStateSelected];
-        [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
+        _segmentControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, 225, 44)];
+        _segmentControl.customDelegate = self;
+        _segmentControl.buttonClickAnimated = YES;
+        _segmentControl.titleColor = [UIColor ssj_colorWithHex:@"999999"];
+        _segmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+        [_segmentControl setTabSize:CGSizeMake(75, 2)];
+        _segmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome, kSegmentTitleSurplus];
     }
     return _segmentControl;
 }
