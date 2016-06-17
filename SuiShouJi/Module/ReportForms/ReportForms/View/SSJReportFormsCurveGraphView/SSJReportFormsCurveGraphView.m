@@ -270,6 +270,8 @@ static const CGFloat kBottomSpaceHeight = 32;
         tMaxValue = MAX(MAX(tMaxValue, paymentValue), incomeValue);
     }
     
+    _selectedAxisXIndex = MIN(_selectedAxisXIndex, _incomeValues.count - 1);
+    
     int index = 0;
     int topDigit = tMaxValue;
     while (topDigit >= 10) {

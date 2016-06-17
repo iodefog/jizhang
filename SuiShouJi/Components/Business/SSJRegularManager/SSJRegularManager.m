@@ -278,6 +278,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     NSDate *nowDate = [NSDate date];
+    nowDate = [NSDate dateWithYear:nowDate.year month:nowDate.month day:nowDate.day];
     
     switch (periodType) {
             // 每天
