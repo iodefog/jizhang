@@ -12,7 +12,8 @@
 @property(nonatomic, strong) UILabel *titleLabel;
 @property(nonatomic, strong) UIView *seperatorLineView;
 @property(nonatomic, strong) UIImageView *lineImage;
-@property(nonatomic, strong) UIImageView *selectImage;
+@property(nonatomic, strong) UIImageView *selectImageView;
+@property(nonatomic, strong) UIImageView *booksIcionImageView;
 @end
 
 @implementation SSJBooksTypeCollectionViewCell
@@ -24,10 +25,11 @@
         UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
         longPressGr.minimumPressDuration = 0.5f;
         [self addGestureRecognizer:longPressGr];
+        [self.contentView addSubview:self.booksIcionImageView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.seperatorLineView];
         [self.contentView addSubview:self.lineImage];
-        [self.contentView addSubview:self.selectImage];
+        [self.contentView addSubview:self.selectImageView];
         self.layer.cornerRadius = 4.f;
     }
     return self;
@@ -47,7 +49,8 @@
     self.titleLabel.centerY = self.height / 2;
     self.lineImage.size = CGSizeMake(7, 56);
     self.lineImage.center = CGPointMake(12, self.height / 2);
-    self.selectImage.rightBottom = CGPointMake(self.width, self.height - 10);
+    self.selectImageView.rightBottom = CGPointMake(self.width, self.height - 10);
+    self.booksIcionImageView.rightBottom = CGPointMake(self.width , self.height);
 }
 
 -(UILabel *)titleLabel{
@@ -76,12 +79,19 @@
     return _lineImage;
 }
 
--(UIImageView *)selectImage{
-    if (!_selectImage) {
-        _selectImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 18, 9)];
-        _selectImage.image = [UIImage imageNamed:@"zhangben_mark"];
+-(UIImageView *)selectImageView{
+    if (!_selectImageView) {
+        _selectImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 18, 9)];
+        _selectImageView.image = [UIImage imageNamed:@"zhangben_mark"];
     }
-    return _selectImage;
+    return _selectImageView;
+}
+
+-(UIImageView *)booksIcionImageView{
+    if (!_booksIcionImageView) {
+        _booksIcionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 34, 34)];
+    }
+    return _booksIcionImageView;
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{
@@ -89,6 +99,7 @@
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
+    self.booksIcionImageView.image = [UIImage imageNamed:_item.booksIcoin];
     [self setNeedsLayout];
 }
 
@@ -100,7 +111,7 @@
 
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
-    self.selectImage.hidden = !_isSelected;
+    self.selectImageView.hidden = !_isSelected;
 }
 
 @end
