@@ -27,7 +27,6 @@
 
 #import "SSJLocalNotificationHelper.h"
 #import <TencentOpenAPI/TencentOAuth.h>
-//#import "SSJStartView.h"
 #import "SSJStartViewManager.h"
 #import "SSJStartViewManager.h"
 
@@ -36,6 +35,7 @@
 #import "SSJJsPatchItem.h"
 #import "SSJBooksTypeSelectViewController.h"
 #import "JPEngine.h"
+#import "SSJNetworkReachabilityManager.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -87,6 +87,7 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window makeKeyAndVisible];
     
     [self setRootViewController];
+    [SSJNetworkReachabilityManager startMonitoring];
     
     //如果第一次打开记录当前时间
     if (SSJIsFirstLaunchForCurrentVersion()) {

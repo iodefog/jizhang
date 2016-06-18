@@ -276,9 +276,7 @@ static NSString *const kTitle7 = @"手势密码";
             userItem.nickName = textInputed;
             userItem.writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             [SSJUserTableManager saveUserItem:userItem];
-            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         };
         _nickNameModifyView.typeErrorBlock = ^(NSString *errorDesc){
             [CDAutoHideMessageHUD showMessage:errorDesc];
@@ -302,9 +300,7 @@ static NSString *const kTitle7 = @"手势密码";
             userItem.signature = textInputed;
             userItem.writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             [SSJUserTableManager saveUserItem:userItem];
-            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         };
         _signatureModifyView.typeErrorBlock = ^(NSString *errorDesc){
             [CDAutoHideMessageHUD showMessage:errorDesc];

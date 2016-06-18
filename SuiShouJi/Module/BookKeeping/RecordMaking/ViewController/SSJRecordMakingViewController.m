@@ -700,9 +700,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,userid];
                 [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid,booksId];
             }
-            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         }
         if (self.addNewChargeBlock) {
             self.addNewChargeBlock(editeChargeArr);

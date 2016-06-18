@@ -282,9 +282,8 @@
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });
     }];
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-    }
+    
+    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
 -(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{

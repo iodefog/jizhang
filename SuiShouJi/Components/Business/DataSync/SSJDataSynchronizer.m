@@ -11,6 +11,7 @@
 #import "SSJDataSynchronizeTask.h"
 #import "SSJImageSynchronizeTask.h"
 #import "SSJSynchronizeTaskQueue.h"
+#import "SSJNetworkReachabilityManager.h"
 
 @interface SSJSynchronizeBlock : NSObject
 
@@ -137,6 +138,23 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     [self.dataSyncQueue addTask:[SSJDataSynchronizeTask task]];
     [self.imageSyncQueue addTask:[SSJImageSynchronizeTask task]];
+}
+
+- (void)startSyncIfNeededWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure {
+    
+    switch (SSJSyncSetting()) {
+        case SSJSyncSettingTypeWIFI:
+            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusReachableViaWiFi) {
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:success failure:failure];
+            }
+            break;
+            
+        case SSJSyncSettingTypeWWAN:
+            if ([SSJNetworkReachabilityManager isReachable]) {
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:success failure:failure];
+            }
+            break;
+    }
 }
 
 #pragma mark - SSJSynchronizeTaskQueueDelegate

@@ -38,4 +38,12 @@ typedef NS_ENUM(NSInteger, SSJDataSynchronizeType) {
  */
 - (void)startSyncWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure;
 
+/**
+ *  根据网络环境和同步设置决定是否需要同步数据
+ *
+ *  @param success  同步成功回调
+ *  @param failure  同步失败回调
+ */
+- (void)startSyncIfNeededWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure;
+
 @end

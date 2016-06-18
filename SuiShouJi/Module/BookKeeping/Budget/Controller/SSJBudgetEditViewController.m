@@ -530,9 +530,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)syncIfNeeded {
-    if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-    }
+    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
 #pragma mark - Getter
