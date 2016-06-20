@@ -54,8 +54,6 @@ static const CGFloat kBottomSpaceHeight = 32;
 // X轴刻度宽度
 @property (nonatomic) CGFloat unitX;
 
-@property (nonatomic) CGFloat margin;
-
 @property (nonatomic) CGFloat maxSurplusValue;
 
 @property (nonatomic) CGFloat minSurplusValue;
@@ -69,7 +67,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         self.backgroundColor = [UIColor whiteColor];
         _displayAxisXCount = 7;
         _bezierSmoothingTension = 0.3;
-        _selectedAxisXIndex = 1;
+        _selectedAxisXIndex = 0;
         
         _paymentValues = [[NSMutableArray alloc] init];
         _incomeValues = [[NSMutableArray alloc] init];
@@ -175,29 +173,18 @@ static const CGFloat kBottomSpaceHeight = 32;
         line.frame = CGRectMake(0, kTopSpaceHeight + unitHeight * i, self.width, 1 / [UIScreen mainScreen].scale);
     }
     
-    if (_axisXCount == 1) {
-        _unitX = 0;
-        _margin = self.width * 0.5;
-    } else if (_axisXCount <= 4) {
-        _unitX = self.width * 0.5 / (_axisXCount - 0.5);
-        _margin = _unitX * 0.5;
-    } else {
-        _unitX = self.width / _displayAxisXCount;
-        _margin = _unitX * 0.5;
-    }
+    _unitX = self.width / (_displayAxisXCount - 1);
     
-    CGFloat width = _unitX * (_axisXCount - 1) + _margin;
+    CGFloat width = _unitX * (_axisXCount - 1);
     
     _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight);
-    _curveView.margin = _margin;
     
     _axisXView.frame = CGRectMake(0, self.height - kBottomSpaceHeight, width, kBottomSpaceHeight);
-    _axisXView.margin = _margin;
     
     _scrollView.frame = self.bounds;
     _scrollView.contentSize = CGSizeMake(width, self.height);
-    _scrollView.contentInset = UIEdgeInsetsMake(0, _axisXCount == 1 ? 0 : _scrollView.width * 0.5 - _margin, 0, _scrollView.width * 0.5);
-    [_scrollView setContentOffset:CGPointMake(_margin + _unitX * (_selectedAxisXIndex - 1) - self.width * 0.5, 0) animated:NO];
+    _scrollView.contentInset = UIEdgeInsetsMake(0, _axisXCount == 1 ? 0 : _scrollView.width * 0.5, 0, _scrollView.width * 0.5);
+    [_scrollView setContentOffset:CGPointMake(_unitX * _selectedAxisXIndex - self.width * 0.5, 0) animated:NO];
     
     _verticalLine.frame = CGRectMake(self.width * 0.5, 60, 1 / [UIScreen mainScreen].scale, self.height - 60 - kBottomSpaceHeight);
     
@@ -233,9 +220,6 @@ static const CGFloat kBottomSpaceHeight = 32;
     
     [_paymentValues removeAllObjects];
     [_incomeValues removeAllObjects];
-    
-    [_paymentValues addObject:@0];
-    [_incomeValues addObject:@0];
     
     CGFloat tMaxValue = 0;
     NSMutableArray *axisXTitles = [NSMutableArray arrayWithCapacity:_axisXCount];
@@ -319,18 +303,18 @@ static const CGFloat kBottomSpaceHeight = 32;
         NSLog(@"超出最大X轴刻度范围");
         return;
     }
-    _selectedAxisXIndex = index + 1;
-    [_scrollView setContentOffset:CGPointMake(_margin + _unitX * (_selectedAxisXIndex - 1) - self.width * 0.5, 0) animated:animted];
+    _selectedAxisXIndex = index;
+    [_scrollView setContentOffset:CGPointMake(_unitX * _selectedAxisXIndex - self.width * 0.5, 0) animated:animted];
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.x == -scrollView.contentInset.left) {
-        _selectedAxisXIndex = 1;
+        _selectedAxisXIndex = 0;
         [self adjustPaymentAndIncomePoint];
         [self updateSurplus];
     } else if (scrollView.contentOffset.x == _axisXView.width - _scrollView.width * 0.5) {
-        _selectedAxisXIndex = _axisXCount;
+        _selectedAxisXIndex = _axisXCount - 1;
         [self adjustPaymentAndIncomePoint];
         [self updateSurplus];
     }
@@ -358,15 +342,15 @@ static const CGFloat kBottomSpaceHeight = 32;
 }
 
 - (void)adjustOffSetXToCenter {
-    CGFloat centerOffSetX = self.width * 0.5 + _scrollView.contentOffset.x - _margin;
+    CGFloat centerOffSetX = self.width * 0.5 + _scrollView.contentOffset.x;
     CGFloat unitCount = floor(centerOffSetX / _unitX);
     if (centerOffSetX - unitCount * _unitX >= _unitX * 0.5) {
         unitCount ++;
     }
     
-    CGFloat offSetX = unitCount * _unitX + _margin - self.width * 0.5;
+    CGFloat offSetX = unitCount * _unitX - self.width * 0.5;
     [_scrollView setContentOffset:CGPointMake(offSetX, 0) animated:YES];
-    _selectedAxisXIndex = unitCount + 1;
+    _selectedAxisXIndex = unitCount;
 }
 
 - (void)adjustPaymentAndIncomePoint {
