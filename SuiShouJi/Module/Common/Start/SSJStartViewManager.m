@@ -171,6 +171,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         [UIView transitionFromView:_launchView toView:_guideView duration:kTransitionDuration options:UIViewAnimationOptionTransitionCrossDissolve completion:NULL];
         _launchView = nil;
     } else {
+        
         [UIView animateWithDuration:0.5f animations:^(void){
             _launchView.transform = CGAffineTransformMakeScale(2.0f, 2.0f);
             _launchView.alpha = 0;
@@ -178,53 +179,54 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         } completion:^(BOOL finished){
             [_launchView removeFromSuperview];
             _launchView = nil;
-            if (_completion) {
-                _completion(self);
-                _completion = nil;
-            }
         }];
-    }
-}
-
-- (void)verifyMotionPasswordIfNeeded {
-    if (!SSJIsUserLogined()) {
+        
         if (_completion) {
             _completion(self);
             _completion = nil;
         }
-        return;
     }
-    
-    //  如果当前页面已经是手势密码，直接返回
-    UIViewController *currentVC = SSJVisibalController();
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
-    
-    // 手势密码开启
-    if ([userItem.motionPWDState boolValue]) {
-        //  验证手势密码页面
-        if (userItem.motionPWD.length) {
-            __weak typeof(self) wself = self;
-            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-            motionVC.finishHandle = ^(UIViewController *controller) {
-                if (wself.completion) {
-                    wself.completion(self);
-                    wself.completion = nil;
-                }
-                [controller dismissViewControllerAnimated:YES completion:NULL];
-            };
-            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
-            [currentVC presentViewController:naviVC animated:NO completion:NULL];
-            
-            return;
-        }
-    }
-    
-    if (_completion) {
-        _completion(self);
-        _completion = nil;
-    }
-    return;
 }
+
+//- (void)verifyMotionPasswordIfNeeded {
+//    if (!SSJIsUserLogined()) {
+//        if (_completion) {
+//            _completion(self);
+//            _completion = nil;
+//        }
+//        return;
+//    }
+//    
+//    //  如果当前页面已经是手势密码，直接返回
+//    UIViewController *currentVC = SSJVisibalController();
+//    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
+//    
+//    // 手势密码开启
+//    if ([userItem.motionPWDState boolValue]) {
+//        //  验证手势密码页面
+//        if (userItem.motionPWD.length) {
+//            __weak typeof(self) wself = self;
+//            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+//            motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
+//            motionVC.finishHandle = ^(UIViewController *controller) {
+//                if (wself.completion) {
+//                    wself.completion(self);
+//                    wself.completion = nil;
+//                }
+//                [controller dismissViewControllerAnimated:YES completion:NULL];
+//            };
+//            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:motionVC];
+//            [currentVC presentViewController:naviVC animated:NO completion:NULL];
+//            
+//            return;
+//        }
+//    }
+//    
+//    if (_completion) {
+//        _completion(self);
+//        _completion = nil;
+//    }
+//    return;
+//}
 
 @end
