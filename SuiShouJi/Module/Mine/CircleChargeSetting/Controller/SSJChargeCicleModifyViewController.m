@@ -51,6 +51,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @implementation SSJChargeCicleModifyViewController{
     UITextField *_moneyInput;
     NSArray *_images;
+    UITextField *_memoInput;
 }
 
 #pragma mark - Lifecycle
@@ -235,6 +236,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.text = self.item.chargeMemo;
+        _memoInput = circleModifyCell.cellInput;
     }else{
         circleModifyCell.cellInput.hidden = YES;
     }
@@ -464,6 +466,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 }
 
 -(void)saveButtonClicked:(id)sender{
+    [_moneyInput resignFirstResponder];
+    [_memoInput resignFirstResponder];
     if (!_moneyInput.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
         return;
