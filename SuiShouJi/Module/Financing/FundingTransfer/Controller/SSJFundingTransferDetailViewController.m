@@ -27,6 +27,7 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"转账记录";
         self.hidesBottomBarWhenPushed = YES;
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }

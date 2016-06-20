@@ -149,9 +149,10 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         __block NSString *booksid = SSJGetCurrentBooksType();
         _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
             if ([item.booksId isEqualToString:booksid]) {
-                SSJSelectBooksType(@"0");
+                SSJSelectBooksType(SSJUSERID());
             }
             [weakSelf getDateFromDB];
+
             if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
                 [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
             }

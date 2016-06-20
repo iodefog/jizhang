@@ -111,7 +111,7 @@
 
 + (void)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update bk_fund_info set operatortype = 2 where cfundid = ?",item.fundingID];
+        [db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",item.fundingID,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion())];
     }];
 }
 @end

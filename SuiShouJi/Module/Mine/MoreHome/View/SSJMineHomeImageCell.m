@@ -12,6 +12,7 @@
 @property (nonatomic,strong) UILabel *detailLabel;
 @property (nonatomic,strong) UILabel *subTitleLabel;
 @property(nonatomic, strong) UIImageView *cellImageView;
+@property(nonatomic, strong) UIImageView *hasMassageImageView;
 @end
 
 @implementation SSJMineHomeImageCell
@@ -22,6 +23,7 @@
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.subTitleLabel];
+        [self.contentView addSubview:self.hasMassageImageView];
     }
     return self;
 }
@@ -46,6 +48,7 @@
     }else{
         self.detailLabel.right = self.contentView.width;
     }
+    self.hasMassageImageView.rightTop = self.cellImageView.rightTop;
 }
 
 -(UILabel *)titleLabel{
@@ -83,6 +86,15 @@
     return _cellImageView;
 }
 
+-(UIImageView *)hasMassageImageView{
+    if (!_hasMassageImageView) {
+        _hasMassageImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 4, 4)];
+        _hasMassageImageView.layer.cornerRadius = 2.f;
+        _hasMassageImageView.backgroundColor = [UIColor redColor];
+    }
+    return _hasMassageImageView;
+}
+
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     _titleLabel.text = _cellTitle;
@@ -104,6 +116,11 @@
 -(void)setCellImage:(UIImage *)cellImage{
     _cellImage = cellImage;
     self.cellImageView.image = _cellImage;
+}
+
+-(void)setHasMassage:(BOOL)hasMassage{
+    _hasMassage = hasMassage;
+    self.hasMassageImageView.hidden = !_hasMassage;
 }
 
 /*

@@ -72,6 +72,7 @@ static BOOL KHasEnterMineHome;
 @implementation SSJMineHomeViewController{
     NSArray *_titleArr;
     SSJUserInfoItem *_userItem;
+    BOOL _hasUreadMassage;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -288,9 +289,12 @@ static BOOL KHasEnterMineHome;
     }else{
         mineHomeCell.cellDetail = @"";
     }
-    
     if ([mineHomeCell.cellTitle isEqualToString:kTitle4]) {
         mineHomeCell.cellSubTitle = @"反馈交流QQ群:552563622";
+        mineHomeCell.hasMassage = _hasUreadMassage;
+    }else{
+        mineHomeCell.cellSubTitle = @"";
+        mineHomeCell.hasMassage = NO;
     }
     return mineHomeCell;
 }
@@ -326,6 +330,20 @@ static BOOL KHasEnterMineHome;
         _feedbackKit.extInfo = @{@"userid":_userItem.cuserid ,
                                  @"loginType":@(SSJUserLoginType()),
                                  @"mobileNo":_userItem.cmobileno ?: @""};
+        __weak typeof(self) weakSelf = self;
+        [_feedbackKit getUnreadCountWithCompletionBlock:^(NSNumber *unreadCount, NSError *error) {
+            if (!error) {
+                NSLog(@"%@",unreadCount);
+                if ([unreadCount integerValue] > 0) {
+                    _hasUreadMassage = YES;
+                }else{
+                    _hasUreadMassage = NO;
+                }
+                [weakSelf.tableView reloadData];
+            }else{
+                NSLog(@"%@",[error localizedDescription]);
+            }
+        }];
     }
     return _feedbackKit;
 }

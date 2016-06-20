@@ -13,4 +13,5 @@
 @property (nonatomic,strong) NSString *cellDetail;
 @property(nonatomic, strong) NSString *cellSubTitle;
 @property(nonatomic, strong) UIImage *cellImage;
+@property(nonatomic) BOOL hasMassage;
 @end
