@@ -12,35 +12,43 @@
 @implementation SSJDatabaseVersion4
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
+    [db beginTransaction];
     NSError *error = [self createBooksTypeTableWithDatabase:db];
     if (error) {
+        [db rollback];
         return error;
     }
     
     error = [self updateUserChargeTableWithDatabase:db];
     if (error) {
+        [db rollback];
         return error;
     }
     
     error = [self updateUserBudgetTableWithDatabase:db];
     if (error) {
+        [db rollback];
         return error;
     }
     
     error = [self updateDailySumChargeTableWithDatabase:db];
     if (error) {
+        [db rollback];
         return error;
     }
     
     error = [self updateChargePeriodConfigTableWithDatabase:db];
     if (error) {
+        [db rollback];
         return error;
     }
     
     error = [self updateUserTableWithDatabase:db];
     if (error) {
+        [db rollback];
         return error;
     }
+    [db commit];
     
     return nil;
 }
@@ -91,12 +99,31 @@
 }
 
 + (NSError *)updateDailySumChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_dailysum_charge add cbooksid text"]) {
+    // 创建临时表
+    if (![db executeUpdate:@"create temporary table TMP_DAILYSUM_CHARGE (CBILLDATE TEXT, EXPENCEAMOUNT REAL, INCOMEAMOUNT REAL, SUMAMOUNT REAL, CWRITEDATE TEXT, CUSERID TEXT, CBOOKSID TEXT, PRIMARY KEY(CBILLDATE, CUSERID, CBOOKSID))"]) {
         return [db lastError];
     }
-    if (![db executeUpdate:@"update bk_dailysum_charge set cbooksid = cuserid"]) {
+    
+    // 将原来表中的纪录插入到临时表中
+    if (![db executeUpdate:@"insert into TMP_DAILYSUM_CHARGE select CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT, CWRITEDATE, CUSERID, CUSERID from BK_DAILYSUM_CHARGE"]) {
         return [db lastError];
     }
+    
+    // 删除原来的表
+    if (![db executeUpdate:@"drop table BK_DAILYSUM_CHARGE"]) {
+        return [db lastError];
+    }
+    
+    // 新建表
+    if (![db executeUpdate:@"create table BK_DAILYSUM_CHARGE (CBILLDATE TEXT, EXPENCEAMOUNT REAL, INCOMEAMOUNT REAL, SUMAMOUNT REAL, CWRITEDATE TEXT, CUSERID TEXT, CBOOKSID TEXT, PRIMARY KEY(CBILLDATE, CUSERID, CBOOKSID))"]) {
+        return [db lastError];
+    }
+    
+    //
+    if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE select * from TMP_DAILYSUM_CHARGE"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
