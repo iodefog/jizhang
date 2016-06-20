@@ -23,37 +23,38 @@
 }
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-    //  查询当前用户的普通支出类型
-    FMResultSet *resultSet = [db executeQuery:@"select a.cbillid from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and b.istate <> 2 order by a.cbillid asc", userId];
-    if (!resultSet) {
-        *error = [db lastError];
-        return NO;
-    }
+//    //  查询当前用户的普通支出类型
+//    FMResultSet *resultSet = [db executeQuery:@"select a.cbillid from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and b.istate <> 2 order by a.cbillid asc", userId];
+//    if (!resultSet) {
+//        *error = [db lastError];
+//        return NO;
+//    }
+//    
+//    //  将用户支出类型添加到数组
+//    NSMutableArray *userBillTypeIdArr = [NSMutableArray array];
+//    while ([resultSet next]) {
+//        NSString *billTypeID = [resultSet stringForColumn:@"cbillid"];
+//        if (billTypeID) {
+//            [userBillTypeIdArr addObject:billTypeID];
+//        }
+//    }
+//    
+//    [resultSet close];
     
-    //  将用户支出类型添加到数组
-    NSMutableArray *userBillTypeIdArr = [NSMutableArray array];
-    while ([resultSet next]) {
-        NSString *billTypeID = [resultSet stringForColumn:@"cbillid"];
-        if (billTypeID) {
-            [userBillTypeIdArr addObject:billTypeID];
-        }
-    }
+//    //  如果将要合并的预算中包涵不属于用户的支出类型，忽略此条记录
+//    NSArray *mergeBillTypeIdArr = [record[@"cbilltype"] componentsSeparatedByString:@","];
+//    for (NSString *billTypeId in mergeBillTypeIdArr) {
+//        if (![userBillTypeIdArr containsObject:billTypeId]) {
+//            return NO;
+//        }
+//    }
     
-    [resultSet close];
     
-    //  如果将要合并的预算中包涵不属于用户的支出类型，忽略此条记录
-    NSArray *mergeBillTypeIdArr = [record[@"cbilltype"] componentsSeparatedByString:@","];
-    for (NSString *billTypeId in mergeBillTypeIdArr) {
-        if (![userBillTypeIdArr containsObject:billTypeId]) {
-            return NO;
-        }
-    }
-    
-    //  查询本地是否有预算类别、周期、支出类型都相同的其它记录，有的话保留修改时间较晚的
+    //  查询本地是否有预算类别、周期、支出类型、账本类型都相同的其它记录，有的话保留修改时间较晚的
 //    resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbilltype = ? and ibid <> ? and operatortype <> 2", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbilltype"], record[@"ibid"]];
 
     // 目前先把相同支出类型的判断去掉，以后增加用户自选支出类型再加上
-    resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and ibid <> ? and operatortype <> 2", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"ibid"]];
+    FMResultSet *resultSet = [db executeQuery:@"select ibid, cwritedate, operatortype from bk_user_budget where cuserid = ? and csdate = ? and cedate = ? and itype = ? and cbooksid = ? and ibid <> ? and operatortype <> 2", userId, record[@"csdate"], record[@"cedate"], record[@"itype"], record[@"cbooksid"], record[@"ibid"]];
     
     if (!resultSet) {
         *error = [db lastError];

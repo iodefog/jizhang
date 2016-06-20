@@ -69,7 +69,7 @@ extern NSString *const SSJBudgetMonthTitleKey;
                                      failure:(void (^)(NSError * _Nullable error))failure;
 
 /**
- *  根据预算模型查询类别名称与类别id的映射表；映射表结构：@{@"餐饮":@"1000", @"烟酒":@"1001"}
+ *  根据预算模型查询类别名称与类别id的映射表；映射表结构：@{@"1000":@"餐饮", @"1001":@"烟酒"}
  *
  *  @param model     查询的预算模型
  *  @param success   查询成功的回调

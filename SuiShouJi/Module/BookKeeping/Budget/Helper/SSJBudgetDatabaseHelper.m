@@ -225,7 +225,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
 + (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableDictionary *map = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:@"select id, cname from bk_bill_type where itype = 1 and istate <> 2"];
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", SSJUSERID()];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -236,7 +236,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         }
         
         while ([resultSet next]) {
-            [map setObject:[resultSet stringForColumn:@"cname"] forKey:[resultSet stringForColumn:@"id"]];
+            [map setObject:[resultSet stringForColumn:@"cname"] forKey:[resultSet stringForColumn:@"cbillid"]];
         }
         
         if (success) {
