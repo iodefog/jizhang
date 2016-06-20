@@ -257,8 +257,18 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         return;
     }
     
+//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+//        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and cbilltype = ? and itype = ? and csdate = ? and cbooksid = ?", SSJUSERID(), model.ID, [self billTypeStringWithBillTypeArr:model.billIds], @(model.type), model.beginDate, model.booksId];
+//        if (success) {
+//            SSJDispatch_main_async_safe(^{
+//                success(isConficted);
+//            });
+//        }
+//    }];
+    
+    // 目前先吧收支id判断去掉，以后增加用户自选支出类别时再加上
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and cbilltype = ? and itype = ? and csdate = ? and cbooksid = ?", SSJUSERID(), model.ID, [self billTypeStringWithBillTypeArr:model.billIds], @(model.type), model.beginDate, model.booksId];
+        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate = ? and cbooksid = ?", SSJUSERID(), model.ID, @(model.type), model.beginDate, model.booksId];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(isConficted);
@@ -345,6 +355,8 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
     budgetModel.isRemind = [set boolForColumn:@"iremind"];
     budgetModel.isAlreadyReminded = [set boolForColumn:@"ihasremind"];
+    
+    // 当前账本所有有效支出流水的总金额
     budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
     
     return budgetModel;

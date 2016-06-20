@@ -475,16 +475,17 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)budgetTypeNames {
-    if (self.model.billIds.count < self.budgetTypeMap.count) {
-        NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:5];
-        for (NSString *typeId in self.model.billIds) {
-            [typeNameArr addObject:self.budgetTypeMap[typeId]];
-            if (typeNameArr.count == 5) {
-                break;
-            }
-        }
-        return [typeNameArr componentsJoinedByString:@","];
-    }
+    // 目前只显示所有支出类别，以后增加用户自选类别时再加上
+//    if (self.model.billIds.count < self.budgetTypeMap.count) {
+//        NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:5];
+//        for (NSString *typeId in self.model.billIds) {
+//            [typeNameArr addObject:self.budgetTypeMap[typeId]];
+//            if (typeNameArr.count == 5) {
+//                break;
+//            }
+//        }
+//        return [typeNameArr componentsJoinedByString:@","];
+//    }
     
     return @"所有支出类目";
 }
