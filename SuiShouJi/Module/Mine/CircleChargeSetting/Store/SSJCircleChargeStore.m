@@ -154,7 +154,7 @@
                                 *rollback = YES;
                             }
                         }else{
-                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount  , sumamount, ibillid , cwritedate , cuserid ,cbooksid) values(?,?,0,?,-1,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
+                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount  , sumamount , cwritedate , cuserid ,cbooksid) values(?,?,0,?,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
                                 if (failure) {
                                     SSJDispatch_main_async_safe(^{
                                         failure([db lastError]);
@@ -174,7 +174,7 @@
                                 *rollback = YES;
                             }
                         }else{
-                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount, sumamount, ibillid , cwritedate , cuserid ,cbooksid) values(?,0,?,?,-1,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
+                            if (![db executeUpdate:@"insert into bk_dailysum_charge (cbilldate , expenceamount , incomeamount, sumamount , cwritedate , cuserid ,cbooksid) values(?,0,?,?,?,?,?)",item.billDate,@([item.money doubleValue]),@(-[item.money doubleValue]),cwriteDate,userid,item.booksId]) {
                                 if (failure) {
                                     SSJDispatch_main_async_safe(^{
                                         failure([db lastError]);
