@@ -679,23 +679,23 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
             if (self.titleSegment.selectedSegmentIndex == 0) {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,userid];
-                if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,userid]){
-                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , EXPENCEAMOUNT = EXPENCEAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid];
+                if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",selectDate,userid,booksId]){
+                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , EXPENCEAMOUNT = EXPENCEAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid,booksId];
                 }else{
-                    [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID) VALUES(?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:(-chargeMoney)],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid];
+                    [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID,CBOOKSID) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:(-chargeMoney)],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid,booksId];
                 }
             }else{
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?", [NSNumber numberWithDouble:chargeMoney] , fundingType.fundingID,userid];
-                if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",selectDate,userid]){
-                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , INCOMEAMOUNT = INCOMEAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid];
+                if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",selectDate,userid,booksId]){
+                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , INCOMEAMOUNT = INCOMEAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid,booksId];
                 }else{
-                    [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID) VALUES(?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid];
+                    [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID , CBOOKSID) VALUES(?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid,booksId];
                 }
             }
             if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId])
             {
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,userid];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid];
+                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid,booksId];
             }else{
                 [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,userid];
                 [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid,booksId];
