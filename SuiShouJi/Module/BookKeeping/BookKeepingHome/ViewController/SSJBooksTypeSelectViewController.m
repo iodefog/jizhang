@@ -142,9 +142,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             item.userId = SSJUSERID();
             [SSJBooksTypeStore saveBooksTypeItem:item];
             [weakSelf getDateFromDB];
-            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         };
         __block NSString *booksid = SSJGetCurrentBooksType();
         _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
@@ -152,10 +150,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
                 SSJSelectBooksType(SSJUSERID());
             }
             [weakSelf getDateFromDB];
-
-            if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-            }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         };
     }
     return _booksEditeView;

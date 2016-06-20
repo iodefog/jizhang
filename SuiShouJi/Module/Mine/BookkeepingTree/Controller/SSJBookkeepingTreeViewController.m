@@ -17,6 +17,7 @@
 #import "SSJBookkeepingTreeHelper.h"
 #import "CDPointActivityIndicator.h"
 #import <CoreMotion/CoreMotion.h>
+#import "SSJNetworkReachabilityManager.h"
 
 @interface SSJBookkeepingTreeViewController ()
 
@@ -44,19 +45,6 @@
 @end
 
 @implementation SSJBookkeepingTreeViewController
-
-+ (void)load {
-    [self reachability];
-}
-
-+ (AFNetworkReachabilityManager *)reachability {
-    static AFNetworkReachabilityManager *reachability = nil;
-    if (!reachability) {
-        reachability = [AFNetworkReachabilityManager managerForDomain:@"www.baidu.com"];
-        [reachability startMonitoring];
-    }
-    return reachability;
-}
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -302,7 +290,7 @@
 - (BOOL)requestIfNeeded {
     // 如果_checkInModel为nil，说明本地没有用户的签到记录，直接请求接口
     if (!_checkInModel) {
-        if ([[self class] reachability].reachable) {
+        if ([SSJNetworkReachabilityManager isReachable]) {
             [self.checkInService checkIn];
         } else {
             [self showNoNetworkAlert];
@@ -313,7 +301,7 @@
     // 判断本地是否保存了今天的签到记录，如果没有保存，就请求接口
     NSDate *lastCheckInDate = [NSDate dateWithString:_checkInModel.lastCheckInDate formatString:@"yyyy-MM-dd"];
     if (![[NSDate date] isSameDay:lastCheckInDate]) {
-        if ([[self class] reachability].reachable) {
+        if ([SSJNetworkReachabilityManager isReachable]) {
             [self.checkInService checkIn];
         } else {
             [self showNoNetworkAlert];

@@ -25,8 +25,8 @@ typedef NS_ENUM(NSInteger, SSJRegistAndForgetPasswordType) {
 };
 
 typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
-    SSJSyncSettingTypeWIFI, //
-    SSJSyncSettingTypeWWAN  //
+    SSJSyncSettingTypeWWAN = 0,
+    SSJSyncSettingTypeWIFI //
 };
 
 //  自定义错误码，从10000开始

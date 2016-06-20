@@ -18,6 +18,4 @@
 
 @property (nonatomic) CGFloat bezierSmoothingTension;
 
-@property (nonatomic) CGFloat margin;
-
 @end

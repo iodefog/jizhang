@@ -29,4 +29,5 @@ pod 'DateTools'
 
 pod 'ZYCornerRadius', '~> 0.5.1'
 pod 'FLAnimatedImage', '~> 1.0'
+pod 'LxThroughPointsBezier', '~> 1.0.0'
 

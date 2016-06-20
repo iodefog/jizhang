@@ -124,7 +124,7 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIButton *)accountBtn {
     if (!_accountBtn) {
         _accountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _accountBtn.frame = CGRectMake(0, 0, 66, 24);
+        _accountBtn.frame = CGRectMake(0, 0, 90, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _accountBtn.layer.borderWidth = 1;
         _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
@@ -136,7 +136,7 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIButton *)dateBtn {
     if (!_dateBtn) {
         _dateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _dateBtn.frame = CGRectMake(0, 0, 66, 24);
+        _dateBtn.frame = CGRectMake(0, 0, 90, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _dateBtn.layer.borderWidth = 1;
         _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
@@ -148,7 +148,7 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIButton *)photoBtn {
     if (!_photoBtn) {
         _photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _photoBtn.frame = CGRectMake(0, 0, 66, 24);
+        _photoBtn.frame = CGRectMake(0, 0, 90, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _photoBtn.layer.borderWidth = 1;
         _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;

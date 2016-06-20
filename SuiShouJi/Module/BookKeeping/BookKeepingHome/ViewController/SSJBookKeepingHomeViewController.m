@@ -683,9 +683,7 @@
                 [self.tableView reloadData];
                 [weakSelf.newlyAddChargeArr removeAllObjects];
                 
-                if (SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
-                    [[SSJDataSynchronizer shareInstance]startSyncWithSuccess:NULL failure:NULL];
-                }   
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             }
         } failure:^(NSError *error) {
             

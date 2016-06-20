@@ -104,17 +104,17 @@
     
     if (self.income != income) {
         self.income = income;
-        self.incomeValueLab.text = [[NSString stringWithFormat:@"%.2f",income] ssj_moneyDisplayFormat];
+        self.incomeValueLab.text = [NSString stringWithFormat:@"%.2f",income];
         [self.incomeValueLab sizeToFit];
     }
     
     if (self.pay != pay) {
         self.pay = pay;
-        self.payValueLab.text = [[NSString stringWithFormat:@"%.2f",pay] ssj_moneyDisplayFormat];
+        self.payValueLab.text = [NSString stringWithFormat:@"%.2f",pay];
         [self.payValueLab sizeToFit];
     }
     
-    self.sumValueLab.text = [[NSString stringWithFormat:@"%.2f",(self.income - self.pay)] ssj_moneyDisplayFormat];
+    self.sumValueLab.text = [NSString stringWithFormat:@"%.2f",(self.income - self.pay)];
     [self.sumValueLab sizeToFit];
     
     [self setNeedsLayout];
