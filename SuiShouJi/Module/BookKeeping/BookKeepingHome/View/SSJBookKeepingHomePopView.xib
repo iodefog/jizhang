@@ -12,14 +12,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_tankuang.png" translatesAutoresizingMaskIntoConstraints="NO" id="2lc-EN-isa">
-                    <rect key="frame" x="22" y="72" width="263" height="244"/>
+                    <rect key="frame" x="10" y="62" width="287" height="265"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="244.5" id="PMG-pW-b4n"/>
-                        <constraint firstAttribute="width" constant="263" id="fuH-Ut-c9K"/>
+                        <constraint firstAttribute="height" constant="265" id="PMG-pW-b4n"/>
+                        <constraint firstAttribute="width" constant="287" id="fuH-Ut-c9K"/>
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="day-e2-xIH">
-                    <rect key="frame" x="257" y="72" width="28" height="28"/>
+                    <rect key="frame" x="269" y="62" width="28" height="28"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="28" id="QyK-ZV-yRp"/>
                         <constraint firstAttribute="width" constant="28" id="djc-mL-i0T"/>
@@ -30,21 +30,21 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fJt-9t-7bo">
-                    <rect key="frame" x="62" y="267" width="80" height="34"/>
+                    <rect key="frame" x="50" y="278" width="80" height="34"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="80" id="UP1-wr-DUH"/>
                         <constraint firstAttribute="height" constant="34" id="wLC-nz-Qbk"/>
                     </constraints>
                     <state key="normal" title="注册">
-                        <color key="titleColor" red="0.27843137254901962" green="0.81176470588235294" blue="0.74509803921568629" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
                         <action selector="registerButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="rFd-Kf-syr"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5BL-WW-bPL">
-                    <rect key="frame" x="165" y="267" width="80" height="34"/>
-                    <color key="backgroundColor" red="0.2784313725" green="0.81176470590000005" blue="0.74509803919999995" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="177" y="278" width="80" height="34"/>
+                    <color key="backgroundColor" red="0.92156862745098034" green="0.29019607843137252" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="34" id="4Cq-mQ-jxj"/>
                         <constraint firstAttribute="width" constant="80" id="X1c-WG-Mv0"/>
@@ -77,7 +77,7 @@
         </view>
     </objects>
     <resources>
-        <image name="home_tankuang.png" width="263" height="244"/>
+        <image name="home_tankuang.png" width="273" height="265"/>
         <image name="home_tankuang_close.png" width="29" height="29"/>
     </resources>
 </document>

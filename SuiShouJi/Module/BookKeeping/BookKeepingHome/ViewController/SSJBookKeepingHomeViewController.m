@@ -89,7 +89,7 @@
         NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
         NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
         int days=((int)time)/(3600*24);
-        if (days > 14) {
+        if (days > 7) {
             SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
             popView.frame = [UIScreen mainScreen].bounds;
             __weak typeof(self) weakSelf = self;
@@ -122,6 +122,7 @@
     self.navigationItem.titleView = self.budgetButton;
     self.navigationItem.rightBarButtonItems = @[rightSpace, self.rightBarButton];
     
+
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];

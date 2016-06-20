@@ -32,16 +32,16 @@
     [super layoutSubviews];
     self.remindImage.center = CGPointMake(self.width / 2, self.height / 2);
     self.remindLabel.width = self.remindImage.width - 70;
-    self.remindLabel.bottom = self.remindImage.bottom - 40;
+    self.remindLabel.bottom = self.remindImage.bottom - 70;
     self.remindLabel.centerX = self.width / 2;
-    self.closeButton.size = CGSizeMake(27, 27);
-    self.closeButton.rightTop = CGPointMake(self.remindImage.right - 27, self.remindImage.top + 13);
+    self.closeButton.centerX = self.width / 2;
+    self.closeButton.top = self.remindLabel.bottom + 15;
 }
 
 -(UIImageView *)remindImage{
     if (!_remindImage) {
         _remindImage = [[UIImageView alloc]init];
-        _remindImage.size = CGSizeMake(320 , 328);
+        _remindImage.size = CGSizeMake(320 , 425);
         _remindImage.image = [UIImage imageNamed:@"home_remind"];
     }
     return _remindImage;
@@ -61,9 +61,11 @@
 
 -(UIButton *)closeButton{
     if (!_closeButton) {
-        _closeButton = [[UIButton alloc]init];
-        
-        [_closeButton setImage:[UIImage imageNamed:@"remind_close"] forState:UIControlStateNormal];
+        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 130, 40)];
+        _closeButton.layer.cornerRadius = 20;
+        _closeButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        _closeButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
+        [_closeButton setTitle:@"知道了" forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;
