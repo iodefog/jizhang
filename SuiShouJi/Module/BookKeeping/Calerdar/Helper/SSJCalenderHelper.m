@@ -76,7 +76,12 @@
              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         double dailySum = 0;
-        FMResultSet *result = [db executeQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ?",date,SSJUSERID()];
+        NSString *userId = SSJUSERID();
+        NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        if (!booksid.length) {
+            booksid = userId;
+        }
+        FMResultSet *result = [db executeQuery:@"SELECT SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",date,userId,booksid];
         if (!result) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);

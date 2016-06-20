@@ -11,9 +11,9 @@
 
 @interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
 
-@property (nonatomic,strong) SSJBillingChargeCellItem *item;
-
 typedef void(^beginEditeBtnClickBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
+@property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
 @property (nonatomic, copy) beginEditeBtnClickBlock beginEditeBtnClickBlock;
 
@@ -56,4 +56,5 @@ typedef void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 -(void)shake;
 
 -(void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion;
+
 @end
