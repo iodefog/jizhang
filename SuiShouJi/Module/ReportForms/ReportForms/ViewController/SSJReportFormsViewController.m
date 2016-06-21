@@ -218,6 +218,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
     [self reloadDatasInPeriod:_selectedPeriod];
     [self updateSurplusViewTitle];
+    
+    [MobClick event:@"form_date_picked"];
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
@@ -248,6 +250,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (void)enterCurveVewController {
     SSJReportFormsCurveViewController *curveVC = [[SSJReportFormsCurveViewController alloc] init];
     [self.navigationController pushViewController:curveVC animated:YES];
+    
+    [MobClick event:@"form_curve"];
 }
 
 - (void)customPeriodBtnAction {
@@ -257,6 +261,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _customPeriodLab.hidden = YES;
         [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
         [self reloadDatas];
+        
+        [MobClick event:@"form_date_custom_delete"];
     } else {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
         
@@ -276,6 +282,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             [wself.customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
         };
         [self.navigationController pushViewController:calendarVC animated:YES];
+        
+        [MobClick event:@"form_date_custom"];
     }
 }
 
