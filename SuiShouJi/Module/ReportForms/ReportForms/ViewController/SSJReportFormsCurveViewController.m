@@ -101,9 +101,9 @@
     return [model.income floatValue];
 }
 
-//- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
-//    
-//}
+- (void)curveGraphView:(SSJReportFormsCurveGraphView *)graphView didScrollToAxisXIndex:(NSUInteger)index {
+    [MobClick event:@"form_curve_move"];
+}
 
 #pragma mark - Event
 - (void)segmentControlValueDidChange {
@@ -111,6 +111,12 @@
     _questionBtn.hidden = _segmentControl.selectedSegmentIndex == 0;
     if (_descView.superview) {
         [_descView dismiss];
+    }
+    
+    if (_segmentControl.selectedSegmentIndex == 0) {
+        [MobClick event:@"form_curve_month"];
+    } else if (_segmentControl.selectedSegmentIndex == 1) {
+        [MobClick event:@"form_curve_week"];
     }
 }
 
@@ -120,6 +126,8 @@
         _endDate = nil;
         [self reloadData];
         [_editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        
+        [MobClick event:@"form_curve_date_custom_delete"];
     } else {
         SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
         if (!userItem.currentBooksId.length) {
@@ -136,6 +144,8 @@
             [wself.editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
         };
         [self.navigationController pushViewController:calendarVC animated:YES];
+        
+        [MobClick event:@"form_curve_date_custom"];
     }
 }
 

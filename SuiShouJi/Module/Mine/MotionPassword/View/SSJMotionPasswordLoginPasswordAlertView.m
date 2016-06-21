@@ -71,8 +71,9 @@ static NSString *const kPinkColor = @"eb4a64";
     [self ssj_popupInView:keyWindow completion:NULL];
 }
 
-- (void)dismiss {
-    [self ssj_dismiss:NULL];
+- (void)dismiss:(void (^ __nullable)(BOOL finished))completion {
+    [_passwordInput resignFirstResponder];
+    [self ssj_dismiss:completion];
 }
 
 - (NSString *)password {

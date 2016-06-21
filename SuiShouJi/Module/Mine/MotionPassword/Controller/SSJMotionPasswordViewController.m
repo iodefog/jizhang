@@ -386,11 +386,13 @@ static const int kVerifyFailureTimesLimit = 5;
             _needToVerifyOriginalPwd = NO;
             _miniMotionView.hidden = NO;
             _verifyLoginPwdBtn.hidden = YES;
-            [_passwordAlertView dismiss];
+            [_passwordAlertView dismiss:NULL];
         } else if (_type == SSJMotionPasswordViewControllerTypeTurnoff) {
             _userItem.motionPWDState = @"0";
             [SSJUserTableManager saveUserItem:_userItem];
-            [self goBackAction];
+            [_passwordAlertView dismiss:^(BOOL finished) {
+                [self goBackAction];
+            }];
         }
     } else {
         [_passwordAlertView shake];
