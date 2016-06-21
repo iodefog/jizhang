@@ -74,6 +74,8 @@
     
     [self.nameInput becomeFirstResponder];
     
+
+    
 }
 
 - (void)dismiss {
@@ -88,6 +90,10 @@
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
     } timeInterval:0.25 fininshed:NULL];
+    
+    if (self.editeViewDismissBlock) {
+        self.editeViewDismissBlock();
+    }
 }
 
 

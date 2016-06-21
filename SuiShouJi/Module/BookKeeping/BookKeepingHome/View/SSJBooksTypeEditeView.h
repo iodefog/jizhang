@@ -23,4 +23,8 @@ typedef void (^comfirmButtonClickedBlock)(SSJBooksTypeItem *item);
 typedef void (^deleteButtonClickedBlock)(SSJBooksTypeItem *item);
 
 @property(nonatomic,copy) deleteButtonClickedBlock deleteButtonClickedBlock;
+
+typedef void (^editeViewDismissBlock)();
+
+@property(nonatomic,copy) editeViewDismissBlock editeViewDismissBlock;
 @end

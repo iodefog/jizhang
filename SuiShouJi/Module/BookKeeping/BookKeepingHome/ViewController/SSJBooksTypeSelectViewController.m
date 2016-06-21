@@ -24,6 +24,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 @implementation SSJBooksTypeSelectViewController{
     NSString *_selectBooksId;
+    NSIndexPath *_editingIndex;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -87,11 +88,14 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     }else{
         cell.isSelected = NO;
     }
+    cell.isEditing = NO;
     __weak typeof(self) weakSelf = self;
     cell.longPressBlock = ^(){
-        [MobClick event:@"edit_account_book"];
-        weakSelf.booksEditeView.item = item;
-        [weakSelf.booksEditeView show];
+        if ([indexPath compare:_editingIndex] != NSOrderedSame) {
+            [MobClick event:@"edit_account_book"];
+            weakSelf.booksEditeView.item = item;
+            [weakSelf.booksEditeView show];
+        }
     };
     cell.item = item;
     return cell;
@@ -151,6 +155,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             }
             [weakSelf getDateFromDB];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        };
+        _booksEditeView.editeViewDismissBlock = ^(){
+            _editingIndex = nil;
         };
     }
     return _booksEditeView;

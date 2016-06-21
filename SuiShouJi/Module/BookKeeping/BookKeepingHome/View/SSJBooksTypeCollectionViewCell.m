@@ -104,9 +104,15 @@
 }
 
 -(void)longPressToDo:(id)sender{
-    if (self.longPressBlock) {
-        self.longPressBlock();
+    if (!_isEditing) {
+        if (self.longPressBlock) {
+            self.longPressBlock();
+        }
     }
+}
+
+-(void)setIsEditing:(BOOL)isEditing{
+    _isEditing = isEditing;
 }
 
 -(void)setIsSelected:(BOOL)isSelected{

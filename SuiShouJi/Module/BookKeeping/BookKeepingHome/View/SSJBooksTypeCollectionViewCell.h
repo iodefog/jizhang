@@ -18,4 +18,6 @@ typedef void (^longPressBlock)();
 
 @property(nonatomic) BOOL isSelected;
 
+@property(nonatomic) BOOL isEditing;
+
 @end
