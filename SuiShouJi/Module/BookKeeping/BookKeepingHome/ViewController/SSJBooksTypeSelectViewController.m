@@ -91,7 +91,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     cell.isEditing = NO;
     __weak typeof(self) weakSelf = self;
     cell.longPressBlock = ^(){
-        if ([indexPath compare:_editingIndex] != NSOrderedSame) {
+        if ([indexPath compare:_editingIndex] != NSOrderedSame || _editingIndex == nil) {
+            _editingIndex = indexPath;
             [MobClick event:@"edit_account_book"];
             weakSelf.booksEditeView.item = item;
             [weakSelf.booksEditeView show];

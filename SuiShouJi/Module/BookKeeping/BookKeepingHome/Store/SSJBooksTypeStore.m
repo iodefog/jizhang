@@ -36,6 +36,7 @@
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
         item.booksColor = @"#CCCCCC";
+        item.booksIcoin = @"books_tianjia";
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -46,8 +47,8 @@
 }
 
 + (BOOL)saveBooksTypeItem:(SSJBooksTypeItem *)item {
-    NSString * typeId = item.booksId;
-    if (!typeId || !typeId.length) {
+    NSString * booksid = item.booksId;
+    if (!booksid || !booksid.length) {
         item.booksId = SSJUUID();
     }
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
@@ -69,7 +70,7 @@
             booksOrder = 1;
         }
         [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
-        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", typeId]) {
+        if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
             sql = [self inertSQLStatementWithTypeInfo:typeInfo];
         } else {
             sql = [self updateSQLStatementWithTypeInfo:typeInfo];
