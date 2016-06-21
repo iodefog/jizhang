@@ -1562,7 +1562,6 @@
 		9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPatchUpdateService.h; sourceTree = "<group>"; };
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
 		9C2A63421D18DDC40010F1DA /* books_tianjia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "books_tianjia@2x.png"; sourceTree = "<group>"; };
-		9C2A66EE1D193F460010F1DA /* SuiShouJi copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SuiShouJi copy-Info.plist"; path = "/Users/ricky/Documents/ios/accountbook_ios/SuiShouJi copy-Info.plist"; sourceTree = "<absolute>"; };
 		9C2ABB8B1CF7E969002FC79E /* SSJGradientMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJGradientMaskView.h; sourceTree = "<group>"; };
 		9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJGradientMaskView.m; sourceTree = "<group>"; };
 		9C2BCFBA1CBF793500D8D8D3 /* ft_shouqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shouqi@2x.png"; sourceTree = "<group>"; };
@@ -4731,7 +4730,6 @@
 				BD543C3D1C1A6DBC00910D61 /* Products */,
 				99CD078B93C18A78568849F8 /* Pods */,
 				72D2CCC3D3120C3CD45EDEB9 /* Frameworks */,
-				9C2A66EE1D193F460010F1DA /* SuiShouJi copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
