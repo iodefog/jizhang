@@ -35,6 +35,10 @@
 @implementation SSJDailySumChargeTable
 
 + (BOOL)updateDailySumChargeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"delete from BK_DAILYSUM_CHARGE where cuserid = ?", userId]) {
+        return NO;
+    }
+    
     //  查询当前用户不同日期、账本的收入、支出总金额
     __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY), A.CBOOKSID, A.ICHARGEID from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and B.istate <> 2 group by A.CBILLDATE, A.CBOOKSID, B.ITYPE", userId];
     if (!result) {
@@ -78,56 +82,16 @@
     
     __block BOOL success = YES;
     
-    NSMutableArray *billDates = [NSMutableArray array];
-    NSMutableArray *bookIds = [NSMutableArray array];
-    
-    //  如果有相同日期的每日流水，就修改，反之则创建新的纪录
     [dailyChargeInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         __SSJDailySumChargeTableModel *model = obj;
-        result = [db executeQuery:@"select count(*) from BK_DAILYSUM_CHARGE where CBILLDATE = ? and CUSERID = ? and CBOOKSID = ?", model.billDate, userId, model.booksId];
-        if (!result) {
-            SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+        
+        if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE (CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT, CUSERID, cwritedate, cbooksid) values (?, ?, ?, ?, ?, ?, ?)", model.billDate, @(model.expenceAmount), @(model.incomeAmount), @(model.incomeAmount - model.expenceAmount), userId, [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], model.booksId]) {
             success = NO;
             *stop = YES;
-            return;
-        }
-        
-        while ([result next]) {
-            NSString *billDateStr = [NSString stringWithFormat:@"'%@'", model.billDate];
-            if (![billDates containsObject:billDateStr]) {
-                [billDates addObject:billDateStr];
-            }
-            
-            NSString *bookIdStr = [NSString stringWithFormat:@"'%@'", model.booksId];
-            if (![bookIds containsObject:bookIdStr]) {
-                [bookIds addObject:bookIdStr];
-            }
-            
-            if ([result intForColumnIndex:0] > 0) {
-                if (![db executeUpdate:@"update BK_DAILYSUM_CHARGE set EXPENCEAMOUNT = ?, INCOMEAMOUNT = ?, SUMAMOUNT = ? , cwritedate = ? where CBILLDATE = ? and CUSERID = ? and CBOOKSID = ?", @(model.expenceAmount), @(model.incomeAmount), @(model.incomeAmount - model.expenceAmount), [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], model.billDate, userId, model.booksId]) {
-                    success = NO;
-                    *stop = YES;
-                }
-            } else {
-                if (![db executeUpdate:@"insert into BK_DAILYSUM_CHARGE (CBILLDATE, EXPENCEAMOUNT, INCOMEAMOUNT, SUMAMOUNT, CUSERID, cwritedate, cbooksid) values (?, ?, ?, ?, ?, ?, ?)", model.billDate, @(model.expenceAmount), @(model.incomeAmount), @(model.incomeAmount - model.expenceAmount), userId, [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], model.booksId]) {
-                    success = NO;
-                    *stop = YES;
-                }
-            }
         }
     }];
     
-    [result close];
-    
-    if (!success) {
-        return NO;
-    }
-    
-    //  将BK_DAILYSUM_CHARGE表中不在有效流水的日期、账本的纪录删除
-    NSString *billDatesStr = [billDates componentsJoinedByString:@", "];
-    NSString *bookIdsStr = [bookIds componentsJoinedByString:@", "];
-    
-    return [db executeUpdate:[NSString stringWithFormat:@"delete from BK_DAILYSUM_CHARGE where cuserid = '%@' and cbilldate not in (%@) and cbooksid not in (%@)", userId, billDatesStr, bookIdsStr]];
+    return success;
 }
 
 @end
