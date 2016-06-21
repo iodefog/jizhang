@@ -337,8 +337,8 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                 // 第一次遍历，补充查询起始时间和查询出的第一条纪录之间的收支统计
                 if (startDate) {
                     SSJDatePeriod *startPeriod = [SSJDatePeriod datePeriodWithPeriodType:periodType date:startDate];
-                    NSMutableArray *periods = [[period periodsFromPeriod:startPeriod] mutableCopy];
-                    [periods addObject:startPeriod];
+                    NSMutableArray *periods = [@[startPeriod] mutableCopy];
+                    [periods addObjectsFromArray:[period periodsFromPeriod:startPeriod]];
                     for (int i = 0; i < periods.count - 1; i ++) {
                         SSJDatePeriod *addPeriod = periods[i];
                         weekOrder++;
