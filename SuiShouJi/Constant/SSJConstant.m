@@ -77,6 +77,11 @@ NSString *const SSJWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 
 NSString *const SSJQQAppKey = @"1105086761";
 
+NSString *const SSJQQAppId = @"mgRX8CiiIIrCoyu6";
+
 NSString *const SSJYWAppKey = @"23359906";
 
+NSString *const SSJWeiBoAppKey = @"4058368695";
+
+NSString *const SSJWeiBoSecret = @"b0584e24371e5ad6118dfa0e3de3197c";
 

@@ -91,11 +91,20 @@ extern NSString *const SSJWeiXinDescription;
 //微信secret
 extern NSString *const SSJWeiXinSecret;
 
+//qq appid
+extern NSString *const SSJQQAppId;
+
 //qq appkey
 extern NSString *const SSJQQAppKey;
 
 //阿里百川 appkey
 extern NSString *const SSJYWAppKey;
+
+//微博appkey
+extern NSString *const SSJWeiBoAppKey;
+
+//微博secret
+extern NSString *const SSJWeiBoSecret;
 
 /** -------------------- KEY -------------------- */
 //上一次选择的资金账户类型
