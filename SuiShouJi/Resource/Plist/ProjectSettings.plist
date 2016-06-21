@@ -8,14 +8,41 @@
 	<array>
 		<string>11501</string>
 	</array>
-	<key>RemoteNotificationInfo</key>
+	<key>Setting</key>
 	<dict>
 		<key>11501</key>
 		<dict>
-			<key>AppID</key>
-			<string></string>
-			<key>AppKey</key>
-			<string></string>
+			<key>WeiXinKey</key>
+			<string>wxf77f7a5867124dfd</string>
+			<key>WeiXinSecret</key>
+			<string>597d6402c3cd82ff12ba0e81abd34b1a</string>
+			<key>QQAppId</key>
+			<string>1105086761</string>
+			<key>QQAppKey</key>
+			<string>mgRX8CiiIIrCoyu6</string>
+			<key>YWAppKey</key>
+			<string>23359906</string>
+			<key>WeiBoAppKey</key>
+			<string>4058368695</string>
+			<key>WeiBoSecret</key>
+			<string>b0584e24371e5ad6118dfa0e3de3197c</string>
+		</dict>
+		<key>11502</key>
+		<dict>
+			<key>WeiXinKey</key>
+			<string>wxf77f7a5867124dfd</string>
+			<key>WeiXinSecret</key>
+			<string>597d6402c3cd82ff12ba0e81abd34b1a</string>
+			<key>QQAppId</key>
+			<string>1105086761</string>
+			<key>QQAppKey</key>
+			<string>mgRX8CiiIIrCoyu6</string>
+			<key>YWAppKey</key>
+			<string>23359906</string>
+			<key>WeiBoAppKey</key>
+			<string>4058368695</string>
+			<key>WeiBoSecret</key>
+			<string>b0584e24371e5ad6118dfa0e3de3197c</string>
 		</dict>
 	</dict>
 </dict>
