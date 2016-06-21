@@ -18,7 +18,8 @@
                     @"userId":@"cuserid",
                     @"cwriteDate":@"cwritedate",
                     @"operatorType":@"operatortype",
-                    @"booksOrder":@"iorder"};
+                    @"booksOrder":@"iorder",
+                    @"booksIcoin":@"cicoin"};
     }
     return mapping;
 }
