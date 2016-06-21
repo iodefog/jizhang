@@ -1330,6 +1330,9 @@
 		9C2A6A961D194CA70010F1DA /* bt_clean@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5E61C4C8E6A00ACE71A /* bt_clean@3x.png */; };
 		9C2A6A971D194CA70010F1DA /* bt_jiechu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C991DB11CE0A79E0031CD02 /* bt_jiechu@2x.png */; };
 		9C2A6A981D194CA70010F1DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
+		9C2A6AA01D1957040010F1DA /* youyu_weibo_banner.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2A6A9F1D1957040010F1DA /* youyu_weibo_banner.png */; };
+		9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */; };
+		9C2A6AA41D1963270010F1DA /* youyu_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2A6AA31D1963270010F1DA /* youyu_icon.png */; };
 		9C2ABB8D1CF7E969002FC79E /* SSJGradientMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */; };
 		9C2BCFBE1CBF793500D8D8D3 /* ft_shouqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2BCFBA1CBF793500D8D8D3 /* ft_shouqi@2x.png */; };
 		9C2BCFBF1CBF793500D8D8D3 /* ft_shouqi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2BCFBB1CBF793500D8D8D3 /* ft_shouqi@3x.png */; };
@@ -2471,7 +2474,9 @@
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
 		9C2A63421D18DDC40010F1DA /* books_tianjia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "books_tianjia@2x.png"; sourceTree = "<group>"; };
 		9C2A6A9D1D194CA70010F1DA /* youyujizhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = youyujizhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C2A6A9E1D194CA70010F1DA /* youyu-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "youyu-Info.plist"; path = "/Users/ricky/Documents/ios/accountbook_ios/youyu-Info.plist"; sourceTree = "<absolute>"; };
+		9C2A6A9F1D1957040010F1DA /* youyu_weibo_banner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youyu_weibo_banner.png; sourceTree = "<group>"; };
+		9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "youyu-Info.plist"; sourceTree = "<group>"; };
+		9C2A6AA31D1963270010F1DA /* youyu_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youyu_icon.png; sourceTree = "<group>"; };
 		9C2ABB8B1CF7E969002FC79E /* SSJGradientMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJGradientMaskView.h; sourceTree = "<group>"; };
 		9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJGradientMaskView.m; sourceTree = "<group>"; };
 		9C2BCFBA1CBF793500D8D8D3 /* ft_shouqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shouqi@2x.png"; sourceTree = "<group>"; };
@@ -4006,6 +4011,7 @@
 				9C6E30B41CEC067D00394BB9 /* canleder_jia@2x.png */,
 				9C6E30AB1CEC067500394BB9 /* canleder_jia@3x.png */,
 				BDF510721C925A6500A49D74 /* weibo_banner.png */,
+				9C2A6A9F1D1957040010F1DA /* youyu_weibo_banner.png */,
 				9C564F0F1CEDBBE5009F7A30 /* founds_yindao-667@2x.png */,
 				9C564F101CEDBBE5009F7A30 /* founds_yindao@2x.png */,
 				9C564F0B1CEDBBDD009F7A30 /* founds_yindao-568@2x.png */,
@@ -4653,6 +4659,7 @@
 		9C4077FD1CE1B84000A61956 /* MoreImage */ = {
 			isa = PBXGroup;
 			children = (
+				9C2A6AA31D1963270010F1DA /* youyu_icon.png */,
 				9C3305CA1D10361300DC4D15 /* xuhuan_zijinzhanghu@3x.png */,
 				9C3305DB1D10361300DC4D15 /* xuhuan_zijinzhanghu@2x.png */,
 				9C3305CB1D10361300DC4D15 /* xuhuan_beizhu@2x.png */,
@@ -5703,12 +5710,12 @@
 		BD543C3F1C1A6DBC00910D61 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */,
 				BD543C421C1A6DBC00910D61 /* AppDelegate.h */,
 				BD543C431C1A6DBC00910D61 /* AppDelegate.m */,
 				BD04332B1C1A7C900051E7AB /* PrefixHeader.pch */,
 				BD543C401C1A6DBC00910D61 /* main.m */,
 				BD543C501C1A6DBC00910D61 /* Info.plist */,
-				9C2A6A9E1D194CA70010F1DA /* youyu-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -6713,6 +6720,7 @@
 				7DDDA7BE1CBE1BFD0029ADAC /* help_tree_level_5@2x.png in Resources */,
 				7DDDA7BC1CBE1BFD0029ADAC /* help_tree_level_4@2x.png in Resources */,
 				BDF510921C925BB500A49D74 /* home_tankuang_close@2x.png in Resources */,
+				9C2A6AA01D1957040010F1DA /* youyu_weibo_banner.png in Resources */,
 				9C991DFD1CE0A79F0031CD02 /* bt_chuchai@3x.png in Resources */,
 				7DDDA7C81CBE1BFD0029ADAC /* rule_bg@2x.png in Resources */,
 				7DAD4A5F1C4F552F004B7FF0 /* reportForms_left@3x.png in Resources */,
@@ -6884,6 +6892,7 @@
 				9C0F00FA1CE9CE8500A31708 /* bt_zhuanqian@3x.png in Resources */,
 				9C3305EF1D10361300DC4D15 /* xuhuan_zijinzhanghu@2x.png in Resources */,
 				9C4078281CE1B92E00A61956 /* more_zhouqi@2x.png in Resources */,
+				9C2A6AA41D1963270010F1DA /* youyu_icon.png in Resources */,
 				9C4078201CE1B92E00A61956 /* more_fankui@2x.png in Resources */,
 				7DD7D6E81C4C8E6A00ACE71A /* bt_yiwai@2x.png in Resources */,
 				9C4078331CE1FC3100A61956 /* tab_accounte_sel@3x.png in Resources */,
@@ -6911,6 +6920,7 @@
 				7DD7D6EE1C4C8E6A00ACE71A /* bt_zhuanru@2x.png in Resources */,
 				9C991DEF1CE0A79F0031CD02 /* bt_baozhuang@3x.png in Resources */,
 				7DD7D6D51C4C8E6A00ACE71A /* bt_shouzhai@3x.png in Resources */,
+				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
 				9C762FB91CE9B21200ED88BE /* dian_sel@3x.png in Resources */,
 				BD976FC41C4F57FB00B0E26D /* solid_circle@3x.png in Resources */,
 				7DD7D6F91C4C8E6A00ACE71A /* edit@3x.png in Resources */,
@@ -8119,7 +8129,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/youyu-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/youyu-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
@@ -8164,7 +8174,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/youyu-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/youyu-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

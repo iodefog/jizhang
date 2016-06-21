@@ -14,8 +14,6 @@
 #import <UMMobClick/MobClick.h>
 #import "UMSocial.h"
 
-//  友盟key
-static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 @implementation SSJUmengManager
 
@@ -40,7 +38,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [MobClick setAppVersion:SSJAppVersion()]; //参数为NSString * 类型,自定义app版本信息，如果不设置，默认从CFBundleVersion里取
     //  reportPolicy为枚举类型,可以为 REALTIME, BATCH,SENDDAILY,SENDWIFIONLY几种
     //  channelId 为NSString * 类型，channelId 为nil或@""时,默认会被被当作@"App Store"渠道
-    UMConfigInstance.appKey = kUMAppKey;
+    UMConfigInstance.appKey = SSJDetailSettingForSource(@"UMAppKey");
     UMConfigInstance.ePolicy = (ReportPolicy)BATCH;
     UMConfigInstance.channelId = SSJDefaultSource();
     [MobClick startWithConfigure:UMConfigInstance]; 
@@ -49,14 +47,14 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 /* 友盟分享 */
 + (void)umengShare{
-    [UMSocialData setAppKey:kUMAppKey];
-    [UMSocialWechatHandler setWXAppId:SSJWeiXinAppKey appSecret:SSJWeiXinSecret url:@"http://5.9188.com/note/d/"];
-    [UMSocialData defaultData].extConfig.wechatSessionData.title = @"9188记账，一种快速实现财务自由的方式。";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账，一种快速实现财务自由的方式。";
-    [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://5.9188.com/note/d/";
-    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:SSJWeiBoAppKey secret:SSJWeiBoSecret RedirectURL:SSJAppStoreAddress];
-    [UMSocialQQHandler setQQWithAppId:SSJQQAppId appKey:SSJQQAppKey url:@"http://5.9188.com/note/d/"];
-    [UMSocialData defaultData].extConfig.qqData.title = @"9188记账，一种快速实现财务自由的方式。";
+    [UMSocialData setAppKey:SSJDetailSettingForSource(@"UMAppKey")];
+    [UMSocialWechatHandler setWXAppId:SSJDetailSettingForSource(@"WeiXinKey") appSecret:SSJDetailSettingForSource(@"WeiXinSecret") url:SSJDetailSettingForSource(@"ShareUrl")];
+    [UMSocialData defaultData].extConfig.wechatSessionData.title = SSJDetailSettingForSource(@"ShareTitle");
+    [UMSocialData defaultData].extConfig.wechatTimelineData.title = SSJDetailSettingForSource(@"ShareTitle");
+    [UMSocialData defaultData].extConfig.wechatTimelineData.url = SSJDetailSettingForSource(@"ShareUrl");
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:SSJDetailSettingForSource(@"WeiBoAppKey") secret:SSJDetailSettingForSource(@"WeiBoSecret") RedirectURL:SSJDetailSettingForSource(@"AppStoreUrl")];
+    [UMSocialQQHandler setQQWithAppId:SSJDetailSettingForSource(@"QQAppId") appKey:SSJDetailSettingForSource(@"QQAppKey") url:SSJDetailSettingForSource(@"ShareUrl")];
+    [UMSocialData defaultData].extConfig.qqData.title = SSJDetailSettingForSource(@"ShareTitle");
 }
 
 

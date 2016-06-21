@@ -15,7 +15,7 @@
 
 @implementation SSJQQLoginHelper
 -(void)qqLoginWithSucessBlock:(qqLoginSuccessBlock)sucessBlock{
-    self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:SSJQQAppId andDelegate:self];
+    self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:SSJDetailSettingForSource(@"QQAppId") andDelegate:self];
     NSArray *permissions= [NSArray arrayWithObjects:@"get_user_info",@"get_simple_userinfo",@"add_t",nil];
     [self.tencentOAuth authorize:permissions inSafari:NO];
     self.sucessBlock = sucessBlock;

@@ -42,9 +42,6 @@ static const NSTimeInterval kLockScreenDelay = 60;
 
 static NSString *const kEnterBackgroundTimeKey = @"kEnterBackgroundTimeKey";
 
-//微信appid
-static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
-
 //微信desc
 static NSString *const kWeiXinDescription = @"weixinLogin";
 
@@ -109,7 +106,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJRegularManager registerRegularTaskNotification];
     
     //微信登录
-    [WXApi registerApp:kWeiXinAppKey withDescription:kWeiXinDescription];
+    [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){

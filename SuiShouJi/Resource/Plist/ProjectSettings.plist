@@ -26,23 +26,51 @@
 			<string>4058368695</string>
 			<key>WeiBoSecret</key>
 			<string>b0584e24371e5ad6118dfa0e3de3197c</string>
+			<key>UMAppKey</key>
+			<string>566e6f12e0f55ac052003f62</string>
+			<key>ShareTitle</key>
+			<string>9188记账，一种快速实现财务自由的方式。</string>
+			<key>ShareUrl</key>
+			<string>http://5.9188.com/note/d/</string>
+			<key>ShareContent</key>
+			<string>财务管理第一步，从记录消费生活开始!</string>
+			<key>ShareIcon</key>
+			<string>icon</string>
+			<key>WeiboBanner</key>
+			<string>weibo_banner</string>
+			<key>AppStoreUrl</key>
+			<string>https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&amp;ls=1&amp;mt=8</string>
 		</dict>
 		<key>11502</key>
 		<dict>
 			<key>WeiXinKey</key>
-			<string>wxf77f7a5867124dfd</string>
+			<string>wx1973e4bbb6b9d773</string>
 			<key>WeiXinSecret</key>
-			<string>597d6402c3cd82ff12ba0e81abd34b1a</string>
+			<string>b8d9ac7bdbd22a8df2e9651b5ab39c41</string>
 			<key>QQAppId</key>
-			<string>1105086761</string>
+			<string>1105340301</string>
 			<key>QQAppKey</key>
-			<string>mgRX8CiiIIrCoyu6</string>
+			<string>mW8hRwplNTlrUj3O</string>
 			<key>YWAppKey</key>
-			<string>23359906</string>
+			<string>23390795</string>
 			<key>WeiBoAppKey</key>
-			<string>4058368695</string>
+			<string>2128876025</string>
 			<key>WeiBoSecret</key>
-			<string>b0584e24371e5ad6118dfa0e3de3197c</string>
+			<string>bcbf3b6f1f534d8e39b0b52418761921</string>
+			<key>UMAppKey</key>
+			<string>5767bf4a67e58ef35d002740</string>
+			<key>ShareTitle</key>
+			<string>有鱼记账，帮我把小家打理得更好。</string>
+			<key>ShareUrl</key>
+			<string>http://jz.9188.com/app/yy/index.html</string>
+			<key>ShareContent</key>
+			<string>在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。</string>
+			<key>ShareIcon</key>
+			<string>youyu_icon</string>
+			<key>WeiboBanner</key>
+			<string>youyu_weibo_banner</string>
+			<key>AppStoreUrl</key>
+			<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-quan-min-kou/id1126210029?l=zh&amp;ls=1&amp;mt=8</string>
 		</dict>
 	</dict>
 </dict>
