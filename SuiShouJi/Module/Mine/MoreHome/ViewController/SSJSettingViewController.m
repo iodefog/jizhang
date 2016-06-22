@@ -121,15 +121,24 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  把APP推荐给好友
     if ([title isEqualToString:kTitle2]) {
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                        appKey:kUMAppKey
-                                        shareText:SSJDetailSettingForSource(@"ShareContent")
-                                        shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
+        if ([SSJDefaultSource() isEqualToString:@"11501"]) {
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:kUMAppKey
+                                              shareText:@"财务管理第一步，从记录消费生活开始!"
+                                             shareImage:[UIImage imageNamed:@"icon"]
                                         shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                        delegate:self];
+                                               delegate:self];
+        }else{
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:kUMAppKey
+                                              shareText:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。"
+                                             shareImage:[UIImage imageNamed:@"youyu_icon"]
+                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+                                               delegate:self];
         }
-
+    }
 }
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.titles[section] count];
@@ -173,8 +182,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if (platformName == UMShareToSina) {
         socialData.shareText = [NSString stringWithFormat:@"%@ %@",SSJDetailSettingForSource(@"ShareTitle"),SSJDetailSettingForSource(@"ShareUrl")];
         socialData.shareImage = [UIImage imageNamed:SSJDetailSettingForSource(@"WeiboBanner")];
-    }
-    else{
+    }else{
         socialData.shareText = SSJDetailSettingForSource(@"ShareContent");
     }
 }

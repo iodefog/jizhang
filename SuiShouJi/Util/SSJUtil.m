@@ -197,7 +197,7 @@ NSDictionary* SSJSettingForSource(){
 NSString* SSJDetailSettingForSource(NSString *key){
     NSDictionary* dic = SSJProjectSettings();
     if (dic) {
-        return [[[dic objectForKey:@"Setting"] objectForKey:SSJDefaultSource()] objectForKey:key];
+        return [NSString stringWithFormat:@"%@",[[[dic objectForKey:@"Setting"] objectForKey:SSJDefaultSource()] objectForKey:key]];
     }else{
         return nil;
     }
