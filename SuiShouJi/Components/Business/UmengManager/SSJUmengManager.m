@@ -55,7 +55,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     [UMSocialData defaultData].extConfig.wechatTimelineData.title = @"9188记账，一种快速实现财务自由的方式。";
     [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://5.9188.com/note/d/";
     [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:SSJWeiBoAppKey secret:SSJWeiBoSecret RedirectURL:SSJAppStoreAddress];
-    [UMSocialQQHandler setQQWithAppId:SSJQQAppId appKey:SSJQQAppKey url:@"http://5.9188.com/note/d/"];
+    [UMSocialQQHandler setQQWithAppId:@"1105086761" appKey:@"mgRX8CiiIIrCoyu6" url:@"http://5.9188.com/note/d/"];
     [UMSocialData defaultData].extConfig.qqData.title = @"9188记账，一种快速实现财务自由的方式。";
 }
 
