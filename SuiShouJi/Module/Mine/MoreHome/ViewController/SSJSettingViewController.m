@@ -24,8 +24,6 @@ static NSString *const kTitle2 = @"分享APP";
 static NSString *const kTitle3 = @"关于我们";
 static NSString *const kTitle4 = @"检查更新";
 
-static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
-
 
 @interface SSJSettingViewController ()
 @property (nonatomic, strong) NSArray *titles;
@@ -123,16 +121,16 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     if ([title isEqualToString:kTitle2]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
             [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:kUMAppKey
+                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
                                               shareText:@"财务管理第一步，从记录消费生活开始!"
-                                             shareImage:[UIImage imageNamed:@"icon"]
+                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
                                         shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                                delegate:self];
         }else{
             [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:kUMAppKey
+                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
                                               shareText:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。"
-                                             shareImage:[UIImage imageNamed:@"youyu_icon"]
+                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
                                         shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                                delegate:self];
         }
