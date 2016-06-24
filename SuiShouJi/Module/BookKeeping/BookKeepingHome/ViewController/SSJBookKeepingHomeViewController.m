@@ -681,7 +681,6 @@
                     }
                     [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                 }
-                [self.tableView reloadData];
                 [weakSelf.newlyAddChargeArr removeAllObjects];
                 
                 [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
