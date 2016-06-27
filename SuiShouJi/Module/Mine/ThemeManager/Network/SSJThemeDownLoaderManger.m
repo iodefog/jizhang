@@ -58,6 +58,10 @@ static id _instance;
         }
     }];
     
+    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession * _Nonnull session, NSURLSessionDownloadTask * _Nonnull downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+        
+    }];
+    
     [downloadTask resume];
 }
 

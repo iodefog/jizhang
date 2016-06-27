@@ -11,4 +11,5 @@
 
 @interface SSJThemeHomeCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) SSJThemeItem *item;
+
 @end

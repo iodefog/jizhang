@@ -31,18 +31,15 @@
     return self;
 }
 
--(float)cellHeight{
-    float height = 225 + [self.themeTitleLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height;
-    return height;
-}
-
 -(void)layoutSubviews{
+    [super layoutSubviews];
+    self.themeImage.image = [UIImage ssj_imageWithColor:[UIColor redColor] size:CGSizeMake(self.width, 179)];
     self.themeImage.size = CGSizeMake(self.width, 179);
     self.themeImage.leftTop = CGPointMake(0, 0);
-    self.themeTitleLabel.leftTop = CGPointMake(5, 15);
+    self.themeTitleLabel.leftTop = CGPointMake(5, self.themeImage.bottom + 15);
     self.themeSizeLabel.leftBottom = CGPointMake(self.themeTitleLabel.right + 10, self.themeTitleLabel.bottom);
     self.themeStatusLabel.leftTop = CGPointMake(self.themeTitleLabel.left, self.themeTitleLabel.bottom + 10);
-    self.themeStatusButton.leftTop =  self.themeStatusLabel.leftTop;
+    self.themeStatusButton.leftTop = self.themeStatusLabel.leftTop;
 }
 
 -(UIImageView *)themeImage{
@@ -77,6 +74,8 @@
         _themeStatusLabel = [[UILabel alloc]init];
         _themeStatusLabel.font = [UIFont systemFontOfSize:13];
         _themeStatusLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _themeStatusLabel.text = @"使用中";
+        [_themeStatusLabel sizeToFit];
     }
     return _themeStatusLabel;
 }
