@@ -1,5 +1,5 @@
 //
-//  SSJThemeDownLoadManager.h
+//  SSJThemeDownLoaderManger.h
 //  SuiShouJi
 //
 //  Created by ricky on 16/6/27.
@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJThemeDownLoadManager : NSObject
+@interface SSJThemeDownLoaderManger : NSObject
 
 @end

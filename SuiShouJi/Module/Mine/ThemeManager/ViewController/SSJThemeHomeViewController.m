@@ -7,9 +7,11 @@
 //
 
 #import "SSJThemeHomeViewController.h"
+#import "SSJNetworkReachabilityManager.h"
 
 @interface SSJThemeHomeViewController ()
-
+@property(nonatomic, strong) UILabel *hintLabel;
+@property(nonatomic, strong) UICollectionView *themeSelectView;
 @end
 
 @implementation SSJThemeHomeViewController
@@ -22,10 +24,45 @@
     return self;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self checkNetwork];
+    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    [self.view addSubview:self.hintLabel];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    self.hintLabel.width = self.view.width;
+    self.hintLabel.height = 32;
+    self.hintLabel.leftTop = CGPointMake(0, 10);
+}
+
+#pragma mark - Private
+-(void)checkNetwork{
+    if ([SSJNetworkReachabilityManager isReachable]) {
+        NSLog(@"yes");
+    }else{
+        NSLog(@"no");
+    };
+}
+
+#pragma mark - Getter
+-(UILabel *)hintLabel{
+    if (!_hintLabel) {
+        _hintLabel = [[UILabel alloc]init];
+        _hintLabel.textAlignment = NSTextAlignmentLeft;
+        _hintLabel.backgroundColor = [UIColor whiteColor];
+        _hintLabel.text = @"  温馨提示，换肤请在WiFi环境下进行，否则会较消耗流量哦。";
+        _hintLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _hintLabel.font = [UIFont systemFontOfSize:14];
+    }
+    return _hintLabel;
 }
 
 - (void)didReceiveMemoryWarning {

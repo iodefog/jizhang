@@ -249,7 +249,7 @@ static BOOL KHasEnterMineHome;
     }
     
     //主题
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle2]) {
         SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
         [self.navigationController pushViewController:themeVC animated:YES];
     }
