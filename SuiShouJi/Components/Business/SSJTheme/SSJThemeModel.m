@@ -23,4 +23,9 @@
     return self;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"<%@>:%@", self, @{@"ID":_ID,
+                                                          @"name":_name}];
+}
+
 @end

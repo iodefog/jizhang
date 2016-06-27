@@ -14,11 +14,12 @@
 @implementation SSJThemeSetting
 
 + (BOOL)addThemeModel:(SSJThemeModel *)model {
-    NSMutableData *data = [NSMutableData data];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    [archiver encodeObject:model forKey:model.ID];
-    [archiver finishEncoding];
-    return [data writeToFile:[self settingFilePath] atomically:YES];
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    NSMutableDictionary *newModelInfo = [NSMutableDictionary dictionaryWithCapacity:modelInfo.count + 1];
+    [newModelInfo addEntriesFromDictionary:modelInfo];
+    [newModelInfo setObject:model forKey:model.ID];
+    
+    return [NSKeyedArchiver archiveRootObject:newModelInfo toFile:[self settingFilePath]];
 }
 
 + (BOOL)switchToThemeID:(NSString *)ID {
@@ -34,8 +35,8 @@
 + (SSJThemeModel *)currentThemeModel {
     NSString *themeID = [[NSUserDefaults standardUserDefaults] objectForKey:SSJCurrentThemeIDKey];
     if (themeID.length) {
-        NSKeyedUnarchiver *unarchiver = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
-        SSJThemeModel *model = [unarchiver decodeObjectForKey:themeID];
+        NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+        SSJThemeModel *model = [modelInfo objectForKey:themeID];
         if (model) {
             return model;
         }
@@ -45,18 +46,12 @@
 }
 
 + (NSArray *)allThemeModels {
-    NSData *data = [NSData dataWithContentsOfFile:[self settingFilePath]];
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-    NSArray *models = [unarchiver decodeObjectForKey:SSJThemeSettingListKey];
-    if (models) {
-        return models;
-    }
-    
-    return [NSArray arrayWithObject:[self defaultThemeModel]];
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    return [modelInfo allValues];
 }
 
 + (NSString *)settingFilePath {
-    NSString *settingPath = [[NSString ssj_themeDirectory] stringByAppendingString:@"settings"];
+    NSString *settingPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"settings"];
     return settingPath;
 }
 

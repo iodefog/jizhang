@@ -9,7 +9,6 @@
 #import "UIImage+SSJTheme.h"
 #import "NSString+SSJTheme.h"
 #import "SSJThemeConst.h"
-#import "UIImageView+WebCache.h"
 
 @implementation UIImage (SSJTheme)
 

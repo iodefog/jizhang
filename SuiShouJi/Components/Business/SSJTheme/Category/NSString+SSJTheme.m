@@ -19,7 +19,7 @@
     BOOL isExisted = [[NSFileManager defaultManager] fileExistsAtPath:directory isDirectory:&isDirectory];
     if (!isExisted || !isDirectory) {
         NSError *error = nil;
-        if ([[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&error]) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:&error]) {
             SSJPRINT(@"创建主题包路径发生错误,error:%@", [error localizedDescription]);
             return nil;
         }

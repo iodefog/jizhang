@@ -5796,12 +5796,12 @@
 		BD543C3F1C1A6DBC00910D61 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */,
 				BD543C421C1A6DBC00910D61 /* AppDelegate.h */,
 				BD543C431C1A6DBC00910D61 /* AppDelegate.m */,
 				BD04332B1C1A7C900051E7AB /* PrefixHeader.pch */,
 				BD543C401C1A6DBC00910D61 /* main.m */,
 				BD543C501C1A6DBC00910D61 /* Info.plist */,
+				9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
