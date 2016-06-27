@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJThemeModel : NSObject <NSCoding, NSDiscardableContent>
+@interface SSJThemeModel : NSObject <NSCoding>
 
 @property (nonatomic, copy) NSString *ID;
 
