@@ -9,9 +9,7 @@
 #import "SSJThemeSetting.h"
 #import "SSJThemeModel.h"
 #import "NSString+SSJTheme.h"
-
-static NSString *const SSJThemeSettingListKey = @"SSJThemeSettingListKey";
-static NSString *const SSJCurrentThemeIDKey = @"SSJCurrentThemeIDKey";
+#import "SSJThemeConst.h"
 
 @implementation SSJThemeSetting
 

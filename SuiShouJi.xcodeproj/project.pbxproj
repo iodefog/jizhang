@@ -37,6 +37,11 @@
 		7D3D0E781CED8EE200A8609B /* record_making_guide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3D0E741CED8EE200A8609B /* record_making_guide@2x.png */; };
 		7D3D0E791CED8EE200A8609B /* record_making_guide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3D0E751CED8EE200A8609B /* record_making_guide@3x.png */; };
 		7D41A6961D1415F30043FD81 /* SSJNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */; };
+		7D4632821D2100E20040BABD /* SSJThemeConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4632811D2100E20040BABD /* SSJThemeConst.m */; };
+		7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
+		7D46328B1D2100EC0040BABD /* SSJThemeConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4632811D2100E20040BABD /* SSJThemeConst.m */; };
+		7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
+		7D46328F1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */; };
 		7D4A42F81CC5E210002F0264 /* check_state_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A42F71CC5E210002F0264 /* check_state_bg@2x.png */; };
 		7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43091CC63755002F0264 /* rain_sound.wav */; };
 		7D4A431E1CC86F51002F0264 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4A431D1CC86F51002F0264 /* AVFoundation.framework */; };
@@ -1960,6 +1965,10 @@
 		7D3D0E751CED8EE200A8609B /* record_making_guide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_guide@3x.png"; sourceTree = "<group>"; };
 		7D41A6941D1415F30043FD81 /* SSJNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNetworkReachabilityManager.h; sourceTree = "<group>"; };
 		7D41A6951D1415F30043FD81 /* SSJNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		7D4632801D2100E20040BABD /* SSJThemeConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeConst.h; sourceTree = "<group>"; };
+		7D4632811D2100E20040BABD /* SSJThemeConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeConst.m; sourceTree = "<group>"; };
+		7D46328C1D21029F0040BABD /* UIImageView+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+SSJTheme.h"; sourceTree = "<group>"; };
+		7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+SSJTheme.m"; sourceTree = "<group>"; };
 		7D4A42F71CC5E210002F0264 /* check_state_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check_state_bg@2x.png"; sourceTree = "<group>"; };
 		7D4A43091CC63755002F0264 /* rain_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rain_sound.wav; sourceTree = "<group>"; };
 		7D4A431D1CC86F51002F0264 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -4477,6 +4486,8 @@
 				7DE4A7DD1D20C0F600F05BF0 /* SSJThemeModel.m */,
 				7DE4A7DF1D20C6DE00F05BF0 /* SSJThemeManager.h */,
 				7DE4A7E01D20C6DE00F05BF0 /* SSJThemeManager.m */,
+				7D4632801D2100E20040BABD /* SSJThemeConst.h */,
+				7D4632811D2100E20040BABD /* SSJThemeConst.m */,
 			);
 			path = SSJTheme;
 			sourceTree = "<group>";
@@ -4504,6 +4515,8 @@
 				7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */,
 				7DE4A7EA1D20DD8C00F05BF0 /* UIImage+SSJTheme.h */,
 				7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */,
+				7D46328C1D21029F0040BABD /* UIImageView+SSJTheme.h */,
+				7D46328D1D21029F0040BABD /* UIImageView+SSJTheme.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -7464,6 +7477,7 @@
 				7DE4A7E71D20DC8500F05BF0 /* SSJThemeSetting.m in Sources */,
 				9C2A670B1D194CA70010F1DA /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C2A670C1D194CA70010F1DA /* SSJPercentCircleAdditionNodeItem.m in Sources */,
+				7D46328B1D2100EC0040BABD /* SSJThemeConst.m in Sources */,
 				9C2A670D1D194CA70010F1DA /* SSJBookKeepingHomeNodateFooter.m in Sources */,
 				9C2A670E1D194CA70010F1DA /* SSJUserUtil.m in Sources */,
 				9C2A670F1D194CA70010F1DA /* SSJTransferDetailHeader.m in Sources */,
@@ -7589,6 +7603,7 @@
 				9C2A67861D194CA70010F1DA /* SSJBudgetDetailHeaderView.m in Sources */,
 				9C2A67871D194CA70010F1DA /* SSJUtil.m in Sources */,
 				9C2A67881D194CA70010F1DA /* SSJReportFormsScaleAxisView.m in Sources */,
+				7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */,
 				9C2A67891D194CA70010F1DA /* SSJBudgetEditLabelCell.m in Sources */,
 				9C2A678A1D194CA70010F1DA /* SSJCalenderTableViewCell.m in Sources */,
 				9C2A678B1D194CA70010F1DA /* SSJBookKeepingButton.m in Sources */,
@@ -7740,6 +7755,7 @@
 				9C2A681B1D194CA70010F1DA /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C2A681C1D194CA70010F1DA /* SSJBillingChargeViewController.m in Sources */,
 				9C2A681D1D194CA70010F1DA /* SSJDateAddition.m in Sources */,
+				7D46328F1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				9C2A681E1D194CA70010F1DA /* main.m in Sources */,
 				9C2A681F1D194CA70010F1DA /* SSJRegistCompleteViewController.m in Sources */,
 				9C2A68201D194CA70010F1DA /* SSJCircleChargeStore.m in Sources */,
@@ -7805,6 +7821,7 @@
 				7DE6E8711C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
 				7D5F332A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m in Sources */,
+				7D4632821D2100E20040BABD /* SSJThemeConst.m in Sources */,
 				7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */,
 				9CD9BC541CFEAAAE0061803B /* SSJTransferDetailHeader.m in Sources */,
 				9CD9BC051CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.m in Sources */,
@@ -8082,6 +8099,7 @@
 				7D2B23F31C3A1225009A74A8 /* SSJBillingChargeViewController.m in Sources */,
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
+				7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
 				9CD9BC091CFD2DAA0061803B /* SSJCircleChargeStore.m in Sources */,
 				7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */,
