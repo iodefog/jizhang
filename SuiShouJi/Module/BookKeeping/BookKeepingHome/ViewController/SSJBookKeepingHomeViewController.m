@@ -710,7 +710,15 @@
 }
 
 -(void)reloadDataAfterSync{
-    [self getDateFromDatebase];
+    // 防止数据同步在动画完成前，导致动画重复执行
+    if (!self.hasLoad) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self getDateFromDatebase];
+        });
+    } else {
+        [self getDateFromDatebase];
+    }
+    
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
