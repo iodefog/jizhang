@@ -21,6 +21,7 @@
 #import "SSJUserInfoItem.h"
 #import "SSJBookkeepingReminderViewController.h"
 #import "SSJCircleChargeSettingViewController.h"
+#import "SSJThemeHomeViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "SSJSettingViewController.h"
 #import "SSJRegistGetVerViewController.h"
@@ -40,11 +41,12 @@
 
 
 static NSString *const kTitle1 = @"记账提醒";
-static NSString *const kTitle2 = @"周期记账";
-static NSString *const kTitle3 = @"数据文件导出";
-static NSString *const kTitle4 = @"意见反馈";
-static NSString *const kTitle5 = @"给个好评";
-static NSString *const kTitle6 = @"设置";
+static NSString *const kTitle2 = @"主题皮肤";
+static NSString *const kTitle3 = @"周期记账";
+static NSString *const kTitle4 = @"数据文件导出";
+static NSString *const kTitle5 = @"意见反馈";
+static NSString *const kTitle6 = @"给个好评";
+static NSString *const kTitle7 = @"设置";
 
 static BOOL KHasEnterMineHome;
 
@@ -93,12 +95,12 @@ static BOOL KHasEnterMineHome;
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
-        self.titles = @[@[kTitle1 , kTitle2], @[kTitle3],@[kTitle4 , kTitle6]];
-        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle6];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle6 , kTitle7];
     } else {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]];
-        self.titles = @[@[kTitle1 , kTitle2], @[kTitle3], @[kTitle4 , kTitle5 , kTitle6]];
-        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle5 , kTitle4 , kTitle6];
+        self.titles = @[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle5 , kTitle4 , kTitle6 , kTitle7];
 
     }
 
@@ -162,7 +164,7 @@ static BOOL KHasEnterMineHome;
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     //  给个好评
-    if ([title isEqualToString:kTitle5]) {
+    if ([title isEqualToString:kTitle6]) {
         NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
@@ -178,7 +180,7 @@ static BOOL KHasEnterMineHome;
     }
     
     //  周期记账
-    if ([title isEqualToString:kTitle2]) {
+    if ([title isEqualToString:kTitle3]) {
         SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
         return;
@@ -202,7 +204,7 @@ static BOOL KHasEnterMineHome;
 //    }
     
     //意见反馈
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle5]) {
         __weak typeof(self) weakSelf = self;
         [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
             if ( viewController != nil ) {
@@ -235,15 +237,21 @@ static BOOL KHasEnterMineHome;
     }
     
     //数据导出
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle4]) {
         SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
         [self.navigationController pushViewController:magicExportVC animated:YES];
     }
     
     //设置
-    if ([title isEqualToString:kTitle6]) {
+    if ([title isEqualToString:kTitle7]) {
         SSJSettingViewController *settingVC = [[SSJSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:settingVC animated:YES];
+    }
+    
+    //主题
+    if ([title isEqualToString:kTitle3]) {
+        SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
+        [self.navigationController pushViewController:themeVC animated:YES];
     }
     
 //    if ([title isEqualToString:kTitle7]) {
