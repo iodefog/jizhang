@@ -36,14 +36,18 @@ static id _instance;
     return self;
 }
 
-- (void)downloadThemeWithUrl:(NSString *)urlStr{
+- (void)downloadThemeWithUrl:(NSString *)urlStr
+                     Success:(void(^)())success
+                     failure:(void (^)(NSError *error))failure{
     if (![urlStr hasPrefix:@"http"]) {
         urlStr = [NSString stringWithFormat:@"http://%@",urlStr];
     }
     NSURL *URL = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
-    NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSProgress *progress = nil;
+    
+    NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]withIntermediateDirectories:YES attributes:nil error:nil];
         }
@@ -53,16 +57,34 @@ static id _instance;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         if (error) {
             NSLog(@"%@",[error localizedDescription]);
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure(error);
+                });
+            }
+            return;
         }else{
-            
+            [progress removeObserver:self forKeyPath:@"fractionCompleted"];
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success();
+                });
+            }
         }
     }];
-    
-    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession * _Nonnull session, NSURLSessionDownloadTask * _Nonnull downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
-        
-    }];
+    [progress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
     
     [downloadTask resume];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    
+    if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
+        NSProgress *progress = (NSProgress *)object;
+        NSLog(@"Progress is %f", progress.fractionCompleted);
+        [self.delegate downLoadThemeWithProgress:progress];
+    }
 }
 
 @end

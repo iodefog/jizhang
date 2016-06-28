@@ -7,13 +7,14 @@
 //
 
 #import "SSJThemeHomeCollectionViewCell.h"
+#import "SSJDownLoadProgressButton.h"
 
 @interface SSJThemeHomeCollectionViewCell()
 @property(nonatomic, strong) UIImageView *themeImage;
 @property(nonatomic, strong) UILabel *themeTitleLabel;
 @property(nonatomic, strong) UILabel *themeSizeLabel;
 @property(nonatomic, strong) UILabel *themeStatusLabel;
-@property(nonatomic, strong) UIButton *themeStatusButton;
+@property(nonatomic, strong) SSJDownLoadProgressButton *themeStatusButton;
 @end
 
 @implementation SSJThemeHomeCollectionViewCell
@@ -40,6 +41,11 @@
     self.themeSizeLabel.leftBottom = CGPointMake(self.themeTitleLabel.right + 10, self.themeTitleLabel.bottom);
     self.themeStatusLabel.leftTop = CGPointMake(self.themeTitleLabel.left, self.themeTitleLabel.bottom + 10);
     self.themeStatusButton.leftTop = self.themeStatusLabel.leftTop;
+    if (self.item.themeStatus != 2) {
+        self.themeStatusButton.hidden = NO;
+    }else{
+        self.themeStatusButton.hidden = YES;
+    }
 }
 
 -(UIImageView *)themeImage{
@@ -80,9 +86,10 @@
     return _themeStatusLabel;
 }
 
--(UIButton *)themeStatusButton{
+-(SSJDownLoadProgressButton *)themeStatusButton{
     if (!_themeStatusButton) {
-        _themeStatusButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 57, 21)];
+        _themeStatusButton = [[SSJDownLoadProgressButton alloc]initWithFrame:CGRectMake(0, 0, 57, 21)];
+        _themeStatusButton.maskColor = @"#eb4a64";
         _themeStatusButton.layer.cornerRadius = 4.f;
         _themeStatusButton.layer.borderColor = [UIColor colorWithRed:235.f / 255 green:74.f / 255 blue:100.f / 255 alpha:0.5].CGColor;
         _themeStatusButton.layer.borderWidth = 1.f;
@@ -96,7 +103,18 @@
 }
 
 -(void)setItem:(SSJThemeItem *)item{
-    
+    _item = item;
+    self.themeTitleLabel.text = _item.themeTitle;
+    self.themeSizeLabel.text = _item.themeSize;
+    if (_item.themeStatus == 0) {
+        [self.themeStatusButton setTitle:@"下载" forState:UIControlStateNormal];
+    }else if (_item.themeStatus == 1) {
+        [self.themeStatusButton setTitle:@"启用" forState:UIControlStateNormal];
+    }else if (_item.themeStatus == 2) {
+        self.themeStatusLabel.text = @"使用中";
+    }
+    [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl]];
+    [self setNeedsLayout];
 }
 
 @end

@@ -10,17 +10,19 @@
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJThemeHomeCollectionViewCell.h"
 #import "SSJThemeCollectionHeaderView.h"
+#import "SSJThemeService.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
 @property(nonatomic, strong) UICollectionView *themeSelectView;
 @property(nonatomic, strong) UICollectionViewFlowLayout *layout;
+@property(nonatomic, strong) NSArray *items;
+@property(nonatomic, strong) SSJThemeService *service;
 @end
 
 static NSString *const kCellId = @"SSJThemeHomeCollectionViewCell";
 
-static NSString *const kHeaderId = @"SSJThemeHomeCollectionViewCell";
-
+static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 @implementation SSJThemeHomeViewController
 
@@ -44,6 +46,7 @@ static NSString *const kHeaderId = @"SSJThemeHomeCollectionViewCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.service requestThemeList];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -129,6 +132,13 @@ static NSString *const kHeaderId = @"SSJThemeHomeCollectionViewCell";
     layout.minimumLineSpacing = 25;
     layout.minimumInteritemSpacing = 12;
     return layout;
+}
+
+-(SSJThemeService *)service{
+    if (!_service) {
+        _service = [[SSJThemeService alloc]initWithDelegate:self];
+    }
+    return _service;
 }
 
 - (void)didReceiveMemoryWarning {
