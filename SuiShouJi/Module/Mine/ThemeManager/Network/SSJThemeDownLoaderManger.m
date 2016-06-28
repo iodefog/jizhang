@@ -10,8 +10,24 @@
 #import "NSString+SSJTheme.h"
 #import "AFNetworking.h"
 
+@interface SSJThemeDownLoaderProgressBlocker : NSObject
+
+@property (nonatomic, copy) void (^progressBlock)(float progress);
+
+@property (nonatomic, copy) NSString *ID;
+
+@property (nonatomic) float progress;
+
+@end
+
+@implementation SSJThemeDownLoaderProgressBlocker
+
+@end
+
 @interface SSJThemeDownLoaderManger()
 @property(nonatomic, strong) AFURLSessionManager *manager;
+
+@property (nonatomic, strong) NSMutableDictionary *blockerMapping;
 @end
 
 @implementation SSJThemeDownLoaderManger
@@ -32,22 +48,26 @@ static id _instance;
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         self.manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
         [self.manager.operationQueue setMaxConcurrentOperationCount:5];
+        _blockerMapping = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
-- (void)downloadThemeWithUrl:(NSString *)urlStr
+- (void)downloadThemeWithID:(NSString *)ID
+                        url:(NSString *)urlStr
                      Success:(void(^)())success
-                     failure:(void (^)(NSError *error))failure{
+                    failure:(void (^)(NSError *error))failure
+                   progress:(void(^)(float progress))progress {
+    
     if (![urlStr hasPrefix:@"http"]) {
         urlStr = [NSString stringWithFormat:@"http://%@",urlStr];
     }
     NSURL *URL = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
-    NSProgress *progress = nil;
+    NSProgress *tProgress = nil;
     
-    NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&progress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+    NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]withIntermediateDirectories:YES attributes:nil error:nil];
         }
@@ -64,7 +84,7 @@ static id _instance;
             }
             return;
         }else{
-            [progress removeObserver:self forKeyPath:@"fractionCompleted"];
+            [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             if (success) {
                 SSJDispatch_main_async_safe(^{
                     success();
@@ -72,7 +92,14 @@ static id _instance;
             }
         }
     }];
-    [progress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
+    
+    [tProgress setUserInfoObject:ID forKey:@"ID"];
+    [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
+    
+    SSJThemeDownLoaderProgressBlocker *progressBlocker = [[SSJThemeDownLoaderProgressBlocker alloc] init];
+    progressBlocker.ID = ID;
+    progressBlocker.progressBlock = progress;
+    [_blockerMapping setObject:progressBlocker forKey:ID];
     
     [downloadTask resume];
 }
@@ -82,8 +109,15 @@ static id _instance;
     
     if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
         NSProgress *progress = (NSProgress *)object;
+        NSString *ID = progress.userInfo[@"ID"];
+        SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
+        progressBlocker.progress = progress.fractionCompleted;
+        if (progressBlocker.progressBlock) {
+            progressBlocker.progressBlock(progress.fractionCompleted);
+        }
+        
         NSLog(@"Progress is %f", progress.fractionCompleted);
-        [self.delegate downLoadThemeWithProgress:progress];
+//        [self.delegate downLoadThemeWithProgress:progress];
     }
 }
 
