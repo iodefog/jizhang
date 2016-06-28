@@ -494,7 +494,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if (weakSelf.item.billId && [item.ID isEqualToString:_categoryID]) {
+            if (weakSelf.item.billId && [item.ID isEqualToString:weakSelf.item.billId]) {
                 item.selected = YES;
                 selectedItem = item;
             }
@@ -778,13 +778,13 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             wself.billTypeInputView.billTypeName = item.title;
             wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
         }];
-        wself.categoryID = item.ID;
+        wself.item.billId = item.ID;
     };
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
-            wself.categoryID = categoryId;
+            wself.item.billId = categoryId;
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];
     };

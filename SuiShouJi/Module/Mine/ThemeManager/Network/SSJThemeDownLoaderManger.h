@@ -8,6 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol SSJThemeDownLoaderMangerDelegate<NSObject>
+
+@required
+- (void)downLoadThemeWithProgress:(NSProgress *)progress;
+@end
+
 @interface SSJThemeDownLoaderManger : NSObject
 
+- (void)downloadThemeWithUrl:(NSString *)urlStr
+                     Success:(void(^)())success
+                     failure:(void (^)(NSError *error))failure;
+
+@property(nonatomic, assign) id <SSJThemeDownLoaderMangerDelegate>delegate;
+
 @end
+

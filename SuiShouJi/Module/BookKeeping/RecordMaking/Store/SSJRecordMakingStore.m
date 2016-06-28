@@ -18,6 +18,9 @@
         NSString *userId = SSJUSERID();
         NSString *editeTime = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if (!item.booksId.length) {
+            item.booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        }
+        if (!item.booksId.length) {
             item.booksId = userId;
         }
         

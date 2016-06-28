@@ -10,4 +10,17 @@
 
 @implementation SSJThemeItem
 
++ (NSDictionary *)replacedKeyFromPropertyName{
+    return @{
+             @"themeId" : @"patchVersion",
+             @"themeTitle" : @"name",
+             @"themeImageUrl" : @"imgUrl",
+             @"themeThumbImageUrl" : @"imgUrl",
+             @"themeDesc" : @"desc",
+             @"downLoadUrl" : @"IOSHREF",
+             @"images" : @"imgs",
+             @"themeSize" : @"size"
+             };
+}
+
 @end
