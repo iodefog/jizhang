@@ -176,8 +176,14 @@ static const CGFloat kBottomSpaceHeight = 32;
     _unitX = self.width / (_displayAxisXCount - 1);
     
     CGFloat width = _unitX * (_axisXCount - 1);
-    
     _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight);
+    
+//#warning test
+//    _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight + 40);
+//    _curveView.layer.borderColor = [UIColor orangeColor].CGColor;
+//    _curveView.layer.borderWidth = 1;
+//    _curveView.layer.zPosition = 100;
+//    _curveView.contentInsets = UIEdgeInsetsMake(0, 0, 40, 0);
     
     _axisXView.frame = CGRectMake(0, self.height - kBottomSpaceHeight, width, kBottomSpaceHeight);
     

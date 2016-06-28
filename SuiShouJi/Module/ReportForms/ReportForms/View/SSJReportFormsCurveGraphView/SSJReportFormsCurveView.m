@@ -81,16 +81,18 @@
     
     [points removeAllObjects];
     
-    CGFloat unitX = self.width / (values.count - 1);
+    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+    
+    CGFloat unitX = contentFrame.size.width / (values.count - 1);
     for (int i = 0; i < values.count; i ++) {
         NSNumber *value = values[i];
-        CGFloat x = unitX * i;
-        CGFloat y = self.height * (1 - [value floatValue] / _maxValue);
+        CGFloat x = unitX * i + contentFrame.origin.x;
+        CGFloat y = contentFrame.size.height * (1 - [value floatValue] / _maxValue) + contentFrame.origin.y;
         [points addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
     }
 }
 
-- (UIBezierPath*)getLinePathWithPoints:(NSArray *)points close:(BOOL)close {
+- (UIBezierPath *)getLinePathWithPoints:(NSArray *)points close:(BOOL)close {
     if (points.count == 0) {
         return nil;
     }
@@ -101,8 +103,10 @@
     [path addBezierThroughPoints:points];
     
     if (close) {
-        [path addLineToPoint:CGPointMake(self.width, self.height)];
-        [path addLineToPoint:CGPointMake(0, self.height)];
+        CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+        
+        [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
+        [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
         [path closePath];
     }
     
