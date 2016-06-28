@@ -12,4 +12,6 @@
 
 - (void)ssj_setThemeImageWithName:(NSString *)name;
 
+- (void)ssj_setCompatibleThemeImageWithName:(NSString *)name;
+
 @end

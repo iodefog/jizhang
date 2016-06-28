@@ -17,4 +17,8 @@
     self.image = [UIImage ssj_themeImageWithName:name];
 }
 
+- (void)ssj_setCompatibleThemeImageWithName:(NSString *)name {
+    self.image = [UIImage ssj_compatibleThemeImageNamed:name];
+}
+
 @end

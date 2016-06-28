@@ -249,8 +249,8 @@ NSDate *SCYEnterBackgroundTime() {
     moreNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_more_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
-    tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
     tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+    [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeZero]];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
