@@ -429,6 +429,8 @@
 		9C0F00FA1CE9CE8500A31708 /* bt_zhuanqian@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0F00F81CE9CE8500A31708 /* bt_zhuanqian@3x.png */; };
 		9C0F01051CEAAD3B00A31708 /* bt_lixi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0F01031CEAAD3B00A31708 /* bt_lixi@2x.png */; };
 		9C0F01061CEAAD3B00A31708 /* bt_lixi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C0F01041CEAAD3B00A31708 /* bt_lixi@3x.png */; };
+		9C141B821D23BD920095E336 /* SSJThemeImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C141B811D23BD920095E336 /* SSJThemeImageCollectionViewCell.m */; };
+		9C141B8A1D23BD960095E336 /* SSJThemeImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C141B811D23BD920095E336 /* SSJThemeImageCollectionViewCell.m */; };
 		9C17FF1C1CE96ED90016EE4C /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */; };
 		9C1833D21CBE56CC00C5B54B /* home_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C1833D11CBE56CC00C5B54B /* home_add@2x.png */; };
 		9C2229351CC78D980040DD54 /* pic_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2229341CC78D980040DD54 /* pic_back@2x.png */; };
@@ -2509,6 +2511,8 @@
 		9C0F00F81CE9CE8500A31708 /* bt_zhuanqian@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_zhuanqian@3x.png"; sourceTree = "<group>"; };
 		9C0F01031CEAAD3B00A31708 /* bt_lixi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_lixi@2x.png"; sourceTree = "<group>"; };
 		9C0F01041CEAAD3B00A31708 /* bt_lixi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bt_lixi@3x.png"; sourceTree = "<group>"; };
+		9C141B801D23BD920095E336 /* SSJThemeImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeImageCollectionViewCell.h; sourceTree = "<group>"; };
+		9C141B811D23BD920095E336 /* SSJThemeImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeImageCollectionViewCell.m; sourceTree = "<group>"; };
 		9C17FF1A1CE96ED90016EE4C /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
 		9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		9C1833D11CBE56CC00C5B54B /* home_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_add@2x.png"; sourceTree = "<group>"; };
@@ -4897,6 +4901,8 @@
 				9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */,
 				9C47E6ED1D222A26005F338A /* SSJDownLoadProgressButton.h */,
 				9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */,
+				9C141B801D23BD920095E336 /* SSJThemeImageCollectionViewCell.h */,
+				9C141B811D23BD920095E336 /* SSJThemeImageCollectionViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7838,6 +7844,7 @@
 				9C2A68011D194CA70010F1DA /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C2A68021D194CA70010F1DA /* SSJChargeCircleTimeSelectView.m in Sources */,
 				9C2A68031D194CA70010F1DA /* SSJPasswordModifyViewController.m in Sources */,
+				9C141B8A1D23BD960095E336 /* SSJThemeImageCollectionViewCell.m in Sources */,
 				9C2A68041D194CA70010F1DA /* SSJDatabaseUpgrader.m in Sources */,
 				9C2A68051D194CA70010F1DA /* SSJBillingChargeCellItem.m in Sources */,
 				9C2A68061D194CA70010F1DA /* SSJImaageBrowseViewController.m in Sources */,
@@ -8103,6 +8110,7 @@
 				9C9471861CEB224C00D69079 /* SSJFundingDetailHeader.m in Sources */,
 				7D5F33531CEAE6C10086B67E /* SSJCalenderDetailViewController.m in Sources */,
 				7D5F33371CEAE6C10086B67E /* SSJBudgetDetailViewController.m in Sources */,
+				9C141B821D23BD920095E336 /* SSJThemeImageCollectionViewCell.m in Sources */,
 				7DE6E8681C55DB75001C9138 /* SSJBaselineTextField.m in Sources */,
 				9CD9BC241CFD2DAA0061803B /* SSJCircleChargeCell.m in Sources */,
 				7D1D7F431C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.m in Sources */,

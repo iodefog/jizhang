@@ -8,8 +8,9 @@
 
 #import "SSJThemeDetailViewController.h"
 #import "SSJDownLoadProgressButton.h"
+#import "SSJThemeImageCollectionViewCell.h"
 
-@interface SSJThemeDetailViewController ()
+@interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
 @property(nonatomic, strong) UIImageView *themeIcon;
 @property(nonatomic, strong) UILabel *themeTitleLabel;
@@ -20,6 +21,9 @@
 @property(nonatomic, strong) UILabel *themeDescLabel;
 @property(nonatomic, strong) UICollectionView *collectionView;
 @end
+
+static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
+
 
 @implementation SSJThemeDetailViewController
 
@@ -49,11 +53,33 @@
     self.themeDownLoadButton.centerX = self.view.width / 2;
     self.seperatorLine.leftTop = CGPointMake(0, self.themeDownLoadButton.bottom + 20);
     self.themeDescLabel.leftTop = CGPointMake(10, self.seperatorLine.bottom + 20);
+    self.collectionView.leftTop = CGPointMake(0, self.themeDescLabel.bottom + 20);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - UICollectionViewDataSource
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.item.images.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJThemeImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    cell.imageUrl = [self.item.images objectAtIndex:indexPath.item][@"imgUrl"];
+    return cell;
+}
+
+
+#pragma mark - UICollectionViewDelegate
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return CGSizeMake(150, 270);
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsMake(0, 10, 0, 10);
 }
 
 #pragma mark - Getter
@@ -123,17 +149,32 @@
     return _themeDownLoadButton;
 }
 
--(UIView *)seperatorLine{
-    if (!_seperatorLine) {
-        _seperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 1 / [UIScreen mainScreen].scale)];
-        _seperatorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 270) collectionViewLayout:self.layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.alwaysBounceVertical = NO;
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.backgroundColor = [UIColor whiteColor];
+        [_collectionView registerClass:[SSJThemeImageCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
+        _collectionView.alwaysBounceVertical = NO;
     }
-    return _seperatorLine;
+    return _collectionView;
+}
+
+- (UICollectionViewFlowLayout *)layout {
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumLineSpacing = 5;
+    layout.minimumInteritemSpacing = 5;
+    return layout;
 }
 
 -(UILabel *)themeDescLabel{
     if (!_themeDescLabel) {
-        _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 10, 56)];
+        _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _themeDescLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         _themeDescLabel.font = [UIFont systemFontOfSize:15];
         _themeDescLabel.text = self.item.themeDesc;
@@ -141,6 +182,14 @@
         [_themeDescLabel sizeToFit];
     }
     return _themeDescLabel;
+}
+
+-(UIView *)seperatorLine{
+    if (!_seperatorLine) {
+        _seperatorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 1 / [UIScreen mainScreen].scale)];
+        _seperatorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+    }
+    return _seperatorLine;
 }
 
 /*
