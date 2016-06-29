@@ -25,6 +25,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+<<<<<<< HEAD
+=======
+//        NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
+//        SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
+>>>>>>> 0d611efb9c2357b7d30dd7f11a9ee47efa241c5f
         [self.contentView addSubview:self.themeImage];
         [self.contentView addSubview:self.themeTitleLabel];
         [self.contentView addSubview:self.themeSizeLabel];
@@ -107,11 +112,9 @@
 -(void)statusButtonClicked:(id)sender{
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
-        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl Success:^{
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             
         } failure:^(NSError *error) {
-            
-        } progress:^(float progress) {
             
         }];
     }
