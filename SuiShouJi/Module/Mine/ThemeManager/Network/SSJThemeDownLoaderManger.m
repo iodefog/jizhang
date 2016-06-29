@@ -139,7 +139,9 @@ static id _instance;
         progressBlocker.progress = progress.fractionCompleted;
         for (SSJThemeDownLoaderProgressBlock block in progressBlocker.blocks) {
             if (block) {
-                block(progress.fractionCompleted);
+                SSJDispatchMainAsync(^{
+                    block(progress.fractionCompleted);
+                });
             }
         }
         
