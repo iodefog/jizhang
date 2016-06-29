@@ -86,9 +86,9 @@ static id _instance;
         }else{
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             
-            NSData *themeData = [self unzipUrl:URL error:&error];
+            NSData *themeData = [self unzipUrl:filePath error:&error];
             
-            [themeData writeToFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] atomically:YES];
+//            [themeData writeToFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] atomically:YES];
             
             if (success) {
                 SSJDispatch_main_async_safe(^{
@@ -132,9 +132,24 @@ static id _instance;
 //  将data进行解压
 - (NSData *)unzipUrl:(NSURL *)Url error:(NSError **)error {
     ZZArchive *archive = [ZZArchive archiveWithURL:Url error:error];
-    if (archive.entries.count > 0) {
-        ZZArchiveEntry *entry = archive.entries[0];
-        return [entry newDataWithError:error];
+    
+    NSString *targetPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"sdfsfd"];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    for (ZZArchiveEntry* entry in archive.entries) {
+        // Some archives don‘t have a separate entry for each directory
+        // and just include the directory‘s name in the filename.
+        // Make sure that directory exists before writing a file into it.
+        NSArray * arr = [entry.fileName componentsSeparatedByString:@"/"];
+        NSInteger index = [entry.fileName length] - 1 - [[arr lastObject] length];
+        NSString * aimPath = [entry.fileName substringToIndex:index];
+        NSError * err;
+        [fileManager createDirectoryAtPath:[NSString stringWithFormat:@"%@/%@", targetPath, aimPath] withIntermediateDirectories:YES attributes:nil error:&err];
+        if (err) {
+            return nil;
+        }
+        
+        NSData * data = [entry newDataWithError:nil];
+        [data writeToFile:[NSString stringWithFormat:@"%@/%@", targetPath, entry.fileName] atomically:YES];
     }
     
     return nil;
