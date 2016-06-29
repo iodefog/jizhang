@@ -17,6 +17,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self addSubview:self.button];
         [self addSubview:self.downloadMaskView];
     }
     return self;
@@ -29,6 +30,13 @@
     return _downloadMaskView;
 }
 
+-(UIButton *)button{
+    if (!_button) {
+        _button = [[UIButton alloc]initWithFrame:self.bounds];
+    }
+    return _button;
+}
+
 -(void)setMaskColor:(NSString *)maskColor{
     _maskColor = maskColor;
     self.downloadMaskView.backgroundColor = [UIColor ssj_colorWithHex:_maskColor];
@@ -37,13 +45,10 @@
 -(void)setDownloadProgress:(float)downloadProgress{
     _downloadProgress = downloadProgress;
     if (_downloadProgress > 0 && _downloadProgress < 1) {
-        self.downloadMaskView.hidden = NO;
         self.downloadMaskView.width = self.width * _downloadProgress;
     }else{
         self.downloadMaskView.width = 0;
-        self.downloadMaskView.hidden = YES;
     }
-    [self setNeedsLayout];
 }
 
 /*

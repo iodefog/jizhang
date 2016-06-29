@@ -97,11 +97,12 @@
         _themeStatusButton = [[SSJDownLoadProgressButton alloc]initWithFrame:CGRectMake(0, 0, 57, 21)];
         _themeStatusButton.maskColor = @"#eb4a64";
         _themeStatusButton.layer.cornerRadius = 4.f;
+        _themeStatusButton.layer.masksToBounds = YES;
         _themeStatusButton.layer.borderColor = [UIColor colorWithRed:235.f / 255 green:74.f / 255 blue:100.f / 255 alpha:0.5].CGColor;
-        [_themeStatusButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
-        _themeStatusButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_themeStatusButton.button setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        _themeStatusButton.button.titleLabel.font = [UIFont systemFontOfSize:13];
         _themeStatusButton.layer.borderWidth = 1.f;
-        [_themeStatusButton addTarget:self action:@selector(statusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [_themeStatusButton.button addTarget:self action:@selector(statusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _themeStatusButton;
 }
@@ -127,9 +128,9 @@
     self.themeSizeLabel.text = _item.themeSize;
     [self.themeSizeLabel sizeToFit];
     if (_item.themeStatus == 0) {
-        [self.themeStatusButton setTitle:@"下载" forState:UIControlStateNormal];
+        [self.themeStatusButton.button setTitle:@"下载" forState:UIControlStateNormal];
     }else if (_item.themeStatus == 1) {
-        [self.themeStatusButton setTitle:@"启用" forState:UIControlStateNormal];
+        [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
     }else if (_item.themeStatus == 2) {
         self.themeStatusLabel.text = @"使用中";
     }

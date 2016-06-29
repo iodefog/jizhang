@@ -114,8 +114,8 @@
     if (!_themeDownLoadButton) {
         _themeDownLoadButton = [[SSJDownLoadProgressButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 56, 45)];
         _themeDownLoadButton.maskColor = @"#eb4a64";
-        [_themeDownLoadButton setTitle:@"下载" forState:UIControlStateNormal];
-        [_themeDownLoadButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
+        [_themeDownLoadButton.button setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         _themeDownLoadButton.layer.cornerRadius = 2.f;
         _themeDownLoadButton.layer.borderWidth = 1.f;
         _themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
