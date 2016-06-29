@@ -11,13 +11,35 @@
 #import "AFNetworking.h"
 #import <ZipZap/ZipZap.h>
 
+@interface SSJThemeDownLoaderProgressBlocker : NSObject
+
+@property (nonatomic, strong) NSMutableArray *blocks;
+
+@property (nonatomic, copy) NSString *ID;
+
+@property (nonatomic) float progress;
+
+@end
 
 @implementation SSJThemeDownLoaderProgressBlocker
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _blocks = [NSMutableArray array];
+    }
+    return self;
+}
 
 @end
 
 @interface SSJThemeDownLoaderManger()
 @property(nonatomic, strong) AFURLSessionManager *manager;
+
+@end
+
+@interface SSJThemeDownLoaderManger ()
+
+@property (nonatomic, strong) NSMutableDictionary *blockerMapping;
 
 @end
 
@@ -46,9 +68,8 @@ static id _instance;
 
 - (void)downloadThemeWithID:(NSString *)ID
                         url:(NSString *)urlStr
-                     Success:(void(^)())success
-                    failure:(void (^)(NSError *error))failure
-                   progress:(void(^)(float progress))progress {
+                    success:(void(^)())success
+                    failure:(void (^)(NSError *error))failure {
     
     if (![urlStr hasPrefix:@"http"]) {
         urlStr = [NSString stringWithFormat:@"http://%@",urlStr];
@@ -66,6 +87,7 @@ static id _instance;
         NSURL *fileURL = [NSURL fileURLWithPath:path];
         return fileURL;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+        [_blockerMapping removeObjectForKey:ID];
         if (error) {
             NSLog(@"%@",[error localizedDescription]);
             if (failure) {
@@ -97,10 +119,15 @@ static id _instance;
     
     SSJThemeDownLoaderProgressBlocker *progressBlocker = [[SSJThemeDownLoaderProgressBlocker alloc] init];
     progressBlocker.ID = ID;
-    progressBlocker.progressBlock = progress;
     [_blockerMapping setObject:progressBlocker forKey:ID];
-    
     [downloadTask resume];
+}
+
+- (void)addProgressHandler:(SSJThemeDownLoaderProgressBlock)handler forID:(NSString *)ID {
+    SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
+    if (progressBlocker) {
+        [progressBlocker.blocks addObject:handler];
+    }
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -110,8 +137,10 @@ static id _instance;
         NSString *ID = progress.userInfo[@"ID"];
         SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
         progressBlocker.progress = progress.fractionCompleted;
-        if (progressBlocker.progressBlock) {
-            progressBlocker.progressBlock(progress.fractionCompleted);
+        for (SSJThemeDownLoaderProgressBlock block in progressBlocker.blocks) {
+            if (block) {
+                block(progress.fractionCompleted);
+            }
         }
         
         NSLog(@"Progress is %f", progress.fractionCompleted);

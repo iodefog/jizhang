@@ -7,15 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@interface SSJThemeDownLoaderProgressBlocker : NSObject
 
-@property (nonatomic, copy) void (^progressBlock)(float progress);
-
-@property (nonatomic, copy) NSString *ID;
-
-@property (nonatomic) float progress;
-
-@end
+typedef void(^SSJThemeDownLoaderProgressBlock)(float);
 
 @interface SSJThemeDownLoaderManger : NSObject
 
@@ -23,11 +16,10 @@
 
 - (void)downloadThemeWithID:(NSString *)ID
                         url:(NSString *)urlStr
-                    Success:(void(^)())success
-                    failure:(void (^)(NSError *error))failure
-                   progress:(void(^)(float progress))progress;
+                    success:(void(^)())success
+                    failure:(void (^)(NSError *error))failure;
 
-@property (nonatomic, strong) NSMutableDictionary *blockerMapping;
+- (void)addProgressHandler:(SSJThemeDownLoaderProgressBlock)handler forID:(NSString *)ID;
 
 @end
 
