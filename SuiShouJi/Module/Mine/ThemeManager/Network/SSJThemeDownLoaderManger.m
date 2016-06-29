@@ -143,7 +143,7 @@ static id _instance;
             }
         }
         
-        NSLog(@"Progress is %f", progress.fractionCompleted);
+//        NSLog(@"Progress is %f", progress.fractionCompleted);
 //        [self.delegate downLoadThemeWithProgress:progress];
     }
 }

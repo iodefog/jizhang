@@ -25,11 +25,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-<<<<<<< HEAD
-=======
 //        NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
 //        SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
->>>>>>> 0d611efb9c2357b7d30dd7f11a9ee47efa241c5f
         [self.contentView addSubview:self.themeImage];
         [self.contentView addSubview:self.themeTitleLabel];
         [self.contentView addSubview:self.themeSizeLabel];
@@ -117,6 +114,9 @@
         } failure:^(NSError *error) {
             
         }];
+        [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+            self.themeStatusButton.downloadProgress = progress;
+        } forID:self.item.themeId];
     }
 }
 
@@ -134,23 +134,8 @@
         self.themeStatusLabel.text = @"使用中";
     }
     [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl]];
-    [self addProgressObserver];
+
     [self setNeedsLayout];
 }
 
--(void)addProgressObserver{
-    NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
-    SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
-    [@(progressBlocker.progress) addObserver:self forKeyPath:@"downloadProgress" options:NSKeyValueObservingOptionNew context:NULL];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    
-    if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSNumber class]]) {
-        NSNumber *progress = (NSNumber *)object;
-        
-        NSLog(@"Progress is %@", progress);
-        //        [self.delegate downLoadThemeWithProgress:progress];
-    }
-}
 @end
