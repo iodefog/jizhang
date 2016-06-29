@@ -9,6 +9,7 @@
 #import "SSJThemeDownLoaderManger.h"
 #import "NSString+SSJTheme.h"
 #import "AFNetworking.h"
+#import <ZipZap/ZipZap.h>
 
 @interface SSJThemeDownLoaderProgressBlocker : NSObject
 
@@ -68,7 +69,7 @@ static id _instance;
     
     NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]withIntermediateDirectories:YES attributes:nil error:nil];
+            [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] withIntermediateDirectories:YES attributes:nil error:nil];
         }
         NSString *path = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename];
         NSURL *fileURL = [NSURL fileURLWithPath:path];
@@ -84,6 +85,11 @@ static id _instance;
             return;
         }else{
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
+            
+            NSData *themeData = [self unzipUrl:URL error:&error];
+            
+            [themeData writeToFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] atomically:YES];
+            
             if (success) {
                 SSJDispatch_main_async_safe(^{
                     success();
@@ -92,9 +98,9 @@ static id _instance;
         }
     }];
     
-    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
-        
-    }];
+//    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+//        
+//    }];
     
     [tProgress setUserInfoObject:ID forKey:@"ID"];
     [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
@@ -108,7 +114,6 @@ static id _instance;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     
     if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
         NSProgress *progress = (NSProgress *)object;
@@ -122,6 +127,17 @@ static id _instance;
         NSLog(@"Progress is %f", progress.fractionCompleted);
 //        [self.delegate downLoadThemeWithProgress:progress];
     }
+}
+
+//  将data进行解压
+- (NSData *)unzipUrl:(NSURL *)Url error:(NSError **)error {
+    ZZArchive *archive = [ZZArchive archiveWithURL:Url error:error];
+    if (archive.entries.count > 0) {
+        ZZArchiveEntry *entry = archive.entries[0];
+        return [entry newDataWithError:error];
+    }
+    
+    return nil;
 }
 
 @end
