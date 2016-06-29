@@ -25,8 +25,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
-        SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
         [self.contentView addSubview:self.themeImage];
         [self.contentView addSubview:self.themeTitleLabel];
         [self.contentView addSubview:self.themeSizeLabel];
@@ -133,7 +131,23 @@
         self.themeStatusLabel.text = @"使用中";
     }
     [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl]];
+    [self addProgressObserver];
     [self setNeedsLayout];
 }
 
+-(void)addProgressObserver{
+    NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
+    SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
+    [@(progressBlocker.progress) addObserver:self forKeyPath:@"downloadProgress" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    
+    if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSNumber class]]) {
+        NSNumber *progress = (NSNumber *)object;
+        
+        NSLog(@"Progress is %@", progress);
+        //        [self.delegate downLoadThemeWithProgress:progress];
+    }
+}
 @end
