@@ -11,15 +11,6 @@
 #import "AFNetworking.h"
 #import <ZipZap/ZipZap.h>
 
-@interface SSJThemeDownLoaderProgressBlocker : NSObject
-
-@property (nonatomic, copy) void (^progressBlock)(float progress);
-
-@property (nonatomic, copy) NSString *ID;
-
-@property (nonatomic) float progress;
-
-@end
 
 @implementation SSJThemeDownLoaderProgressBlocker
 
@@ -85,10 +76,9 @@ static id _instance;
             return;
         }else{
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
-            
-            NSData *themeData = [self unzipUrl:filePath error:&error];
-            
-//            [themeData writeToFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] atomically:YES];
+            if ([self unzipUrl:filePath path:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] error:&error]) {
+                [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
+            };
             
             if (success) {
                 SSJDispatch_main_async_safe(^{
@@ -130,10 +120,9 @@ static id _instance;
 }
 
 //  将data进行解压
-- (NSData *)unzipUrl:(NSURL *)Url error:(NSError **)error {
+- (BOOL)unzipUrl:(NSURL *)Url path:(NSString *)path error:(NSError **)error {
     ZZArchive *archive = [ZZArchive archiveWithURL:Url error:error];
     
-    NSString *targetPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"sdfsfd"];
     NSFileManager * fileManager = [NSFileManager defaultManager];
     for (ZZArchiveEntry* entry in archive.entries) {
         // Some archives don‘t have a separate entry for each directory
@@ -143,16 +132,16 @@ static id _instance;
         NSInteger index = [entry.fileName length] - 1 - [[arr lastObject] length];
         NSString * aimPath = [entry.fileName substringToIndex:index];
         NSError * err;
-        [fileManager createDirectoryAtPath:[NSString stringWithFormat:@"%@/%@", targetPath, aimPath] withIntermediateDirectories:YES attributes:nil error:&err];
+        [fileManager createDirectoryAtPath:[NSString stringWithFormat:@"%@/%@", path, aimPath] withIntermediateDirectories:YES attributes:nil error:&err];
         if (err) {
-            return nil;
+            return NO;
         }
         
         NSData * data = [entry newDataWithError:nil];
-        [data writeToFile:[NSString stringWithFormat:@"%@/%@", targetPath, entry.fileName] atomically:YES];
+        [data writeToFile:[NSString stringWithFormat:@"%@/%@", path, entry.fileName] atomically:YES];
     }
     
-    return nil;
+    return YES;
 }
 
 @end

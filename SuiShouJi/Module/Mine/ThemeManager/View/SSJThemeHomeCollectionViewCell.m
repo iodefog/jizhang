@@ -25,6 +25,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
+        SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
         [self.contentView addSubview:self.themeImage];
         [self.contentView addSubview:self.themeTitleLabel];
         [self.contentView addSubview:self.themeSizeLabel];

@@ -7,6 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+@interface SSJThemeDownLoaderProgressBlocker : NSObject
+
+@property (nonatomic, copy) void (^progressBlock)(float progress);
+
+@property (nonatomic, copy) NSString *ID;
+
+@property (nonatomic) float progress;
+
+@end
+
 @interface SSJThemeDownLoaderManger : NSObject
 
 + (SSJThemeDownLoaderManger *)sharedInstance;
