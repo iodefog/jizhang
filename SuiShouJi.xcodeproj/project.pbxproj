@@ -2111,8 +2111,8 @@
 		7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddNewTypeColorSelectionView.m; sourceTree = "<group>"; };
 		7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionViewCell.h; sourceTree = "<group>"; };
 		7D5F33001CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionViewCell.m; sourceTree = "<group>"; };
-		7D5F33031CEAE6C10086B67E /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
-		7D5F33041CEAE6C10086B67E /* SSJCustomKeyBoardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyBoardButton.m; sourceTree = "<group>"; };
+		7D5F33031CEAE6C10086B67E /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCustomKeyBoardButton.h; path = ../../../Module/BookKeeping/RecordMaking/View/SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
+		7D5F33041CEAE6C10086B67E /* SSJCustomKeyBoardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCustomKeyBoardButton.m; path = ../../../Module/BookKeeping/RecordMaking/View/SSJCustomKeyBoardButton.m; sourceTree = "<group>"; };
 		7D5F33051CEAE6C10086B67E /* SSJCustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomTextView.h; sourceTree = "<group>"; };
 		7D5F33061CEAE6C10086B67E /* SSJCustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomTextView.m; sourceTree = "<group>"; };
 		7D5F33071CEAE6C10086B67E /* SSJDateSelectedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDateSelectedView.h; sourceTree = "<group>"; };
@@ -3773,8 +3773,6 @@
 				7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */,
 				7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */,
 				7D5F33001CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m */,
-				7D5F33031CEAE6C10086B67E /* SSJCustomKeyBoardButton.h */,
-				7D5F33041CEAE6C10086B67E /* SSJCustomKeyBoardButton.m */,
 				7D5F33051CEAE6C10086B67E /* SSJCustomTextView.h */,
 				7D5F33061CEAE6C10086B67E /* SSJCustomTextView.m */,
 				7D5F33071CEAE6C10086B67E /* SSJDateSelectedView.h */,
@@ -4698,6 +4696,8 @@
 		9C17FF191CE96ED90016EE4C /* SSJCustomKeyBoard */ = {
 			isa = PBXGroup;
 			children = (
+				7D5F33031CEAE6C10086B67E /* SSJCustomKeyBoardButton.h */,
+				7D5F33041CEAE6C10086B67E /* SSJCustomKeyBoardButton.m */,
 				9C17FF1A1CE96ED90016EE4C /* SSJCustomKeyboard.h */,
 				9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */,
 			);

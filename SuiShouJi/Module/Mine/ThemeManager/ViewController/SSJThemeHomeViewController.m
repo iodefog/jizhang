@@ -10,7 +10,12 @@
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJThemeHomeCollectionViewCell.h"
 #import "SSJThemeCollectionHeaderView.h"
+#import "SSJThemeDetailViewController.h"
 #import "SSJThemeService.h"
+
+#import "SSJThemeSetting.h"
+#import "SSJThemeModel.h"
+#import "NSString+SSJTheme.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -58,13 +63,19 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     self.themeSelectView.leftTop = CGPointMake(0, self.hintLabel.bottom);
 }
 
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.service cancel];
+}
+
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 5;
+    return self.items.count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    cell.item = [self.items objectAtIndex:indexPath.item];
     return cell;
 }
 
@@ -89,14 +100,20 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     return header;
 }
 
-#pragma mark - Private
--(void)checkNetwork{
-    //检测网络状态
-    if ([SSJNetworkReachabilityManager isReachable]) {
-        NSLog(@"yes");
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
+    themeDetailVc.item = item;
+    [self.navigationController pushViewController:themeDetailVc animated:YES];
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if ([service.returnCode isEqualToString:@"1"]) {
+        [self getThemeStatusForThemes:self.service.themes];
     }else{
-        NSLog(@"no");
-    };
+        
+    }
 }
 
 #pragma mark - Getter
@@ -139,6 +156,30 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _service = [[SSJThemeService alloc]initWithDelegate:self];
     }
     return _service;
+}
+
+#pragma mark - Private
+-(void)checkNetwork{
+    //检测网络状态
+    if ([SSJNetworkReachabilityManager isReachable]) {
+        NSLog(@"yes");
+    }else{
+        NSLog(@"no");
+    };
+}
+
+-(void)getThemeStatusForThemes:(NSArray *)themes{
+    for (SSJThemeItem *theme in themes) {
+        if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
+            theme.themeStatus = 2;
+        }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:theme.themeId]]) {
+            theme.themeStatus = 1;
+        }else{
+            theme.themeStatus = 0;
+        }
+    }
+    self.items = themes;
+    [self.themeSelectView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

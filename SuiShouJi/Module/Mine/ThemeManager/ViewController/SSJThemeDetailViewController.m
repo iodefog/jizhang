@@ -48,7 +48,7 @@
     self.themeDownLoadButton.top = self.themeIcon.bottom + 20;
     self.themeDownLoadButton.centerX = self.view.width / 2;
     self.seperatorLine.leftTop = CGPointMake(0, self.themeDownLoadButton.bottom + 20);
-    self.themeDescLabel.leftTop = CGPointMake(20, self.seperatorLine.bottom + 20);
+    self.themeDescLabel.leftTop = CGPointMake(10, self.seperatorLine.bottom + 20);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -133,10 +133,11 @@
 
 -(UILabel *)themeDescLabel{
     if (!_themeDescLabel) {
-        _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 56)];
+        _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 10, 56)];
         _themeDescLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         _themeDescLabel.font = [UIFont systemFontOfSize:15];
         _themeDescLabel.text = self.item.themeDesc;
+        _themeDescLabel.numberOfLines = 0;
         [_themeDescLabel sizeToFit];
     }
     return _themeDescLabel;

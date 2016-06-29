@@ -27,7 +27,6 @@
 @interface SSJThemeDownLoaderManger()
 @property(nonatomic, strong) AFURLSessionManager *manager;
 
-@property (nonatomic, strong) NSMutableDictionary *blockerMapping;
 @end
 
 @implementation SSJThemeDownLoaderManger
@@ -91,6 +90,10 @@ static id _instance;
                 });
             }
         }
+    }];
+    
+    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+        
     }];
     
     [tProgress setUserInfoObject:ID forKey:@"ID"];

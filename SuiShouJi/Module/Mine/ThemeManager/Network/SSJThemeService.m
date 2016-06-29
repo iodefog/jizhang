@@ -18,8 +18,8 @@
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
-        NSDictionary *results = [[rootElement objectForKey:@"results"] objectForKey:@"themeconfig"];
-        NSArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:results];
+        NSDictionary *results = [rootElement objectForKey:@"results"];
+        NSArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];
         self.themes = [NSArray arrayWithArray:themeArray];
     }
 }

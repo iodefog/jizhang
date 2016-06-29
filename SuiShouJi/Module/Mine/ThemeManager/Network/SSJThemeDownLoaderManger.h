@@ -7,20 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@protocol SSJThemeDownLoaderMangerDelegate<NSObject>
-
-@required
-- (void)downLoadThemeWithProgress:(NSProgress *)progress;
-@end
-
 @interface SSJThemeDownLoaderManger : NSObject
 
-- (void)downloadThemeWithUrl:(NSString *)urlStr
-                     Success:(void(^)())success
-                     failure:(void (^)(NSError *error))failure;
++ (SSJThemeDownLoaderManger *)sharedInstance;
 
-@property(nonatomic, assign) id <SSJThemeDownLoaderMangerDelegate>delegate;
+- (void)downloadThemeWithID:(NSString *)ID
+                        url:(NSString *)urlStr
+                    Success:(void(^)())success
+                    failure:(void (^)(NSError *error))failure
+                   progress:(void(^)(float progress))progress;
+
+@property (nonatomic, strong) NSMutableDictionary *blockerMapping;
 
 @end
 

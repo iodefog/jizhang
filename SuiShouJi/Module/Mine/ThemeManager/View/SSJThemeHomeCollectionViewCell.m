@@ -8,6 +8,8 @@
 
 #import "SSJThemeHomeCollectionViewCell.h"
 #import "SSJDownLoadProgressButton.h"
+#import "SSJThemeDownLoaderManger.h"
+#import "SSJThemeDownLoaderManger.h"
 
 @interface SSJThemeHomeCollectionViewCell()
 @property(nonatomic, strong) UIImageView *themeImage;
@@ -43,8 +45,10 @@
     self.themeStatusButton.leftTop = self.themeStatusLabel.leftTop;
     if (self.item.themeStatus != 2) {
         self.themeStatusButton.hidden = NO;
+        self.themeStatusLabel.hidden = YES;
     }else{
         self.themeStatusButton.hidden = YES;
+        self.themeStatusLabel.hidden = NO;
     }
 }
 
@@ -92,6 +96,8 @@
         _themeStatusButton.maskColor = @"#eb4a64";
         _themeStatusButton.layer.cornerRadius = 4.f;
         _themeStatusButton.layer.borderColor = [UIColor colorWithRed:235.f / 255 green:74.f / 255 blue:100.f / 255 alpha:0.5].CGColor;
+        [_themeStatusButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        _themeStatusButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _themeStatusButton.layer.borderWidth = 1.f;
         [_themeStatusButton addTarget:self action:@selector(statusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -99,13 +105,24 @@
 }
 
 -(void)statusButtonClicked:(id)sender{
-    
+    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
+        [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl Success:^{
+            
+        } failure:^(NSError *error) {
+            
+        } progress:^(float progress) {
+            
+        }];
+    }
 }
 
 -(void)setItem:(SSJThemeItem *)item{
     _item = item;
     self.themeTitleLabel.text = _item.themeTitle;
+    [self.themeTitleLabel sizeToFit];
     self.themeSizeLabel.text = _item.themeSize;
+    [self.themeSizeLabel sizeToFit];
     if (_item.themeStatus == 0) {
         [self.themeStatusButton setTitle:@"下载" forState:UIControlStateNormal];
     }else if (_item.themeStatus == 1) {

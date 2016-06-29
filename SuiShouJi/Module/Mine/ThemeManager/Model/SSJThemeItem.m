@@ -12,10 +12,10 @@
 
 + (NSDictionary *)replacedKeyFromPropertyName{
     return @{
-             @"themeId" : @"patchVersion",
+             @"themeId" : @"id",
              @"themeTitle" : @"name",
              @"themeImageUrl" : @"imgUrl",
-             @"themeThumbImageUrl" : @"imgUrl",
+             @"themeThumbImageUrl" : @"thumbUrl",
              @"themeDesc" : @"desc",
              @"downLoadUrl" : @"IOSHREF",
              @"images" : @"imgs",
