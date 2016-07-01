@@ -134,6 +134,7 @@ static id _instance;
     
     if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
         NSProgress *progress = (NSProgress *)object;
+        NSLog(@"%f",progress.fractionCompleted);
         NSString *ID = progress.userInfo[@"ID"];
         SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
         progressBlocker.progress = progress.fractionCompleted;

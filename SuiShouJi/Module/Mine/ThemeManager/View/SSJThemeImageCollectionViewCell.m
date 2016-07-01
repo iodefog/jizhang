@@ -29,14 +29,14 @@
         _cellImageView = [[UIImageView alloc]initWithFrame:self.contentView.bounds];
         _cellImageView.layer.cornerRadius = 3.f;
         _cellImageView.layer.masksToBounds = YES;
-        _cellImageView.image = [UIImage ssj_imageWithColor:[UIColor redColor] size:self.contentView.size];
+//        _cellImageView.image = [UIImage ssj_imageWithColor:[UIColor redColor] size:self.contentView.size];
     }
     return _cellImageView;
 }
 
 -(void)setImageUrl:(NSString *)imageUrl{
     _imageUrl = imageUrl;
-//    [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+    [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
 }
 
 @end

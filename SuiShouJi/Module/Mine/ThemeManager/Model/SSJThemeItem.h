@@ -40,4 +40,7 @@
 //下载地址
 @property(nonatomic, strong) NSString *downLoadUrl;
 
+//cell高度
+@property(nonatomic) float cellHeight;
+
 @end

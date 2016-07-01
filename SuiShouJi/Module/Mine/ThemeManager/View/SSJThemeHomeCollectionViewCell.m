@@ -38,7 +38,6 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.themeImage.image = [UIImage ssj_imageWithColor:[UIColor redColor] size:CGSizeMake(self.width, 179)];
     self.themeImage.size = CGSizeMake(self.width, 179);
     self.themeImage.leftTop = CGPointMake(0, 0);
     self.themeTitleLabel.leftTop = CGPointMake(5, self.themeImage.bottom + 15);
@@ -52,6 +51,13 @@
         self.themeStatusButton.hidden = YES;
         self.themeStatusLabel.hidden = NO;
     }
+}
+
+-(float)cellHeight{
+    float imageRatio = 220 / 358;
+    float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
+    float height = imageHeight + 50 + [self.themeTitleLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].width + MAX(self.themeStatusLabel.height, self.themeStatusButton.height);
+    return height;
 }
 
 -(UIImageView *)themeImage{
@@ -108,15 +114,16 @@
 }
 
 -(void)statusButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
-            
+
         } failure:^(NSError *error) {
             
         }];
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
-            self.themeStatusButton.downloadProgress = progress;
+            weakSelf.themeStatusButton.downloadProgress = progress;
         } forID:self.item.themeId];
     }
 }
@@ -135,7 +142,6 @@
         self.themeStatusLabel.text = @"使用中";
     }
     [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl]];
-
     [self setNeedsLayout];
 }
 

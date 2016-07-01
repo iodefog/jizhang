@@ -45,7 +45,6 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     [self.view addSubview:self.hintLabel];
     [self.view addSubview:self.themeSelectView];
-
     // Do any additional setup after loading the view.
 }
 
@@ -82,6 +81,8 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJThemeHomeCollectionViewCell *cell = (SSJThemeHomeCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    NSLog(@"%f",[cell cellHeight]);
     return CGSizeMake((self.view.width - 45) / 3, 245);
 }
 

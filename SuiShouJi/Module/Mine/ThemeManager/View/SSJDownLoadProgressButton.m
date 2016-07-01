@@ -44,7 +44,7 @@
 
 -(void)setDownloadProgress:(float)downloadProgress{
     _downloadProgress = downloadProgress;
-    if (_downloadProgress > 0 && _downloadProgress <= 1) {
+    if (_downloadProgress > 0 && _downloadProgress < 1) {
         self.downloadMaskView.width = self.width * _downloadProgress;
     }else{
         self.downloadMaskView.width = 0;

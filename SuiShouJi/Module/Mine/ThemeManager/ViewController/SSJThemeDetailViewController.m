@@ -9,6 +9,7 @@
 #import "SSJThemeDetailViewController.h"
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeImageCollectionViewCell.h"
+#import "SSJThemeDownLoaderManger.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
@@ -82,10 +83,27 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     return UIEdgeInsetsMake(0, 10, 0, 10);
 }
 
+#pragma mark - Event
+-(void)themeDownLoadButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
+        [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
+
+        } failure:^(NSError *error) {
+            
+        }];
+        [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+            weakSelf.themeDownLoadButton.downloadProgress = progress;
+        } forID:self.item.themeId];
+    }
+}
+
 #pragma mark - Getter
 -(UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 5)];
+        _scrollView.contentSize = CGSizeMake(self.view.width, 610);
         _scrollView.backgroundColor = [UIColor whiteColor];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
@@ -98,7 +116,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         _themeIcon = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
         _themeIcon.layer.cornerRadius = 4.f;
         _themeIcon.layer.masksToBounds = YES;
-        _themeIcon.image = [UIImage imageNamed:self.item.themeThumbImageUrl];
+        [_themeIcon sd_setImageWithURL:[NSURL URLWithString:self.item.themeThumbImageUrl]];
     }
     return _themeIcon;
 }
@@ -140,8 +158,15 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if (!_themeDownLoadButton) {
         _themeDownLoadButton = [[SSJDownLoadProgressButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 56, 45)];
         _themeDownLoadButton.maskColor = @"#eb4a64";
-        [_themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
+        if (_item.themeStatus == 0) {
+            [_themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
+        }else if (_item.themeStatus == 1) {
+            [_themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
+        }else if (_item.themeStatus == 2) {
+            [_themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
+        }
         [_themeDownLoadButton.button setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_themeDownLoadButton.button addTarget:self action:@selector(themeDownLoadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _themeDownLoadButton.layer.cornerRadius = 2.f;
         _themeDownLoadButton.layer.borderWidth = 1.f;
         _themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
@@ -174,7 +199,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 -(UILabel *)themeDescLabel{
     if (!_themeDescLabel) {
-        _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectZero];
+        _themeDescLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 10, 56)];
         _themeDescLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         _themeDescLabel.font = [UIFont systemFontOfSize:15];
         _themeDescLabel.text = self.item.themeDesc;
