@@ -16,6 +16,7 @@
 #import "SSJThemeSetting.h"
 #import "SSJThemeModel.h"
 #import "NSString+SSJTheme.h"
+#import "SSJThemeDownLoaderManger.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -73,17 +74,18 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
     SSJThemeHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
-    cell.item = [self.items objectAtIndex:indexPath.item];
+    cell.item = item;
     return cell;
 }
 
 
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeHomeCollectionViewCell *cell = (SSJThemeHomeCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    NSLog(@"%f",[cell cellHeight]);
-    return CGSizeMake((self.view.width - 45) / 3, 245);
+    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    NSLog(@"%f",item.cellHeight);
+    return CGSizeMake((self.view.width - 45) / 3, item.cellHeight);
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
@@ -171,13 +173,29 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)getThemeStatusForThemes:(NSArray *)themes{
     for (SSJThemeItem *theme in themes) {
-        if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
-            theme.themeStatus = 2;
-        }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:theme.themeId]]) {
-            theme.themeStatus = 1;
+        if ([theme.themeId isEqualToString:@"0"]) {
+            if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
+                theme.themeStatus = 2;
+            }else {
+                theme.themeStatus = 1;
+            }
         }else{
-            theme.themeStatus = 0;
+            if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
+                theme.themeStatus = 2;
+            }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:theme.themeId]]) {
+                theme.themeStatus = 1;
+            }else{
+                theme.themeStatus = 0;
+            }
         }
+        if ([[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:theme.themeId]) {
+            theme.isDownLoading = YES;
+        }else{
+            theme.isDownLoading = NO;
+        }
+        float imageRatio = 220.f / 358;
+        float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
+        theme.cellHeight = imageHeight + 25 + [theme.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height + 26;
     }
     self.items = themes;
     [self.themeSelectView reloadData];

@@ -62,6 +62,7 @@ static id _instance;
         self.manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
         [self.manager.operationQueue setMaxConcurrentOperationCount:5];
         _blockerMapping = [NSMutableDictionary dictionary];
+        _downLoadingArr = [NSMutableArray array];
     }
     return self;
 }
@@ -79,6 +80,8 @@ static id _instance;
     
     NSProgress *tProgress = nil;
     
+    [self.downLoadingArr addObject:ID];
+    
     NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] withIntermediateDirectories:YES attributes:nil error:nil];
@@ -89,6 +92,7 @@ static id _instance;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         [_blockerMapping removeObjectForKey:ID];
         if (error) {
+            [self.downLoadingArr removeObject:ID];
             NSLog(@"%@",[error localizedDescription]);
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -97,6 +101,7 @@ static id _instance;
             }
             return;
         }else{
+            [self.downLoadingArr removeObject:ID];
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             if ([self unzipUrl:filePath path:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];

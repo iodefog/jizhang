@@ -19,7 +19,9 @@
 @property(nonatomic, strong) SSJDownLoadProgressButton *themeStatusButton;
 @end
 
-@implementation SSJThemeHomeCollectionViewCell
+@implementation SSJThemeHomeCollectionViewCell{
+    float _cellHeight;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -27,6 +29,12 @@
     if (self) {
 //        NSMutableDictionary *progressDic = [SSJThemeDownLoaderManger sharedInstance].blockerMapping;
 //        SSJThemeDownLoaderProgressBlocker *progressBlocker = progressDic[self.item.themeId];
+//        if ([[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
+//            __weak typeof(self) weakSelf = self;
+//            [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+//                weakSelf.themeStatusButton.downloadProgress = progress;
+//            } forID:self.item.themeId];
+//        }
         [self.contentView addSubview:self.themeImage];
         [self.contentView addSubview:self.themeTitleLabel];
         [self.contentView addSubview:self.themeSizeLabel];
@@ -38,7 +46,8 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.themeImage.size = CGSizeMake(self.width, 179);
+    float imageRatio = 220.f / 358;
+    self.themeImage.size = CGSizeMake(self.width, self.width / imageRatio);
     self.themeImage.leftTop = CGPointMake(0, 0);
     self.themeTitleLabel.leftTop = CGPointMake(5, self.themeImage.bottom + 15);
     self.themeSizeLabel.leftBottom = CGPointMake(self.themeTitleLabel.right + 10, self.themeTitleLabel.bottom);
@@ -51,13 +60,6 @@
         self.themeStatusButton.hidden = YES;
         self.themeStatusLabel.hidden = NO;
     }
-}
-
--(float)cellHeight{
-    float imageRatio = 220 / 358;
-    float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
-    float height = imageHeight + 50 + [self.themeTitleLabel.text sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].width + MAX(self.themeStatusLabel.height, self.themeStatusButton.height);
-    return height;
 }
 
 -(UIImageView *)themeImage{
@@ -130,18 +132,42 @@
 
 -(void)setItem:(SSJThemeItem *)item{
     _item = item;
-    self.themeTitleLabel.text = _item.themeTitle;
-    [self.themeTitleLabel sizeToFit];
-    self.themeSizeLabel.text = _item.themeSize;
-    [self.themeSizeLabel sizeToFit];
-    if (_item.themeStatus == 0) {
-        [self.themeStatusButton.button setTitle:@"下载" forState:UIControlStateNormal];
-    }else if (_item.themeStatus == 1) {
-        [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
-    }else if (_item.themeStatus == 2) {
-        self.themeStatusLabel.text = @"使用中";
+    if (![_item.themeId isEqualToString:@"0"]) {
+        self.themeTitleLabel.text = _item.themeTitle;
+        [self.themeTitleLabel sizeToFit];
+        self.themeSizeLabel.hidden = NO;
+        self.themeSizeLabel.text = _item.themeSize;
+        [self.themeSizeLabel sizeToFit];
+        if (_item.themeStatus == 0) {
+            [self.themeStatusButton.button setTitle:@"下载" forState:UIControlStateNormal];
+        }else if (_item.themeStatus == 1) {
+            [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
+        }else if (_item.themeStatus == 2) {
+            self.themeStatusLabel.text = @"使用中";
+        }
+        [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl] placeholderImage:[UIImage imageNamed:@"noneImage"]];
+        __weak typeof(self) weakSelf = self;
+        if (self.item.isDownLoading) {
+            self.themeStatusButton.downloadMaskView.hidden = NO;
+            [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+                weakSelf.themeStatusButton.downloadProgress = progress;
+            } forID:self.item.themeId];
+        }else{
+            self.themeStatusButton.downloadMaskView.hidden = YES;
+        }
+    }else{
+        self.themeSizeLabel.hidden = YES;
+        self.themeTitleLabel.text = _item.themeTitle;
+        [self.themeTitleLabel sizeToFit];
+        if (_item.themeStatus == 0) {
+            [self.themeStatusButton.button setTitle:@"下载" forState:UIControlStateNormal];
+        }else if (_item.themeStatus == 1) {
+            [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
+        }else if (_item.themeStatus == 2) {
+            self.themeStatusLabel.text = @"使用中";
+        }
+        self.themeImage.image = [UIImage imageNamed:@"defualtImage"];
     }
-    [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl]];
     [self setNeedsLayout];
 }
 

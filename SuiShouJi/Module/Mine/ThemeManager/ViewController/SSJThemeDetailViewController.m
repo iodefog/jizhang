@@ -10,9 +10,13 @@
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeImageCollectionViewCell.h"
 #import "SSJThemeDownLoaderManger.h"
+#import "SSJThemeSetting.h"
+#import "NSString+SSJTheme.h"
+#import "SSJThemeModel.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
+@property(nonatomic, strong) UIView* greyLineView;
 @property(nonatomic, strong) UIImageView *themeIcon;
 @property(nonatomic, strong) UILabel *themeTitleLabel;
 @property(nonatomic, strong) UILabel *themeSizeLabel;
@@ -26,12 +30,16 @@
 static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 
-@implementation SSJThemeDetailViewController
+@implementation SSJThemeDetailViewController{
+    NSArray *_images;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _images = @[@"defualtHome",@"defualtReport",@"defualtFund",@"defualtMine",@"defualtLogin"];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.greyLineView];
     [self.scrollView addSubview:self.themeIcon];
     [self.scrollView addSubview:self.themeTitleLabel];
     [self.scrollView addSubview:self.themeSizeLabel];
@@ -45,8 +53,9 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.scrollView.leftTop = CGPointMake(0, 10);
-    self.themeIcon.leftTop = CGPointMake(20, 20);
+    self.scrollView.leftTop = CGPointMake(0, 0);
+    self.greyLineView.leftTop = CGPointMake(0, 0);
+    self.themeIcon.leftTop = CGPointMake(20, 30);
     self.themeTitleLabel.leftTop = CGPointMake(self.themeIcon.right + 16, self.themeIcon.top + 10);
     self.themeSizeLabel.leftTop = CGPointMake(self.themeIcon.right + 16, self.themeTitleLabel.bottom + 12);
     self.themePriceLabel.leftBottom = CGPointMake(self.themeIcon.right + 16, self.themeIcon.bottom - 10);
@@ -57,6 +66,18 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     self.collectionView.leftTop = CGPointMake(0, self.themeDescLabel.bottom + 20);
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if ([[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
+        __weak typeof(self) weakSelf = self;
+        [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+            weakSelf.themeDownLoadButton.downloadProgress = progress;
+        } forID:self.item.themeId];
+    }else{
+        [self updateThemeStatus];
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -64,12 +85,19 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    if ([self.item.themeId isEqualToString:@"0"]) {
+        return _images.count;
+    }
     return self.item.images.count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
-    cell.imageUrl = [self.item.images objectAtIndex:indexPath.item][@"imgUrl"];
+    if ([self.item.themeId isEqualToString:@"0"]) {
+        cell.imageName = [_images objectAtIndex:indexPath.item];
+    }else{
+        cell.imageUrl = [self.item.images objectAtIndex:indexPath.item][@"imgUrl"];
+    }
     return cell;
 }
 
@@ -102,7 +130,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 #pragma mark - Getter
 -(UIScrollView *)scrollView{
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 5)];
+        _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
         _scrollView.contentSize = CGSizeMake(self.view.width, 610);
         _scrollView.backgroundColor = [UIColor whiteColor];
         _scrollView.showsHorizontalScrollIndicator = NO;
@@ -111,12 +139,24 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     return _scrollView;
 }
 
+-(UIView *)greyLineView{
+    if (!_greyLineView) {
+        _greyLineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 10)];
+        _greyLineView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    }
+    return _greyLineView;
+}
+
 -(UIImageView *)themeIcon{
     if (!_themeIcon) {
         _themeIcon = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
         _themeIcon.layer.cornerRadius = 4.f;
         _themeIcon.layer.masksToBounds = YES;
-        [_themeIcon sd_setImageWithURL:[NSURL URLWithString:self.item.themeThumbImageUrl]];
+        if ([self.item.themeId isEqualToString:@"0"]) {
+            self.themeIcon.image = [UIImage imageNamed:@"defualtThumbImage"];
+        }else{
+            [_themeIcon sd_setImageWithURL:[NSURL URLWithString:self.item.themeThumbImageUrl] placeholderImage:[UIImage imageNamed:@"noneThumbImage"]];
+        }
     }
     return _themeIcon;
 }
@@ -216,6 +256,35 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     }
     return _seperatorLine;
 }
+
+-(void)updateThemeStatus{
+    if ([self.item.themeId isEqualToString:@"0"]) {
+        if ([self.item.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
+            [self.themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
+        }else {
+            [self.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
+        }
+    }else{
+        if ([self.item.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
+            [self.themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
+        }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.themeId]]) {
+            [self.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
+        }else{
+            [self.themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
+        }
+    }
+}
+
 
 /*
 #pragma mark - Navigation

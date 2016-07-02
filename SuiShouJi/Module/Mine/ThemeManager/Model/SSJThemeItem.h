@@ -43,4 +43,7 @@
 //cell高度
 @property(nonatomic) float cellHeight;
 
+//是否正在下载
+@property(nonatomic) BOOL isDownLoading;
+
 @end

@@ -12,5 +12,5 @@
 @interface SSJThemeHomeCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) SSJThemeItem *item;
 
--(float)cellHeight;
+@property(nonatomic) BOOL isDownloading;
 @end

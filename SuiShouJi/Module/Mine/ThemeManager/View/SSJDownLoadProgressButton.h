@@ -12,4 +12,5 @@
 @property(nonatomic) float downloadProgress;
 @property(nonatomic, strong) NSString *maskColor;
 @property(nonatomic, strong) UIButton *button;
+@property(nonatomic, strong) UIView *downloadMaskView;
 @end

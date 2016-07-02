@@ -19,7 +19,12 @@
     [super requestDidFinish:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = [rootElement objectForKey:@"results"];
-        NSArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];
+        NSMutableArray *themeArray = [SSJThemeItem mj_objectArrayWithKeyValuesArray:[results objectForKey:@"themeconfig"]];
+        SSJThemeItem *item = [[SSJThemeItem alloc]init];
+        item.themeId = @"0";
+        item.themeTitle = @"官方白";
+        item.themeDesc = @"官方默认皮肤，羞羞萌萌的小猫伴你走过记账囧途，简约的初心设计与你一路相随。";
+        [themeArray insertObject:item atIndex:0];
         self.themes = [NSArray arrayWithArray:themeArray];
     }
 }

@@ -10,4 +10,5 @@
 
 @interface SSJThemeImageCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) NSString *imageUrl;
+@property(nonatomic, strong) NSString *imageName;
 @end

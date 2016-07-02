@@ -36,7 +36,12 @@
 
 -(void)setImageUrl:(NSString *)imageUrl{
     _imageUrl = imageUrl;
-    [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+    [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"noneDetailImage"]];
+}
+
+-(void)setImageName:(NSString *)imageName{
+    _imageName = imageName;
+    self.cellImageView.image = [UIImage imageNamed:_imageName];
 }
 
 @end

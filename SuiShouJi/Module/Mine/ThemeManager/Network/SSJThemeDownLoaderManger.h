@@ -21,5 +21,7 @@ typedef void(^SSJThemeDownLoaderProgressBlock)(float);
 
 - (void)addProgressHandler:(SSJThemeDownLoaderProgressBlock)handler forID:(NSString *)ID;
 
+@property (nonatomic, strong) NSMutableArray *downLoadingArr;
+
 @end
 

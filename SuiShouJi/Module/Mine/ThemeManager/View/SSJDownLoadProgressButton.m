@@ -8,7 +8,6 @@
 
 #import "SSJDownLoadProgressButton.h"
 @interface SSJDownLoadProgressButton()
-@property(nonatomic, strong) UIView *downloadMaskView;
 @end
 
 @implementation SSJDownLoadProgressButton
