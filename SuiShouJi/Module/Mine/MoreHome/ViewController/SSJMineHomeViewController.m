@@ -61,6 +61,7 @@ static BOOL KHasEnterMineHome;
 @property (nonatomic, strong) NSArray *images;
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
+@property(nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
 
@@ -89,6 +90,7 @@ static BOOL KHasEnterMineHome;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.header];
+    [self.view addSubview:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -130,9 +132,9 @@ static BOOL KHasEnterMineHome;
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 155);
-    self.header.leftTop = CGPointMake(0, 64);
+    self.header.leftTop = CGPointMake(0, 0);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 204);
     self.tableView.top = self.header.bottom;
-    self.tableView.height = self.view.height - 204;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -311,6 +313,21 @@ static BOOL KHasEnterMineHome;
 }
 
 #pragma mark - Getter
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+//        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+//        [_tableView ssj_clearExtendSeparator];
+//        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+//            [_tableView setSeparatorInset:UIEdgeInsetsZero];
+//        }
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+    }
+    return _tableView;
+}
+
 -(SSJMineHomeTableViewHeader *)header{
     if (!_header) {
         __weak typeof(self) weakSelf = self;
