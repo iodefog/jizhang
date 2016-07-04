@@ -7,8 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class SSJThemeModel;
+#import "SSJThemeModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
