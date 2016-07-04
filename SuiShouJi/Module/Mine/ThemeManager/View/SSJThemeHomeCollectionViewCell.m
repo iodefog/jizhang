@@ -125,7 +125,7 @@
 
 -(void)statusButtonClicked:(id)sender{
 //    __weak typeof(self) weakSelf = self;
-//    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
+    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             
@@ -134,7 +134,7 @@
         }];
         self.themeStatusButton.downloadMaskView.hidden = NO;
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
-//    }
+    }
 }
 
 -(void)setItem:(SSJThemeItem *)item{
