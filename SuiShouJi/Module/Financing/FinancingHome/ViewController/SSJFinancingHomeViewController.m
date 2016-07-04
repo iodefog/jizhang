@@ -84,7 +84,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 //    self.profitAmountLabel.centerY = self.headerView.height / 2;
 //    self.transferButton.right = self.view.width - 15;
 //    self.transferButton.centerY = self.headerView.height / 2;
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 141);
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 144);
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 

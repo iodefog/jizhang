@@ -140,6 +140,7 @@
 -(void)setItem:(SSJThemeItem *)item{
     [[SSJThemeDownLoaderManger sharedInstance] removeProgressHandler:_downloadHandler forID:self.item.themeId];
     _item = item;
+    //判断是否是默认的主题
     if (![_item.themeId isEqualToString:@"0"]) {
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
@@ -165,9 +166,7 @@
         self.themeSizeLabel.hidden = YES;
         self.themeTitleLabel.text = _item.themeTitle;
         [self.themeTitleLabel sizeToFit];
-        if (_item.themeStatus == 0) {
-            [self.themeStatusButton.button setTitle:@"下载" forState:UIControlStateNormal];
-        }else if (_item.themeStatus == 1) {
+        if (_item.themeStatus == 1) {
             [self.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
         }else if (_item.themeStatus == 2) {
             self.themeStatusLabel.text = @"使用中";

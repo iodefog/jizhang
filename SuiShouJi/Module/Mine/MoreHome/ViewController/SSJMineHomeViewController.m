@@ -80,7 +80,8 @@ static BOOL KHasEnterMineHome;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"更多";
-        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.extendedLayoutIncludesOpaqueBars = NO;
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
@@ -92,6 +93,8 @@ static BOOL KHasEnterMineHome;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+//    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
@@ -128,8 +131,8 @@ static BOOL KHasEnterMineHome;
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 155);
     self.header.leftTop = CGPointMake(0, 64);
-    self.tableView.top = self.header.bottom - 64;
-    self.tableView.height = self.view.height - 155;
+    self.tableView.top = self.header.bottom;
+    self.tableView.height = self.view.height - 204;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

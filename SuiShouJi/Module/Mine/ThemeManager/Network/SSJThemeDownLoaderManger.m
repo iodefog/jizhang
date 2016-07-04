@@ -9,6 +9,7 @@
 #import "SSJThemeDownLoaderManger.h"
 #import "NSString+SSJTheme.h"
 #import "AFNetworking.h"
+#import "SSJThemeModel.h"
 #import <ZipZap/ZipZap.h>
 
 @interface SSJThemeDownLoaderProgressBlocker : NSObject
@@ -105,6 +106,7 @@ static id _instance;
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             if ([self unzipUrl:filePath path:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
+//                [SSJThemeModel mj_objectWithFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID]];
             };
             
             if (success) {
@@ -193,5 +195,4 @@ static id _instance;
     
     return YES;
 }
-
 @end
