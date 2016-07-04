@@ -7,9 +7,15 @@
 //
 
 #import "SSJThemeSetting.h"
-#import "SSJThemeModel.h"
-#import "NSString+SSJTheme.h"
 #import "SSJThemeConst.h"
+#import "NSString+SSJTheme.h"
+#import "UIImage+SSJTheme.h"
+
+#import "MMDrawerController.h"
+#import "SSJBookKeepingHomeViewController.h"
+#import "SSJReportFormsViewController.h"
+#import "SSJFinancingHomeViewController.h"
+#import "SSJMineHomeViewController.h"
 
 @implementation SSJThemeSetting
 
@@ -29,6 +35,9 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:ID forKey:SSJCurrentThemeIDKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self updateTabbar];
+    
     return YES;
 }
 
@@ -57,7 +66,41 @@
 
 + (SSJThemeModel *)defaultThemeModel {
     SSJThemeModel *model = [[SSJThemeModel alloc] init];
+    model.mainTitleColor = @"#000000";
+    model.naviBarTitleAlpha = 1;
+    model.naviBarTintColor = @"#eb4a64";
+    model.naviBarBackgroundColor = @"#FFFFFF";
+    model.tabBarTitleColor = @"#a7a7a7";
+    model.tabBarSelectedTitleColor = @"#eb4a64";
     return model;
+}
+
++ (void)updateTabbar {
+    MMDrawerController *drawerVC = (MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if (![drawerVC isKindOfClass:[MMDrawerController class]]) {
+        return;
+    }
+    
+    UITabBarController *tabBarVC = (UITabBarController *)drawerVC.centerViewController;
+    if (![tabBarVC isKindOfClass:[UITabBarController class]]) {
+        return;
+    }
+    
+    UIViewController *recordHomeController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:0];
+    recordHomeController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_accounte_nor"];
+    recordHomeController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_accounte_sel"];
+    
+    UIViewController *reportFormsController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:1];
+    reportFormsController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_form_nor"];
+    reportFormsController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_form_sel"];
+    
+    UIViewController *financingController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:2];
+    financingController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_founds_nor"];
+    financingController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_founds_sel"];
+    
+    UIViewController *moreController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:3];
+    moreController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_more_nor"];
+    moreController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_more_sel"];
 }
 
 @end

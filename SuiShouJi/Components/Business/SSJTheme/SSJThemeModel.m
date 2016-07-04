@@ -25,7 +25,27 @@
 
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"<%@>:%@", self, @{@"ID":_ID,
-                                                          @"name":_name}];
+                                                          @"name":_name,
+                                                          @"previewUrlStr":_previewUrlStr,
+                                                          @"size":@(_size),
+                                                          @"mainTitleColor":_mainTitleColor,
+                                                          @"tabBarTitleColor":_tabBarTitleColor,
+                                                          @"tabBarSelectedTitleColor":_tabBarSelectedTitleColor,
+                                                          @"naviBarTitleAlpha":@(_naviBarTitleAlpha),
+                                                          @"naviBarTintColor":_naviBarTintColor,
+                                                          @"naviBarBackgroundColor":_naviBarBackgroundColor,
+                                                          @"cellSeparatorColor":_cellSeparatorColor,
+                                                          @"cellIndicatorColor":_cellIndicatorColor,
+                                                          @"recordHomeCalendarTitleColor":_recordHomeCalendarTitleColor,
+                                                          @"recordHomeCircleBorderColor":_recordHomeCircleBorderColor,
+                                                          @"recordHomeBudgetLabelTitleAlpha":@(_recordHomeBudgetLabelTitleAlpha),
+                                                          @"recordHomeBudgetLabelBorderAlpha":@(_recordHomeBudgetLabelBorderAlpha),
+                                                          @"recordHomeIncomeAndPayTitleAlpha":@(_recordHomeIncomeAndPayTitleAlpha),
+                                                          @"recordHomeIncomeAndPayValueAlpha":@(_recordHomeIncomeAndPayValueAlpha),
+                                                          @"recordHomeListDateAlpha":@(_recordHomeListDateAlpha),
+                                                          @"recordHomeListDateAmountAlpha":@(_recordHomeListDateAmountAlpha),
+                                                          @"recordHomeListChargeTitleAlpha":@(_recordHomeListChargeTitleAlpha),
+                                                          @"recordHomeListChargeMemoAlpha":@(_recordHomeListChargeMemoAlpha)}];
 }
 
 @end
