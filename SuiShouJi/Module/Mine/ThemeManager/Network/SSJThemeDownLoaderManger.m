@@ -129,9 +129,22 @@ static id _instance;
 }
 
 - (void)addProgressHandler:(SSJThemeDownLoaderProgressBlock)handler forID:(NSString *)ID {
+    if (!ID) {
+        return;
+    }
     SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
-    if (progressBlocker) {
+    if (progressBlocker && handler && ![progressBlocker.blocks containsObject:handler]) {
         [progressBlocker.blocks addObject:handler];
+    }
+}
+
+- (void)removeProgressHandler:(SSJThemeDownLoaderProgressBlock)handler forID:(NSString *)ID {
+    if (!ID) {
+        return;
+    }
+    SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
+    if (progressBlocker && handler && [progressBlocker.blocks containsObject:handler]) {
+        [progressBlocker.blocks removeObject:handler];
     }
 }
 
@@ -139,7 +152,7 @@ static id _instance;
     
     if ([keyPath isEqualToString:@"fractionCompleted"] && [object isKindOfClass:[NSProgress class]]) {
         NSProgress *progress = (NSProgress *)object;
-        NSLog(@"%f",progress.fractionCompleted);
+//        NSLog(@"%f",progress.fractionCompleted);
         NSString *ID = progress.userInfo[@"ID"];
         SSJThemeDownLoaderProgressBlocker *progressBlocker = _blockerMapping[ID];
         progressBlocker.progress = progress.fractionCompleted;

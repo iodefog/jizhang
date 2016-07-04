@@ -17,6 +17,9 @@
 @property(nonatomic, strong) UILabel *themeSizeLabel;
 @property(nonatomic, strong) UILabel *themeStatusLabel;
 @property(nonatomic, strong) SSJDownLoadProgressButton *themeStatusButton;
+
+@property (nonatomic, copy) void (^downloadHandler)(float progress);
+
 @end
 
 @implementation SSJThemeHomeCollectionViewCell{
@@ -40,6 +43,11 @@
         [self.contentView addSubview:self.themeSizeLabel];
         [self.contentView addSubview:self.themeStatusLabel];
         [self.contentView addSubview:self.themeStatusButton];
+        
+        __weak typeof(self) weakSelf = self;
+        _downloadHandler = ^(float progress) {
+            weakSelf.themeStatusButton.downloadProgress = progress;
+        };
     }
     return self;
 }
@@ -116,21 +124,21 @@
 }
 
 -(void)statusButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
+//    __weak typeof(self) weakSelf = self;
+//    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
-
+            
         } failure:^(NSError *error) {
             
         }];
-        [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
-            weakSelf.themeStatusButton.downloadProgress = progress;
-        } forID:self.item.themeId];
-    }
+        self.themeStatusButton.downloadMaskView.hidden = NO;
+        [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
+//    }
 }
 
 -(void)setItem:(SSJThemeItem *)item{
+    [[SSJThemeDownLoaderManger sharedInstance] removeProgressHandler:_downloadHandler forID:self.item.themeId];
     _item = item;
     if (![_item.themeId isEqualToString:@"0"]) {
         self.themeTitleLabel.text = _item.themeTitle;
@@ -146,12 +154,10 @@
             self.themeStatusLabel.text = @"使用中";
         }
         [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl] placeholderImage:[UIImage imageNamed:@"noneImage"]];
-        __weak typeof(self) weakSelf = self;
+//        __weak typeof(self) weakSelf = self;
         if (self.item.isDownLoading) {
             self.themeStatusButton.downloadMaskView.hidden = NO;
-            [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
-                weakSelf.themeStatusButton.downloadProgress = progress;
-            } forID:self.item.themeId];
+            [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
         }else{
             self.themeStatusButton.downloadMaskView.hidden = YES;
         }
