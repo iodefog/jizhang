@@ -159,7 +159,7 @@
             self.themeStatusButton.downloadMaskView.hidden = NO;
             [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
         }else{
-            self.themeStatusButton.downloadMaskView.hidden = YES;
+//            self.themeStatusButton.downloadMaskView.hidden = YES;
         }
     }else{
         self.themeSizeLabel.hidden = YES;
