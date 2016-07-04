@@ -148,12 +148,12 @@
         [self.themeImage sd_setImageWithURL:[NSURL URLWithString:_item.themeImageUrl] placeholderImage:[UIImage imageNamed:@"noneImage"]];
         __weak typeof(self) weakSelf = self;
         if (self.item.isDownLoading) {
-            self.themeStatusButton.downloadMaskView.hidden = NO;
+//            self.themeStatusButton.downloadMaskView.hidden = NO;
             [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
                 weakSelf.themeStatusButton.downloadProgress = progress;
             } forID:self.item.themeId];
         }else{
-            self.themeStatusButton.downloadMaskView.hidden = YES;
+//            self.themeStatusButton.downloadMaskView.hidden = YES;
         }
     }else{
         self.themeSizeLabel.hidden = YES;
