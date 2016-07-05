@@ -66,12 +66,23 @@
 
 + (SSJThemeModel *)defaultThemeModel {
     SSJThemeModel *model = [[SSJThemeModel alloc] init];
-    model.mainTitleColor = @"#000000";
-    model.naviBarTitleAlpha = 1;
+    model.ID = @"0";
+    model.name = @"默认主题";
+    model.backgroundAlpha = 1;
+    model.mainColor = @"#000000";
+    model.secondaryColor = @"#a7a7a7";
+    model.marcatoColor = @"#eb4a64";
+    model.naviBarTitleColor = @"#000000";
     model.naviBarTintColor = @"#eb4a64";
     model.naviBarBackgroundColor = @"#FFFFFF";
     model.tabBarTitleColor = @"#a7a7a7";
     model.tabBarSelectedTitleColor = @"#eb4a64";
+    model.tabBarBackgroundColor = @"#FFFFFF";
+    model.cellSeparatorAlpha = 1;
+    model.cellSeparatorColor = @"#e8e8e8";
+    model.cellIndicatorColor = @"#cccccc";
+    model.moreHomeTitleColor = @"#FFFFFF";
+    model.moreHomeSubtitleColor = @"#fab9bf";
     return model;
 }
 
