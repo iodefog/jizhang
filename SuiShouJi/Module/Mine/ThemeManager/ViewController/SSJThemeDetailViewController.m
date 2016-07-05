@@ -258,6 +258,8 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 }
 
 -(void)updateThemeStatus{
+    
+    //刷新主题的状态
     if ([self.item.themeId isEqualToString:@"0"]) {
         if ([self.item.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
             [self.themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
