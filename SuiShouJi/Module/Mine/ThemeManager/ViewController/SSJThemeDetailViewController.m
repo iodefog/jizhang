@@ -9,10 +9,6 @@
 #import "SSJThemeDetailViewController.h"
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeImageCollectionViewCell.h"
-#import "SSJThemeDownLoaderManger.h"
-#import "SSJThemeSetting.h"
-#import "NSString+SSJTheme.h"
-#import "SSJThemeModel.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;

@@ -15,7 +15,6 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
-#import "SSJThemeSetting.h"
 
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>

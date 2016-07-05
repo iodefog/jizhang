@@ -97,21 +97,31 @@
         return;
     }
     
+    SSJThemeModel *themeModel = [self currentThemeModel];
+    
     UIViewController *recordHomeController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:0];
     recordHomeController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_accounte_nor"];
     recordHomeController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_accounte_sel"];
+    [recordHomeController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
+    [recordHomeController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     UIViewController *reportFormsController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:1];
     reportFormsController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_form_nor"];
     reportFormsController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_form_sel"];
+    [reportFormsController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
+    [reportFormsController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     UIViewController *financingController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:2];
     financingController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_founds_nor"];
     financingController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_founds_sel"];
+    [financingController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
+    [financingController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     UIViewController *moreController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:3];
     moreController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_more_nor"];
     moreController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_more_sel"];
+    [moreController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
+    [moreController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
 }
 
 @end

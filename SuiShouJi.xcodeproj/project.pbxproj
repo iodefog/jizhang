@@ -372,11 +372,9 @@
 		7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE2E9121C9C291C001868F5 /* SSJUmengManager.m */; };
 		7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */; };
 		7DE4A7DB1D20C0BA00F05BF0 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
-		7DE4A7E11D20C6DE00F05BF0 /* SSJThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E01D20C6DE00F05BF0 /* SSJThemeManager.m */; };
 		7DE4A7E51D20DC7000F05BF0 /* NSString+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */; };
 		7DE4A7E61D20DC7D00F05BF0 /* NSString+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */; };
 		7DE4A7E71D20DC8500F05BF0 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
-		7DE4A7E91D20DC8B00F05BF0 /* SSJThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E01D20C6DE00F05BF0 /* SSJThemeManager.m */; };
 		7DE4A7EC1D20DD8C00F05BF0 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
 		7DE69B611C8D26E7001D31C1 /* SSJImageSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */; };
 		7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */; };
@@ -2236,6 +2234,7 @@
 		7DA4ACB41C919F38004E39E8 /* budget_red_wave_full@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_red_wave_full@3x.png"; sourceTree = "<group>"; };
 		7DA6EDD01D2B5CAE0097F06C /* SSJThemeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeModel.h; sourceTree = "<group>"; };
 		7DA6EDD11D2B5CAE0097F06C /* SSJThemeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeModel.m; sourceTree = "<group>"; };
+		7DA6EDE51D2BC21E0097F06C /* SSJTheme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSJTheme.h; sourceTree = "<group>"; };
 		7DABCA4A1D0D74E6002886E8 /* reportForms_delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_delete@2x.png"; sourceTree = "<group>"; };
 		7DABCA4B1D0D74E6002886E8 /* reportForms_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_delete@3x.png"; sourceTree = "<group>"; };
 		7DABCA4C1D0D74E6002886E8 /* reportForms_edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_edit@2x.png"; sourceTree = "<group>"; };
@@ -2456,8 +2455,6 @@
 		7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizeTask.m; sourceTree = "<group>"; };
 		7DE4A7D91D20C0BA00F05BF0 /* SSJThemeSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeSetting.h; sourceTree = "<group>"; };
 		7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeSetting.m; sourceTree = "<group>"; };
-		7DE4A7DF1D20C6DE00F05BF0 /* SSJThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeManager.h; sourceTree = "<group>"; };
-		7DE4A7E01D20C6DE00F05BF0 /* SSJThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeManager.m; sourceTree = "<group>"; };
 		7DE4A7E31D20DC7000F05BF0 /* NSString+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SSJTheme.h"; sourceTree = "<group>"; };
 		7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SSJTheme.m"; sourceTree = "<group>"; };
 		7DE4A7EA1D20DD8C00F05BF0 /* UIImage+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SSJTheme.h"; sourceTree = "<group>"; };
@@ -4558,8 +4555,7 @@
 				7DE4A7E21D20DC5300F05BF0 /* Category */,
 				7DE4A7D71D20C09400F05BF0 /* SSJThemeDownloader */,
 				7DE4A7D81D20C09400F05BF0 /* SSJThemeSetting */,
-				7DE4A7DF1D20C6DE00F05BF0 /* SSJThemeManager.h */,
-				7DE4A7E01D20C6DE00F05BF0 /* SSJThemeManager.m */,
+				7DA6EDE51D2BC21E0097F06C /* SSJTheme.h */,
 				7D4632801D2100E20040BABD /* SSJThemeConst.h */,
 				7D4632811D2100E20040BABD /* SSJThemeConst.m */,
 			);
@@ -7810,7 +7806,6 @@
 				9C2A67951D194CA70010F1DA /* SSJRecordMakingBillTypeSelectionCell.m in Sources */,
 				9C2A67961D194CA70010F1DA /* SSJCustomTextView.m in Sources */,
 				9C2A67971D194CA70010F1DA /* SSJScrollViewAddition.m in Sources */,
-				7DE4A7E91D20DC8B00F05BF0 /* SSJThemeManager.m in Sources */,
 				9C2A67981D194CA70010F1DA /* SSJPersonalDetailItem.m in Sources */,
 				9C2A67991D194CA70010F1DA /* SSJStartUpgradeAlertView.m in Sources */,
 				9C66F1241D20FF060094125D /* SSJThemeItem.m in Sources */,
@@ -8354,7 +8349,6 @@
 				7D5F333B1CEAE6C10086B67E /* SSJBudgetListCellItem.m in Sources */,
 				9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */,
 				9C9471891CEB224C00D69079 /* SSJFundingDetailsViewController.m in Sources */,
-				7DE4A7E11D20C6DE00F05BF0 /* SSJThemeManager.m in Sources */,
 				7D5F33791CEAE6C10086B67E /* SSJCustomKeyBoardButton.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,

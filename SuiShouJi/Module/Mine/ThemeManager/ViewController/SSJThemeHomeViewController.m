@@ -13,11 +13,6 @@
 #import "SSJThemeDetailViewController.h"
 #import "SSJThemeService.h"
 
-#import "SSJThemeSetting.h"
-#import "SSJThemeModel.h"
-#import "NSString+SSJTheme.h"
-#import "SSJThemeDownLoaderManger.h"
-
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
 @property(nonatomic, strong) UICollectionView *themeSelectView;

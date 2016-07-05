@@ -37,9 +37,6 @@
 #import "JPEngine.h"
 #import "SSJNetworkReachabilityManager.h"
 
-#import "SSJThemeSetting.h"
-#import "UIImage+SSJTheme.h"
-
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
