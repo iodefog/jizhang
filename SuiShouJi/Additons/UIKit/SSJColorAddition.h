@@ -17,4 +17,6 @@
  */
 + (UIColor *)ssj_colorWithHex:(NSString *)hexColor;
 
++ (UIColor *)ssj_colorWithHex:(NSString *)hexColor alpha:(CGFloat)alpha;
+
 @end

@@ -16,5 +16,7 @@
 #import "SSJThemeDownLoaderManger.h"
 #import "SSJThemeSetting.h"
 
+#define SSJ_CURRENT_THEME [SSJThemeSetting currentThemeModel]
+
 
 #endif /* SSJTheme_h */

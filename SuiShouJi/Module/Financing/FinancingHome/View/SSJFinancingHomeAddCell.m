@@ -41,7 +41,7 @@
     if (!_backImage) {
         _backImage = [[UIImageView alloc]init];
         _backImage.image = [[UIImage imageNamed:@"tianjia_border"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _backImage.tintColor = [UIColor orangeColor];
+        _backImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _backImage;
 }
@@ -50,7 +50,7 @@
     if (!_addImage) {
         _addImage = [[UIImageView alloc]init];
         _addImage.image = [[UIImage imageNamed:@"add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _addImage.tintColor = [UIColor orangeColor];
+        _addImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _addImage;
 }
