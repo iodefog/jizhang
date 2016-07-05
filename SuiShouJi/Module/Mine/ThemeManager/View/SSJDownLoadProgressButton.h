@@ -9,8 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJDownLoadProgressButton : UIView
+
+//下载进度
 @property(nonatomic) float downloadProgress;
+
+//进度条颜色
 @property(nonatomic, strong) NSString *maskColor;
+
 @property(nonatomic, strong) UIButton *button;
+
 @property(nonatomic, strong) UIView *downloadMaskView;
 @end

@@ -11,6 +11,4 @@
 
 @interface SSJThemeHomeCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) SSJThemeItem *item;
-
-@property(nonatomic) BOOL isDownloading;
 @end

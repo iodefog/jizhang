@@ -319,9 +319,9 @@ static BOOL KHasEnterMineHome;
         _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
 //        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 //        [_tableView ssj_clearExtendSeparator];
-//        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-//            [_tableView setSeparatorInset:UIEdgeInsetsZero];
-//        }
+        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        }
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }

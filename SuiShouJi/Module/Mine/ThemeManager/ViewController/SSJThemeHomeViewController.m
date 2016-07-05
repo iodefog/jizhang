@@ -172,6 +172,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 -(void)getThemeStatusForThemes:(NSArray *)themes{
+    //获取主题的状态
     for (SSJThemeItem *theme in themes) {
         if ([theme.themeId isEqualToString:@"0"]) {
             if ([theme.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
@@ -188,11 +189,14 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
                 theme.themeStatus = 0;
             }
         }
+        //获取主题是否正在下载
         if ([[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:theme.themeId]) {
             theme.isDownLoading = YES;
         }else{
             theme.isDownLoading = NO;
         }
+        
+        //计算每个cell的高度
         float imageRatio = 220.f / 358;
         float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
         theme.cellHeight = imageHeight + 25 + [theme.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height + 26;
