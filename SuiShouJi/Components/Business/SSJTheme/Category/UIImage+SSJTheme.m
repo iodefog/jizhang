@@ -61,6 +61,10 @@
     return image;
 }
 
++ (instancetype)ssj_themeImageWithName:(NSString *)name renderingMode:(UIImageRenderingMode)mode {
+    return [[self ssj_themeImageWithName:name] imageWithRenderingMode:mode];
+}
+
 + (instancetype)ssj_compatibleThemeImageNamed:(NSString *)name {
     NSString *imageName = [name stringByDeletingPathExtension];
     

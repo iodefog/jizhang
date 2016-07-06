@@ -12,6 +12,8 @@
 
 + (instancetype)ssj_themeImageWithName:(NSString *)name;
 
++ (instancetype)ssj_themeImageWithName:(NSString *)name renderingMode:(UIImageRenderingMode)mode;
+
 + (instancetype)ssj_compatibleThemeImageNamed:(NSString *)name;
 
 @end

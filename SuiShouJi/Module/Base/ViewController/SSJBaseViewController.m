@@ -22,6 +22,8 @@
 
 @property (nonatomic) BOOL isDatabaseInitFinished;
 
+@property (nonatomic, strong) UIImageView *backgroundView;
+
 @end
 
 @implementation SSJBaseViewController
@@ -34,6 +36,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.extendedLayoutIncludesOpaqueBars = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
@@ -46,6 +49,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    
+    _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+    [self.view addSubview:_backgroundView];
     
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
@@ -118,7 +124,7 @@
 }
 
 - (void)updateAppearanceAfterThemeChanged {
-    
+    [_backgroundView ssj_setThemeImageWithName:@"background"];
 }
 
 #pragma mark - Notification
