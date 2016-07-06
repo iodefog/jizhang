@@ -70,4 +70,7 @@
 // 更多首页顶部次要标题颜色（等级）
 @property (nonatomic, copy) NSString *moreHomeSubtitleColor;
 
+// 记一笔首页记一笔按钮边框色
+@property (nonatomic, copy) NSString *recordHomeBorderColor;
+
 @end
