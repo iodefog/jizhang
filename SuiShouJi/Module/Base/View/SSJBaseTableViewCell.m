@@ -26,7 +26,8 @@
             [self setLayoutMargins:UIEdgeInsetsZero];
         }
         
-        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
