@@ -113,13 +113,15 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
-
+            [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
         } failure:^(NSError *error) {
             
         }];
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
             weakSelf.themeDownLoadButton.downloadProgress = progress;
         } forID:self.item.themeId];
+    }else{
+        [SSJThemeSetting switchToThemeID:self.item.themeId];
     }
 }
 
