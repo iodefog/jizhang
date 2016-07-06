@@ -9,14 +9,12 @@
 #ifndef SSJTheme_h
 #define SSJTheme_h
 
+#import "SSJThemeUtil.h"
 #import "NSString+SSJTheme.h"
 #import "UIImage+SSJTheme.h"
 #import "UIImageView+SSJTheme.h"
 #import "SSJThemeModel.h"
 #import "SSJThemeDownLoaderManger.h"
 #import "SSJThemeSetting.h"
-
-#define SSJ_CURRENT_THEME [SSJThemeSetting currentThemeModel]
-
 
 #endif /* SSJTheme_h */

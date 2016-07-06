@@ -9,7 +9,6 @@
 #import "UIImageView+SSJTheme.h"
 #import "NSString+SSJTheme.h"
 #import "UIImage+SSJTheme.h"
-#import "SSJThemeConst.h"
 
 @implementation UIImageView (SSJTheme)
 
