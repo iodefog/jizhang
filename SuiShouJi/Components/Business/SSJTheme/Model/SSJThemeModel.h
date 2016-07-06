@@ -34,6 +34,9 @@
 // 强调颜色
 @property (nonatomic, copy) NSString *marcatoColor;
 
+// 边框线颜色
+@property (nonatomic, copy) NSString *borderColor;
+
 // 导航栏标题透明度
 @property (nonatomic, copy) NSString *naviBarTitleColor;
 

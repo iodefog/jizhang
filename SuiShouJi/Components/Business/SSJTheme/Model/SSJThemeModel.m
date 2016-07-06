@@ -19,6 +19,7 @@
     [aCoder encodeObject:_mainColor forKey:@"mainColor"];
     [aCoder encodeObject:_secondaryColor forKey:@"secondaryColor"];
     [aCoder encodeObject:_marcatoColor forKey:@"marcatoColor"];
+    [aCoder encodeObject:_borderColor forKey:@"borderColor"];
     [aCoder encodeObject:_naviBarTitleColor forKey:@"naviBarTitleColor"];
     [aCoder encodeObject:_naviBarTintColor forKey:@"naviBarTintColor"];
     [aCoder encodeObject:_naviBarBackgroundColor forKey:@"naviBarBackgroundColor"];
@@ -42,6 +43,7 @@
         _mainColor = [aDecoder decodeObjectForKey:@"mainColor"];
         _secondaryColor = [aDecoder decodeObjectForKey:@"secondaryColor"];
         _marcatoColor = [aDecoder decodeObjectForKey:@"marcatoColor"];
+        _borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
         _naviBarTitleColor = [aDecoder decodeObjectForKey:@"naviBarTitleColor"];
         _naviBarTintColor = [aDecoder decodeObjectForKey:@"naviBarTintColor"];
         _naviBarBackgroundColor = [aDecoder decodeObjectForKey:@"naviBarBackgroundColor"];
@@ -66,6 +68,7 @@
                                                           @"mainColor":_mainColor,
                                                           @"secondaryColor":_secondaryColor,
                                                           @"marcatoColor":_marcatoColor,
+                                                          @"borderColor":_borderColor,
                                                           @"naviBarTitleColor":_naviBarTitleColor,
                                                           @"naviBarTintColor":_naviBarTintColor,
                                                           @"naviBarBackgroundColor":_naviBarBackgroundColor,
