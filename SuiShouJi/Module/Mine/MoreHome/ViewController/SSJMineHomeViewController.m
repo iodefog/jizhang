@@ -133,7 +133,7 @@ static BOOL KHasEnterMineHome;
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 155);
     self.header.leftTop = CGPointMake(0, 0);
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 204);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom);
     self.tableView.top = self.header.bottom;
 }
 
