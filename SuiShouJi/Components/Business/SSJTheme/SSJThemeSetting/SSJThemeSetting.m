@@ -96,6 +96,8 @@
     
     SSJThemeModel *themeModel = [self currentThemeModel];
     
+    [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.tabBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero]];
+    
     UIViewController *recordHomeController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:0];
     recordHomeController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_accounte_nor"];
     recordHomeController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_accounte_sel"];

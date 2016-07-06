@@ -104,7 +104,7 @@ static id _instance;
         }else{
             [self.downLoadingArr removeObject:ID];
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
-            if ([self unzipUrl:filePath path:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] error:&error]) {
+            if ([self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
 //                [SSJThemeModel mj_objectWithFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID]];
             };
