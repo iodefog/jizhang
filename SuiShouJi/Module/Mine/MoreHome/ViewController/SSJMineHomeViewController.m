@@ -318,13 +318,13 @@ static BOOL KHasEnterMineHome;
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
 //        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 //        [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }

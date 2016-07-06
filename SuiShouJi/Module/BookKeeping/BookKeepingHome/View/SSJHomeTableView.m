@@ -19,7 +19,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.lineView];
-        self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self ssj_clearExtendSeparator];
         if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
             [self setSeparatorInset:UIEdgeInsetsZero];
