@@ -42,7 +42,7 @@
 - (void)reloadDataAfterInitDatabase;
 
 /**
- *  切换主题后调用的方法，子类根据情况重写，父类中没有做任何处理
+ *  切换主题后调用的方法，子类根据情况重写，必须调用父类方法
  */
 - (void)updateAppearanceAfterThemeChanged;
 

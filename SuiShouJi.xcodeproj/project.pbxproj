@@ -4558,13 +4558,13 @@
 		7DE4A7CF1D20C01900F05BF0 /* SSJTheme */ = {
 			isa = PBXGroup;
 			children = (
+				7DA6EDE51D2BC21E0097F06C /* SSJTheme.h */,
+				7D8F7C361D2CAED200F7DF6A /* SSJThemeUtil.h */,
+				7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */,
 				7DA6EDCF1D2B5CAE0097F06C /* Model */,
 				7DE4A7E21D20DC5300F05BF0 /* Category */,
 				7DE4A7D71D20C09400F05BF0 /* SSJThemeDownloader */,
 				7DE4A7D81D20C09400F05BF0 /* SSJThemeSetting */,
-				7DA6EDE51D2BC21E0097F06C /* SSJTheme.h */,
-				7D8F7C361D2CAED200F7DF6A /* SSJThemeUtil.h */,
-				7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */,
 			);
 			path = SSJTheme;
 			sourceTree = "<group>";
