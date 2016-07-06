@@ -41,7 +41,7 @@
 -(UIView *)lineView{
     if (!_lineView) {
         _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1, 0)];
-        _lineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     }
     return _lineView;
 }
@@ -54,10 +54,10 @@
 -(void)setHasData:(BOOL)hasData{
     _hasData = hasData;
     if (!_hasData) {
-        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeBorderColor];
         self.lineView.width = 1.5f;
     }else{
-        self.lineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
         self.lineView.width = 1.f;
     }
 }

@@ -46,7 +46,7 @@
 -(SSJScrollTextView *)expenditureView{
     if (!_expenditureView) {
         _expenditureView = [[SSJScrollTextView alloc]init];
-        _expenditureView.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _expenditureView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _expenditureView.textFont = 20;
         _expenditureView.totalAnimationDuration = 1.f;
     }
@@ -56,7 +56,7 @@
 -(SSJScrollTextView *)incomeView{
     if (!_incomeView) {
         _incomeView = [[SSJScrollTextView alloc]init];
-        _incomeView.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _incomeView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _incomeView.textFont = 20;
         _incomeView.totalAnimationDuration = 1.f;
 
@@ -67,7 +67,7 @@
 -(UILabel *)expenditureTitleLabel{
     if (!_expenditureTitleLabel) {
         _expenditureTitleLabel = [[UILabel alloc]init];
-        _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _expenditureTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _expenditureTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _expenditureTitleLabel;
@@ -76,7 +76,7 @@
 -(UILabel *)incomeTitleLabel{
     if (!_incomeTitleLabel) {
         _incomeTitleLabel = [[UILabel alloc]init];
-        _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _incomeTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _incomeTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _incomeTitleLabel;
@@ -85,7 +85,7 @@
 -(UIView *)seperatorLine{
     if (!_seperatorLine) {
         _seperatorLine = [[UIView alloc]init];
-        _seperatorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _seperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     }
     return _seperatorLine;
 }

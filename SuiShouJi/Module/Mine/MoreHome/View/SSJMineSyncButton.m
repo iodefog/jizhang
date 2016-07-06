@@ -70,7 +70,8 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
 -(UIImageView *)arrowImage{
     if (!_arrowImage) {
         _arrowImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 8, 10)];
-        _arrowImage.image = [UIImage imageNamed:@"more_arrow"];
+        _arrowImage.image = [[UIImage imageNamed:@"more_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _arrowImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
         _arrowImage.hidden = YES;
     }
     return _arrowImage;
@@ -79,7 +80,8 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
 -(UIImageView *)cloudImage{
     if (!_cloudImage) {
         _cloudImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
-        _cloudImage.image = [UIImage imageNamed:@"more_tongbu"];
+        _cloudImage.image = [[UIImage imageNamed:@"more_tongbu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _cloudImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
     }
     return _cloudImage;
 }
@@ -88,7 +90,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"云同步";
-        _titleLabel.textColor = [UIColor whiteColor];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
         _titleLabel.font = [UIFont systemFontOfSize:16];
         [_titleLabel sizeToFit];
     }
@@ -107,35 +109,35 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
                 dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, (2 - animationDuration) *NSEC_PER_SEC);
                 dispatch_after(time, dispatch_get_main_queue(), ^{
                     [self stopAnimation];
-                    self.cloudImage.image = [UIImage imageNamed:@"more_tongbu_s"];
+                    self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu_s"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.titleLabel.text = @"同步成功";
                     [self.titleLabel sizeToFit];
                     dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
                     dispatch_after(time, dispatch_get_main_queue(), ^{
-                        self.cloudImage.image = [UIImage imageNamed:@"more_tongbu"];
+                        self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                         self.titleLabel.text = @"云同步";
                     });
                 });
             }else{
                 [self stopAnimation];
-                self.cloudImage.image = [UIImage imageNamed:@"more_tongbu_s"];
+                self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu_s"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 self.titleLabel.text = @"同步成功";
                 [self.titleLabel sizeToFit];
                 dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
                 dispatch_after(time, dispatch_get_main_queue(), ^{
-                    self.cloudImage.image = [UIImage imageNamed:@"more_tongbu"];
+                    self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     self.titleLabel.text = @"云同步";
                 });
             }
         }
     }failure:^(SSJDataSynchronizeType type, NSError *error) {
         [self stopAnimation];
-        self.cloudImage.image = [UIImage imageNamed:@"more_tongbu_f"];
+        self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu_f"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.titleLabel.text = @"同步失败";
         [self.titleLabel sizeToFit];
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
         dispatch_after(time, dispatch_get_main_queue(), ^{
-            self.cloudImage.image = [UIImage imageNamed:@"more_tongbu"];
+            self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.titleLabel.text = @"云同步";
         });
     }];
@@ -143,7 +145,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
 }
 
 -(void)startAnimation{
-    self.cloudImage.image = [UIImage imageNamed:@"more_tongbuing"];
+    self.cloudImage.image = [[UIImage imageNamed:@"more_tongbuing"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.arrowImage.hidden = NO;
     CAKeyframeAnimation *arrowAnimation =[CAKeyframeAnimation animation];
     arrowAnimation.keyPath = @"transform.translation.y";

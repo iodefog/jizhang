@@ -64,10 +64,10 @@
     model.ID = SSJDefaultThemeID;
     model.name = @"默认主题";
     model.backgroundAlpha = 1;
-    model.mainColor = @"#000000";
+    model.mainColor = @"#393939";
     model.secondaryColor = @"#a7a7a7";
     model.marcatoColor = @"#eb4a64";
-    model.borderColor = @"#666666";
+    model.borderColor = @"#cccccc";
     model.naviBarTitleColor = @"#000000";
     model.naviBarTintColor = @"#eb4a64";
     model.naviBarBackgroundColor = @"#FFFFFF";

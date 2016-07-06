@@ -53,7 +53,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
     if (!_recordMakingButton) {
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
         _recordMakingButton.layer.cornerRadius = self.width / 2;
-        _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
+        _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeBorderColor].CGColor;
         _recordMakingButton.layer.borderWidth = 2.0f;
         [_recordMakingButton addTarget:self action:@selector(recordMakingButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -63,7 +63,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 -(UIImageView *)penImage{
     if (!_penImage) {
         _penImage = [[UIImageView alloc]init];
-        _penImage.image = [UIImage imageNamed:@"home_pen"];
+        _penImage.image = [UIImage ssj_themeImageWithName:@"home_pen"];
     }
     return _penImage;
 }
@@ -71,7 +71,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 -(UIImageView *)lineImage{
     if (!_lineImage) {
         _lineImage = [[UIImageView alloc]init];
-        _lineImage.image = [UIImage imageNamed:@"home_line"];
+        _lineImage.image = [UIImage ssj_themeImageWithName:@"home_line"];
     }
     return _lineImage;
 }

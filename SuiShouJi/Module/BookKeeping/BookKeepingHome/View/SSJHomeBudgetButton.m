@@ -45,9 +45,9 @@
 -(UIButton *)button{
     if (!_button) {
         _button = [[UIButton alloc]init];
-        [_button setTitleColor:[UIColor ssj_colorWithHex:@"a7a7a7"] forState:UIControlStateNormal];
+        [_button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         _button.layer.cornerRadius = 13.f;
-        _button.layer.borderColor = [UIColor ssj_colorWithHex:@"a7a7a7"].CGColor;
+        _button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
         _button.layer.borderWidth = 1.f;
         _button.titleLabel.font = [UIFont systemFontOfSize:14];
         [_button addTarget:self action:@selector(budgetButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -57,9 +57,9 @@
 
 -(void)setModel:(SSJBudgetModel *)model{
     _model = model;
-    [self.button setTitleColor:[UIColor ssj_colorWithHex:@"a7a7a7"] forState:UIControlStateNormal];
+    [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
     [self.button setBackgroundColor:[UIColor whiteColor]];
-    self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"a7a7a7"].CGColor;
+    self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
     if (_model == nil) {
         [self.button setTitle:@"添加预算" forState:UIControlStateNormal];
     }else{

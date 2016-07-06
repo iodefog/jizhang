@@ -34,6 +34,7 @@
 @end
 
 @interface SSJThemeDownLoaderManger()
+
 @property(nonatomic, strong) AFURLSessionManager *manager;
 
 @end
@@ -106,7 +107,9 @@ static id _instance;
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             if ([self unzipUrl:filePath path:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
-//                [SSJThemeModel mj_objectWithFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID]];
+                NSString *ThemePath = [NSString stringWithFormat:@"%@/%@",[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID],@""];
+                SSJThemeModel *themeModel = [SSJThemeModel mj_objectWithFile:ThemePath];
+                [SSJThemeSetting addThemeModel:themeModel];
             };
             
             if (success) {
@@ -116,10 +119,6 @@ static id _instance;
             }
         }
     }];
-    
-//    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
-//        
-//    }];
     
     [tProgress setUserInfoObject:ID forKey:@"ID"];
     [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];

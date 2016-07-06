@@ -50,7 +50,7 @@
     if (!_addImage) {
         _addImage = [[UIImageView alloc]init];
         _addImage.image = [[UIImage imageNamed:@"add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _addImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _addImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _addImage;
 }
@@ -59,7 +59,7 @@
     if (!_addLabel) {
         _addLabel = [[UILabel alloc]init];
         _addLabel.font = [UIFont systemFontOfSize:18];
-        _addLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _addLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _addLabel.text = @"添加资金帐户";
         [_addLabel sizeToFit];
     }

@@ -71,13 +71,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 85);
-    self.headerView.leftTop = CGPointMake(0, 10);
+    self.headerView.leftTop = CGPointMake(0, 0);
     self.hiddenButton.right = self.view.width - 120;
     self.hiddenButton.centerY = self.headerView.centerY;
 //    self.profitAmountLabel.left = self.profitLabel.right + 20;
 //    self.transferButton.size = CGSizeMake(65, 30);
-    [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
-    [_headerView ssj_setBorderStyle:SSJBorderStyleBottom];
+    [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_headerView ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
     [_headerView ssj_setBorderWidth:1];
 //    self.profitLabel.left = 10.0f;
 //    self.profitLabel.centerY = self.headerView.height / 2;
@@ -221,6 +221,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
         _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }
@@ -237,7 +238,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(UIButton *)hiddenButton{
     if (!_hiddenButton) {
         _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-        [_hiddenButton setImage:[UIImage imageNamed:@"founds_yingcang"] forState:UIControlStateNormal];
+        [_hiddenButton setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
         [_hiddenButton setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
         [_hiddenButton addTarget:self action:@selector(hiddenButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

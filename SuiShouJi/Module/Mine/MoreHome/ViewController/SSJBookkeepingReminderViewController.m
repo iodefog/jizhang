@@ -56,7 +56,6 @@ static NSString *const kTitle3 = @"定期提醒";
     [self saveChargeReminder];
 }
 
-
 #pragma mark - Getter
 -(SSJChargeReminderTimeView *)chargeReminderTime{
     if (!_chargeReminderTime) {

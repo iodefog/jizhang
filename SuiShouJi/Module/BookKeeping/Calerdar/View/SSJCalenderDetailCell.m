@@ -33,7 +33,7 @@
 -(UILabel *)cellLabel{
     if (_cellLabel == nil) {
         _cellLabel = [[UILabel alloc]init];
-        _cellLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _cellLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellLabel.textAlignment = NSTextAlignmentLeft;
         _cellLabel.font = [UIFont systemFontOfSize:15];
     }
@@ -43,7 +43,7 @@
 -(UILabel *)detailLabel{
     if (_detailLabel == nil) {
         _detailLabel = [[UILabel alloc]init];
-        _detailLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _detailLabel.textAlignment = NSTextAlignmentRight;
         _detailLabel.font = [UIFont systemFontOfSize:18];
     }

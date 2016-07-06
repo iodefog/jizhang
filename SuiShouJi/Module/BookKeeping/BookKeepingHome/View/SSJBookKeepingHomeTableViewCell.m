@@ -109,7 +109,7 @@
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _incomeLabel.font = [UIFont systemFontOfSize:15];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_incomeLabel sizeToFit];
     }
     return _incomeLabel;
@@ -119,7 +119,7 @@
     if (!_expenditureLabel) {
         _expenditureLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _expenditureLabel.font = [UIFont systemFontOfSize:15];
-        _expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_expenditureLabel sizeToFit];
     }
     return _expenditureLabel;
@@ -163,7 +163,7 @@
     if (!_incomeMemoLabel) {
         _incomeMemoLabel = [[UILabel alloc]init];
         _incomeMemoLabel.textAlignment = NSTextAlignmentRight;
-        _incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _incomeMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _incomeMemoLabel.font = [UIFont systemFontOfSize:14];
     }
     return _incomeMemoLabel;
@@ -173,7 +173,7 @@
     if (!_expentureMemoLabel) {
         _expentureMemoLabel = [[UILabel alloc]init];
         _expentureMemoLabel.textAlignment = NSTextAlignmentLeft;
-        _expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _expentureMemoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _expentureMemoLabel.font = [UIFont systemFontOfSize:14];
     }
     return _expentureMemoLabel;
@@ -196,7 +196,7 @@
         _expentureImage = [[UIImageView alloc]init];
         _expentureImage.userInteractionEnabled = YES;
         UITapGestureRecognizer *singleTap =
-        [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick: )];
+        [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
         singleTap.numberOfTapsRequired = 1;
         [_expentureImage addGestureRecognizer:singleTap];
     }
@@ -206,7 +206,7 @@
 -(UIView *)toplineView{
     if (!_toplineView) {
         _toplineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 , self.height / 2)];
-        _toplineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _toplineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     }
     return _toplineView;
 }
@@ -214,7 +214,7 @@
 -(UIView *)bottomlineView{
     if (!_bottomlineView) {
         _bottomlineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1 , self.height / 2)];
-        _bottomlineView.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _bottomlineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     }
     return _bottomlineView;
 }
@@ -243,7 +243,7 @@
         _categoryImageButton.userInteractionEnabled = NO;
         [_categoryImageButton setImage:nil forState:UIControlStateNormal];
         _categoryImageButton.titleLabel.font = [UIFont systemFontOfSize:14];
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"cccccc"] forState:UIControlStateNormal];
+        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor] forState:UIControlStateNormal];
         _IncomeImage.hidden = YES;
         _expentureImage.hidden = YES;
         _IncomeImage.image = nil;
@@ -253,9 +253,9 @@
         if ([_item.money doubleValue] < 0) {
             self.expenditureLabel.hidden = NO;
             self.incomeLabel.hidden = NO;
-            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             self.expenditureLabel.text = [NSString stringWithFormat:@"%.2f",[item.money doubleValue]];
-            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             [self.expenditureLabel sizeToFit];
             if (month == currentMonth) {
                 if (day == [NSDate date].day) {
@@ -273,9 +273,9 @@
             [self.incomeLabel sizeToFit];
 
         }else{
-            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             self.incomeLabel.text = [NSString stringWithFormat:@"+%.2f",[_item.money doubleValue]];
-            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             [self.incomeLabel sizeToFit];
             if (month == currentMonth) {
                 if (day == [NSDate date].day) {
@@ -297,14 +297,14 @@
         if (!_item.incomeOrExpence) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
             [self.incomeLabel sizeToFit];
-            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             self.expenditureLabel.text = @"";
             self.incomeMemoLabel.text = _item.chargeMemo;
             [self.incomeMemoLabel sizeToFit];
             self.expentureMemoLabel.text = @"";
         }else{
             self.expenditureLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
-            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.expenditureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             [self.expenditureLabel sizeToFit];
             self.incomeLabel.text = @"";
             self.expentureMemoLabel.text = _item.chargeMemo;
