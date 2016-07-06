@@ -36,7 +36,7 @@ static NSString *const kGrayScaleColor = @"CCCCCC";
         _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:layout];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"F8F8F8"];
+        _collectionView.backgroundColor = [UIColor clearColor];
         [_collectionView registerClass:[SSJReportFormsScaleAxisCell class] forCellWithReuseIdentifier:kCellId];
         _collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
         _collectionView.showsHorizontalScrollIndicator = NO;
