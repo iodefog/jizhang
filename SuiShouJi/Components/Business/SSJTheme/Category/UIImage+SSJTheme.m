@@ -8,7 +8,6 @@
 
 #import "UIImage+SSJTheme.h"
 #import "NSString+SSJTheme.h"
-#import "SSJThemeConst.h"
 
 @implementation UIImage (SSJTheme)
 
@@ -33,7 +32,7 @@
 
 + (instancetype)ssj_themeImageWithName:(NSString *)name {
     
-    NSString *themeID = [[NSUserDefaults standardUserDefaults] objectForKey:SSJCurrentThemeIDKey];
+    NSString *themeID = SSJCurrentThemeID();
     
     // 如果是默认主题，就从bundle中读图片；反之，从相应的沙盒目录中读取图片
     if ([themeID isEqualToString:SSJDefaultThemeID]) {

@@ -7,7 +7,6 @@
 //
 
 #import "SSJThemeSetting.h"
-#import "SSJThemeConst.h"
 #import "NSString+SSJTheme.h"
 #import "UIImage+SSJTheme.h"
 
@@ -33,8 +32,7 @@
         return NO;
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:ID forKey:SSJCurrentThemeIDKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    SSJSetCurrentThemeID(ID);
     
     [self updateTabbar];
     
@@ -42,16 +40,13 @@
 }
 
 + (SSJThemeModel *)currentThemeModel {
-    NSString *themeID = [[NSUserDefaults standardUserDefaults] objectForKey:SSJCurrentThemeIDKey];
-    if (themeID.length) {
-        NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
-        SSJThemeModel *model = [modelInfo objectForKey:themeID];
-        if (model) {
-            return model;
-        }
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    SSJThemeModel *model = [modelInfo objectForKey:SSJCurrentThemeID()];
+    if (model) {
+        return model;
+    } else {
+        return [self defaultThemeModel];
     }
-    
-    return [self defaultThemeModel];
 }
 
 + (NSArray *)allThemeModels {
