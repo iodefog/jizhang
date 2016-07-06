@@ -32,8 +32,12 @@
 }
 
 + (instancetype)ssj_themeImageWithName:(NSString *)name {
-    UIImage *image = [UIImage imageNamed:name];
-    if (image) {
+    
+    NSString *themeID = [[NSUserDefaults standardUserDefaults] objectForKey:SSJCurrentThemeIDKey];
+    
+    // 如果是默认主题，就从bundle中读图片；反之，从相应的沙盒目录中读取图片
+    if ([themeID isEqualToString:SSJDefaultThemeID]) {
+        UIImage *image = [UIImage imageNamed:name];
         return image;
     }
     
@@ -43,11 +47,10 @@
         imgName = [NSString stringWithFormat:@"%@@%d", name, (int)[UIScreen mainScreen].scale];
     }
     
-    NSString *themeID = [[NSUserDefaults standardUserDefaults] objectForKey:SSJCurrentThemeIDKey];
     NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:themeID];
     imagePath = [imagePath stringByAppendingPathComponent:imgName];
     
-    image = [[self memoCache] objectForKey:imagePath];
+    UIImage *image = [[self memoCache] objectForKey:imagePath];
     if (image) {
         return image;
     }

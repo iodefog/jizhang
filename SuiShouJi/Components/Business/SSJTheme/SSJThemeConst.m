@@ -8,7 +8,7 @@
 
 #import "SSJThemeConst.h"
 
-NSString *const SSJThemeSettingListKey = @"SSJThemeSettingListKey";
-
 NSString *const SSJCurrentThemeIDKey = @"SSJCurrentThemeIDKey";
+
+NSString *const SSJDefaultThemeID = @"0";
 

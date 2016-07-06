@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *const SSJThemeSettingListKey;
-
 extern NSString *const SSJCurrentThemeIDKey;
+
+extern NSString *const SSJDefaultThemeID;
