@@ -59,7 +59,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getDateFromDateBase];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
         SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] objectAtIndex:0];
@@ -72,7 +72,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 85);
-    self.headerView.leftTop = CGPointMake(0, 0);
+    self.headerView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
     self.hiddenButton.right = self.view.width - 120;
     self.hiddenButton.centerY = self.headerView.centerY;
 //    self.profitAmountLabel.left = self.profitLabel.right + 20;
@@ -221,7 +221,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
-        _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
@@ -230,7 +229,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(SSJFinancingHomeHeader *)headerView{
     if (!_headerView) {
         _headerView = [[SSJFinancingHomeHeader alloc]init];
-        _headerView.backgroundColor = [UIColor whiteColor];
         [_headerView.transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _headerView;
