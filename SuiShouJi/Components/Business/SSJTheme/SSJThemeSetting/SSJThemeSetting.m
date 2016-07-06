@@ -67,6 +67,7 @@
     model.mainColor = @"#000000";
     model.secondaryColor = @"#a7a7a7";
     model.marcatoColor = @"#eb4a64";
+    model.borderColor = @"#666666";
     model.naviBarTitleColor = @"#000000";
     model.naviBarTintColor = @"#eb4a64";
     model.naviBarBackgroundColor = @"#FFFFFF";
@@ -78,6 +79,7 @@
     model.cellIndicatorColor = @"#cccccc";
     model.moreHomeTitleColor = @"#FFFFFF";
     model.moreHomeSubtitleColor = @"#fab9bf";
+    model.recordHomeBorderColor = @"#eb4a64";
     return model;
 }
 

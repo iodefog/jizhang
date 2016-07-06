@@ -31,6 +31,7 @@
     [aCoder encodeObject:_cellIndicatorColor forKey:@"cellIndicatorColor"];
     [aCoder encodeObject:_moreHomeTitleColor forKey:@"moreHomeTitleColor"];
     [aCoder encodeObject:_moreHomeSubtitleColor forKey:@"moreHomeSubtitleColor"];
+    [aCoder encodeObject:_recordHomeBorderColor forKey:@"recordHomeBorderColor"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -55,6 +56,7 @@
         _cellIndicatorColor = [aDecoder decodeObjectForKey:@"cellIndicatorColor"];
         _moreHomeTitleColor = [aDecoder decodeObjectForKey:@"moreHomeTitleColor"];
         _moreHomeSubtitleColor = [aDecoder decodeObjectForKey:@"moreHomeSubtitleColor"];
+        _recordHomeBorderColor = [aDecoder decodeObjectForKey:@"recordHomeBorderColor"];
     }
     return self;
 }
