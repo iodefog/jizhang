@@ -31,6 +31,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"主题皮肤";
         self.hidesBottomBarWhenPushed = YES;
+
     }
     return self;
 }
@@ -79,7 +80,6 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
-    NSLog(@"%f",item.cellHeight);
     return CGSizeMake((self.view.width - 45) / 3, item.cellHeight);
 }
 

@@ -220,13 +220,16 @@
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
         _plusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_plusButton setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
+        [_plusButton setImage:[[UIImage imageNamed:@"reportForms_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _plusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _plusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
         _minusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_minusButton setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
+        [_minusButton setImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _minusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
