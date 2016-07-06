@@ -106,7 +106,18 @@ static id _instance;
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
             if ([self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
-//                [SSJThemeModel mj_objectWithFile:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID]];
+                
+                NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
+                NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
+                NSError *error = nil;
+                NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+                if (error) {
+                    SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
+                    return;
+                }
+                
+                SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
+                [SSJThemeSetting addThemeModel:model];
             };
             
             if (success) {
