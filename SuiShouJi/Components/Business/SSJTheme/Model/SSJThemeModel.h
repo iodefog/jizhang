@@ -37,6 +37,9 @@
 // 边框线颜色
 @property (nonatomic, copy) NSString *borderColor;
 
+// 按钮颜色
+@property (nonatomic, copy) NSString *buttonColor;
+
 // 导航栏标题透明度
 @property (nonatomic, copy) NSString *naviBarTitleColor;
 
@@ -72,5 +75,8 @@
 
 // 记一笔首页记一笔按钮边框色
 @property (nonatomic, copy) NSString *recordHomeBorderColor;
+
+// 记一笔首页日历颜色
+@property (nonatomic, copy) NSString *recordHomeCalendarColor;
 
 @end

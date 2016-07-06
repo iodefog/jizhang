@@ -20,6 +20,7 @@
     [aCoder encodeObject:_secondaryColor forKey:@"secondaryColor"];
     [aCoder encodeObject:_marcatoColor forKey:@"marcatoColor"];
     [aCoder encodeObject:_borderColor forKey:@"borderColor"];
+    [aCoder encodeObject:_buttonColor forKey:@"buttonColor"];
     [aCoder encodeObject:_naviBarTitleColor forKey:@"naviBarTitleColor"];
     [aCoder encodeObject:_naviBarTintColor forKey:@"naviBarTintColor"];
     [aCoder encodeObject:_naviBarBackgroundColor forKey:@"naviBarBackgroundColor"];
@@ -32,6 +33,7 @@
     [aCoder encodeObject:_moreHomeTitleColor forKey:@"moreHomeTitleColor"];
     [aCoder encodeObject:_moreHomeSubtitleColor forKey:@"moreHomeSubtitleColor"];
     [aCoder encodeObject:_recordHomeBorderColor forKey:@"recordHomeBorderColor"];
+    [aCoder encodeObject:_recordHomeCalendarColor forKey:@"recordHomeCalendarColor"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -45,6 +47,7 @@
         _secondaryColor = [aDecoder decodeObjectForKey:@"secondaryColor"];
         _marcatoColor = [aDecoder decodeObjectForKey:@"marcatoColor"];
         _borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
+        _buttonColor = [aDecoder decodeObjectForKey:@"buttonColor"];
         _naviBarTitleColor = [aDecoder decodeObjectForKey:@"naviBarTitleColor"];
         _naviBarTintColor = [aDecoder decodeObjectForKey:@"naviBarTintColor"];
         _naviBarBackgroundColor = [aDecoder decodeObjectForKey:@"naviBarBackgroundColor"];
@@ -57,6 +60,7 @@
         _moreHomeTitleColor = [aDecoder decodeObjectForKey:@"moreHomeTitleColor"];
         _moreHomeSubtitleColor = [aDecoder decodeObjectForKey:@"moreHomeSubtitleColor"];
         _recordHomeBorderColor = [aDecoder decodeObjectForKey:@"recordHomeBorderColor"];
+        _recordHomeCalendarColor = [aDecoder decodeObjectForKey:@"recordHomeCalendarColor"];
     }
     return self;
 }
@@ -71,6 +75,7 @@
                                                           @"secondaryColor":_secondaryColor,
                                                           @"marcatoColor":_marcatoColor,
                                                           @"borderColor":_borderColor,
+                                                          @"buttonColor":_buttonColor,
                                                           @"naviBarTitleColor":_naviBarTitleColor,
                                                           @"naviBarTintColor":_naviBarTintColor,
                                                           @"naviBarBackgroundColor":_naviBarBackgroundColor,
@@ -81,7 +86,8 @@
                                                           @"cellSeparatorColor":_cellSeparatorColor,
                                                           @"cellIndicatorColor":_cellIndicatorColor,
                                                           @"moreHomeTitleColor":_moreHomeTitleColor,
-                                                          @"moreHomeSubtitleColor":_moreHomeSubtitleColor}];
+                                                          @"moreHomeSubtitleColor":_moreHomeSubtitleColor,
+                                                          @"recordHomeCalendarColor":_recordHomeCalendarColor}];
 }
 
 @end

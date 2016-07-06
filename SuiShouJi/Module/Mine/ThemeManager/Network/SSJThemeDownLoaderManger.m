@@ -107,6 +107,7 @@ static id _instance;
             if ([self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
                 
+                // 解析主题配置文件，
                 NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
                 NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
                 NSError *error = nil;
