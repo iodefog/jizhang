@@ -43,7 +43,7 @@
     // 按照屏幕分辨率拼接图片名称，例如：320x640 imgName.png；640x960 imgName@2x.png；1242x2208 imgName@3x.png
     NSString *imgName = name;
     if ([UIScreen mainScreen].scale == 2 || [UIScreen mainScreen].scale == 3) {
-        imgName = [NSString stringWithFormat:@"%@@%d", name, (int)[UIScreen mainScreen].scale];
+        imgName = [NSString stringWithFormat:@"%@@%dx.png", name, (int)[UIScreen mainScreen].scale];
     }
     
     NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:themeID];

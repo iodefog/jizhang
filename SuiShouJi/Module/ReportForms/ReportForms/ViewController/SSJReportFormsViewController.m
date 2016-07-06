@@ -85,6 +85,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         self.statisticsTitle = @"报表首页";
         self.circleItems = [NSMutableArray array];
         self.automaticallyAdjustsScrollViewInsets = NO;
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -126,7 +127,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.tableView.height = self.view.height - self.dateAxisView.height;
+    self.tableView.height = self.view.height - self.dateAxisView.height - self.tabBarController.tabBar.height;
 }
 
 #pragma mark - UITabBarControllerDelegate

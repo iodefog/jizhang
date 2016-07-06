@@ -42,6 +42,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"我的资金";
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -84,7 +85,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 //    self.profitAmountLabel.centerY = self.headerView.height / 2;
 //    self.transferButton.right = self.view.width - 15;
 //    self.transferButton.centerY = self.headerView.height / 2;
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.headerView.bottom);
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.headerView.bottom - self.tabBarController.tabBar.height);
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 

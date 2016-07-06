@@ -16,7 +16,6 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
 
-
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
@@ -38,8 +37,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -115,6 +114,10 @@
 }
 
 - (void)reloadDataAfterInitDatabase {
+    
+}
+
+- (void)updateAppearanceAfterThemeChanged {
     
 }
 

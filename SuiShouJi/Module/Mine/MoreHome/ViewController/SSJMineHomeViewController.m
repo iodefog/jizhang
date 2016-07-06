@@ -81,7 +81,7 @@ static BOOL KHasEnterMineHome;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"更多";
-        self.extendedLayoutIncludesOpaqueBars = NO;
+        self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
@@ -134,7 +134,7 @@ static BOOL KHasEnterMineHome;
     [super viewDidLayoutSubviews];
     self.header.size = CGSizeMake(self.view.width, 219);
     self.header.leftTop = CGPointMake(0, 0);
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.header.bottom - self.tabBarController.tabBar.height);
     self.tableView.top = self.header.bottom;
 }
 
