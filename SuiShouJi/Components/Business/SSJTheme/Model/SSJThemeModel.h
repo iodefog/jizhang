@@ -58,6 +58,9 @@
 // tabbar背景色
 @property (nonatomic, copy) NSString *tabBarBackgroundColor;
 
+// tabbar边框线透明度
+@property (nonatomic) CGFloat tabBarShadowImageAlpha;
+
 // cell分割线透明度
 @property (nonatomic) CGFloat cellSeparatorAlpha;
 

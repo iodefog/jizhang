@@ -85,6 +85,7 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window makeKeyAndVisible];
     
     [self setRootViewController];
+    [SSJThemeSetting updateTabbarAppearance];
     [SSJNetworkReachabilityManager startMonitoring];
     
     //如果第一次打开记录当前时间
@@ -225,44 +226,23 @@ NSDate *SCYEnterBackgroundTime() {
 
 // 设置根控制器
 - (void)setRootViewController {
-    SSJThemeModel *themeModel = [SSJThemeSetting currentThemeModel];
-    
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
-    bookKeepingNavi.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_accounte_nor" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    bookKeepingNavi.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_accounte_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    [bookKeepingNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
-    [bookKeepingNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
-    reportFormsNavi.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_form_nor" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    reportFormsNavi.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_form_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    [reportFormsNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
-    [reportFormsNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
-    financingNavi.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_founds_nor" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    financingNavi.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_founds_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    [financingNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
-    [financingNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"更多";
-    moreNavi.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_more_nor" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    moreNavi.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_more_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    [moreNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
-    [moreNavi.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
-    [tabBarVC.tabBar setShadowImage:[[UIImage alloc] init]];
-    [tabBarVC.tabBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#000000" alpha:0.5] size:CGSizeZero]];
-    [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.tabBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero]];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];

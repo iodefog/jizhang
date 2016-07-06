@@ -34,7 +34,7 @@
     
     SSJSetCurrentThemeID(ID);
     
-    [self updateTabbar];
+    [self updateTabbarAppearance];
     
     return YES;
 }
@@ -54,38 +54,7 @@
     return [modelInfo allValues];
 }
 
-+ (NSString *)settingFilePath {
-    NSString *settingPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"settings"];
-    return settingPath;
-}
-
-+ (SSJThemeModel *)defaultThemeModel {
-    SSJThemeModel *model = [[SSJThemeModel alloc] init];
-    model.ID = SSJDefaultThemeID;
-    model.name = @"默认主题";
-    model.backgroundAlpha = 1;
-    model.mainColor = @"#393939";
-    model.secondaryColor = @"#a7a7a7";
-    model.marcatoColor = @"#eb4a64";
-    model.borderColor = @"#cccccc";
-    model.buttonColor = @"#eb4a64";
-    model.naviBarTitleColor = @"#000000";
-    model.naviBarTintColor = @"#eb4a64";
-    model.naviBarBackgroundColor = @"#FFFFFF";
-    model.tabBarTitleColor = @"#a7a7a7";
-    model.tabBarSelectedTitleColor = @"#eb4a64";
-    model.tabBarBackgroundColor = @"#FFFFFF";
-    model.cellSeparatorAlpha = 1;
-    model.cellSeparatorColor = @"#e8e8e8";
-    model.cellIndicatorColor = @"#cccccc";
-    model.moreHomeTitleColor = @"#FFFFFF";
-    model.moreHomeSubtitleColor = @"#fab9bf";
-    model.recordHomeBorderColor = @"#eb4a64";
-    model.recordHomeCalendarColor = @"#eb4a64";
-    return model;
-}
-
-+ (void)updateTabbar {
++ (void)updateTabbarAppearance {
     MMDrawerController *drawerVC = (MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     if (![drawerVC isKindOfClass:[MMDrawerController class]]) {
         return;
@@ -98,6 +67,7 @@
     
     SSJThemeModel *themeModel = [self currentThemeModel];
     
+    [tabBarVC.tabBar setShadowImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:@"#e8e8e8" alpha:themeModel.tabBarShadowImageAlpha] size:CGSizeZero]];
     [tabBarVC.tabBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.tabBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero]];
     
     UIViewController *recordHomeController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:0];
@@ -123,6 +93,38 @@
     moreController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_more_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];
     [moreController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
     [moreController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
+}
+
++ (NSString *)settingFilePath {
+    NSString *settingPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"settings"];
+    return settingPath;
+}
+
++ (SSJThemeModel *)defaultThemeModel {
+    SSJThemeModel *model = [[SSJThemeModel alloc] init];
+    model.ID = SSJDefaultThemeID;
+    model.name = @"默认主题";
+    model.backgroundAlpha = 1;
+    model.mainColor = @"#393939";
+    model.secondaryColor = @"#a7a7a7";
+    model.marcatoColor = @"#eb4a64";
+    model.borderColor = @"#cccccc";
+    model.buttonColor = @"#eb4a64";
+    model.naviBarTitleColor = @"#000000";
+    model.naviBarTintColor = @"#eb4a64";
+    model.naviBarBackgroundColor = @"#FFFFFF";
+    model.tabBarTitleColor = @"#a7a7a7";
+    model.tabBarSelectedTitleColor = @"#eb4a64";
+    model.tabBarBackgroundColor = @"#FFFFFF";
+    model.tabBarShadowImageAlpha = 1;
+    model.cellSeparatorAlpha = 1;
+    model.cellSeparatorColor = @"#e8e8e8";
+    model.cellIndicatorColor = @"#cccccc";
+    model.moreHomeTitleColor = @"#FFFFFF";
+    model.moreHomeSubtitleColor = @"#fab9bf";
+    model.recordHomeBorderColor = @"#eb4a64";
+    model.recordHomeCalendarColor = @"#eb4a64";
+    return model;
 }
 
 @end

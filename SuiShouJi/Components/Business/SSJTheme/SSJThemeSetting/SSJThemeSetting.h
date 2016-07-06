@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray *)allThemeModels;
 
++ (void)updateTabbarAppearance;
+
 @end
 
 NS_ASSUME_NONNULL_END
