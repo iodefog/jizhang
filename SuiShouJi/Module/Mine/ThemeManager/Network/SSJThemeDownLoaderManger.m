@@ -34,7 +34,6 @@
 @end
 
 @interface SSJThemeDownLoaderManger()
-
 @property(nonatomic, strong) AFURLSessionManager *manager;
 
 @end
@@ -105,11 +104,20 @@ static id _instance;
         }else{
             [self.downLoadingArr removeObject:ID];
             [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
-            if ([self unzipUrl:filePath path:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] error:&error]) {
+            if ([self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
                 [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
-                NSString *ThemePath = [NSString stringWithFormat:@"%@/%@",[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID],@""];
-                SSJThemeModel *themeModel = [SSJThemeModel mj_objectWithFile:ThemePath];
-                [SSJThemeSetting addThemeModel:themeModel];
+                
+                NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
+                NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
+                NSError *error = nil;
+                NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+                if (error) {
+                    SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
+                    return;
+                }
+                
+                SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
+                [SSJThemeSetting addThemeModel:model];
             };
             
             if (success) {
@@ -119,6 +127,10 @@ static id _instance;
             }
         }
     }];
+    
+//    [self.manager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+//        
+//    }];
     
     [tProgress setUserInfoObject:ID forKey:@"ID"];
     [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];

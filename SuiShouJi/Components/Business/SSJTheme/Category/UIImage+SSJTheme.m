@@ -47,6 +47,7 @@
     }
     
     NSString *imagePath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:themeID];
+    imagePath = [imagePath stringByAppendingPathComponent:@"Img"];
     imagePath = [imagePath stringByAppendingPathComponent:imgName];
     
     UIImage *image = [[self memoCache] objectForKey:imagePath];
