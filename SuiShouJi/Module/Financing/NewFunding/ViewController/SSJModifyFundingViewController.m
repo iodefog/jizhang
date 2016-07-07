@@ -60,9 +60,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor blackColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -217,7 +214,7 @@
         UIButton *comfirmButton = [[UIButton alloc]init];
         comfirmButton.size = CGSizeMake(self.view.width - 40, 40);
         comfirmButton.center = CGPointMake(_footerView.width / 2, _footerView.height / 2);
-        comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         comfirmButton.layer.cornerRadius = 4.0f;
         [comfirmButton setTitle:@"保存" forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -228,7 +225,7 @@
 
 -(TPKeyboardAvoidingTableView *)tableView{
     if (!_tableView) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStyleGrouped];
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.backgroundColor = [UIColor clearColor];
 
         _tableView.delegate = self;

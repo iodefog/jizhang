@@ -53,7 +53,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -186,7 +185,7 @@
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableview{
     if (!_tableview) {
-        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableview.backgroundColor = [UIColor clearColor];
         _tableview.delegate = self;
         _tableview.dataSource = self;

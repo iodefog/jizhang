@@ -344,7 +344,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -359,7 +360,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [saveButton setTitle:@"保存" forState:UIControlStateNormal];
         saveButton.layer.cornerRadius = 3.f;
         saveButton.layer.masksToBounds = YES;
-        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);

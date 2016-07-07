@@ -60,7 +60,6 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
-    [self.tableView registerClass:[SSJFundingDetailListHeaderView class] forHeaderFooterViewReuseIdentifier:kFundingListHeaderViewID];
     self.tableView.tableHeaderView = self.header;
 }
 
@@ -121,7 +120,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    SSJFundingDetailListHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingListHeaderViewID];
+    SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
     headerView.item = [self.listItems objectAtIndex:section];
     __weak typeof(self) weakSelf = self;
     headerView.SectionHeaderClickedBlock = ^(){

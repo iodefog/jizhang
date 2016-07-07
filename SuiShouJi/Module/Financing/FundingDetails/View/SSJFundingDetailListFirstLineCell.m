@@ -36,7 +36,7 @@
 -(UILabel *)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _incomeLabel.font = [UIFont systemFontOfSize:12];
     }
     return _incomeLabel;
@@ -45,7 +45,7 @@
 -(UILabel *)expentureLabel{
     if (!_expentureLabel) {
         _expentureLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _expentureLabel.font = [UIFont systemFontOfSize:12];
     }
     return _expentureLabel;

@@ -40,19 +40,19 @@
     }
     [self.view addSubview:self.headerView];
     [self.view addSubview:self.collectionView];
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightbuttonView];
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(comfirmButtonClick:)];
     self.navigationItem.rightBarButtonItem  = rightBarButton;
     // Do any additional setup after loading the view.
 }
 
 -(void)viewDidLayoutSubviews{
-    _headerView.top = 10;
+    _headerView.top = SSJ_NAVIBAR_BOTTOM + 10;
     _headerView.size = CGSizeMake(self.view.width, 55);
     _nameLabel.left = 10;
     _nameLabel.centerY = self.headerView.height / 2;
     _amountLabel.right = self.headerView.width - 10;
     _amountLabel.centerY = self.headerView.height / 2;
-    self.collectionView.frame = CGRectMake(0, 75, self.view.width, self.view.height - 75);
+    self.collectionView.frame = CGRectMake(0, self.headerView.bottom, self.view.width, self.view.height - self.headerView.bottom);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -105,10 +105,10 @@
         flowLayout.minimumInteritemSpacing = 10;
         flowLayout.minimumLineSpacing = 10;
         _collectionView =[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
         [_collectionView registerClass:[SSJColorSelectCollectionViewCell class] forCellWithReuseIdentifier:@"ColorSelectCollectionViewCell"];
-        _collectionView.backgroundColor = [UIColor whiteColor];
     }
     return _collectionView;
 }
@@ -131,18 +131,6 @@
         [_headerView addSubview:_amountLabel];
     }
     return _headerView;
-}
-
--(UIView *)rightbuttonView{
-    if (!_rightbuttonView) {
-        _rightbuttonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-        UIButton *comfirmButton = [[UIButton alloc]init];
-        comfirmButton.frame = CGRectMake(0, 0, 44, 44);
-        [comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [_rightbuttonView addSubview:comfirmButton];
-    }
-    return _rightbuttonView;
 }
 
 #pragma mark - Private
