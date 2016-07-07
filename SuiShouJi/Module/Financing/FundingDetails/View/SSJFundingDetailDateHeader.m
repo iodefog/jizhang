@@ -17,6 +17,7 @@
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
         [self addSubview:self.dateLabel];
         [self addSubview:self.balanceLabel];
+        self.contentView.backgroundColor = [UIColor clearColor];
     }
     return self;
 }

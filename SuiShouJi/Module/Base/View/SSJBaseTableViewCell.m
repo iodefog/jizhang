@@ -43,8 +43,8 @@
     return self;
 }
 
-- (void)setNeedsLayout {
-    [super setNeedsLayout];
+- (void)layoutSubviews {
+    [super layoutSubviews];
     CGFloat accessoryWidth = 33;
     self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
     _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
