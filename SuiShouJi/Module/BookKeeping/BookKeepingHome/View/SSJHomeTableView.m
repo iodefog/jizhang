@@ -69,4 +69,8 @@
     }
 }
 
+- (void)updateAfterThemeChange{
+    self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+}
+
 @end

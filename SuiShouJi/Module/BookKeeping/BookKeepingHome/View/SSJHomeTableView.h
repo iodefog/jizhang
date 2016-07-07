@@ -17,4 +17,6 @@ typedef void(^tableViewClickBlock)();
 
 @property(nonatomic) BOOL hasData;
 
+- (void)updateAfterThemeChange;
+
 @end

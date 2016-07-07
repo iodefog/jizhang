@@ -21,4 +21,7 @@ typedef void(^budgetButtonClickBlock)(SSJBudgetModel *model);
 @property(nonatomic) double currentBalance;
 
 @property (nonatomic) long currentMonth;
+
+- (void)updateAfterThemeChange;
+
 @end

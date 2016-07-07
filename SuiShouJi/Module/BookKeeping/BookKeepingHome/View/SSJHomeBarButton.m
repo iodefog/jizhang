@@ -57,4 +57,9 @@
     self.dateLabel.text = [NSString stringWithFormat:@"%02ld",_currentDay];
     [self.dateLabel sizeToFit];
 }
+
+- (void)updateAfterThemeChange{
+    self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    self.calenderImage.image = [UIImage ssj_themeImageWithName:@"home_calender"];
+}
 @end

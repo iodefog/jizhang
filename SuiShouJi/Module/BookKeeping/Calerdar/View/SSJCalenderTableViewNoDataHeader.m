@@ -19,8 +19,9 @@
 }
 
 -(void)awakeFromNib{
+    [self.recordMakingButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     self.recordMakingButton.layer.cornerRadius = 20;
-    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
+    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
     self.recordMakingButton.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
 }
 

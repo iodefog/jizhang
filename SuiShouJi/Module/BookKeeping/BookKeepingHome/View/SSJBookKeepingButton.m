@@ -204,6 +204,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 
 - (void)stopLoading{
     [self.penImage.layer removeAnimationForKey:kLodingViewAnimationKey];
+    
 }
 
 
@@ -213,7 +214,10 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
     }
 }
 
-
+- (void)updateAfterThemeChange{
+    self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeBorderColor].CGColor;
+    self.penImage.image = [UIImage ssj_themeImageWithName:@"home_pen"];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

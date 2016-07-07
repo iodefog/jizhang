@@ -610,6 +610,15 @@
 }
 
 #pragma mark - Private
+-(void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self.bookKeepingHeader updateAfterThemeChange];
+    [self.tableView updateAfterThemeChange];
+    [self.budgetButton updateAfterThemeChange];
+    [self.homeButton updateAfterThemeChange];
+    [self.budgetButton updateAfterThemeChange];
+}
+
 -(void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;

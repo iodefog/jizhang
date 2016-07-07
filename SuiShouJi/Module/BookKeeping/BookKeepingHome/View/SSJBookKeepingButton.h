@@ -25,5 +25,7 @@ typedef void(^recordMakingClickBlock)();
 
 @property(nonatomic) BOOL refreshSuccessOrNot;
 
+- (void)updateAfterThemeChange;
+
 
 @end
