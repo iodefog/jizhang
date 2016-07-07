@@ -37,7 +37,7 @@
 
 @interface SSJBookKeepingHomeViewController ()
 
-@property (nonatomic,strong) UIBarButtonItem *rightBarButton;
+@property (nonatomic,strong) SSJHomeBarButton *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
@@ -120,9 +120,9 @@
 //    leftSpace.width = -10;
 //    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     self.navigationItem.titleView = self.budgetButton;
-    self.navigationItem.rightBarButtonItems = @[rightSpace, self.rightBarButton];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightBarButton];
+    self.navigationItem.rightBarButtonItems = @[rightSpace, rightItem];
     
-
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];
@@ -486,14 +486,13 @@
     return _tableView;
 }
 
--(UIBarButtonItem*)rightBarButton{
+-(SSJHomeBarButton*)rightBarButton{
     if (!_rightBarButton) {
-        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+        _rightBarButton = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
 //        buttonView.layer.borderColor = [UIColor redColor].CGColor;
 //        buttonView.layer.borderWidth = 1;
-        buttonView.currentDay = _currentDay;
-        [buttonView.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];
+        _rightBarButton.currentDay = _currentDay;
+        [_rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _rightBarButton;
 }
@@ -617,6 +616,7 @@
     [self.budgetButton updateAfterThemeChange];
     [self.homeButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
+    [self.rightBarButton updateAfterThemeChange];
 }
 
 -(void)getDateFromDatebase{

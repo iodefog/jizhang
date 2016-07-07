@@ -31,7 +31,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"主题皮肤";
         self.hidesBottomBarWhenPushed = YES;
-
+        self.appliesTheme = NO;
     }
     return self;
 }

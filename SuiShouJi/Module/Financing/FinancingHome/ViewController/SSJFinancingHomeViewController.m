@@ -310,6 +310,12 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self getDateFromDateBase];
 }
 
+-(void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self.headerView updateAfterThemeChange];
+    [self.collectionView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

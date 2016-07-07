@@ -71,6 +71,7 @@
 
 - (void)updateAfterThemeChange{
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 @end

@@ -30,6 +30,14 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     NSArray *_images;
 }
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.title = @"主题详情";
+        self.appliesTheme = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _images = @[@"defualtHome",@"defualtReport",@"defualtFund",@"defualtMine",@"defualtLogin"];
