@@ -37,6 +37,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.extendedLayoutIncludesOpaqueBars = YES;
+        _appliesTheme = YES;
     }
     return self;
 }
