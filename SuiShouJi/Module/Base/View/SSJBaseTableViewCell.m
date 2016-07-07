@@ -62,6 +62,7 @@
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
 }
 
