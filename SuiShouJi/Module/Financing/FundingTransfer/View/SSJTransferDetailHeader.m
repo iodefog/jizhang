@@ -14,6 +14,7 @@
 
 - (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier{
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+        self.contentView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.dateLabel];
     }
     return self;

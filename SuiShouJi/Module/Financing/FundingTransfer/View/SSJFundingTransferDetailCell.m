@@ -58,7 +58,7 @@
 -(UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _dateLabel.font = [UIFont systemFontOfSize:15];
     }
     return _dateLabel;
@@ -74,7 +74,7 @@
 -(UILabel *)moneyLabel{
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
-        _moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _moneyLabel.font = [UIFont systemFontOfSize:18];
     }
     return _moneyLabel;
@@ -83,7 +83,7 @@
 -(UILabel *)transferSourceLabel{
     if (!_transferSourceLabel) {
         _transferSourceLabel = [[UILabel alloc]init];
-        _transferSourceLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _transferSourceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _transferSourceLabel.font = [UIFont systemFontOfSize:15];
     }
     return _transferSourceLabel;
@@ -92,7 +92,7 @@
 -(UILabel *)memoLabel{
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
-        _memoLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memoLabel.font = [UIFont systemFontOfSize:15];
     }
     return _memoLabel;
