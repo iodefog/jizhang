@@ -21,11 +21,15 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 
 @implementation SSJAddNewTypeColorSelectionView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithWidth:(CGFloat)width {
+    if (self = [super initWithFrame:CGRectMake(0, 0, width, 0)]) {
         [self addSubview:self.collectionView];
     }
     return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    return [self initWithWidth:CGRectGetWidth(frame)];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {

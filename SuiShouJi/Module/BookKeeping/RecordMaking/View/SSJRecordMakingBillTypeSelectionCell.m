@@ -40,6 +40,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [self.contentView addSubview:_imageView];
         
         _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
+        _label.backgroundColor = [UIColor clearColor];
         _label.fontSize = 16;
         _label.textAlignment = NSTextAlignmentCenter;
         _label.textColor = [UIColor blackColor];

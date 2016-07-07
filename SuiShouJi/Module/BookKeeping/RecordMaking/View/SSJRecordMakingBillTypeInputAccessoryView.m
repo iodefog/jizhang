@@ -79,13 +79,14 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIView *)topView {
     if (!_topView) {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
-        _topView.backgroundColor = [UIColor whiteColor];
+        _topView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        
         UIImageView *img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         img.left = 10;
         img.centerY = _topView.height * 0.5;
         [_topView addSubview:img];
         [_topView ssj_setBorderWidth:1];
-        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor]];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_topView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
     }
     return _topView;
