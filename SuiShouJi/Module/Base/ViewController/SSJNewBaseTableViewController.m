@@ -82,7 +82,7 @@
 
 - (UITableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:_tableViewStyle];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height) style:_tableViewStyle];
         _tableView.dataSource=self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;

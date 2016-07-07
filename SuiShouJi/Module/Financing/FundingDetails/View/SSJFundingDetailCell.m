@@ -25,7 +25,7 @@
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
     
-        self.textLabel.textColor = [UIColor blackColor];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         
         [self.contentView addSubview:self.moneyLab];

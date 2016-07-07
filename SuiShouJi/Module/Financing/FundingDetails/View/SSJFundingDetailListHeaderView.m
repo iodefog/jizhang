@@ -21,7 +21,7 @@
         [self ssj_setBorderWidth:1.f];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self.contentView addSubview:self.btn];
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.expandImage];
