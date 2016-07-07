@@ -36,6 +36,8 @@
     
     [self updateTabbarAppearance];
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
+    
     return YES;
 }
 

@@ -54,7 +54,7 @@
 -(void)setItem:(SSJCalenderCellItem *)item{
     _item = item;
     if ([[_item.backGroundColor lowercaseString] isEqualToString:@"ffffff"]) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:_item.backGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor clearColor];
     }else{
         self.backgroundColor = [UIColor ssj_colorWithHex:_item.backGroundColor];
     }

@@ -70,7 +70,7 @@
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
     [self.view addSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -81,7 +81,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
     [self getDataFromDateBase];
 }
@@ -213,7 +213,7 @@
 -(UIView *)dateChangeView{
     if (!_dateChangeView) {
         _dateChangeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 180, 45)];
-        _dateChangeView.backgroundColor = [UIColor whiteColor];
+//        _dateChangeView.backgroundColor = [UIColor whiteColor];
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
         _dateLabel.font = [UIFont systemFontOfSize:18];
@@ -245,6 +245,7 @@
         __weak typeof(self) weakSelf = self;
         _nodataHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
         _nodataHeader.size = CGSizeMake(self.view.width, 300);
+        _nodataHeader.backgroundColor = [UIColor clearColor];
         _nodataHeader.RecordMakingButtonBlock = ^(){
             SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
             recordMakingVC.selectedDay = weakSelf.selectedDay;

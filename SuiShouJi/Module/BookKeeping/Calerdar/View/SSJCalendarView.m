@@ -60,7 +60,7 @@
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = _marginForHorizon;
         _calendar =[[UICollectionView alloc]initWithFrame:self.bounds collectionViewLayout:flowLayout];
-        _calendar.backgroundColor=[UIColor whiteColor];
+        _calendar.backgroundColor= [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _calendar.scrollEnabled = NO;
         _calendar.dataSource=self;
         _calendar.delegate=self;
