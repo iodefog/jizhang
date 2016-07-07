@@ -36,4 +36,7 @@ typedef NS_ENUM(NSInteger, SSJReportFormsType) {
 // 收支类型ID
 @property (nonatomic, copy) NSString *ID;
 
+// 文本颜色
+@property (nonatomic, copy) NSString *titleColor;
+
 @end

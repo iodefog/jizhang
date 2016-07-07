@@ -186,7 +186,7 @@ static id _instance;
 //  将data进行解压
 - (BOOL)unzipUrl:(NSURL *)Url path:(NSString *)path error:(NSError **)error {
     ZZArchive *archive = [ZZArchive archiveWithURL:Url error:error];
-    if (error) {
+    if (*error) {
         return NO;
     }
     
@@ -199,7 +199,7 @@ static id _instance;
         NSInteger index = [entry.fileName length] - 1 - [[arr lastObject] length];
         NSString * aimPath = [entry.fileName substringToIndex:index];
         [fileManager createDirectoryAtPath:[NSString stringWithFormat:@"%@/%@", path, aimPath] withIntermediateDirectories:YES attributes:nil error:error];
-        if (error) {
+        if (*error) {
             return NO;
         }
         

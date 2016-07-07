@@ -14,8 +14,8 @@
 static const CGFloat kItemWidth = 70;
 
 static NSString *const kCellId = @"SSJReportFormsScaleAxisCell";
-static NSString *const kRedScaleColor = @"EB4A64";
-static NSString *const kGrayScaleColor = @"CCCCCC";
+//static NSString *const kRedScaleColor = @"EB4A64";
+//static NSString *const kGrayScaleColor = @"CCCCCC";
 
 @interface SSJReportFormsScaleAxisView () <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -80,7 +80,7 @@ static NSString *const kGrayScaleColor = @"CCCCCC";
     if (_delegate && [_delegate respondsToSelector:@selector(scaleAxisView:heightForAxisAtIndex:)]) {
         cell.scaleHeight = [_delegate scaleAxisView:self heightForAxisAtIndex:indexPath.item];
     }
-    cell.scaleColor = indexPath.item == _selectedIndex ? [UIColor ssj_colorWithHex:kRedScaleColor] : [UIColor ssj_colorWithHex:kGrayScaleColor];
+    cell.scaleColor = indexPath.item == _selectedIndex ? _selectedScaleColor : _scaleColor;
     return cell;
 }
 
@@ -99,7 +99,7 @@ static NSString *const kGrayScaleColor = @"CCCCCC";
         NSIndexPath *indexPath = [_collectionView indexPathForItemAtPoint:CGPointMake(scrollView.contentOffset.x + _collectionView.width * 0.5, 0)];
         SSJReportFormsScaleAxisCell *centerCell = (SSJReportFormsScaleAxisCell *)[_collectionView cellForItemAtIndexPath:indexPath];
         for (SSJReportFormsScaleAxisCell *cell in _collectionView.visibleCells) {
-            cell.scaleColor = cell == centerCell ? [UIColor ssj_colorWithHex:kRedScaleColor] : [UIColor ssj_colorWithHex:kGrayScaleColor];
+            cell.scaleColor = cell == centerCell ? _selectedScaleColor : _scaleColor;
         }
     }
 }

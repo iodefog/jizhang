@@ -27,7 +27,6 @@
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
         self.textLabel.backgroundColor = [UIColor clearColor];
         
         [self.contentView addSubview:self.percentLabel];
@@ -67,6 +66,8 @@
         self.percentLabel.text = [NSString stringWithFormat:@"%.1f％",item.scale * 100];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
         
+        self.textLabel.textColor = _percentLabel.textColor = _moneyLabel.textColor = [UIColor ssj_colorWithHex:item.titleColor];
+        
         [self.percentLabel sizeToFit];
 //        [self.moneyLabel sizeToFit];
         
@@ -79,7 +80,6 @@
         _percentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _percentLabel.backgroundColor = [UIColor clearColor];
         _percentLabel.font = [UIFont systemFontOfSize:18];
-        _percentLabel.textColor = [UIColor blackColor];
     }
     return _percentLabel;
 }
@@ -89,7 +89,6 @@
         _moneyLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _moneyLabel.backgroundColor = [UIColor clearColor];
         _moneyLabel.font = [UIFont systemFontOfSize:18];
-        _moneyLabel.textColor = [UIColor blackColor];
         _moneyLabel.textAlignment = NSTextAlignmentRight;
     }
     return _moneyLabel;

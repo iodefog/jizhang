@@ -30,6 +30,10 @@
 
 @property (nonatomic) NSUInteger selectedIndex;
 
+@property (nonatomic, strong) UIColor *scaleColor;
+
+@property (nonatomic, strong) UIColor *selectedScaleColor;
+
 - (void)reloadData;
 
 @end

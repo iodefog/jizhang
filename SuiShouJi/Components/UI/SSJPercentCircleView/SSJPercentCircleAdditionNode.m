@@ -272,7 +272,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     if (!_textLabel) {
         _textLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _textLabel.hidden = YES;
-        _textLabel.backgroundColor = [UIColor whiteColor];
+        _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.font = [UIFont systemFontOfSize:self.item.textSize];
         _textLabel.textColor = [UIColor ssj_colorWithHex:self.item.textColorValue];
         _textLabel.text = self.item.text;
