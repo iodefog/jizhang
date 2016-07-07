@@ -120,7 +120,7 @@
             additionViewItem.gapBetweenImageAndText = 0;
             additionViewItem.text = item.additionalText;
             additionViewItem.textSize = 15;
-            additionViewItem.textColorValue = @"#a7a7a7";
+            additionViewItem.textColorValue = SSJ_CURRENT_THEME.secondaryColor;
             [additionNodeItems addObject:additionViewItem];
         }
     }

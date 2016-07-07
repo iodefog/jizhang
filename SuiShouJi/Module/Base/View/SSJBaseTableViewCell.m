@@ -8,10 +8,20 @@
 
 #import "SSJBaseTableViewCell.h"
 
+@interface SSJBaseTableViewCell ()
+
+@property (nonatomic, strong) UIImageView *indicatorView;
+
+@end
+
 @implementation SSJBaseTableViewCell
 
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
     return 48;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -27,8 +37,40 @@
         if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
             [self setLayoutMargins:UIEdgeInsetsZero];
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
+}
+
+- (void)setNeedsLayout {
+    [super setNeedsLayout];
+    CGFloat accessoryWidth = 33;
+    self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
+    _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
+}
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType {
+    if (accessoryType == UITableViewCellAccessoryDisclosureIndicator) {
+        if (!self.indicatorView.superview) {
+            [self addSubview:self.indicatorView];
+            [self setNeedsLayout];
+        }
+    } else {
+        [super setAccessoryType:accessoryType];
+    }
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
+}
+
+- (UIImageView *)indicatorView {
+    if (!_indicatorView) {
+        _indicatorView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cellIndicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
+    }
+    return _indicatorView;
 }
 
 @end
