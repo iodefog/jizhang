@@ -64,7 +64,7 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _displayAxisXCount = 7;
         _bezierSmoothingTension = 0.3;
         _selectedAxisXIndex = 0;
@@ -287,7 +287,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         UILabel *label = [[UILabel alloc] init];
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont systemFontOfSize:12];
-        label.textColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
+        label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         label.text = [NSString stringWithFormat:@"%ld", _maxValue - i * unitValue];
         label.hidden = !showScaleValue;
         [label sizeToFit];
@@ -295,7 +295,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_axisYLabels addObject:label];
         
         UIView *line = [[UIView alloc] init];
-        line.backgroundColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
+        line.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [self addSubview:line];
         [_horizontalLines addObject:line];
     }

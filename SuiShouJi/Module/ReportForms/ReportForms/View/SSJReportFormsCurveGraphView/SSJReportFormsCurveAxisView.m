@@ -18,7 +18,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         _labels = [[NSMutableArray alloc] init];
     }
     return self;
@@ -66,7 +66,7 @@
         for (int i = 0; i < _axisTitles.count; i ++) {
             UILabel *label = [[UILabel alloc] init];
             label.font = [UIFont systemFontOfSize:12];
-            label.textColor = [UIColor ssj_colorWithHex:@"878787"];
+            label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
             label.text = _axisTitles[i];
             [label sizeToFit];
             [self addSubview:label];

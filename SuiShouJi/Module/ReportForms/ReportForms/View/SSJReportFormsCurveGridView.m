@@ -20,7 +20,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         
         _topLabel = [[UILabel alloc] init];
         _topLabel.font = [UIFont systemFontOfSize:12];
@@ -61,14 +61,16 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        
+        UIColor *borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         
         _incomeCell = [[SSJReportFormsCurveGridCell alloc] init];
         _incomeCell.topLabel.text = @"期间收入（元）";
         _incomeCell.bottomLabel.text = @"0.00";
         _incomeCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"EB4141"];
         [_incomeCell ssj_setBorderWidth:1];
-        [_incomeCell ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_incomeCell ssj_setBorderColor:borderColor];
         [_incomeCell ssj_setBorderStyle:(SSJBorderStyleBottom | SSJBorderStyleRight)];
         [self addSubview:_incomeCell];
         
@@ -77,7 +79,7 @@
         _paymentCell.bottomLabel.text = @"0.00";
         _paymentCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"38A146"];
         [_paymentCell ssj_setBorderWidth:1];
-        [_paymentCell ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_paymentCell ssj_setBorderColor:borderColor];
         [_paymentCell ssj_setBorderStyle:SSJBorderStyleBottom];
         [self addSubview:_paymentCell];
         
@@ -86,7 +88,7 @@
         _surplusCell.bottomLabel.text = @"0.00";
         _surplusCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"363636"];
         [_surplusCell ssj_setBorderWidth:1];
-        [_surplusCell ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_surplusCell ssj_setBorderColor:borderColor];
         [_surplusCell ssj_setBorderStyle:SSJBorderStyleRight];
         [self addSubview:_surplusCell];
         

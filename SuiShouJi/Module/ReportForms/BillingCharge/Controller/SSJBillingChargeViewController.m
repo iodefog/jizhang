@@ -52,11 +52,6 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self reloadData];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.tableView.frame = self.view.bounds;
-}
-
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [self.datas count];
@@ -81,10 +76,12 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
     SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kBillingChargeHeaderViewID];
     headerView.textLabel.text = sectionInfo[SSJBillingChargeDateKey];
+    headerView.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
     NSString *sumStr = sectionInfo[SSJBillingChargeSumKey];
     sumStr = [NSString stringWithFormat:@"%.2f", [sumStr doubleValue]];
     headerView.sumLabel.text = sumStr;
+    headerView.sumLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
     return headerView;
 }
@@ -99,6 +96,11 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     calenderDetailVC.item = selectedItem;
     [self.navigationController pushViewController:calenderDetailVC animated:YES];
 }
+
+//- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+//    view.tintColor = [UIColor redColor];
+////    view.backgroundColor = [UIColor redColor];
+//}
 
 #pragma mark - Private
 - (void)reloadData {
@@ -121,12 +123,12 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.rowHeight = 90;
         _tableView.sectionHeaderHeight = 40;
         [_tableView ssj_clearExtendSeparator];

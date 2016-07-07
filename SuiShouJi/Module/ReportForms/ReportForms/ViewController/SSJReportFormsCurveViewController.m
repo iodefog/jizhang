@@ -76,11 +76,6 @@
     [self reloadData];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.scrollView.frame = self.view.bounds;
-}
-
 #pragma mark - SSJReportFormsCurveGraphViewDelegate
 - (NSUInteger)numberOfAxisXInCurveGraphView:(SSJReportFormsCurveGraphView *)graphView {
     return _datas.count;
@@ -248,9 +243,10 @@
         _segmentControl = [[SSJSegmentedControl alloc] initWithItems:@[@"月", @"周"]];
         _segmentControl.size = CGSizeMake(150, 30);
         _segmentControl.font = [UIFont systemFontOfSize:15];
-        _segmentControl.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"];
-        _segmentControl.selectedBorderColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
-        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#eb4a64"]} forState:UIControlStateSelected];
+        _segmentControl.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _segmentControl.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
+        [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
         [_segmentControl addTarget:self action:@selector(segmentControlValueDidChange) forControlEvents:UIControlEventValueChanged];
     }
     return _segmentControl;
@@ -258,8 +254,8 @@
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] init];
-        _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
+        _scrollView.backgroundColor = [UIColor clearColor];
     }
     return _scrollView;
 }
@@ -269,7 +265,8 @@
         _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
         _periodLabel.textAlignment = NSTextAlignmentCenter;
         _periodLabel.font = [UIFont systemFontOfSize:15];
-        _periodLabel.layer.borderColor = SSJ_DEFAULT_SEPARATOR_COLOR.CGColor;
+        _periodLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _periodLabel.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _periodLabel.layer.borderWidth = 1;
         _periodLabel.layer.cornerRadius = 15;
     }
@@ -297,7 +294,7 @@
 - (UIView *)questionBackView {
     if (!_questionBackView) {
         _questionBackView = [[UIView alloc] initWithFrame:CGRectMake(0, self.curveView.bottom, self.view.width, 30)];
-        _questionBackView.backgroundColor = [UIColor whiteColor];
+        _questionBackView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [_questionBackView addSubview:self.questionBtn];
     }
     return _questionBackView;

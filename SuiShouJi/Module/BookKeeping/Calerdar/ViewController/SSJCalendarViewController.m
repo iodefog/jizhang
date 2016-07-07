@@ -70,7 +70,7 @@
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
     [self.view addSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    self.tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.1];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -177,8 +177,7 @@
     if (!_tableView) {
         _tableView = [[UITableView alloc]init];
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         _tableView.delegate = self;
         _tableView.dataSource = self;
