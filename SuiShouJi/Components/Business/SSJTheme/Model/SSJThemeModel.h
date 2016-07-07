@@ -34,6 +34,12 @@
 // 强调颜色
 @property (nonatomic, copy) NSString *marcatoColor;
 
+// 主要填充颜色
+@property (nonatomic, copy) NSString *mainFillColor;
+
+// 次要填充颜色
+@property (nonatomic, copy) NSString *secondaryFillColor;
+
 // 边框线颜色
 @property (nonatomic, copy) NSString *borderColor;
 

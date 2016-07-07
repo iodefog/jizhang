@@ -19,6 +19,8 @@
     [aCoder encodeObject:_mainColor forKey:@"mainColor"];
     [aCoder encodeObject:_secondaryColor forKey:@"secondaryColor"];
     [aCoder encodeObject:_marcatoColor forKey:@"marcatoColor"];
+    [aCoder encodeObject:_mainFillColor forKey:@"mainFillColor"];
+    [aCoder encodeObject:_secondaryFillColor forKey:@"secondaryFillColor"];
     [aCoder encodeObject:_borderColor forKey:@"borderColor"];
     [aCoder encodeObject:_buttonColor forKey:@"buttonColor"];
     [aCoder encodeObject:_naviBarTitleColor forKey:@"naviBarTitleColor"];
@@ -46,6 +48,8 @@
         _mainColor = [aDecoder decodeObjectForKey:@"mainColor"];
         _secondaryColor = [aDecoder decodeObjectForKey:@"secondaryColor"];
         _marcatoColor = [aDecoder decodeObjectForKey:@"marcatoColor"];
+        _mainFillColor = [aDecoder decodeObjectForKey:@"mainFillColor"];
+        _secondaryFillColor = [aDecoder decodeObjectForKey:@"secondaryFillColor"];
         _borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
         _buttonColor = [aDecoder decodeObjectForKey:@"buttonColor"];
         _naviBarTitleColor = [aDecoder decodeObjectForKey:@"naviBarTitleColor"];

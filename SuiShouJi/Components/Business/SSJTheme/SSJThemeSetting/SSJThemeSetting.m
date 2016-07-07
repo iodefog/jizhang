@@ -110,6 +110,8 @@
     model.mainColor = @"#393939";
     model.secondaryColor = @"#a7a7a7";
     model.marcatoColor = @"#eb4a64";
+    model.mainFillColor = @"#F4F4F4";
+    model.secondaryFillColor = @"#FFFFFF";
     model.borderColor = @"#cccccc";
     model.buttonColor = @"#eb4a64";
     model.naviBarTitleColor = @"#000000";

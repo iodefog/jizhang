@@ -85,7 +85,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         img.centerY = _topView.height * 0.5;
         [_topView addSubview:img];
         [_topView ssj_setBorderWidth:1];
-        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"D9DADC"]];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor]];
         [_topView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
     }
     return _topView;
@@ -94,7 +94,7 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, _topView.bottom, self.width, 37)];
-        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"F4F4F4"];
+        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
         [_bottomView ssj_setBorderWidth:1];
         [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"D9DADC"]];
         [_bottomView ssj_setBorderStyle:SSJBorderStyleBottom];
