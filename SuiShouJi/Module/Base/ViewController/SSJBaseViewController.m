@@ -49,9 +49,11 @@
     
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     
-    _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
-    _backgroundView.frame = self.view.bounds;
-    [self.view addSubview:_backgroundView];
+    if (_appliesTheme) {
+        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+        _backgroundView.frame = self.view.bounds;
+        [self.view addSubview:_backgroundView];
+    }
     
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
