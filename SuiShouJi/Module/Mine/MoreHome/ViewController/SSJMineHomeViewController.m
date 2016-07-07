@@ -324,7 +324,7 @@ static BOOL KHasEnterMineHome;
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
     }
@@ -453,6 +453,11 @@ static BOOL KHasEnterMineHome;
 }
 
 #pragma mark - Private
+-(void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self.header updateAfterThemeChange];
+}
+
 //  提示用户登录或注册
 - (void)alertUserToLoginOrRegister {
     [self.motionSwitch setOn:NO animated:YES];

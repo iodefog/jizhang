@@ -164,6 +164,11 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     [self.arrowImage.layer removeAnimationForKey:kCircleAnimationKey];
 }
 
+- (void)updateAfterThemeChange{
+    self.arrowImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+    self.cloudImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+    self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

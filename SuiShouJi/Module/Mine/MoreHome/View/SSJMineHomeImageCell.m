@@ -123,6 +123,13 @@
     self.hasMassageImageView.hidden = !_hasMassage;
 }
 
+-(void)updateCellAppearanceAfterThemeChanged{
+    [super updateCellAppearanceAfterThemeChanged];
+    self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

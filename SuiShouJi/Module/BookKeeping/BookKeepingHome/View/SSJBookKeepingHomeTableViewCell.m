@@ -23,7 +23,6 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
         self.isAnimating = NO;
         [self addSubview:self.toplineView];
         [self addSubview:self.bottomlineView];
