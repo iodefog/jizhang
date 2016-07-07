@@ -68,6 +68,6 @@
         </view>
     </objects>
     <resources>
-        <image name="calendar_norecord.png" width="176" height="124"/>
+        <image name="calendar_norecord.png" width="120" height="149"/>
     </resources>
 </document>

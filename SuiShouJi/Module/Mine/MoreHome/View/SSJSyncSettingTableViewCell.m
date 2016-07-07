@@ -35,7 +35,7 @@
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLabel;
 }
@@ -43,7 +43,8 @@
 -(UIImageView *)checkMarkImage{
     if (!_checkMarkImage) {
         _checkMarkImage = [[UIImageView alloc]init];
-        _checkMarkImage.image = [UIImage imageNamed:@"checkmark"];
+        _checkMarkImage.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
     }
     return _checkMarkImage;
 }

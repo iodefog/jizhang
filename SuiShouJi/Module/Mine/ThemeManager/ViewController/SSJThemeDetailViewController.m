@@ -49,7 +49,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.scrollView.leftTop = CGPointMake(0, 0);
+    self.scrollView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
     self.greyLineView.leftTop = CGPointMake(0, 0);
     self.themeIcon.leftTop = CGPointMake(20, 30);
     self.themeTitleLabel.leftTop = CGPointMake(self.themeIcon.right + 16, self.themeIcon.top + 10);
@@ -261,6 +261,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     if ([self.item.themeId isEqualToString:@"0"]) {
         if ([self.item.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
             [self.themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
+            [self.themeDownLoadButton.button setTitleColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateNormal];
             self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"].CGColor;
             [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
         }else {
@@ -271,6 +272,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     }else{
         if ([self.item.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
             [self.themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
+            [self.themeDownLoadButton.button setTitleColor:[UIColor ssj_colorWithHex:@"#cccccc"] forState:UIControlStateNormal];
             self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#cccccc"].CGColor;
             [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
         }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.themeId]]) {

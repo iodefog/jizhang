@@ -174,6 +174,11 @@ static NSString *const kTitle7 = @"手势密码";
     return mineHomeCell;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view = [UIView new];
+    return view;
+}
+
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -252,7 +257,7 @@ static NSString *const kTitle7 = @"手势密码";
         [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
         quitLogButton.layer.cornerRadius = 3.f;
         quitLogButton.layer.masksToBounds = YES;
-        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);

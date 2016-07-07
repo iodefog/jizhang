@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJBaseTableViewCell.h"
 
-@interface SSJSyncSettingTableViewCell : UITableViewCell
+@interface SSJSyncSettingTableViewCell : SSJBaseTableViewCell
 @property (nonatomic,strong) NSString *cellTitle;
 @property (nonatomic) BOOL selectedOrNot;
 @end

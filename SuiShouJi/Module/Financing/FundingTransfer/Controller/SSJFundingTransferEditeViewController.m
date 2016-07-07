@@ -48,7 +48,6 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
         self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
     }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"929292"];
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
     // Do any additional setup after loading the view.
 }
@@ -122,7 +121,7 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
         [modifyButton setTitle:@"编辑" forState:UIControlStateNormal];
         modifyButton.layer.cornerRadius = 3.f;
         modifyButton.layer.masksToBounds = YES;
-        [modifyButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [modifyButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [modifyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [modifyButton addTarget:self action:@selector(modifyButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         modifyButton.center = CGPointMake(_modifyButtonView.width / 2, _modifyButtonView.height / 2);

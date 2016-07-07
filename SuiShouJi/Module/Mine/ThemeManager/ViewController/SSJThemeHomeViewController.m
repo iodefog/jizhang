@@ -54,7 +54,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     [super viewDidLayoutSubviews];
     self.hintLabel.width = self.view.width;
     self.hintLabel.height = 32;
-    self.hintLabel.leftTop = CGPointMake(0, 10);
+    self.hintLabel.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
     self.themeSelectView.size = CGSizeMake(self.view.width, self.view.height - self.hintLabel.bottom);
     self.themeSelectView.leftTop = CGPointMake(0, self.hintLabel.bottom);
 }

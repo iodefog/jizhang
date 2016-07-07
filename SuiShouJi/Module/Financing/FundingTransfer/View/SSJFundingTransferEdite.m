@@ -33,7 +33,7 @@
 -(UILabel *)cellTitleLabel{
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]init];
-        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellTitleLabel.font = [UIFont systemFontOfSize:18];
     }
     return _cellTitleLabel;
@@ -42,7 +42,7 @@
 -(UILabel *)cellDetailLabel{
     if (!_cellDetailLabel) {
         _cellDetailLabel = [[UILabel alloc]init];
-        _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _cellDetailLabel.font = [UIFont systemFontOfSize:18];
     }
     return _cellDetailLabel;

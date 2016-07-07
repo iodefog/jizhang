@@ -12,10 +12,14 @@
 @end
 @implementation SSJTransferDetailHeader
 
-- (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier{
-    if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
-        self.contentView.backgroundColor = [UIColor clearColor];
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.dateLabel];
+        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        [self ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return self;
 }
@@ -23,7 +27,8 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.dateLabel.left = 10;
-    self.dateLabel.centerY = self.contentView.height / 2;
+    self.dateLabel.centerY = self.height / 2;
+    [self ssj_relayoutBorder];
 }
 
 -(UILabel *)dateLabel{

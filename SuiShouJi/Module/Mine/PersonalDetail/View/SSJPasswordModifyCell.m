@@ -26,6 +26,7 @@
     if (!_passwordInput) {
         _passwordInput = [[UITextField alloc]init];
         _passwordInput.secureTextEntry = YES;
+        _passwordInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_passwordInput ssj_setBorderStyle:SSJBorderStyleBottom];
         [_passwordInput ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
         UIView *leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 20, self.contentView.height)];
