@@ -132,6 +132,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    [_surplusView updateThemeColor];
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -557,7 +559,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJReportFormsSurplusView *)surplusView {
     if (!_surplusView) {
         _surplusView = [[SSJReportFormsSurplusView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 185)];
-        _surplusView.backgroundColor = [UIColor ssj_colorWithHex:@"#f2f6f5"];
+        _surplusView.backgroundColor = [UIColor clearColor];
+        [_surplusView updateThemeColor];
     }
     return _surplusView;
 }
