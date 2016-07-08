@@ -10,5 +10,11 @@
 #import "SSJThemeItem.h"
 
 @interface SSJThemeHomeCollectionViewCell : UICollectionViewCell
+
 @property(nonatomic, strong) SSJThemeItem *item;
+
+typedef void(^themeChangeBlock)();
+
+@property (nonatomic, copy) themeChangeBlock themeChangeBlock;
+
 @end

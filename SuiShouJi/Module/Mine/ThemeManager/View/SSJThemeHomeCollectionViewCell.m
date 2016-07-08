@@ -130,6 +130,9 @@
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
+            if (weakSelf.themeChangeBlock) {
+                weakSelf.themeChangeBlock();
+            }
         } failure:^(NSError *error) {
             
         }];
@@ -137,6 +140,9 @@
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
     }else{
         [SSJThemeSetting switchToThemeID:self.item.themeId];
+        if (self.themeChangeBlock) {
+            self.themeChangeBlock();
+        }
     }
 }
 

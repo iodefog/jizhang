@@ -12,7 +12,6 @@
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
-@property(nonatomic, strong) UIView* greyLineView;
 @property(nonatomic, strong) UIImageView *themeIcon;
 @property(nonatomic, strong) UILabel *themeTitleLabel;
 @property(nonatomic, strong) UILabel *themeSizeLabel;
@@ -120,6 +119,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             
         }];
@@ -128,6 +128,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         } forID:self.item.themeId];
     }else{
         [SSJThemeSetting switchToThemeID:self.item.themeId];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 
@@ -141,14 +142,6 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         _scrollView.showsVerticalScrollIndicator = NO;
     }
     return _scrollView;
-}
-
--(UIView *)greyLineView{
-    if (!_greyLineView) {
-        _greyLineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 10)];
-        _greyLineView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    }
-    return _greyLineView;
 }
 
 -(UIImageView *)themeIcon{

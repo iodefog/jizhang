@@ -71,6 +71,10 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
     SSJThemeHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    __weak typeof(self) weakSelf = self;
+    cell.themeChangeBlock = ^(){
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+    };
     cell.item = item;
     return cell;
 }
