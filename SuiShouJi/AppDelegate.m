@@ -41,9 +41,6 @@
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
-//  是否需要显示banner
-static BOOL kNeedBannerDisplay;
-
 static NSString *const kEnterBackgroundTimeKey = @"kEnterBackgroundTimeKey";
 
 //微信desc
@@ -71,8 +68,6 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    kNeedBannerDisplay = YES;
     
     [self analyzeJspatch];
     

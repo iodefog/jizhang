@@ -21,12 +21,14 @@
     if (self) {
         [self addSubview:self.banner];
         [self addSubview:self.closeButton];
-        self.images = [NSMutableArray arrayWithCapacity:0];
-        for (SSJBannerItem *item in self.items) {
-            [self.images addObject:item.bannerImageUrl];
-        }
     }
     return self;
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    self.banner.frame = self.bounds;
+    self.closeButton.rightTop = CGPointMake(self.width - 10, 10);
 }
 
 -(SCYWinCowryHomeBannerView *)banner{
@@ -46,7 +48,7 @@
 
 -(UIButton *)closeButton{
     if (!_closeButton) {
-        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(self.width - 10, 10, 30, 30)];
+        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 19, 19)];
         [_closeButton setImage:[UIImage imageNamed:@"banner_cha"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -57,6 +59,16 @@
     if (self.closeButtonClickBlock) {
         self.closeButtonClickBlock();
     }
+}
+
+-(void)setItems:(NSArray *)items{
+    _items = items;
+    self.images = [NSMutableArray arrayWithCapacity:0];
+    for (SSJBannerItem *item in _items) {
+        [self.images addObject:item.bannerImageUrl];
+    }
+    self.banner.imageUrls = self.images;
+    [self setNeedsLayout];
 }
 
 /*

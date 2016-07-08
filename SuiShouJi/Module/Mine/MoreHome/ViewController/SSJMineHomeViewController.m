@@ -52,7 +52,7 @@ static NSString *const kTitle7 = @"设置";
 
 static BOOL KHasEnterMineHome;
 
-static BOOL kNeedBannerDisplay;
+static BOOL kNeedBannerDisplay = YES;
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
@@ -345,6 +345,7 @@ static BOOL kNeedBannerDisplay;
         _bannerHeader = [[SSJBannerHeaderView alloc]init];
         _bannerHeader.closeButtonClickBlock = ^(){
             kNeedBannerDisplay = NO;
+            [weakSelf.tableView reloadData];
         };
         _bannerHeader.bannerClickedBlock = ^(NSString *url){
             SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
