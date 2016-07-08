@@ -43,8 +43,8 @@
 
 + (NSArray *)allThemeModels {
     NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
-    NSMutableArray *allModels = [NSMutableArray arrayWithArray:[modelInfo allValues]];
-    [allModels addObject:[self defaultThemeModel]];
+    NSMutableArray *allModels = [NSMutableArray arrayWithObject:[self defaultThemeModel]];
+    [allModels addObjectsFromArray:[modelInfo allValues]];
     return allModels;
 }
 

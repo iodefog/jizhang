@@ -90,7 +90,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     } else if (indexPath.row == 2) {
         cell.accessoryView = nil;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
     } else if (indexPath.row == 3) {
         cell.accessoryView = self.fingerSwitch;

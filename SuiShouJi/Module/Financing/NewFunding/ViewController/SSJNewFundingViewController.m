@@ -140,7 +140,7 @@
             NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
             [NewFundingCell.typeLabel sizeToFit];
             NewFundingCell.cellText.enabled = NO;
-            NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         case 4:{
@@ -148,7 +148,7 @@
             NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
             NewFundingCell.cellText.text = @"选择颜色";
             NewFundingCell.cellText.enabled = NO;
-            NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         default:

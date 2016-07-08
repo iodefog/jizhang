@@ -374,7 +374,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
         budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        budgetTypeCell.accessoryType = UITableViewCellAccessoryNone;
+        budgetTypeCell.customAccessoryType = UITableViewCellAccessoryNone;
 
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
@@ -384,7 +384,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         bookTypeCell.detailTextLabel.text = nil;
         [bookTypeCell.detailTextLabel sizeToFit];
         bookTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        bookTypeCell.accessoryType = UITableViewCellAccessoryNone;
+        bookTypeCell.customAccessoryType = UITableViewCellAccessoryNone;
         
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
@@ -440,7 +440,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetPeriodCell.subtitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
-        budgetPeriodCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = UITableViewCellSelectionStyleGray;
     }
 }

@@ -119,7 +119,7 @@ static NSString *const kTitle3 = @"定期提醒";
     if (indexPath.section == 0) {
         mineHomeCell.accessoryView = switchButton;
     }else if (indexPath.section == 2){
-        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         mineHomeCell.cellDetail = self.selectCircle;
     }else{
         mineHomeCell.cellDetail = self.selectTime;

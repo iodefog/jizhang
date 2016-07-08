@@ -96,7 +96,7 @@ static NSString *const kTitle3 = @"联系客服";
     SSJAboutusTableViewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
         mineHomeCell = [[SSJAboutusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_safeObjectAtIndex:indexPath.row];
     if ([mineHomeCell.cellTitle isEqualToString:kTitle3]) {

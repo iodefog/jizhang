@@ -255,18 +255,18 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle1]) {
         circleModifyCell.cellDetail = self.item.booksName;
     }else if ([title isEqualToString:kTitle2]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (!self.item.incomeOrExpence) {
             circleModifyCell.cellDetail = @"支出";
         }else{
             circleModifyCell.cellDetail = @"收入";
         }
     }else if ([title isEqualToString:kTitle3]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.typeName;
         circleModifyCell.cellTypeImageName = self.item.imageName;
     }else if ([title isEqualToString:kTitle7]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
             case 0:
                 circleModifyCell.cellDetail = @"每天";
@@ -293,15 +293,15 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 break;
         }
     }else if ([title isEqualToString:kTitle8]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.fundName;
         circleModifyCell.cellTypeImageName = self.item.fundImage;
     }else if ([title isEqualToString:kTitle9]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
     }
     if ([title isEqualToString:kTitle6]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.chargeImage.length || self.selectedImage != nil) {
             circleModifyCell.cellImageView.image = [UIImage imageNamed:@"mark_pic"];
         }else{

@@ -21,7 +21,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;

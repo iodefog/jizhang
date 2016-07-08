@@ -164,14 +164,14 @@
             [NewFundingCell.typeTitle sizeToFit];
             NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
             NewFundingCell.cellDetail.enabled = NO;
-            NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         case 4:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
             NewFundingCell.cellDetail.hidden = YES;
-            NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         default:
