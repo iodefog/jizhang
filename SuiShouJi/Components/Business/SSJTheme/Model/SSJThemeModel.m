@@ -13,8 +13,11 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:_ID forKey:@"ID"];
     [aCoder encodeObject:_name forKey:@"name"];
-    [aCoder encodeFloat:_size forKey:@"size"];
+    [aCoder encodeObject:_size forKey:@"size"];
     [aCoder encodeObject:_previewUrlStr forKey:@"previewUrlStr"];
+    [aCoder encodeObject:_thumbUrlStr forKey:@"thumbUrlStr"];
+    [aCoder encodeObject:_previewUrlArr forKey:@"previewUrlArr"];
+    [aCoder encodeObject:_desc forKey:@"desc"];
     [aCoder encodeFloat:_backgroundAlpha forKey:@"backgroundAlpha"];
     [aCoder encodeObject:_mainColor forKey:@"mainColor"];
     [aCoder encodeObject:_secondaryColor forKey:@"secondaryColor"];
@@ -42,8 +45,11 @@
     if (self = [super init]) {
         _ID = [aDecoder decodeObjectForKey:@"ID"];
         _name = [aDecoder decodeObjectForKey:@"name"];
-        _size = [aDecoder decodeFloatForKey:@"size"];
+        _size = [aDecoder decodeObjectForKey:@"size"];
         _previewUrlStr = [aDecoder decodeObjectForKey:@"previewUrlStr"];
+        _thumbUrlStr = [aDecoder decodeObjectForKey:@"thumbUrlStr"];
+        _previewUrlArr = [aDecoder decodeObjectForKey:@"previewUrlArr"];
+        _desc = [aDecoder decodeObjectForKey:@"desc"];
         _backgroundAlpha = [aDecoder decodeFloatForKey:@"backgroundAlpha"];
         _mainColor = [aDecoder decodeObjectForKey:@"mainColor"];
         _secondaryColor = [aDecoder decodeObjectForKey:@"secondaryColor"];
@@ -72,7 +78,7 @@
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"<%@>:%@", self, @{@"ID":_ID,
                                                           @"name":_name,
-                                                          @"size":@(_size),
+                                                          @"size":_size,
                                                           @"previewUrlStr":_previewUrlStr,
                                                           @"backgroundAlpha":@(_backgroundAlpha),
                                                           @"mainColor":_mainColor,

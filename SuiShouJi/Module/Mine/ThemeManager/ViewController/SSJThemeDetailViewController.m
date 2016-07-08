@@ -43,7 +43,6 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     _images = @[@"defualtHome",@"defualtReport",@"defualtFund",@"defualtMine",@"defualtLogin"];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.greyLineView];
     [self.scrollView addSubview:self.themeIcon];
     [self.scrollView addSubview:self.themeTitleLabel];
     [self.scrollView addSubview:self.themeSizeLabel];
@@ -57,8 +56,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.scrollView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
-    self.greyLineView.leftTop = CGPointMake(0, 0);
+    self.scrollView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
     self.themeIcon.leftTop = CGPointMake(20, 30);
     self.themeTitleLabel.leftTop = CGPointMake(self.themeIcon.right + 16, self.themeIcon.top + 10);
     self.themeSizeLabel.leftTop = CGPointMake(self.themeIcon.right + 16, self.themeTitleLabel.bottom + 12);

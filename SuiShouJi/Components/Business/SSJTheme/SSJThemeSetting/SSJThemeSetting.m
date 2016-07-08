@@ -61,7 +61,7 @@
 + (SSJThemeModel *)defaultThemeModel {
     SSJThemeModel *model = [[SSJThemeModel alloc] init];
     model.ID = SSJDefaultThemeID;
-    model.name = @"默认主题";
+    model.name = @"官方白";
     model.backgroundAlpha = 1;
     model.mainColor = @"#393939";
     model.secondaryColor = @"#a7a7a7";

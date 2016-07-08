@@ -17,10 +17,19 @@
 @property (nonatomic, copy) NSString *name;
 
 // 主题包大小
-@property (nonatomic) double size;
+@property (nonatomic, copy) NSString *size;
 
 // 预览图片url
 @property (nonatomic, copy) NSString *previewUrlStr;
+
+// 缩略图url
+@property(nonatomic, copy) NSString *thumbUrlStr;
+
+// 预览图片数组
+@property(nonatomic, copy) NSArray *previewUrlArr;
+
+// 主题描述
+@property(nonatomic, copy) NSString *desc;
 
 // 所有背景透明度
 @property (nonatomic) CGFloat backgroundAlpha;

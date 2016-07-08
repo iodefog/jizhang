@@ -38,7 +38,6 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self checkNetwork];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     [self.view addSubview:self.hintLabel];
     [self.view addSubview:self.themeSelectView];
@@ -47,7 +46,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.service requestThemeList];
+    [self checkNetwork];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -110,8 +109,13 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     if ([service.returnCode isEqualToString:@"1"]) {
         [self getThemeStatusForThemes:self.service.themes];
     }else{
-        
+        [self getThemeFromLocal];
     }
+}
+
+- (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error{
+    [self getThemeFromLocal];
+
 }
 
 #pragma mark - Getter
@@ -157,12 +161,32 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 #pragma mark - Private
+-(void)getThemeFromLocal{
+    NSArray *themes = [SSJThemeSetting allThemeModels];
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    for (SSJThemeModel *model in themes) {
+        SSJThemeItem *item = [[SSJThemeItem alloc]init];
+        item.themeId = model.ID;
+        item.themeTitle = model.name;
+        item.themeImageUrl = model.previewUrlStr;
+        item.themeThumbImageUrl = model.thumbUrlStr;
+        item.themeSize = model.size;
+        item.images = model.previewUrlArr;
+        item.themeDesc = model.desc;
+        float imageRatio = 220.f / 358;
+        float imageHeight = (SSJSCREENWITH - 45) / 3 / imageRatio;
+        item.cellHeight = imageHeight + 25 + [item.themeTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]}].height + 26;
+        [tempArr addObject:item];
+    }
+    [self getThemeStatusForThemes:tempArr];
+}
+
 -(void)checkNetwork{
     //检测网络状态
     if ([SSJNetworkReachabilityManager isReachable]) {
-        NSLog(@"yes");
+        [self.service requestThemeList];
     }else{
-        NSLog(@"no");
+        [self getThemeFromLocal];
     };
 }
 

@@ -72,7 +72,7 @@
 - (UILabel *)moneyLab {
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
-        _moneyLab.backgroundColor = [UIColor whiteColor];
+        _moneyLab.backgroundColor = [UIColor clearColor];
         _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _moneyLab.font = [UIFont systemFontOfSize:20];
     }
