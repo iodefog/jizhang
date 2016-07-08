@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return (instancetype) 返回实例对象
  */
 - (instancetype)initWithTitle:(NSString *)title
-                      message:(NSString *)message
+                      message:(NSAttributedString *)message
             cancelButtonTitle:(nullable NSString *)cancelButtonTitle
               sureButtonTitle:(nullable NSString *)sureButtonTitle
      cancelButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))cancelHandler

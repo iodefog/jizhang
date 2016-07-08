@@ -37,7 +37,7 @@ static const NSTimeInterval kDuration = 0.3;
 
 @implementation SSJStartUpgradeAlertView
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(nullable NSString *)cancelButtonTitle sureButtonTitle:(nullable NSString *)sureButtonTitle cancelButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))cancelHandler sureButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))sureHandler {
+- (instancetype)initWithTitle:(NSString *)title message:(NSAttributedString *)message cancelButtonTitle:(nullable NSString *)cancelButtonTitle sureButtonTitle:(nullable NSString *)sureButtonTitle cancelButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))cancelHandler sureButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))sureHandler {
     if (self = [super initWithFrame:CGRectZero]) {
         
         self.backgroundColor = [UIColor whiteColor];
@@ -45,7 +45,7 @@ static const NSTimeInterval kDuration = 0.3;
         self.clipsToBounds = YES;
         
         self.titleLabel.text = title;
-        self.contentLabel.text = message;
+        self.contentLabel.attributedText = message;
         [self.scrollView addSubview:self.contentLabel];
         
         [self addSubview:self.titleLabel];
@@ -194,7 +194,7 @@ static const NSTimeInterval kDuration = 0.3;
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _cancelButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[[_cancelButton titleColorForState:UIControlStateNormal] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
         [_cancelButton addTarget:self action:@selector(cancelButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_cancelButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
