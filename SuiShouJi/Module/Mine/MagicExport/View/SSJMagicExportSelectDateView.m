@@ -32,7 +32,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        
         [self addSubview:self.titleLab];
         [self addSubview:self.beginDateBaseLineView];
         [self addSubview:self.endDateBaseLineView];
@@ -77,7 +78,7 @@
     [self setNeedsLayout];
     
     NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"亲爱的用户，您在"];
-    [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"eb4a64"]}]];
+    [title appendAttributedString:[[NSAttributedString alloc] initWithString:[beginDate formattedDateWithFormat:@"yyyy年M月d日"] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]}]];
     [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"开启了记账之旅"]];
     self.titleLab.attributedText = title;
     
@@ -104,6 +105,7 @@
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
+        _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.numberOfLines = 0;
         _titleLab.font = [UIFont systemFontOfSize:14];
     }
@@ -115,7 +117,7 @@
         _beginDateTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
         _beginDateTitleLab.font = [UIFont systemFontOfSize:12];
         _beginDateTitleLab.text = @"起始";
-        _beginDateTitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _beginDateTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_beginDateTitleLab sizeToFit];
     }
     return _beginDateTitleLab;
@@ -126,7 +128,7 @@
         _endDateTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 164, 0)];
         _endDateTitleLab.font = [UIFont systemFontOfSize:12];
         _endDateTitleLab.text = @"结束";
-        _endDateTitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _endDateTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_endDateTitleLab sizeToFit];
     }
     return _endDateTitleLab;
@@ -136,7 +138,7 @@
     if (!_beginDateLab) {
         _beginDateLab = [[UILabel alloc] init];
         _beginDateLab.font = [UIFont systemFontOfSize:18];
-        _beginDateLab.textColor = [UIColor blackColor];
+        _beginDateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _beginDateLab.text = @"--年--月--日";
     }
     return _beginDateLab;
@@ -147,7 +149,7 @@
         _endDateLab = [[UILabel alloc] init];
         _endDateLab.font = [UIFont systemFontOfSize:18];
         _endDateLab.text = @"--年--月--日";
-        _endDateLab.textColor = [UIColor blackColor];
+        _endDateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _endDateLab;
 }
@@ -155,10 +157,10 @@
 - (UIView *)beginDateBaseLineView {
     if (!_beginDateBaseLineView) {
         _beginDateBaseLineView = [[UIView alloc] init];
-        _beginDateBaseLineView.backgroundColor = [UIColor whiteColor];
+        _beginDateBaseLineView.backgroundColor = [UIColor clearColor];
         [_beginDateBaseLineView ssj_setBorderWidth:1];
         [_beginDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_beginDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
+        [_beginDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickBeginDateAction)];
         [_beginDateBaseLineView addGestureRecognizer:tap];
@@ -169,10 +171,10 @@
 - (UIView *)endDateBaseLineView {
     if (!_endDateBaseLineView) {
         _endDateBaseLineView = [[UIView alloc] init];
-        _endDateBaseLineView.backgroundColor = [UIColor whiteColor];
+        _endDateBaseLineView.backgroundColor = [UIColor clearColor];
         [_endDateBaseLineView ssj_setBorderWidth:1];
         [_endDateBaseLineView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_endDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"]];
+        [_endDateBaseLineView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickEndDateAction)];
         [_endDateBaseLineView addGestureRecognizer:tap];
@@ -182,7 +184,8 @@
 
 - (UIImageView *)arrowView {
     if (!_arrowView) {
-        _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow"]];
+        _arrowView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _arrowView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
     }
     return _arrowView;
 }

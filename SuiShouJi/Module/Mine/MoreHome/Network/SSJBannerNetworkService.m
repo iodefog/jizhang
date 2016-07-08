@@ -16,7 +16,7 @@
     [self request:@"http://jz.9188.com/app/banner.json" params:nil];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
+- (void)requestDidFinish:(id)rootElement{
     [super requestDidFinish:rootElement];
 }
 

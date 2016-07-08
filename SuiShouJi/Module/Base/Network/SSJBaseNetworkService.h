@@ -152,7 +152,7 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
  *
  *  @param rootElement 请求返回的数据
  */
-- (void)requestDidFinish:(NSDictionary *)rootElement;
+- (void)requestDidFinish:(id)rootElement;
 
 /**
  *  封装参数，需要时子类可以重写此方法，但必须调用父类方法
