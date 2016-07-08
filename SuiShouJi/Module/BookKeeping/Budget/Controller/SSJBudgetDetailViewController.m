@@ -80,14 +80,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     [self loadAllData];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    self.scrollView.height = self.view.height;
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -248,8 +241,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-        _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
+        _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.hidden = YES;
     }
     return _scrollView;

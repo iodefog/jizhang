@@ -149,7 +149,7 @@ static CGSize kButtonSize = {36, 30};
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = [UIFont systemFontOfSize:21];
-        _titleLabel.textColor = [UIColor blackColor];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
     }
     return _titleLabel;
 }
@@ -157,8 +157,9 @@ static CGSize kButtonSize = {36, 30};
 - (UIButton *)preButton {
     if (!_preButton) {
         _preButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_preButton setImage:[UIImage imageNamed:@"budget_left"] forState:UIControlStateNormal];
+        [_preButton setImage:[[UIImage imageNamed:@"budget_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_preButton setImage:[UIImage imageNamed:@"budget_left_disable"] forState:UIControlStateDisabled];
+        _preButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
         [_preButton addTarget:self action:@selector(preButtonAction) forControlEvents:UIControlEventTouchUpInside];
         _preButton.size = kButtonSize;
     }
@@ -168,8 +169,9 @@ static CGSize kButtonSize = {36, 30};
 - (UIButton *)nextButton {
     if (!_nextButton) {
         _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_nextButton setImage:[UIImage imageNamed:@"budget_right"] forState:UIControlStateNormal];
+        [_nextButton setImage:[[UIImage imageNamed:@"budget_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_nextButton setImage:[UIImage imageNamed:@"budget_right_diable"] forState:UIControlStateDisabled];
+        _nextButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
         [_nextButton addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];
         _nextButton.size = kButtonSize;
     }

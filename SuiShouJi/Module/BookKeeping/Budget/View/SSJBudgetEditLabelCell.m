@@ -20,15 +20,16 @@
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor blackColor];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         self.detailTextLabel.font = [UIFont systemFontOfSize:11];
-        self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:@"999999"];
+        self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         self.subtitleLab = [[UILabel alloc] init];
-        self.subtitleLab.backgroundColor = [UIColor whiteColor];
+        self.subtitleLab.backgroundColor = [UIColor clearColor];
         self.subtitleLab.font = [UIFont systemFontOfSize:18];
         self.subtitleLab.textAlignment = NSTextAlignmentRight;
+        self.subtitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [self.contentView addSubview:self.subtitleLab];
     }
     return self;

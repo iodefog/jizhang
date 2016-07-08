@@ -21,14 +21,14 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor blackColor];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         self.detailTextLabel.font = [UIFont systemFontOfSize:11];
-        self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:@"999999"];
+        self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         self.textField = [[UITextField alloc] init];
         self.textField.textAlignment = NSTextAlignmentRight;
-        self.textField.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        self.textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [self.contentView addSubview:self.textField];
     }
     return self;

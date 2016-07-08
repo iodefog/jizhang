@@ -22,7 +22,7 @@
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.circleView];
         [self addSubview:self.button];
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return self;
 }
@@ -35,6 +35,7 @@
 - (SSJPercentCircleView *)circleView {
     if (!_circleView) {
         _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
+        _circleView.backgroundColor = [UIColor clearColor];
     }
     return _circleView;
 }
@@ -44,11 +45,11 @@
         _button = [[SSJBorderButton alloc] init];
         [_button setFontSize:21];
         [_button setTitle:@"编辑" forState:SSJBorderButtonStateNormal];
-        [_button setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
+        [_button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
         [_button setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [_button setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
-        [_button setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
-        [_button setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateHighlighted];
+        [_button setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
+        [_button setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
+        [_button setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateHighlighted];
     }
     return _button;
 }
