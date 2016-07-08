@@ -23,7 +23,7 @@ typedef void(^SCYWinCowryHomeBannerViewTapAction)(SCYWinCowryHomeBannerView *vie
 @interface SCYWinCowryHomeBannerView : UIView
 
 //  图片url数组
-@property (nonatomic, strong) NSArray *imageUrls;
+@property (nonatomic, strong) NSArray <NSString *>*imageUrls;
 
 //  点击图片的回调
 @property (nonatomic, copy) SCYWinCowryHomeBannerViewTapAction tapAction;

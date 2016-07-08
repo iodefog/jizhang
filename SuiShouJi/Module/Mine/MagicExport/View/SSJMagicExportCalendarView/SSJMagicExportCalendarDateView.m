@@ -26,6 +26,8 @@
         [self addSubview:self.dateLabel];
         [self addSubview:self.descLabel];
         [self addSubview:self.marker];
+        
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -52,9 +54,9 @@
     self.descLabel.text = _item.selected ? _item.desc : nil;
     
     self.dateLabel.clipsToBounds = _item.selected;
-    self.dateLabel.backgroundColor = _item.selected ? SSJ_THEME_RED_COLOR : [UIColor whiteColor];
+    self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] : [UIColor clearColor];
     self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
-    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : SSJ_THEME_RED_COLOR;
+    self.marker.tintColor = _item.selected ? [UIColor clearColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }
 
 #pragma mark - UIResponder
@@ -71,9 +73,9 @@
     
     _item.selected = YES;
     self.dateLabel.clipsToBounds = _item.selected;
-    self.marker.tintColor = _item.selected ? [UIColor whiteColor] : SSJ_THEME_RED_COLOR;
+    self.marker.tintColor = _item.selected ? [UIColor clearColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [UIView transitionWithView:self duration:0.15 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        self.dateLabel.backgroundColor = _item.selected ? SSJ_THEME_RED_COLOR : [UIColor whiteColor];
+        self.dateLabel.backgroundColor = _item.selected ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] : [UIColor clearColor];
         self.dateLabel.textColor = _item.selected ? [UIColor whiteColor] : _item.dateColor;
         self.descLabel.text = _item.desc;
     } completion:NULL];
@@ -88,7 +90,7 @@
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
         _dateLabel.layer.cornerRadius = _dateLabel.width * 0.5;
-        _dateLabel.backgroundColor = [UIColor whiteColor];
+        _dateLabel.backgroundColor = [UIColor clearColor];
         _dateLabel.font = [UIFont systemFontOfSize:13];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
     }
@@ -98,9 +100,9 @@
 - (UILabel *)descLabel {
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] init];
-        _descLabel.backgroundColor = [UIColor whiteColor];
+        _descLabel.backgroundColor = [UIColor clearColor];
         _descLabel.font = [UIFont systemFontOfSize:13];
-        _descLabel.textColor = SSJ_THEME_RED_COLOR;
+        _descLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _descLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _descLabel;

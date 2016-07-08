@@ -18,16 +18,17 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        
         NSArray *weekArr = @[@"日", @"一", @"二", @"三", @"四", @"五", @"六"];
         _labelArr = [[NSMutableArray alloc] initWithCapacity:weekArr.count];
         for (NSString *week in weekArr) {
             UILabel *lab = [[UILabel alloc] init];
-            lab.backgroundColor = [UIColor whiteColor];
+            lab.backgroundColor = [UIColor clearColor];
             lab.font = [UIFont systemFontOfSize:13];
             lab.text = week;
             lab.textAlignment = NSTextAlignmentCenter;
-            lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? SSJ_THEME_RED_COLOR : [UIColor ssj_colorWithHex:@"393939"];
+            lab.textColor = ([week isEqualToString:@"日"] || [week isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
             [_labelArr addObject:lab];
             [self addSubview:lab];
         }

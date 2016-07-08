@@ -30,18 +30,18 @@
     if (self = [super initWithFrame:frame]) {
         _topLabel = [[UILabel alloc] init];
         _topLabel.font = [UIFont systemFontOfSize:18];
-        _topLabel.textColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+        _topLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _topLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_topLabel];
         
         _bottomLabel = [[UILabel alloc] init];
         _bottomLabel.font = [UIFont systemFontOfSize:18];
-        _bottomLabel.textColor = [UIColor ssj_colorWithHex:@"3F3F3F"];
+        _bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bottomLabel.textAlignment = NSTextAlignmentCenter;
         _bottomLabel.top = self.height;
         [self addSubview:_bottomLabel];
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -121,7 +121,7 @@
         [self addSubview:_endDateButton];
         
         _tabView = [[UIView alloc] init];
-        _tabView.backgroundColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+        _tabView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [self addSubview:_tabView];
     }
     return self;

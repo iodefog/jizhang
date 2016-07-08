@@ -46,6 +46,8 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         
         [self addSubview:self.weekView];
         [self addSubview:self.tableView];
+        
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -193,7 +195,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
                 if (item.showContent) {
                     if (_delegate && [_delegate respondsToSelector:@selector(calendarView:canSelectDate:)]) {
                         item.canSelect = [_delegate calendarView:self canSelectDate:item.date];
-                        item.dateColor = item.canSelect ? [UIColor ssj_colorWithHex:@"393939"] : [UIColor ssj_colorWithHex:@"929292"];
+                        item.dateColor = item.canSelect ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
                     }
                 }
                 
@@ -276,8 +278,8 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         _tableView.delegate = self;
         _tableView.rowHeight = 60;
         _tableView.sectionHeaderHeight = 45;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         [_tableView registerClass:[SSJMagicExportCalendarViewCell class] forCellReuseIdentifier:kCalendarCellId];
         [_tableView registerClass:[SSJMagicExportCalendarHeaderView class] forHeaderFooterViewReuseIdentifier:kCalendarHeaderId];
