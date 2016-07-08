@@ -16,9 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)switchToThemeID:(NSString *)ID;
 
++ (NSArray *)allThemeModels;
+
 + (SSJThemeModel *)currentThemeModel;
 
-+ (NSArray *)allThemeModels;
++ (SSJThemeModel *)defaultThemeModel;
 
 + (void)updateTabbarAppearance;
 

@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) SSJBaseItem *cellItem;
 
+@property (nonatomic) UITableViewCellAccessoryType customAccessoryType;
+
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object;
 
 /**

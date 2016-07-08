@@ -45,19 +45,31 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    CGFloat accessoryWidth = 33;
-    self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
-    _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
+    
+    if (_customAccessoryType == UITableViewCellAccessoryDisclosureIndicator) {
+        CGFloat accessoryWidth = 33;
+        self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
+        _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
+    } else {
+        self.contentView.frame = self.bounds;
+    }
 }
 
-- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType {
-    if (accessoryType == UITableViewCellAccessoryDisclosureIndicator) {
-        if (!self.indicatorView.superview) {
-            [self addSubview:self.indicatorView];
-            [self setNeedsLayout];
+- (void)setCustomAccessoryType:(UITableViewCellAccessoryType)customAccessoryType {
+    if (_customAccessoryType != customAccessoryType) {
+        _customAccessoryType = customAccessoryType;
+        
+        if (customAccessoryType == UITableViewCellAccessoryDisclosureIndicator) {
+            if (!self.indicatorView.superview) {
+                [self addSubview:self.indicatorView];
+            }
+        } else {
+            if (self.indicatorView.superview) {
+                [self.indicatorView removeFromSuperview];
+            }
         }
-    } else {
-        [super setAccessoryType:accessoryType];
+        
+        [self setNeedsLayout];
     }
 }
 

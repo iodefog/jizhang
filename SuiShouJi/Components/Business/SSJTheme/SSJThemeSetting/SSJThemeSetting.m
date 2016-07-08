@@ -41,6 +41,13 @@
     return YES;
 }
 
++ (NSArray *)allThemeModels {
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    NSMutableArray *allModels = [NSMutableArray arrayWithArray:[modelInfo allValues]];
+    [allModels addObject:[self defaultThemeModel]];
+    return allModels;
+}
+
 + (SSJThemeModel *)currentThemeModel {
     NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
     SSJThemeModel *model = [modelInfo objectForKey:SSJCurrentThemeID()];
@@ -51,9 +58,33 @@
     }
 }
 
-+ (NSArray *)allThemeModels {
-    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
-    return [modelInfo allValues];
++ (SSJThemeModel *)defaultThemeModel {
+    SSJThemeModel *model = [[SSJThemeModel alloc] init];
+    model.ID = SSJDefaultThemeID;
+    model.name = @"默认主题";
+    model.backgroundAlpha = 1;
+    model.mainColor = @"#393939";
+    model.secondaryColor = @"#a7a7a7";
+    model.marcatoColor = @"#eb4a64";
+    model.mainFillColor = @"#F4F4F4";
+    model.secondaryFillColor = @"#FFFFFF";
+    model.borderColor = @"#cccccc";
+    model.buttonColor = @"#eb4a64";
+    model.naviBarTitleColor = @"#000000";
+    model.naviBarTintColor = @"#eb4a64";
+    model.naviBarBackgroundColor = @"#FFFFFF";
+    model.tabBarTitleColor = @"#a7a7a7";
+    model.tabBarSelectedTitleColor = @"#eb4a64";
+    model.tabBarBackgroundColor = @"#FFFFFF";
+    model.tabBarShadowImageAlpha = 1;
+    model.cellSeparatorAlpha = 1;
+    model.cellSeparatorColor = @"#e8e8e8";
+    model.cellIndicatorColor = @"#cccccc";
+    model.moreHomeTitleColor = @"#FFFFFF";
+    model.moreHomeSubtitleColor = @"#fab9bf";
+    model.recordHomeBorderColor = @"#eb4a64";
+    model.recordHomeCalendarColor = @"#eb4a64";
+    return model;
 }
 
 + (void)updateTabbarAppearance {
@@ -100,35 +131,6 @@
 + (NSString *)settingFilePath {
     NSString *settingPath = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:@"settings"];
     return settingPath;
-}
-
-+ (SSJThemeModel *)defaultThemeModel {
-    SSJThemeModel *model = [[SSJThemeModel alloc] init];
-    model.ID = SSJDefaultThemeID;
-    model.name = @"默认主题";
-    model.backgroundAlpha = 1;
-    model.mainColor = @"#393939";
-    model.secondaryColor = @"#a7a7a7";
-    model.marcatoColor = @"#eb4a64";
-    model.mainFillColor = @"#F4F4F4";
-    model.secondaryFillColor = @"#FFFFFF";
-    model.borderColor = @"#cccccc";
-    model.buttonColor = @"#eb4a64";
-    model.naviBarTitleColor = @"#000000";
-    model.naviBarTintColor = @"#eb4a64";
-    model.naviBarBackgroundColor = @"#FFFFFF";
-    model.tabBarTitleColor = @"#a7a7a7";
-    model.tabBarSelectedTitleColor = @"#eb4a64";
-    model.tabBarBackgroundColor = @"#FFFFFF";
-    model.tabBarShadowImageAlpha = 1;
-    model.cellSeparatorAlpha = 1;
-    model.cellSeparatorColor = @"#e8e8e8";
-    model.cellIndicatorColor = @"#cccccc";
-    model.moreHomeTitleColor = @"#FFFFFF";
-    model.moreHomeSubtitleColor = @"#fab9bf";
-    model.recordHomeBorderColor = @"#eb4a64";
-    model.recordHomeCalendarColor = @"#eb4a64";
-    return model;
 }
 
 @end
