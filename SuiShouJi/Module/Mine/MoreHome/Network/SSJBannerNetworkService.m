@@ -18,11 +18,6 @@
 
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
-    NSLog(@"%@",self.desc);
-    if ([self.returnCode isEqualToString:@"1"]) {
-        NSDictionary *result = [rootElement objectForKey:@"results"];
-        self.items = [SSJBannerItem mj_objectArrayWithKeyValuesArray:result];
-    }
 }
 
 

@@ -321,6 +321,7 @@ static BOOL KHasEnterMineHome;
 -(SSJBannerNetworkService *)bannerService{
     if (!_bannerService) {
         _bannerService = [[SSJBannerNetworkService alloc]initWithDelegate:self];
+        _bannerService.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
     }
     return _bannerService;
 }
