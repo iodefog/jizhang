@@ -18,6 +18,8 @@
 
 - (void)requestDidFinish:(id)rootElement{
     [super requestDidFinish:rootElement];
+    NSArray *result = [NSArray arrayWithArray:rootElement];
+    self.items = [SSJBannerItem mj_objectArrayWithKeyValuesArray:result];
 }
 
 

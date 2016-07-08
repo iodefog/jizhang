@@ -34,6 +34,7 @@
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJBannerNetworkService.h"
+#import "SSJBannerHeaderView.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -51,6 +52,7 @@ static NSString *const kTitle7 = @"设置";
 
 static BOOL KHasEnterMineHome;
 
+static BOOL kNeedBannerDisplay;
 
 @interface SSJMineHomeViewController ()
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
@@ -64,7 +66,7 @@ static BOOL KHasEnterMineHome;
 @property(nonatomic, strong) UIView *rightbuttonView;
 @property(nonatomic, strong) UITableView *tableView;
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
-
+@property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
 
 
@@ -157,7 +159,17 @@ static BOOL KHasEnterMineHome;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
+        return 90;
+    }
     return 10;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (self.bannerHeader.items.count && section == 0 && kNeedBannerDisplay) {
+        return self.bannerHeader;
+    }
+    return [UIView new];
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
@@ -317,7 +329,31 @@ static BOOL KHasEnterMineHome;
     return mineHomeCell;
 }
 
+#pragma mark - SSJBaseNetworkService
+-(void)serverDidFinished:(SSJBaseNetworkService *)service{
+    if (self.bannerService.items) {
+        self.bannerHeader.items = self.bannerService.items;
+        [self.tableView reloadData];
+    }
+}
+
+
 #pragma mark - Getter
+-(SSJBannerHeaderView *)bannerHeader{
+    if (!_bannerHeader) {
+        __weak typeof(self) weakSelf = self;
+        _bannerHeader = [[SSJBannerHeaderView alloc]init];
+        _bannerHeader.closeButtonClickBlock = ^(){
+            kNeedBannerDisplay = NO;
+        };
+        _bannerHeader.bannerClickedBlock = ^(NSString *url){
+            SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
+            [weakSelf.navigationController pushViewController:webVc animated:YES];
+        };
+    }
+    return _bannerHeader;
+}
+
 -(SSJBannerNetworkService *)bannerService{
     if (!_bannerService) {
         _bannerService = [[SSJBannerNetworkService alloc]initWithDelegate:self];
