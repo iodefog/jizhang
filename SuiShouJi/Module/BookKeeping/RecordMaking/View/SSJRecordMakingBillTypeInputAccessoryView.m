@@ -95,7 +95,7 @@
         _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, _topView.bottom, self.width, 37)];
         _bottomView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
         [_bottomView ssj_setBorderWidth:1];
-        [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"D9DADC"]];
+        [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_bottomView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _bottomView;
@@ -103,7 +103,8 @@
 
 - (UIImageView *)memoIcon {
     if (!_memoIcon) {
-        _memoIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record_making_memo"]];
+        _memoIcon = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"record_making_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _memoIcon.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoIcon.left = 12;
         _memoIcon.centerY = self.topView.height * 0.5;
     }
@@ -114,7 +115,8 @@
     if (!_memoView) {
         _memoView = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, self.topView.width - 40, self.topView.height)];
         _memoView.font = [UIFont systemFontOfSize:13];
-        _memoView.placeholder = @"写点啥备注下";
+        _memoView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _memoView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"写点啥备注下" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoView.returnKeyType = UIReturnKeyDone;
     }
     return _memoView;
