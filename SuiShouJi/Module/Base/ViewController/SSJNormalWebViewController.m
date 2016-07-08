@@ -60,9 +60,10 @@
     return webViewVC;
 }
 
-- (instancetype)init{
-    self = [super init];
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.appliesTheme = NO;
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.toolBarHidden=YES;
         self.showURLInNavigationBar = NO;
