@@ -464,9 +464,10 @@
         _emailTextField.delegate = self;
         _emailTextField.layer.borderWidth = 1;
         _emailTextField.layer.cornerRadius = 3;
-        _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
-        _emailTextField.placeholder = @"请输入邮箱地址";
+        _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
         _emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _emailTextField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _emailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入邮箱地址" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, _emailTextField.height)];
         _emailTextField.leftView = leftView;

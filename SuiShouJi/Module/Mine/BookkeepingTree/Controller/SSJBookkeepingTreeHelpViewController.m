@@ -32,6 +32,8 @@ static NSString *const kHelpCellId = @"kHelpCellId";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"帮助";
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.appliesTheme = NO;
         self.statisticsTitle = @"记账树帮助页面";
         [self organiseItems];
     }
@@ -84,7 +86,7 @@ static NSString *const kHelpCellId = @"kHelpCellId";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;

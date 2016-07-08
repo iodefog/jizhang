@@ -27,11 +27,12 @@
     style.paragraphSpacing = 30;
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"亲爱的用户您好：\n各大邮箱公司正在审核本司发送的邮箱属性，若您在“收件箱”收不到邮件，可至您邮箱里的“广告邮件”或“垃圾邮件”中查看 。\n很抱歉给您带来不便，我们正加速解决此问题，感谢您的理解与支持。" attributes:@{NSParagraphStyleAttributeName:style}];
     
-    UILabel *contentLab = [[UILabel alloc] initWithFrame:CGRectMake(35, 30, self.view.width - 55, self.view.height - 30)];
+    UILabel *contentLab = [[UILabel alloc] initWithFrame:CGRectMake(35, 30 + SSJ_NAVIBAR_BOTTOM, self.view.width - 55, self.view.height - 30 - SSJ_NAVIBAR_BOTTOM)];
     contentLab.font = [UIFont systemFontOfSize:16];
     contentLab.attributedText = text;
     contentLab.numberOfLines = 0;
     [contentLab sizeToFit];
+    contentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.view addSubview:contentLab];
 }
 
