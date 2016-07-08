@@ -33,6 +33,7 @@
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
+#import "SSJBannerNetworkService.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -62,6 +63,7 @@ static BOOL KHasEnterMineHome;
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 @property(nonatomic, strong) UITableView *tableView;
+@property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
 
@@ -95,6 +97,7 @@ static BOOL KHasEnterMineHome;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.bannerService requestBannersList];
     [UIApplication sharedApplication].statusBarHidden = YES;
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -315,6 +318,13 @@ static BOOL KHasEnterMineHome;
 }
 
 #pragma mark - Getter
+-(SSJBannerNetworkService *)bannerService{
+    if (!_bannerService) {
+        _bannerService = [[SSJBannerNetworkService alloc]initWithDelegate:self];
+    }
+    return _bannerService;
+}
+
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];

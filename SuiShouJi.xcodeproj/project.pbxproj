@@ -1735,6 +1735,9 @@
 		9CD9BC5E1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */; };
 		9CD9BC641CFEBCA40061803B /* SSJFundingTransferEdite.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */; };
 		9CD9BC681CFFD3600061803B /* SSJChargeCircleModifyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */; };
+		9CE7D7851D2F4EA40013E97B /* SSJBannerHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */; };
+		9CE7D78F1D2F4ECA0013E97B /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D78E1D2F4ECA0013E97B /* SSJBannerItem.m */; };
+		9CE7D7921D2F4FF80013E97B /* SSJBannerNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7911D2F4FF80013E97B /* SSJBannerNetworkService.m */; };
 		9CEB85BF1CC5D8FC00AE8F8D /* mark_jilu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BB1CC5D8FC00AE8F8D /* mark_jilu@2x.png */; };
 		9CEB85C01CC5D8FC00AE8F8D /* mark_jilu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */; };
 		9CEB85C11CC5D8FC00AE8F8D /* mark_pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */; };
@@ -3038,6 +3041,12 @@
 		9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferEdite.m; sourceTree = "<group>"; };
 		9CD9BC661CFFD3600061803B /* SSJChargeCircleModifyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeCircleModifyCell.h; sourceTree = "<group>"; };
 		9CD9BC671CFFD3600061803B /* SSJChargeCircleModifyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeCircleModifyCell.m; sourceTree = "<group>"; };
+		9CE7D7831D2F4EA40013E97B /* SSJBannerHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBannerHeaderView.h; sourceTree = "<group>"; };
+		9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBannerHeaderView.m; sourceTree = "<group>"; };
+		9CE7D78D1D2F4ECA0013E97B /* SSJBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBannerItem.h; sourceTree = "<group>"; };
+		9CE7D78E1D2F4ECA0013E97B /* SSJBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBannerItem.m; sourceTree = "<group>"; };
+		9CE7D7901D2F4FF80013E97B /* SSJBannerNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBannerNetworkService.h; sourceTree = "<group>"; };
+		9CE7D7911D2F4FF80013E97B /* SSJBannerNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBannerNetworkService.m; sourceTree = "<group>"; };
 		9CEB85BB1CC5D8FC00AE8F8D /* mark_jilu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_jilu@2x.png"; sourceTree = "<group>"; };
 		9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_jilu@3x.png"; sourceTree = "<group>"; };
 		9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@2x.png"; sourceTree = "<group>"; };
@@ -5420,6 +5429,8 @@
 				9CD9BBB21CFD2DAA0061803B /* SSJChargeReminderItem.m */,
 				9CD9BBB31CFD2DAA0061803B /* SSJUserInfoItem.h */,
 				9CD9BBB41CFD2DAA0061803B /* SSJUserInfoItem.m */,
+				9CE7D78D1D2F4ECA0013E97B /* SSJBannerItem.h */,
+				9CE7D78E1D2F4ECA0013E97B /* SSJBannerItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5431,6 +5442,8 @@
 				9CD9BBB71CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m */,
 				9CD9BBB81CFD2DAA0061803B /* SSJUserInfoNetworkService.h */,
 				9CD9BBB91CFD2DAA0061803B /* SSJUserInfoNetworkService.m */,
+				9CE7D7901D2F4FF80013E97B /* SSJBannerNetworkService.h */,
+				9CE7D7911D2F4FF80013E97B /* SSJBannerNetworkService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -5460,6 +5473,8 @@
 				9CD9BBD11CFD2DAA0061803B /* SSJNoneCircleChargeView.m */,
 				9CD9BBD21CFD2DAA0061803B /* SSJSyncSettingTableViewCell.h */,
 				9CD9BBD31CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m */,
+				9CE7D7831D2F4EA40013E97B /* SSJBannerHeaderView.h */,
+				9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8043,6 +8058,7 @@
 				7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
 				7D5F332A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m in Sources */,
 				7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */,
+				9CE7D7921D2F4FF80013E97B /* SSJBannerNetworkService.m in Sources */,
 				9C66F1201D20D8910094125D /* SSJThemeItem.m in Sources */,
 				9CD9BC541CFEAAAE0061803B /* SSJTransferDetailHeader.m in Sources */,
 				9CD9BC051CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.m in Sources */,
@@ -8067,6 +8083,7 @@
 				BD0433241C1A78B40051E7AB /* SSJImageAddition.m in Sources */,
 				9CD9BC111CFD2DAA0061803B /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
 				9C9471871CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m in Sources */,
+				9CE7D7851D2F4EA40013E97B /* SSJBannerHeaderView.m in Sources */,
 				BD0433271C1A78B40051E7AB /* SSJTableView.m in Sources */,
 				9CD9BA401CF7FA780061803B /* SSJBooksTypeEditeView.m in Sources */,
 				9CD9BBFD1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m in Sources */,
@@ -8264,6 +8281,7 @@
 				7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
+				9CE7D78F1D2F4ECA0013E97B /* SSJBannerItem.m in Sources */,
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
 				9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */,
 				7D6F93311D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m in Sources */,
