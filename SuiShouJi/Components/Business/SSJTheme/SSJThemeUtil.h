@@ -10,6 +10,9 @@
 
 #define SSJ_CURRENT_THEME [SSJThemeSetting currentThemeModel]
 
+//  切换主题通知
+extern NSString *const SSJThemeDidChangeNotification;
+
 extern NSString *const SSJDefaultThemeID;
 
 void SSJSetCurrentThemeID(NSString *ID);

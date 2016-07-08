@@ -42,6 +42,12 @@
 //上一次点击的按钮
 @property (nonatomic) NSInteger lastPressTag;
 
+// 按键标题颜色，默认黑色
+@property (nonatomic, strong) UIColor *titleColor;
+
+// 按钮分割线颜色，默认黑色
+@property (nonatomic, strong) UIColor *separatorColor;
+
 @end
 
 

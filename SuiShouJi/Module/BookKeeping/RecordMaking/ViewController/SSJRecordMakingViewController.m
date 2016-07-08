@@ -231,8 +231,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
     if (!_accessoryView) {
         _accessoryView = [[SSJRecordMakingBillTypeInputAccessoryView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, 86)];
-        _accessoryView.buttonTitleNormalColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _accessoryView.buttonTitleSelectedColor = [UIColor blackColor];
+        _accessoryView.buttonTitleNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _accessoryView.buttonTitleSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];

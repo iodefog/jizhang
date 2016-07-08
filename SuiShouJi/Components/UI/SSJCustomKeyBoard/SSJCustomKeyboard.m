@@ -69,6 +69,8 @@ static id _instance;
         self.rightNum = 0;
         self.leftNum = 0;
         self.lastPressTag = 0;
+        _titleColor = [UIColor blackColor];
+        _separatorColor = [UIColor blackColor];
         [self setNumKey];
         [self addSubview:self.DecimalButton];
         [self addSubview:self.ZeroButton];
@@ -98,18 +100,53 @@ static id _instance;
     self.ComfirmButton.rightBottom = CGPointMake(self.width, self.height);
 }
 
+- (void)setTitleColor:(UIColor *)titleColor {
+    if (!CGColorEqualToColor(_titleColor.CGColor, titleColor.CGColor)) {
+        _titleColor = titleColor;
+        
+        for (SSJCustomKeyBoardButton *numButton in self.numButtonArray) {
+            [numButton setTitleColor:_titleColor forState:UIControlStateNormal];
+        }
+        
+        [_BackspaceButton setTintColor:_titleColor];
+        [_PlusButton setTintColor:_titleColor];
+        [_MinusButton setTintColor:_titleColor];
+        [_ZeroButton setTitleColor:_titleColor forState:UIControlStateNormal];
+        [_DecimalButton setTitleColor:_titleColor forState:UIControlStateNormal];
+        [_ComfirmButton setTitleColor:_titleColor forState:UIControlStateNormal];
+    }
+}
+
+- (void)setSeparatorColor:(UIColor *)separatorColor {
+    if (!CGColorEqualToColor(_separatorColor.CGColor, separatorColor.CGColor)) {
+        _separatorColor = separatorColor;
+        
+        for (SSJCustomKeyBoardButton *numButton in self.numButtonArray) {
+            numButton.layer.borderColor = _separatorColor.CGColor;
+        }
+        
+        _BackspaceButton.layer.borderColor = _separatorColor.CGColor;
+        _PlusButton.layer.borderColor = _separatorColor.CGColor;
+        _MinusButton.layer.borderColor = _separatorColor.CGColor;
+        _ZeroButton.layer.borderColor = _separatorColor.CGColor;
+        _DecimalButton.layer.borderColor = _separatorColor.CGColor;
+        _ComfirmButton.layer.borderColor = _separatorColor.CGColor;
+    }
+}
+
 //数字键
 -(void)setNumKey{
     for (int i = 0; i < 9; i ++) {
         SSJCustomKeyBoardButton *numButton = [[SSJCustomKeyBoardButton alloc]init];
         [numButton setTitle:[NSString stringWithFormat:@"%d",i + 1] forState:UIControlStateNormal];
+        [numButton setTitleColor:_titleColor forState:UIControlStateNormal];
         numButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [numButton setTintColor:[UIColor whiteColor]];
         [numButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         [self.numButtonArray addObject:numButton];
         numButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        numButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff"];
-        numButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        numButton.backgroundColor = [UIColor clearColor];
+        numButton.layer.borderColor = _separatorColor.CGColor;
         numButton.layer.borderWidth = 1.0f / 2;
         numButton.tag = i + 1;
         [self addSubview:numButton];
@@ -121,12 +158,12 @@ static id _instance;
         _ZeroButton = [[SSJCustomKeyBoardButton alloc]init];
         _ZeroButton.leftBottom = CGPointMake(_buttonWight,self.height);
         [_ZeroButton setTitle:@"0" forState:UIControlStateNormal];
+        [_ZeroButton setTitleColor:_titleColor forState:UIControlStateNormal];
         _ZeroButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_ZeroButton setTintColor:[UIColor whiteColor]];
         [_ZeroButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _ZeroButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _ZeroButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff"];
-        _ZeroButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _ZeroButton.backgroundColor = [UIColor clearColor];
+        _ZeroButton.layer.borderColor = _separatorColor.CGColor;
         _ZeroButton.layer.borderWidth = 1.0f / 2;
         _ZeroButton.tag = 10;
     }
@@ -138,13 +175,13 @@ static id _instance;
     if (!_BackspaceButton) {
         _BackspaceButton = [[SSJCustomKeyBoardButton alloc]init];
         _BackspaceButton.rightTop = CGPointMake(self.width,0);
-        [_BackspaceButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+        [_BackspaceButton setImage:[[UIImage imageNamed:@"back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _BackspaceButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_BackspaceButton setTintColor:[UIColor whiteColor]];
+        [_BackspaceButton setTintColor:_titleColor];
         [_BackspaceButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _BackspaceButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _BackspaceButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff"];
-        _BackspaceButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _BackspaceButton.backgroundColor = [UIColor clearColor];
+        _BackspaceButton.layer.borderColor = _separatorColor.CGColor;
         _BackspaceButton.layer.borderWidth = 1.0f / 2;
         _BackspaceButton.tag = 11;
     }
@@ -173,13 +210,13 @@ static id _instance;
     if (!_PlusButton) {
         _PlusButton = [[SSJCustomKeyBoardButton alloc]init];
         _PlusButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
-        [_PlusButton setImage:[UIImage imageNamed:@"plus"] forState:UIControlStateNormal];
+        [_PlusButton setImage:[[UIImage imageNamed:@"plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _PlusButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_PlusButton setTintColor:[UIColor whiteColor]];
+        [_PlusButton setTintColor:_titleColor];
         [_PlusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _PlusButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _PlusButton.backgroundColor = [UIColor whiteColor];
-        _PlusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _PlusButton.backgroundColor = [UIColor clearColor];
+        _PlusButton.layer.borderColor = _separatorColor.CGColor;
         _PlusButton.layer.borderWidth = 1.0f / 2;
         _PlusButton.tag = 13;
     }
@@ -190,13 +227,13 @@ static id _instance;
     if (!_MinusButton) {
         _MinusButton = [[SSJCustomKeyBoardButton alloc]init];
         _MinusButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
-        [_MinusButton setImage:[UIImage imageNamed:@"minus"] forState:UIControlStateNormal];
+        [_MinusButton setImage:[[UIImage imageNamed:@"minus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_MinusButton setTintColor:[UIColor whiteColor]];
+        [_MinusButton setTintColor:_titleColor];
         [_MinusButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];\
         _MinusButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _MinusButton.backgroundColor = [UIColor whiteColor];
-        _MinusButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _MinusButton.backgroundColor = [UIColor clearColor];
+        _MinusButton.layer.borderColor = _separatorColor.CGColor;
         _MinusButton.layer.borderWidth = 1.0f / 2;
         _MinusButton.tag = 14;
     }
@@ -209,12 +246,13 @@ static id _instance;
         _DecimalButton = [[SSJCustomKeyBoardButton alloc]init];
         _DecimalButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
         [_DecimalButton setTitle:@"." forState:UIControlStateNormal];
+        [_DecimalButton setTitleColor:_titleColor forState:UIControlStateNormal];
         _DecimalButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_DecimalButton setTintColor:[UIColor whiteColor]];
         [_DecimalButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _DecimalButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _DecimalButton.backgroundColor = [UIColor whiteColor];
-        _DecimalButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _DecimalButton.backgroundColor = [UIColor clearColor];
+        _DecimalButton.layer.borderColor = _separatorColor.CGColor;
         _DecimalButton.layer.borderWidth = 1.0f / 2;
         _DecimalButton.tag = 15;
     }
@@ -227,12 +265,13 @@ static id _instance;
         _ComfirmButton = [[SSJCustomKeyBoardButton alloc]init];
         _ComfirmButton.leftBottom = CGPointMake(_buttonWight * 2,self.height);
         [_ComfirmButton setTitle:@"OK" forState:UIControlStateNormal];
+        [_ComfirmButton setTitleColor:_titleColor forState:UIControlStateNormal];
         _ComfirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_ComfirmButton setTintColor:[UIColor whiteColor]];
         [_ComfirmButton addTarget:self action:@selector(keyboardBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
         _ComfirmButton.titleLabel.font = [UIFont systemFontOfSize:24];
-        _ComfirmButton.backgroundColor = [UIColor whiteColor];
-        _ComfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"e2e2e2"].CGColor;
+        _ComfirmButton.backgroundColor = [UIColor clearColor];
+        _ComfirmButton.layer.borderColor = _separatorColor.CGColor;
         _ComfirmButton.layer.borderWidth = 1.0f / 2;
         _ComfirmButton.tag = 16;
     }

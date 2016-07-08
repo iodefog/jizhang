@@ -8,6 +8,8 @@
 
 #import "SSJThemeUtil.h"
 
+NSString *const SSJThemeDidChangeNotification = @"SSJThemeDidChangeNotification";
+
 static NSString *const SSJCurrentThemeIDKey = @"SSJCurrentThemeIDKey";
 
 NSString *const SSJDefaultThemeID = @"0";

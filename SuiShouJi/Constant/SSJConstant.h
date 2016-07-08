@@ -157,7 +157,4 @@ extern NSString *const SSJInitDatabaseDidFinishNotification;
 //  切换账本的通知
 extern NSString *const SSJBooksTypeDidChangeNotification;
 
-//  切换主题通知
-extern NSString *const SSJThemeDidChangeNotification;
-
 

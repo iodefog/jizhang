@@ -8,8 +8,6 @@
 
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
-static NSString *const kBorderColorValue = @"cccccc";
-
 @interface SSJRecordMakingBillTypeInputAccessoryView ()
 
 @property (nonatomic, strong) UIView *topView;
@@ -128,7 +126,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _accountBtn.frame = CGRectMake(0, 0, 90, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _accountBtn.layer.borderWidth = 1;
-        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
+        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
     }
     return _accountBtn;
@@ -140,7 +138,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _dateBtn.frame = CGRectMake(0, 0, 90, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _dateBtn.layer.borderWidth = 1;
-        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
+        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
     }
     return _dateBtn;
@@ -152,7 +150,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _photoBtn.frame = CGRectMake(0, 0, 90, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _photoBtn.layer.borderWidth = 1;
-        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
+        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
     }
     return _photoBtn;
