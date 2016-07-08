@@ -33,6 +33,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"主题详情";
+        self.automaticallyAdjustsScrollViewInsets = NO;
         self.appliesTheme = NO;
     }
     return self;

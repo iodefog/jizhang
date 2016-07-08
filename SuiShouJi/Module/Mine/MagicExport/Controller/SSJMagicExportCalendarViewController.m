@@ -108,7 +108,8 @@
 - (SSJMagicExportCalendarSwitchStartAndEndDateControl *)dateSwitchControl {
     if (!_dateSwitchControl) {
         __weak typeof(self) wself = self;
-        _dateSwitchControl = [[SSJMagicExportCalendarSwitchStartAndEndDateControl alloc] initWithFrame:CGRectMake(0, 10, self.view.width, 68)];
+        _dateSwitchControl = [[SSJMagicExportCalendarSwitchStartAndEndDateControl alloc] initWithFrame:CGRectMake(0, 10 + SSJ_NAVIBAR_BOTTOM, self.view.width, 68)];
+        _dateSwitchControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _dateSwitchControl.beginDate = _beginDate;
         _dateSwitchControl.endDate = _endDate;
         _dateSwitchControl.clickBeginDateAction = ^{
