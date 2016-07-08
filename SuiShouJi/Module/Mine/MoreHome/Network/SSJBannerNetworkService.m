@@ -17,7 +17,8 @@
 }
 
 - (void)requestDidFinish:(NSDictionary *)rootElement{
-    [super requestDidFinish:rootElement];
+    NSDictionary *result = [rootElement objectForKey:@"results"];
+    self.items = [SSJBannerItem mj_objectArrayWithKeyValuesArray:result];
 }
 
 

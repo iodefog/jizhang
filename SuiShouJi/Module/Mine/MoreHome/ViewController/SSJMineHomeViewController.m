@@ -317,6 +317,12 @@ static BOOL KHasEnterMineHome;
     return mineHomeCell;
 }
 
+#pragma mark - SSJBaseNetworkService
+-(void)serverDidFinished:(SSJBaseNetworkService *)service{
+    
+}
+
+
 #pragma mark - Getter
 -(SSJBannerNetworkService *)bannerService{
     if (!_bannerService) {
