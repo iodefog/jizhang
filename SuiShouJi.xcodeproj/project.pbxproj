@@ -197,6 +197,7 @@
 		7DAD4A611C4F552F004B7FF0 /* reportForms_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DAD4A5D1C4F552F004B7FF0 /* reportForms_right@2x.png */; };
 		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */; };
+		7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -2267,6 +2268,8 @@
 		7DAD4B171C4FAF42004B7FF0 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		7DB428FF1CAE3E5000B46F32 /* SSJDatabaseVersion2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion2.h; sourceTree = "<group>"; };
 		7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion2.m; sourceTree = "<group>"; };
+		7DB6140A1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYWinCowryHomeBannerView.h; sourceTree = "<group>"; };
+		7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYWinCowryHomeBannerView.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -3948,6 +3951,8 @@
 			children = (
 				7D6AAB611C312C500007C0A3 /* SSJUnlimitedScrollView.h */,
 				7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */,
+				7DB6140A1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.h */,
+				7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */,
 			);
 			name = SSJUnlimitedScrollView;
 			path = SCYUnlimitedScrollView;
@@ -8204,6 +8209,7 @@
 				7DD902971CE202790076929F /* SCYSlidePagingHeaderView.m in Sources */,
 				9CD9BC3B1CFD2DAA0061803B /* SSJPersonalDetailViewController.m in Sources */,
 				BD0433921C1A8DA50051E7AB /* SSJGlobalServiceManager.m in Sources */,
+				7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */,
 				9CD9BC001CFD2DAA0061803B /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
 				9C9471861CEB224C00D69079 /* SSJFundingDetailHeader.m in Sources */,
 				7D5F33531CEAE6C10086B67E /* SSJCalenderDetailViewController.m in Sources */,
