@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJBannerHeaderView : UITableViewHeaderFooterView
-
+@property(nonatomic, strong) NSArray *items;
 @end

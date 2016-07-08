@@ -16,8 +16,9 @@
     [self request:@"http://jz.9188.com/app/banner.json" params:nil];
 }
 
-- (void)requestDidFinish:(NSDictionary *)rootElement{
-    NSDictionary *result = [rootElement objectForKey:@"results"];
+- (void)requestDidFinish:(id)rootElement{
+    [super requestDidFinish:rootElement];
+    NSArray *result = [NSArray arrayWithArray:rootElement];
     self.items = [SSJBannerItem mj_objectArrayWithKeyValuesArray:result];
 }
 
