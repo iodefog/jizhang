@@ -83,7 +83,7 @@
 - (UILabel *)typeLab {
     if (!_typeLab) {
         _typeLab = [[UILabel alloc] init];
-        _typeLab.backgroundColor = [UIColor whiteColor];
+        _typeLab.backgroundColor = [UIColor clearColor];
         _typeLab.textColor = [UIColor blackColor];
         _typeLab.font = [UIFont systemFontOfSize:14];
     }
@@ -93,7 +93,7 @@
 - (UILabel *)beginDateLab {
     if (!_beginDateLab) {
         _beginDateLab = [[UILabel alloc] init];
-        _beginDateLab.backgroundColor = [UIColor whiteColor];
+        _beginDateLab.backgroundColor = [UIColor clearColor];
         _beginDateLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         _beginDateLab.font = [UIFont systemFontOfSize:12];
     }
@@ -103,7 +103,7 @@
 - (UILabel *)paymentLab {
     if (!_paymentLab) {
         _paymentLab = [[UILabel alloc] init];
-        _paymentLab.backgroundColor = [UIColor whiteColor];
+        _paymentLab.backgroundColor = [UIColor clearColor];
         _paymentLab.textColor = [UIColor blackColor];
         _paymentLab.font = [UIFont systemFontOfSize:14];
     }
@@ -113,7 +113,7 @@
 - (UILabel *)budgetLab {
     if (!_budgetLab) {
         _budgetLab = [[UILabel alloc] init];
-        _budgetLab.backgroundColor = [UIColor whiteColor];
+        _budgetLab.backgroundColor = [UIColor clearColor];
         _budgetLab.textColor = [UIColor blackColor];
         _budgetLab.font = [UIFont systemFontOfSize:14];
     }
