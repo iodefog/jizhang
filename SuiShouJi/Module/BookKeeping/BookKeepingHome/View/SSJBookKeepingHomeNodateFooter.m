@@ -35,7 +35,7 @@
 -(UIImageView *)bearImage{
     if (!_bearImage) {
         _bearImage = [[UIImageView alloc]init];
-        _bearImage.image = [UIImage imageNamed:@"home_none"];
+        _bearImage.image = [UIImage ssj_themeImageWithName:@"home_none"];
     }
     return _bearImage;
 }

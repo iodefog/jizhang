@@ -120,7 +120,7 @@
         _startDate = nil;
         _endDate = nil;
         [self reloadData];
-        [_editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_editPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         
         [MobClick event:@"form_curve_date_custom_delete"];
     } else {
@@ -277,7 +277,7 @@
     if (!_editPeriodBtn) {
         _editPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _editPeriodBtn.frame = CGRectMake(self.view.width - 50, 0, 50, 50);
-        [_editPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_editPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_editPeriodBtn addTarget:self action:@selector(editPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _editPeriodBtn;

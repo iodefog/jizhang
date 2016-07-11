@@ -88,7 +88,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_scrollView addSubview:_axisXView];
         
         _verticalLine = [[UIView alloc] init];
-        _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
+        _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [self addSubview:_verticalLine];
         
         _paymentPoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
@@ -119,7 +119,8 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_incomeLabel sizeToFit];
         [self addSubview:_incomeLabel];
         
-        _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_balloon"]];
+        _balloonView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"reportForms_balloon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _balloonView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [self addSubview:_balloonView];
         
         _surplusLabel = [[UILabel alloc] init];

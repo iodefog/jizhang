@@ -267,7 +267,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _customPeriod = nil;
         _dateAxisView.hidden = NO;
         _customPeriodLab.hidden = YES;
-        [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [self reloadDatas];
         
         [MobClick event:@"form_date_custom_delete"];
@@ -631,7 +631,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _customPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
-        [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_customPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;
