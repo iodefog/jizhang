@@ -21,8 +21,6 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @interface SSJMotionPasswordViewController () <SCYMotionEncryptionViewDelegate>
 
-@property (nonatomic, strong) UIImageView *backgroundView;
-
 @property (nonatomic, strong) UIView *portraitView;
 
 @property (nonatomic, strong) UILabel *remindLab;
@@ -107,7 +105,8 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.backgroundView];
+    self.backgroundView.image = [UIImage imageNamed:@"motion_background"];
+    
     [self.view addSubview:self.remindLab];
     [self.view addSubview:self.motionView];
     
@@ -425,14 +424,6 @@ static const int kVerifyFailureTimesLimit = 5;
 }
 
 #pragma mark - Getter
-- (UIImageView *)backgroundView {
-    if (!_backgroundView) {
-        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"motion_background"]];
-        _backgroundView.frame = self.view.bounds;
-    }
-    return _backgroundView;
-}
-
 - (UIView *)portraitView {
     if (!_portraitView) {
         _portraitView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 68, 68)];
