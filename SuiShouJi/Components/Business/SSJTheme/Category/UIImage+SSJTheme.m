@@ -56,7 +56,11 @@
     }
     
     image = [UIImage imageWithContentsOfFile:imagePath];
-    [[self memoCache] setObject:image forKey:imagePath];
+    if (image) {
+        [[self memoCache] setObject:image forKey:imagePath];
+    } else {
+        SSJPRINT(@"imge在指定路径下不存在 %@", imagePath);
+    }
     
     return image;
 }

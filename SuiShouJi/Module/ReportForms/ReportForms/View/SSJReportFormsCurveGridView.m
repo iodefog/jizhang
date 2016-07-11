@@ -24,7 +24,7 @@
         
         _topLabel = [[UILabel alloc] init];
         _topLabel.font = [UIFont systemFontOfSize:12];
-        _topLabel.textColor = [UIColor ssj_colorWithHex:@"030408"];
+        _topLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [self addSubview:_topLabel];
         
         _bottomLabel = [[UILabel alloc] init];
@@ -86,7 +86,7 @@
         _surplusCell = [[SSJReportFormsCurveGridCell alloc] init];
         _surplusCell.topLabel.text = @"期间结余（元）";
         _surplusCell.bottomLabel.text = @"0.00";
-        _surplusCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"363636"];
+        _surplusCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_surplusCell ssj_setBorderWidth:1];
         [_surplusCell ssj_setBorderColor:borderColor];
         [_surplusCell ssj_setBorderStyle:SSJBorderStyleRight];
@@ -95,7 +95,7 @@
         _dailyPaymentCell = [[SSJReportFormsCurveGridCell alloc] init];
         _dailyPaymentCell.topLabel.text = @"日均花费（元）";
         _dailyPaymentCell.bottomLabel.text = @"0.00";
-        _dailyPaymentCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"363636"];
+        _dailyPaymentCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [self addSubview:_dailyPaymentCell];
     }
     return self;

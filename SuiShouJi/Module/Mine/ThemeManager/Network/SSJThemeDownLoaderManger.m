@@ -110,6 +110,12 @@ static id _instance;
                 // 解析主题配置文件，
                 NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
                 NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
+                
+                if (!jsonData) {
+                    SSJPRINT(@"<<< themeSettings.json 文件不存在 >>>");
+                    return;
+                }
+                
                 NSError *error = nil;
                 NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
                 if (error) {

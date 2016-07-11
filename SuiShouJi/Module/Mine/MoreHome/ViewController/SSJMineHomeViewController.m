@@ -504,6 +504,7 @@ static BOOL kNeedBannerDisplay = YES;
 -(void)updateAppearanceAfterThemeChanged{
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
 //  提示用户登录或注册

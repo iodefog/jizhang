@@ -550,7 +550,7 @@
 -(UIImageView *)noDataHeader{
     if (!_noDataHeader) {
         _noDataHeader = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 294)];
-        _noDataHeader.image = [UIImage imageNamed:@"home_none"];
+        _noDataHeader.image = [UIImage ssj_themeImageWithName:@"home_none"];
     }
     return _noDataHeader;
 }
