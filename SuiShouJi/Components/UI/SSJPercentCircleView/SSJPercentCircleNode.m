@@ -18,9 +18,9 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @property (nonatomic) CGFloat lineWith;
 
-@property (nonatomic, strong) NSArray *items;
+@property (nonatomic, strong) UIColor *fillColor;
 
-@property (nonatomic, strong) CAShapeLayer *maskLayer;
+@property (nonatomic, strong) NSArray *items;
 
 @property (nonatomic, strong) NSMutableArray *circleLayers;
 
@@ -46,6 +46,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     if (self = [super initWithFrame:frame]) {
         self.circleLayers = [NSMutableArray array];
         self.shootLayers = [NSMutableArray array];
+        _fillColor = [UIColor clearColor];
     }
     return self;
 }
@@ -89,9 +90,6 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     [self.shootLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [self.shootLayers removeAllObjects];
     
-    [self.maskLayer removeFromSuperlayer];
-    self.maskLayer = nil;
-    
     if (self.items.count == 0) {
         if (self.completion) {
             self.completion();
@@ -107,7 +105,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         CAShapeLayer *layer = [CAShapeLayer layer];
         layer.contentsScale = [[UIScreen mainScreen] scale];
         layer.path = circlePath.CGPath;
-        layer.fillColor = [UIColor whiteColor].CGColor;
+        layer.fillColor = _fillColor.CGColor;
         layer.lineWidth = self.lineWith;
         layer.strokeColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
         layer.strokeEnd = 0;
@@ -126,16 +124,11 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
         [layer addAnimation:animation forKey:kAnimationKey];
     }
-    
-    [self.layer addSublayer:self.maskLayer];
 }
 
 - (void)reloadShootLayers {
     [self.circleLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [self.circleLayers removeAllObjects];
-    
-    [self.maskLayer removeFromSuperlayer];
-    self.maskLayer = nil;
     
     for (SSJPercentCircleNodeItem *item in self.items) {
         UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:self.centerPoint radius:self.radius startAngle:(item.startAngle - M_PI_2) endAngle:(item.endAngle - M_PI_2) clockwise:YES];
@@ -143,27 +136,13 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         CAShapeLayer *layer = [CAShapeLayer layer];
         layer.contentsScale = [[UIScreen mainScreen] scale];
         layer.path = circlePath.CGPath;
-        layer.fillColor = [UIColor whiteColor].CGColor;
+        layer.fillColor = _fillColor.CGColor;
         layer.lineWidth = self.lineWith;
         layer.strokeColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
         [self.layer addSublayer:layer];
         
         [self.shootLayers addObject:layer];
     }
-    
-    [self.layer addSublayer:self.maskLayer];
-}
-
-- (CAShapeLayer *)maskLayer {
-    if (!_maskLayer) {
-        _maskLayer = [CAShapeLayer layer];
-        _maskLayer.fillColor = [UIColor whiteColor].CGColor;
-        _maskLayer.contentsScale = [[UIScreen mainScreen] scale];
-        _maskLayer.lineWidth = 0;
-        _maskLayer.zPosition = FLT_MAX;
-        _maskLayer.path = [UIBezierPath bezierPathWithArcCenter:self.centerPoint radius:self.radius startAngle:-M_PI_2 endAngle:M_PI * 1.5 clockwise:YES].CGPath;
-    }
-    return _maskLayer;
 }
 
 @end

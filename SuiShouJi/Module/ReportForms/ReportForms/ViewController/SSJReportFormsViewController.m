@@ -553,7 +553,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJPercentCircleView *)chartView {
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
-        _chartView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _chartView.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _chartView.dataSource = self;
         [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -601,6 +601,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _incomeAndPaymentTitleLab.backgroundColor = [UIColor clearColor];
         _incomeAndPaymentTitleLab.font = [UIFont systemFontOfSize:15];
         _incomeAndPaymentTitleLab.textAlignment = NSTextAlignmentCenter;
+        _incomeAndPaymentTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _incomeAndPaymentTitleLab;
 }
@@ -614,6 +615,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
         _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
         _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
+        _incomeAndPaymentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _incomeAndPaymentMoneyLab;
 }

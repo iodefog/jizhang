@@ -23,6 +23,8 @@
 
 @property (nonatomic, strong) SSJPercentCircleAdditionGroupNode *additionGroupNode;
 
+@property (nonatomic, strong) UIView *contentView;
+
 @property (nonatomic, strong) UIImageView *skinView;
 
 @property (nonatomic) NSUInteger animateCounter;
@@ -37,12 +39,15 @@
 
 - (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets thickness:(CGFloat)thickness {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         self.circleInsets = insets;
         self.circleThickness = thickness;
         
+        self.contentView = [[UIView alloc] initWithFrame:self.bounds];
+        [self addSubview:self.contentView];
+        
         self.additionGroupNode = [SSJPercentCircleAdditionGroupNode node];
-        [self addSubview:self.additionGroupNode];
+        [self.contentView addSubview:self.additionGroupNode];
         
         self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
         self.skinView.hidden = YES;
@@ -54,6 +59,7 @@
 }
 
 - (void)layoutSubviews {
+    self.contentView.frame = self.bounds;
     [self updateCircleFrame];
 }
 
@@ -75,10 +81,10 @@
     
     if (!self.circleNode) {
         CGPoint center = CGPointMake(CGRectGetMidX(self.circleFrame), CGRectGetMidY(self.circleFrame));
-        CGFloat radius = CGRectGetWidth(self.circleFrame) * 0.5 - self.circleThickness;
-        CGFloat lineWith = self.circleThickness * 2;
+        CGFloat radius = CGRectGetWidth(self.circleFrame) * 0.5 - self.circleThickness * 0.5;
+        CGFloat lineWith = self.circleThickness;
         self.circleNode = [SSJPercentCircleNode nodeWithCenter:center radius:radius lineWith:lineWith];
-        [self addSubview:self.circleNode];
+        [self.contentView addSubview:self.circleNode];
     }
     
     NSMutableArray *circleNodeItems = [NSMutableArray arrayWithCapacity:numberOfComponents];
@@ -125,7 +131,7 @@
         }
     }
     
-    self.circleNode.hidden = NO;
+    self.contentView.hidden = NO;
 //    [self.circleNode stopAnimation];
     [self.additionGroupNode cleanUpAdditionNodes];
     
@@ -148,7 +154,7 @@
                     weakSelf.skinView.image = screentShot;
                     weakSelf.skinView.size = screentShot.size;
                     
-                    weakSelf.circleNode.hidden = YES;
+                    weakSelf.contentView.hidden = YES;
                 });
             });
         }];
