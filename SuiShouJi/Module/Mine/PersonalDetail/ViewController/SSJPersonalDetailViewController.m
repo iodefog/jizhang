@@ -125,7 +125,7 @@ static NSString *const kTitle7 = @"手势密码";
         [self.signatureModifyView show];
     }
     if ([title isEqualToString:kTitle7]) {
-        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
     }
 }

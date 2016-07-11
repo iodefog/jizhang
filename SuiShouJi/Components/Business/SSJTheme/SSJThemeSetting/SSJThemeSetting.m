@@ -87,6 +87,9 @@
     model.loginMainColor = @"#FFFFFF";
     model.loginSecondaryColor = @"#fab9bf";
     model.loginButtonTitleColor = @"#eb4a64";
+    model.motionPasswordNormalColor = @"#FFFFFF";
+    model.motionPasswordHighlightedColor = @"#ffdb01";
+    model.motionPasswordErrorColor = @"#eb4a64";
     
     return model;
 }

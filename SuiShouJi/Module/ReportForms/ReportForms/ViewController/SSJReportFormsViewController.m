@@ -134,6 +134,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     [_surplusView updateThemeColor];
+    
+    if (_customPeriod) {
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+    } else {
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -287,7 +293,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             wself.dateAxisView.hidden = YES;
             wself.customPeriodLab.hidden = NO;
             [wself updateCustomPeriodLab];
-            [wself.customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
+            [wself.customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
         };
         [self.navigationController pushViewController:calendarVC animated:YES];
         
