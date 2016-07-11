@@ -17,6 +17,7 @@
 #import "SSJMagicExportViewController.h"
 #import "SSJAboutusViewController.h"
 #import "SSJStartChecker.h"
+#import "SSJStartUpgradeAlertView.h"
 
 
 static NSString *const kTitle1 = @"自动同步设置";
@@ -204,14 +205,8 @@ static NSString *const kTitle4 = @"检查更新";
 //}
 
 -(void)quitLogButtonClicked:(id)sender {
-    //  退出登陆后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-    SSJClearLoginInfo();
-    [SSJUserTableManager reloadUserIdWithError:nil];
-    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-    [self.tableView reloadData];
-    [self.navigationController popViewControllerAnimated:YES];
+
+
 //    self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
 //    self.header.nicknameLabel.text = @"待君登录";
 //    [self.tableView reloadData];

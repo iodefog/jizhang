@@ -69,6 +69,7 @@
     }
     self.banner.imageUrls = self.images;
     [self setNeedsLayout];
+    [self.banner beginAutoRoll];
 }
 
 /*
