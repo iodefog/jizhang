@@ -29,9 +29,6 @@
 
 @property (nonatomic, strong) SSJRegistNetworkService *registCompleteService;
 
-//  背景图片
-@property (nonatomic,strong)UIImageView *backGroundImage;
-
 @end
 
 @implementation SSJRegistCompleteViewController
@@ -52,7 +49,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.backGroundImage];
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"login_bg"];
+    }
     [self.view addSubview:self.scrollView];
 //    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.passwordField];
@@ -65,9 +64,11 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -202,13 +203,6 @@
     return _scrollView;
 }
 
--(UIImageView *)backGroundImage{
-    if (!_backGroundImage) {
-        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
-    }
-    return _backGroundImage;
-}
 
 //- (SSJRegistOrderView *)stepView {
 //    if (!_stepView) {
@@ -220,10 +214,10 @@
 - (SSJBaselineTextField *)passwordField {
     if (!_passwordField) {
         _passwordField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
-        _passwordField.textColor = [UIColor whiteColor];
+        _passwordField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _passwordField.secureTextEntry = YES;
         _passwordField.font = [UIFont systemFontOfSize:15];
-        _passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入6-15位字母、数字组合" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
+        _passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入6-15位字母、数字组合" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _passwordField.delegate = self;
         _passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
@@ -235,9 +229,9 @@
         _finishBtn = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.passwordField.bottom + 40, self.view.width - 50, 40)];
         [_finishBtn setFontSize:16];
         [_finishBtn setTitle:@"下一步" forState:SSJBorderButtonStateNormal];
-        [_finishBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_finishBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:SSJBorderButtonStateNormal];
         [_finishBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [_finishBtn setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_finishBtn setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:SSJBorderButtonStateNormal];
         [_finishBtn addTarget:self action:@selector(finishBtnAction)];
     }
     return _finishBtn;
