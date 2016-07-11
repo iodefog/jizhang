@@ -72,7 +72,7 @@
     [super viewDidLoad];
     TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@""];
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"login_bg"];
     }
     [scrollView addSubview:self.tfPhoneNum];
     [scrollView addSubview:self.tfPassword];
