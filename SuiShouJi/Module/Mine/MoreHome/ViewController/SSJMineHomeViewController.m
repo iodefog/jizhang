@@ -152,7 +152,7 @@ static BOOL kNeedBannerDisplay = YES;
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle5]) {
         return 65;
     }
     return 55;
@@ -319,7 +319,7 @@ static BOOL kNeedBannerDisplay = YES;
     }else{
         mineHomeCell.cellDetail = @"";
     }
-    if ([mineHomeCell.cellTitle isEqualToString:kTitle4]) {
+    if ([mineHomeCell.cellTitle isEqualToString:kTitle5]) {
         mineHomeCell.cellSubTitle = @"反馈交流QQ群:552563622";
         mineHomeCell.hasMassage = _hasUreadMassage;
     }else{

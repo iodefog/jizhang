@@ -125,7 +125,7 @@
 
 -(void)statusButtonClicked:(id)sender{
 //    __weak typeof(self) weakSelf = self;
-    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"]) {
+    if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         __weak typeof(self) weakSelf = self;
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
@@ -134,11 +134,12 @@
                 weakSelf.themeChangeBlock();
             }
         } failure:^(NSError *error) {
-            
+            [CDAutoHideMessageHUD showMessage:@"下载失败"];
+            [weakSelf.themeStatusButton.button setTitle:@"下载" forState:UIControlStateNormal];
         }];
         self.themeStatusButton.downloadMaskView.hidden = NO;
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
-    }else{
+    }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
         [SSJThemeSetting switchToThemeID:self.item.themeId];
         if (self.themeChangeBlock) {
             self.themeChangeBlock();

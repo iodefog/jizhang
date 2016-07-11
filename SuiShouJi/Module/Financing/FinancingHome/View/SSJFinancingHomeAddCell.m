@@ -23,6 +23,7 @@
         [self.contentView addSubview:self.backImage];
         [self.contentView addSubview:self.addImage];
         [self.contentView addSubview:self.addLabel];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChange) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -35,6 +36,10 @@
     self.addImage.right = self.width / 2 - 40;
     self.addLabel.centerY = self.height / 2;
     self.addLabel.left = self.addImage.right + 10;
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(UIImageView *)backImage{
@@ -65,4 +70,11 @@
     }
     return _addLabel;
 }
+
+-(void)themeChange{
+    self.addLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.addImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.backImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+}
+
 @end

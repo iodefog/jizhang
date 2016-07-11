@@ -112,6 +112,11 @@ static id _instance;
                 NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
                 
                 if (!jsonData) {
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure(error);
+                        });
+                    }
                     SSJPRINT(@"<<< themeSettings.json 文件不存在 目录：%@>>>", themeSettingPath);
                     return;
                 }
@@ -119,6 +124,11 @@ static id _instance;
                 NSError *error = nil;
                 NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
                 if (error) {
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure(error);
+                        });
+                    }
                     SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
                     return;
                 }
