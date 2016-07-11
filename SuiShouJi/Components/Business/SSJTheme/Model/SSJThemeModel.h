@@ -106,4 +106,13 @@
 // 登录按钮标题颜色
 @property (nonatomic, copy) NSString *loginButtonTitleColor;
 
+// 手势密码普通状态颜色
+@property (nonatomic, copy) NSString *motionPasswordNormalColor;
+
+// 手势密码高亮状态颜色
+@property (nonatomic, copy) NSString *motionPasswordHighlightedColor;
+
+// 手势密码错误状态颜色
+@property (nonatomic, copy) NSString *motionPasswordErrorColor;
+
 @end

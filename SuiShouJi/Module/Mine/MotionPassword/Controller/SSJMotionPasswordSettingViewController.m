@@ -44,10 +44,9 @@
     [super viewDidLoad];
     
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 8)];
-    headerView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    headerView.backgroundColor = [UIColor clearColor];
     self.tableView.tableHeaderView = headerView;
     self.tableView.rowHeight = 60;
-    self.tableView.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -79,7 +78,7 @@
     SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellId"];
     if (!cell) {
         cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cellId"];
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:@"444444"];
+        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     cell.textLabel.text = [_titles ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row == 0) {

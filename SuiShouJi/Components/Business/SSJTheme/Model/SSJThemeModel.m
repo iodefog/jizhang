@@ -42,6 +42,9 @@
     [aCoder encodeObject:_loginMainColor forKey:@"loginMainColor"];
     [aCoder encodeObject:_loginSecondaryColor forKey:@"loginSecondaryColor"];
     [aCoder encodeObject:_loginButtonTitleColor forKey:@"loginButtonTitleColor"];
+    [aCoder encodeObject:_motionPasswordNormalColor forKey:@"motionPasswordNormalColor"];
+    [aCoder encodeObject:_motionPasswordHighlightedColor forKey:@"motionPasswordHighlightedColor"];
+    [aCoder encodeObject:_motionPasswordErrorColor forKey:@"motionPasswordErrorColor"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -77,6 +80,9 @@
         _loginMainColor = [aDecoder decodeObjectForKey:@"loginMainColor"];
         _loginSecondaryColor = [aDecoder decodeObjectForKey:@"loginSecondaryColor"];
         _loginButtonTitleColor = [aDecoder decodeObjectForKey:@"loginButtonTitleColor"];
+        _motionPasswordNormalColor = [aDecoder decodeObjectForKey:@"motionPasswordNormalColor"];
+        _motionPasswordHighlightedColor = [aDecoder decodeObjectForKey:@"motionPasswordHighlightedColor"];
+        _motionPasswordErrorColor = [aDecoder decodeObjectForKey:@"motionPasswordErrorColor"];
     }
     return self;
 }
@@ -86,10 +92,15 @@
                                                           @"name":_name,
                                                           @"size":_size,
                                                           @"previewUrlStr":_previewUrlStr,
+                                                          @"thumbUrlStr":_thumbUrlStr,
+                                                          @"previewUrlArr":_previewUrlArr,
+                                                          @"desc":_desc,
                                                           @"backgroundAlpha":@(_backgroundAlpha),
                                                           @"mainColor":_mainColor,
                                                           @"secondaryColor":_secondaryColor,
                                                           @"marcatoColor":_marcatoColor,
+                                                          @"mainFillColor":_mainFillColor,
+                                                          @"secondaryFillColor":_secondaryFillColor,
                                                           @"borderColor":_borderColor,
                                                           @"buttonColor":_buttonColor,
                                                           @"naviBarTitleColor":_naviBarTitleColor,
@@ -98,12 +109,20 @@
                                                           @"tabBarTitleColor":_tabBarTitleColor,
                                                           @"tabBarSelectedTitleColor":_tabBarSelectedTitleColor,
                                                           @"tabBarBackgroundColor":_tabBarBackgroundColor,
+                                                          @"tabBarShadowImageAlpha":@(_tabBarShadowImageAlpha),
                                                           @"cellSeparatorAlpha":@(_cellSeparatorAlpha),
                                                           @"cellSeparatorColor":_cellSeparatorColor,
                                                           @"cellIndicatorColor":_cellIndicatorColor,
                                                           @"moreHomeTitleColor":_moreHomeTitleColor,
                                                           @"moreHomeSubtitleColor":_moreHomeSubtitleColor,
-                                                          @"recordHomeCalendarColor":_recordHomeCalendarColor}];
+                                                          @"recordHomeBorderColor":_recordHomeBorderColor,
+                                                          @"recordHomeCalendarColor":_recordHomeCalendarColor,
+                                                          @"loginMainColor":_loginMainColor,
+                                                          @"loginSecondaryColor":_loginSecondaryColor,
+                                                          @"loginButtonTitleColor":_loginButtonTitleColor,
+                                                          @"motionPasswordNormalColor":_motionPasswordNormalColor,
+                                                          @"motionPasswordHighlightedColor":_motionPasswordHighlightedColor,
+                                                          @"motionPasswordErrorColor":_motionPasswordErrorColor}];
 }
 
 @end
