@@ -80,12 +80,10 @@ static const NSTimeInterval kDuration = 0.3;
 
 - (void)layoutSubviews {
     [self.titleLabel sizeToFit];
-    self.titleLabel.frame = CGRectMake(0, 0, self.width, MAX(kMinTitleHeight, self.titleLabel.height));
+    self.titleLabel.frame = CGRectMake(0, 0, self.width, _titleHeight);
 
     self.scrollView.contentSize = CGSizeMake(self.contentLabel.width, self.contentLabel.height);
     self.scrollView.frame = CGRectMake(15, self.titleLabel.bottom, self.contentLabel.width, _contentHeight);
-    
-    self.contentLabel.top = (self.scrollView.height - self.contentLabel.height) * 0.5;
     
     if (self.cancelButton.titleLabel.text.length
         && self.sureButton.titleLabel.text.length) {
@@ -112,7 +110,7 @@ static const NSTimeInterval kDuration = 0.3;
     
     _titleHeight = MAX(kMinTitleHeight, self.titleLabel.height);
     CGFloat maxContentHeight = [UIScreen mainScreen].bounds.size.height * 0.7 - _titleHeight - kButtonHeight;
-    _contentHeight = MIN(MAX(kMinContentHeight, self.contentLabel.height + 30), maxContentHeight);
+    _contentHeight = MIN(MAX(kMinContentHeight, self.contentLabel.height + 15), maxContentHeight);
     
     return CGSizeMake(width, _titleHeight + _contentHeight + kButtonHeight);
 }
