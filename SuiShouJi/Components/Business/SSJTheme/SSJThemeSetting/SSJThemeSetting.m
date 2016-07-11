@@ -70,6 +70,7 @@
     model.secondaryFillColor = @"#FFFFFF";
     model.borderColor = @"#cccccc";
     model.buttonColor = @"#eb4a64";
+    model.secondaryButtonColor = @"#FFFFFF";
     model.naviBarTitleColor = @"#000000";
     model.naviBarTintColor = @"#eb4a64";
     model.naviBarBackgroundColor = @"#FFFFFF";

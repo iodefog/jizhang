@@ -55,6 +55,9 @@
 // 按钮颜色
 @property (nonatomic, copy) NSString *buttonColor;
 
+// 次要按钮颜色（登录、注册、忘记密码）
+@property (nonatomic, copy) NSString *secondaryButtonColor;
+
 // 导航栏标题透明度
 @property (nonatomic, copy) NSString *naviBarTitleColor;
 

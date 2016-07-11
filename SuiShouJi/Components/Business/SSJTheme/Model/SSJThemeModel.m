@@ -26,6 +26,7 @@
     [aCoder encodeObject:_secondaryFillColor forKey:@"secondaryFillColor"];
     [aCoder encodeObject:_borderColor forKey:@"borderColor"];
     [aCoder encodeObject:_buttonColor forKey:@"buttonColor"];
+    [aCoder encodeObject:_secondaryButtonColor forKey:@"secondaryButtonColor"];
     [aCoder encodeObject:_naviBarTitleColor forKey:@"naviBarTitleColor"];
     [aCoder encodeObject:_naviBarTintColor forKey:@"naviBarTintColor"];
     [aCoder encodeObject:_naviBarBackgroundColor forKey:@"naviBarBackgroundColor"];
@@ -58,6 +59,7 @@
         _secondaryFillColor = [aDecoder decodeObjectForKey:@"secondaryFillColor"];
         _borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
         _buttonColor = [aDecoder decodeObjectForKey:@"buttonColor"];
+        _secondaryButtonColor = [aDecoder decodeObjectForKey:@"secondaryButtonColor"];
         _naviBarTitleColor = [aDecoder decodeObjectForKey:@"naviBarTitleColor"];
         _naviBarTintColor = [aDecoder decodeObjectForKey:@"naviBarTintColor"];
         _naviBarBackgroundColor = [aDecoder decodeObjectForKey:@"naviBarBackgroundColor"];
