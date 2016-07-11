@@ -376,6 +376,8 @@
 		7DDDA8001CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DDDA7FF1CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m */; };
 		7DDDA8111CBF75390029ADAC /* help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DDDA80F1CBF75390029ADAC /* help@2x.png */; };
 		7DDDA8121CBF75390029ADAC /* help@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DDDA8101CBF75390029ADAC /* help@3x.png */; };
+		7DE0896F1D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
+		7DE089701D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */; };
 		7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE2E9121C9C291C001868F5 /* SSJUmengManager.m */; };
 		7DE3AD761C5F26D5009B2131 /* SSJDataSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE3AD751C5F26D5009B2131 /* SSJDataSynchronizeTask.m */; };
 		7DE4A7DB1D20C0BA00F05BF0 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
@@ -2472,6 +2474,8 @@
 		7DDDA7FF1CBE53A60029ADAC /* UIView+SSJViewAnimatioin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SSJViewAnimatioin.m"; sourceTree = "<group>"; };
 		7DDDA80F1CBF75390029ADAC /* help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help@2x.png"; sourceTree = "<group>"; };
 		7DDDA8101CBF75390029ADAC /* help@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help@3x.png"; sourceTree = "<group>"; };
+		7DE0896D1D333ED4008431D6 /* SSJDatabaseVersion5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion5.h; sourceTree = "<group>"; };
+		7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion5.m; sourceTree = "<group>"; };
 		7DE27F991CB50F4600D5EB41 /* ZipZap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZipZap.xcodeproj; path = ZipZap/ZipZap.xcodeproj; sourceTree = "<group>"; };
 		7DE2E9111C9C291C001868F5 /* SSJUmengManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUmengManager.h; sourceTree = "<group>"; };
 		7DE2E9121C9C291C001868F5 /* SSJUmengManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUmengManager.m; sourceTree = "<group>"; };
@@ -4648,6 +4652,8 @@
 				7D5848731CE4557D0027DAFA /* SSJDatabaseVersion3.m */,
 				7DD3E5761CFBF2D1005A1ACB /* SSJDatabaseVersion4.h */,
 				7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */,
+				7DE0896D1D333ED4008431D6 /* SSJDatabaseVersion5.h */,
+				7DE0896E1D333ED4008431D6 /* SSJDatabaseVersion5.m */,
 			);
 			path = SSJDatabaseUpdater;
 			sourceTree = "<group>";
@@ -7835,6 +7841,7 @@
 				9C2A67771D194CA70010F1DA /* SSJRegistGetVerViewController.m in Sources */,
 				9C2A67781D194CA70010F1DA /* SSJFundingTypeSelectView.m in Sources */,
 				9C2A67791D194CA70010F1DA /* SSJViewControllerAddition.m in Sources */,
+				7DE089701D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
 				9C2A677A1D194CA70010F1DA /* SSJUserItem.m in Sources */,
 				9C2A677B1D194CA70010F1DA /* SSJMemoMakingView.m in Sources */,
 				9C47E6E41D222372005F338A /* SSJThemeDetailViewController.m in Sources */,
@@ -8333,6 +8340,7 @@
 				9C9471781CEB224C00D69079 /* SSJFinancingHomeAddCell.m in Sources */,
 				9C94718B1CEB224C00D69079 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,
+				7DE0896F1D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
 				7D5F33741CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m in Sources */,
 				9CD9BC4A1CFDA4990061803B /* SSJFundingTransferDetailItem.m in Sources */,
@@ -8731,7 +8739,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
+				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
