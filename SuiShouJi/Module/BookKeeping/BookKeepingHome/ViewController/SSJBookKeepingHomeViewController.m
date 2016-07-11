@@ -617,6 +617,8 @@
     [self.homeButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
     [self.rightBarButton updateAfterThemeChange];
+    
+    _noDataHeader.image = [UIImage ssj_themeImageWithName:@"home_none"];
 }
 
 -(void)getDateFromDatebase{

@@ -94,7 +94,7 @@ static id _instance;
         [_blockerMapping removeObjectForKey:ID];
         if (error) {
             [self.downLoadingArr removeObject:ID];
-            NSLog(@"%@",[error localizedDescription]);
+            SSJPRINT(@"%@",[error localizedDescription]);
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure(error);
@@ -112,7 +112,7 @@ static id _instance;
                 NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
                 
                 if (!jsonData) {
-                    SSJPRINT(@"<<< themeSettings.json 文件不存在 >>>");
+                    SSJPRINT(@"<<< themeSettings.json 文件不存在 目录：%@>>>", themeSettingPath);
                     return;
                 }
                 
