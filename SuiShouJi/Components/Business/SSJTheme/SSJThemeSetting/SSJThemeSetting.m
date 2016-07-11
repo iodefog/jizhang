@@ -70,7 +70,6 @@
     model.secondaryFillColor = @"#FFFFFF";
     model.borderColor = @"#cccccc";
     model.buttonColor = @"#eb4a64";
-    model.secondaryButtonColor = @"#FFFFFF";
     model.naviBarTitleColor = @"#000000";
     model.naviBarTintColor = @"#eb4a64";
     model.naviBarBackgroundColor = @"#FFFFFF";
@@ -85,6 +84,10 @@
     model.moreHomeSubtitleColor = @"#fab9bf";
     model.recordHomeBorderColor = @"#eb4a64";
     model.recordHomeCalendarColor = @"#eb4a64";
+    model.loginMainColor = @"#FFFFFF";
+    model.loginSecondaryColor = @"#fab9bf";
+    model.loginButtonTitleColor = @"#eb4a64";
+    
     return model;
 }
 

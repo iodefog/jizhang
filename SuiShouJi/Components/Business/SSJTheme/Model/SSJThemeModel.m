@@ -26,7 +26,6 @@
     [aCoder encodeObject:_secondaryFillColor forKey:@"secondaryFillColor"];
     [aCoder encodeObject:_borderColor forKey:@"borderColor"];
     [aCoder encodeObject:_buttonColor forKey:@"buttonColor"];
-    [aCoder encodeObject:_secondaryButtonColor forKey:@"secondaryButtonColor"];
     [aCoder encodeObject:_naviBarTitleColor forKey:@"naviBarTitleColor"];
     [aCoder encodeObject:_naviBarTintColor forKey:@"naviBarTintColor"];
     [aCoder encodeObject:_naviBarBackgroundColor forKey:@"naviBarBackgroundColor"];
@@ -40,6 +39,9 @@
     [aCoder encodeObject:_moreHomeSubtitleColor forKey:@"moreHomeSubtitleColor"];
     [aCoder encodeObject:_recordHomeBorderColor forKey:@"recordHomeBorderColor"];
     [aCoder encodeObject:_recordHomeCalendarColor forKey:@"recordHomeCalendarColor"];
+    [aCoder encodeObject:_loginMainColor forKey:@"loginMainColor"];
+    [aCoder encodeObject:_loginSecondaryColor forKey:@"loginSecondaryColor"];
+    [aCoder encodeObject:_loginButtonTitleColor forKey:@"loginButtonTitleColor"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -59,7 +61,6 @@
         _secondaryFillColor = [aDecoder decodeObjectForKey:@"secondaryFillColor"];
         _borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
         _buttonColor = [aDecoder decodeObjectForKey:@"buttonColor"];
-        _secondaryButtonColor = [aDecoder decodeObjectForKey:@"secondaryButtonColor"];
         _naviBarTitleColor = [aDecoder decodeObjectForKey:@"naviBarTitleColor"];
         _naviBarTintColor = [aDecoder decodeObjectForKey:@"naviBarTintColor"];
         _naviBarBackgroundColor = [aDecoder decodeObjectForKey:@"naviBarBackgroundColor"];
@@ -73,6 +74,9 @@
         _moreHomeSubtitleColor = [aDecoder decodeObjectForKey:@"moreHomeSubtitleColor"];
         _recordHomeBorderColor = [aDecoder decodeObjectForKey:@"recordHomeBorderColor"];
         _recordHomeCalendarColor = [aDecoder decodeObjectForKey:@"recordHomeCalendarColor"];
+        _loginMainColor = [aDecoder decodeObjectForKey:@"loginMainColor"];
+        _loginSecondaryColor = [aDecoder decodeObjectForKey:@"loginSecondaryColor"];
+        _loginButtonTitleColor = [aDecoder decodeObjectForKey:@"loginButtonTitleColor"];
     }
     return self;
 }
