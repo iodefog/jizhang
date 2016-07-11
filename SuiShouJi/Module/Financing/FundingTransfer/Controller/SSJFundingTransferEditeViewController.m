@@ -84,6 +84,7 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJFundingTransferEdite *cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferEditeCellIdentifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     cell.cellTitle = title;
     if ([title isEqualToString:kTitle1]) {
