@@ -18,11 +18,11 @@
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
+@property (nonatomic, strong) UIImageView *backgroundView;
+
 @property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
 
 @property (nonatomic) BOOL isDatabaseInitFinished;
-
-@property (nonatomic, strong) UIImageView *backgroundView;
 
 @end
 

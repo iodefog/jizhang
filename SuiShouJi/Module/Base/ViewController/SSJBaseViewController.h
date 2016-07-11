@@ -12,6 +12,11 @@
 @interface SSJBaseViewController : UIViewController <SSJBaseNetworkServiceDelegate>
 
 /**
+ *  背景图片
+ */
+@property (nonatomic, strong, readonly) UIImageView *backgroundView;
+
+/**
  *  统计标题
  */
 @property (nonatomic, copy) NSString *statisticsTitle;
