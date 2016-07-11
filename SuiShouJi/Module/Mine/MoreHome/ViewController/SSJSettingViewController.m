@@ -204,14 +204,6 @@ static NSString *const kTitle4 = @"检查更新";
 //    return _loggedFooterView;
 //}
 
--(void)quitLogButtonClicked:(id)sender {
-
-
-//    self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
-//    self.header.nicknameLabel.text = @"待君登录";
-//    [self.tableView reloadData];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

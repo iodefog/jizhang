@@ -48,6 +48,8 @@ NSString *const SSJLastPatchVersionKey = @"lastPatchVersionKey";
 
 NSString *const SSJCurrentBooksTypeKey = @"currentBooksTypeKey";
 
+NSString *const SSJLastLoggedUserItemKey = @"SSJLastLoggedUserItemKey";
+
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 

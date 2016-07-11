@@ -33,6 +33,7 @@
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJStartUpgradeAlertView.h"
 
 
 @interface SSJBookKeepingHomeViewController ()
@@ -81,32 +82,10 @@
     [super viewWillAppear:animated];
  //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 //    _hasLoad = YES;
+    [self popIfNeeded];
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
-    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
-        NSDate *currentDate = [NSDate date];
-        NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
-        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
-        int days=((int)time)/(3600*24);
-        if (days > 7) {
-            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
-            popView.frame = [UIScreen mainScreen].bounds;
-            __weak typeof(self) weakSelf = self;
-            popView.loginBtnClickBlock = ^(){
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            };
-            popView.registerBtnClickBlock = ^(){
-                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
-                registerVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:registerVC animated:YES];
-            };
-            [[UIApplication sharedApplication].keyWindow addSubview:popView];
-            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
-        }
-    }
     [self getCurrentDate];
     
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
@@ -609,6 +588,44 @@
 }
 
 #pragma mark - Private
+-(void)popIfNeeded{
+    __weak typeof(self) weakSelf = self;
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined()) {
+        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            [alert dismiss];
+        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+            [weakSelf.navigationController pushViewController:loginVc animated:YES];
+            [alert dismiss];
+        }];
+        [alert show];
+    }
+    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
+        NSDate *currentDate = [NSDate date];
+        NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
+        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
+        int days=((int)time)/(3600*24);
+        if (days > 7) {
+            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
+            popView.frame = [UIScreen mainScreen].bounds;
+            popView.loginBtnClickBlock = ^(){
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            };
+            popView.registerBtnClickBlock = ^(){
+                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
+                registerVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:registerVC animated:YES];
+            };
+            [[UIApplication sharedApplication].keyWindow addSubview:popView];
+            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
+        }
+    }
+
+}
+
 -(void)updateAppearanceAfterThemeChanged{
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
