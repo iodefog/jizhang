@@ -85,18 +85,22 @@ static const NSTimeInterval kDuration = 0.3;
     self.scrollView.contentSize = CGSizeMake(self.contentLabel.width, self.contentLabel.height);
     self.scrollView.frame = CGRectMake(15, self.titleLabel.bottom, self.contentLabel.width, _contentHeight);
     
-    if (self.cancelButton.titleLabel.text.length
-        && self.sureButton.titleLabel.text.length) {
+    if ([self.cancelButton titleForState:UIControlStateNormal].length
+        && [self.sureButton titleForState:UIControlStateNormal].length) {
+        
         self.cancelButton.frame = CGRectMake(0, self.scrollView.bottom, self.width * 0.5, kButtonHeight);
         self.sureButton.frame = CGRectMake(self.width * 0.5, self.scrollView.bottom, self.width * 0.5, kButtonHeight);
-    } else if (self.cancelButton.titleLabel.text.length
-               && !self.sureButton.titleLabel.text.length) {
+        
+    } else if ([self.cancelButton titleForState:UIControlStateNormal].length
+               && ![self.sureButton titleForState:UIControlStateNormal].length) {
+        
         self.cancelButton.frame = CGRectMake(0, self.scrollView.bottom, self.width, kButtonHeight);
-    } else if (!self.cancelButton.titleLabel.text.length
-               && self.sureButton.titleLabel.text.length) {
+        
+    } else if (![self.cancelButton titleForState:UIControlStateNormal].length
+               && [self.sureButton titleForState:UIControlStateNormal].length) {
+        
         self.sureButton.frame = CGRectMake(0, self.scrollView.bottom, self.width, kButtonHeight);
     }
-    
     
     [self.cancelButton ssj_relayoutBorder];
     [self.sureButton ssj_relayoutBorder];
