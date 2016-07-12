@@ -73,7 +73,8 @@
                     @"writeDate":@"cwritedate",
                     @"motionTrackState":@"cmotionPwdTrackState",
                     @"fingerPrintState":@"cfingerPrintState",
-                    @"currentBooksId":@"ccurrentBooksId"};
+                    @"currentBooksId":@"ccurrentBooksId",
+                    @"loginType":@"loginType"};
     }
     return mapping;
 }
