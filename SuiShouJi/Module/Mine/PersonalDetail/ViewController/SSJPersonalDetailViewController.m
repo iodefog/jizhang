@@ -254,6 +254,9 @@ static NSString *const kTitle7 = @"手势密码";
         [alert dismiss];
     } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
         //  退出登陆后强制同步一次
+        SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+        NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
+        [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         SSJClearLoginInfo();
         [SSJUserTableManager reloadUserIdWithError:nil];
@@ -261,9 +264,6 @@ static NSString *const kTitle7 = @"手势密码";
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
         [weakSelf.tableView reloadData];
         [weakSelf.navigationController popViewControllerAnimated:YES];
-        SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
-        NSData *archiveCarPriceData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
-        [[NSUserDefaults standardUserDefaults] setObject:archiveCarPriceData forKey:SSJLastLoggedUserItemKey];
         [alert dismiss];
     }];
     

@@ -20,6 +20,7 @@
 #import "SSJFundingDailySumCell.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJFundingTransferEditeViewController.h"
+#import "SSJFundingDetailNoDataView.h"
 
 #import "FMDB.h"
 
@@ -34,6 +35,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 @property (nonatomic, strong) NSArray *datas;
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
 @property(nonatomic, strong)  NSMutableArray <SSJFundingDetailListItem *>  *listItems;
+@property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -60,6 +62,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
     self.tableView.tableHeaderView = self.header;
+    [self.view addSubview:self.noDataHeader];
 }
 
 
@@ -78,6 +81,11 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
         weakSelf.listItems = [NSMutableArray arrayWithArray:data];
         [weakSelf.tableView reloadData];
         [weakSelf.view ssj_hideLoadingIndicator];
+        if (data.count == 0) {
+            self.noDataHeader.hidden = NO;
+        }else{
+            self.noDataHeader.hidden = YES;
+        }
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
     }];
@@ -119,29 +127,16 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (self.listItems.count == 0) {
-        SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
-        headerView.item = [self.listItems objectAtIndex:section];
-        __weak typeof(self) weakSelf = self;
-        headerView.SectionHeaderClickedBlock = ^(){
-            [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
-            [weakSelf.tableView beginUpdates];
-            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
-            [weakSelf.tableView endUpdates];
-        };
-        return headerView;
-    }else{
-        SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
-        headerView.item = [self.listItems objectAtIndex:section];
-        __weak typeof(self) weakSelf = self;
-        headerView.SectionHeaderClickedBlock = ^(){
-            [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
-            [weakSelf.tableView beginUpdates];
-            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
-            [weakSelf.tableView endUpdates];
-        };
-        return headerView;
-    }
+    SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
+    headerView.item = [self.listItems objectAtIndex:section];
+    __weak typeof(self) weakSelf = self;
+    headerView.SectionHeaderClickedBlock = ^(){
+        [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
+        [weakSelf.tableView beginUpdates];
+        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+        [weakSelf.tableView endUpdates];
+    };
+    return headerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -175,14 +170,17 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.listItems.count == 0) {
-        return self.view.height - 107;
-    }else{
-        return 60;
-    }
+    return 60;
 }
 
 #pragma mark - Getter
+-(SSJFundingDetailNoDataView *)noDataHeader{
+    if (!_noDataHeader) {
+        _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 171                           , self.view.width, self.view.height - 171)];
+    }
+    return _noDataHeader;
+}
+
 -(SSJFundingDetailHeader *)header{
     if (!_header) {
         _header = [[SSJFundingDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 107)];
