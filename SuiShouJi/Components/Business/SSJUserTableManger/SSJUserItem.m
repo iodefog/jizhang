@@ -68,7 +68,6 @@
                     @"idCardNo":@"cidcard",
                     @"registerState":@"cregisterstate",
                     @"defaultFundAcctState":@"cdefaultfundacctstate",
-                    @"defaultBooksType":@"cdefaultbookstype",
                     @"icon":@"cicons",
                     @"signature":@"usersignature",
                     @"writeDate":@"cwritedate",
