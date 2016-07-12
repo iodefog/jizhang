@@ -92,6 +92,7 @@ static id _instance;
         return fileURL;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
         [_blockerMapping removeObjectForKey:ID];
+        
         if (error) {
             [self.downLoadingArr removeObject:ID];
             SSJPRINT(@"%@",[error localizedDescription]);
@@ -101,47 +102,56 @@ static id _instance;
                 });
             }
             return;
-        }else{
-            [self.downLoadingArr removeObject:ID];
-            [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
-            if ([self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
-                [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
-                
-                // 解析主题配置文件，
-                NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
-                NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
-                
-                if (!jsonData) {
-                    if (failure) {
-                        SSJDispatch_main_async_safe(^{
-                            failure(error);
-                        });
-                    }
-                    SSJPRINT(@"<<< themeSettings.json 文件不存在 目录：%@>>>", themeSettingPath);
-                    return;
-                }
-                
-                NSError *error = nil;
-                NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-                if (error) {
-                    if (failure) {
-                        SSJDispatch_main_async_safe(^{
-                            failure(error);
-                        });
-                    }
-                    SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
-                    return;
-                }
-                
-                SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
-                [SSJThemeSetting addThemeModel:model];
-            };
-            
-            if (success) {
+        }
+        
+        [self.downLoadingArr removeObject:ID];
+        [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
+        
+        if (![self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
+            SSJPRINT(@"%@",[error localizedDescription]);
+            if (failure) {
                 SSJDispatch_main_async_safe(^{
-                    success();
+                    failure(error);
                 });
             }
+            return;
+        };
+        
+        [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
+        
+        // 解析主题配置文件，
+        NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
+        NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
+        
+        if (!jsonData) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure(error);
+                });
+            }
+            SSJPRINT(@"<<< themeSettings.json 文件不存在 目录：%@>>>", themeSettingPath);
+            return;
+        }
+        
+        NSError *tError = nil;
+        NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
+        if (tError) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure(tError);
+                });
+            }
+            SSJPRINT(@"<<< 解析主题json文件错误 error：%@ >>>", error);
+            return;
+        }
+        
+        SSJThemeModel *model = [SSJThemeModel mj_objectWithKeyValues:resultInfo];
+        [SSJThemeSetting addThemeModel:model];
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
         }
     }];
     
