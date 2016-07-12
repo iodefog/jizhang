@@ -69,7 +69,7 @@ static const NSTimeInterval kDuration = 0.3;
         
         if (cancelButtonTitle.length && sureButtonTitle.length) {
             [self.cancelButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-            [self.cancelButton ssj_setBorderStyle:SSJBorderStyleBottom];
+            [self.cancelButton ssj_setBorderStyle:(SSJBorderStyleRight | SSJBorderStyleTop)];
             [self.cancelButton ssj_setBorderWidth:1];
         }
         
