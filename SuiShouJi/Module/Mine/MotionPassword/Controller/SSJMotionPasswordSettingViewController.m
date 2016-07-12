@@ -90,7 +90,7 @@
     } else if (indexPath.row == 2) {
         cell.accessoryView = nil;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     } else if (indexPath.row == 3) {
         cell.accessoryView = self.fingerSwitch;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;

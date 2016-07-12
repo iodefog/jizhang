@@ -85,11 +85,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-}
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *text = textField.text ? : @"";
@@ -245,7 +240,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_authCodeField) {
         _authCodeField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, self.phoneNoField.bottom, self.view.width - 50, 50) contentHeight:34];
         _authCodeField.font = [UIFont systemFontOfSize:15];
-        _authCodeField.textColor = [UIColor whiteColor];
+        _authCodeField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _authCodeField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _authCodeField.delegate = self;
         _authCodeField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -276,7 +271,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         }
         [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
-        [_getAuthCodeBtn ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor]];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:2];
         [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 0, 4, 0)];

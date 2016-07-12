@@ -72,14 +72,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self beginCountdownIfNeeded];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    [self.networkService cancel];
-    if ([self isBeingPresented] || [self isMovingFromParentViewController]) {
-        [self.countdownTimer invalidate];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     }
 }
 
@@ -89,14 +89,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     [self.authCodeTextField becomeFirstResponder];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
-        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.networkService cancel];
+    if ([self isBeingPresented] || [self isMovingFromParentViewController]) {
+        [self.countdownTimer invalidate];
     }
 }
 
@@ -241,7 +239,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
             [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         }
         [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
-        [_getAuthCodeBtn ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor]];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:2];
         [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 0, 4, 0)];

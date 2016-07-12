@@ -22,7 +22,7 @@
     if (self) {
         [self ssj_setBorderWidth:1.f];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
-        [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         self.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.btn];
         [self addSubview:self.dateLabel];

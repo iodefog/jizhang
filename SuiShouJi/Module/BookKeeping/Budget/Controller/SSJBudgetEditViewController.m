@@ -428,7 +428,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        budgetPeriodCell.selectionStyle = UITableViewCellSelectionStyleGray;
+        budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
 }
 

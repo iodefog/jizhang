@@ -243,7 +243,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle4] || [title isEqualToString:kTitle5] || [title isEqualToString:kTitle10]) {
         circleModifyCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }else{
-        circleModifyCell.selectionStyle = UITableViewCellSelectionStyleGray;
+        circleModifyCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
     if ([title isEqualToString:kTitle10]) {
         circleModifyCell.cellSubTitle = title;
@@ -349,6 +349,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }

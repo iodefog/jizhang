@@ -230,6 +230,7 @@
 
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }
@@ -237,7 +238,7 @@
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
         _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
-        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
+//        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
     return _rightBarButton;
 }

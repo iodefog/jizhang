@@ -113,21 +113,21 @@
     switch (indexPath.section) {
         case 0:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.placeholder = @"请输入账户名称";
+            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             _nameTextField = NewFundingCell.cellText;
             _nameTextField.delegate = self;
         }
             break;
         case 1:{
             _amountTextField = NewFundingCell.cellText;
-            NewFundingCell.cellText.placeholder = @"请输入账户余额";
+            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             NewFundingCell.cellText.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             _amountTextField.delegate = self;
         }
             break;
         case 2:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.placeholder = @"备注说明";
+            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             _memoTextField = NewFundingCell.cellText;
             _memoTextField.delegate = self;
 
@@ -189,6 +189,7 @@
         _tableview.backgroundColor = [UIColor clearColor];
         _tableview.delegate = self;
         _tableview.dataSource = self;
+        _tableview.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableview;
 }

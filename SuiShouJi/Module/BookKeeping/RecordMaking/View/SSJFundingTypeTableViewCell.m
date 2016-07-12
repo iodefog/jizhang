@@ -45,7 +45,7 @@
     if (!_fundingTitle) {
         _fundingTitle = [[UILabel alloc]initWithFrame:CGRectZero];
         _fundingTitle.font = [UIFont systemFontOfSize:15];
-        _fundingTitle.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _fundingTitle.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _fundingTitle;
 }
@@ -82,9 +82,9 @@
                                range:[string rangeOfString:self.item.fundingName]];
             [attrString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15]
                                range:[string rangeOfString:[NSString stringWithFormat:@"(%@)",self.item.fundingMemo]]];
-            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"393939"]
+            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]
                                range:[string rangeOfString:self.item.fundingName]];
-            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"a7a7a7"]
+            [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]
                                range:[string rangeOfString:[NSString stringWithFormat:@"(%@)",self.item.fundingMemo]]];
             _fundingTitle.attributedText = attrString;
         }
