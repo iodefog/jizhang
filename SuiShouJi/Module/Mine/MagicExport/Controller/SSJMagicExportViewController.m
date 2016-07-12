@@ -279,6 +279,11 @@
         return;
     }
     
+    if (![self.emailTextField.text ssj_validEmial]) {
+        [CDAutoHideMessageHUD showMessage:@"邮件格式不正确"];
+        return;
+    }
+    
     if (!_service) {
         _service = [[SSJMagicExportService alloc] initWithDelegate:self];
         _service.showLodingIndicator = YES;

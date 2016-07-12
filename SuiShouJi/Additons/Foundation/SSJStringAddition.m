@@ -18,15 +18,6 @@
 }
 
 - (NSString *)ssj_md5HexDigest {
-//    const char* str = [self UTF8String];
-//    unsigned char result[CC_MD5_DIGEST_LENGTH];
-//    CC_MD5(str, (CC_LONG)strlen(str), result);
-//    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH*2];//
-//    for(int i = 0; i<CC_MD5_DIGEST_LENGTH; i++) {
-//        [ret appendFormat:@"%02x",result[i]];
-//    }
-//    return [ret lowercaseString];
-    
     return [[self dataUsingEncoding:NSUTF8StringEncoding] md5Hash];
 }
 
@@ -130,10 +121,10 @@
     return self;
 }
 
-
 @end
 
 @implementation NSString (SSJFilter)
+
 - (NSString *)ssj_emojiFilter{
     NSMutableString *tempStr = [NSMutableString string];
     NSString *regEx = @"^[A-Za-z\\d\\u4E00-\\u9FA5\\p{P}‘’“”]+";
@@ -145,4 +136,15 @@
     }
     return [NSString stringWithFormat:@"%@",tempStr];
 }
+
+@end
+
+@implementation NSString (SSJRegex)
+
+- (BOOL)ssj_validEmial {
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:self];
+}
+
 @end
