@@ -85,6 +85,9 @@
 // cell右侧箭头颜色
 @property (nonatomic, copy) NSString *cellIndicatorColor;
 
+// cell点击效果
+@property (nonatomic) UITableViewCellSelectionStyle cellSelectionStyle;
+
 // 更多首页顶部主要标题颜色（用户名、云同步、签到）
 @property (nonatomic, copy) NSString *moreHomeTitleColor;
 

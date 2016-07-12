@@ -26,7 +26,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.selectionStyle = UITableViewCellSelectionStyleGray;
+        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         self.contentView.backgroundColor = [UIColor clearColor];
         
@@ -74,6 +74,7 @@
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
+    self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
 }

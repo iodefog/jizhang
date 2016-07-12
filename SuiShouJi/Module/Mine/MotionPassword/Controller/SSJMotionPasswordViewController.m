@@ -507,9 +507,9 @@ static const int kVerifyFailureTimesLimit = 5;
         _miniMotionView = [[SCYMotionEncryptionView alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
         _miniMotionView.userInteractionEnabled = NO;
         _miniMotionView.circleRadius = 5;
-        _miniMotionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_compatibleImageNamed:@"motion_circle_default"],
-                                      @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_compatibleImageNamed:@"motion_circle_correct"],
-                                      @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_compatibleImageNamed:@"motion_circle_error"]};
+        _miniMotionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_themeImageWithName:@"motion_circle_default"],
+                                      @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_themeImageWithName:@"motion_circle_correct"],
+                                      @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_themeImageWithName:@"motion_circle_error"]};
     }
     return _miniMotionView;
 }
@@ -519,14 +519,18 @@ static const int kVerifyFailureTimesLimit = 5;
         _motionView = [[SCYMotionEncryptionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width * 0.8, self.view.width * 0.8)];
         _motionView.delegate = self;
         _motionView.showStroke = YES;
-        SSJThemeModel *model = SSJ_CURRENT_THEME;
+//        SSJThemeModel *model = SSJ_CURRENT_THEME;
         _motionView.strokeColorInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordHighlightedColor],
                                         @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordHighlightedColor],
                                         @(SCYMotionEncryptionCircleLayerStatusError):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor]};
+//        _motionView.strokeColorInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIColor ssj_colorWithHex:@"#ffdb01"],
+//                                        @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIColor ssj_colorWithHex:@"#ffdb01"],
+//                                        @(SCYMotionEncryptionCircleLayerStatusError):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor]};
+
         _motionView.circleRadius = self.view.width * 0.1;
-        _motionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_compatibleImageNamed:@"motion_circle_default"],
-                                  @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_compatibleImageNamed:@"motion_circle_correct"],
-                                  @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_compatibleImageNamed:@"motion_circle_error"]};
+        _motionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_themeImageWithName:@"motion_circle_default"],
+                                  @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_themeImageWithName:@"motion_circle_correct"],
+                                  @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_themeImageWithName:@"motion_circle_error"]};
     }
     return _motionView;
 }
