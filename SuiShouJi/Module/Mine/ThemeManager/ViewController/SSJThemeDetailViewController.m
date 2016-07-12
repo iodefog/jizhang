@@ -72,6 +72,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     [super viewWillAppear:animated];
     if ([[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         __weak typeof(self) weakSelf = self;
+        [self.themeDownLoadButton.button setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
             weakSelf.themeDownLoadButton.downloadProgress = progress;
         } forID:self.item.themeId];
@@ -122,7 +123,8 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
-            
+            [CDAutoHideMessageHUD showMessage:@"下载失败"];
+            [weakSelf.themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
         }];
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
             weakSelf.themeDownLoadButton.downloadProgress = progress;

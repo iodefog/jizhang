@@ -55,7 +55,6 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = self.rightButton;
     self.title = self.item.fundingName;
-    self.tableView.rowHeight = 55;
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
@@ -120,16 +119,29 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
-    headerView.item = [self.listItems objectAtIndex:section];
-    __weak typeof(self) weakSelf = self;
-    headerView.SectionHeaderClickedBlock = ^(){
-        [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
-        [weakSelf.tableView beginUpdates];
-        [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
-        [weakSelf.tableView endUpdates];
-    };
-    return headerView;
+    if (self.listItems.count == 0) {
+        SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
+        headerView.item = [self.listItems objectAtIndex:section];
+        __weak typeof(self) weakSelf = self;
+        headerView.SectionHeaderClickedBlock = ^(){
+            [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
+            [weakSelf.tableView beginUpdates];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+            [weakSelf.tableView endUpdates];
+        };
+        return headerView;
+    }else{
+        SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
+        headerView.item = [self.listItems objectAtIndex:section];
+        __weak typeof(self) weakSelf = self;
+        headerView.SectionHeaderClickedBlock = ^(){
+            [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
+            [weakSelf.tableView beginUpdates];
+            [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+            [weakSelf.tableView endUpdates];
+        };
+        return headerView;
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -162,6 +174,14 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     }
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (self.listItems.count == 0) {
+        return self.view.height - 107;
+    }else{
+        return 60;
+    }
+}
+
 #pragma mark - Getter
 -(SSJFundingDetailHeader *)header{
     if (!_header) {
@@ -174,11 +194,6 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     return _header;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 60;
-}
-
-#pragma mark - Getter
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"edit"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
