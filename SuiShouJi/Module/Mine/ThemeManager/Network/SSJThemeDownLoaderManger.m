@@ -107,7 +107,13 @@ static id _instance;
         [self.downLoadingArr removeObject:ID];
         [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
         
-        if (![self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&error]) {
+        NSError *tError = nil;
+        [self unzipUrl:filePath path:[NSString ssj_themeDirectory] error:&tError];
+        
+        // 不管解压是否成功，把压缩包删除，否则可能会导致以后下载相同压缩包不能覆盖的奇葩问题
+        [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
+        
+        if (tError) {
             SSJPRINT(@"%@",[error localizedDescription]);
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -115,9 +121,7 @@ static id _instance;
                 });
             }
             return;
-        };
-        
-        [[NSFileManager defaultManager] removeItemAtURL:filePath error:&error];
+        }
         
         // 解析主题配置文件，
         NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
@@ -133,7 +137,6 @@ static id _instance;
             return;
         }
         
-        NSError *tError = nil;
         NSDictionary *resultInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
         if (tError) {
             if (failure) {
