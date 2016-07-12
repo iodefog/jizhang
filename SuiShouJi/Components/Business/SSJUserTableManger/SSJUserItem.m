@@ -28,7 +28,7 @@
     [aCoder encodeObject:_motionTrackState forKey:@"motionTrackState"];
     [aCoder encodeObject:_fingerPrintState forKey:@"fingerPrintState"];
     [aCoder encodeObject:_currentBooksId forKey:@"currentBooksId"];
-    [aCoder encodeInteger:_loginType forKey:@"loginType"];
+    [aCoder encodeObject:_loginType forKey:@"loginType"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -48,7 +48,7 @@
         _motionTrackState = [aDecoder decodeObjectForKey:@"motionTrackState"];
         _fingerPrintState = [aDecoder decodeObjectForKey:@"fingerPrintState"];
         _currentBooksId = [aDecoder decodeObjectForKey:@"currentBooksId"];
-        _loginType = [aDecoder decodeIntegerForKey:@"loginType"];
+        _loginType = [aDecoder decodeObjectForKey:@"loginType"];
      }
     return self;
 }

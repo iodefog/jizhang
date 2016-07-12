@@ -193,15 +193,34 @@
         NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
         SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
         if ([self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
-//            NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
-//            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//                [alert dismiss];
-//            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//                SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
-//                [weakSelf.navigationController pushViewController:loginVc animated:YES];
-//                [alert dismiss];
-//            }];
-//            [alert show];
+            NSString *userName;
+            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+                userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+            }else{
+                userName = lastUserItem.nickName;
+            }
+            NSString *hintStr;
+            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+                hintStr = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+            }else if ([lastUserItem.loginType isEqualToString:@"1"]) {
+                hintStr = [NSString stringWithFormat:@"您已使用过qq%@登陆过,确定使用新账户登录",userName];
+            }else if ([lastUserItem.loginType isEqualToString:@"2"]) {
+                hintStr = [NSString stringWithFormat:@"您已使用过微信%@登陆过,确定使用新账户登录",userName];
+            }
+            NSString *fullhint = [NSString stringWithFormat:@"%@\n\n登陆后新的记账数据将同步到新账号",hintStr];
+            NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:fullhint];
+            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[fullhint rangeOfString:hintStr]];
+            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
+            [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[fullhint rangeOfString:userName]];
+            [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
+            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+                [alert dismiss];
+            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+                SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+                [weakSelf.navigationController pushViewController:loginVc animated:YES];
+                [alert dismiss];
+            }];
+            [alert show];
         }
     }
     //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
