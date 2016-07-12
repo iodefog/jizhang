@@ -29,6 +29,7 @@
 #import "WXApi.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
+#import "SSJStartUpgradeAlertView.h"
 #import "SSJLoginHelper.h"
 
 
@@ -188,9 +189,20 @@
     }
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
+        __weak typeof(self) weakSelf = self;
         NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
         SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-        NSLog(@"%@",lastUserItem.userId);
+        if ([self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
+//            NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+//            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//                [alert dismiss];
+//            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//                SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+//                [weakSelf.navigationController pushViewController:loginVc animated:YES];
+//                [alert dismiss];
+//            }];
+//            [alert show];
+        }
     }
     //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
