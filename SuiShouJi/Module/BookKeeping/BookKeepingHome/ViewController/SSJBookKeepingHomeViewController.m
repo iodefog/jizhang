@@ -35,6 +35,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJStartUpgradeAlertView.h"
 
+BOOL kHomeNeedLoginPop;
 
 @interface SSJBookKeepingHomeViewController ()
 
@@ -59,8 +60,6 @@
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
-
-
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -590,7 +589,8 @@
 #pragma mark - Private
 -(void)popIfNeeded{
     __weak typeof(self) weakSelf = self;
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined()) {
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
+        kHomeNeedLoginPop = NO;
         NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
         SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
             [alert dismiss];

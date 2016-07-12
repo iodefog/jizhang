@@ -349,6 +349,7 @@ static BOOL kNeedBannerDisplay = YES;
         };
         _bannerHeader.bannerClickedBlock = ^(NSString *url){
             SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
+            webVc.title = @"精选信用卡";
             [weakSelf.navigationController pushViewController:webVc animated:YES];
         };
     }

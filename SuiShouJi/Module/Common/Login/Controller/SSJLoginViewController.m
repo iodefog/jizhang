@@ -192,7 +192,7 @@
         __weak typeof(self) weakSelf = self;
         NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
         SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-        if ([self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
+        if (![self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
             NSString *userName;
             if ([lastUserItem.loginType isEqualToString:@"0"]) {
                 userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
@@ -216,13 +216,97 @@
             SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
                 [alert dismiss];
             } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-                SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
-                [weakSelf.navigationController pushViewController:loginVc animated:YES];
+                [weakSelf comfirmTologin];
                 [alert dismiss];
             }];
             [alert show];
+        }else{
+            [self comfirmTologin];
+        }
+    }else{
+        [self comfirmTologin];
+    }
+}
+
+#pragma mark - Notification
+-(void)updatetextfield:(id)sender{
+    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
+        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
+            self.loginButton.enabled = YES;
+        }else{
+        self.loginButton.enabled = NO;
         }
     }
+}
+
+#pragma mark - Event
+-(void)loginButtonClicked:(id)sender{
+    [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
+    [self.tfPassword resignFirstResponder];
+}
+
+-(void)forgetButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_forget_pwd"];
+
+    SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
+    forgetVC.backController = self.backController;
+    forgetVC.finishHandle = ^(UIViewController *controller){
+        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+    };
+    [self.navigationController pushViewController:forgetVC animated:YES];
+}
+
+-(void)registerButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_register"];
+
+    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
+    registerVc.finishHandle = ^(UIViewController *controller){
+        //  如果是忘记密码，就返回到登录页面
+        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
+            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+        } else {
+            if (weakSelf.finishHandle) {
+                weakSelf.finishHandle(weakSelf);
+            } else {
+                [weakSelf ssj_backOffAction];
+            }
+        }
+    };
+    [self.navigationController pushViewController:registerVc animated:YES];
+}
+
+- (void)backOffAction {
+    if (self.cancelHandle) {
+        self.cancelHandle(self);
+    } else {
+       [super ssj_backOffAction];
+    }
+}
+
+-(void)qqLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_qq"];
+
+    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
+        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
+    }];
+}
+
+-(void)weixinLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_weichat"];
+
+    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
+        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
+    }];
+}
+
+#pragma mark - Private
+-(void)comfirmTologin{
     //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
     if (![SSJUserTableManager saveUserItem:self.loginService.item]
@@ -308,83 +392,6 @@
     } else {
         [self ssj_backOffAction];
     }
-}
-
-#pragma mark - Notification
--(void)updatetextfield:(id)sender{
-    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
-        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
-            self.loginButton.enabled = YES;
-        }else{
-        self.loginButton.enabled = NO;
-        }
-    }
-}
-
-#pragma mark - Event
--(void)loginButtonClicked:(id)sender{
-    [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
-    [self.tfPassword resignFirstResponder];
-}
-
--(void)forgetButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    [MobClick event:@"login_forget_pwd"];
-
-    SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
-    forgetVC.backController = self.backController;
-    forgetVC.finishHandle = ^(UIViewController *controller){
-        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-    };
-    [self.navigationController pushViewController:forgetVC animated:YES];
-}
-
--(void)registerButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    [MobClick event:@"login_register"];
-
-    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
-    registerVc.finishHandle = ^(UIViewController *controller){
-        //  如果是忘记密码，就返回到登录页面
-        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
-            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-        } else {
-            if (weakSelf.finishHandle) {
-                weakSelf.finishHandle(weakSelf);
-            } else {
-                [weakSelf ssj_backOffAction];
-            }
-        }
-    };
-    [self.navigationController pushViewController:registerVc animated:YES];
-}
-
-- (void)backOffAction {
-    if (self.cancelHandle) {
-        self.cancelHandle(self);
-    } else {
-       [super ssj_backOffAction];
-    }
-}
-
--(void)qqLoginButtonClicked:(id)sender{
-    [MobClick event:@"login_qq"];
-
-    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
-        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
-        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
-    }];
-}
-
--(void)weixinLoginButtonClicked:(id)sender{
-    [MobClick event:@"login_weichat"];
-
-    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
-        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
-        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
-    }];
 }
 
 #pragma mark - Getter

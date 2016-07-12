@@ -14,6 +14,7 @@ static NSString *const kTitle5 = @"我的等级";
 static NSString *const kTitle6 = @"修改登录密码";
 static NSString *const kTitle7 = @"手势密码";
 
+extern BOOL kHomeNeedLoginPop;
 
 #import "SSJPersonalDetailViewController.h"
 #import "SSJMineHomeTabelviewCell.h"
@@ -240,8 +241,8 @@ static NSString *const kTitle7 = @"手势密码";
 }
 
 -(void)quitLogButtonClicked:(id)sender {
+    kHomeNeedLoginPop = YES;
     NSString *hintStr = @"退出登录后,后续记账请登录同个帐号哦。\n\n未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。";
-    
     NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:hintStr];
     [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
     [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
