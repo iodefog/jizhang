@@ -564,7 +564,7 @@ static BOOL kNeedBannerDisplay = YES;
         loginVc.backController = self;
         [self.navigationController pushViewController:loginVc animated:YES];
     }else{
-        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]init];
+        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:personalDetailVc animated:YES];
     }
 }

@@ -314,6 +314,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [super updateAppearanceAfterThemeChanged];
     [self.headerView updateAfterThemeChange];
     self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.headerView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [self.collectionView reloadData];
 }
 

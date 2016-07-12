@@ -1508,6 +1508,7 @@
 		9C7B9CC41D338B0100A4F71F /* login_bg-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C7B9CBC1D338AED00A4F71F /* login_bg-667@2x.png */; };
 		9C7B9CC51D338B0400A4F71F /* login_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C7B9CBD1D338AED00A4F71F /* login_bg@2x.png */; };
 		9C7B9CC61D338B0700A4F71F /* login_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C7B9CBE1D338AED00A4F71F /* login_bg@3x.png */; };
+		9C7B9CC91D33BFF800A4F71F /* SSJFundingDetailNoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */; };
 		9C9081641CEEB3D600FF5450 /* zhouqi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9081621CEEB3D600FF5450 /* zhouqi@2x.png */; };
 		9C9081651CEEB3D600FF5450 /* zhouqi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9081631CEEB3D600FF5450 /* zhouqi@3x.png */; };
 		9C9471761CEB224C00D69079 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */; };
@@ -2728,6 +2729,8 @@
 		9C7B9CBC1D338AED00A4F71F /* login_bg-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg-667@2x.png"; sourceTree = "<group>"; };
 		9C7B9CBD1D338AED00A4F71F /* login_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@2x.png"; sourceTree = "<group>"; };
 		9C7B9CBE1D338AED00A4F71F /* login_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg@3x.png"; sourceTree = "<group>"; };
+		9C7B9CC71D33BFF800A4F71F /* SSJFundingDetailNoDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailNoDataView.h; sourceTree = "<group>"; };
+		9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailNoDataView.m; sourceTree = "<group>"; };
 		9C9081621CEEB3D600FF5450 /* zhouqi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zhouqi@2x.png"; path = "../zhouqi@2x.png"; sourceTree = "<group>"; };
 		9C9081631CEEB3D600FF5450 /* zhouqi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zhouqi@3x.png"; path = "../zhouqi@3x.png"; sourceTree = "<group>"; };
 		9C9471331CEB224C00D69079 /* SSJFinancingHomeitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeitem.h; sourceTree = "<group>"; };
@@ -5128,6 +5131,8 @@
 				9C94715C1CEB224C00D69079 /* SSJFundingDetailListFirstLineCell.m */,
 				9C94715D1CEB224C00D69079 /* SSJFundingDetailListHeaderView.h */,
 				9C94715E1CEB224C00D69079 /* SSJFundingDetailListHeaderView.m */,
+				9C7B9CC71D33BFF800A4F71F /* SSJFundingDetailNoDataView.h */,
+				9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8402,6 +8407,7 @@
 				9CD9BC0F1CFD2DAA0061803B /* SSJMagicExportService.m in Sources */,
 				9CD9BC1E1CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m in Sources */,
 				9CD9BC2D1CFD2DAA0061803B /* SSJAboutusViewController.m in Sources */,
+				9C7B9CC91D33BFF800A4F71F /* SSJFundingDetailNoDataView.m in Sources */,
 				BD0433281C1A78B40051E7AB /* SSJViewAddition.m in Sources */,
 				7DE69C3A1C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				9C4C52821CF6EEEB006A0CD6 /* SSJBooksTypeStore.m in Sources */,
