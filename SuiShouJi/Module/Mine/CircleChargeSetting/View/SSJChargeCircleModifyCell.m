@@ -109,6 +109,7 @@
 -(UIImageView *)cellImage{
     if (!_cellImage) {
         _cellImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 21, 21)];
+        _cellImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _cellImage;
 }
@@ -133,7 +134,7 @@
 
 -(void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
-    self.cellImage.image = [UIImage imageNamed:_cellImageName];
+    self.cellImage.image = [[UIImage imageNamed:_cellImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self setNeedsLayout];
 }
 

@@ -136,7 +136,7 @@
         if (self.item != nil) {
             _transferIntext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
         }
-        _transferIntext.placeholder = @"¥0.00";
+        _transferIntext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _transferIntext.leftView = self.transferInButtonView;
         _transferIntext.leftViewMode = UITextFieldViewModeAlways;
         _transferIntext.textAlignment = NSTextAlignmentRight;
@@ -162,7 +162,7 @@
         if (self.item != nil) {
             _transferOuttext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
         }
-        _transferOuttext.placeholder = @"¥0.00";
+        _transferOuttext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _transferOuttext.leftView = self.transferOutButtonView;
         _transferOuttext.leftViewMode = UITextFieldViewModeAlways;
         _transferOuttext.textAlignment = NSTextAlignmentRight;
@@ -275,7 +275,8 @@
 -(UIImageView *)transferImage{
     if (!_transferImage) {
         _transferImage = [[UIImageView alloc]init];
-        _transferImage.image = [UIImage imageNamed:@"founds_exchange"];
+        _transferImage.image = [[UIImage imageNamed:@"founds_exchange"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _transferImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _transferImage;
 }
@@ -316,7 +317,7 @@
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30 + textWidth, 0)];
         _memoInput.leftView = view;
         _memoInput.leftViewMode = UITextFieldViewModeAlways;
-        [_memoInput ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_memoInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_memoInput ssj_setBorderStyle:SSJBorderStyleTop];
     }
     return _memoInput;

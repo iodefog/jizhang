@@ -30,11 +30,13 @@
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         
-        _photo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mark_pic"]];
+        _photo = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"mark_pic"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _photo.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _photo.size = CGSizeMake(16, 16);
         [self.contentView addSubview:_photo];
         
-        _memo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mark_jilu"]];
+        _memo = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"mark_jilu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _memo.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memo.size = CGSizeMake(16, 16);
         [self.contentView addSubview:_memo];
         
@@ -116,6 +118,7 @@
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.backgroundColor = [UIColor clearColor];
         _moneyLab.font = [UIFont systemFontOfSize:20];
+        _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _moneyLab;
 }

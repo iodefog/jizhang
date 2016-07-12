@@ -76,7 +76,6 @@ static NSString *const kTitle7 = @"手势密码";
     }else{
         self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5],@[kTitle6 , kTitle7]];
     }
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate

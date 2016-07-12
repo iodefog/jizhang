@@ -69,8 +69,8 @@
 -(UIImageView *)circleImage{
     if (!_circleImage) {
         _circleImage = [[UIImageView alloc]init];
-        _circleImage.image = [UIImage imageNamed:@"zhouqi"];
-        
+        _circleImage.image = [[UIImage imageNamed:@"zhouqi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _circleImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _circleImage;
 }
