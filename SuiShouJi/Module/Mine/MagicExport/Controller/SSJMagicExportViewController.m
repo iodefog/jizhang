@@ -510,6 +510,7 @@
         lab.font = [UIFont systemFontOfSize:15];
         lab.text = @"您还未有记账数据哦";
         lab.textAlignment = NSTextAlignmentCenter;
+        lab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_noDataRemindView addSubview:lab];
         
         SSJBorderButton *recordBtn = [[SSJBorderButton alloc] initWithFrame:CGRectMake((_noDataRemindView.width - 120) * 0.5, lab.bottom + 20, 120, 30)];
@@ -517,11 +518,11 @@
         recordBtn.borderWidth = 1;
         recordBtn.cornerRadius = 15;
         [recordBtn setTitle:@"记一笔" forState:SSJBorderButtonStateNormal];
-        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
         [recordBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
         [recordBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateHighlighted];
+        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateHighlighted];
         [recordBtn addTarget:self action:@selector(recordBtnAction)];
         [_noDataRemindView addSubview:recordBtn];
     }
