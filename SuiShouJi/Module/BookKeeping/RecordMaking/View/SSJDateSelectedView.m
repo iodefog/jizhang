@@ -28,10 +28,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         self.selectedDay = day;
         self.selectedMonth = month;
         self.selectedYear = year;
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
         [self addSubview:self.calendarView];
         [self addSubview:self.titleView];
         [self addSubview:self.dateChangeView];
@@ -107,7 +107,6 @@
 -(UIView*)titleView{
     if (_titleView == nil) {
         _titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 45)];
-        _titleView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _titleLabel.text = @"选择日期";
         _titleLabel.font = [UIFont systemFontOfSize:18];
@@ -130,7 +129,7 @@
         _dateChangeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 45)];
         [_dateChangeView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_dateChangeView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e8e8e8"]];
-        _dateChangeView.backgroundColor = [UIColor whiteColor];
+        _dateChangeView.backgroundColor = [UIColor clearColor];
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
         _dateLabel.font = [UIFont systemFontOfSize:18];
