@@ -24,6 +24,8 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 - (instancetype)initWithWidth:(CGFloat)width {
     if (self = [super initWithFrame:CGRectMake(0, 0, width, 0)]) {
         [self addSubview:self.collectionView];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        
     }
     return self;
 }
@@ -74,7 +76,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
         [_collectionView registerClass:[SSJColorSelectCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor clearColor];
     }
     return _collectionView;
 }
