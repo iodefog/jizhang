@@ -58,7 +58,7 @@
 - (UIView *)fillColorView {
     if (!_fillColorView) {
         _fillColorView = [[UIView alloc] init];
-        _fillColorView.backgroundColor = [UIColor whiteColor];
+        _fillColorView.backgroundColor = [UIColor clearColor];
         _fillColorView.alpha = SSJ_CURRENT_THEME.recordMakingInputViewAlpha;
     }
     return _fillColorView;
