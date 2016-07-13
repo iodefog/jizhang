@@ -126,7 +126,7 @@
 }
 
 - (void)updateAppearanceAfterThemeChanged {
-    [_backgroundView ssj_setThemeImageWithName:@"background"];
+    [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
 }
 
 #pragma mark - Notification
