@@ -40,12 +40,12 @@
     CGContextSetBlendMode(ctx, kCGBlendModeXOR);
     
     // 填充颜色
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"e9f4ea"].CGColor);
+    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
 //    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"e9f4ea" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"fae5e5"].CGColor);
+    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
 //    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"fae5e5" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);

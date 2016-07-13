@@ -118,4 +118,10 @@
 // 手势密码错误状态颜色
 @property (nonatomic, copy) NSString *motionPasswordErrorColor;
 
+// 报表曲线图收入填充色
+@property (nonatomic, copy) NSString *reportFormsCurveIncomeFillColor;
+
+// 报表曲线图支出填充色
+@property (nonatomic, copy) NSString *reportFormsCurvePaymentFillColor;
+
 @end

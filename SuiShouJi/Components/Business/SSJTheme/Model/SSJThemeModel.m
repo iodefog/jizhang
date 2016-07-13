@@ -46,6 +46,8 @@
     [aCoder encodeObject:_motionPasswordNormalColor forKey:@"motionPasswordNormalColor"];
     [aCoder encodeObject:_motionPasswordHighlightedColor forKey:@"motionPasswordHighlightedColor"];
     [aCoder encodeObject:_motionPasswordErrorColor forKey:@"motionPasswordErrorColor"];
+    [aCoder encodeObject:_reportFormsCurveIncomeFillColor forKey:@"reportFormsCurveIncomeFillColor"];
+    [aCoder encodeObject:_reportFormsCurvePaymentFillColor forKey:@"reportFormsCurvePaymentFillColor"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -85,6 +87,8 @@
         _motionPasswordNormalColor = [aDecoder decodeObjectForKey:@"motionPasswordNormalColor"];
         _motionPasswordHighlightedColor = [aDecoder decodeObjectForKey:@"motionPasswordHighlightedColor"];
         _motionPasswordErrorColor = [aDecoder decodeObjectForKey:@"motionPasswordErrorColor"];
+        _reportFormsCurveIncomeFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurveIncomeFillColor"];
+        _reportFormsCurvePaymentFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurvePaymentFillColor"];
     }
     return self;
 }
@@ -125,7 +129,9 @@
                                                           @"loginButtonTitleColor":_loginButtonTitleColor,
                                                           @"motionPasswordNormalColor":_motionPasswordNormalColor,
                                                           @"motionPasswordHighlightedColor":_motionPasswordHighlightedColor,
-                                                          @"motionPasswordErrorColor":_motionPasswordErrorColor}];
+                                                          @"motionPasswordErrorColor":_motionPasswordErrorColor,
+                                                          @"reportFormsCurveIncomeFillColor":_reportFormsCurveIncomeFillColor,
+                                                          @"reportFormsCurvePaymentFillColor":_reportFormsCurvePaymentFillColor}];
 }
 
 @end
