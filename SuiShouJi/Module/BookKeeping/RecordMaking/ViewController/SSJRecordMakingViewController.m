@@ -48,9 +48,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic,strong) NSString *categoryID;
 
-@property (nonatomic,strong) SSJFundingItem *selectItem;
-@property (nonatomic,strong) SSJFundingItem *defualtItem;
-
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputView *billTypeInputView;
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeSelectionView *paymentTypeView;
@@ -141,6 +138,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
+        _DateSelectedView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         __weak typeof(self) weakSelf = self;
         _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
 //            if (weakSelf.selectChargeCircleType != -1
@@ -169,7 +167,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
-                weakSelf.selectItem = fundingItem;
+                weakSelf.item.fundId = fundingItem.fundingID;
+                weakSelf.item.fundName = fundingItem.fundingName;
                 [weakSelf updateFundingType];
                  NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
                 [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:SSJLastSelectFundItemKey];
@@ -177,7 +176,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
                     [weakSelf.FundingTypeSelectView reloadDate];
-                    weakSelf.selectItem = newFundingItem;
+                    weakSelf.item.fundId = fundingItem.fundingID;
+                    weakSelf.item.fundName = fundingItem.fundingName;
                     [weakSelf updateFundingType];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
