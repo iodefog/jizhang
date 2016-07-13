@@ -225,13 +225,13 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.text = self.item.money;
-        circleModifyCell.cellInput.placeholder = @"0.00";
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTitle5]) {
-        circleModifyCell.cellInput.placeholder = @"选填";
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.tag = 101;
