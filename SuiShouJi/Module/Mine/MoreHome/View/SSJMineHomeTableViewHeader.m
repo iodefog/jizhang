@@ -52,7 +52,7 @@
     self.loginButton.leftTop = CGPointMake(0, 0);
     self.headPotraitImage.size = CGSizeMake(64, 64);
     self.headPotraitImage.centerX = self.width / 2;
-    self.headPotraitImage.top = 20;
+    self.headPotraitImage.top = 40;
     self.nicknameLabel.top = self.headPotraitImage.bottom + 10;
     self.nicknameLabel.centerX = self.width / 2;
     self.checkInLevelLabel.top = self.nicknameLabel.bottom + 10;

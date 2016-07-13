@@ -11,7 +11,7 @@
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-#import "SSJHomeBarButton.h"
+#import "SSJHomeBarCalenderButton.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginViewController.h"
 #import "SSJRegistGetVerViewController.h"
@@ -39,7 +39,7 @@ BOOL kHomeNeedLoginPop;
 
 @interface SSJBookKeepingHomeViewController ()
 
-@property (nonatomic,strong) SSJHomeBarButton *rightBarButton;
+@property (nonatomic,strong) SSJHomeBarCalenderButton *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
@@ -88,8 +88,8 @@ BOOL kHomeNeedLoginPop;
     [self getCurrentDate];
     
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
-//    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"home_books"] style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonClicked:)];
     self.navigationItem.leftBarButtonItem = leftButton;
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
@@ -125,6 +125,7 @@ BOOL kHomeNeedLoginPop;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
@@ -176,11 +177,11 @@ BOOL kHomeNeedLoginPop;
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 0.1;
+    return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.1;
+    return 0;
 }
 
 
@@ -464,9 +465,9 @@ BOOL kHomeNeedLoginPop;
     return _tableView;
 }
 
--(SSJHomeBarButton*)rightBarButton{
+-(SSJHomeBarCalenderButton*)rightBarButton{
     if (!_rightBarButton) {
-        _rightBarButton = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
 //        buttonView.layer.borderColor = [UIColor redColor].CGColor;
 //        buttonView.layer.borderWidth = 1;
         _rightBarButton.currentDay = _currentDay;
@@ -634,7 +635,6 @@ BOOL kHomeNeedLoginPop;
     [self.homeButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
     [self.rightBarButton updateAfterThemeChange];
-    
     _noDataHeader.image = [UIImage ssj_themeImageWithName:@"home_none"];
 }
 

@@ -12,7 +12,7 @@
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
-    self.showLodingIndicator = YES;
+    self.showLodingIndicator = NO;
     [self request:@"http://jz.9188.com/app/banner.json" params:nil];
 }
 

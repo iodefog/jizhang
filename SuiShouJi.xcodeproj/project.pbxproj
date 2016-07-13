@@ -67,7 +67,7 @@
 		7D5F332B1CEAE6C10086B67E /* SSJBookKeepingHomePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F324C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.m */; };
 		7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D5F324D1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib */; };
 		7D5F332D1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F324F1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m */; };
-		7D5F332F1CEAE6C10086B67E /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32531CEAE6C10086B67E /* SSJHomeBarButton.m */; };
+		7D5F332F1CEAE6C10086B67E /* SSJHomeBarCalenderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32531CEAE6C10086B67E /* SSJHomeBarCalenderButton.m */; };
 		7D5F33301CEAE6C10086B67E /* SSJHomeBudgetButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32551CEAE6C10086B67E /* SSJHomeBudgetButton.m */; };
 		7D5F33311CEAE6C10086B67E /* SSJHomeReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32571CEAE6C10086B67E /* SSJHomeReminderView.m */; };
 		7D5F33321CEAE6C10086B67E /* SSJHomeTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32591CEAE6C10086B67E /* SSJHomeTableView.m */; };
@@ -536,7 +536,7 @@
 		9C2A67571D194CA70010F1DA /* SSJMagicExportCalendarDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9B1CFD2DAA0061803B /* SSJMagicExportCalendarDateView.m */; };
 		9C2A67581D194CA70010F1DA /* SSJMagicExportBookTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */; };
 		9C2A67591D194CA70010F1DA /* SSJStringAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433051C1A78B40051E7AB /* SSJStringAddition.m */; };
-		9C2A675A1D194CA70010F1DA /* SSJHomeBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32531CEAE6C10086B67E /* SSJHomeBarButton.m */; };
+		9C2A675A1D194CA70010F1DA /* SSJHomeBarCalenderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32531CEAE6C10086B67E /* SSJHomeBarCalenderButton.m */; };
 		9C2A675B1D194CA70010F1DA /* SSJForgetPassowrdNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF361C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m */; };
 		9C2A675C1D194CA70010F1DA /* SSJForgotPSWResetService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF3A1C4751EA000E6CC9 /* SSJForgotPSWResetService.m */; };
 		9C2A675D1D194CA70010F1DA /* SSJReportFormsScaleAxisCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD9D0C31CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m */; };
@@ -2071,8 +2071,8 @@
 		7D5F324D1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SSJBookKeepingHomePopView.xib; sourceTree = "<group>"; };
 		7D5F324E1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeTableViewCell.h; sourceTree = "<group>"; };
 		7D5F324F1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeTableViewCell.m; sourceTree = "<group>"; };
-		7D5F32521CEAE6C10086B67E /* SSJHomeBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarButton.h; sourceTree = "<group>"; };
-		7D5F32531CEAE6C10086B67E /* SSJHomeBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarButton.m; sourceTree = "<group>"; };
+		7D5F32521CEAE6C10086B67E /* SSJHomeBarCalenderButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBarCalenderButton.h; sourceTree = "<group>"; };
+		7D5F32531CEAE6C10086B67E /* SSJHomeBarCalenderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBarCalenderButton.m; sourceTree = "<group>"; };
 		7D5F32541CEAE6C10086B67E /* SSJHomeBudgetButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeBudgetButton.h; sourceTree = "<group>"; };
 		7D5F32551CEAE6C10086B67E /* SSJHomeBudgetButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHomeBudgetButton.m; sourceTree = "<group>"; };
 		7D5F32561CEAE6C10086B67E /* SSJHomeReminderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHomeReminderView.h; sourceTree = "<group>"; };
@@ -3630,8 +3630,8 @@
 				7D5F324D1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib */,
 				7D5F324E1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.h */,
 				7D5F324F1CEAE6C10086B67E /* SSJBookKeepingHomeTableViewCell.m */,
-				7D5F32521CEAE6C10086B67E /* SSJHomeBarButton.h */,
-				7D5F32531CEAE6C10086B67E /* SSJHomeBarButton.m */,
+				7D5F32521CEAE6C10086B67E /* SSJHomeBarCalenderButton.h */,
+				7D5F32531CEAE6C10086B67E /* SSJHomeBarCalenderButton.m */,
 				7D5F32541CEAE6C10086B67E /* SSJHomeBudgetButton.h */,
 				7D5F32551CEAE6C10086B67E /* SSJHomeBudgetButton.m */,
 				7D5F32561CEAE6C10086B67E /* SSJHomeReminderView.h */,
@@ -7825,7 +7825,7 @@
 				9C2A67571D194CA70010F1DA /* SSJMagicExportCalendarDateView.m in Sources */,
 				9C2A67581D194CA70010F1DA /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				9C2A67591D194CA70010F1DA /* SSJStringAddition.m in Sources */,
-				9C2A675A1D194CA70010F1DA /* SSJHomeBarButton.m in Sources */,
+				9C2A675A1D194CA70010F1DA /* SSJHomeBarCalenderButton.m in Sources */,
 				9C2A675B1D194CA70010F1DA /* SSJForgetPassowrdNetworkService.m in Sources */,
 				9C2A675C1D194CA70010F1DA /* SSJForgotPSWResetService.m in Sources */,
 				9C2A675D1D194CA70010F1DA /* SSJReportFormsScaleAxisCell.m in Sources */,
@@ -8182,7 +8182,7 @@
 				9CD9BC121CFD2DAA0061803B /* SSJMagicExportCalendarDateView.m in Sources */,
 				7D9E4A531D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				BD0433201C1A78B40051E7AB /* SSJStringAddition.m in Sources */,
-				7D5F332F1CEAE6C10086B67E /* SSJHomeBarButton.m in Sources */,
+				7D5F332F1CEAE6C10086B67E /* SSJHomeBarCalenderButton.m in Sources */,
 				BD70DF5A1C4751EA000E6CC9 /* SSJForgetPassowrdNetworkService.m in Sources */,
 				BD70DF5C1C4751EA000E6CC9 /* SSJForgotPSWResetService.m in Sources */,
 				7DD9D0C61CF6E2A6005AF735 /* SSJReportFormsScaleAxisCell.m in Sources */,

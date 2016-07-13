@@ -19,7 +19,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.lineView];
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor clearColor];
         [self ssj_clearExtendSeparator];
         if ([self respondsToSelector:@selector(setSeparatorInset:)]) {
             [self setSeparatorInset:UIEdgeInsetsZero];
@@ -71,7 +71,7 @@
 
 - (void)updateAfterThemeChange{
     self.lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
-    self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 @end
