@@ -54,6 +54,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
         _recordMakingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width, self.height)];
         _recordMakingButton.layer.cornerRadius = self.width / 2;
         _recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeBorderColor].CGColor;
+        _recordMakingButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeButtonBackgroundColor];
         _recordMakingButton.layer.borderWidth = 2.0f;
         [_recordMakingButton addTarget:self action:@selector(recordMakingButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -217,6 +218,7 @@ static NSString *const kLodingViewAnimationKey = @"lodingViewAnimationKey";
 - (void)updateAfterThemeChange{
     self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeBorderColor].CGColor;
     self.penImage.image = [UIImage ssj_themeImageWithName:@"home_pen"];
+    self.recordMakingButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeButtonBackgroundColor];
 }
 
 /*

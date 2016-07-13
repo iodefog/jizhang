@@ -128,8 +128,7 @@
 -(UIButton*)categoryImageButton{
     if (_categoryImageButton == nil) {
         _categoryImageButton = [[UIButton alloc]init];
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _categoryImageButton.backgroundColor = [UIColor whiteColor];
+        _categoryImageButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCategoryBackgroundColor];
         _categoryImageButton.contentMode = UIViewContentModeScaleAspectFill;
         _categoryImageButton.layer.masksToBounds = YES;
         [_categoryImageButton addTarget:self action:@selector(buttonClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -293,7 +292,7 @@
             [self.expenditureLabel sizeToFit];
         }
     }else{
-        [_categoryImageButton ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_categoryImageButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCategoryBackgroundColor] forState:UIControlStateNormal];
         if (!_item.incomeOrExpence) {
             self.incomeLabel.text = [NSString stringWithFormat:@"%@%.2f",_item.typeName,[_item.money doubleValue]];
             [self.incomeLabel sizeToFit];
