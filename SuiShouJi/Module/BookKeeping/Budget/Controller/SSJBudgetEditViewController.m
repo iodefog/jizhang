@@ -417,6 +417,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         UILabel *percentLab = [[UILabel alloc] init];
         percentLab.font = [UIFont systemFontOfSize:18];
         percentLab.text = @"％";
+        percentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [percentLab sizeToFit];
         
         budgetScaleCell.textField.rightView = percentLab;
