@@ -27,7 +27,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+//        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _marginForHorizon = (self.width - 35*7) / 9;
         _marginForvertical = (self.height - 35*7) / 14;
         _weekArray = [NSArray arrayWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六",  nil];
@@ -60,7 +60,6 @@
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = _marginForHorizon;
         _calendar =[[UICollectionView alloc]initWithFrame:self.bounds collectionViewLayout:flowLayout];
-        _calendar.backgroundColor= [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _calendar.scrollEnabled = NO;
         _calendar.dataSource=self;
         _calendar.delegate=self;

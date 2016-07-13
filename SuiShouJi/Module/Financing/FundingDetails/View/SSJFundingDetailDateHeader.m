@@ -15,6 +15,7 @@
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.1];
         [self addSubview:self.dateLabel];
         [self addSubview:self.balanceLabel];
     }
