@@ -126,13 +126,13 @@ static NSString *kCellID = @"cellID";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor whiteColor];
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.scrollEnabled = NO;
         
         [_tableView ssj_setBorderWidth:1];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _tableView;
 }
