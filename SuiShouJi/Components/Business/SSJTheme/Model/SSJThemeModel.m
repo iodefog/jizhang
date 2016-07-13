@@ -48,6 +48,7 @@
     [aCoder encodeObject:_motionPasswordErrorColor forKey:@"motionPasswordErrorColor"];
     [aCoder encodeObject:_reportFormsCurveIncomeFillColor forKey:@"reportFormsCurveIncomeFillColor"];
     [aCoder encodeObject:_reportFormsCurvePaymentFillColor forKey:@"reportFormsCurvePaymentFillColor"];
+    [aCoder encodeFloat:_recordMakingInputViewAlpha forKey:@"recordMakingInputViewAlpha"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -89,6 +90,7 @@
         _motionPasswordErrorColor = [aDecoder decodeObjectForKey:@"motionPasswordErrorColor"];
         _reportFormsCurveIncomeFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurveIncomeFillColor"];
         _reportFormsCurvePaymentFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurvePaymentFillColor"];
+        _recordMakingInputViewAlpha = [aDecoder decodeFloatForKey:@"recordMakingInputViewAlpha"];
     }
     return self;
 }
@@ -131,7 +133,8 @@
                                                           @"motionPasswordHighlightedColor":_motionPasswordHighlightedColor,
                                                           @"motionPasswordErrorColor":_motionPasswordErrorColor,
                                                           @"reportFormsCurveIncomeFillColor":_reportFormsCurveIncomeFillColor,
-                                                          @"reportFormsCurvePaymentFillColor":_reportFormsCurvePaymentFillColor}];
+                                                          @"reportFormsCurvePaymentFillColor":_reportFormsCurvePaymentFillColor,
+                                                          @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha)}];
 }
 
 @end

@@ -84,7 +84,7 @@
     model.moreHomeTitleColor = @"#FFFFFF";
     model.moreHomeSubtitleColor = @"#fab9bf";
     model.recordHomeBorderColor = @"#eb4a64";
-    model.recordHomeCalendarColor = @"#eb4a64";
+    model.recordHomeCalendarColor = @"#a7a7a7";
     model.loginMainColor = @"#FFFFFF";
     model.loginSecondaryColor = @"#fab9bf";
     model.loginButtonTitleColor = @"#eb4a64";
@@ -93,6 +93,7 @@
     model.motionPasswordErrorColor = @"#eb4a64";
     model.reportFormsCurveIncomeFillColor = @"#fae5e5";
     model.reportFormsCurvePaymentFillColor = @"#e9f4ea";
+    model.recordMakingInputViewAlpha = 1;
     
     return model;
 }

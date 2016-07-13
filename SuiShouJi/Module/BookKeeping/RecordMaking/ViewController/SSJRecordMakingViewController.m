@@ -512,7 +512,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         }
         
         [UIView animateWithDuration:kAnimationDuration animations:^{
-            weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
+            weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
         }];
         weakSelf.billTypeInputView.billTypeName = selectedItem.title;
         
@@ -637,7 +637,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
             if (item.selected) {
                 [UIView animateWithDuration:kAnimationDuration animations:^{
-                    wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                    wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                 }];
                 wself.billTypeInputView.billTypeName = item.title;
             }
@@ -647,7 +647,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [wself.billTypeInputView.moneyInput becomeFirstResponder];
         [UIView animateWithDuration:kAnimationDuration animations:^{
             wself.billTypeInputView.billTypeName = item.title;
-            wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+            wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
         }];
         wself.item.billId = item.ID;
     };
@@ -690,7 +690,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _paymentTypeView.items) {
                 if (item.selected) {
                     [UIView animateWithDuration:kAnimationDuration animations:^{
-                        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                        _billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                     }];
                     _billTypeInputView.billTypeName = item.title;
                     break;
@@ -704,7 +704,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _incomeTypeView.items) {
                 if (item.selected) {
                     [UIView animateWithDuration:kAnimationDuration animations:^{
-                        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                        _billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                     }];
                     _billTypeInputView.billTypeName = item.title;
                     break;

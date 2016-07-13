@@ -124,4 +124,7 @@
 // 报表曲线图支出填充色
 @property (nonatomic, copy) NSString *reportFormsCurvePaymentFillColor;
 
+// 记一笔输入框透明度
+@property (nonatomic) CGFloat recordMakingInputViewAlpha;
+
 @end
