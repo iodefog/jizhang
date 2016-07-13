@@ -84,7 +84,9 @@
     model.moreHomeTitleColor = @"#FFFFFF";
     model.moreHomeSubtitleColor = @"#fab9bf";
     model.recordHomeBorderColor = @"#eb4a64";
+    model.recordHomeButtonBackgroundColor = @"#FFFFFF";
     model.recordHomeCalendarColor = @"#a7a7a7";
+    model.recordHomeCategoryBackgroundColor = @"#FFFFFF";
     model.loginMainColor = @"#FFFFFF";
     model.loginSecondaryColor = @"#fab9bf";
     model.loginButtonTitleColor = @"#eb4a64";

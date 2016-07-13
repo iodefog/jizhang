@@ -39,7 +39,9 @@
     [aCoder encodeObject:_moreHomeTitleColor forKey:@"moreHomeTitleColor"];
     [aCoder encodeObject:_moreHomeSubtitleColor forKey:@"moreHomeSubtitleColor"];
     [aCoder encodeObject:_recordHomeBorderColor forKey:@"recordHomeBorderColor"];
+    [aCoder encodeObject:_recordHomeButtonBackgroundColor forKey:@"recordHomeButtonBackgroundColor"];
     [aCoder encodeObject:_recordHomeCalendarColor forKey:@"recordHomeCalendarColor"];
+    [aCoder encodeObject:_recordHomeCategoryBackgroundColor forKey:@"recordHomeCategoryBackgroundColor"];
     [aCoder encodeObject:_loginMainColor forKey:@"loginMainColor"];
     [aCoder encodeObject:_loginSecondaryColor forKey:@"loginSecondaryColor"];
     [aCoder encodeObject:_loginButtonTitleColor forKey:@"loginButtonTitleColor"];
@@ -81,7 +83,9 @@
         _moreHomeTitleColor = [aDecoder decodeObjectForKey:@"moreHomeTitleColor"];
         _moreHomeSubtitleColor = [aDecoder decodeObjectForKey:@"moreHomeSubtitleColor"];
         _recordHomeBorderColor = [aDecoder decodeObjectForKey:@"recordHomeBorderColor"];
+        _recordHomeButtonBackgroundColor = [aDecoder decodeObjectForKey:@"recordHomeButtonBackgroundColor"];
         _recordHomeCalendarColor = [aDecoder decodeObjectForKey:@"recordHomeCalendarColor"];
+        _recordHomeCategoryBackgroundColor = [aDecoder decodeObjectForKey:@"recordHomeCategoryBackgroundColor"];
         _loginMainColor = [aDecoder decodeObjectForKey:@"loginMainColor"];
         _loginSecondaryColor = [aDecoder decodeObjectForKey:@"loginSecondaryColor"];
         _loginButtonTitleColor = [aDecoder decodeObjectForKey:@"loginButtonTitleColor"];
@@ -125,7 +129,9 @@
                                                           @"moreHomeTitleColor":_moreHomeTitleColor,
                                                           @"moreHomeSubtitleColor":_moreHomeSubtitleColor,
                                                           @"recordHomeBorderColor":_recordHomeBorderColor,
+                                                          @"recordHomeButtonBackgroundColor":_recordHomeButtonBackgroundColor,
                                                           @"recordHomeCalendarColor":_recordHomeCalendarColor,
+                                                          @"recordHomeCategoryBackgroundColor":_recordHomeCategoryBackgroundColor,
                                                           @"loginMainColor":_loginMainColor,
                                                           @"loginSecondaryColor":_loginSecondaryColor,
                                                           @"loginButtonTitleColor":_loginButtonTitleColor,
