@@ -17,6 +17,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.fundingImage];
         [self.contentView addSubview:self.fundingTitle];
         [self addSubview:self.checkMark];
@@ -53,7 +54,8 @@
 -(UIImageView *)checkMark{
     if (!_checkMark) {
         _checkMark = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 17, 17)];
-        _checkMark.image = [UIImage imageNamed:@"checkmark"];
+        _checkMark.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _checkMark.hidden = YES;
     }
     return _checkMark;
@@ -99,6 +101,12 @@
     _cellTitle = cellTitle;
     self.fundingTitle.text = cellTitle;
     [self.fundingTitle sizeToFit];
+}
+
+-(void)updateCellAppearanceAfterThemeChanged{
+    [super updateCellAppearanceAfterThemeChanged];
+    self.backgroundColor = [UIColor clearColor];
+    self.checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 /*
 // Only override drawRect: if you perform custom drawing.
