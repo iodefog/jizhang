@@ -187,7 +187,8 @@ static BOOL kNeedBannerDisplay = YES;
     
     //  给个好评
     if ([title isEqualToString:kTitle6]) {
-        NSURL *url = [NSURL URLWithString:SSJAppStoreAddress];
+        NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
+        NSURL *url = [NSURL URLWithString:appstoreUrlStr];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
             [[UIApplication sharedApplication] openURL:url];
         }
@@ -255,7 +256,6 @@ static BOOL kNeedBannerDisplay = YES;
                 [CDAutoHideMessageHUD showMessage:title];
             }
         }];
-
     }
     
     //数据导出
