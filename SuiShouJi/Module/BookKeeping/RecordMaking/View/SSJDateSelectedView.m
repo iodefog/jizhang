@@ -93,6 +93,7 @@
     if (!_calendarView) {
         NSString *dateStr = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.width, 270)];
+        _calendarView.calendar.backgroundColor = [UIColor clearColor];
         _calendarView.isSelectOnly = YES;
         _calendarView.selectedYear = self.selectedYear;
         _calendarView.selectedMonth = self.selectedMonth;
@@ -109,15 +110,16 @@
         _titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 45)];
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _titleLabel.text = @"选择日期";
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLabel.font = [UIFont systemFontOfSize:18];
         [_titleLabel sizeToFit];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
-        [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_titleView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_titleView ssj_setBorderWidth:1];
-        [_titleView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        [_titleView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_titleView addSubview:_closeButton];
         [_titleView addSubview:_titleLabel];
     }
@@ -128,21 +130,24 @@
     if (!_dateChangeView) {
         _dateChangeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 45)];
         [_dateChangeView ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_dateChangeView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"e8e8e8"]];
+        [_dateChangeView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         _dateChangeView.backgroundColor = [UIColor clearColor];
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _dateLabel.font = [UIFont systemFontOfSize:18];
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
         _plusButton.frame = CGRectMake(0, 0, 20, 29);
-        [_plusButton setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
+        [_plusButton setImage:[[UIImage imageNamed:@"reportForms_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _plusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _plusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
         _minusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_minusButton setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
+        [_minusButton setImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _minusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

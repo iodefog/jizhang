@@ -29,9 +29,8 @@
     if (self) {
         [self sizeToFit];
 
-//        UIView *backView = [[UIView alloc]initWithFrame:self.frame];
         [self addSubview:self.tableview];
-        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
 //        [self addSubview:self.addNewTypeButtonView];
         [self addSubview:self.titleView];
     }
@@ -130,6 +129,7 @@
 -(UITableView *)tableview{
     if (_tableView == nil) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.width, 200)];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -140,7 +140,7 @@
 -(UIView *)titleView{
     if (!_titleView) {
         _titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 45)];
-        _titleView.backgroundColor = [UIColor whiteColor];
+        _titleView.backgroundColor = [UIColor clearColor];
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"选择资金账户";
         _titleLabel.textAlignment = NSTextAlignmentCenter;

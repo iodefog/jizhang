@@ -175,9 +175,8 @@
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]init];
-        _tableView.backgroundView = nil;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.1];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.backgroundColor = [UIColor clearColor];
         [_tableView ssj_clearExtendSeparator];
         _tableView.delegate = self;
         _tableView.dataSource = self;
