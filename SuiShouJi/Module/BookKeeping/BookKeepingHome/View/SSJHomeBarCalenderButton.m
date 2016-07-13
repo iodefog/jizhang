@@ -6,14 +6,14 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJHomeBarButton.h"
+#import "SSJHomeBarCalenderButton.h"
 
-@interface SSJHomeBarButton()
+@interface SSJHomeBarCalenderButton()
 @property (nonatomic,strong) UIImageView *calenderImage;
 @property (nonatomic,strong) UILabel *dateLabel;
 @end
 
-@implementation SSJHomeBarButton
+@implementation SSJHomeBarCalenderButton
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -27,10 +27,9 @@
 }
 
 -(void)layoutSubviews{
-    _calenderImage.frame = CGRectMake(0, 0, 30, 30);
     _calenderImage.center = CGPointMake(self.width / 2, self.height / 2);
     _dateLabel.bottom = self.height;
-    _dateLabel.center = CGPointMake(self.width / 2, self.height / 2 + 3);
+    _dateLabel.center = CGPointMake(self.width / 2, self.height / 2);
     _btn.frame = CGRectMake(0, 0, self.width, self.height);
 }
 
@@ -38,6 +37,7 @@
     if (_calenderImage == nil) {
         _calenderImage = [[UIImageView alloc]init];
         _calenderImage.image = [UIImage ssj_themeImageWithName:@"home_calender"];
+        [_calenderImage sizeToFit];
     }
     return _calenderImage;
 }
@@ -45,7 +45,7 @@
 -(UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCalendarColor];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
         _dateLabel.font = [UIFont systemFontOfSize:13];
     }
@@ -59,7 +59,7 @@
 }
 
 - (void)updateAfterThemeChange{
-    self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCalendarColor];
     self.calenderImage.image = [UIImage ssj_themeImageWithName:@"home_calender"];
 }
 @end
