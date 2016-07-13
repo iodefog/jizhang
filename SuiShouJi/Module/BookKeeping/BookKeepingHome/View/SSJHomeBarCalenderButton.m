@@ -61,5 +61,6 @@
 - (void)updateAfterThemeChange{
     self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.recordHomeCalendarColor];
     self.calenderImage.image = [UIImage ssj_themeImageWithName:@"home_calender"];
+    [self.calenderImage sizeToFit];
 }
 @end

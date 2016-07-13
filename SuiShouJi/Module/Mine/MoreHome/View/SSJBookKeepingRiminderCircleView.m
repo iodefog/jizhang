@@ -26,6 +26,7 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         _weekdayArray = [[NSMutableArray alloc]initWithArray:@[@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"]];
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         [self addSubview:self.tableView];
@@ -119,25 +120,26 @@
 -(UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]init];
-        _topView.backgroundColor = [UIColor whiteColor];
+        _topView.backgroundColor = [UIColor clearColor];
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.text = @"重复";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_topView ssj_setBorderWidth:1];
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
-        [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
         _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
         _comfirmButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _comfirmButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_topView addSubview:_comfirmButton];
@@ -148,7 +150,8 @@
 -(UITableView *)tableView{
     if (_tableView == nil) {
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.width, 320)];
-        _tableView.separatorStyle = UITableViewCellSelectionStyleGray;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
