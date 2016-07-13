@@ -97,8 +97,14 @@
 // 记一笔首页记一笔按钮边框色
 @property (nonatomic, copy) NSString *recordHomeBorderColor;
 
+// 记一笔首页记一笔按钮背景色
+@property (nonatomic, copy) NSString *recordHomeButtonBackgroundColor;
+
 // 记一笔首页日历颜色
 @property (nonatomic, copy) NSString *recordHomeCalendarColor;
+
+// 记一笔首页收支类别图标背景色
+@property (nonatomic, copy) NSString *recordHomeCategoryBackgroundColor;
 
 // 登录页主要色
 @property (nonatomic, copy) NSString *loginMainColor;
