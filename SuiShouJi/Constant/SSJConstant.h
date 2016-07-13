@@ -73,9 +73,6 @@ extern NSString *const SSJImageBaseUrlString;
 //
 extern NSString *const SSJErrorDomain;
 
-//  appstore地址
-extern NSString *const SSJAppStoreAddress;
-
 //  同步加密密钥字符串
 extern NSString *const SSJSyncPrivateKey;
 

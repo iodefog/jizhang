@@ -138,7 +138,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
-        _DateSelectedView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+//        _DateSelectedView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         __weak typeof(self) weakSelf = self;
         _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
 //            if (weakSelf.selectChargeCircleType != -1

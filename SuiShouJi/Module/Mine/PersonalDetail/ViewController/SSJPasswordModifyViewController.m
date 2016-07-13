@@ -79,15 +79,15 @@
         passwordModifyCell.passwordInput.delegate = self;
     }
     if (indexPath.row == 0) {
-        passwordModifyCell.passwordInput.placeholder = @"原密码";
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"原密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         self.oldPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 1) {
-        passwordModifyCell.passwordInput.placeholder = @"新密码";
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         self.modifiedPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 2) {
-        passwordModifyCell.passwordInput.placeholder = @"确认新密码";
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"确认新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         self.comfirmNewPasswordInput = passwordModifyCell.passwordInput;
     }
     return passwordModifyCell;
