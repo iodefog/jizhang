@@ -140,9 +140,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [_surplusView updateThemeColor];
     
     if (_customPeriod) {
-        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-    } else {
         [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+    } else {
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
     }
 }
 

@@ -57,7 +57,6 @@ static NSString *const kTitle4 = @"检查更新";
     }
     
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
