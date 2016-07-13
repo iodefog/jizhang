@@ -26,7 +26,7 @@
         [self addSubview:self.fillColorView];
         [self addSubview:self.billTypeNameLab];
         [self addSubview:self.moneyInput];
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
