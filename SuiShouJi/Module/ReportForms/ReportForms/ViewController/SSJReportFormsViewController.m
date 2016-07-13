@@ -121,8 +121,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     [_tableView reloadData];
     
-    _chartView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    
     _segmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _segmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     
