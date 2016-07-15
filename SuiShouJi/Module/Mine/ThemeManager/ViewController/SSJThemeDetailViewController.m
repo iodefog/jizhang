@@ -121,6 +121,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
+            [MobClick event:@"open_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"下载失败"];
@@ -131,6 +132,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         } forID:self.item.themeId];
     }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
         [SSJThemeSetting switchToThemeID:self.item.themeId];
+        [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }

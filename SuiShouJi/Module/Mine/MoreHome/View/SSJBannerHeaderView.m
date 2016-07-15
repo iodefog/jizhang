@@ -57,6 +57,7 @@
 }
 
 -(void)closeButtonClick:(id)sender{
+    [MobClick event:@"mine_banner_close"];
     if (self.closeButtonClickBlock) {
         self.closeButtonClickBlock();
     }

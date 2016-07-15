@@ -135,6 +135,7 @@
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
+            [MobClick event:@"open_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
             if (weakSelf.themeChangeBlock) {
                 weakSelf.themeChangeBlock();
             }
@@ -146,6 +147,7 @@
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:_downloadHandler forID:self.item.themeId];
     }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){
         [SSJThemeSetting switchToThemeID:self.item.themeId];
+        [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
         if (self.themeChangeBlock) {
             self.themeChangeBlock();
         }
