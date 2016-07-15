@@ -37,6 +37,11 @@
     return _nodataImage;
 }
 
+-(void)updateAfterThemeChanged{
+    self.nodataImage.image = [UIImage ssj_themeImageWithName:@"home_none"];
+    [self.nodataImage sizeToFit];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

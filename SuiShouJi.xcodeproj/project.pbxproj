@@ -1459,6 +1459,7 @@
 		9C4078391CE1FC3100A61956 /* tab_more_sel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078311CE1FC3100A61956 /* tab_more_sel@3x.png */; };
 		9C4078471CE2190800A61956 /* tianjia_border@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078451CE2190800A61956 /* tianjia_border@2x.png */; };
 		9C4078481CE2190800A61956 /* tianjia_border@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C4078461CE2190800A61956 /* tianjia_border@3x.png */; };
+		9C4152081D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */; };
 		9C47E6E41D222372005F338A /* SSJThemeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1401D214E330094125D /* SSJThemeDetailViewController.m */; };
 		9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */; };
 		9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6F11D224BEF005F338A /* SSJThemeService.m */; };
@@ -2684,6 +2685,8 @@
 		9C4078311CE1FC3100A61956 /* tab_more_sel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_more_sel@3x.png"; sourceTree = "<group>"; };
 		9C4078451CE2190800A61956 /* tianjia_border@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia_border@2x.png"; sourceTree = "<group>"; };
 		9C4078461CE2190800A61956 /* tianjia_border@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia_border@3x.png"; sourceTree = "<group>"; };
+		9C4152061D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeNoDataHeader.h; sourceTree = "<group>"; };
+		9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeNoDataHeader.m; sourceTree = "<group>"; };
 		9C47E6ED1D222A26005F338A /* SSJDownLoadProgressButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDownLoadProgressButton.h; sourceTree = "<group>"; };
 		9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDownLoadProgressButton.m; sourceTree = "<group>"; };
 		9C47E6F01D224BEF005F338A /* SSJThemeService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeService.h; sourceTree = "<group>"; };
@@ -3628,6 +3631,8 @@
 		7D5F32441CEAE6C10086B67E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9C4152061D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.h */,
+				9C4152071D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m */,
 				7D5F32451CEAE6C10086B67E /* SSJBookKeepingButton.h */,
 				7D5F32461CEAE6C10086B67E /* SSJBookKeepingButton.m */,
 				7D5F32471CEAE6C10086B67E /* SSJBookKeepingHeader.h */,
@@ -8259,6 +8264,7 @@
 				BD04339B1C1A8DA50051E7AB /* SSJNormalWebViewController.m in Sources */,
 				9CD9BC2B1CFD2DAA0061803B /* SSJNoneCircleChargeView.m in Sources */,
 				7D5F333E1CEAE6C10086B67E /* SSJBudgetDetailBottomView.m in Sources */,
+				9C4152081D38F0C500D2AC02 /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */,
 				9C66F11D1D20C40F0094125D /* SSJThemeHomeCollectionViewCell.m in Sources */,
 				7D768A7D1C96C93A00CB75B0 /* SSJSynchronizeTask.m in Sources */,

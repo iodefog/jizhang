@@ -635,6 +635,7 @@ BOOL kHomeNeedLoginPop;
     [self.homeButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
     [self.rightBarButton updateAfterThemeChange];
+    [self.noDataHeader updateAfterThemeChanged];
 }
 
 -(void)getDateFromDatebase{

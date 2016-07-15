@@ -10,4 +10,6 @@
 
 @interface SSJBookKeepingHomeNoDataHeader : UIView
 
+-(void)updateAfterThemeChanged;
+
 @end
