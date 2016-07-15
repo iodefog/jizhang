@@ -50,8 +50,8 @@
                 [weakSelf.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
             }else{
                 [weakSelf.themeStatusButton.button setTitle:@"" forState:UIControlStateNormal];
-                weakSelf.themeStatusButton.downloadProgress = progress;
             }
+            weakSelf.themeStatusButton.downloadProgress = progress;
         };
     }
     return self;
