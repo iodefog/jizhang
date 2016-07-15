@@ -47,6 +47,8 @@
 		7D4A432B1CC87187002F0264 /* rain_sound_off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43271CC87187002F0264 /* rain_sound_off@3x.png */; };
 		7D4A432C1CC87187002F0264 /* rain_sound_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43281CC87187002F0264 /* rain_sound_on@2x.png */; };
 		7D4A432D1CC87187002F0264 /* rain_sound_on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43291CC87187002F0264 /* rain_sound_on@3x.png */; };
+		7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
+		7D4CF7051D38D174009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
 		7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
 		7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
@@ -2036,6 +2038,8 @@
 		7D4A43271CC87187002F0264 /* rain_sound_off@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rain_sound_off@3x.png"; sourceTree = "<group>"; };
 		7D4A43281CC87187002F0264 /* rain_sound_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rain_sound_on@2x.png"; sourceTree = "<group>"; };
 		7D4A43291CC87187002F0264 /* rain_sound_on@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rain_sound_on@3x.png"; sourceTree = "<group>"; };
+		7D4CF7021D38D16D009CC8ED /* SSJBudgetNodataRemindView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetNodataRemindView.h; sourceTree = "<group>"; };
+		7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetNodataRemindView.m; sourceTree = "<group>"; };
 		7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundAccountTable.h; sourceTree = "<group>"; };
 		7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundAccountTable.m; sourceTree = "<group>"; };
 		7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDailySumChargeTable.h; sourceTree = "<group>"; };
@@ -3744,6 +3748,8 @@
 				7D5F328A1CEAE6C10086B67E /* SSJBudgetListCell.m */,
 				7D5F328B1CEAE6C10086B67E /* SSJBudgetWaveWaterView.h */,
 				7D5F328C1CEAE6C10086B67E /* SSJBudgetWaveWaterView.m */,
+				7D4CF7021D38D16D009CC8ED /* SSJBudgetNodataRemindView.h */,
+				7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7920,6 +7926,7 @@
 				9C2A67B11D194CA70010F1DA /* SSJCircleChargeCell.m in Sources */,
 				9C2A67B21D194CA70010F1DA /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
 				9C2A67B31D194CA70010F1DA /* SSJSegmentedControl.m in Sources */,
+				7D4CF7051D38D174009CC8ED /* SSJBudgetNodataRemindView.m in Sources */,
 				9C2A67B41D194CA70010F1DA /* SSJNewFundingTypeCell.m in Sources */,
 				9C2A67B51D194CA70010F1DA /* SSJCustomCollectionViewFlowLayout.m in Sources */,
 				9C2A67B61D194CA70010F1DA /* SSJBillingChargeHelper.m in Sources */,
@@ -8146,6 +8153,7 @@
 				7D5F334E1CEAE6C10086B67E /* SSJCalenderDetailCell.m in Sources */,
 				9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */,
 				7D5F334A1CEAE6C10086B67E /* SSJCalenderCellItem.m in Sources */,
+				7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
 				7D5F33771CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m in Sources */,
 				7DE4A7E51D20DC7000F05BF0 /* NSString+SSJTheme.m in Sources */,
