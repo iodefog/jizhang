@@ -167,6 +167,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 success(SSJDataSynchronizeTypeData);
             }
             [self.dataSuccessBlocks removeBlock];
+            [self.dataFailureBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncDataSuccessNotification object:self];
 #ifdef DEBUG
             [CDAutoHideMessageHUD showMessage:@"数据同步成功"];
@@ -184,6 +185,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 success(SSJDataSynchronizeTypeImage);
             }
             [self.imageSuccessBlocks removeBlock];
+            [self.imageFailureBlocks removeBlock];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncImageSuccessNotification object:self];
 #ifdef DEBUG
             [CDAutoHideMessageHUD showMessage:@"图片同步成功"];
@@ -201,7 +203,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 failure(SSJDataSynchronizeTypeData, error);
             }
             [self.dataFailureBlocks removeBlock];
-            
+            [self.dataSuccessBlocks removeBlock];
 #ifdef DEBUG
             [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
 #endif
@@ -217,6 +219,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 failure(SSJDataSynchronizeTypeImage, error);
             }
             [self.imageFailureBlocks removeBlock];
+            [self.imageSuccessBlocks removeBlock];
 #ifdef DEBUG
             if (error.code == SSJErrorCodeImageSyncFailed) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"图片同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
