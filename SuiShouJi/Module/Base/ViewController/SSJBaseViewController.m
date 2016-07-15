@@ -97,6 +97,10 @@
     [MobClick endLogPageView:[self statisticsTitle]];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return SSJ_CURRENT_THEME.statusBarStyle;
+}
+
 #pragma mark - UIResponder
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesEnded:touches withEvent:event];

@@ -36,6 +36,7 @@
     [aCoder encodeObject:_cellSeparatorColor forKey:@"cellSeparatorColor"];
     [aCoder encodeObject:_cellIndicatorColor forKey:@"cellIndicatorColor"];
     [aCoder encodeInt:_cellSelectionStyle forKey:@"cellSelectionStyle"];
+    [aCoder encodeInt:_statusBarStyle forKey:@"statusBarStyle"];
     [aCoder encodeObject:_moreHomeTitleColor forKey:@"moreHomeTitleColor"];
     [aCoder encodeObject:_moreHomeSubtitleColor forKey:@"moreHomeSubtitleColor"];
     [aCoder encodeObject:_recordHomeBorderColor forKey:@"recordHomeBorderColor"];
@@ -80,6 +81,7 @@
         _cellSeparatorColor = [aDecoder decodeObjectForKey:@"cellSeparatorColor"];
         _cellIndicatorColor = [aDecoder decodeObjectForKey:@"cellIndicatorColor"];
         _cellSelectionStyle = [aDecoder decodeIntForKey:@"cellSelectionStyle"];
+        _statusBarStyle = [aDecoder decodeIntForKey:@"statusBarStyle"];
         _moreHomeTitleColor = [aDecoder decodeObjectForKey:@"moreHomeTitleColor"];
         _moreHomeSubtitleColor = [aDecoder decodeObjectForKey:@"moreHomeSubtitleColor"];
         _recordHomeBorderColor = [aDecoder decodeObjectForKey:@"recordHomeBorderColor"];
@@ -126,6 +128,7 @@
                                                           @"cellSeparatorColor":_cellSeparatorColor,
                                                           @"cellIndicatorColor":_cellIndicatorColor,
                                                           @"cellSelectionStyle":@(_cellSelectionStyle),
+                                                          @"statusBarStyle":@(_statusBarStyle),
                                                           @"moreHomeTitleColor":_moreHomeTitleColor,
                                                           @"moreHomeSubtitleColor":_moreHomeSubtitleColor,
                                                           @"recordHomeBorderColor":_recordHomeBorderColor,

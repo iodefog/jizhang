@@ -81,6 +81,7 @@
     model.cellSeparatorColor = @"#e8e8e8";
     model.cellIndicatorColor = @"#cccccc";
     model.cellSelectionStyle = UITableViewCellSelectionStyleGray;
+    model.statusBarStyle = UIStatusBarStyleDefault;
     model.moreHomeTitleColor = @"#FFFFFF";
     model.moreHomeSubtitleColor = @"#fab9bf";
     model.recordHomeBorderColor = @"#eb4a64";
