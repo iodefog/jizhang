@@ -100,7 +100,11 @@ static BOOL kNeedBannerDisplay = YES;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.bannerService requestBannersList];
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    }
+    
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-

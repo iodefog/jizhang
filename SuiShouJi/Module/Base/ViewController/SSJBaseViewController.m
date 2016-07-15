@@ -69,7 +69,8 @@
     }else{
         self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
     }
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 
     
     SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
@@ -131,6 +132,7 @@
 
 - (void)updateAppearanceAfterThemeChanged {
     [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
+    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
 #pragma mark - Notification
