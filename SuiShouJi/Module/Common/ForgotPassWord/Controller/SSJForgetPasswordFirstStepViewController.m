@@ -67,8 +67,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
         self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                         NSForegroundColorAttributeName:[UIColor whiteColor]};
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];

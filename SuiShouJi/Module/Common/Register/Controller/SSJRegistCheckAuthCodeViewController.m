@@ -77,6 +77,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
         self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
                                                                         NSForegroundColorAttributeName:[UIColor whiteColor]};
         self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -85,7 +86,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     [self.authCodeTextField becomeFirstResponder];
 }
 

@@ -72,7 +72,7 @@ BOOL kHomeNeedLoginPop;
         self.statisticsTitle = @"首页";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
+//        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
 }
