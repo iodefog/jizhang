@@ -49,6 +49,11 @@
 		7D4A432D1CC87187002F0264 /* rain_sound_on@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D4A43291CC87187002F0264 /* rain_sound_on@3x.png */; };
 		7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
 		7D4CF7051D38D174009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
+		7D4CF70E1D38E38B009CC8ED /* SSJBannerHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7841D2F4EA40013E97B /* SSJBannerHeaderView.m */; };
+		7D4CF70F1D38E398009CC8ED /* SCYWinCowryHomeBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */; };
+		7D4CF7101D38E3A5009CC8ED /* SSJBannerNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D7911D2F4FF80013E97B /* SSJBannerNetworkService.m */; };
+		7D4CF7111D38E3B3009CC8ED /* SSJBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE7D78E1D2F4ECA0013E97B /* SSJBannerItem.m */; };
+		7D4CF7121D38E3C4009CC8ED /* SSJFundingDetailNoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */; };
 		7D4EF8821C43B10C003C4B20 /* SSJFundAccountTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */; };
 		7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
 		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
@@ -7856,6 +7861,7 @@
 				9C2A67701D194CA70010F1DA /* SSJBillTypeSelectCell.m in Sources */,
 				7DA6EDD81D2B5CDC0097F06C /* SSJThemeDownLoaderManger.m in Sources */,
 				9C2A67711D194CA70010F1DA /* SFHFKeychainUtils.m in Sources */,
+				7D4CF7121D38E3C4009CC8ED /* SSJFundingDetailNoDataView.m in Sources */,
 				9C2A67721D194CA70010F1DA /* SSJBudgetDetailPeriodSwitchControl.m in Sources */,
 				9C2A67731D194CA70010F1DA /* SSJFinancingHomeHelper.m in Sources */,
 				9C2A67741D194CA70010F1DA /* SSJBudgetDetailMiddleTitleView.m in Sources */,
@@ -7962,6 +7968,7 @@
 				9C2A67D41D194CA70010F1DA /* SSJSettingViewController.m in Sources */,
 				9C2A67D51D194CA70010F1DA /* SSJSmallCalendarView.m in Sources */,
 				9C2A67D61D194CA70010F1DA /* SSJAlertViewDelegator.m in Sources */,
+				7D4CF70E1D38E38B009CC8ED /* SSJBannerHeaderView.m in Sources */,
 				9C2A67D71D194CA70010F1DA /* SSJMineHomeTabelviewCell.m in Sources */,
 				9C2A67D81D194CA70010F1DA /* NSString+MoneyDisplayFormat.m in Sources */,
 				9C2A67D91D194CA70010F1DA /* SSJBooksTypeCollectionViewCell.m in Sources */,
@@ -8034,6 +8041,7 @@
 				9C2A68181D194CA70010F1DA /* SSJBudgetWaveWaterView.m in Sources */,
 				9C2A68191D194CA70010F1DA /* SSJPercentCircleAdditionNode.m in Sources */,
 				9C2A681A1D194CA70010F1DA /* SSJDateSelectedView.m in Sources */,
+				7D4CF7111D38E3B3009CC8ED /* SSJBannerItem.m in Sources */,
 				9C2A681B1D194CA70010F1DA /* UIView+SSJViewAnimatioin.m in Sources */,
 				9C2A681C1D194CA70010F1DA /* SSJBillingChargeViewController.m in Sources */,
 				9C47E6F31D224BF4005F338A /* SSJDownLoadProgressButton.m in Sources */,
@@ -8056,6 +8064,7 @@
 				9C2A682C1D194CA70010F1DA /* SSJPortraitUploadNetworkService.m in Sources */,
 				9C2A682D1D194CA70010F1DA /* SSJAboutusViewController.m in Sources */,
 				9C2A682E1D194CA70010F1DA /* SSJViewAddition.m in Sources */,
+				7D4CF7101D38E3A5009CC8ED /* SSJBannerNetworkService.m in Sources */,
 				9C2A682F1D194CA70010F1DA /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				9C2A68301D194CA70010F1DA /* SSJBooksTypeStore.m in Sources */,
 				9C2A68311D194CA70010F1DA /* SSJBooksTypeSelectViewController.m in Sources */,
@@ -8066,6 +8075,7 @@
 				7DE4A7E61D20DC7D00F05BF0 /* NSString+SSJTheme.m in Sources */,
 				9C2A68361D194CA70010F1DA /* SSJBookkeepingTreeDescView.m in Sources */,
 				9C2A68371D194CA70010F1DA /* SSJModifyFundingViewController.m in Sources */,
+				7D4CF70F1D38E398009CC8ED /* SCYWinCowryHomeBannerView.m in Sources */,
 				9C2A68381D194CA70010F1DA /* SSJFundingTransferViewController.m in Sources */,
 				9C2A68391D194CA70010F1DA /* SSJScrollTextView.m in Sources */,
 				9C2A683A1D194CA70010F1DA /* SSJFundAccountTable.m in Sources */,
@@ -8519,8 +8529,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8551,7 +8561,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2b8db009-b00f-41bc-abe9-6c929205d71d";
+				PROVISIONING_PROFILE = "0d3437e5-4a91-4322-8a8d-43d658d23cfd";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -8733,7 +8743,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -8765,7 +8775,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
