@@ -50,11 +50,6 @@ static NSString *const kHelpCellId = @"kHelpCellId";
     [self.view addSubview:self.tableView];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.tableView.height = self.view.height;
-}
-
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _items.count;
