@@ -34,6 +34,7 @@
 #import "SSJBookKeepingHomeHelper.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJStartUpgradeAlertView.h"
+#import "SSJBookKeepingHomeNoDataHeader.h"
 
 BOOL kHomeNeedLoginPop;
 
@@ -49,7 +50,7 @@ BOOL kHomeNeedLoginPop;
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
-@property(nonatomic, strong) UIImageView *noDataHeader;
+@property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -547,11 +548,9 @@ BOOL kHomeNeedLoginPop;
     return _homeButton;
 }
 
--(UIImageView *)noDataHeader{
+-(SSJBookKeepingHomeNoDataHeader *)noDataHeader{
     if (!_noDataHeader) {
-        _noDataHeader = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 294)];
-        _noDataHeader.image = [UIImage ssj_themeImageWithName:@"home_none"];
-        [_noDataHeader sizeToFit];
+        _noDataHeader = [[SSJBookKeepingHomeNoDataHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
     }
     return _noDataHeader;
 }
@@ -636,7 +635,7 @@ BOOL kHomeNeedLoginPop;
     [self.homeButton updateAfterThemeChange];
     [self.budgetButton updateAfterThemeChange];
     [self.rightBarButton updateAfterThemeChange];
-    _noDataHeader.image = [UIImage ssj_themeImageWithName:@"home_none"];
+    [self.noDataHeader updateAfterThemeChanged];
 }
 
 -(void)getDateFromDatebase{
