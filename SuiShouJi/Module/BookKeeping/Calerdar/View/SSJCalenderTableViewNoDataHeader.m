@@ -9,6 +9,7 @@
 #import "SSJCalenderTableViewNoDataHeader.h"
 @interface SSJCalenderTableViewNoDataHeader()
 @property (weak, nonatomic) IBOutlet UIButton *recordMakingButton;
+@property (weak, nonatomic) IBOutlet UILabel *hintLabel;
 
 @end
 @implementation SSJCalenderTableViewNoDataHeader
@@ -23,6 +24,7 @@
     self.recordMakingButton.layer.cornerRadius = 20;
     self.recordMakingButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
     self.recordMakingButton.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+    self.hintLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 - (IBAction)recordButtonClicked:(id)sender {

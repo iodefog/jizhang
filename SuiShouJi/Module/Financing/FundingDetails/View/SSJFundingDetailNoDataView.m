@@ -29,7 +29,7 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.noDataImage.centerX = self.width / 2;
-    self.noDataImage.centerY = self.height / 2 - 5;
+    self.noDataImage.centerY = self.height / 2 - 20;
     self.noDataLabel.top = self.noDataImage.bottom + 10;
     self.noDataLabel.centerX = self.width / 2;
 }

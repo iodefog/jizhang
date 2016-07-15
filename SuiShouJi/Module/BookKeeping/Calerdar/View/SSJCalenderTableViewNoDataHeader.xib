@@ -12,20 +12,20 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar_norecord.png" translatesAutoresizingMaskIntoConstraints="NO" id="sTt-KS-Xge">
-                    <rect key="frame" x="81" y="0.0" width="154" height="120"/>
+                    <rect key="frame" x="98" y="0.0" width="120" height="150"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="120" id="CYO-jJ-5gj"/>
-                        <constraint firstAttribute="width" constant="154" id="gEy-Av-ebN"/>
+                        <constraint firstAttribute="height" constant="150" id="CYO-jJ-5gj"/>
+                        <constraint firstAttribute="width" constant="120" id="gEy-Av-ebN"/>
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="您当天没有记账记录哦" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUr-iI-5nu">
-                    <rect key="frame" x="83" y="125" width="150" height="18"/>
+                    <rect key="frame" x="83" y="155" width="150" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.65490196078431373" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X0u-UM-I4T">
-                    <rect key="frame" x="83" y="148" width="150" height="40"/>
+                    <rect key="frame" x="83" y="178" width="150" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="150" id="vDu-Gu-ocK"/>
                         <constraint firstAttribute="height" constant="40" id="x9o-tC-Nbo"/>
@@ -62,6 +62,7 @@
                 </mask>
             </variation>
             <connections>
+                <outlet property="hintLabel" destination="QUr-iI-5nu" id="VQd-bV-Msr"/>
                 <outlet property="recordMakingButton" destination="X0u-UM-I4T" id="SQ7-9S-4Me"/>
             </connections>
             <point key="canvasLocation" x="81.5" y="50"/>

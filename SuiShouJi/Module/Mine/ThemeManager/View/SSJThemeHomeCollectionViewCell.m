@@ -46,8 +46,12 @@
         
         __weak typeof(self) weakSelf = self;
         _downloadHandler = ^(float progress) {
-            [weakSelf.themeStatusButton.button setTitle:@"" forState:UIControlStateNormal];
-            weakSelf.themeStatusButton.downloadProgress = progress;
+            if (progress == 1) {
+                [weakSelf.themeStatusButton.button setTitle:@"启用" forState:UIControlStateNormal];
+            }else{
+                [weakSelf.themeStatusButton.button setTitle:@"" forState:UIControlStateNormal];
+                weakSelf.themeStatusButton.downloadProgress = progress;
+            }
         };
     }
     return self;

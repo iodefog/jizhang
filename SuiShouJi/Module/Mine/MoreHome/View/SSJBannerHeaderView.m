@@ -38,6 +38,7 @@
         __weak typeof(self) weakSelf = self;
         _banner.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex){
             SSJBannerItem *item = [weakSelf.items objectAtIndex:tapIndex];
+            [MobClick event:@"mine_banner" attributes:@{@"bannerUrl":item.bannerUrl}];
             if (weakSelf.bannerClickedBlock) {
                 weakSelf.bannerClickedBlock(item.bannerUrl);
             }

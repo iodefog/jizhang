@@ -287,21 +287,21 @@
 
 -(void)qqLoginButtonClicked:(id)sender{
     [MobClick event:@"login_qq"];
-
+    __weak typeof(self) weakSelf = self;
     [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
+        [weakSelf.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
     }];
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
     [MobClick event:@"login_weichat"];
-
+    __weak typeof(self) weakSelf = self;
     [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
+        [weakSelf.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
     }];
 }
 
@@ -372,7 +372,7 @@
     //  如果用户手势密码开启，进入手势密码页面
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
     if ([userItem.motionPWDState boolValue]) {
-        
+        __weak typeof(self) weakSelf = self;
         SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
         motionVC.finishHandle = self.finishHandle;
         motionVC.backController = self.backController;
@@ -381,7 +381,7 @@
         } else {
             motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
         }
-        [self.navigationController pushViewController:motionVC animated:YES];
+        [weakSelf.navigationController pushViewController:motionVC animated:YES];
         
         return;
     }
