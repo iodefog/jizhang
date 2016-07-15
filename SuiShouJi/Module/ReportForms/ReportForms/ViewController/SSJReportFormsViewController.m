@@ -13,6 +13,7 @@
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsScaleAxisView.h"
+#import "SSJBudgetNodataRemindView.h"
 
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
@@ -41,7 +42,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 @property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
 
 //  没有流水的提示视图
-@property (nonatomic, strong) UIImageView *noDataRemindView;
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
@@ -589,9 +590,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     return _tableView;
 }
 
-- (UIImageView *)noDataRemindView {
+- (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_nodata"]];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.title = @"报表空空如也";
     }
     return _noDataRemindView;
 }

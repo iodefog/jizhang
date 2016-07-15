@@ -12,17 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SSJMagicExportCalendarDateView;
 @class SSJMagicExportCalendarViewCell;
-@class SSJMagicExportCalendarViewCellItem;
-
-typedef void(^SSJMagicExportCalendarViewCellBlock)(SSJMagicExportCalendarViewCell *, SSJMagicExportCalendarDateView *);
+@class SSJMagicExportCalendarDateViewItem;
 
 @interface SSJMagicExportCalendarViewCell : SSJBaseTableViewCell
 
-@property (nonatomic, strong) NSArray<SSJMagicExportCalendarViewCellItem *> *dateItems;
+@property (nonatomic, strong) NSArray<SSJMagicExportCalendarDateViewItem *> *dateItems;
 
-@property (nonatomic, copy) SSJMagicExportCalendarViewCellBlock willSelectBlock;
+@property (nonatomic, copy) BOOL(^shouldSelectBlock)(SSJMagicExportCalendarViewCell *, SSJMagicExportCalendarDateView *);
 
-@property (nonatomic, copy) SSJMagicExportCalendarViewCellBlock didSelectBlock;
+@property (nonatomic, copy) void(^didSelectBlock)(SSJMagicExportCalendarViewCell *, SSJMagicExportCalendarDateView *);
 
 @end
 

@@ -149,7 +149,7 @@ static CGSize kButtonSize = {36, 30};
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = [UIFont systemFontOfSize:21];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor];
     }
     return _titleLabel;
 }
