@@ -9,18 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @class SSJMagicExportCalendarDateView;
-@class SSJMagicExportCalendarViewCellItem;
-
-typedef void(^SSJMagicExportCalendarDateViewBlock)(SSJMagicExportCalendarDateView *);
+@class SSJMagicExportCalendarDateViewItem;
 
 @interface SSJMagicExportCalendarDateView : UIView
 
-@property (nonatomic, strong) SSJMagicExportCalendarViewCellItem *item;
+@property (nonatomic, strong) SSJMagicExportCalendarDateViewItem *item;
 
-@property (nonatomic, copy) SSJMagicExportCalendarDateViewBlock willSelectBlock;
+@property (nonatomic, copy) BOOL(^shouldSelectBlock)(SSJMagicExportCalendarDateView *);
 
-@property (nonatomic, copy) SSJMagicExportCalendarDateViewBlock didSelectBlock;
-
-- (void)update;
+@property (nonatomic, copy) void(^didSelectBlock)(SSJMagicExportCalendarDateView *);
 
 @end

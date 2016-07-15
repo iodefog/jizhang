@@ -8,7 +8,7 @@
 
 #import "SSJMagicExportCalendarViewCell.h"
 #import "SSJMagicExportCalendarDateView.h"
-#import "SSJMagicExportCalendarViewCellItem.h"
+#import "SSJMagicExportCalendarDateViewItem.h"
 
 @interface SSJMagicExportCalendarViewCell ()
 
@@ -26,16 +26,21 @@
         for (int i = 0; i < 7; i ++) {
             SSJMagicExportCalendarDateView *dateView = [[SSJMagicExportCalendarDateView alloc] init];
             __weak typeof(self) weakSelf = self;
-            dateView.willSelectBlock = ^(SSJMagicExportCalendarDateView *dateView) {
-                if (weakSelf.willSelectBlock) {
-                    weakSelf.willSelectBlock(weakSelf, dateView);
+            
+            dateView.shouldSelectBlock = ^BOOL(SSJMagicExportCalendarDateView *dateView) {
+                BOOL shouldSelect = YES;
+                if (weakSelf.shouldSelectBlock) {
+                    shouldSelect = weakSelf.shouldSelectBlock(weakSelf, dateView);
                 }
+                return shouldSelect;
             };
+            
             dateView.didSelectBlock = ^(SSJMagicExportCalendarDateView *dateView) {
                 if (weakSelf.didSelectBlock) {
                     weakSelf.didSelectBlock(weakSelf, dateView);
                 }
             };
+            
             [_dateViewArr addObject:dateView];
             [self.contentView addSubview:dateView];
         }
@@ -53,7 +58,7 @@
     }
 }
 
-- (void)setDateItems:(NSArray<SSJMagicExportCalendarViewCellItem *> *)dateItems {
+- (void)setDateItems:(NSArray<SSJMagicExportCalendarDateViewItem *> *)dateItems {
     _dateItems = dateItems;
     for (int i = 0; i < _dateItems.count; i ++) {
         SSJMagicExportCalendarDateView *dateView = [_dateViewArr ssj_safeObjectAtIndex:i];

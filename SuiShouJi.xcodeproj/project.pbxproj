@@ -563,7 +563,7 @@
 		9C2A67721D194CA70010F1DA /* SSJBudgetDetailPeriodSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327E1CEAE6C10086B67E /* SSJBudgetDetailPeriodSwitchControl.m */; };
 		9C2A67731D194CA70010F1DA /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471371CEB224C00D69079 /* SSJFinancingHomeHelper.m */; };
 		9C2A67741D194CA70010F1DA /* SSJBudgetDetailMiddleTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F327C1CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.m */; };
-		9C2A67751D194CA70010F1DA /* SSJMagicExportCalendarViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.m */; };
+		9C2A67751D194CA70010F1DA /* SSJMagicExportCalendarDateViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m */; };
 		9C2A67761D194CA70010F1DA /* SSJBillTypeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D58487F1CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m */; };
 		9C2A67771D194CA70010F1DA /* SSJRegistGetVerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD70DF541C4751EA000E6CC9 /* SSJRegistGetVerViewController.m */; };
 		9C2A67781D194CA70010F1DA /* SSJFundingTypeSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F330A1CEAE6C10086B67E /* SSJFundingTypeSelectView.m */; };
@@ -1703,7 +1703,7 @@
 		9CD9BC141CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */; };
 		9CD9BC151CFD2DAA0061803B /* SSJMagicExportCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA11CFD2DAA0061803B /* SSJMagicExportCalendarView.m */; };
 		9CD9BC161CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */; };
-		9CD9BC171CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.m */; };
+		9CD9BC171CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m */; };
 		9CD9BC181CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */; };
 		9CD9BC191CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA91CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m */; };
 		9CD9BC1A1CFD2DAA0061803B /* SSJMagicExportSelectDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBAB1CFD2DAA0061803B /* SSJMagicExportSelectDateView.m */; };
@@ -2974,8 +2974,8 @@
 		9CD9BBA11CFD2DAA0061803B /* SSJMagicExportCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarView.m; sourceTree = "<group>"; };
 		9CD9BBA21CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarViewCell.h; sourceTree = "<group>"; };
 		9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarViewCell.m; sourceTree = "<group>"; };
-		9CD9BBA41CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarViewCellItem.h; sourceTree = "<group>"; };
-		9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarViewCellItem.m; sourceTree = "<group>"; };
+		9CD9BBA41CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarDateViewItem.h; sourceTree = "<group>"; };
+		9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarDateViewItem.m; sourceTree = "<group>"; };
 		9CD9BBA61CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportCalendarWeekView.h; sourceTree = "<group>"; };
 		9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportCalendarWeekView.m; sourceTree = "<group>"; };
 		9CD9BBA81CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportResultCheckMarkView.h; sourceTree = "<group>"; };
@@ -5416,20 +5416,20 @@
 		9CD9BB991CFD2DAA0061803B /* SSJMagicExportCalendarView */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9BB9A1CFD2DAA0061803B /* SSJMagicExportCalendarDateView.h */,
-				9CD9BB9B1CFD2DAA0061803B /* SSJMagicExportCalendarDateView.m */,
-				9CD9BB9C1CFD2DAA0061803B /* SSJMagicExportCalendarHeaderView.h */,
-				9CD9BB9D1CFD2DAA0061803B /* SSJMagicExportCalendarHeaderView.m */,
-				9CD9BB9E1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.h */,
-				9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */,
 				9CD9BBA01CFD2DAA0061803B /* SSJMagicExportCalendarView.h */,
 				9CD9BBA11CFD2DAA0061803B /* SSJMagicExportCalendarView.m */,
 				9CD9BBA21CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.h */,
 				9CD9BBA31CFD2DAA0061803B /* SSJMagicExportCalendarViewCell.m */,
-				9CD9BBA41CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.h */,
-				9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.m */,
+				9CD9BB9A1CFD2DAA0061803B /* SSJMagicExportCalendarDateView.h */,
+				9CD9BB9B1CFD2DAA0061803B /* SSJMagicExportCalendarDateView.m */,
+				9CD9BBA41CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.h */,
+				9CD9BBA51CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m */,
+				9CD9BB9C1CFD2DAA0061803B /* SSJMagicExportCalendarHeaderView.h */,
+				9CD9BB9D1CFD2DAA0061803B /* SSJMagicExportCalendarHeaderView.m */,
 				9CD9BBA61CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.h */,
 				9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */,
+				9CD9BB9E1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.h */,
+				9CD9BB9F1CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m */,
 			);
 			path = SSJMagicExportCalendarView;
 			sourceTree = "<group>";
@@ -7853,7 +7853,7 @@
 				9C2A67721D194CA70010F1DA /* SSJBudgetDetailPeriodSwitchControl.m in Sources */,
 				9C2A67731D194CA70010F1DA /* SSJFinancingHomeHelper.m in Sources */,
 				9C2A67741D194CA70010F1DA /* SSJBudgetDetailMiddleTitleView.m in Sources */,
-				9C2A67751D194CA70010F1DA /* SSJMagicExportCalendarViewCellItem.m in Sources */,
+				9C2A67751D194CA70010F1DA /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				9C2A67761D194CA70010F1DA /* SSJBillTypeSyncTable.m in Sources */,
 				9C2A67771D194CA70010F1DA /* SSJRegistGetVerViewController.m in Sources */,
 				9C2A67781D194CA70010F1DA /* SSJFundingTypeSelectView.m in Sources */,
@@ -8210,7 +8210,7 @@
 				7D5F33411CEAE6C10086B67E /* SSJBudgetDetailPeriodSwitchControl.m in Sources */,
 				9C9471771CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */,
 				7D5F33401CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.m in Sources */,
-				9CD9BC171CFD2DAA0061803B /* SSJMagicExportCalendarViewCellItem.m in Sources */,
+				9CD9BC171CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				7D5848801CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
 				7D5F337C1CEAE6C10086B67E /* SSJFundingTypeSelectView.m in Sources */,
