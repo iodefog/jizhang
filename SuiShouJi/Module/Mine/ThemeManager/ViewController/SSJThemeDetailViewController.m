@@ -122,6 +122,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
+            [MobClick event:@"download_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
             [MobClick event:@"open_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
