@@ -12,6 +12,7 @@
 @implementation SSJThemeService
 
 - (void)requestThemeList{
+    self.showLodingIndicator = YES;
     [self request:SSJURLWithAPI(@"/user/themes.go") params:nil];
 }
 

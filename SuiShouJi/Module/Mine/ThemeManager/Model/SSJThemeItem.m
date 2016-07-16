@@ -19,7 +19,7 @@
              @"themeDesc" : @"desc",
              @"downLoadUrl" : @"IOSHREF",
              @"images" : @"imgs",
-             @"themeSize" : @"size"
+             @"themeSize" : @"isize"
              };
 }
 
