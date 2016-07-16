@@ -137,6 +137,7 @@
         _moneyLab = [[UILabel alloc] init];
         _moneyLab.backgroundColor = [UIColor clearColor];
         _moneyLab.font = [UIFont systemFontOfSize:20];
+        _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _moneyLab;
 }
@@ -169,7 +170,7 @@
 -(UILabel *)memoLabel{
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
-        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memoLabel.font = [UIFont systemFontOfSize:13];
     }
     return _memoLabel;

@@ -45,7 +45,7 @@
 -(UILabel *)expentureLabel{
     if (!_expentureLabel) {
         _expentureLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _expentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _expentureLabel.font = [UIFont systemFontOfSize:12];
     }
     return _expentureLabel;
