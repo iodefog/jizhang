@@ -12,6 +12,7 @@
 #import "SSJReportFormsCurveGraphView.h"
 #import "SSJReportFormsCurveGridView.h"
 #import "SSJReportFormsCurveDescriptionView.h"
+#import "SSJBudgetNodataRemindView.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJReportFormsUtil.h"
 #import "SSJUserTableManager.h"
@@ -36,7 +37,7 @@
 
 @property (nonatomic, strong) SSJReportFormsCurveGridView *gridView;
 
-@property (nonatomic, strong) UIImageView *noDataRemindView;
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @property (nonatomic, strong) NSArray *datas;
 
@@ -318,9 +319,10 @@
     return _gridView;
 }
 
-- (UIImageView *)noDataRemindView {
+- (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_nodata"]];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.title = @"报表空空如也";
     }
     return _noDataRemindView;
 }
