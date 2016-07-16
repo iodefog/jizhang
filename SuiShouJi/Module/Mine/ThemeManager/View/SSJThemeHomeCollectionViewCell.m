@@ -135,7 +135,7 @@
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
-            [MobClick event:@"open_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
+            [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
             if (weakSelf.themeChangeBlock) {
                 weakSelf.themeChangeBlock();
             }

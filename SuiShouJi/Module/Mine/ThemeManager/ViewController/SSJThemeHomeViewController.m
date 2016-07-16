@@ -46,6 +46,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self checkNetwork];
 }
 

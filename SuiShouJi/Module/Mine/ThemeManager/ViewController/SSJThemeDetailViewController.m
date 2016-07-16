@@ -70,6 +70,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     if ([[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         __weak typeof(self) weakSelf = self;
         [self.themeDownLoadButton.button setTitle:@"" forState:UIControlStateNormal];
