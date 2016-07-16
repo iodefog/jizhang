@@ -53,11 +53,11 @@
     // 曲线
     CGContextSetLineWidth(ctx, 1);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:@"59ae65"].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:NO].CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:@"f56262"].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:NO].CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
 }

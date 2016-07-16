@@ -94,6 +94,8 @@
     model.motionPasswordNormalColor = @"#FFFFFF";
     model.motionPasswordHighlightedColor = @"#ffdb01";
     model.motionPasswordErrorColor = @"#eb4a64";
+    model.reportFormsCurveIncomeColor = @"#f56262";
+    model.reportFormsCurvePaymentColor = @"#59ae65";
     model.reportFormsCurveIncomeFillColor = @"#fae5e5";
     model.reportFormsCurvePaymentFillColor = @"#e9f4ea";
     model.recordMakingInputViewAlpha = 1;

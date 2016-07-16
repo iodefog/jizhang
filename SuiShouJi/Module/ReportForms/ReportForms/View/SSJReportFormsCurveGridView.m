@@ -68,7 +68,7 @@
         _incomeCell = [[SSJReportFormsCurveGridCell alloc] init];
         _incomeCell.topLabel.text = @"期间收入（元）";
         _incomeCell.bottomLabel.text = @"0.00";
-        _incomeCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"EB4141"];
+        _incomeCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
         [_incomeCell ssj_setBorderWidth:1];
         [_incomeCell ssj_setBorderColor:borderColor];
         [_incomeCell ssj_setBorderStyle:(SSJBorderStyleBottom | SSJBorderStyleRight)];
@@ -77,7 +77,7 @@
         _paymentCell = [[SSJReportFormsCurveGridCell alloc] init];
         _paymentCell.topLabel.text = @"期间支出（元）";
         _paymentCell.bottomLabel.text = @"0.00";
-        _paymentCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:@"38A146"];
+        _paymentCell.bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
         [_paymentCell ssj_setBorderWidth:1];
         [_paymentCell ssj_setBorderColor:borderColor];
         [_paymentCell ssj_setBorderStyle:SSJBorderStyleBottom];
