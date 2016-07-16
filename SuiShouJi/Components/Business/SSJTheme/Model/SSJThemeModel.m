@@ -49,6 +49,8 @@
     [aCoder encodeObject:_motionPasswordNormalColor forKey:@"motionPasswordNormalColor"];
     [aCoder encodeObject:_motionPasswordHighlightedColor forKey:@"motionPasswordHighlightedColor"];
     [aCoder encodeObject:_motionPasswordErrorColor forKey:@"motionPasswordErrorColor"];
+    [aCoder encodeObject:_reportFormsCurveIncomeColor forKey:@"reportFormsCurveIncomeColor"];
+    [aCoder encodeObject:_reportFormsCurvePaymentColor forKey:@"reportFormsCurvePaymentColor"];
     [aCoder encodeObject:_reportFormsCurveIncomeFillColor forKey:@"reportFormsCurveIncomeFillColor"];
     [aCoder encodeObject:_reportFormsCurvePaymentFillColor forKey:@"reportFormsCurvePaymentFillColor"];
     [aCoder encodeFloat:_recordMakingInputViewAlpha forKey:@"recordMakingInputViewAlpha"];
@@ -94,6 +96,8 @@
         _motionPasswordNormalColor = [aDecoder decodeObjectForKey:@"motionPasswordNormalColor"];
         _motionPasswordHighlightedColor = [aDecoder decodeObjectForKey:@"motionPasswordHighlightedColor"];
         _motionPasswordErrorColor = [aDecoder decodeObjectForKey:@"motionPasswordErrorColor"];
+        _reportFormsCurveIncomeColor = [aDecoder decodeObjectForKey:@"reportFormsCurveIncomeColor"];
+        _reportFormsCurvePaymentColor = [aDecoder decodeObjectForKey:@"reportFormsCurvePaymentColor"];
         _reportFormsCurveIncomeFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurveIncomeFillColor"];
         _reportFormsCurvePaymentFillColor = [aDecoder decodeObjectForKey:@"reportFormsCurvePaymentFillColor"];
         _recordMakingInputViewAlpha = [aDecoder decodeFloatForKey:@"recordMakingInputViewAlpha"];
@@ -141,6 +145,8 @@
                                                           @"motionPasswordNormalColor":_motionPasswordNormalColor,
                                                           @"motionPasswordHighlightedColor":_motionPasswordHighlightedColor,
                                                           @"motionPasswordErrorColor":_motionPasswordErrorColor,
+                                                          @"reportFormsCurveIncomeColor":_reportFormsCurveIncomeColor,
+                                                          @"reportFormsCurvePaymentColor":_reportFormsCurvePaymentColor,
                                                           @"reportFormsCurveIncomeFillColor":_reportFormsCurveIncomeFillColor,
                                                           @"reportFormsCurvePaymentFillColor":_reportFormsCurvePaymentFillColor,
                                                           @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha)}];
