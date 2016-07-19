@@ -13,6 +13,32 @@
 @property (nonatomic, strong, readonly) UIWebView *webView;
 
 /**
+ *  进度条颜色,默认系统TintColor
+ */
+@property (nonatomic, strong) UIColor *progressViewTintColor;
+
+/**
+ *  工具条Item颜色,默认系统TintColor
+ */
+@property (nonatomic, strong) UIColor *toolBarItemTintColor;
+
+/**
+ *  工具条颜色
+ */
+@property (nonatomic, strong) UIColor *toolBarTintColor;
+
+/**
+ *  是否在导航条显示URL,默认隐藏(NO)
+ */
+@property (nonatomic, assign) BOOL showURLInNavigationBar;
+
+/**
+ *  是否在导航条显示网页的PageTitle,默认隐藏(NO)
+ */
+@property (nonatomic, assign) BOOL showPageTitleInNavigationBar;
+
+
+/**
  *  是否隐藏工具条,默认隐藏(YES)
  */
 @property (nonatomic, assign) BOOL toolBarHidden;
@@ -24,7 +50,7 @@
  *
  *  @return SSJNormalWebViewController对象
  */
-+ (SSJNormalWebViewController *)webViewVCWithURL:(NSURL *)url;
++ (instancetype)webViewVCWithURL:(NSURL *)url;
 
 /**
  *  刷新当前页面
