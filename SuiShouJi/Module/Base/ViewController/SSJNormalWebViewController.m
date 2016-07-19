@@ -12,30 +12,6 @@
     NSTimer *_fakeProgressTimer;
 }
 
-/**
- *  进度条颜色,默认系统TintColor
- */
-@property (nonatomic, strong) UIColor *progressViewTintColor;
-
-/**
- *  工具条Item颜色,默认系统TintColor
- */
-@property (nonatomic, strong) UIColor *toolBarItemTintColor;
-
-/**
- *  工具条颜色
- */
-@property (nonatomic, strong) UIColor *toolBarTintColor;
-
-/**
- *  是否在导航条显示URL,默认隐藏(NO)
- */
-@property (nonatomic, assign) BOOL showURLInNavigationBar;
-
-/**
- *  是否在导航条显示网页的PageTitle,默认隐藏(NO)
- */
-@property (nonatomic, assign) BOOL showPageTitleInNavigationBar;
 
 /**
  *  UIWebView的url
@@ -54,7 +30,7 @@
 @implementation SSJNormalWebViewController
 @synthesize webView=_webView;
 
-+ (SSJNormalWebViewController *)webViewVCWithURL:(NSURL *)url{
++ (instancetype)webViewVCWithURL:(NSURL *)url{
     SSJNormalWebViewController *webViewVC=[[self alloc]init];
     webViewVC.url=url;
     return webViewVC;

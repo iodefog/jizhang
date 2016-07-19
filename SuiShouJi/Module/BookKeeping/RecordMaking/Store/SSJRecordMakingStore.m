@@ -64,7 +64,7 @@
             if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cbilldate = ? and cuserid = ? and cbooksid = ?",item.billDate,userId,item.booksId]) {
                 if (item.incomeOrExpence) {
                     //如果是支出
-                    if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ? , cwritedate = ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,editeTime,item.booksId,item.billDate]) {
+                    if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ? , cwritedate = ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -75,7 +75,7 @@
                     }
                 }else{
                     //如果是收入
-                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? , cwritedate = ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate,editeTime]) {
+                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount + ? , sumamount = sumamount + ? , cwritedate = ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -88,7 +88,7 @@
             }else{
                 if (item.incomeOrExpence) {
                     //如果是支出
-                    if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (?,?,?,?,?,?)",@(money),@(-money),userId,item.booksId,item.billDate,editeTime]) {
+                    if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount, sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (?,0,?,?,?,?,?)",@(money),@(-money),userId,item.booksId,item.billDate,editeTime]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
@@ -99,7 +99,7 @@
                     }
                 }else{
                     //如果是收入
-                    if (![db executeUpdate:@"insert into bk_dailysum_charge (incomeamount,sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (?,?,?,?,?,?)",@(money),@(money),userId,item.booksId,item.billDate,editeTime]) {
+                    if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount,sumamount,cuserid,cbooksid,cbilldate,cwritedate) values (0,?,?,?,?,?,?)",@(money),@(money),userId,item.booksId,item.billDate,editeTime]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
