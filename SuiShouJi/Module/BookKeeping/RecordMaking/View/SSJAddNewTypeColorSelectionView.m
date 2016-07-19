@@ -21,11 +21,17 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 
 @implementation SSJAddNewTypeColorSelectionView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithWidth:(CGFloat)width {
+    if (self = [super initWithFrame:CGRectMake(0, 0, width, 0)]) {
         [self addSubview:self.collectionView];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        
     }
     return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    return [self initWithWidth:CGRectGetWidth(frame)];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -70,7 +76,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
         _collectionView.dataSource=self;
         _collectionView.delegate=self;
         [_collectionView registerClass:[SSJColorSelectCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor clearColor];
     }
     return _collectionView;
 }

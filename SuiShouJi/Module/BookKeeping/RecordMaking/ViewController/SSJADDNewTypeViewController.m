@@ -61,7 +61,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self loadData];
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
@@ -74,14 +74,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [self.scrollView addSubview:self.customTypeInputView];
     [self.scrollView addSubview:self.customCategoryCollectionView];
     [self.scrollView addSubview:self.colorSelectionView];
-}
-
--(void)viewDidLayoutSubviews{
-    _scrollView.frame = self.view.bounds;
-    _scrollView.contentSize = CGSizeMake(self.view.width * 2, self.view.height);
-    _newCategoryCollectionView.frame = CGRectMake(0, 10, self.view.width, self.view.height - 10);
-    _colorSelectionView.bottom = self.view.height;
-    _customCategoryCollectionView.frame = CGRectMake(_scrollView.width, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -219,10 +211,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (SCYSlidePagingHeaderView *)titleSegmentView {
     if (!_titleSegmentView) {
         _titleSegmentView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, 204, 44)];
+        _titleSegmentView.backgroundColor = [UIColor clearColor];
         _titleSegmentView.customDelegate = self;
         _titleSegmentView.buttonClickAnimated = YES;
-        _titleSegmentView.titleColor = [UIColor ssj_colorWithHex:@"999999"];
-        _titleSegmentView.selectedTitleColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+        _titleSegmentView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _titleSegmentView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_titleSegmentView setTabSize:CGSizeMake(102, 2)];
         _titleSegmentView.titles = @[@"添加类别", @"自定义类别"];
     }
@@ -231,39 +224,40 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
+        _scrollView.contentSize = CGSizeMake(_scrollView.width * 2, _scrollView.height);
+        _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;
-        _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
     }
     return _scrollView;
 }
 
 - (UICollectionView *)newCategoryCollectionView {
     if (!_newCategoryCollectionView) {
-        _newCategoryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) collectionViewLayout:self.newCategoryLayout];
-        _newCategoryCollectionView.dataSource=self;
-        _newCategoryCollectionView.delegate=self;
+        _newCategoryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.scrollView.width, self.scrollView.height) collectionViewLayout:self.newCategoryLayout];
+        _newCategoryCollectionView.dataSource = self;
+        _newCategoryCollectionView.delegate = self;
         _newCategoryCollectionView.bounces = YES;
         _newCategoryCollectionView.alwaysBounceVertical = YES;
         [_newCategoryCollectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
-        _newCategoryCollectionView.backgroundColor = [UIColor whiteColor];
         _newCategoryCollectionView.contentOffset = CGPointMake(0, 0);
         _newCategoryCollectionView.contentInset = UIEdgeInsetsMake(0, 0, 94, 0);
+        _newCategoryCollectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _newCategoryCollectionView;
 }
 
 - (UICollectionView *)customCategoryCollectionView {
     if (!_customCategoryCollectionView) {
-        _customCategoryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, _customTypeInputView.bottom, self.view.width, self.view.height - _customTypeInputView.bottom - _colorSelectionView.height - 5) collectionViewLayout:self.customCategoryLayout];
-        _customCategoryCollectionView.dataSource=self;
-        _customCategoryCollectionView.delegate=self;
+        _customCategoryCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(self.scrollView.width, _customTypeInputView.bottom, self.scrollView.width, self.scrollView.height - _customTypeInputView.bottom - self.colorSelectionView.height - 5) collectionViewLayout:self.customCategoryLayout];
+        _customCategoryCollectionView.dataSource = self;
+        _customCategoryCollectionView.delegate = self;
         _customCategoryCollectionView.bounces = YES;
         _customCategoryCollectionView.alwaysBounceVertical = YES;
         [_customCategoryCollectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
-        _customCategoryCollectionView.backgroundColor = [UIColor whiteColor];
         _customCategoryCollectionView.contentOffset = CGPointMake(0, 0);
+        _customCategoryCollectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _customCategoryCollectionView;
 }
@@ -294,13 +288,14 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (UITextField *)customTypeInputView {
     if (!_customTypeInputView) {
-        _customTypeInputView = [[UITextField alloc] initWithFrame:CGRectMake(self.view.width, 10, self.view.width, 63)];
-        _customTypeInputView.backgroundColor = [UIColor whiteColor];
+        _customTypeInputView = [[UITextField alloc] initWithFrame:CGRectMake(self.view.width, 0, self.view.width, 63)];
+        _customTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _customTypeInputView.font = [UIFont systemFontOfSize:15];
-        _customTypeInputView.placeholder = @"请输入类别名称";
+        _customTypeInputView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _customTypeInputView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入类别名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _customTypeInputView.delegate = self;
         [_customTypeInputView ssj_setBorderWidth:1];
-        [_customTypeInputView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_customTypeInputView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_customTypeInputView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70, _customTypeInputView.height)];
@@ -320,8 +315,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (SSJAddNewTypeColorSelectionView *)colorSelectionView {
     if (!_colorSelectionView) {
-        _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithFrame:CGRectMake(self.view.width, 0, self.view.width, 0)];
+        _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithWidth:self.scrollView.width];
         [_colorSelectionView sizeToFit];
+        _colorSelectionView.leftBottom = CGPointMake(self.scrollView.width, self.scrollView.height);
         _colorSelectionView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
         [_colorSelectionView ssj_setBorderWidth:1];
         [_colorSelectionView ssj_setBorderStyle:SSJBorderStyleTop];

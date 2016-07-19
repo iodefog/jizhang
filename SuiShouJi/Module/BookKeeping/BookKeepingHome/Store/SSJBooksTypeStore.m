@@ -50,6 +50,7 @@
     NSString * booksid = item.booksId;
     if (!booksid || !booksid.length) {
         item.booksId = SSJUUID();
+        item.booksIcoin = @"";
     }
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
     if (![[typeInfo allKeys] containsObject:@"iversion"]) {

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJFundingDetailListItem.h"
 
-@interface SSJFundingDetailListHeaderView : UITableViewHeaderFooterView
+@interface SSJFundingDetailListHeaderView : UIView
 
 @property(nonatomic, strong) SSJFundingDetailListItem *item;
 

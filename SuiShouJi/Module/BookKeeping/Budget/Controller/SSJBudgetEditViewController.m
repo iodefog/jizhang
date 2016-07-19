@@ -87,19 +87,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [self.view addSubview:self.tableView];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.view endEditing:YES];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.tableView.frame = self.view.bounds;
 }
 
 #pragma mark - UITableViewDataSource
@@ -370,21 +360,19 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         //  预算类别
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
         budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
-        budgetTypeCell.subtitleLab.textColor = [UIColor blackColor];
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
         budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        budgetTypeCell.accessoryType = UITableViewCellAccessoryNone;
+        budgetTypeCell.customAccessoryType = UITableViewCellAccessoryNone;
 
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
         SSJBudgetEditLabelCell *bookTypeCell = cell;
         bookTypeCell.subtitleLab.text = _bookName;
-        bookTypeCell.subtitleLab.textColor = [UIColor blackColor];
         bookTypeCell.detailTextLabel.text = nil;
         [bookTypeCell.detailTextLabel sizeToFit];
         bookTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        bookTypeCell.accessoryType = UITableViewCellAccessoryNone;
+        bookTypeCell.customAccessoryType = UITableViewCellAccessoryNone;
         
     } else if ([cellTitle isEqualToString:kAutoContinueTitle]) {
         //  自动续用
@@ -429,6 +417,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         UILabel *percentLab = [[UILabel alloc] init];
         percentLab.font = [UIFont systemFontOfSize:18];
         percentLab.text = @"％";
+        percentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [percentLab sizeToFit];
         
         budgetScaleCell.textField.rightView = percentLab;
@@ -437,11 +426,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         //  周期
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
         budgetPeriodCell.subtitleLab.text = [self budgetPeriod];
-        budgetPeriodCell.subtitleLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
-        budgetPeriodCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        budgetPeriodCell.selectionStyle = UITableViewCellSelectionStyleGray;
+        budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
 }
 
@@ -537,11 +525,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.tableFooterView = [[UIView alloc] init];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView registerClass:[SSJBudgetEditLabelCell class] forCellReuseIdentifier:kBudgetEditLabelCellId];
@@ -569,7 +557,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         _saveBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
         [_saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [_saveBtn addTarget:self action:@selector(saveButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _saveBtn;

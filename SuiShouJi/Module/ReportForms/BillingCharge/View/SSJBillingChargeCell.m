@@ -25,26 +25,20 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.textLabel.font = [UIFont systemFontOfSize:15];
-        self.textLabel.textColor = [UIColor blackColor];
-//        self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
         
-        _photo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mark_pic"]];
+        _photo = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"mark_pic"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _photo.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _photo.size = CGSizeMake(16, 16);
         [self.contentView addSubview:_photo];
         
-        _memo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"mark_jilu"]];
+        _memo = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"mark_jilu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _memo.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memo.size = CGSizeMake(16, 16);
         [self.contentView addSubview:_memo];
-        
-//        self.textLabel.layer.borderColor = [UIColor orangeColor].CGColor;
-//        self.textLabel.layer.borderWidth = 1;
-//        _photo.layer.borderColor = [UIColor redColor].CGColor;
-//        _photo.layer.borderWidth = 1;
-//        _memo.layer.borderColor = [UIColor redColor].CGColor;
-//        _memo.layer.borderWidth = 1;
         
         [self.contentView addSubview:self.moneyLab];
         [self.contentView addSubview:self.memoLab];
@@ -122,8 +116,9 @@
 - (UILabel *)moneyLab {
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
-        _moneyLab.backgroundColor = [UIColor whiteColor];
+        _moneyLab.backgroundColor = [UIColor clearColor];
         _moneyLab.font = [UIFont systemFontOfSize:20];
+        _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _moneyLab;
 }
@@ -131,8 +126,8 @@
 -(UILabel *)memoLab{
     if (!_memoLab) {
         _memoLab = [[UILabel alloc]init];
-        _memoLab.backgroundColor = [UIColor whiteColor];
-        _memoLab.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _memoLab.backgroundColor = [UIColor clearColor];
+        _memoLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoLab.font = [UIFont systemFontOfSize:13];
     }
     return _memoLab;

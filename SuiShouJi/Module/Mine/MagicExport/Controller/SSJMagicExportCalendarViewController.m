@@ -78,12 +78,33 @@
     }
 }
 
-- (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView canSelectDate:(NSDate *)date {
-    if (_beginDate) {
-        return [date compare:[NSDate date]] != NSOrderedDescending && [date compare:_beginDate] != NSOrderedAscending;
-    } else {
-        return [date compare:[NSDate date]] != NSOrderedDescending;
+- (UIColor *)calendarView:(SSJMagicExportCalendarView *)calendarView colorForDate:(NSDate *)date {
+    NSDate *nowDate = [NSDate date];
+    nowDate = [NSDate dateWithYear:nowDate.year month:nowDate.month day:nowDate.day];
+    
+    if ([nowDate compare:date] == NSOrderedAscending
+        || (_beginDate && [_beginDate compare:date] == NSOrderedDescending)
+        || (_endDate && [_endDate compare:date] == NSOrderedAscending)) {
+        return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
+    
+    return [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
+
+- (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView shouldSelectDate:(NSDate *)date {
+    if (_beginDate && [_beginDate compare:date] == NSOrderedDescending) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，不能选择早于起始日期的时间哦" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        return NO;
+    }
+    
+    NSDate *nowDate = [NSDate date];
+    nowDate = [NSDate dateWithYear:nowDate.year month:nowDate.month day:nowDate.day];
+    if ([nowDate compare:date] == NSOrderedAscending) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，起始日期不能晚于今天哦" action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date {
@@ -108,7 +129,8 @@
 - (SSJMagicExportCalendarSwitchStartAndEndDateControl *)dateSwitchControl {
     if (!_dateSwitchControl) {
         __weak typeof(self) wself = self;
-        _dateSwitchControl = [[SSJMagicExportCalendarSwitchStartAndEndDateControl alloc] initWithFrame:CGRectMake(0, 10, self.view.width, 68)];
+        _dateSwitchControl = [[SSJMagicExportCalendarSwitchStartAndEndDateControl alloc] initWithFrame:CGRectMake(0, 10 + SSJ_NAVIBAR_BOTTOM, self.view.width, 68)];
+        _dateSwitchControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _dateSwitchControl.beginDate = _beginDate;
         _dateSwitchControl.endDate = _endDate;
         _dateSwitchControl.clickBeginDateAction = ^{
@@ -135,6 +157,8 @@
         _calendarView = [[SSJMagicExportCalendarView alloc] initWithFrame:CGRectMake(0, self.dateSwitchControl.bottom, self.view.width, self.view.height - self.dateSwitchControl.bottom)];
         _calendarView.delegate = self;
         _calendarView.selectedDates = selectedDates;
+        _calendarView.selectedDateColor = [UIColor whiteColor];
+        _calendarView.highlightColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _calendarView;
 }

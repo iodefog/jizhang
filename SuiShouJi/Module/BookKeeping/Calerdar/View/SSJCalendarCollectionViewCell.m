@@ -53,7 +53,11 @@
 
 -(void)setItem:(SSJCalenderCellItem *)item{
     _item = item;
-    self.backgroundColor = [UIColor ssj_colorWithHex:_item.backGroundColor];
+    if ([[_item.backGroundColor lowercaseString] isEqualToString:@"ffffff"]) {
+        self.backgroundColor = [UIColor clearColor];
+    }else{
+        self.backgroundColor = [UIColor ssj_colorWithHex:_item.backGroundColor];
+    }
     self.dateLabel.textColor = [UIColor ssj_colorWithHex:_item.titleColor];
     if (_item.isSelectable) {
         self.userInteractionEnabled = YES;
@@ -65,17 +69,17 @@
     }else{
         self.dateLabel.text = [NSString stringWithFormat:@"%d",[[[self.item.dateStr componentsSeparatedByString:@"-"] lastObject] intValue]];
     }
-    if ([_item.backGroundColor isEqualToString:@"eb4a64"]) {
+    if ([_item.backGroundColor isEqualToString:SSJ_CURRENT_THEME.marcatoColor] || [_item.backGroundColor isEqualToString:@"cccccc"]) {
         self.starImage.tintColor = [UIColor whiteColor];
     }else{
-        self.starImage.tintColor = [UIColor ssj_colorWithHex:@"ffa81c"];
+        self.starImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     if (_item.haveDataOrNot) {
         self.starImage.hidden = NO;
     }else{
         self.starImage.hidden = YES;
     }
-    if ([_item.backGroundColor isEqualToString:@"eb4a64"] || [_item.backGroundColor isEqualToString:@"cccccc"]) {
+    if ([_item.backGroundColor isEqualToString:SSJ_CURRENT_THEME.marcatoColor] || [_item.backGroundColor isEqualToString:@"cccccc"]) {
         self.layer.cornerRadius = self.height / 2;
     }
 }

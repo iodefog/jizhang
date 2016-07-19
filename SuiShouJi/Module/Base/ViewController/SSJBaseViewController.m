@@ -16,8 +16,9 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
 
-
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
+
+@property (nonatomic, strong) UIImageView *backgroundView;
 
 @property (nonatomic, strong) UIBarButtonItem *syncLoadingItem;
 
@@ -35,18 +36,24 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        _appliesTheme = YES;
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self addObserver];
+    
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    
+    if (_appliesTheme) {
+        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+        _backgroundView.frame = self.view.bounds;
+        [self.view addSubview:_backgroundView];
+    }
     
     if (self.navigationController && [[self.navigationController viewControllers] count] > 1) {
         if (!self.navigationItem.leftBarButtonItem) {
@@ -62,13 +69,16 @@
     }else{
         self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
     }
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+    
+    SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor blackColor]};
+                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -86,6 +96,10 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [MobClick endLogPageView:[self statisticsTitle]];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return SSJ_CURRENT_THEME.statusBarStyle;
 }
 
 #pragma mark - UIResponder
@@ -114,6 +128,11 @@
 
 - (void)reloadDataAfterInitDatabase {
     
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
+    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
 #pragma mark - Notification
@@ -211,6 +230,17 @@
 }
 
 #pragma mark - Private
+- (void)addObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
+    
+    if (_appliesTheme) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+    }
+}
+
 - (UIBarButtonItem *)syncLoadingItem {
     if (!_syncLoadingItem) {
         UIView *syncLoadingView = [[UIView alloc] init];

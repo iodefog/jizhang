@@ -8,20 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJMagicExportCalendarViewCellItem : NSObject
+@interface SSJMagicExportCalendarDateViewItem : NSObject
 
-@property (nonatomic) BOOL canSelect;
+@property (nonatomic) BOOL hidden;
 
 @property (nonatomic) BOOL selected;
 
 @property (nonatomic) BOOL showMarker;
 
-@property (nonatomic) BOOL showContent;
-
 @property (nonatomic, strong) NSDate *date;
+
+@property (nonatomic, copy) NSString *desc;
 
 @property (nonatomic, strong) UIColor *dateColor;
 
-@property (nonatomic, copy) NSString *desc;
+@property (nonatomic, strong) UIColor *selectedDateColor;
+
+@property (nonatomic, strong) UIColor *highlightColor;
 
 @end

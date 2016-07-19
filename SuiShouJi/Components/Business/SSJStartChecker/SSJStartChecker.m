@@ -165,7 +165,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
             break;
             
         case SSJAppUpdateTypeUpdate: {
-            SSJStartUpgradeAlertView *alertView = [[SSJStartUpgradeAlertView alloc] initWithTitle:@"我升级啦" message:self.networkService.content cancelButtonTitle:@"取消" sureButtonTitle:@"去升级" cancelButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
+            SSJStartUpgradeAlertView *alertView = [[SSJStartUpgradeAlertView alloc] initWithTitle:@"我升级啦" message:[[NSAttributedString alloc] initWithString:self.networkService.content attributes:nil] cancelButtonTitle:@"取消" sureButtonTitle:@"去升级" cancelButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
                 [alert dismiss];
             } sureButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
                 [alert dismiss];
@@ -175,7 +175,7 @@ static const NSUInteger kMaxLoadUpdateItmes = 0; //  加载更新信息失败的
         }   break;
             
         case SSJAppUpdateTypeForceUpdate: {
-            SSJStartUpgradeAlertView *alertView = [[SSJStartUpgradeAlertView alloc] initWithTitle:@"我升级啦" message:self.networkService.content cancelButtonTitle:nil sureButtonTitle:@"去升级" cancelButtonClickHandler:NULL sureButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
+            SSJStartUpgradeAlertView *alertView = [[SSJStartUpgradeAlertView alloc] initWithTitle:@"我升级啦" message:[[NSAttributedString alloc] initWithString:self.networkService.content attributes:nil] cancelButtonTitle:nil sureButtonTitle:@"去升级" cancelButtonClickHandler:NULL sureButtonClickHandler:^(SSJStartUpgradeAlertView *alert) {
                 [weakSelf gotoUpdate];
             }];
             [alertView show];

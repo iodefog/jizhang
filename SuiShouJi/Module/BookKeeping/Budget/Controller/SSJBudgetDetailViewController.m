@@ -14,6 +14,7 @@
 #import "SSJBudgetDetailMiddleTitleView.h"
 #import "SSJBorderButton.h"
 #import "SSJPercentCircleView.h"
+#import "SSJBudgetNodataRemindView.h"
 #import "SSJBudgetDatabaseHelper.h"
 
 static const CGFloat kHeaderMargin = 8;
@@ -38,10 +39,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 @property (nonatomic, strong) SSJBudgetDetailBottomView *bottomView;
 
 //  没有消费记录的提示视图
-@property (nonatomic, strong) UIImageView *noDataRemindView;
-
-//  没有消费记录的提示
-@property (nonatomic, strong) UILabel *noDataRemindLab;
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 //  预算数据模型
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
@@ -80,14 +78,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     [self loadAllData];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    self.scrollView.height = self.view.height;
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -202,9 +193,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     
     if (!self.budgetModel) {
         self.scrollView.hidden = YES;
-        self.noDataRemindLab.text = [NSString stringWithFormat:@"您在这个%@没有设置预算哦", tStr];
-        [self.noDataRemindLab sizeToFit];
-        self.noDataRemindLab.center = CGPointMake(self.noDataRemindView.width * 0.5, self.noDataRemindView.height * 0.737);
+        self.noDataRemindView.title = [NSString stringWithFormat:@"您在这个%@没有设置预算哦", tStr];
         [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         return;
     }
@@ -225,9 +214,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         [self.view ssj_hideWatermark:YES];
         [self.bottomView.circleView ssj_hideWatermark:YES];
     } else {
-        self.noDataRemindLab.text = @"NO，小主居然忘记记账了！";
-        [self.noDataRemindLab sizeToFit];
-        self.noDataRemindLab.center = CGPointMake(self.noDataRemindView.width * 0.5, self.noDataRemindView.height * 0.737);
+        self.noDataRemindView.title = @"NO，小主居然忘记记账了！";
         [self.bottomView.circleView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
     }
     
@@ -248,8 +235,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-        _scrollView.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
+        _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.hidden = YES;
     }
     return _scrollView;
@@ -278,21 +265,11 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     return _bottomView;
 }
 
-- (UIImageView *)noDataRemindView {
+- (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_no_data"]];
-        [_noDataRemindView addSubview:self.noDataRemindLab];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
     }
     return _noDataRemindView;
-}
-
-- (UILabel *)noDataRemindLab {
-    if (!_noDataRemindLab) {
-        _noDataRemindLab = [[UILabel alloc] init];
-        _noDataRemindLab.textColor = [UIColor whiteColor];
-        _noDataRemindLab.font = [UIFont systemFontOfSize:18];
-    }
-    return _noDataRemindLab;
 }
 
 @end

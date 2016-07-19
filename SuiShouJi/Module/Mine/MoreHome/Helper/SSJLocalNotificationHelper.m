@@ -80,7 +80,6 @@
             }  
         }  
     }
-    NSArray *NewlocalNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
 }
 
 

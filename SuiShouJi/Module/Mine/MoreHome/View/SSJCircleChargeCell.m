@@ -69,8 +69,8 @@
 -(UIImageView *)circleImage{
     if (!_circleImage) {
         _circleImage = [[UIImageView alloc]init];
-        _circleImage.image = [UIImage imageNamed:@"zhouqi"];
-        
+        _circleImage.image = [[UIImage imageNamed:@"zhouqi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _circleImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _circleImage;
 }
@@ -78,7 +78,7 @@
 -(UILabel *)categoryLabel{
     if (!_categoryLabel) {
         _categoryLabel = [[UILabel alloc]init];
-        _categoryLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _categoryLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _categoryLabel.font = [UIFont systemFontOfSize:18];
     }
     return _categoryLabel;
@@ -87,7 +87,7 @@
 -(UILabel *)moneyLabel{
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
-        _moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _moneyLabel.font = [UIFont systemFontOfSize:18];
 
     }
@@ -97,7 +97,7 @@
 -(UILabel *)circleLabel{
     if (!_circleLabel) {
         _circleLabel = [[UILabel alloc]init];
-        _circleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _circleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _circleLabel.font = [UIFont systemFontOfSize:15];
         
     }
@@ -116,7 +116,7 @@
 -(UILabel *)timeLabel{
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc]init];
-        _timeLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _timeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _timeLabel.font = [UIFont systemFontOfSize:14];
     }
     return _timeLabel;

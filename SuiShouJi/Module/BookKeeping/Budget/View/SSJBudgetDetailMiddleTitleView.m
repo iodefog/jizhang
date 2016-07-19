@@ -22,7 +22,7 @@
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.titleLabel];
         [self addSubview:self.periodLabel];
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -58,7 +58,7 @@
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.textColor = [UIColor blackColor];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLabel.font = [UIFont systemFontOfSize:12];
     }
     return _titleLabel;
@@ -67,7 +67,7 @@
 - (UILabel *)periodLabel {
     if (!_periodLabel) {
         _periodLabel = [[UILabel alloc] init];
-        _periodLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _periodLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _periodLabel.font = [UIFont systemFontOfSize:12];
     }
     return _periodLabel;

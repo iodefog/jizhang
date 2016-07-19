@@ -185,6 +185,24 @@ BOOL SSJIsAppStoreSource() {
     return NO;
 }
 
+NSDictionary* SSJSettingForSource(){
+    NSDictionary* dic = SSJProjectSettings();
+    if (dic) {
+        return [[dic objectForKey:@"Setting"] objectForKey:SSJDefaultSource()];
+    }else{
+        return nil;
+    }
+}
+
+NSString* SSJDetailSettingForSource(NSString *key){
+    NSDictionary* dic = SSJProjectSettings();
+    if (dic) {
+        return [NSString stringWithFormat:@"%@",[[[dic objectForKey:@"Setting"] objectForKey:SSJDefaultSource()] objectForKey:key]];
+    }else{
+        return nil;
+    }
+}
+
 NSString *SSJMessageWithErrorCode(NSError *error) {
     if ([error.domain isEqualToString:NSURLErrorDomain]) {
         if (error.code == NSURLErrorTimedOut) {

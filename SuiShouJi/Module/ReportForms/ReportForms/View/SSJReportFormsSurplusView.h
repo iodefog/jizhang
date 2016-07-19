@@ -14,4 +14,6 @@
 
 - (void)setIncome:(double)income pay:(double)pay;
 
+- (void)updateThemeColor;
+
 @end

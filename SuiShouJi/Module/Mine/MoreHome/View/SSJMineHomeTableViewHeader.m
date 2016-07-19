@@ -35,6 +35,12 @@
         [self addSubview:self.checkInButton];
         [self addSubview:self.verticalSepertorLine];
         [self addSubview:self.loginButton];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            self.backImage.hidden = NO;
+        }else{
+            self.backImage.hidden = YES;
+            self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        }
     }
     return self;
 }
@@ -45,12 +51,12 @@
     self.loginButton.size = CGSizeMake(self.width, self.height - 50);
     self.loginButton.leftTop = CGPointMake(0, 0);
     self.headPotraitImage.size = CGSizeMake(64, 64);
-    self.headPotraitImage.centerY = (self.height - 50) / 2;
-    self.headPotraitImage.left = 10;
-    self.nicknameLabel.bottom = (self.height - 50) / 2 - 2;
-    self.nicknameLabel.left = self.headPotraitImage.right + 10;
-    self.checkInLevelLabel.top = (self.height - 50) / 2 + 2;
-    self.checkInLevelLabel.left = self.headPotraitImage.right + 10;
+    self.headPotraitImage.centerX = self.width / 2;
+    self.headPotraitImage.top = 40;
+    self.nicknameLabel.top = self.headPotraitImage.bottom + 10;
+    self.nicknameLabel.centerX = self.width / 2;
+    self.checkInLevelLabel.top = self.nicknameLabel.bottom + 10;
+    self.checkInLevelLabel.centerX = self.width / 2;
     self.syncButton.size = CGSizeMake(self.width / 2 , 50);
     self.syncButton.leftBottom = CGPointMake(0, self.height);
     [self.syncButton ssj_relayoutBorder];
@@ -72,7 +78,7 @@
 -(UILabel *)nicknameLabel{
     if (!_nicknameLabel) {
         _nicknameLabel = [[UILabel alloc]init];
-        _nicknameLabel.textColor = [UIColor whiteColor];
+        _nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
         _nicknameLabel.font = [UIFont systemFontOfSize:18];
     }
     return _nicknameLabel;
@@ -82,7 +88,7 @@
     if (!_checkInLevelLabel) {
         _checkInLevelLabel = [[UILabel alloc]init];
         _checkInLevelLabel.font = [UIFont systemFontOfSize:13];
-        _checkInLevelLabel.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+        _checkInLevelLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];
     }
     return _checkInLevelLabel;
 }
@@ -91,11 +97,12 @@
     if (!_checkInButton) {
         _checkInButton = [[UIButton alloc]init];
         [_checkInButton setTitle:@"签到" forState:UIControlStateNormal];
-        [_checkInButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_checkInButton setImage:[UIImage imageNamed:@"more_qiandao"] forState:UIControlStateNormal];
+        [_checkInButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor] forState:UIControlStateNormal];
+        [_checkInButton setImage:[[UIImage imageNamed:@"more_qiandao"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _checkInButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
         _checkInButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_checkInButton ssj_setBorderStyle:SSJBorderStyleTop];
-        [_checkInButton ssj_setBorderColor:[UIColor whiteColor]];
+        [_checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_checkInButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
         [_checkInButton addTarget:self action:@selector(checkInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -106,7 +113,7 @@
     if (!_syncButton) {
         _syncButton = [[SSJMineSyncButton alloc]init];
         [_syncButton ssj_setBorderStyle:SSJBorderStyleTop];
-        [_syncButton ssj_setBorderColor:[UIColor whiteColor]];
+        [_syncButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_syncButton ssj_setBorderWidth:1.f / [UIScreen mainScreen].scale];
     }
     return _syncButton;
@@ -131,7 +138,7 @@
 -(UIView *)verticalSepertorLine{
     if (!_verticalSepertorLine) {
         _verticalSepertorLine = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1.f / [UIScreen mainScreen].scale, 30)];
-        _verticalSepertorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _verticalSepertorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _verticalSepertorLine;
 }
@@ -219,6 +226,23 @@
     if (self.syncButtonClickBlock) {
         self.syncButtonClickBlock();
     }
+}
+
+- (void)updateAfterThemeChange{
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backImage.hidden = NO;
+    }else{
+        self.backImage.hidden = YES;
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    }
+    self.nicknameLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+    self.checkInLevelLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeSubtitleColor];  
+    self.verticalSepertorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.checkInButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor] forState:UIControlStateNormal];
+    self.checkInButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+    [self.checkInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.syncButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.syncButton updateAfterThemeChange];
 }
 
 /*

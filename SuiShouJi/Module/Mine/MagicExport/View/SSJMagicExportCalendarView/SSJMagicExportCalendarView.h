@@ -24,9 +24,9 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 
 - (NSString *)calendarView:(SSJMagicExportCalendarView *)calendarView descriptionForSelectedDate:(NSDate *)date;
 
-- (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView canSelectDate:(NSDate *)date;
+- (UIColor *)calendarView:(SSJMagicExportCalendarView *)calendarView colorForDate:(NSDate *)date;
 
-//- (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date;
+- (BOOL)calendarView:(SSJMagicExportCalendarView *)calendarView shouldSelectDate:(NSDate *)date;
 
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView didSelectDate:(NSDate *)date;
 
@@ -36,6 +36,10 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 @interface SSJMagicExportCalendarView : UIView
 
 @property (nonatomic, weak) id<SSJMagicExportCalendarViewDelegate> delegate;
+
+@property (nonatomic, strong) UIColor *selectedDateColor;
+
+@property (nonatomic, strong) UIColor *highlightColor;
 
 @property (nullable, nonatomic, strong) NSArray<NSDate *> *selectedDates;
 

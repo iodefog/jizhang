@@ -8,8 +8,6 @@
 
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
-static NSString *const kBorderColorValue = @"cccccc";
-
 @interface SSJRecordMakingBillTypeInputAccessoryView ()
 
 @property (nonatomic, strong) UIView *topView;
@@ -79,13 +77,14 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIView *)topView {
     if (!_topView) {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 50)];
-        _topView.backgroundColor = [UIColor whiteColor];
+        _topView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        
         UIImageView *img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         img.left = 10;
         img.centerY = _topView.height * 0.5;
         [_topView addSubview:img];
         [_topView ssj_setBorderWidth:1];
-        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"D9DADC"]];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_topView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
     }
     return _topView;
@@ -94,9 +93,9 @@ static NSString *const kBorderColorValue = @"cccccc";
 - (UIView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, _topView.bottom, self.width, 37)];
-        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"F4F4F4"];
+        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor];
         [_bottomView ssj_setBorderWidth:1];
-        [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"D9DADC"]];
+        [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_bottomView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _bottomView;
@@ -104,7 +103,8 @@ static NSString *const kBorderColorValue = @"cccccc";
 
 - (UIImageView *)memoIcon {
     if (!_memoIcon) {
-        _memoIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record_making_memo"]];
+        _memoIcon = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"record_making_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _memoIcon.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoIcon.left = 12;
         _memoIcon.centerY = self.topView.height * 0.5;
     }
@@ -115,7 +115,8 @@ static NSString *const kBorderColorValue = @"cccccc";
     if (!_memoView) {
         _memoView = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, self.topView.width - 40, self.topView.height)];
         _memoView.font = [UIFont systemFontOfSize:13];
-        _memoView.placeholder = @"写点啥备注下";
+        _memoView.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _memoView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"写点啥备注下" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoView.returnKeyType = UIReturnKeyDone;
     }
     return _memoView;
@@ -127,7 +128,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _accountBtn.frame = CGRectMake(0, 0, 90, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _accountBtn.layer.borderWidth = 1;
-        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
+        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
     }
     return _accountBtn;
@@ -139,7 +140,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _dateBtn.frame = CGRectMake(0, 0, 90, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _dateBtn.layer.borderWidth = 1;
-        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
+        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
     }
     return _dateBtn;
@@ -151,7 +152,7 @@ static NSString *const kBorderColorValue = @"cccccc";
         _photoBtn.frame = CGRectMake(0, 0, 90, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _photoBtn.layer.borderWidth = 1;
-        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:kBorderColorValue].CGColor;
+        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
     }
     return _photoBtn;

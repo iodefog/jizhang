@@ -49,7 +49,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+//    self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     self.navigationItem.rightBarButtonItem = self.rightButton;
     [self.view addSubview:self.transferIntext];
     [self.view addSubview:self.transferOuttext];
@@ -72,7 +72,7 @@
 
 -(void)viewDidLayoutSubviews{
     self.transferOuttext.size = CGSizeMake(self.view.width, 60);
-    self.transferOuttext.leftTop = CGPointMake(0, 20);
+    self.transferOuttext.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 20);
     self.transferIntext.size = CGSizeMake(self.view.width, 60);
     self.transferIntext.leftTop = CGPointMake(0, self.transferOuttext.bottom + 85);
     self.transferImage.size = CGSizeMake(14, 24);
@@ -121,7 +121,7 @@
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
-        _rightButton.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        _rightButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
     }
     return _rightButton;
 }
@@ -130,13 +130,13 @@
     if (_transferIntext == nil) {
         _transferIntext = [[UITextField alloc]init];
 //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        _transferIntext.backgroundColor = [UIColor whiteColor];
+        _transferIntext.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _transferIntext.keyboardType = UIKeyboardTypeDecimalPad;
         _transferIntext.font = [UIFont systemFontOfSize:24];
         if (self.item != nil) {
             _transferIntext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
         }
-        _transferIntext.placeholder = @"¥0.00";
+        _transferIntext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _transferIntext.leftView = self.transferInButtonView;
         _transferIntext.leftViewMode = UITextFieldViewModeAlways;
         _transferIntext.textAlignment = NSTextAlignmentRight;
@@ -144,6 +144,7 @@
         UIView *rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 35)];
         _transferIntext.rightView = rightView;
         _transferIntext.rightViewMode = UITextFieldViewModeAlways;
+        _transferIntext.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
         _transferIntext.delegate = self;
     }
@@ -154,13 +155,14 @@
     if (_transferOuttext == nil) {
         _transferOuttext = [[UITextField alloc]init];
         //        _transferIntext.borderStyle = UITextBorderStyleRoundedRect;
-        _transferOuttext.backgroundColor = [UIColor whiteColor];
+        _transferOuttext.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _transferOuttext.keyboardType = UIKeyboardTypeDecimalPad;
+        _transferOuttext.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _transferOuttext.font = [UIFont systemFontOfSize:24];
         if (self.item != nil) {
             _transferOuttext.text = [NSString stringWithFormat:@"¥%.2f",[self.item.transferMoney doubleValue]];
         }
-        _transferOuttext.placeholder = @"¥0.00";
+        _transferOuttext.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _transferOuttext.leftView = self.transferOutButtonView;
         _transferOuttext.leftViewMode = UITextFieldViewModeAlways;
         _transferOuttext.textAlignment = NSTextAlignmentRight;
@@ -185,8 +187,8 @@
             [_transferInButton setTitle:self.item.transferInName forState:UIControlStateNormal];
             [_transferInButton setImage:[UIImage imageNamed:self.item.transferInImage] forState:UIControlStateNormal];
         }
-        _transferInButton.titleLabel.textColor = [UIColor blackColor];
-        [_transferInButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        _transferInButton.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_transferInButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         _transferInButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_transferInButton addTarget:self action:@selector(transferInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_transferInButtonView addSubview:_transferInButton];
@@ -205,7 +207,7 @@
             [_transferOutButton setTitle:self.item.transferOutName forState:UIControlStateNormal];
             [_transferOutButton setImage:[UIImage imageNamed:self.item.transferOutImage] forState:UIControlStateNormal];
         }
-        [_transferOutButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_transferOutButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         _transferOutButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_transferOutButton addTarget:self action:@selector(transferOutButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_transferOutButtonView addSubview:_transferOutButton];
@@ -273,7 +275,8 @@
 -(UIImageView *)transferImage{
     if (!_transferImage) {
         _transferImage = [[UIImageView alloc]init];
-        _transferImage.image = [UIImage imageNamed:@"founds_exchange"];
+        _transferImage.image = [[UIImage imageNamed:@"founds_exchange"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _transferImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _transferImage;
 }
@@ -282,7 +285,7 @@
     if (!_transferLabel) {
         _transferLabel = [[UILabel alloc]init];
         _transferLabel.font = [UIFont systemFontOfSize:13];
-        _transferLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _transferLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _transferLabel.text = @"转至";
         [_transferLabel sizeToFit];
     }
@@ -293,7 +296,7 @@
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
         _memoLabel.text = @"备注:";
-        _memoLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _memoLabel.font = [UIFont systemFontOfSize:15];
         [_memoLabel sizeToFit];
     }
@@ -303,7 +306,8 @@
 -(UITextField *)memoInput{
     if (!_memoInput) {
         _memoInput = [[UITextField alloc]init];
-        _memoInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _memoInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _memoInput.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _memoInput.font = [UIFont systemFontOfSize:15];
         _memoInput.textAlignment = NSTextAlignmentLeft;
         if (self.item != nil) {
@@ -313,8 +317,7 @@
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30 + textWidth, 0)];
         _memoInput.leftView = view;
         _memoInput.leftViewMode = UITextFieldViewModeAlways;
-        _memoInput.backgroundColor = [UIColor whiteColor];
-        [_memoInput ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_memoInput ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_memoInput ssj_setBorderStyle:SSJBorderStyleTop];
     }
     return _memoInput;
@@ -325,7 +328,7 @@
         _comfirmButton = [[UIButton alloc]init];
         [_comfirmButton setTitle:@"确认转账" forState:UIControlStateNormal];
         [_comfirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+        _comfirmButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         _comfirmButton.layer.cornerRadius = 3.f;
         [_comfirmButton addTarget:self action:@selector(saveClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

@@ -109,11 +109,6 @@
     [self.service cancel];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    _scrollView.frame = CGRectMake(0, self.announcementLab.bottom, self.view.width, self.view.height - self.announcementLab.bottom);
-}
-
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _bookTypes.count;
@@ -240,7 +235,7 @@
 
 - (void)setUpView {
     if (!_scrollView) {
-        _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+        _scrollView = [[TPKeyboardAvoidingScrollView alloc] initWithFrame:CGRectMake(0, self.announcementLab.bottom, self.view.width, self.view.height - self.announcementLab.bottom)];
     }
     
     [self.view addSubview:self.announcementLab];
@@ -281,6 +276,11 @@
 - (void)commitButtonAction {
     if (!self.emailTextField.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请先输入邮箱地址"];
+        return;
+    }
+    
+    if (![self.emailTextField.text ssj_validEmial]) {
+        [CDAutoHideMessageHUD showMessage:@"邮件格式不正确"];
         return;
     }
     
@@ -334,9 +334,10 @@
 #pragma mark - Getter
 - (UILabel *)announcementLab {
     if (!_announcementLab) {
-        _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 35)];
-        _announcementLab.backgroundColor = [UIColor whiteColor];
+        _announcementLab = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 35)];
+        _announcementLab.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _announcementLab.font = [UIFont systemFontOfSize:14];
+        _announcementLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.firstLineHeadIndent = 10;
@@ -414,9 +415,9 @@
 - (UILabel *)dateLabel {
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 36)];
-        _dateLabel.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        _dateLabel.backgroundColor = [UIColor clearColor];
         _dateLabel.font = [UIFont systemFontOfSize:14];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.firstLineHeadIndent = 10;
@@ -442,9 +443,9 @@
 - (UILabel *)emailLabel {
     if (!_emailLabel) {
         _emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.selectDateView.bottom, self.view.width, 36)];
-        _emailLabel.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        _emailLabel.backgroundColor = [UIColor clearColor];
         _emailLabel.font = [UIFont systemFontOfSize:14];
-        _emailLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _emailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.firstLineHeadIndent = 10;
@@ -456,7 +457,7 @@
 - (UIView *)emailView {
     if (!_emailView) {
         _emailView = [[UIView alloc] initWithFrame:CGRectMake(0, self.emailLabel.bottom, self.view.width, 88)];
-        _emailView.backgroundColor = [UIColor whiteColor];
+        _emailView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _emailView;
 }
@@ -464,12 +465,14 @@
 - (UITextField *)emailTextField {
     if (!_emailTextField) {
         _emailTextField = [[UITextField alloc] initWithFrame:CGRectInset(self.emailView.bounds, 22, 22)];
+        _emailTextField.backgroundColor = [UIColor clearColor];
         _emailTextField.delegate = self;
         _emailTextField.layer.borderWidth = 1;
         _emailTextField.layer.cornerRadius = 3;
-        _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
-        _emailTextField.placeholder = @"请输入邮箱地址";
+        _emailTextField.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
         _emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _emailTextField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _emailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入邮箱地址" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, _emailTextField.height)];
         _emailTextField.leftView = leftView;
@@ -487,7 +490,7 @@
         _commitBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_commitBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_commitBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [_commitBtn addTarget:self action:@selector(commitButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _commitBtn;
@@ -507,6 +510,7 @@
         lab.font = [UIFont systemFontOfSize:15];
         lab.text = @"您还未有记账数据哦";
         lab.textAlignment = NSTextAlignmentCenter;
+        lab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_noDataRemindView addSubview:lab];
         
         SSJBorderButton *recordBtn = [[SSJBorderButton alloc] initWithFrame:CGRectMake((_noDataRemindView.width - 120) * 0.5, lab.bottom + 20, 120, 30)];
@@ -514,11 +518,11 @@
         recordBtn.borderWidth = 1;
         recordBtn.cornerRadius = 15;
         [recordBtn setTitle:@"记一笔" forState:SSJBorderButtonStateNormal];
-        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
         [recordBtn setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateNormal];
+        [recordBtn setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateNormal];
         [recordBtn setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:SSJBorderButtonStateHighlighted];
+        [recordBtn setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:SSJBorderButtonStateHighlighted];
         [recordBtn addTarget:self action:@selector(recordBtnAction)];
         [_noDataRemindView addSubview:recordBtn];
     }

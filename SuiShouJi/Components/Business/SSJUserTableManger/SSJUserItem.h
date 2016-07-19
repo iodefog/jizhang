@@ -61,6 +61,8 @@
 //  当前选中的账本id(默认为0)
 @property(nonatomic, strong) NSString *currentBooksId;
 
+@property(nonatomic, strong) NSString *loginType;
+
 + (NSDictionary *)propertyMapping;
 
 @end

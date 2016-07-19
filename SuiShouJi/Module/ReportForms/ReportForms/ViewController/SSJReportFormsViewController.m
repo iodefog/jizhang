@@ -13,6 +13,7 @@
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsScaleAxisView.h"
+#import "SSJBudgetNodataRemindView.h"
 
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
@@ -41,7 +42,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 @property (nonatomic, strong) SSJReportFormsSurplusView *surplusView;
 
 //  没有流水的提示视图
-@property (nonatomic, strong) UIImageView *noDataRemindView;
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 //  流水列表视图
 @property (nonatomic, strong) UITableView *tableView;
@@ -54,8 +55,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 //  自定义时间
 @property (nonatomic, strong) UILabel *customPeriodLab;
-
-@property (nonatomic, strong) UIView *customPeriodBackView;
 
 //  编辑、删除自定义时间按钮
 @property (nonatomic, strong) UIButton *customPeriodBtn;
@@ -85,6 +84,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         self.statisticsTitle = @"报表首页";
         self.circleItems = [NSMutableArray array];
         self.automaticallyAdjustsScrollViewInsets = NO;
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -92,7 +92,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
     self.tabBarController.delegate = self;
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"reportForms_curve"] style:UIBarButtonItemStylePlain target:self action:@selector(enterCurveVewController)];
@@ -100,7 +99,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     
     self.navigationItem.titleView = self.segmentControl;
     
-    [self.view addSubview:self.customPeriodBackView];
     [self.view addSubview:self.dateAxisView];
     [self.view addSubview:self.customPeriodLab];
     [self.view addSubview:self.customPeriodBtn];
@@ -119,14 +117,32 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     [self reloadDatas];
 }
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    [self reloadDatas];
-//}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.tableView.height = self.view.height - self.dateAxisView.height;
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    
+    [_tableView reloadData];
+    
+    _segmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _segmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    
+    _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    
+    _incomeAndPaymentTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _incomeAndPaymentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
+    _chartView.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    [_surplusView updateThemeColor];
+    
+    if (_customPeriod) {
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+    } else {
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+    }
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -153,6 +169,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
+    incomeAndPayCell.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [incomeAndPayCell setCellItem:[self.datas ssj_safeObjectAtIndex:indexPath.row]];
     return incomeAndPayCell;
 }
@@ -259,7 +276,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _customPeriod = nil;
         _dateAxisView.hidden = NO;
         _customPeriodLab.hidden = YES;
-        [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [self reloadDatas];
         
         [MobClick event:@"form_date_custom_delete"];
@@ -279,7 +296,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             wself.dateAxisView.hidden = YES;
             wself.customPeriodLab.hidden = NO;
             [wself updateCustomPeriodLab];
-            [wself.customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_delete"] forState:UIControlStateNormal];
+            [wself.customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
         };
         [self.navigationController pushViewController:calendarVC animated:YES];
         
@@ -325,7 +342,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     _customPeriodLab.text = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
     CGSize textSize = [_customPeriodLab.text sizeWithAttributes:@{NSFontAttributeName:_customPeriodLab.font}];
     _customPeriodLab.width = textSize.width + 28;
-    _customPeriodLab.center = CGPointMake(self.view.width * 0.5, 25);
+    _customPeriodLab.centerX = self.view.width * 0.5;
 }
 
 //  更新总收入\总支出
@@ -376,7 +393,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         
         if (periods.count == 0) {
             _dateAxisView.hidden = YES;
-            _customPeriodBackView.hidden = YES;
             _customPeriodLab.hidden = YES;
             _customPeriodBtn.hidden = YES;
             self.tableView.hidden = YES;
@@ -388,7 +404,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         }
         
         _dateAxisView.hidden = NO;
-        _customPeriodBackView.hidden = NO;
         _customPeriodLab.hidden = !_customPeriod;
         _customPeriodBtn.hidden = NO;
         self.tableView.hidden = NO;
@@ -516,10 +531,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SCYSlidePagingHeaderView *)segmentControl {
     if (!_segmentControl) {
         _segmentControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, 0, 225, 44)];
+        _segmentControl.backgroundColor = [UIColor clearColor];
         _segmentControl.customDelegate = self;
         _segmentControl.buttonClickAnimated = YES;
-        _segmentControl.titleColor = [UIColor ssj_colorWithHex:@"999999"];
-        _segmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:@"EB4A64"];
+        _segmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _segmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_segmentControl setTabSize:CGSizeMake(75, 2)];
         _segmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome, kSegmentTitleSurplus];
     }
@@ -528,7 +544,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
+        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50)];
+        _dateAxisView.backgroundColor = [UIColor clearColor];
+        _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _dateAxisView.delegate = self;
     }
     return _dateAxisView;
@@ -537,8 +556,9 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJPercentCircleView *)chartView {
     if (!_chartView) {
         _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
+        _chartView.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _chartView.dataSource = self;
-        [_chartView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_chartView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_chartView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_chartView ssj_setBorderWidth:1];
     }
@@ -548,31 +568,32 @@ static NSString *const kSegmentTitleSurplus = @"结余";
 - (SSJReportFormsSurplusView *)surplusView {
     if (!_surplusView) {
         _surplusView = [[SSJReportFormsSurplusView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 185)];
-        _surplusView.backgroundColor = [UIColor ssj_colorWithHex:@"#f2f6f5"];
+        _surplusView.backgroundColor = [UIColor clearColor];
+        [_surplusView updateThemeColor];
     }
     return _surplusView;
 }
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
         _tableView.sectionFooterHeight = 0;
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.tableFooterView = [[UIView alloc] init];
-        _tableView.contentInset = UIEdgeInsetsMake(0, 0, self.tabBarController.tabBar.height, 0);
     }
     return _tableView;
 }
 
-- (UIImageView *)noDataRemindView {
+- (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_nodata"]];
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.title = @"报表空空如也";
     }
     return _noDataRemindView;
 }
@@ -584,6 +605,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _incomeAndPaymentTitleLab.backgroundColor = [UIColor clearColor];
         _incomeAndPaymentTitleLab.font = [UIFont systemFontOfSize:15];
         _incomeAndPaymentTitleLab.textAlignment = NSTextAlignmentCenter;
+        _incomeAndPaymentTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _incomeAndPaymentTitleLab;
 }
@@ -597,16 +619,19 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         _incomeAndPaymentMoneyLab.minimumScaleFactor = 0.66;
         _incomeAndPaymentMoneyLab.adjustsFontSizeToFitWidth = YES;
         _incomeAndPaymentMoneyLab.textAlignment = NSTextAlignmentCenter;
+        _incomeAndPaymentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _incomeAndPaymentMoneyLab;
 }
 
 - (UILabel *)customPeriodLab {
     if (!_customPeriodLab) {
-        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 30)];
+        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, 0, 30)];
+        _customPeriodLab.backgroundColor = [UIColor clearColor];
         _customPeriodLab.textAlignment = NSTextAlignmentCenter;
         _customPeriodLab.font = [UIFont systemFontOfSize:15];
-        _customPeriodLab.layer.borderColor = SSJ_DEFAULT_SEPARATOR_COLOR.CGColor;
+        _customPeriodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _customPeriodLab.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _customPeriodLab.layer.borderWidth = 1;
         _customPeriodLab.layer.cornerRadius = 15;
         _customPeriodLab.hidden = YES;
@@ -614,19 +639,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     return _customPeriodLab;
 }
 
-- (UIView *)customPeriodBackView {
-    if (!_customPeriodBackView) {
-        _customPeriodBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
-        _customPeriodBackView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    }
-    return _customPeriodBackView;
-}
-
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, 0, 50, 50);
-        [_customPeriodBtn setImage:[UIImage imageNamed:@"reportForms_edit"] forState:UIControlStateNormal];
+        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
+        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_customPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;

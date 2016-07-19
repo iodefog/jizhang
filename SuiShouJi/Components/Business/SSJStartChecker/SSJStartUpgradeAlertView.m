@@ -33,11 +33,15 @@ static const NSTimeInterval kDuration = 0.3;
 @property (nonatomic, strong) void(^cancelHandler)(SSJStartUpgradeAlertView *);
 @property (nonatomic, strong) void(^sureHandler)(SSJStartUpgradeAlertView *);
 
+@property (nonatomic) CGFloat titleHeight;
+
+@property (nonatomic) CGFloat contentHeight;
+
 @end
 
 @implementation SSJStartUpgradeAlertView
 
-- (instancetype)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(nullable NSString *)cancelButtonTitle sureButtonTitle:(nullable NSString *)sureButtonTitle cancelButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))cancelHandler sureButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))sureHandler {
+- (instancetype)initWithTitle:(NSString *)title message:(NSAttributedString *)message cancelButtonTitle:(nullable NSString *)cancelButtonTitle sureButtonTitle:(nullable NSString *)sureButtonTitle cancelButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))cancelHandler sureButtonClickHandler:(nullable void(^)(SSJStartUpgradeAlertView *alert))sureHandler {
     if (self = [super initWithFrame:CGRectZero]) {
         
         self.backgroundColor = [UIColor whiteColor];
@@ -45,7 +49,7 @@ static const NSTimeInterval kDuration = 0.3;
         self.clipsToBounds = YES;
         
         self.titleLabel.text = title;
-        self.contentLabel.text = message;
+        self.contentLabel.attributedText = message;
         [self.scrollView addSubview:self.contentLabel];
         
         [self addSubview:self.titleLabel];
@@ -65,7 +69,7 @@ static const NSTimeInterval kDuration = 0.3;
         
         if (cancelButtonTitle.length && sureButtonTitle.length) {
             [self.cancelButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-            [self.cancelButton ssj_setBorderStyle:SSJBorderStyleBottom];
+            [self.cancelButton ssj_setBorderStyle:(SSJBorderStyleRight | SSJBorderStyleTop)];
             [self.cancelButton ssj_setBorderWidth:1];
         }
         
@@ -76,26 +80,27 @@ static const NSTimeInterval kDuration = 0.3;
 
 - (void)layoutSubviews {
     [self.titleLabel sizeToFit];
-    self.titleLabel.frame = CGRectMake(0, 0, self.width, MAX(kMinTitleHeight, self.titleLabel.height));
-    
-    self.contentLabel.width = self.width - 30;
-    [self.contentLabel sizeToFit];
+    self.titleLabel.frame = CGRectMake(0, 0, self.width, _titleHeight);
 
     self.scrollView.contentSize = CGSizeMake(self.contentLabel.width, self.contentLabel.height);
-    self.scrollView.frame = CGRectMake(15, self.titleLabel.bottom, self.contentLabel.width, self.height - self.titleLabel.bottom - kButtonHeight);
+    self.scrollView.frame = CGRectMake(15, self.titleLabel.bottom, self.contentLabel.width, _contentHeight);
     
-    if (self.cancelButton.titleLabel.text.length
-        && self.sureButton.titleLabel.text.length) {
+    if ([self.cancelButton titleForState:UIControlStateNormal].length
+        && [self.sureButton titleForState:UIControlStateNormal].length) {
+        
         self.cancelButton.frame = CGRectMake(0, self.scrollView.bottom, self.width * 0.5, kButtonHeight);
         self.sureButton.frame = CGRectMake(self.width * 0.5, self.scrollView.bottom, self.width * 0.5, kButtonHeight);
-    } else if (self.cancelButton.titleLabel.text.length
-               && !self.sureButton.titleLabel.text.length) {
+        
+    } else if ([self.cancelButton titleForState:UIControlStateNormal].length
+               && ![self.sureButton titleForState:UIControlStateNormal].length) {
+        
         self.cancelButton.frame = CGRectMake(0, self.scrollView.bottom, self.width, kButtonHeight);
-    } else if (!self.cancelButton.titleLabel.text.length
-               && self.sureButton.titleLabel.text.length) {
+        
+    } else if (![self.cancelButton titleForState:UIControlStateNormal].length
+               && [self.sureButton titleForState:UIControlStateNormal].length) {
+        
         self.sureButton.frame = CGRectMake(0, self.scrollView.bottom, self.width, kButtonHeight);
     }
-    
     
     [self.cancelButton ssj_relayoutBorder];
     [self.sureButton ssj_relayoutBorder];
@@ -104,11 +109,14 @@ static const NSTimeInterval kDuration = 0.3;
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat width = 270;
     
-    CGFloat titleHeight = MAX(kMinTitleHeight, self.titleLabel.height);
-    CGFloat maxContentHeight = [UIScreen mainScreen].bounds.size.height * 0.7 - titleHeight - kButtonHeight;
-    CGFloat contentHeight = MIN(MAX(kMinContentHeight, self.contentLabel.height), maxContentHeight);
+    self.contentLabel.width = width - 30;
+    [self.contentLabel sizeToFit];
     
-    return CGSizeMake(width, titleHeight + contentHeight + kButtonHeight);
+    _titleHeight = MAX(kMinTitleHeight, self.titleLabel.height);
+    CGFloat maxContentHeight = [UIScreen mainScreen].bounds.size.height * 0.7 - _titleHeight - kButtonHeight;
+    _contentHeight = MIN(MAX(kMinContentHeight, self.contentLabel.height + 15), maxContentHeight);
+    
+    return CGSizeMake(width, _titleHeight + _contentHeight + kButtonHeight);
 }
 
 #pragma mark - Public
@@ -194,7 +202,7 @@ static const NSTimeInterval kDuration = 0.3;
     if (!_cancelButton) {
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _cancelButton.titleLabel.font = [UIFont systemFontOfSize:18];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[[_cancelButton titleColorForState:UIControlStateNormal] colorWithAlphaComponent:0.5] forState:UIControlStateHighlighted];
         [_cancelButton addTarget:self action:@selector(cancelButtonAction) forControlEvents:UIControlEventTouchUpInside];
         [_cancelButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];

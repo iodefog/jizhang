@@ -16,37 +16,39 @@
 
 @implementation SSJFundingDetailListHeaderView
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
-    if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
         [self ssj_setBorderWidth:1.f];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
-        [self ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
-        self.contentView.backgroundColor = [UIColor whiteColor];
-        [self.contentView addSubview:self.btn];
-        [self.contentView addSubview:self.dateLabel];
-        [self.contentView addSubview:self.expandImage];
-        [self.contentView addSubview:self.moneyLabel];
+        [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        [self addSubview:self.btn];
+        [self addSubview:self.dateLabel];
+        [self addSubview:self.expandImage];
+        [self addSubview:self.moneyLabel];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.btn.frame = self.contentView.frame;
+    self.btn.frame = self.bounds;
     self.dateLabel.left = 10;
-    self.dateLabel.centerY = self.contentView.height / 2;
+    self.dateLabel.centerY = self.height / 2;
     self.expandImage.size = CGSizeMake(16, 8);
-    self.expandImage.right = self.contentView.width - 10;
-    self.expandImage.centerY = self.contentView.height / 2;
+    self.expandImage.right = self.width - 10;
+    self.expandImage.centerY = self.height / 2;
     self.moneyLabel.right = self.expandImage.left - 10;
-    self.moneyLabel.centerY = self.contentView.height / 2;
+    self.moneyLabel.centerY = self.height / 2;
     [self ssj_relayoutBorder];
 }
 
 - (UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _dateLabel.font = [UIFont systemFontOfSize:15];
     }
     return _dateLabel;
@@ -64,7 +66,6 @@
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
         _moneyLabel.font = [UIFont systemFontOfSize:18];
-        _moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
     }
     return _moneyLabel;
 }

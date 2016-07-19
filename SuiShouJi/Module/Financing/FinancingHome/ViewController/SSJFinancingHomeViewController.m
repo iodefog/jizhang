@@ -42,6 +42,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"我的资金";
+        self.extendedLayoutIncludesOpaqueBars = YES;
     }
     return self;
 }
@@ -58,7 +59,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getDateFromDateBase];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
         SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] objectAtIndex:0];
@@ -71,20 +72,20 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     self.headerView.size = CGSizeMake(self.view.width, 85);
-    self.headerView.leftTop = CGPointMake(0, 10);
+    self.headerView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
     self.hiddenButton.right = self.view.width - 120;
     self.hiddenButton.centerY = self.headerView.centerY;
 //    self.profitAmountLabel.left = self.profitLabel.right + 20;
 //    self.transferButton.size = CGSizeMake(65, 30);
-    [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"a7a7a7"]];
-    [_headerView ssj_setBorderStyle:SSJBorderStyleBottom];
+    [_headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_headerView ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
     [_headerView ssj_setBorderWidth:1];
 //    self.profitLabel.left = 10.0f;
 //    self.profitLabel.centerY = self.headerView.height / 2;
 //    self.profitAmountLabel.centerY = self.headerView.height / 2;
 //    self.transferButton.right = self.view.width - 15;
 //    self.transferButton.centerY = self.headerView.height / 2;
-    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - 141);
+    self.collectionView.size = CGSizeMake(self.view.width, self.view.height - self.headerView.bottom - self.tabBarController.tabBar.height);
     self.collectionView.leftTop = CGPointMake(0, self.headerView.bottom);
 }
 
@@ -220,7 +221,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }
@@ -228,7 +229,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(SSJFinancingHomeHeader *)headerView{
     if (!_headerView) {
         _headerView = [[SSJFinancingHomeHeader alloc]init];
-        _headerView.backgroundColor = [UIColor whiteColor];
         [_headerView.transferButton addTarget:self action:@selector(transferButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _headerView;
@@ -237,7 +237,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(UIButton *)hiddenButton{
     if (!_hiddenButton) {
         _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-        [_hiddenButton setImage:[UIImage imageNamed:@"founds_yingcang"] forState:UIControlStateNormal];
+        [_hiddenButton setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
         [_hiddenButton setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
         [_hiddenButton addTarget:self action:@selector(hiddenButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -308,6 +308,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)reloadDataAfterSync{
     [self getDateFromDateBase];
+}
+
+-(void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self.headerView updateAfterThemeChange];
+    self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.headerView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    [self.collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

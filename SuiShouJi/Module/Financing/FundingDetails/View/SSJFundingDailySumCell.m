@@ -21,7 +21,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"F6F6F6"];
+        self.backgroundColor = [UIColor clearColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.moneyLabel];
@@ -40,7 +40,7 @@
 -(UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _dateLabel.font = [UIFont systemFontOfSize:12];
     }
     return _dateLabel;
@@ -50,7 +50,6 @@
     if (!_moneyLabel) {
         _moneyLabel = [[UILabel alloc]init];
         _moneyLabel.font = [UIFont systemFontOfSize:12];
-        _moneyLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
     }
     return _moneyLabel;
 }

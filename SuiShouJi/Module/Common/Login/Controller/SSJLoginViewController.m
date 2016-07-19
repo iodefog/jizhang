@@ -29,6 +29,7 @@
 #import "WXApi.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
+#import "SSJStartUpgradeAlertView.h"
 #import "SSJLoginHelper.h"
 
 
@@ -45,7 +46,6 @@
 @property (nonatomic,strong)UIButton *forgetButton;
 @property (nonatomic,strong)UIButton *tencentLoginButton;
 @property (nonatomic,strong)UIButton *weixinLoginButton;
-@property (nonatomic,strong)UIImageView *backGroundImage;
 @property (nonatomic,strong)UIView *leftSeperatorLine;
 @property (nonatomic,strong)UIView *rightSeperatorLine;
 @property (nonatomic,strong)UILabel *thirdPartyLoginLabel;
@@ -72,7 +72,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     TPKeyboardAvoidingScrollView *scrollView = [[TPKeyboardAvoidingScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-    [self.view addSubview:self.backGroundImage];
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"login_bg"];
+    }
     [scrollView addSubview:self.tfPhoneNum];
     [scrollView addSubview:self.tfPassword];
     [scrollView addSubview:self.loginButton];
@@ -89,17 +91,16 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+    }
 }
 
 -(void)viewDidLayoutSubviews{
@@ -111,7 +112,6 @@
         self.loginButton.centerX = self.view.width / 2;
         self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 20);
         self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 17);
-        self.backGroundImage.frame = self.view.frame;
         self.thirdPartyLoginLabel.centerX = self.view.width / 2;
         self.thirdPartyLoginLabel.bottom = self.view.height - 110;
         if ([WXApi isWXAppInstalled]) {
@@ -139,7 +139,6 @@
         self.loginButton.centerX = self.view.width / 2;
         self.registerButton.leftTop = CGPointMake(self.loginButton.left, self.loginButton.bottom + 25);
         self.forgetButton.rightTop = CGPointMake(self.loginButton.right, self.registerButton.bottom + 20);
-        self.backGroundImage.frame = self.view.frame;
         self.thirdPartyLoginLabel.centerX = self.view.width / 2;
         self.thirdPartyLoginLabel.bottom = self.view.height - 150;
         if ([WXApi isWXAppInstalled]) {
@@ -189,6 +188,125 @@
         return;
     }
     
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
+        __weak typeof(self) weakSelf = self;
+        NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
+        SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
+        if (![self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
+            NSString *userName;
+            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+                userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+            }else{
+                userName = lastUserItem.nickName;
+            }
+            NSString *hintStr;
+            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+                hintStr = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+            }else if ([lastUserItem.loginType isEqualToString:@"1"]) {
+                hintStr = [NSString stringWithFormat:@"您已使用过qq%@登陆过,确定使用新账户登录",userName];
+            }else if ([lastUserItem.loginType isEqualToString:@"2"]) {
+                hintStr = [NSString stringWithFormat:@"您已使用过微信%@登陆过,确定使用新账户登录",userName];
+            }
+            NSString *fullhint = [NSString stringWithFormat:@"%@\n\n登陆后新的记账数据将同步到新账号",hintStr];
+            NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:fullhint];
+            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[fullhint rangeOfString:hintStr]];
+            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
+            [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[fullhint rangeOfString:userName]];
+            [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
+            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+                [alert dismiss];
+            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+                [weakSelf comfirmTologin];
+                [alert dismiss];
+            }];
+            [alert show];
+        }else{
+            [self comfirmTologin];
+        }
+    }else{
+        [self comfirmTologin];
+    }
+}
+
+#pragma mark - Notification
+-(void)updatetextfield:(id)sender{
+    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
+        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
+            self.loginButton.enabled = YES;
+        }else{
+        self.loginButton.enabled = NO;
+        }
+    }
+}
+
+#pragma mark - Event
+-(void)loginButtonClicked:(id)sender{
+    [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
+    [self.tfPassword resignFirstResponder];
+}
+
+-(void)forgetButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_forget_pwd"];
+
+    SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
+    forgetVC.backController = self.backController;
+    forgetVC.finishHandle = ^(UIViewController *controller){
+        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+    };
+    [self.navigationController pushViewController:forgetVC animated:YES];
+}
+
+-(void)registerButtonClicked:(id)sender{
+    __weak typeof(self) weakSelf = self;
+    [MobClick event:@"login_register"];
+
+    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
+    registerVc.finishHandle = ^(UIViewController *controller){
+        //  如果是忘记密码，就返回到登录页面
+        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
+            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
+        } else {
+            if (weakSelf.finishHandle) {
+                weakSelf.finishHandle(weakSelf);
+            } else {
+                [weakSelf ssj_backOffAction];
+            }
+        }
+    };
+    [self.navigationController pushViewController:registerVc animated:YES];
+}
+
+- (void)backOffAction {
+    if (self.cancelHandle) {
+        self.cancelHandle(self);
+    } else {
+       [super ssj_backOffAction];
+    }
+}
+
+-(void)qqLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_qq"];
+    __weak typeof(self) weakSelf = self;
+    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
+        [weakSelf.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
+    }];
+}
+
+-(void)weixinLoginButtonClicked:(id)sender{
+    [MobClick event:@"login_weichat"];
+    __weak typeof(self) weakSelf = self;
+    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
+        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
+        [weakSelf.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
+    }];
+}
+
+#pragma mark - Private
+-(void)comfirmTologin{
     //  只要登录就设置用户为已注册，因为9188帐户、第三方登录没有注册就可以登录
     self.loginService.item.registerState = @"1";
     if (![SSJUserTableManager saveUserItem:self.loginService.item]
@@ -254,7 +372,7 @@
     //  如果用户手势密码开启，进入手势密码页面
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID()];
     if ([userItem.motionPWDState boolValue]) {
-        
+        __weak typeof(self) weakSelf = self;
         SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
         motionVC.finishHandle = self.finishHandle;
         motionVC.backController = self.backController;
@@ -263,7 +381,7 @@
         } else {
             motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
         }
-        [self.navigationController pushViewController:motionVC animated:YES];
+        [weakSelf.navigationController pushViewController:motionVC animated:YES];
         
         return;
     }
@@ -274,83 +392,6 @@
     } else {
         [self ssj_backOffAction];
     }
-}
-
-#pragma mark - Notification
--(void)updatetextfield:(id)sender{
-    if (self.tfPhoneNum.isFirstResponder || self.tfPassword.isFirstResponder) {
-        if (self.tfPhoneNum.text.length != 0 && self.tfPassword.text.length >= 6) {
-            self.loginButton.enabled = YES;
-        }else{
-        self.loginButton.enabled = NO;
-        }
-    }
-}
-
-#pragma mark - Event
--(void)loginButtonClicked:(id)sender{
-    [self.loginService loadLoginModelWithPassWord:self.tfPassword.text AndUserAccount:self.tfPhoneNum.text];
-    [self.tfPassword resignFirstResponder];
-}
-
--(void)forgetButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    [MobClick event:@"login_forget_pwd"];
-
-    SSJForgetPasswordFirstStepViewController *forgetVC = [[SSJForgetPasswordFirstStepViewController alloc] init];
-    forgetVC.backController = self.backController;
-    forgetVC.finishHandle = ^(UIViewController *controller){
-        [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-    };
-    [self.navigationController pushViewController:forgetVC animated:YES];
-}
-
--(void)registerButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    [MobClick event:@"login_register"];
-
-    SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
-    registerVc.finishHandle = ^(UIViewController *controller){
-        //  如果是忘记密码，就返回到登录页面
-        if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
-            [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-        } else {
-            if (weakSelf.finishHandle) {
-                weakSelf.finishHandle(weakSelf);
-            } else {
-                [weakSelf ssj_backOffAction];
-            }
-        }
-    };
-    [self.navigationController pushViewController:registerVc animated:YES];
-}
-
-- (void)backOffAction {
-    if (self.cancelHandle) {
-        self.cancelHandle(self);
-    } else {
-       [super ssj_backOffAction];
-    }
-}
-
--(void)qqLoginButtonClicked:(id)sender{
-    [MobClick event:@"login_qq"];
-
-    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
-        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
-        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
-    }];
-}
-
--(void)weixinLoginButtonClicked:(id)sender{
-    [MobClick event:@"login_weichat"];
-
-    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
-        [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
-        [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [self.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
-    }];
 }
 
 #pragma mark - Getter
@@ -375,27 +416,21 @@
 //    return _loginView;
 //}
 
--(UIImageView *)backGroundImage{
-    if (!_backGroundImage) {
-        _backGroundImage = [[UIImageView alloc]init];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
-    }
-    return _backGroundImage;
-}
 
 -(SSJBaselineTextField*)tfPhoneNum{
     if (!_tfPhoneNum) {
-        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_username"]];
+        UIImageView *image = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"login_username"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        image.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         
         _tfPhoneNum = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 0, self.view.width - 22, 47) contentHeight:34];
-        _tfPhoneNum.tintColor = [UIColor whiteColor];
-        _tfPhoneNum.textColor = [UIColor whiteColor];
+        _tfPhoneNum.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
-        [_tfPhoneNum setValue:[UIColor colorWithWhite:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forKeyPath:@"_placeholderLabel.textColor"];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
@@ -407,16 +442,17 @@
 
 -(SSJBaselineTextField*)tfPassword{
     if (!_tfPassword) {
-        UIImageView *image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
+        UIImageView *image = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"login_password"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        image.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 40, 47)];
         [leftView addSubview:image];
         image.center = CGPointMake(20, 23);
         _tfPassword = [[SSJBaselineTextField alloc]initWithFrame:CGRectMake(11, 47, self.view.width - 22, 47) contentHeight:34];
-        _tfPassword.tintColor = [UIColor whiteColor];
-        _tfPassword.textColor = [UIColor whiteColor];
+        _tfPassword.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _tfPassword.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
-        [_tfPassword setValue:[UIColor colorWithWhite:1 alpha:0.5] forKeyPath:@"_placeholderLabel.textColor"];
+        [_tfPassword setValue:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forKeyPath:@"_placeholderLabel.textColor"];
         _tfPassword.font = [UIFont systemFontOfSize:16];
         _tfPassword.secureTextEntry = YES;
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
@@ -436,8 +472,8 @@
         _loginButton.layer.cornerRadius = 3;
         _loginButton.enabled = NO;
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
-        _loginButton.backgroundColor = [UIColor whiteColor];
+        [_loginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginButtonTitleColor] forState:UIControlStateNormal];
+        _loginButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         [_loginButton addTarget:self action:@selector(loginButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _loginButton;
@@ -449,11 +485,11 @@
         _registerButton.size = CGSizeMake(self.view.width - 22, 47);
         _registerButton.clipsToBounds = YES;
         _registerButton.layer.cornerRadius = 3;
-        _registerButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        _registerButton.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor].CGColor;
         _registerButton.layer.borderWidth = 1.0f;
         _registerButton.titleLabel.font = [UIFont systemFontOfSize:21];
         [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
-        [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_registerButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         [_registerButton ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         [_registerButton addTarget:self action:@selector(registerButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -466,7 +502,7 @@
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_forgetButton setRight:self.loginButton.right];
         [_forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-        [_forgetButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_forgetButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forState:UIControlStateNormal];
         _forgetButton.titleLabel.font = [UIFont systemFontOfSize:15];
         [_forgetButton addTarget:self action:@selector(forgetButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_forgetButton sizeToFit];
@@ -478,9 +514,11 @@
 -(UIButton *)tencentLoginButton{
     if (!_tencentLoginButton) {
         _tencentLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
-        [_tencentLoginButton setImage:[UIImage imageNamed:@"more_qq"] forState:UIControlStateNormal];
+        [_tencentLoginButton setImage:[[UIImage imageNamed:@"more_qq"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_tencentLoginButton setTitle:@"腾讯QQ" forState:UIControlStateNormal];
+        [_tencentLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
         _tencentLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _tencentLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _tencentLoginButton.spaceBetweenImageAndTitle = 12;
         _tencentLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
         _tencentLoginButton.contentMode = UIViewContentModeCenter;
@@ -492,8 +530,10 @@
 -(UIButton *)weixinLoginButton{
     if (!_weixinLoginButton) {
         _weixinLoginButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 70)];
-        [_weixinLoginButton setImage:[UIImage imageNamed:@"more_weixin"] forState:UIControlStateNormal];
+        [_weixinLoginButton setImage:[[UIImage imageNamed:@"more_weixin"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_weixinLoginButton setTitle:@"微信" forState:UIControlStateNormal];
+        [_weixinLoginButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
+        _weixinLoginButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _weixinLoginButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _weixinLoginButton.spaceBetweenImageAndTitle = 12;
         _weixinLoginButton.contentLayoutType = SSJButtonLayoutTypeImageTopTitleBottom;
@@ -506,7 +546,7 @@
 -(UIView *)leftSeperatorLine{
     if (!_leftSeperatorLine) {
         _leftSeperatorLine = [[UIView alloc]init];
-        _leftSeperatorLine.backgroundColor = [UIColor whiteColor];
+        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
     }
     return _leftSeperatorLine;
 }
@@ -514,7 +554,7 @@
 -(UIView *)rightSeperatorLine{
     if (!_rightSeperatorLine) {
         _rightSeperatorLine = [[UIView alloc]init];
-        _rightSeperatorLine.backgroundColor = [UIColor whiteColor];
+        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
     }
     return _rightSeperatorLine;
 }
@@ -524,7 +564,7 @@
         _thirdPartyLoginLabel = [[UILabel alloc]init];
         _thirdPartyLoginLabel.text = @"使用第三方登录";
         [_thirdPartyLoginLabel sizeToFit];
-        _thirdPartyLoginLabel.textColor = [UIColor whiteColor];
+        _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
         _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
         _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
     }

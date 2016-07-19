@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJFinancingHomeHeader : UIView
+
 @property(nonatomic, strong) NSString *balanceAmount;
+
 @property(nonatomic, strong) UIButton *transferButton;
+
+- (void)updateAfterThemeChange;
+
 @end

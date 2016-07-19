@@ -218,6 +218,7 @@
 - (SSJWaveWaterView *)growingView {
     if (!_growingView) {
         _growingView = [[SSJWaveWaterView alloc] initWithRadius:40];
+        _growingView.backgroundColor = [UIColor clearColor];
         _growingView.topTitleColor = [UIColor blackColor];
         _growingView.bottomTitleColor = [UIColor blackColor];
         _growingView.titleGap = 2;
@@ -244,6 +245,7 @@
         }
         
         _fullView = [[SSJWaveWaterView alloc] initWithRadius:40];
+        _fullView.backgroundColor = [UIColor clearColor];
         _fullView.topTitleColor = [UIColor whiteColor];
         _fullView.bottomTitleColor = [UIColor whiteColor];
         _fullView.items = items;

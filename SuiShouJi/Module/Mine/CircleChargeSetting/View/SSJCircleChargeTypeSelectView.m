@@ -33,6 +33,7 @@ static NSString *kCellID = @"cellID";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         self.titles = @[kTitle1, kTitle2];
         [self addSubview:self.titleLab];
         [self addSubview:self.tableView];
@@ -87,8 +88,10 @@ static NSString *kCellID = @"cellID";
         cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellID];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    cell.backgroundColor = [UIColor clearColor];
     NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
     cell.textLabel.text = title;
+    cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     cell.accessoryView = indexPath.row == self.selectIndex ? self.accessoryView : nil;
     return cell;
 }
@@ -111,9 +114,9 @@ static NSString *kCellID = @"cellID";
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.backgroundColor = [UIColor whiteColor];
+        _titleLab.backgroundColor = [UIColor clearColor];
         _titleLab.text = @"收支类别";
-        _titleLab.textColor = [UIColor blackColor];
+        _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _titleLab.textAlignment = NSTextAlignmentCenter;
     }
     return _titleLab;
@@ -125,21 +128,22 @@ static NSString *kCellID = @"cellID";
         _tableView.rowHeight = 44;
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        _tableView.backgroundColor = [UIColor whiteColor];
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.scrollEnabled = NO;
         
         [_tableView ssj_setBorderWidth:1];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-        [_tableView ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _tableView;
 }
 
 - (UIImageView *)accessoryView {
     if (!_accessoryView) {
-        _accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
+        _accessoryView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _accessoryView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _accessoryView;
 }

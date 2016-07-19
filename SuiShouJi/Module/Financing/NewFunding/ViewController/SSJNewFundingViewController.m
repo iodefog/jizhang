@@ -53,7 +53,6 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -114,21 +113,21 @@
     switch (indexPath.section) {
         case 0:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.placeholder = @"请输入账户名称";
+            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             _nameTextField = NewFundingCell.cellText;
             _nameTextField.delegate = self;
         }
             break;
         case 1:{
             _amountTextField = NewFundingCell.cellText;
-            NewFundingCell.cellText.placeholder = @"请输入账户余额";
+            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             NewFundingCell.cellText.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             _amountTextField.delegate = self;
         }
             break;
         case 2:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            NewFundingCell.cellText.placeholder = @"备注说明";
+            NewFundingCell.cellText.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             _memoTextField = NewFundingCell.cellText;
             _memoTextField.delegate = self;
 
@@ -141,7 +140,7 @@
             NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
             [NewFundingCell.typeLabel sizeToFit];
             NewFundingCell.cellText.enabled = NO;
-            NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         case 4:{
@@ -149,7 +148,7 @@
             NewFundingCell.colorView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
             NewFundingCell.cellText.text = @"选择颜色";
             NewFundingCell.cellText.enabled = NO;
-            NewFundingCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         default:
@@ -186,10 +185,11 @@
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableview{
     if (!_tableview) {
-        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableview.backgroundColor = [UIColor clearColor];
         _tableview.delegate = self;
         _tableview.dataSource = self;
+        _tableview.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableview;
 }

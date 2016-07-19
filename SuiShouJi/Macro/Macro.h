@@ -90,4 +90,10 @@ alpha:(a)]
 //  屏幕屏幕宽度
 #define SSJSCREENWITH CGRectGetWidth([UIScreen mainScreen].bounds)
 
+//  导航栏底部到屏幕顶端的距离
+#define SSJ_NAVIBAR_BOTTOM (CGRectGetHeight([UIApplication sharedApplication].statusBarFrame) + CGRectGetHeight(self.navigationController.navigationBar.frame))
+
+//  tabbar高度
+#define SSJ_TABBAR_HEIGHT self.tabBarController.tabBar.height
+
 #endif

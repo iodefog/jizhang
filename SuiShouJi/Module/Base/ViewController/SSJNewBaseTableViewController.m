@@ -82,12 +82,12 @@
 
 - (UITableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:_tableViewStyle];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:_tableViewStyle];
         _tableView.dataSource=self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];

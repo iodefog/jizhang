@@ -25,7 +25,7 @@
         self.imageView.contentMode = UIViewContentModeCenter;
         self.imageView.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
     
-        self.textLabel.textColor = [UIColor blackColor];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         
         [self.contentView addSubview:self.moneyLab];
@@ -135,8 +135,9 @@
 - (UILabel *)moneyLab {
     if (!_moneyLab) {
         _moneyLab = [[UILabel alloc] init];
-        _moneyLab.backgroundColor = [UIColor whiteColor];
+        _moneyLab.backgroundColor = [UIColor clearColor];
         _moneyLab.font = [UIFont systemFontOfSize:20];
+        _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _moneyLab;
 }
@@ -161,7 +162,7 @@
     if (!_typeLabel) {
         _typeLabel = [[UILabel alloc]init];
         _typeLabel.font = [UIFont systemFontOfSize:15];
-        _typeLabel.textColor = [UIColor ssj_colorWithHex:@"#393939"];
+        _typeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _typeLabel;
 }
@@ -169,7 +170,7 @@
 -(UILabel *)memoLabel{
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
-        _memoLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memoLabel.font = [UIFont systemFontOfSize:13];
     }
     return _memoLabel;

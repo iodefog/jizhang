@@ -34,8 +34,8 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJFundingTransferDetailCell class] forCellReuseIdentifier:SSJTransferDetailCellIdentifier];
-    [self.tableView registerClass:[SSJTransferDetailHeader class] forHeaderFooterViewReuseIdentifier:SSJTransferDetailHeaderIdentifier];
     // Do any additional setup after loading the view.
 }
 
@@ -116,17 +116,18 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    SSJTransferDetailHeader *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SSJTransferDetailHeaderIdentifier];
+    SSJTransferDetailHeader *header = [[SSJTransferDetailHeader alloc]init];
     NSArray* arr = [self.datas allKeys];
     arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
         NSComparisonResult result = [obj1 compare:obj2];
         return result==NSOrderedAscending;
     }];
+    header.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     header.currentMonth = [arr objectAtIndex:section];
     return header;
 }
 
-
+#pragma mark - Getter
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

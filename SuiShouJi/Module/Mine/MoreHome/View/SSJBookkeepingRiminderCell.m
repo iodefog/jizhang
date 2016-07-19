@@ -16,6 +16,7 @@
 @implementation SSJBookkeepingRiminderCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.checkMark];
         [self.contentView addSubview:self.cellTitleLabel];
         [self addSubview:self.checkMark];
@@ -35,7 +36,7 @@
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _cellTitleLabel.font = [UIFont systemFontOfSize:15];
-        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _cellTitleLabel;
 }
@@ -43,7 +44,8 @@
 -(UIImageView *)checkMark{
     if (!_checkMark) {
         _checkMark = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 17, 17)];
-        _checkMark.image = [UIImage imageNamed:@"checkmark"];
+        _checkMark.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _checkMark.hidden = YES;
     }
     return _checkMark;
@@ -62,6 +64,13 @@
     _cellTitle = cellTitle;
     self.cellTitleLabel.text = _cellTitle;
     [self.cellTitleLabel sizeToFit];
+}
+
+-(void)updateCellAppearanceAfterThemeChanged{
+    [super updateCellAppearanceAfterThemeChanged];
+    self.backgroundColor = [UIColor clearColor];
+    self.cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }
 
 /*

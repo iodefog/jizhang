@@ -12,7 +12,7 @@
 
 @interface SSJMagicExportResultViewController ()
 
-@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UIView *contentView;
 
 @property (nonatomic, strong) SSJMagicExportResultCheckMarkView *checkMark;
 
@@ -34,12 +34,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.headerView];
-    [self.view addSubview:self.checkMark];
-    [self.view addSubview:self.remindLab];
-    [self.view addSubview:self.goBackBtn];
-    
-    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.contentView];
+    [self.contentView addSubview:self.checkMark];
+    [self.contentView addSubview:self.remindLab];
+    [self.contentView addSubview:self.goBackBtn];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -64,17 +62,18 @@
 }
 
 #pragma marm - Getter
-- (UIView *)headerView {
-    if (!_headerView) {
-        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 10)];
-        _headerView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+- (UIView *)contentView {
+    if (!_contentView) {
+        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
+        _contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
-    return _headerView;
+    return _contentView;
 }
 
 - (SSJMagicExportResultCheckMarkView *)checkMark {
     if (!_checkMark) {
         _checkMark = [[SSJMagicExportResultCheckMarkView alloc] initWithRadius:30];
+        _checkMark.backgroundColor = [UIColor clearColor];
         _checkMark.center = CGPointMake(self.view.width * 0.5, 66);
     }
     return _checkMark;
@@ -83,9 +82,10 @@
 - (UILabel *)remindLab {
     if (!_remindLab) {
         _remindLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 140, self.view.width, 18)];
-        _remindLab.backgroundColor = [UIColor whiteColor];
+        _remindLab.backgroundColor = [UIColor clearColor];
         _remindLab.font = [UIFont systemFontOfSize:18];
         _remindLab.textAlignment = NSTextAlignmentCenter;
+        _remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _remindLab.text = @"提交成功，请至您的邮箱查看";
     }
     return _remindLab;
@@ -96,7 +96,7 @@
         _goBackBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _goBackBtn.titleLabel.font = [UIFont systemFontOfSize:18];
         [_goBackBtn setTitle:@"返回首页" forState:UIControlStateNormal];
-        [_goBackBtn setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_goBackBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [_goBackBtn addTarget:self action:@selector(goBackHomeAction) forControlEvents:UIControlEventTouchUpInside];
         [_goBackBtn sizeToFit];
         _goBackBtn.center = CGPointMake(self.view.width * 0.5, 260);

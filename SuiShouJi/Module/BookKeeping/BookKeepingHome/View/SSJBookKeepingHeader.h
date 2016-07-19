@@ -29,5 +29,6 @@
 //当前月份
 @property (nonatomic)long currentMonth;
 
+- (void)updateAfterThemeChange;
 
 @end

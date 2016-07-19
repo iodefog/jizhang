@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJHomeBarButton : UIView
+@interface SSJHomeBarCalenderButton : UIView
+
 @property (nonatomic) long currentDay;
+
 @property (nonatomic,strong) UIButton *btn;
+
+- (void)updateAfterThemeChange;
 
 @end

@@ -26,6 +26,7 @@
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "YYKeyboardManager.h"
+#import "SSJRecordMakingStore.h"
 
 static const NSTimeInterval kAnimationDuration = 0.25;
 
@@ -42,11 +43,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
 
 @property (nonatomic) NSInteger selectChargeCircleType;
-@property (nonatomic,strong) NSString *chargeMemo;
-@property (nonatomic,strong) NSString *categoryID;
 
-@property (nonatomic,strong) SSJFundingItem *selectItem;
-@property (nonatomic,strong) SSJFundingItem *defualtItem;
+@property (nonatomic,strong) NSString *chargeMemo;
+
+@property (nonatomic,strong) NSString *categoryID;
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputView *billTypeInputView;
 
@@ -88,6 +88,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (!self.item) {
+        self.item = [[SSJBillingChargeCellItem alloc]init];
+    }
+    
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
     
     [self initData];
@@ -100,7 +104,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.scrollView addSubview:self.paymentTypeView];
     [self.scrollView addSubview:self.incomeTypeView];
     
-    if (self.item && self.item.incomeOrExpence == 0) {
+    
+    if (self.item.ID.length && self.item.incomeOrExpence == 0) {
         _lastSelectedIndex = 1;
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.width, 0)];
     }
@@ -109,7 +114,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getCategoryList];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -126,14 +130,15 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 #pragma mark - Getter
 - (void)updateFundingType {
-    [self.accessoryView.accountBtn setTitle:_selectItem.fundingName forState:UIControlStateNormal];
+    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:UIControlStateNormal];
     self.accessoryView.accountBtn.selected = YES;
-    self.FundingTypeSelectView.selectFundID = _selectItem.fundingID;
+    self.FundingTypeSelectView.selectFundID = self.item.fundId;
 }
 
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
+//        _DateSelectedView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         __weak typeof(self) weakSelf = self;
         _DateSelectedView.calendarView.DateSelectedBlock = ^(long year , long month ,long day,  NSString *selectDate){
 //            if (weakSelf.selectChargeCircleType != -1
@@ -144,6 +149,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.selectedDay = day;
             weakSelf.selectedMonth = month;
             weakSelf.selectedYear = year;
+            weakSelf.item.billDate = selectDate;
             [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月",weakSelf.selectedMonth] forState:UIControlStateNormal];
             [weakSelf.accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", month, day] forState:UIControlStateNormal];
             [weakSelf.DateSelectedView dismiss];
@@ -161,7 +167,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
-                weakSelf.selectItem = fundingItem;
+                weakSelf.item.fundId = fundingItem.fundingID;
+                weakSelf.item.fundName = fundingItem.fundingName;
                 [weakSelf updateFundingType];
                  NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
                 [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:SSJLastSelectFundItemKey];
@@ -169,7 +176,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
                     [weakSelf.FundingTypeSelectView reloadDate];
-                    weakSelf.selectItem = newFundingItem;
+                    weakSelf.item.fundId = fundingItem.fundingID;
+                    weakSelf.item.fundName = fundingItem.fundingName;
                     [weakSelf updateFundingType];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
@@ -185,7 +193,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (SSJRecordMakingBillTypeInputView *)billTypeInputView {
     if (!_billTypeInputView) {
-        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 91)];
+        _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 91)];
         _billTypeInputView.moneyInput.delegate = self;
         if (_item.money) {
             _billTypeInputView.moneyInput.text = [NSString stringWithFormat:@"%.2f", [_item.money doubleValue]];
@@ -223,8 +231,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
     if (!_accessoryView) {
         _accessoryView = [[SSJRecordMakingBillTypeInputAccessoryView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, 86)];
-        _accessoryView.buttonTitleNormalColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
-        _accessoryView.buttonTitleSelectedColor = [UIColor blackColor];
+        _accessoryView.buttonTitleNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _accessoryView.buttonTitleSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
@@ -425,8 +433,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     _currentYear= now.year;
     _currentDay = now.day;
     _currentMonth = now.month;
-    
-    if (self.item == nil) {
+    //获取日期
+    if (self.item.ID.length == 0) {
         if (_selectedYear == 0) {
             self.selectedYear = _currentYear;
         }
@@ -436,37 +444,42 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         if (_selectedDay == 0) {
             self.selectedDay = _currentDay;
         }
-        self.selectChargeCircleType = -1;
     }else{
-        [self getSelectedDateFromDate:self.item.billDate];
-        if (self.item.ID == nil) {
+        if (self.item.ID.length == 0) {
             self.selectedYear = _currentYear;
             self.selectedMonth = _currentMonth;
             self.selectedDay = _currentDay;
         }else{
-            self.selectedYear = _originaldYear;
-            self.selectedMonth = _originaldMonth;
-            self.selectedDay = _originaldDay;
-        }
-        self.categoryID = self.item.billId;
-        if ([self.item.configId isEqualToString:@""] || (![self.item.billDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]] && self.item.ID != nil)) {
-            self.selectChargeCircleType = -1;
-        }else{
-            self.selectChargeCircleType = self.item.chargeCircleType;
+            self.selectedYear = [[self.item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
+            self.selectedMonth = [[self.item.billDate substringWithRange:NSMakeRange(5, 2)] integerValue];
+            self.selectedDay = [[self.item.billDate substringWithRange:NSMakeRange(8, 2)] integerValue];
         }
     }
-    
-    if (self.item != nil) {
-        [self getSelectedFundingType];
-    }else{
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey] == nil) {
-            [self getDefualtFudingItem];
+    self.item.billDate = [NSString stringWithFormat:@"%04ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
+    //获取选中的资金账户
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        if (weakSelf.item.ID.length != 0) {
+            if (!weakSelf.item.fundName.length) {
+                weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
+            }
         }else{
-            NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey];
-            _selectItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
-            [self updateFundingType];
+            if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey] == nil) {
+                weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+            }else{
+                NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey];
+                SSJFundingItem *fundItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
+                weakSelf.item.fundId = fundItem.fundingID;
+                weakSelf.item.fundName = fundItem.fundingName;
+            }
         }
-    }
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [weakSelf updateFundingType];
+        });
+    }];
+
 }
 
 -(void)getCategoryList{
@@ -474,14 +487,13 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         && self.titleSegment.selectedSegmentIndex != 1) {
         return;
     }
-    
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:!self.titleSegment.selectedSegmentIndex Success:^(NSMutableArray *result) {
         __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
         dispatch_apply([result count], dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(size_t index) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [result ssj_safeObjectAtIndex:index];
-            if (_categoryID && [item.ID isEqualToString:_categoryID]) {
+            if (weakSelf.item.billId && [item.ID isEqualToString:weakSelf.item.billId]) {
                 item.selected = YES;
                 selectedItem = item;
             }
@@ -489,7 +501,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         if (!selectedItem) {
             selectedItem = [result firstObject];
             selectedItem.selected = YES;
-            _categoryID = selectedItem.ID;
+            weakSelf.item.billId = selectedItem.ID;
         }
         
         if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
@@ -499,7 +511,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         }
         
         [UIView animateWithDuration:kAnimationDuration animations:^{
-            weakSelf.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
+            weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
         }];
         weakSelf.billTypeInputView.billTypeName = selectedItem.title;
         
@@ -540,16 +552,16 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 -(void)settitleSegment{
     _titleSegment = [[SSJSegmentedControl alloc]initWithItems:@[@"支出",@"收入"]];
-    if (self.item == nil) {
+    if (self.item.ID == nil) {
         _titleSegment.selectedSegmentIndex = 0;
     }else{
         _titleSegment.selectedSegmentIndex = !self.item.incomeOrExpence;
     }
     _titleSegment.size = CGSizeMake(202, 30);
-    _titleSegment.borderColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
-    _titleSegment.selectedBorderColor = [UIColor ssj_colorWithHex:@"EB4A64"];
-    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex: @"a7a7a7"]} forState:UIControlStateNormal];
-    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"EB4A64"]} forState:UIControlStateSelected];
+    _titleSegment.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _titleSegment.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
+    [_titleSegment setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
     [_titleSegment addTarget: self action: @selector(segmentPressed:)forControlEvents: UIControlEventValueChanged];
     self.navigationItem.titleView = _titleSegment;
 }
@@ -566,204 +578,30 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [CDAutoHideMessageHUD showMessage:@"金额不能小于0"];
         return;
     }
-    if (self.selectChargeCircleType != -1) {
-        NSString *selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        if (![selectDate isEqualToString:[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]]) {
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"抱歉,暂不可设置历史日期的定期收入/支出哦~" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-//            weakSelf.ChargeCircleSelectView.selectCircleType = -1;
-//            [weakSelf.accessoryView.dateBtn setTitle:weakSelf.ChargeCircleSelectView.selectedPeriod forState:UIControlStateNormal];
-            return;
-        }
-    }
-    if (self.selectItem.fundingID == nil) {
+    if (self.item.fundId == nil) {
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
         return;
     }
-    self.chargeMemo = _accessoryView.memoView.text;
-    [MobClick event:@"addRecord_memo"];
-    __block NSString *booksId = SSJGetCurrentBooksType();
-    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSMutableArray *editeChargeArr = [NSMutableArray arrayWithCapacity:0];
-        double chargeMoney = [self.billTypeInputView.moneyInput.text doubleValue];
-        NSString *operationTime = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSString *selectDate;
-        NSString *userid= SSJUSERID();
-        selectDate = [NSString stringWithFormat:@"%ld-%02ld-%02ld",self.selectedYear,self.selectedMonth,self.selectedDay];
-        SSJFundingItem *fundingType = weakSelf.selectItem;
+    self.item.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
+    self.item.money = _billTypeInputView.moneyInput.text;
+    self.item.chargeMemo = _accessoryView.memoView.text;
+    if (self.item.chargeMemo && self.item.ID.length) {
+        [MobClick event:@"addRecord_memo"];
+    }
+    if (_selectedImage != nil) {
         NSString *imageName = SSJUUID();
-        NSString *iconfigId;
-        if (self.selectChargeCircleType == -1) {
-            iconfigId = @"";
-        }else{
-            iconfigId = SSJUUID();
+        if (SSJSaveImage(_selectedImage, imageName) && SSJSaveThumbImage(_selectedImage, imageName)) {
+            weakSelf.item.chargeImage = imageName;
         }
-        if (self.item == nil) {
-            //新增流水
-            NSString *chargeID = SSJUUID();
-            if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
-            }else{
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? ",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID];
-            }
-            [db executeUpdate:@"INSERT INTO BK_USER_CHARGE (ICHARGEID , CUSERID , IMONEY , IBILLID , IFUNSID  , IOLDMONEY , IBALANCE , CWRITEDATE , IVERSION , OPERATORTYPE , CBILLDATE , CMEMO , ICONFIGID , CBOOKSID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",chargeID,userid,[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[NSNumber numberWithDouble:19.99],[NSNumber numberWithDouble:19.99],operationTime,@(SSJSyncVersion()),[NSNumber numberWithInt:0],selectDate,self.chargeMemo,iconfigId,booksId];
-            if (weakSelf.selectedImage != nil) {
-                if (SSJSaveImage(weakSelf.selectedImage, imageName)&&SSJSaveThumbImage(weakSelf.selectedImage, imageName)) {
-                    [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",[NSString stringWithFormat:@"%@.jpg",imageName],[NSString stringWithFormat:@"%@-thumb.jpg",imageName],chargeID,SSJUSERID()];
-                    [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",chargeID,[NSString stringWithFormat:@"%@.jpg",imageName],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
-                    if (weakSelf.selectChargeCircleType != -1) {
-                        [db executeUpdate:@"update BK_CHARGE_PERIOD_CONFIG set CIMGURL = ? where ICONFIGID = ?",[NSString stringWithFormat:@"%@.jpg",imageName],iconfigId];
-                    }
-                }
-            }
-            int count = [db intForQuery:@"SELECT COUNT(CBILLDATE) AS COUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",selectDate,userid,booksId];
-            double incomeSum = 0.0;
-            double expenseSum = 0.0;
-            double sum = 0.0;
-            if (count == 0) {
-                if (self.titleSegment.selectedSegmentIndex == 0) {
-                    expenseSum = expenseSum + chargeMoney;
-                    sum = sum - chargeMoney;
-                }else{
-                    incomeSum = incomeSum + chargeMoney;
-                    sum = sum + chargeMoney;
-                }
-                [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID ,CBOOKSID) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid,booksId];
-            }else{
-                FMResultSet *rs = [db executeQuery:@"SELECT EXPENCEAMOUNT, INCOMEAMOUNT , SUMAMOUNT FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",selectDate,userid,booksId];
-                while ([rs next]) {
-                    incomeSum = [rs doubleForColumn:@"INCOMEAMOUNT"];
-                    expenseSum = [rs doubleForColumn:@"EXPENCEAMOUNT"];
-                    sum = [rs doubleForColumn:@"SUMAMOUNT"];
-                }
-                if (self.titleSegment.selectedSegmentIndex == 0) {
-                    expenseSum = expenseSum + chargeMoney;
-                    sum = sum - chargeMoney;
-                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET EXPENCEAMOUNT = ? , SUMAMOUNT = ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:expenseSum],[NSNumber numberWithDouble:sum],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid,booksId];
-                }else{
-                    incomeSum = incomeSum + chargeMoney;
-                    sum = sum + chargeMoney;
-                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET INCOMEAMOUNT = ? , SUMAMOUNT = ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:incomeSum],[NSNumber numberWithDouble:sum],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid,booksId];
-                }
-            }
-            SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
-            item.ID = chargeID;
-            item.operatorType = 1;
-            [editeChargeArr addObject:item];
-        }else if (self.item.ID != nil){
-            //修改流水
-            if ([db intForQuery:@"select operatortype from bk_user_charge where ichargeid = ?",weakSelf.item.ID] == 2) {
-                [weakSelf.navigationController popViewControllerAnimated:YES];
-                return;
-            }
-            if ([db executeUpdate:@"UPDATE BK_USER_CHARGE SET IMONEY = ? , IBILLID = ? , IFUNSID = ? , CWRITEDATE = ? , OPERATORTYPE = ? , CBILLDATE = ? , IVERSION = ? , CMEMO = ? WHERE ICHARGEID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],weakSelf.categoryID,fundingType.fundingID,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:1],selectDate,@(SSJSyncVersion()),self.chargeMemo , self.item.ID,userid]) {
-                if (weakSelf.selectedImage != nil) {
-                    if (SSJSaveImage(weakSelf.selectedImage, imageName)&&SSJSaveThumbImage(weakSelf.selectedImage, imageName)) {
-                        [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",[NSString stringWithFormat:@"%@.jpg",imageName],[NSString stringWithFormat:@"%@-thumb.jpg",imageName],weakSelf.item.ID,userid];
-                        [db executeUpdate:@"insert into BK_IMG_SYNC (RID , CIMGNAME , CWRITEDATE , OPERATORTYPE , ISYNCTYPE , ISYNCSTATE) values (?,?,?,?,?,?)",weakSelf.item.ID,[NSString stringWithFormat:@"%@.jpg",imageName],[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0],[NSNumber numberWithInt:0]];
-                        if (weakSelf.item.chargeImage != nil && ![weakSelf.item.chargeImage isEqualToString:@""]) {
-                            if (([db intForQuery:@"select * from BK_IMG_SYNC where CIMGNAME = ? and RID <> ?",weakSelf.item.chargeImage,weakSelf.item.ID]+[db intForQuery:@"select * from BK_USER_CHARGE where CIMGURL = ? and ICHARGEID <> ?",weakSelf.item.chargeImage,weakSelf.item.ID] == 0)) {
-                                [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeImage) error:nil];
-                                [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(weakSelf.item.chargeThumbImage) error:nil];
-                                [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",weakSelf.item.chargeImage];
-                            }
-                        }
-                    }
-                }else if(self.item.chargeImage.length == 0){
-                    [db executeUpdate:@"update BK_USER_CHARGE set CIMGURL = ? , THUMBURL = ? where ICHARGEID = ? AND CUSERID = ?",@"",@"",weakSelf.item.ID,userid];
-                    [db executeUpdate:@"delete from BK_IMG_SYNC where RID = ?",self.item.ID];
-                }
-                SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
-                item.ID = self.item.ID;
-                item.operatorType = 2;
-                [editeChargeArr addObject:item];
-            }
-            if (self.titleSegment.selectedSegmentIndex == 0) {
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:chargeMoney],fundingType.fundingID,userid];
-                if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",selectDate,userid,booksId]){
-                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , EXPENCEAMOUNT = EXPENCEAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? and cbooksid = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid,booksId];
-                }else{
-                    [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID,CBOOKSID) VALUES(?,?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:(-chargeMoney)],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid,booksId];
-                }
-            }else{
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?", [NSNumber numberWithDouble:chargeMoney] , fundingType.fundingID,userid];
-                if([db intForQuery:@"SELECT COUNT(*) FROM BK_DAILYSUM_CHARGE WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",selectDate,userid,booksId]){
-                    [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , INCOMEAMOUNT = INCOMEAMOUNT + ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],selectDate,userid,booksId];
-                }else{
-                    [db executeUpdate:@"INSERT INTO BK_DAILYSUM_CHARGE (CBILLDATE , EXPENCEAMOUNT , INCOMEAMOUNT  , SUMAMOUNT , CWRITEDATE , CUSERID , CBOOKSID) VALUES(?,?,?,?,?,?)",selectDate,[NSNumber numberWithDouble:0],[NSNumber numberWithDouble:chargeMoney],[NSNumber numberWithDouble:chargeMoney],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],userid,booksId];
-                }
-            }
-            if ([db intForQuery:@"SELECT ITYPE FROM BK_BILL_TYPE WHERE ID = ?",weakSelf.item.billId])
-            {
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE + ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,userid];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT + ? , EXPENCEAMOUNT = EXPENCEAMOUNT - ? ,CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid,booksId];
-            }else{
-                [db executeUpdate:@"UPDATE BK_FUNS_ACCT SET IBALANCE = IBALANCE - ? WHERE CFUNDID = ? AND CUSERID = ?",[NSNumber numberWithDouble:[self.item.money doubleValue]],weakSelf.item.fundId,userid];
-                [db executeUpdate:@"UPDATE BK_DAILYSUM_CHARGE SET SUMAMOUNT = SUMAMOUNT - ? , INCOMEAMOUNT = INCOMEAMOUNT - ? , CWRITEDATE = ? WHERE CBILLDATE = ? AND CUSERID = ? AND CBOOKSID = ?",[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[NSNumber numberWithDouble:[weakSelf.item.money doubleValue]],[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],weakSelf.item.billDate,userid,booksId];
-            }
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    }
+    [weakSelf goBackAction];
+    [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
+        if (weakSelf.addNewChargeBlock) {
+            weakSelf.addNewChargeBlock(@[editeItem]);
         }
-        if (self.addNewChargeBlock) {
-            self.addNewChargeBlock(editeChargeArr);
-        }
-        [db executeUpdate:@"DELETE FROM BK_DAILYSUM_CHARGE WHERE SUMAMOUNT = 0 AND INCOMEAMOUNT = 0 AND EXPENCEAMOUNT = 0"];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [weakSelf goBackAction];
-        });
+    } failure:^{
+        
     }];
-}
-
--(void)getDefualtFudingItem{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE CPARENT != ? AND A.CFUNDID = B.CFUNDID AND A.OPERATORTYPE <> 2 AND A.CUSERID = ? LIMIT 1",@"root",SSJUSERID()];
-        weakSelf.defualtItem = [[SSJFundingItem alloc]init];
-        while ([rs next]) {
-            weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-            weakSelf.defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-            weakSelf.defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-            weakSelf.defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-            weakSelf.defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-            weakSelf.defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.selectItem = _defualtItem;
-            [self updateFundingType];
-        });
-    }];
-}
-
--(void)getSelectedFundingType{
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *userid = SSJUSERID();
-        FMResultSet * rs = [db executeQuery:@"SELECT A.* , B.IBALANCE FROM BK_FUND_INFO  A , BK_FUNS_ACCT B WHERE A.CFUNDID = B.CFUNDID AND A.CFUNDID = ? AND A.CUSERID = ? AND A.OPERATORTYPE != 2",self.item.fundId,userid];
-        _defualtItem = [[SSJFundingItem alloc]init];
-        while ([rs next]) {
-            weakSelf.defualtItem.fundingColor = [rs stringForColumn:@"CCOLOR"];
-            weakSelf.defualtItem.fundingIcon = [rs stringForColumn:@"CICOIN"];
-            weakSelf.defualtItem.fundingID = [rs stringForColumn:@"CFUNDID"];
-            weakSelf.defualtItem.fundingName = [rs stringForColumn:@"CACCTNAME"];
-            weakSelf.defualtItem.fundingParent = [rs stringForColumn:@"CPARENT"];
-            weakSelf.defualtItem.fundingBalance = [rs doubleForColumn:@"IBALANCE"];
-        }
-        if (weakSelf.defualtItem.fundingID == nil) {
-            [weakSelf getDefualtFudingItem];
-            return;
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.selectItem = weakSelf.defualtItem;
-            [self updateFundingType];
-        });
-    }];
-}
-
--(void)getSelectedDateFromDate:(NSString*)date{
-    NSDateFormatter *dateFormater = [[NSDateFormatter alloc]init];
-    [dateFormater setDateFormat:@"yyyy-MM-dd"];
-    NSDate *selectDate = [dateFormater dateFromString:date];
-    _originaldYear= selectDate.year;
-    _originaldDay = selectDate.day;
-    _originaldMonth = selectDate.month;
 }
 
 - (BOOL)showGuideViewIfNeeded {
@@ -798,7 +636,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
             if (item.selected) {
                 [UIView animateWithDuration:kAnimationDuration animations:^{
-                    wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                    wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                 }];
                 wself.billTypeInputView.billTypeName = item.title;
             }
@@ -808,15 +646,15 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [wself.billTypeInputView.moneyInput becomeFirstResponder];
         [UIView animateWithDuration:kAnimationDuration animations:^{
             wself.billTypeInputView.billTypeName = item.title;
-            wself.billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+            wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
         }];
-        wself.categoryID = item.ID;
+        wself.item.billId = item.ID;
     };
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
-            wself.categoryID = categoryId;
+            wself.item.billId = categoryId;
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];
     };
@@ -851,7 +689,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _paymentTypeView.items) {
                 if (item.selected) {
                     [UIView animateWithDuration:kAnimationDuration animations:^{
-                        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                        _billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                     }];
                     _billTypeInputView.billTypeName = item.title;
                     break;
@@ -865,7 +703,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             for (SSJRecordMakingBillTypeSelectionCellItem *item in _incomeTypeView.items) {
                 if (item.selected) {
                     [UIView animateWithDuration:kAnimationDuration animations:^{
-                        _billTypeInputView.backgroundColor = [UIColor ssj_colorWithHex:item.colorValue];
+                        _billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                     }];
                     _billTypeInputView.billTypeName = item.title;
                     break;

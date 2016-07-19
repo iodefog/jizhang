@@ -12,6 +12,11 @@
 @interface SSJBaseViewController : UIViewController <SSJBaseNetworkServiceDelegate>
 
 /**
+ *  背景图片
+ */
+@property (nonatomic, strong, readonly) UIImageView *backgroundView;
+
+/**
  *  统计标题
  */
 @property (nonatomic, copy) NSString *statisticsTitle;
@@ -27,6 +32,11 @@
 @property (nonatomic, readonly) BOOL isDatabaseInitFinished;
 
 /**
+ *  是否应用主题，默认为YES
+ */
+@property (nonatomic) BOOL appliesTheme;
+
+/**
  *  导航栏返回按钮点击事件，如果子类重写此方法，需要调用父类方法
  */
 - (void)goBackAction;
@@ -40,5 +50,10 @@
  *  数据库初始化完成后重载数据，子类根据情况重写，父类中没有做任何处理
  */
 - (void)reloadDataAfterInitDatabase;
+
+/**
+ *  切换主题后调用的方法，子类根据情况重写，必须调用父类方法
+ */
+- (void)updateAppearanceAfterThemeChanged;
 
 @end

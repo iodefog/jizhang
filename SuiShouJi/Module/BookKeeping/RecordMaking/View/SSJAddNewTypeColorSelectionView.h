@@ -12,6 +12,8 @@
 
 @interface SSJAddNewTypeColorSelectionView : UIControl
 
+- (instancetype)initWithWidth:(CGFloat)width;
+
 @property (nonatomic, strong) NSArray *colors;
 
 @property (nonatomic) NSInteger selectedIndex;

@@ -18,7 +18,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self.contentView addSubview:self.incomeLabel];
         [self.contentView addSubview:self.expentureLabel];
     }
@@ -36,7 +36,7 @@
 -(UILabel *)incomeLabel{
     if (!_incomeLabel) {
         _incomeLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _incomeLabel.font = [UIFont systemFontOfSize:12];
     }
     return _incomeLabel;
@@ -45,7 +45,7 @@
 -(UILabel *)expentureLabel{
     if (!_expentureLabel) {
         _expentureLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _expentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _expentureLabel.font = [UIFont systemFontOfSize:12];
     }
     return _expentureLabel;

@@ -83,7 +83,7 @@
 -(UIPickerView *)pickerView{
     if (!_pickerView) {
         _pickerView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
-        _pickerView.backgroundColor = [UIColor whiteColor];
+        _pickerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         _pickerView.showsSelectionIndicator=YES;
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
@@ -94,22 +94,24 @@
 -(UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]init];
-        _topView.backgroundColor = [UIColor whiteColor];
+        _topView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:@"cccccc"]];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
         [_topView ssj_setBorderWidth:1];
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
-        [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_closeButton];
         _comfirmButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
-        [_comfirmButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [_comfirmButton setImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _comfirmButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_topView addSubview:_comfirmButton];
     }
@@ -147,6 +149,7 @@
     UILabel *label = [[UILabel alloc]init];
     label.text = [_titleArray objectAtIndex:row];
     label.font = [UIFont systemFontOfSize:18];
+    label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [label sizeToFit];
     return label;
 }

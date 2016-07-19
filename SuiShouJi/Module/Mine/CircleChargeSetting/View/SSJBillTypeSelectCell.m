@@ -20,6 +20,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.cellImageView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.checkMarkImageView];
@@ -43,7 +44,7 @@
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLabel;
 }
@@ -58,7 +59,8 @@
 -(UIImageView *)checkMarkImageView{
     if (!_checkMarkImageView) {
         _checkMarkImageView = [[UIImageView alloc]init];
-        _checkMarkImageView.image = [UIImage imageNamed:@"checkmark"];
+        _checkMarkImageView.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _checkMarkImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _checkMarkImageView;
 }
@@ -74,6 +76,11 @@
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
     self.checkMarkImageView.hidden = !_isSelected;
+}
+
+-(void)updateCellAppearanceAfterThemeChanged{
+    [super updateCellAppearanceAfterThemeChanged];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 /*

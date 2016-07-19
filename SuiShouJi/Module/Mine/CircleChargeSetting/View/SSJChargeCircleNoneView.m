@@ -31,6 +31,7 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.seperatorLine.size = CGSizeMake(self.width, 10);
     self.seperatorLine.leftTop = CGPointMake(0, 0);
     self.noneImage.bottom = self.height / 2 - 10;
@@ -54,7 +55,7 @@
         _makeChargeCircleButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.width - 40, 40)];
         [_makeChargeCircleButton setTitle:@"添加周期记账" forState:UIControlStateNormal];
         _makeChargeCircleButton.layer.cornerRadius = 3.f;
-        [_makeChargeCircleButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_makeChargeCircleButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [_makeChargeCircleButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_makeChargeCircleButton addTarget:self action:@selector(makeChargeCircleButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -66,7 +67,7 @@
     if (!_nodataLabel) {
         _nodataLabel = [[UILabel alloc]init];
         _nodataLabel.font = [UIFont systemFontOfSize:18];
-        _nodataLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _nodataLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _nodataLabel.text = @"您暂时未设置任何周期记账哦~";
         [_nodataLabel sizeToFit];
     }
@@ -76,7 +77,7 @@
 -(UIView *)seperatorLine{
     if (!_seperatorLine) {
         _seperatorLine = [[UIView alloc]init];
-        _seperatorLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _seperatorLine.backgroundColor = [UIColor clearColor];
     }
     return _seperatorLine;
 }

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SSJTransferDetailHeader : UITableViewHeaderFooterView
+@interface SSJTransferDetailHeader : UIView
 @property(nonatomic, strong) NSString *currentMonth;
 
 @end

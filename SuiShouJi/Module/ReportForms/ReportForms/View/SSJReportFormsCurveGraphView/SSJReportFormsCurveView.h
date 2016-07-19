@@ -18,4 +18,6 @@
 
 @property (nonatomic) CGFloat bezierSmoothingTension;
 
+@property (nonatomic) UIEdgeInsets contentInsets;
+
 @end

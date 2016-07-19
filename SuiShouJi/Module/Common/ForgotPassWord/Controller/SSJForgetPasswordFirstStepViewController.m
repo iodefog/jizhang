@@ -29,8 +29,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 @property (nonatomic, strong) SSJRegistNetworkService *networkService;
 
-@property (nonatomic,strong) UIImageView *backGroundImage;
-
 //  倒计时定时器
 @property (nonatomic, strong) NSTimer *countdownTimer;
 
@@ -56,7 +54,9 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.backGroundImage];
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"login_bg"];
+    }
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.phoneNoField];
     [self.scrollView addSubview:self.authCodeField];
@@ -67,11 +67,14 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    }
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -81,11 +84,6 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     } else {
         [self.phoneNoField becomeFirstResponder];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -221,15 +219,16 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_phoneNoField) {
         _phoneNoField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 74, self.view.width - 50, 50) contentHeight:34];
         _phoneNoField.font = [UIFont systemFontOfSize:15];
-        _phoneNoField.textColor = [UIColor whiteColor];
-        _phoneNoField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
+        _phoneNoField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        _phoneNoField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _phoneNoField.text = self.mobileNo.length ? self.mobileNo : @"";
         _phoneNoField.delegate = self;
         _phoneNoField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _phoneNoField.keyboardType = UIKeyboardTypeNumberPad;
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 36)];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_username"]];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"login_username"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         imageView.center = CGPointMake(leftView.width * 0.5, leftView.height * 0.5);
         [leftView addSubview:imageView];
         _phoneNoField.leftViewMode = UITextFieldViewModeAlways;
@@ -242,8 +241,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
     if (!_authCodeField) {
         _authCodeField = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, self.phoneNoField.bottom, self.view.width - 50, 50) contentHeight:34];
         _authCodeField.font = [UIFont systemFontOfSize:15];
-        _authCodeField.textColor = [UIColor whiteColor];
-        _authCodeField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
+        _authCodeField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        _authCodeField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入验证码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _authCodeField.delegate = self;
         _authCodeField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _authCodeField.keyboardType = UIKeyboardTypeNumberPad;
@@ -251,7 +250,8 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _authCodeField.rightViewMode = UITextFieldViewModeAlways;
         
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 36)];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_password"]];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"login_password"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         imageView.center = CGPointMake(leftView.width * 0.5, leftView.height * 0.5);
         [leftView addSubview:imageView];
         _authCodeField.leftViewMode = UITextFieldViewModeAlways;
@@ -266,9 +266,13 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _getAuthCodeBtn.size = CGSizeMake(85, 30);
         _getAuthCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15];
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f6ff00"] forState:UIControlStateNormal];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f6ff00"] forState:UIControlStateNormal];
+        }else{
+            [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:UIControlStateNormal];
+        }
         [_getAuthCodeBtn addTarget:self action:@selector(getAuthCodeAction) forControlEvents:UIControlEventTouchUpInside];
-        [_getAuthCodeBtn ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_getAuthCodeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor]];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:2];
         [_getAuthCodeBtn ssj_setBorderInsets:UIEdgeInsetsMake(4, 0, 4, 0)];
@@ -297,20 +301,12 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _nextButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.authCodeField.bottom + 40, self.view.width - 50, 40)];
         [_nextButton setFontSize:16];
         [_nextButton setTitle:@"下一步" forState:SSJBorderButtonStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:SSJBorderButtonStateNormal];
         [_nextButton setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [_nextButton setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:SSJBorderButtonStateNormal];
         [_nextButton addTarget:self action:@selector(nextBtnAction)];
     }
     return _nextButton;
-}
-
-- (UIImageView *)backGroundImage{
-    if (!_backGroundImage) {
-        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
-    }
-    return _backGroundImage;
 }
 
 @end

@@ -21,8 +21,6 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @interface SSJMotionPasswordViewController () <SCYMotionEncryptionViewDelegate>
 
-@property (nonatomic, strong) UIImageView *backgroundView;
-
 @property (nonatomic, strong) UIView *portraitView;
 
 @property (nonatomic, strong) UILabel *remindLab;
@@ -107,7 +105,10 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view addSubview:self.backgroundView];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundView.image = [UIImage imageNamed:@"motion_background"];
+    }
+    
     [self.view addSubview:self.remindLab];
     [self.view addSubview:self.motionView];
     
@@ -212,7 +213,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 if ([_userItem.motionPWD isEqualToString:[keypads componentsJoinedByString:@","]]) {
                     _needToVerifyOriginalPwd = NO;
                     self.remindLab.text = @"绘制解锁图案";
-                    self.remindLab.textColor = [UIColor whiteColor];
+                    self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
                     self.miniMotionView.hidden = NO;
                     self.verifyLoginPwdBtn.hidden = YES;
                     return SCYMotionEncryptionCircleLayerStatusCorrect;
@@ -220,7 +221,7 @@ static const int kVerifyFailureTimesLimit = 5;
                     //  验证失败
                     self.verifyFailureTimes --;
                     self.remindLab.text = [NSString stringWithFormat:@"密码错误，您还可以输入%d次", self.verifyFailureTimes];
-                    self.remindLab.textColor = [UIColor ssj_colorWithHex:kErrorRemindTextColor];
+                    self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor];
                     
                     //  验证失败次数达到最大限制
                     if (self.verifyFailureTimes == 0) {
@@ -245,7 +246,7 @@ static const int kVerifyFailureTimesLimit = 5;
                     return SCYMotionEncryptionCircleLayerStatusError;
                 } else {
                     self.remindLab.text = @"请再次绘制解锁图案";
-                    self.remindLab.textColor = [UIColor whiteColor];
+                    self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
                     self.password = [keypads componentsJoinedByString:@","];
                     return SCYMotionEncryptionCircleLayerStatusCorrect;
                 }
@@ -267,7 +268,7 @@ static const int kVerifyFailureTimesLimit = 5;
                 } else {
                     //  设置失败，重新绘制
                     self.remindLab.text = @"绘制不一致，请重新绘制";
-                    self.remindLab.textColor = [UIColor ssj_colorWithHex:kErrorRemindTextColor];
+                    self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor];
                     [self.miniMotionView setKeypads:keypads toStatus:SCYMotionEncryptionCircleLayerStatusError];
                     double delayInSeconds = 0.4;
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
@@ -295,7 +296,7 @@ static const int kVerifyFailureTimesLimit = 5;
             } else {
                 //  验证失败
                 self.verifyFailureTimes --;
-                self.remindLab.textColor = [UIColor ssj_colorWithHex:kErrorRemindTextColor];
+                self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor];
                 self.remindLab.text = [NSString stringWithFormat:@"密码错误，您还可以输入%d次", self.verifyFailureTimes];
                 
                 //  验证失败次数达到最大限制
@@ -319,7 +320,7 @@ static const int kVerifyFailureTimesLimit = 5;
             } else {
                 //  验证失败
                 self.verifyFailureTimes --;
-                self.remindLab.textColor = [UIColor ssj_colorWithHex:kErrorRemindTextColor];
+                self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor];
                 self.remindLab.text = [NSString stringWithFormat:@"密码错误，您还可以输入%d次", self.verifyFailureTimes];
                 
                 //  验证失败次数达到最大限制
@@ -382,7 +383,7 @@ static const int kVerifyFailureTimesLimit = 5;
         // 验证登录密码正确
         if (_type == SSJMotionPasswordViewControllerTypeSetting) {
             self.remindLab.text = @"绘制解锁图案";
-            self.remindLab.textColor = [UIColor whiteColor];
+            self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
             _needToVerifyOriginalPwd = NO;
             _miniMotionView.hidden = NO;
             _verifyLoginPwdBtn.hidden = YES;
@@ -425,21 +426,13 @@ static const int kVerifyFailureTimesLimit = 5;
 }
 
 #pragma mark - Getter
-- (UIImageView *)backgroundView {
-    if (!_backgroundView) {
-        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"motion_background"]];
-        _backgroundView.frame = self.view.bounds;
-    }
-    return _backgroundView;
-}
-
 - (UIView *)portraitView {
     if (!_portraitView) {
         _portraitView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 68, 68)];
         _portraitView.clipsToBounds = YES;
         _portraitView.layer.cornerRadius = 34;
         _portraitView.layer.borderWidth = 1;
-        _portraitView.layer.borderColor = [UIColor whiteColor].CGColor;
+        _portraitView.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor].CGColor;
         
         CGRect imageFrame = CGRectInset(_portraitView.bounds, 3, 3);
         UIImageView *imageView = [[UIImageView alloc] initWithCornerRadiusAdvance:CGRectGetWidth(imageFrame) * 0.5 rectCornerType:UIRectCornerAllCorners];
@@ -462,7 +455,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UILabel *)remindLab {
     if (!_remindLab) {
         _remindLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height * 0.338, self.view.width, 20)];
-        _remindLab.textColor = [UIColor whiteColor];
+        _remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
         _remindLab.textAlignment = NSTextAlignmentCenter;
         _remindLab.font = [UIFont systemFontOfSize:18];
     }
@@ -474,7 +467,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _verifyLoginPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _verifyLoginPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
-        [_verifyLoginPwdBtn setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         [_verifyLoginPwdBtn addTarget:self action:@selector(forgetPasswordAction) forControlEvents:UIControlEventTouchUpInside];
         [_verifyLoginPwdBtn sizeToFit];
         _verifyLoginPwdBtn.centerX = self.view.width * 0.5;
@@ -488,7 +481,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _forgetPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _forgetPwdBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_forgetPwdBtn setTitle:@"忘记手势密码" forState:UIControlStateNormal];
-        [_forgetPwdBtn setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         [_forgetPwdBtn addTarget:self action:@selector(forgetPasswordAction) forControlEvents:UIControlEventTouchUpInside];
         [_forgetPwdBtn sizeToFit];
         _forgetPwdBtn.leftBottom = CGPointMake(15, self.view.height - 30);
@@ -501,7 +494,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _changeAccountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeAccountBtn.titleLabel.font = [UIFont systemFontOfSize:14];
         [_changeAccountBtn setTitle:@"使用其它账号登录" forState:UIControlStateNormal];
-        [_changeAccountBtn setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         [_changeAccountBtn addTarget:self action:@selector(changeAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_changeAccountBtn sizeToFit];
         _changeAccountBtn.rightBottom = CGPointMake(self.view.width - 15, self.view.height - 30);
@@ -514,9 +507,9 @@ static const int kVerifyFailureTimesLimit = 5;
         _miniMotionView = [[SCYMotionEncryptionView alloc] initWithFrame:CGRectMake(0, 0, 38, 38)];
         _miniMotionView.userInteractionEnabled = NO;
         _miniMotionView.circleRadius = 5;
-        _miniMotionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_compatibleImageNamed:@"motion_circle_default"],
-                                      @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_compatibleImageNamed:@"motion_circle_correct"],
-                                      @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_compatibleImageNamed:@"motion_circle_error"]};
+        _miniMotionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_themeImageWithName:@"motion_circle_default"],
+                                      @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_themeImageWithName:@"motion_circle_correct"],
+                                      @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_themeImageWithName:@"motion_circle_error"]};
     }
     return _miniMotionView;
 }
@@ -526,13 +519,18 @@ static const int kVerifyFailureTimesLimit = 5;
         _motionView = [[SCYMotionEncryptionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width * 0.8, self.view.width * 0.8)];
         _motionView.delegate = self;
         _motionView.showStroke = YES;
-        _motionView.strokeColorInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIColor ssj_colorWithHex:@"#ffdb01"],
-                                        @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIColor ssj_colorWithHex:@"#ffdb01"],
-                                        @(SCYMotionEncryptionCircleLayerStatusError):[UIColor ssj_colorWithHex:kErrorRemindTextColor]};
+//        SSJThemeModel *model = SSJ_CURRENT_THEME;
+        _motionView.strokeColorInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordHighlightedColor],
+                                        @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordHighlightedColor],
+                                        @(SCYMotionEncryptionCircleLayerStatusError):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor]};
+//        _motionView.strokeColorInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIColor ssj_colorWithHex:@"#ffdb01"],
+//                                        @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIColor ssj_colorWithHex:@"#ffdb01"],
+//                                        @(SCYMotionEncryptionCircleLayerStatusError):[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor]};
+
         _motionView.circleRadius = self.view.width * 0.1;
-        _motionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_compatibleImageNamed:@"motion_circle_default"],
-                                  @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_compatibleImageNamed:@"motion_circle_correct"],
-                                  @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_compatibleImageNamed:@"motion_circle_error"]};
+        _motionView.imageInfo = @{@(SCYMotionEncryptionCircleLayerStatusDefault):[UIImage ssj_themeImageWithName:@"motion_circle_default"],
+                                  @(SCYMotionEncryptionCircleLayerStatusCorrect):[UIImage ssj_themeImageWithName:@"motion_circle_correct"],
+                                  @(SCYMotionEncryptionCircleLayerStatusError):[UIImage ssj_themeImageWithName:@"motion_circle_error"]};
     }
     return _motionView;
 }

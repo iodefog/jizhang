@@ -10,4 +10,6 @@
 
 @interface SSJMineSyncButton : UIView
 
+- (void)updateAfterThemeChange;
+
 @end

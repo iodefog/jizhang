@@ -40,22 +40,24 @@
     CGContextSetBlendMode(ctx, kCGBlendModeXOR);
     
     // 填充颜色
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"e9f4ea"].CGColor);
+    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
+//    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"e9f4ea" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"fae5e5"].CGColor);
+    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
+//    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"fae5e5" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
     // 曲线
     CGContextSetLineWidth(ctx, 1);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:@"59ae65"].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:NO].CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:@"f56262"].CGColor);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:NO].CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
 }
@@ -81,16 +83,18 @@
     
     [points removeAllObjects];
     
-    CGFloat unitX = self.width / (values.count - 1);
+    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+    
+    CGFloat unitX = contentFrame.size.width / (values.count - 1);
     for (int i = 0; i < values.count; i ++) {
         NSNumber *value = values[i];
-        CGFloat x = unitX * i;
-        CGFloat y = self.height * (1 - [value floatValue] / _maxValue);
+        CGFloat x = unitX * i + contentFrame.origin.x;
+        CGFloat y = contentFrame.size.height * (1 - [value floatValue] / _maxValue) + contentFrame.origin.y;
         [points addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
     }
 }
 
-- (UIBezierPath*)getLinePathWithPoints:(NSArray *)points close:(BOOL)close {
+- (UIBezierPath *)getLinePathWithPoints:(NSArray *)points close:(BOOL)close {
     if (points.count == 0) {
         return nil;
     }
@@ -101,8 +105,10 @@
     [path addBezierThroughPoints:points];
     
     if (close) {
-        [path addLineToPoint:CGPointMake(self.width, self.height)];
-        [path addLineToPoint:CGPointMake(0, self.height)];
+        CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+        
+        [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
+        [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
         [path closePath];
     }
     

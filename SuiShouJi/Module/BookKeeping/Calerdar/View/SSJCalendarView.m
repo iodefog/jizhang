@@ -27,7 +27,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+//        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _marginForHorizon = (self.width - 35*7) / 9;
         _marginForvertical = (self.height - 35*7) / 14;
         _weekArray = [NSArray arrayWithObjects:@"日",@"一",@"二",@"三",@"四",@"五",@"六",  nil];
@@ -60,7 +60,6 @@
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = _marginForHorizon;
         _calendar =[[UICollectionView alloc]initWithFrame:self.bounds collectionViewLayout:flowLayout];
-        _calendar.backgroundColor=[UIColor whiteColor];
         _calendar.scrollEnabled = NO;
         _calendar.dataSource=self;
         _calendar.delegate=self;
@@ -219,19 +218,19 @@
         if (i < 7) {
             item.dateStr = [_weekArray objectAtIndex:i];
             item.backGroundColor = @"FFFFFF";
-            item.titleColor = @"a7a7a7";
+            item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
             item.isSelectable = NO;
             [self.items addObject:item];
         }else if (i < [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + 7 - 1){
             item.dateStr = @"";
             item.backGroundColor = @"FFFFFF";
-            item.titleColor = @"a7a7a7";
+            item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
             item.isSelectable = NO;
             [self.items addObject:item];
         }else if(i > [self getWeekOfFirstDayOfMonth:self.year withMonth:self.month] + [self getDaysOfMonth:self.year withMonth:self.month] + 5){
             item.dateStr = @"";
             item.backGroundColor = @"FFFFFF";
-            item.titleColor = @"a7a7a7";
+            item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
             item.isSelectable = NO;
             [self.items addObject:item];
         }else{
@@ -239,17 +238,17 @@
             item.dateStr = [NSString stringWithFormat:@"%ld-%02ld-%02d",self.year,self.month,[cellDay intValue]];
             if (_year > _currentYear) {
                 item.backGroundColor = @"FFFFFF";
-                item.titleColor = @"a7a7a7";
+                item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else if (_year == _currentYear && _month > _currentMonth){
                 item.backGroundColor = @"FFFFFF";
-                item.titleColor = @"a7a7a7";
+                item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else if ([cellDay integerValue] > _currentDay && _year == _currentYear && _month == _currentMonth){
                 item.backGroundColor = @"FFFFFF";
-                item.titleColor = @"a7a7a7";
+                item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
                 item.isSelectable = NO;
                 [self.items addObject:item];
             }else{
@@ -260,7 +259,7 @@
                 }
                 if ([item.dateStr isEqualToString:self.selectDateStr]) {
                     if ([item.dateStr isEqualToString:currentDateStr]) {
-                        item.backGroundColor = @"eb4a64";
+                        item.backGroundColor = SSJ_CURRENT_THEME.marcatoColor;
                         item.titleColor = @"FFFFFF";
                         item.isSelectable = YES;
                         [self.items addObject:item];
@@ -273,12 +272,12 @@
                 }else{
                     if ([item.dateStr isEqualToString:currentDateStr]) {
                         item.backGroundColor = @"FFFFFF";
-                        item.titleColor = @"eb4a64";
+                        item.titleColor = SSJ_CURRENT_THEME.marcatoColor;
                         item.isSelectable = YES;
                         [self.items addObject:item];
                     }else{
                         item.backGroundColor = @"FFFFFF";
-                        item.titleColor = @"393939";
+                        item.titleColor = SSJ_CURRENT_THEME.mainColor;
                         item.isSelectable = YES;
                         [self.items addObject:item];
                     }

@@ -17,6 +17,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.balanceLabel];
         [self addSubview:self.transferButton];
     }
@@ -37,7 +38,7 @@
 -(UILabel *)balanceLabel{
     if (!_balanceLabel) {
         _balanceLabel = [[UILabel alloc]init];
-        _balanceLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _balanceLabel;
 }
@@ -47,12 +48,13 @@
         _transferButton = [[UIButton alloc]init];
         _transferButton.contentLayoutType = SSJButtonLayoutTypeDefault;
         _transferButton.spaceBetweenImageAndTitle = 10;
-        [_transferButton setImage:[UIImage imageNamed:@"zhuanzhang"] forState:UIControlStateNormal];
+        [_transferButton setImage:[[UIImage imageNamed:@"zhuanzhang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _transferButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_transferButton setTitle:@"转账" forState:UIControlStateNormal];
-        [_transferButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_transferButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         _transferButton.titleLabel.font = [UIFont systemFontOfSize:20];
         [_transferButton ssj_setBorderStyle:SSJBorderStyleLeft];
-        [_transferButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_transferButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _transferButton;
 }
@@ -66,6 +68,15 @@
     self.balanceLabel.attributedText = balace;
     [self.balanceLabel sizeToFit];
 }
+
+- (void)updateAfterThemeChange{
+    self.balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.transferButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [self.transferButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [self.transferButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+}
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -23,6 +23,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets thickness:(CGFloat)thickness;
 
+@property (nonatomic, strong, readonly) UIView *contentView;
+
 @property (nonatomic, readonly) UIEdgeInsets circleInsets;
 
 @property (nonatomic, readonly) CGFloat circleThickness;

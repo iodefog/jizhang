@@ -11,7 +11,7 @@
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-#import "SSJHomeBarButton.h"
+#import "SSJHomeBarCalenderButton.h"
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginViewController.h"
 #import "SSJRegistGetVerViewController.h"
@@ -33,11 +33,14 @@
 #import "SSJHomeReminderView.h"
 #import "SSJBookKeepingHomeHelper.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJStartUpgradeAlertView.h"
+#import "SSJBookKeepingHomeNoDataHeader.h"
 
+BOOL kHomeNeedLoginPop;
 
 @interface SSJBookKeepingHomeViewController ()
 
-@property (nonatomic,strong) UIBarButtonItem *rightBarButton;
+@property (nonatomic,strong) SSJHomeBarCalenderButton *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
@@ -47,7 +50,7 @@
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
-@property(nonatomic, strong) UIImageView *noDataHeader;
+@property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -58,8 +61,6 @@
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
-
-
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -72,7 +73,7 @@
         self.statisticsTitle = @"首页";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
-        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
+//        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
 }
@@ -81,37 +82,15 @@
     [super viewWillAppear:animated];
  //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 //    _hasLoad = YES;
+    [self popIfNeeded];
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
-    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
-        NSDate *currentDate = [NSDate date];
-        NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
-        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
-        int days=((int)time)/(3600*24);
-        if (days > 7) {
-            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
-            popView.frame = [UIScreen mainScreen].bounds;
-            __weak typeof(self) weakSelf = self;
-            popView.loginBtnClickBlock = ^(){
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:loginVC animated:YES];
-            };
-            popView.registerBtnClickBlock = ^(){
-                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
-                registerVC.backController = weakSelf;
-                [weakSelf.navigationController pushViewController:registerVC animated:YES];
-            };
-            [[UIApplication sharedApplication].keyWindow addSubview:popView];
-            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
-        }
-    }
     [self getCurrentDate];
     
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
+//    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"home_books"] style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonClicked:)];
     self.navigationItem.leftBarButtonItem = leftButton;
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
@@ -120,9 +99,9 @@
 //    leftSpace.width = -10;
 //    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     self.navigationItem.titleView = self.budgetButton;
-    self.navigationItem.rightBarButtonItems = @[rightSpace, self.rightBarButton];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightBarButton];
+    self.navigationItem.rightBarButtonItems = @[rightSpace, rightItem];
     
-
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];
@@ -147,13 +126,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
     [self.view addSubview:self.statusLabel];
     self.tableView.frame = self.view.frame;
 //    self.newlyAddChargeArr = [[NSMutableArray alloc]init];
-    self.tableView.backgroundColor = [UIColor whiteColor];
+//    self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.view.backgroundColor = [UIColor whiteColor];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAfterBooksTypeChange) name:SSJBooksTypeDidChangeNotification object:nil];
@@ -163,7 +143,7 @@
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[self navigationController] setNavigationBarHidden:NO animated:NO];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     self.selectIndex = nil;
     [self getCurrentDate];
     [self.tableView reloadData];
@@ -198,11 +178,11 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 0.1;
+    return 0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.1;
+    return 0;
 }
 
 
@@ -486,14 +466,13 @@
     return _tableView;
 }
 
--(UIBarButtonItem*)rightBarButton{
+-(SSJHomeBarCalenderButton*)rightBarButton{
     if (!_rightBarButton) {
-        SSJHomeBarButton *buttonView = [[SSJHomeBarButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
 //        buttonView.layer.borderColor = [UIColor redColor].CGColor;
 //        buttonView.layer.borderWidth = 1;
-        buttonView.currentDay = _currentDay;
-        [buttonView.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-        _rightBarButton = [[UIBarButtonItem alloc]initWithCustomView:buttonView];
+        _rightBarButton.currentDay = _currentDay;
+        [_rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _rightBarButton;
 }
@@ -569,10 +548,9 @@
     return _homeButton;
 }
 
--(UIImageView *)noDataHeader{
+-(SSJBookKeepingHomeNoDataHeader *)noDataHeader{
     if (!_noDataHeader) {
-        _noDataHeader = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 294)];
-        _noDataHeader.image = [UIImage imageNamed:@"home_none"];
+        _noDataHeader = [[SSJBookKeepingHomeNoDataHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
     }
     return _noDataHeader;
 }
@@ -610,6 +588,56 @@
 }
 
 #pragma mark - Private
+-(void)popIfNeeded{
+    __weak typeof(self) weakSelf = self;
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
+        kHomeNeedLoginPop = NO;
+        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            [alert dismiss];
+        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+            [weakSelf.navigationController pushViewController:loginVc animated:YES];
+            [alert dismiss];
+        }];
+        [alert show];
+    }
+    if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
+        NSDate *currentDate = [NSDate date];
+        NSDate *lastPopTime = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastPopTimeKey];
+        NSTimeInterval time=[currentDate timeIntervalSinceDate:lastPopTime];
+        int days=((int)time)/(3600*24);
+        if (days > 7) {
+            SSJBookKeepingHomePopView *popView = [SSJBookKeepingHomePopView BookKeepingHomePopView];
+            popView.frame = [UIScreen mainScreen].bounds;
+            popView.loginBtnClickBlock = ^(){
+                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc]init];
+                loginVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:loginVC animated:YES];
+            };
+            popView.registerBtnClickBlock = ^(){
+                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
+                registerVC.backController = weakSelf;
+                [weakSelf.navigationController pushViewController:registerVC animated:YES];
+            };
+            [[UIApplication sharedApplication].keyWindow addSubview:popView];
+            [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
+        }
+    }
+
+}
+
+-(void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self.bookKeepingHeader updateAfterThemeChange];
+    [self.tableView updateAfterThemeChange];
+    [self.budgetButton updateAfterThemeChange];
+    [self.homeButton updateAfterThemeChange];
+    [self.budgetButton updateAfterThemeChange];
+    [self.rightBarButton updateAfterThemeChange];
+    [self.noDataHeader updateAfterThemeChanged];
+}
+
 -(void)getDateFromDatebase{
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
@@ -653,35 +681,34 @@
                 weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                 NSMutableArray *newAddArr = [NSMutableArray arrayWithArray:[result objectForKey:SSJNewAddChargeArrKey]];
                 NSMutableDictionary *sumDic = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJChargeCountSummaryKey]];
-                NSMutableDictionary *startIndex = [NSMutableDictionary dictionaryWithCapacity:0];
-                for (int i = 0; i < newAddArr.count; i++) {
-                    weakSelf.newlyAddIndexArr = [NSMutableArray arrayWithCapacity:0];
-                    SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
-                    [weakSelf.newlyAddIndexArr addObject:@(item.chargeIndex)];
-                    if (item.operatorType == 0) {
-                        //                if (weakSelf.items.count != 1) {
-                        //                    if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
-                        //                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 2 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                        //                    }else{
-                        //                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                        //                    }
-                        //                }
-//                        [weakSelf.items insertObject:item atIndex:item.chargeIndex];
-                        [weakSelf.tableView beginUpdates];
-                        if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
-                            [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+                NSMutableDictionary *startIndex = [NSMutableDictionary dictionaryWithDictionary:[result objectForKey:SSJDateStartIndexDicKey]];
+                if (weakSelf.items.count == [weakSelf.tableView numberOfRowsInSection:0] + newAddArr.count || weakSelf.items.count == [weakSelf.tableView numberOfRowsInSection:0] + newAddArr.count + 1) {
+                    for (int i = 0; i < newAddArr.count; i++) {
+                        weakSelf.newlyAddIndexArr = [NSMutableArray arrayWithCapacity:0];
+                        SSJBillingChargeCellItem *item = [newAddArr objectAtIndex:i];
+                        [weakSelf.newlyAddIndexArr addObject:@(item.chargeIndex)];
+                        if (item.operatorType == 0) {
+                            [weakSelf.tableView beginUpdates];
+                            if ([[sumDic valueForKey:item.billDate] intValue] == 0) {
+                                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0],[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+                            }else{
+                                [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+                            }
+                            [weakSelf.tableView endUpdates];
+                            [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[startIndex objectForKey:item.billDate] integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                            if (item.chargeIndex == weakSelf.items.count - 1) {
+                                [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex - 2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                            }
                         }else{
-                            [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:item.chargeIndex inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+                            weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
+                            [weakSelf.tableView reloadData];
                         }
-                        [weakSelf.tableView endUpdates];
-                        [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[[startIndex objectForKey:item.billDate] integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-                    }else{
-                        weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
-                        [weakSelf.tableView reloadData];
+                        [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                     }
-                    [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:item.chargeIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+
+                }else{
+                    [weakSelf.tableView reloadData];
                 }
-                [self.tableView reloadData];
                 [weakSelf.newlyAddChargeArr removeAllObjects];
                 
                 [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
@@ -716,7 +743,15 @@
 }
 
 -(void)reloadDataAfterSync{
-    [self getDateFromDatebase];
+    // 防止数据同步在动画完成前，导致动画重复执行
+    if (!self.hasLoad) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self getDateFromDatebase];
+        });
+    } else {
+        [self getDateFromDatebase];
+    }
+    
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];

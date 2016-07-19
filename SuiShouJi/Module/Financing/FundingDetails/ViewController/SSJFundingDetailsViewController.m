@@ -20,6 +20,7 @@
 #import "SSJFundingDailySumCell.h"
 #import "SSJCalenderDetailViewController.h"
 #import "SSJFundingTransferEditeViewController.h"
+#import "SSJFundingDetailNoDataView.h"
 
 #import "FMDB.h"
 
@@ -34,6 +35,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 @property (nonatomic, strong) NSArray *datas;
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
 @property(nonatomic, strong)  NSMutableArray <SSJFundingDetailListItem *>  *listItems;
+@property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -55,13 +57,12 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = self.rightButton;
     self.title = self.item.fundingName;
-    self.tableView.rowHeight = 55;
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
-    [self.tableView registerClass:[SSJFundingDetailListHeaderView class] forHeaderFooterViewReuseIdentifier:kFundingListHeaderViewID];
     self.tableView.tableHeaderView = self.header;
+    [self.view addSubview:self.noDataHeader];
 }
 
 
@@ -80,6 +81,11 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
         weakSelf.listItems = [NSMutableArray arrayWithArray:data];
         [weakSelf.tableView reloadData];
         [weakSelf.view ssj_hideLoadingIndicator];
+        if (data.count == 0) {
+            self.noDataHeader.hidden = NO;
+        }else{
+            self.noDataHeader.hidden = YES;
+        }
     } failure:^(NSError *error) {
         [weakSelf.view ssj_hideLoadingIndicator];
     }];
@@ -121,7 +127,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    SSJFundingDetailListHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFundingListHeaderViewID];
+    SSJFundingDetailListHeaderView *headerView = [[SSJFundingDetailListHeaderView alloc]init];
     headerView.item = [self.listItems objectAtIndex:section];
     __weak typeof(self) weakSelf = self;
     headerView.SectionHeaderClickedBlock = ^(){
@@ -163,7 +169,18 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     }
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 60;
+}
+
 #pragma mark - Getter
+-(SSJFundingDetailNoDataView *)noDataHeader{
+    if (!_noDataHeader) {
+        _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 171                           , self.view.width, self.view.height - 171)];
+    }
+    return _noDataHeader;
+}
+
 -(SSJFundingDetailHeader *)header{
     if (!_header) {
         _header = [[SSJFundingDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 107)];
@@ -175,11 +192,6 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     return _header;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 60;
-}
-
-#pragma mark - Getter
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
         _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"edit"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];

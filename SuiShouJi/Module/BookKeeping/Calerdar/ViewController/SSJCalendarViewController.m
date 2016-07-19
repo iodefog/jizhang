@@ -70,7 +70,6 @@
     self.navigationItem.titleView = self.dateChangeView;
     [self.view addSubview:self.calendarView];
     [self.view addSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[SSJFundingDetailDateHeader class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
@@ -81,7 +80,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"],NSFontAttributeName:[UIFont systemFontOfSize:21]};
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getCurrentDate];
     [self getDataFromDateBase];
 }
@@ -176,9 +175,8 @@
 -(UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc]init];
-        _tableView.backgroundView = nil;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -192,6 +190,7 @@
 -(SSJCalendarView *)calendarView{
     if (_calendarView == nil) {
         _calendarView = [[SSJCalendarView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 270)];
+        _calendarView.calendar.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _calendarView.isSelectOnly = NO;
         _calendarView.year = _currentYear;
         _calendarView.month = _currentMonth;
@@ -213,20 +212,24 @@
 -(UIView *)dateChangeView{
     if (!_dateChangeView) {
         _dateChangeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 180, 45)];
-        _dateChangeView.backgroundColor = [UIColor whiteColor];
+//        _dateChangeView.backgroundColor = [UIColor whiteColor];
         _dateLabel = [[UILabel alloc]init];
         _dateLabel.text = [NSString stringWithFormat:@"%ld年%ld月",self.selectedYear,self.selectedMonth];
         _dateLabel.font = [UIFont systemFontOfSize:18];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [_dateLabel sizeToFit];
         _plusButton = [[UIButton alloc]init];
         _plusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_plusButton setImage:[UIImage imageNamed:@"reportForms_right"] forState:UIControlStateNormal];
+        [_plusButton setImage:[[UIImage imageNamed:@"reportForms_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _plusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+
         [_plusButton addTarget:self action:@selector(plusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _plusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_plusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton = [[UIButton alloc]init];
         _minusButton.frame = CGRectMake(0, 0, 20, 28);
-        [_minusButton setImage:[UIImage imageNamed:@"reportForms_left"] forState:UIControlStateNormal];
+        [_minusButton setImage:[[UIImage imageNamed:@"reportForms_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _minusButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [_minusButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _minusButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_minusButton addTarget:self action:@selector(minusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -242,6 +245,7 @@
         __weak typeof(self) weakSelf = self;
         _nodataHeader = [SSJCalenderTableViewNoDataHeader CalenderTableViewNoDataHeader];
         _nodataHeader.size = CGSizeMake(self.view.width, 300);
+        _nodataHeader.backgroundColor = [UIColor clearColor];
         _nodataHeader.RecordMakingButtonBlock = ^(){
             SSJRecordMakingViewController *recordMakingVC = [[SSJRecordMakingViewController alloc]init];
             recordMakingVC.selectedDay = weakSelf.selectedDay;

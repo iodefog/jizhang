@@ -225,13 +225,13 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.text = self.item.money;
-        circleModifyCell.cellInput.placeholder = @"0.00";
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTitle5]) {
-        circleModifyCell.cellInput.placeholder = @"选填";
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.tag = 101;
@@ -243,7 +243,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle4] || [title isEqualToString:kTitle5] || [title isEqualToString:kTitle10]) {
         circleModifyCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }else{
-        circleModifyCell.selectionStyle = UITableViewCellSelectionStyleGray;
+        circleModifyCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
     if ([title isEqualToString:kTitle10]) {
         circleModifyCell.cellSubTitle = title;
@@ -255,18 +255,18 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle1]) {
         circleModifyCell.cellDetail = self.item.booksName;
     }else if ([title isEqualToString:kTitle2]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (!self.item.incomeOrExpence) {
             circleModifyCell.cellDetail = @"支出";
         }else{
             circleModifyCell.cellDetail = @"收入";
         }
     }else if ([title isEqualToString:kTitle3]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.typeName;
         circleModifyCell.cellTypeImageName = self.item.imageName;
     }else if ([title isEqualToString:kTitle7]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
             case 0:
                 circleModifyCell.cellDetail = @"每天";
@@ -293,15 +293,15 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 break;
         }
     }else if ([title isEqualToString:kTitle8]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.fundName;
         circleModifyCell.cellTypeImageName = self.item.fundImage;
     }else if ([title isEqualToString:kTitle9]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
     }
     if ([title isEqualToString:kTitle6]) {
-        circleModifyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.chargeImage.length || self.selectedImage != nil) {
             circleModifyCell.cellImageView.image = [UIImage imageNamed:@"mark_pic"];
         }else{
@@ -344,10 +344,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }
@@ -359,7 +361,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [saveButton setTitle:@"保存" forState:UIControlStateNormal];
         saveButton.layer.cornerRadius = 3.f;
         saveButton.layer.masksToBounds = YES;
-        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);

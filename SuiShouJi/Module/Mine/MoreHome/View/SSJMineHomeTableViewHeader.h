@@ -34,4 +34,6 @@ typedef void (^checkInButtonClickBlock)();
 typedef void (^HeaderClickedBlock)();
 
 @property (nonatomic, copy) HeaderClickedBlock HeaderClickedBlock;
+
+- (void)updateAfterThemeChange;
 @end

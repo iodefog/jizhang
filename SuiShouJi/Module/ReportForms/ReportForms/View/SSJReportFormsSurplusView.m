@@ -120,6 +120,13 @@
     [self setNeedsLayout];
 }
 
+- (void)updateThemeColor {
+    _horizontalLine.backgroundColor = _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    _incomeTitleLab.textColor = _payTitleLab.textColor = _sumTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _incomeValueLab.textColor = _payValueLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _sumValueLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+}
+
 - (UILabel *)sumTitleLab {
     if (!_sumTitleLab) {
         _sumTitleLab = [self createLabelWithText:@"支出" fontSize:15 textColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
@@ -165,7 +172,6 @@
 - (UIView *)horizontalLine {
     if (!_horizontalLine) {
         _horizontalLine = [[UIView alloc] init];
-        _horizontalLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
     }
     return _horizontalLine;
 }
@@ -173,7 +179,6 @@
 - (UIView *)verticalLine {
     if (!_verticalLine) {
         _verticalLine = [[UIView alloc] init];
-        _verticalLine.backgroundColor = SSJ_DEFAULT_SEPARATOR_COLOR;
     }
     return _verticalLine;
 }

@@ -7,6 +7,7 @@
 //
 
 #import "SSJFinancingHomeAddCell.h"
+
 @interface SSJFinancingHomeAddCell()
 @property(nonatomic, strong) UIImageView *backImage;
 @property(nonatomic, strong) UIImageView *addImage;
@@ -22,6 +23,7 @@
         [self.contentView addSubview:self.backImage];
         [self.contentView addSubview:self.addImage];
         [self.contentView addSubview:self.addLabel];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChange) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -36,10 +38,15 @@
     self.addLabel.left = self.addImage.right + 10;
 }
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(UIImageView *)backImage{
     if (!_backImage) {
         _backImage = [[UIImageView alloc]init];
-        _backImage.image = [UIImage imageNamed:@"tianjia_border"];
+        _backImage.image = [[UIImage imageNamed:@"tianjia_border"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _backImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _backImage;
 }
@@ -47,7 +54,8 @@
 -(UIImageView *)addImage{
     if (!_addImage) {
         _addImage = [[UIImageView alloc]init];
-        _addImage.image = [UIImage imageNamed:@"add"];
+        _addImage.image = [[UIImage imageNamed:@"add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _addImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _addImage;
 }
@@ -56,10 +64,17 @@
     if (!_addLabel) {
         _addLabel = [[UILabel alloc]init];
         _addLabel.font = [UIFont systemFontOfSize:18];
-        _addLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _addLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _addLabel.text = @"添加资金帐户";
         [_addLabel sizeToFit];
     }
     return _addLabel;
 }
+
+-(void)themeChange{
+    self.addLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.addImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.backImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+}
+
 @end

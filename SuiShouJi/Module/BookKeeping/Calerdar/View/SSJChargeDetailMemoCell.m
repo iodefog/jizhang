@@ -33,7 +33,7 @@
 -(UILabel *)cellTitleLabel{
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]init];
-        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:@"a7a7a7"];
+        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellTitleLabel.textAlignment = NSTextAlignmentLeft;
         _cellTitleLabel.font = [UIFont systemFontOfSize:15];
     }
@@ -43,7 +43,7 @@
 -(UILabel *)memoLabel{
     if (!_memoLabel) {
         _memoLabel = [[UILabel alloc]init];
-        _memoLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _memoLabel.textAlignment = NSTextAlignmentRight;
         _memoLabel.font = [UIFont systemFontOfSize:18];
         _memoLabel.numberOfLines = 2;

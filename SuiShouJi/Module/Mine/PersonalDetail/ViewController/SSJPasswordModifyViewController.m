@@ -79,15 +79,15 @@
         passwordModifyCell.passwordInput.delegate = self;
     }
     if (indexPath.row == 0) {
-        passwordModifyCell.passwordInput.placeholder = @"原密码";
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"原密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         self.oldPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 1) {
-        passwordModifyCell.passwordInput.placeholder = @"新密码";
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         self.modifiedPasswordInput = passwordModifyCell.passwordInput;
     }
     if (indexPath.row == 2) {
-        passwordModifyCell.passwordInput.placeholder = @"确认新密码";
+        passwordModifyCell.passwordInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"确认新密码" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         self.comfirmNewPasswordInput = passwordModifyCell.passwordInput;
     }
     return passwordModifyCell;
@@ -112,7 +112,7 @@
         [comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         comfirmButton.layer.cornerRadius = 3.f;
         comfirmButton.layer.masksToBounds = YES;
-        [comfirmButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [comfirmButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [comfirmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         comfirmButton.center = CGPointMake(_comfirmView.width / 2, _comfirmView.height / 2);

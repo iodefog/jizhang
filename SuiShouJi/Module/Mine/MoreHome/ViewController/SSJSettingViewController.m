@@ -17,14 +17,13 @@
 #import "SSJMagicExportViewController.h"
 #import "SSJAboutusViewController.h"
 #import "SSJStartChecker.h"
+#import "SSJStartUpgradeAlertView.h"
 
 
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"分享APP";
 static NSString *const kTitle3 = @"关于我们";
 static NSString *const kTitle4 = @"检查更新";
-
-static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 
 
 @interface SSJSettingViewController ()
@@ -58,7 +57,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     }
     
     [self.navigationController setNavigationBarHidden:NO];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -121,15 +119,24 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     
     //  把APP推荐给好友
     if ([title isEqualToString:kTitle2]) {
-        [UMSocialSnsService presentSnsIconSheetView:self
-                                        appKey:kUMAppKey
-                                        shareText:@"财务管理第一步，从记录消费生活开始!"
-                                        shareImage:[UIImage imageNamed:@"icon"]
+        if ([SSJDefaultSource() isEqualToString:@"11501"]) {
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
+                                              shareText:@"财务管理第一步，从记录消费生活开始!"
+                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
                                         shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
-                                        delegate:self];
+                                               delegate:self];
+        }else{
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:SSJDetailSettingForSource(@"UMAppKey")
+                                              shareText:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。"
+                                             shareImage:[UIImage imageNamed:SSJDetailSettingForSource(@"ShareIcon")]
+                                        shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
+                                               delegate:self];
         }
-
+    }
 }
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return [self.titles[section] count];
@@ -144,7 +151,7 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
     SSJMineHomeTabelviewCell *mineHomeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!mineHomeCell) {
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
@@ -171,11 +178,10 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData
 {
     if (platformName == UMShareToSina) {
-        socialData.shareText = @"9188记账——财务管理第一步，从记录消费生活开始! http://5.9188.com/note/d/";
-        socialData.shareImage = [UIImage imageNamed:@"weibo_banner"];
-    }
-    else{
-        socialData.shareText = @"财务管理第一步，从记录消费生活开始!";
+        socialData.shareText = [NSString stringWithFormat:@"%@ %@",SSJDetailSettingForSource(@"ShareTitle"),SSJDetailSettingForSource(@"ShareUrl")];
+        socialData.shareImage = [UIImage imageNamed:SSJDetailSettingForSource(@"WeiboBanner")];
+    }else{
+        socialData.shareText = SSJDetailSettingForSource(@"ShareContent");
     }
 }
 
@@ -196,20 +202,6 @@ static NSString *const kUMAppKey = @"566e6f12e0f55ac052003f62";
 //    }
 //    return _loggedFooterView;
 //}
-
--(void)quitLogButtonClicked:(id)sender {
-    //  退出登陆后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-    SSJClearLoginInfo();
-    [SSJUserTableManager reloadUserIdWithError:nil];
-    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-    [self.tableView reloadData];
-    [self.navigationController popViewControllerAnimated:YES];
-//    self.header.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
-//    self.header.nicknameLabel.text = @"待君登录";
-//    [self.tableView reloadData];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

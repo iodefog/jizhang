@@ -42,8 +42,6 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
-    
     [self.view ssj_showLoadingIndicator];
     
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
@@ -55,12 +53,6 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
     }];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    self.tableView.frame = self.view.bounds;
 }
 
 #pragma mark - UITableViewDataSource
@@ -133,12 +125,12 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];

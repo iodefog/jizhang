@@ -14,6 +14,7 @@ static NSString *const kTitle5 = @"我的等级";
 static NSString *const kTitle6 = @"修改登录密码";
 static NSString *const kTitle7 = @"手势密码";
 
+extern BOOL kHomeNeedLoginPop;
 
 #import "SSJPersonalDetailViewController.h"
 #import "SSJMineHomeTabelviewCell.h"
@@ -31,6 +32,8 @@ static NSString *const kTitle7 = @"手势密码";
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
+#import "SSJStartUpgradeAlertView.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJPersonalDetailViewController ()
 @property (nonatomic, strong) NSArray *titles;
@@ -74,7 +77,6 @@ static NSString *const kTitle7 = @"手势密码";
     }else{
         self.titles = @[@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5],@[kTitle6 , kTitle7]];
     }
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
 }
 
 #pragma mark - UITableViewDelegate
@@ -123,7 +125,7 @@ static NSString *const kTitle7 = @"手势密码";
         [self.signatureModifyView show];
     }
     if ([title isEqualToString:kTitle7]) {
-        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+        SSJMotionPasswordSettingViewController *motionPwdSettingVC = [[SSJMotionPasswordSettingViewController alloc] initWithTableViewStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:motionPwdSettingVC animated:YES];
     }
 }
@@ -165,13 +167,18 @@ static NSString *const kTitle7 = @"手势密码";
     }else if ([title isEqualToString:kTitle4]){
         mineHomeCell.cellDetail = self.item.mobileNo;
     }else if ([title isEqualToString:kTitle6]){
-        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if ([title isEqualToString:kTitle7]) {
-        mineHomeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     } else if ([title isEqualToString:kTitle5]){
         mineHomeCell.cellDetail = self.checkInLevel;
     }
     return mineHomeCell;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView *view = [UIView new];
+    return view;
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -234,14 +241,33 @@ static NSString *const kTitle7 = @"手势密码";
 }
 
 -(void)quitLogButtonClicked:(id)sender {
-    //  退出登陆后强制同步一次
-    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-    SSJClearLoginInfo();
-    [SSJUserTableManager reloadUserIdWithError:nil];
-    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
-    [self.tableView reloadData];
-    [self.navigationController popViewControllerAnimated:YES];
+    kHomeNeedLoginPop = YES;
+    NSString *hintStr = @"退出登录后,后续记账请登录同个帐号哦。\n\n未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。";
+    NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:hintStr];
+    [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
+    [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
+    [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"393939"] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
+    [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[hintStr rangeOfString:@"同个帐号"]];
+    [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
+    __weak typeof(self) weakSelf = self;
+    SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+        [alert dismiss];
+    } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+        //  退出登陆后强制同步一次
+        SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+        NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
+        [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        SSJClearLoginInfo();
+        [SSJUserTableManager reloadUserIdWithError:nil];
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+        [weakSelf.tableView reloadData];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [alert dismiss];
+    }];
+    
+    [alert show];
 }
 
 #pragma mark - Getter
@@ -252,7 +278,7 @@ static NSString *const kTitle7 = @"手势密码";
         [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
         quitLogButton.layer.cornerRadius = 3.f;
         quitLogButton.layer.masksToBounds = YES;
-        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);

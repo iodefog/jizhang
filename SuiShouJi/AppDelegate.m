@@ -42,9 +42,6 @@ static const NSTimeInterval kLockScreenDelay = 60;
 
 static NSString *const kEnterBackgroundTimeKey = @"kEnterBackgroundTimeKey";
 
-//微信appid
-static NSString *const kWeiXinAppKey = @"wxf77f7a5867124dfd";
-
 //微信desc
 static NSString *const kWeiXinDescription = @"weixinLogin";
 
@@ -70,6 +67,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     [self analyzeJspatch];
     
     
@@ -87,6 +85,7 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window makeKeyAndVisible];
     
     [self setRootViewController];
+    [SSJThemeSetting updateTabbarAppearance];
     [SSJNetworkReachabilityManager startMonitoring];
     
     //如果第一次打开记录当前时间
@@ -109,7 +108,7 @@ NSDate *SCYEnterBackgroundTime() {
     [SSJRegularManager registerRegularTaskNotification];
     
     //微信登录
-    [WXApi registerApp:kWeiXinAppKey withDescription:kWeiXinDescription];
+    [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
@@ -230,30 +229,20 @@ NSDate *SCYEnterBackgroundTime() {
     SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *bookKeepingNavi = [[UINavigationController alloc] initWithRootViewController:bookKeepingVC];
     bookKeepingNavi.tabBarItem.title = @"记账";
-    bookKeepingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_accounte_nor"];
-    bookKeepingNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_accounte_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal                                                                                                                                                                                                                                                                                                                                                                                               ];
     
     SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *reportFormsNavi = [[UINavigationController alloc] initWithRootViewController:reportFormsVC];
     reportFormsNavi.tabBarItem.title = @"报表";
-    reportFormsNavi.tabBarItem.image = [UIImage imageNamed:@"tab_form_nor"];
-    reportFormsNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_form_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *financingNavi = [[UINavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
-    financingNavi.tabBarItem.image = [UIImage imageNamed:@"tab_founds_nor"];
-    financingNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_founds_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+    SSJMineHomeViewController *moreVC = [[SSJMineHomeViewController alloc] initWithNibName:nil bundle:nil];
     UINavigationController *moreNavi = [[UINavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"更多";
-    moreNavi.tabBarItem.image = [UIImage imageNamed:@"tab_more_nor"];
-    moreNavi.tabBarItem.selectedImage = [[UIImage imageNamed:@"tab_more_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
-    tabBarVC.tabBar.barTintColor = [UIColor whiteColor];
-    tabBarVC.tabBar.tintColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
     tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
     
     SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];

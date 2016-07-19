@@ -128,6 +128,7 @@
                      @"icon":@"cicon"};
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
+        self.item.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
         self.item.loginPWD = [_loginPassword ssj_md5HexDigest];
         
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];

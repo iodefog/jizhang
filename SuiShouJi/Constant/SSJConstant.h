@@ -73,9 +73,6 @@ extern NSString *const SSJImageBaseUrlString;
 //
 extern NSString *const SSJErrorDomain;
 
-//  appstore地址
-extern NSString *const SSJAppStoreAddress;
-
 //  同步加密密钥字符串
 extern NSString *const SSJSyncPrivateKey;
 
@@ -127,6 +124,9 @@ extern NSString *const SSJLastPatchVersionKey;
 
 //当前使用的账本
 extern NSString *const SSJCurrentBooksTypeKey;
+
+//上一次下载的补丁的key
+extern NSString *const SSJLastLoggedUserItemKey;
 
 
 /** --------------- Notification --------------- */

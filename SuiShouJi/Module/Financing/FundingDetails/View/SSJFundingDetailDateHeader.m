@@ -32,7 +32,7 @@
 -(UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:@"a9a9a9"];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _dateLabel.font = [UIFont systemFontOfSize:15];
     }
     return _dateLabel;
@@ -41,7 +41,7 @@
 -(UILabel *)balanceLabel{
     if (!_balanceLabel) {
         _balanceLabel = [[UILabel alloc]init];
-        _balanceLabel.textColor = [UIColor ssj_colorWithHex:@"a9a9a9"];
+        _balanceLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _balanceLabel.font = [UIFont systemFontOfSize:15];
     }
     return _balanceLabel;

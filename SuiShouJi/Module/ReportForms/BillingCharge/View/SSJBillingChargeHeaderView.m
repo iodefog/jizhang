@@ -19,8 +19,6 @@
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
         self.textLabel.font = [UIFont systemFontOfSize:15];
-        self.textLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
-        self.contentView.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
         [self.contentView addSubview:self.sumLabel];
     }
     return self;
@@ -39,7 +37,6 @@
     if (!_sumLabel) {
         _sumLabel = [[UILabel alloc] init];
         _sumLabel.font = [UIFont systemFontOfSize:15];
-        _sumLabel.textColor = [UIColor ssj_colorWithHex:@"#a7a7a7"];
         _sumLabel.textAlignment = NSTextAlignmentRight;
     }
     return _sumLabel;

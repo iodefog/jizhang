@@ -14,4 +14,6 @@
 
 @property (nonatomic, strong, readonly) UITextField *moneyInput;
 
+@property (nonatomic, strong) UIColor *fillColor;
+
 @end

@@ -25,12 +25,17 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
 @property (nonatomic, strong) UIButton *deleteBtn;
 
+@property (nonatomic, strong) UIColor *normalTextColor;
+
 @end
 
 @implementation SSJRecordMakingBillTypeSelectionCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        
+        _normalTextColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 52, 52)];
         _imageView.layer.borderWidth = 1;
         _imageView.layer.cornerRadius = _imageView.width * 0.5;
@@ -40,9 +45,9 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [self.contentView addSubview:_imageView];
         
         _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
+        _label.backgroundColor = [UIColor clearColor];
         _label.fontSize = 16;
         _label.textAlignment = NSTextAlignmentCenter;
-        _label.textColor = [UIColor blackColor];
         [self.contentView addSubview:_label];
         
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -94,7 +99,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     if (_item.editable) {
         _imageView.transform = CGAffineTransformMakeScale(1, 1);
         _imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"C4C4C4"].CGColor;
-        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : [UIColor blackColor];
+        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
         
         self.contentView.transform = CGAffineTransformMakeRotation(-M_PI_4 * 0.06);
         [UIView animateWithDuration:0.12 delay:0 options:(UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction) animations:^{
@@ -108,7 +113,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     } else {
         _imageView.layer.borderColor = (_item.selected ? [UIColor ssj_colorWithHex:_item.colorValue].CGColor : [UIColor clearColor].CGColor);
         _imageView.transform = _item.selected ? CGAffineTransformMakeScale(kScale, kScale) : CGAffineTransformIdentity;
-        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : [UIColor blackColor];
+        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
     }
 }
 
@@ -116,12 +121,11 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     CGColorRef normalBorderColor = [UIColor clearColor].CGColor;
     CGColorRef selectedBorderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
     
-    UIColor *normalTextColor = [UIColor blackColor];
     UIColor *selectedTextColor = [UIColor ssj_colorWithHex:_item.colorValue];
     
     _imageView.layer.borderColor = selected ? normalBorderColor : selectedBorderColor;
     _imageView.transform = _item.selected ? CGAffineTransformIdentity : CGAffineTransformMakeScale(kScale, kScale);
-    _label.textColor = _item.selected ? normalTextColor : selectedTextColor;
+    _label.textColor = _item.selected ? _normalTextColor : selectedTextColor;
     
     
     CABasicAnimation *borderColorAnimation = [CABasicAnimation animationWithKeyPath:@"borderColor"];
@@ -145,7 +149,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     textColorAnimation.delegate = self;
     textColorAnimation.removedOnCompletion = NO;
     textColorAnimation.fillMode = kCAFillModeForwards;
-    textColorAnimation.toValue = (__bridge id _Nullable)(selected ? selectedTextColor.CGColor : normalTextColor.CGColor);
+    textColorAnimation.toValue = (__bridge id _Nullable)(selected ? selectedTextColor.CGColor : _normalTextColor.CGColor);
     [_label.layer addAnimation:textColorAnimation forKey:kTextColorAnimationKey];
 }
 
@@ -160,7 +164,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [_imageView.layer removeAnimationForKey:kTransformAnimationKey];
         
     } else if (anim == [_label.layer animationForKey:kTextColorAnimationKey]) {
-        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : [UIColor blackColor];
+        _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
         [_label.layer removeAnimationForKey:kTextColorAnimationKey];
     }
 }

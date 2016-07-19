@@ -95,6 +95,22 @@ NSString *SSJDefaultSource();
 BOOL SSJIsAppStoreSource();
 
 /**
+ *  返回当前渠道的配置的字典
+ *
+ *  @return (NSDictionary *)
+ */
+NSDictionary* SSJSettingForSource();
+
+/**
+ *  返回当前渠道具体配置
+ *
+ *  @param key 配置的key
+ *
+ *  @return (NSString *)
+ */
+NSString* SSJDetailSettingForSource(NSString *key);
+
+/**
  *  根据错误返回相应的提示，如果没有对应的错误提示，就返回nil
  *
  *  @param error 错误

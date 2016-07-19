@@ -11,7 +11,7 @@
 #import "SSJMagicExportCalendarHeaderView.h"
 #import "SSJMagicExportCalendarWeekView.h"
 #import "SSJMagicExportCalendarDateView.h"
-#import "SSJMagicExportCalendarViewCellItem.h"
+#import "SSJMagicExportCalendarDateViewItem.h"
 #import "SSJMagicExportCalendarIndexPath.h"
 #import "SSJDatePeriod.h"
 
@@ -46,6 +46,8 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         
         [self addSubview:self.weekView];
         [self addSubview:self.tableView];
+        
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
@@ -66,21 +68,15 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJMagicExportCalendarViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCalendarCellId forIndexPath:indexPath];
+    
     __weak typeof(self) weakSelf = self;
-//    cell.willSelectBlock = ^(SSJMagicExportCalendarViewCell *cell, SSJMagicExportCalendarDateView *dateView) {
-//        if (!weakSelf.delegate) {
-//            return;
-//        }
-//        
-//        if ([weakSelf.delegate respondsToSelector:@selector(calendarView:willSelectDate:)]) {
-//            [weakSelf.delegate calendarView:weakSelf willSelectDate:dateView.item.date];
-//        }
-//        if ([weakSelf.delegate respondsToSelector:@selector(calendarView:descriptionForSelectedDate:)]) {
-//            NSString *desc = [weakSelf.delegate calendarView:weakSelf descriptionForSelectedDate:dateView.item.date];
-//            dateView.item.desc = desc;
-//            [weakSelf.tableView reloadData];
-//        }
-//    };
+    cell.shouldSelectBlock = ^BOOL(SSJMagicExportCalendarViewCell *cell, SSJMagicExportCalendarDateView *dateView) {
+        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(calendarView:shouldSelectDate:)]) {
+            return [weakSelf.delegate calendarView:weakSelf shouldSelectDate:dateView.item.date];
+        }
+        return YES;
+    };
+    
     cell.didSelectBlock = ^(SSJMagicExportCalendarViewCell *cell, SSJMagicExportCalendarDateView *dateView) {
         if (!weakSelf.delegate) {
             return;
@@ -99,7 +95,6 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
             if ([weakSelf.delegate respondsToSelector:@selector(calendarView:descriptionForSelectedDate:)]) {
                 NSString *desc = [weakSelf.delegate calendarView:weakSelf descriptionForSelectedDate:dateView.item.date];
                 dateView.item.desc = desc;
-                [weakSelf.tableView reloadData];
             }
         }
     };
@@ -111,7 +106,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     SSJMagicExportCalendarHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kCalendarHeaderId];
     SSJMagicExportCalendarIndexPath *indexPath = [SSJMagicExportCalendarIndexPath indexPathForSection:section row:1 index:0];
-    SSJMagicExportCalendarViewCellItem *item = [_items ssj_objectAtCalendarIndexPath:indexPath];
+    SSJMagicExportCalendarDateViewItem *item = [_items ssj_objectAtCalendarIndexPath:indexPath];
     headerView.textLabel.text = [item.date formattedDateWithFormat:@"yyyy年M月"];
     return headerView;
 }
@@ -121,7 +116,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     _selectedDates = selectedDates;
     for (NSArray *monthList in _items) {
         for (NSArray *weekList in monthList) {
-            for (SSJMagicExportCalendarViewCellItem *dateItem in weekList) {
+            for (SSJMagicExportCalendarDateViewItem *dateItem in weekList) {
                 if ([_selectedDates containsObject:dateItem.date]) {
                     dateItem.selected = YES;
                     if (_delegate && [_delegate respondsToSelector:@selector(calendarView:descriptionForSelectedDate:)]) {
@@ -135,7 +130,6 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
             }
         }
     }
-    [self.tableView reloadData];
 }
 
 - (void)reload {
@@ -180,27 +174,36 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
             NSMutableArray *dateItems = [[NSMutableArray alloc] initWithCapacity:7];
             for (int dateIndex = 0; dateIndex < 7; dateIndex ++) {
                 int day = (int)(rowIndex * 7 + dateIndex - firstDayIndex + 1);
+                NSDate *date = [NSDate dateWithYear:period.startDate.year month:period.startDate.month day:day];
                 
-                SSJMagicExportCalendarViewCellItem *item = [[SSJMagicExportCalendarViewCellItem alloc] init];
-                item.date = [NSDate dateWithYear:period.startDate.year month:period.startDate.month day:day];
-                item.selected = [_selectedDates containsObject:item.date];
-                if (item.selected && [_delegate respondsToSelector:@selector(calendarView:descriptionForSelectedDate:)]) {
-                    item.desc = [_delegate calendarView:self descriptionForSelectedDate:item.date];
-                }
-                item.showMarker = [_delegate calendarView:self shouldShowMarkerForDate:item.date];
-                item.showContent = ([item.date compare:period.startDate] != NSOrderedAscending && [item.date compare:period.endDate] != NSOrderedDescending);
-                item.canSelect = item.showContent;
-                if (item.showContent) {
-                    if (_delegate && [_delegate respondsToSelector:@selector(calendarView:canSelectDate:)]) {
-                        item.canSelect = [_delegate calendarView:self canSelectDate:item.date];
-                        item.dateColor = item.canSelect ? [UIColor ssj_colorWithHex:@"393939"] : [UIColor ssj_colorWithHex:@"929292"];
+                SSJMagicExportCalendarDateViewItem *item = [[SSJMagicExportCalendarDateViewItem alloc] init];
+                
+                item.hidden = ([date compare:period.startDate] == NSOrderedAscending || [date compare:period.endDate] == NSOrderedDescending);
+                
+                if (!item.hidden) {
+                    item.date = date;
+                    item.selected = [_selectedDates containsObject:date];
+                    
+                    if (item.selected && [_delegate respondsToSelector:@selector(calendarView:descriptionForSelectedDate:)]) {
+                        item.desc = [_delegate calendarView:self descriptionForSelectedDate:date];
                     }
+                    
+                    if ([_delegate respondsToSelector:@selector(calendarView:shouldShowMarkerForDate:)]) {
+                        item.showMarker = [_delegate calendarView:self shouldShowMarkerForDate:date];
+                    }
+                    
+                    if ([_delegate respondsToSelector:@selector(calendarView:colorForDate:)]) {
+                        item.dateColor = [_delegate calendarView:self colorForDate:date];
+                    }
+                    
+                    item.selectedDateColor = _selectedDateColor;
+                    item.highlightColor = _highlightColor;
+                    
+                    SSJMagicExportCalendarIndexPath *indexPath = [SSJMagicExportCalendarIndexPath indexPathForSection:section row:rowIndex index:dateIndex];
+                    [_dateIndexMapping setObject:indexPath forKey:[item.date formattedDateWithFormat:@"yyyy-MM-dd"]];
                 }
                 
                 [dateItems addObject:item];
-                
-                SSJMagicExportCalendarIndexPath *indexPath = [SSJMagicExportCalendarIndexPath indexPathForSection:section row:rowIndex index:dateIndex];
-                [_dateIndexMapping setObject:indexPath forKey:[item.date formattedDateWithFormat:@"yyyy-MM-dd"]];
             }
             
             [monthItems addObject:dateItems];
@@ -220,11 +223,10 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     
     for (NSDate *date in dates) {
         SSJMagicExportCalendarIndexPath *indexPath = [_dateIndexMapping objectForKey:[date formattedDateWithFormat:@"yyyy-MM-dd"]];
-        SSJMagicExportCalendarViewCellItem *item = [_items ssj_objectAtCalendarIndexPath:indexPath];
+        SSJMagicExportCalendarDateViewItem *item = [_items ssj_objectAtCalendarIndexPath:indexPath];
         item.selected = NO;
         item.desc = nil;
     }
-    [self.tableView reloadData];
 }
 
 - (void)scrollToDate:(NSDate *)date {
@@ -276,8 +278,8 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         _tableView.delegate = self;
         _tableView.rowHeight = 60;
         _tableView.sectionHeaderHeight = 45;
-        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-        _tableView.separatorColor = SSJ_DEFAULT_SEPARATOR_COLOR;
+        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         [_tableView registerClass:[SSJMagicExportCalendarViewCell class] forCellReuseIdentifier:kCalendarCellId];
         [_tableView registerClass:[SSJMagicExportCalendarHeaderView class] forHeaderFooterViewReuseIdentifier:kCalendarHeaderId];

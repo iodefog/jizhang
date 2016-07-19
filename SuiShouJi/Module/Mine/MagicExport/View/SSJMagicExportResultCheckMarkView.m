@@ -50,10 +50,10 @@ static const NSTimeInterval kDuration = 0.8;
     CAShapeLayer *layer = (CAShapeLayer *)self.layer;
     layer.path = path.CGPath;
     layer.strokeEnd = 0;
-    layer.strokeColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
+    layer.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
     layer.lineWidth = 1.5;
     layer.lineCap = kCALineCapRound;
-    layer.fillColor = [UIColor whiteColor].CGColor;
+    layer.fillColor = [UIColor clearColor].CGColor;
     
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     animation.fromValue = @0;

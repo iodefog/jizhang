@@ -12,11 +12,11 @@ const int64_t SSJDefaultSyncVersion = -1;
 
 //  接口域名
 #ifdef DEBUG
-//NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
-NSString *const SSJBaseURLString = @"http://jz.9188.com";
+NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
+//NSString *const SSJBaseURLString = @"http://jz.9188.com";
 
-//NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";  // 测试环境
-NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
+NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";  // 测试环境
+//NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
 
 #else
 //NSString *const SSJBaseURLString = @"http://192.168.1.155:9008";   // 测试环境
@@ -27,8 +27,6 @@ NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
 #endif
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
-
-NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/cn/app/9188ji-zhang/id1080564439?mt=8";
 
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";
 
@@ -47,6 +45,8 @@ NSString *const SSJHaveEnterFundingHomeKey = @"haveEnterFundingHomeKey";
 NSString *const SSJLastPatchVersionKey = @"lastPatchVersionKey";
 
 NSString *const SSJCurrentBooksTypeKey = @"currentBooksTypeKey";
+
+NSString *const SSJLastLoggedUserItemKey = @"SSJLastLoggedUserItemKey";
 
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
@@ -75,9 +75,9 @@ NSString *const SSJWeiXinDescription = @"weixinLogin";
 
 NSString *const SSJWeiXinSecret = @"597d6402c3cd82ff12ba0e81abd34b1a";
 
-NSString *const SSJQQAppKey = @"1105086761";
+NSString *const SSJQQAppId = @"1105086761";
 
-NSString *const SSJQQAppId = @"mgRX8CiiIIrCoyu6";
+NSString *const SSJQQAppKey = @"mgRX8CiiIIrCoyu6";
 
 NSString *const SSJYWAppKey = @"23359906";
 

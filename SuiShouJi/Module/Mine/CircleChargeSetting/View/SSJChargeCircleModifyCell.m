@@ -57,7 +57,7 @@
 -(UILabel *)cellTitleLabel{
     if (!_cellTitleLabel) {
         _cellTitleLabel = [[UILabel alloc]init];
-        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellTitleLabel.font = [UIFont systemFontOfSize:18];
     }
     return _cellTitleLabel;
@@ -66,7 +66,7 @@
 -(UILabel *)cellDetailLabel{
     if (!_cellDetailLabel) {
         _cellDetailLabel = [[UILabel alloc]init];
-        _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _cellDetailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _cellDetailLabel.font = [UIFont systemFontOfSize:18];
     }
     return _cellDetailLabel;
@@ -75,7 +75,7 @@
 -(UILabel *)cellSubTitleLabel{
     if (!_cellSubTitleLabel) {
         _cellSubTitleLabel = [[UILabel alloc]init];
-        _cellSubTitleLabel.textColor = [UIColor ssj_colorWithHex:@"929292"];
+        _cellSubTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _cellSubTitleLabel.font = [UIFont systemFontOfSize:13];
     }
     return _cellSubTitleLabel;
@@ -91,7 +91,7 @@
 -(UITextField *)cellInput{
     if (!_cellInput) {
         _cellInput = [[UITextField alloc]init];
-        _cellInput.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _cellInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _cellInput.textAlignment = NSTextAlignmentRight;
         _cellInput.font = [UIFont systemFontOfSize:18];
         _cellInput.hidden = YES;
@@ -109,6 +109,7 @@
 -(UIImageView *)cellImage{
     if (!_cellImage) {
         _cellImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 21, 21)];
+        _cellImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _cellImage;
 }
@@ -133,7 +134,7 @@
 
 -(void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
-    self.cellImage.image = [UIImage imageNamed:_cellImageName];
+    self.cellImage.image = [[UIImage imageNamed:_cellImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self setNeedsLayout];
 }
 

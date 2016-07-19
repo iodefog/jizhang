@@ -24,7 +24,6 @@
 @property (nonatomic, strong) UIButton *agreeButton;
 @property (nonatomic, strong) UIButton *protocolButton;
 @property (nonatomic, strong) SSJBorderButton *nextButton;
-@property (nonatomic,strong)UIImageView *backGroundImage;
 
 @property (nonatomic, strong) SSJRegistNetworkService *getVerCodeService;
 
@@ -48,7 +47,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.backGroundImage];
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"login_bg"];
+    }
     [self.view addSubview:self.scrollView];
 //    [self.scrollView addSubview:self.stepView];
     [self.scrollView addSubview:self.tfPhoneNum];
@@ -62,22 +63,23 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor whiteColor]};
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                        NSForegroundColorAttributeName:[UIColor whiteColor]};
+        self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.tfPhoneNum becomeFirstResponder];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self.getVerCodeService cancel];
 }
 
@@ -174,15 +176,6 @@
     return _scrollView;
 }
 
--(UIImageView *)backGroundImage{
-    if (!_backGroundImage) {
-        _backGroundImage = [[UIImageView alloc]initWithFrame:self.view.bounds];
-        _backGroundImage.image = [UIImage imageNamed:@"login_bg"];
-    }
-    return _backGroundImage;
-}
-
-
 //- (SSJRegistOrderView *)stepView {
 //    if (!_stepView) {
 //        _stepView = [[SSJRegistOrderView alloc] initWithFrame:CGRectMake(10, 64, self.view.width - 20, 44) withOrderType:SSJRegistOrderTypeInputPhoneNo];
@@ -194,8 +187,8 @@
     if (!_tfPhoneNum) {
         _tfPhoneNum = [[SSJBaselineTextField alloc] initWithFrame:CGRectMake(25, 83, self.view.width - 50, 50) contentHeight:34];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
-        _tfPhoneNum.textColor = [UIColor whiteColor];
-        _tfPhoneNum.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1 alpha:0.5]}];
+        _tfPhoneNum.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        _tfPhoneNum.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入您的手机号" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]}];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
@@ -208,9 +201,9 @@
         _nextButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(25, self.tfPhoneNum.bottom + 40, self.view.width - 50, 40)];
         [_nextButton setFontSize:16];
         [_nextButton setTitle:@"获取验证码" forState:SSJBorderButtonStateNormal];
-        [_nextButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:SSJBorderButtonStateNormal];
         [_nextButton setBackgroundColor:[UIColor clearColor] forState:SSJBorderButtonStateNormal];
-        [_nextButton setBorderColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+        [_nextButton setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor] forState:SSJBorderButtonStateNormal];
         [_nextButton addTarget:self action:@selector(getAuthCodeAction)];
     }
     return _nextButton;
@@ -222,11 +215,12 @@
         _agreeButton.frame = CGRectMake(25, self.nextButton.bottom + 20, 12, 12);
         _agreeButton.selected = YES;
         [_agreeButton setImage:nil forState:UIControlStateNormal];
-        [_agreeButton setImage:[UIImage imageNamed:@"register_agreement"] forState:UIControlStateSelected];
+        [_agreeButton setImage:[[UIImage imageNamed:@"register_agreement"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected];
+        _agreeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         [_agreeButton addTarget:self action:@selector(agreeProtocaolAction) forControlEvents:UIControlEventTouchUpInside];
         [_agreeButton ssj_setBorderWidth:1];
         [_agreeButton ssj_setBorderStyle:SSJBorderStyleAll];
-        [_agreeButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        [_agreeButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor]];
 //        [_agreeButton ssj_setBorderInsets:UIEdgeInsetsMake(13, 13, 13, 13)];
     }
     return _agreeButton;
@@ -238,7 +232,7 @@
         _protocolButton.titleLabel.font = [UIFont systemFontOfSize:12];
         [_protocolButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_protocolButton setTitle:@"我已阅读并同意用户协定" forState:UIControlStateNormal];
-        [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:@"#757575"] forState:UIControlStateNormal];
+        [_protocolButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forState:UIControlStateNormal];
         [_protocolButton sizeToFit];
         [_protocolButton addTarget:self action:@selector(checkProtocolAction) forControlEvents:UIControlEventTouchUpInside];
         _protocolButton.left = self.agreeButton.right + 10;

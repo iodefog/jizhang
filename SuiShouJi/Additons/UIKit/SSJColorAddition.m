@@ -11,6 +11,10 @@
 @implementation UIColor (SSJCategory)
 
 + (UIColor *)ssj_colorWithHex:(NSString *)hexColor {
+    return [self ssj_colorWithHex:hexColor alpha:1];
+}
+
++ (UIColor *)ssj_colorWithHex:(NSString *)hexColor alpha:(CGFloat)alpha {
     if (hexColor.length) {
         NSString *cString = [[hexColor stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] uppercaseString];
         // String should be 6 or 8 characters
@@ -41,7 +45,7 @@
         return [UIColor colorWithRed:((float) r / 255.0f)
                                green:((float) g / 255.0f)
                                 blue:((float) b / 255.0f)
-                               alpha:1.0f];
+                               alpha:alpha];
     }else {
         return nil;
     }

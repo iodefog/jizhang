@@ -64,7 +64,7 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _displayAxisXCount = 7;
         _bezierSmoothingTension = 0.3;
         _selectedAxisXIndex = 0;
@@ -88,25 +88,25 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_scrollView addSubview:_axisXView];
         
         _verticalLine = [[UIView alloc] init];
-        _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
+        _verticalLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [self addSubview:_verticalLine];
         
         _paymentPoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
         _paymentPoint.layer.cornerRadius = 4;
         _paymentPoint.clipsToBounds = YES;
-        _paymentPoint.backgroundColor = [UIColor ssj_colorWithHex:@"59ae65"];
+        _paymentPoint.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
         [self addSubview:_paymentPoint];
         
         _incomePoint = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 8, 8)];
         _incomePoint.layer.cornerRadius = 4;
         _incomePoint.clipsToBounds = YES;
-        _incomePoint.backgroundColor = [UIColor ssj_colorWithHex:@"f56262"];
+        _incomePoint.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
         [self addSubview:_incomePoint];
         
         _paymentLabel = [[UILabel alloc] init];
         _paymentLabel.backgroundColor = [UIColor clearColor];
         _paymentLabel.font = [UIFont systemFontOfSize:10];
-        _paymentLabel.textColor = [UIColor ssj_colorWithHex:@"389F47"];
+        _paymentLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
         _paymentLabel.text = @"支出";
         [_paymentLabel sizeToFit];
         [self addSubview:_paymentLabel];
@@ -114,12 +114,13 @@ static const CGFloat kBottomSpaceHeight = 32;
         _incomeLabel = [[UILabel alloc] init];
         _incomeLabel.backgroundColor = [UIColor clearColor];
         _incomeLabel.font = [UIFont systemFontOfSize:10];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:@"D73939"];
+        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
         _incomeLabel.text = @"收入";
         [_incomeLabel sizeToFit];
         [self addSubview:_incomeLabel];
         
-        _balloonView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"reportForms_balloon"]];
+        _balloonView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"reportForms_balloon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _balloonView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [self addSubview:_balloonView];
         
         _surplusLabel = [[UILabel alloc] init];
@@ -176,8 +177,14 @@ static const CGFloat kBottomSpaceHeight = 32;
     _unitX = self.width / (_displayAxisXCount - 1);
     
     CGFloat width = _unitX * (_axisXCount - 1);
-    
     _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight);
+    
+//#warning test
+//    _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight + 40);
+//    _curveView.layer.borderColor = [UIColor orangeColor].CGColor;
+//    _curveView.layer.borderWidth = 1;
+//    _curveView.layer.zPosition = 100;
+//    _curveView.contentInsets = UIEdgeInsetsMake(0, 0, 40, 0);
     
     _axisXView.frame = CGRectMake(0, self.height - kBottomSpaceHeight, width, kBottomSpaceHeight);
     
@@ -281,7 +288,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         UILabel *label = [[UILabel alloc] init];
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont systemFontOfSize:12];
-        label.textColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
+        label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         label.text = [NSString stringWithFormat:@"%ld", _maxValue - i * unitValue];
         label.hidden = !showScaleValue;
         [label sizeToFit];
@@ -289,7 +296,7 @@ static const CGFloat kBottomSpaceHeight = 32;
         [_axisYLabels addObject:label];
         
         UIView *line = [[UIView alloc] init];
-        line.backgroundColor = [UIColor ssj_colorWithHex:@"CCCCCC"];
+        line.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [self addSubview:line];
         [_horizontalLines addObject:line];
     }

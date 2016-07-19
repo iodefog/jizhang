@@ -135,7 +135,7 @@
         _categoryName = [[UILabel alloc]init];
         [_categoryName sizeToFit];
         _categoryName.font = [UIFont systemFontOfSize:14];
-        _categoryName.textColor = [UIColor ssj_colorWithHex:@"393939"];
+        _categoryName.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _categoryName.textAlignment = NSTextAlignmentCenter;
     }
     return _categoryName;

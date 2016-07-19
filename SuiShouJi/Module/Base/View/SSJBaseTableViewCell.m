@@ -8,15 +8,27 @@
 
 #import "SSJBaseTableViewCell.h"
 
+@interface SSJBaseTableViewCell ()
+
+@property (nonatomic, strong) UIImageView *indicatorView;
+
+@end
+
 @implementation SSJBaseTableViewCell
 
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
     return 48;
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.selectionStyle = UITableViewCellSelectionStyleGray;
+        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.contentView.backgroundColor = [UIColor clearColor];
         
         if ([self respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]) {
             [self setPreservesSuperviewLayoutMargins:NO];
@@ -25,8 +37,54 @@
         if ([self respondsToSelector:@selector(setLayoutMargins:)]) {
             [self setLayoutMargins:UIEdgeInsetsZero];
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    if (_customAccessoryType == UITableViewCellAccessoryDisclosureIndicator) {
+        CGFloat accessoryWidth = 33;
+        self.contentView.frame = CGRectMake(0, 0, self.width - accessoryWidth, self.height);
+        _indicatorView.center = CGPointMake(self.contentView.right + accessoryWidth * 0.5, self.height * 0.5);
+    } else {
+        self.contentView.frame = self.bounds;
+    }
+}
+
+- (void)setCustomAccessoryType:(UITableViewCellAccessoryType)customAccessoryType {
+    if (_customAccessoryType != customAccessoryType) {
+        _customAccessoryType = customAccessoryType;
+        
+        if (customAccessoryType == UITableViewCellAccessoryDisclosureIndicator) {
+            if (!self.indicatorView.superview) {
+                [self addSubview:self.indicatorView];
+            }
+        } else {
+            if (self.indicatorView.superview) {
+                [self.indicatorView removeFromSuperview];
+            }
+        }
+        
+        [self setNeedsLayout];
+    }
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
+}
+
+- (UIImageView *)indicatorView {
+    if (!_indicatorView) {
+        _indicatorView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cellIndicator"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
+    }
+    return _indicatorView;
 }
 
 @end

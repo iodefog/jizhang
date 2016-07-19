@@ -11,6 +11,8 @@
 
 @interface SSJRecordMakingBillTypeInputView ()
 
+@property (nonatomic, strong) UIView *fillColorView;
+
 @property (nonatomic, strong) UILabel *billTypeNameLab;
 
 @property (nonatomic, strong) UITextField *moneyInput;
@@ -21,13 +23,16 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        [self addSubview:self.fillColorView];
         [self addSubview:self.billTypeNameLab];
         [self addSubview:self.moneyInput];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
 
 - (void)layoutSubviews {
+    _fillColorView.frame = self.bounds;
     _billTypeNameLab.left = 30;
     _billTypeNameLab.centerY = self.height * 0.5;
     _moneyInput.right = self.width - 30;
@@ -41,6 +46,22 @@
         [_billTypeNameLab sizeToFit];
         [self setNeedsLayout];
     }
+}
+
+- (void)setFillColor:(UIColor *)fillColor {
+    if (!CGColorEqualToColor(_fillColor.CGColor, fillColor.CGColor)) {
+        _fillColor = fillColor;
+        _fillColorView.backgroundColor = _fillColor;
+    }
+}
+
+- (UIView *)fillColorView {
+    if (!_fillColorView) {
+        _fillColorView = [[UIView alloc] init];
+        _fillColorView.backgroundColor = [UIColor clearColor];
+        _fillColorView.alpha = SSJ_CURRENT_THEME.recordMakingInputViewAlpha;
+    }
+    return _fillColorView;
 }
 
 - (UILabel *)billTypeNameLab {
