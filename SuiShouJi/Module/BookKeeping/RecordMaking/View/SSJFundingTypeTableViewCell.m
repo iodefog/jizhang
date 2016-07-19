@@ -55,7 +55,7 @@
     if (!_checkMark) {
         _checkMark = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 17, 17)];
         _checkMark.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _checkMark.hidden = YES;
     }
     return _checkMark;

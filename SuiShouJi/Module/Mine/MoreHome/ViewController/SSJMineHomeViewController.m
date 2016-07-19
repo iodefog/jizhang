@@ -10,7 +10,7 @@
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJMineHomeImageCell.h"
 #import "SSJSyncSettingViewController.h"
-#import "SSJNormalWebViewController.h"
+#import "SSJAdWebViewController.h"
 #import "SSJLoginViewController.h"
 #import "SSJUserTableManager.h"
 #import "SSJUserInfoItem.h"
@@ -351,8 +351,7 @@ static BOOL kNeedBannerDisplay = YES;
             [weakSelf.tableView reloadData];
         };
         _bannerHeader.bannerClickedBlock = ^(NSString *url , NSString *title){
-            SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
-            webVc.title = title;
+            SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
             [weakSelf.navigationController pushViewController:webVc animated:YES];
         };
     }

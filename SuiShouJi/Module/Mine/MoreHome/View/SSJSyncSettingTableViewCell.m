@@ -44,7 +44,7 @@
     if (!_checkMarkImage) {
         _checkMarkImage = [[UIImageView alloc]init];
         _checkMarkImage.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+        _checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _checkMarkImage;
 }
