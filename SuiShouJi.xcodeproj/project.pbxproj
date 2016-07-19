@@ -1374,6 +1374,8 @@
 		9C2BCFC41CBF8DC400D8D8D3 /* home_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C2BCFC31CBF8DC400D8D8D3 /* home_add@3x.png */; };
 		9C2E02771CAE419600C5F764 /* SSJWeiXinLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */; };
 		9C2E02781CAE419600C5F764 /* SSJQQUserInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02761CAE419600C5F764 /* SSJQQUserInfoItem.m */; };
+		9C2FC0461D3E3A9700A4C0C9 /* SSJMemberSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */; };
+		9C2FC0501D3E3AA100A4C0C9 /* SSJChargeMemberItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */; };
 		9C3276CC1CE339AC00109C4C /* home_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C3276CA1CE339AC00109C4C /* home_line@2x.png */; };
 		9C3276CD1CE339AC00109C4C /* home_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C3276CB1CE339AC00109C4C /* home_line@3x.png */; };
 		9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
@@ -2600,6 +2602,10 @@
 		9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWeiXinLoginHelper.m; sourceTree = "<group>"; };
 		9C2E02751CAE419600C5F764 /* SSJQQUserInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJQQUserInfoItem.h; sourceTree = "<group>"; };
 		9C2E02761CAE419600C5F764 /* SSJQQUserInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJQQUserInfoItem.m; sourceTree = "<group>"; };
+		9C2FC0441D3E3A9700A4C0C9 /* SSJMemberSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSelectView.h; sourceTree = "<group>"; };
+		9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberSelectView.m; sourceTree = "<group>"; };
+		9C2FC04E1D3E3AA100A4C0C9 /* SSJChargeMemBerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeMemBerItem.h; sourceTree = "<group>"; };
+		9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeMemberItem.m; sourceTree = "<group>"; };
 		9C3276CA1CE339AC00109C4C /* home_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_line@2x.png"; sourceTree = "<group>"; };
 		9C3276CB1CE339AC00109C4C /* home_line@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_line@3x.png"; sourceTree = "<group>"; };
 		9C3276ED1CE4614700109C4C /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -3849,6 +3855,8 @@
 		7D5F32F31CEAE6C10086B67E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9C2FC04E1D3E3AA100A4C0C9 /* SSJChargeMemBerItem.h */,
+				9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */,
 				7D5F32F41CEAE6C10086B67E /* SSJFundingItem.h */,
 				7D5F32F51CEAE6C10086B67E /* SSJFundingItem.m */,
 				7D5F32F61CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.h */,
@@ -3862,6 +3870,8 @@
 		7D5F32FA1CEAE6C10086B67E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9C2FC0441D3E3A9700A4C0C9 /* SSJMemberSelectView.h */,
+				9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */,
 				7D5F32FB1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.h */,
 				7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */,
 				7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */,
@@ -8327,6 +8337,7 @@
 				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9CD9BC0D1CFD2DAA0061803B /* SSJMagicExportResultViewController.m in Sources */,
 				7D5F337F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.m in Sources */,
+				9C2FC0461D3E3A9700A4C0C9 /* SSJMemberSelectView.m in Sources */,
 				9CD9BC0A1CFD2DAA0061803B /* SSJChargeCircleSelectView.m in Sources */,
 				7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */,
 				9C29319C1CEEFFD300484F6E /* SSJPatchUpdateService.m in Sources */,
@@ -8400,6 +8411,7 @@
 				7D5F33861CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
 				7DABCA661D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m in Sources */,
 				9CD9BC4D1CFDBFB40061803B /* SSJFundingTransferDetailViewController.m in Sources */,
+				9C2FC0501D3E3AA100A4C0C9 /* SSJChargeMemberItem.m in Sources */,
 				7D5F33491CEAE6C10086B67E /* SSJCalenderHelper.m in Sources */,
 				7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */,
 				7D5F33481CEAE6C10086B67E /* SSJBudgetWaveWaterView.m in Sources */,
