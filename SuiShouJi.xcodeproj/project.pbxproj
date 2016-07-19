@@ -1760,8 +1760,6 @@
 		9CEB85C01CC5D8FC00AE8F8D /* mark_jilu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */; };
 		9CEB85C11CC5D8FC00AE8F8D /* mark_pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */; };
 		9CEB85C21CC5D8FC00AE8F8D /* mark_pic@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BE1CC5D8FC00AE8F8D /* mark_pic@3x.png */; };
-		9CF51A1D1D3CB16D005A47A9 /* SSJMemberSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF51A1C1D3CB16D005A47A9 /* SSJMemberSelectView.m */; };
-		9CF51A201D3CC7E0005A47A9 /* SSJChargeMemberItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF51A1F1D3CC7E0005A47A9 /* SSJChargeMemberItem.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
@@ -3082,10 +3080,6 @@
 		9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_jilu@3x.png"; sourceTree = "<group>"; };
 		9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@2x.png"; sourceTree = "<group>"; };
 		9CEB85BE1CC5D8FC00AE8F8D /* mark_pic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@3x.png"; sourceTree = "<group>"; };
-		9CF51A1B1D3CB16D005A47A9 /* SSJMemberSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSelectView.h; sourceTree = "<group>"; };
-		9CF51A1C1D3CB16D005A47A9 /* SSJMemberSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemberSelectView.m; sourceTree = "<group>"; };
-		9CF51A1E1D3CC7E0005A47A9 /* SSJChargeMemberItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeMemberItem.h; sourceTree = "<group>"; };
-		9CF51A1F1D3CC7E0005A47A9 /* SSJChargeMemberItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeMemberItem.m; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -3858,8 +3852,6 @@
 				7D5F32F71CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.m */,
 				7D5F32F81CEAE6C10086B67E /* SSJRecordMakingCategoryItem.h */,
 				7D5F32F91CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m */,
-				9CF51A1E1D3CC7E0005A47A9 /* SSJChargeMemberItem.h */,
-				9CF51A1F1D3CC7E0005A47A9 /* SSJChargeMemberItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3895,8 +3887,6 @@
 				7D5F331D1CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionView.m */,
 				7D5F331E1CEAE6C10086B67E /* SSJSmallCalendarView.h */,
 				7D5F331F1CEAE6C10086B67E /* SSJSmallCalendarView.m */,
-				9CF51A1B1D3CB16D005A47A9 /* SSJMemberSelectView.h */,
-				9CF51A1C1D3CB16D005A47A9 /* SSJMemberSelectView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8166,7 +8156,6 @@
 				7D5F33851CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				7D5F334E1CEAE6C10086B67E /* SSJCalenderDetailCell.m in Sources */,
 				9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */,
-				9CF51A1D1D3CB16D005A47A9 /* SSJMemberSelectView.m in Sources */,
 				7D5F334A1CEAE6C10086B67E /* SSJCalenderCellItem.m in Sources */,
 				7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */,
 				BDC01FF31C2D92E3008B1F75 /* CDAutoHideMessageHUD.m in Sources */,
@@ -8323,7 +8312,6 @@
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
-				9CF51A201D3CC7E0005A47A9 /* SSJChargeMemberItem.m in Sources */,
 				9CD9BC201CFD2DAA0061803B /* SSJAboutusTableViewCell.m in Sources */,
 				9C17FF1C1CE96ED90016EE4C /* SSJCustomKeyboard.m in Sources */,
 				7D768A731C926B6600CB75B0 /* SSJBorderButton.m in Sources */,
@@ -8567,7 +8555,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "21c6d3ba-9c4c-4c2d-a7e2-5a92130f8c4e";
 				PROVISIONING_PROFILE = "98121965-944f-45ce-bbfb-a3c5a5d931b8";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
