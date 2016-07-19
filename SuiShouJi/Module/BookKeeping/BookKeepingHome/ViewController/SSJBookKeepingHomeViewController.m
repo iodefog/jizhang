@@ -80,7 +80,8 @@ BOOL kHomeNeedLoginPop;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
- //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+
+//    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 //    _hasLoad = YES;
     [self popIfNeeded];
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);

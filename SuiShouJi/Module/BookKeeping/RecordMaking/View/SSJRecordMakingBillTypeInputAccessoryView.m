@@ -24,6 +24,8 @@
 
 @property (nonatomic, strong) UIButton *photoBtn;
 
+@property (nonatomic, strong) UIButton *memberBtn;
+
 @end
 
 @implementation SSJRecordMakingBillTypeInputAccessoryView
@@ -37,6 +39,7 @@
         [self.topView addSubview:self.memoView];
         [self.bottomView addSubview:self.accountBtn];
         [self.bottomView addSubview:self.dateBtn];
+        [self.bottomView addSubview:self.memberBtn];
         [self.bottomView addSubview:self.photoBtn];
     }
     return self;
@@ -46,11 +49,12 @@
     _topView.frame = CGRectMake(0, 0, self.width, 50);
     _bottomView.frame = CGRectMake(0, _topView.bottom, self.width, 37);
     
-    CGFloat horizontalGap = (_bottomView.width - _accountBtn.width - _dateBtn.width - _photoBtn.width) * 0.25;
+    CGFloat horizontalGap = (_bottomView.width - _accountBtn.width - _dateBtn.width - _photoBtn.width - _memberBtn.width) * 0.2;
     _accountBtn.left = horizontalGap;
     _dateBtn.left = _accountBtn.right + horizontalGap;
-    _photoBtn.left = _dateBtn.right + horizontalGap;
-    _accountBtn.centerY = _dateBtn.centerY = _photoBtn.centerY = _bottomView.height * 0.5;
+    _memberBtn.left = _dateBtn.right + horizontalGap;
+    _photoBtn.left = _memberBtn.right + horizontalGap;
+    _accountBtn.centerY = _dateBtn.centerY = _photoBtn.centerY =_memberBtn.centerY = _bottomView.height * 0.5;
 }
 
 - (void)setButtonTitleNormalColor:(UIColor *)buttonTitleNormalColor {
@@ -60,6 +64,7 @@
     
     [_accountBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_dateBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
+    [_memberBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_photoBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
 }
 
@@ -70,6 +75,7 @@
     
     [_accountBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
     [_dateBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+    [_memberBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_photoBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
 }
 
@@ -144,6 +150,18 @@
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
     }
     return _dateBtn;
+}
+
+- (UIButton *)memberBtn {
+    if (!_memberBtn) {
+        _memberBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _memberBtn.frame = CGRectMake(0, 0, 90, 24);
+        _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _memberBtn.layer.borderWidth = 1;
+        _memberBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
+        _memberBtn.layer.cornerRadius = _memberBtn.height * 0.5;
+    }
+    return _memberBtn;
 }
 
 - (UIButton *)photoBtn {
