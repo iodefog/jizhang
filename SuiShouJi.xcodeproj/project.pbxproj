@@ -26,6 +26,7 @@
 		7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24231C3E097C009A74A8 /* SSJUserChargeSyncTable.m */; };
 		7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24261C3E098F009A74A8 /* SSJFundInfoSyncTable.m */; };
 		7D2B242A1C3E09A0009A74A8 /* SSJUserBillSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2B24291C3E09A0009A74A8 /* SSJUserBillSyncTable.m */; };
+		7D2C2DD41D3E33C700059A5F /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
 		7D2E7FB51C520EA500A2601C /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		7D39554F1C5F7CE2004D807C /* SSJStartNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D39554E1C5F7CE2004D807C /* SSJStartNetworkService.m */; };
 		7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955511C5F7D25004D807C /* SSJStartChecker.m */; };
@@ -8089,6 +8090,7 @@
 				9C2A68431D194CA70010F1DA /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9C2A68441D194CA70010F1DA /* SSJSyncSettingViewController.m in Sources */,
 				9C2A68451D194CA70010F1DA /* SSJADDNewTypeViewController.m in Sources */,
+				7D2C2DD41D3E33C700059A5F /* SSJAdWebViewController.m in Sources */,
 				9C66F1271D20FF100094125D /* SSJThemeHomeCollectionViewCell.m in Sources */,
 				9C2A68461D194CA70010F1DA /* SSJReportFormsCurveGridView.m in Sources */,
 				9C2A68471D194CA70010F1DA /* SSJMagicExportCalendarViewCell.m in Sources */,
