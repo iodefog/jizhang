@@ -18,7 +18,7 @@ typedef void (^closeButtonClickBlock)();
 @property (nonatomic, copy) closeButtonClickBlock closeButtonClickBlock;
 
 //  点击banner的回调
-typedef void (^bannerClickedBlock)(NSString *url);
+typedef void (^bannerClickedBlock)(NSString *url , NSString *title);
 
 @property (nonatomic, copy) bannerClickedBlock bannerClickedBlock;
 

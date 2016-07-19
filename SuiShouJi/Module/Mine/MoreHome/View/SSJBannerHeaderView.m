@@ -40,7 +40,7 @@
             SSJBannerItem *item = [weakSelf.items objectAtIndex:tapIndex];
             [MobClick event:@"mine_banner" attributes:@{@"bannerUrl":item.bannerUrl}];
             if (weakSelf.bannerClickedBlock) {
-                weakSelf.bannerClickedBlock(item.bannerUrl);
+                weakSelf.bannerClickedBlock(item.bannerUrl,item.bannerName);
             }
         };
     }

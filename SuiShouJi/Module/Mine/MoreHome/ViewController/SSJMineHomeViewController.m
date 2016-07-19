@@ -111,12 +111,11 @@ static BOOL kNeedBannerDisplay = YES;
     if ([SSJStartChecker sharedInstance].isInReview) {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
         self.titles = @[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]];
-        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle6 , kTitle7];
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7];
     } else {
         self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]];
         self.titles = @[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]];
-        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle5 , kTitle4 , kTitle6 , kTitle7];
-
+        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7];
     }
 
     __weak typeof(self) weakSelf = self;
@@ -351,9 +350,9 @@ static BOOL kNeedBannerDisplay = YES;
             kNeedBannerDisplay = NO;
             [weakSelf.tableView reloadData];
         };
-        _bannerHeader.bannerClickedBlock = ^(NSString *url){
+        _bannerHeader.bannerClickedBlock = ^(NSString *url , NSString *title){
             SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:url]];
-            webVc.title = @"精选信用卡";
+            webVc.title = title;
             [weakSelf.navigationController pushViewController:webVc animated:YES];
         };
     }
