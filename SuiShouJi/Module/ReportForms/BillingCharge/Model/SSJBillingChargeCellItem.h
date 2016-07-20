@@ -83,9 +83,9 @@
 @property(nonatomic, strong) NSString *transferSource;
 
 // 成员id
-@property(nonatomic, strong) NSArray *membersIdArr;
+@property(nonatomic, strong) NSMutableArray *membersIdArr;
 
 // 成员名称
-@property(nonatomic, strong) NSArray *membersNameArr;
+@property(nonatomic, strong) NSMutableArray *membersNameArr;
 
 @end

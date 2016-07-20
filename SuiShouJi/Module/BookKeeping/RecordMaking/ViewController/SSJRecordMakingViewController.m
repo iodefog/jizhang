@@ -420,6 +420,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectMemberAction{
+    self.memberSelectView.selectedMembers = self.item.membersIdArr;
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -552,8 +553,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and cuserid = ? and operatortype <> 2"]) {
-            FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.cuserid = ? and a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",userId,weakSelf.item.ID];
+        if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and operatortype <> 2"]) {
+            FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",userId,weakSelf.item.ID];
             NSMutableArray *tempIdArr = [NSMutableArray arrayWithCapacity:0];
             NSMutableArray *tempNameArr = [NSMutableArray arrayWithCapacity:0];
             while ([result next]) {
@@ -566,8 +567,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.item.membersIdArr = tempIdArr;
             weakSelf.item.membersNameArr = tempNameArr;
         }else{
-            weakSelf.item.membersIdArr = @[@"1"];
-            weakSelf.item.membersNameArr = @[@"自己"];
+            weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"1", nil];
+            weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (weakSelf.item.membersNameArr.count == 1) {

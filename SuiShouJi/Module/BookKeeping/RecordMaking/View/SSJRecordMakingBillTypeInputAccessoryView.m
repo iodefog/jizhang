@@ -158,7 +158,8 @@
         _memberBtn.frame = CGRectMake(0, 0, 90, 24);
         _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _memberBtn.layer.borderWidth = 1;
-        _memberBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
+        [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        _memberBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
         _memberBtn.layer.cornerRadius = _memberBtn.height * 0.5;
     }
     return _memberBtn;
