@@ -85,6 +85,31 @@
     }];
 }
 
++ (void)createDefaultMembersWithError:(NSError **)error {
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSError *tError = [self createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
+        if (error) {
+            *error = tError;
+        }
+    }];
+}
+
++ (void)asyncCreateDefaultMembersTypeWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSError *error = [self createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+        } else {
+            if (success) {
+                success();
+            }
+        }
+    }];
+}
+
+
 + (void)createDefaultBillTypesIfNeededWithError:(NSError **)error {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSError *tError = [self createDefaultBillTypesIfNeededForUserId:SSJUSERID() inDatabase:db];
@@ -152,7 +177,14 @@
             }
             return;
         }
-
+        
+        error = [self createDefaultMembersForUserId:userId inDatabase:db];
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+            return;
+        }
         
         error = [self createDefaultBillTypesIfNeededForUserId:userId inDatabase:db];
         if (error) {
@@ -266,6 +298,49 @@
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"books_jiehun"];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId,@(4),@"books_zhuangxiu"];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"旅行账本", @"#AD82DD", writeDate, @(SSJSyncVersion()), userId,@(5),@"books_lvxing"];
+    
+    return nil;
+}
+
+//  如果当前用户没有创建过默认的成员，则创建默认成员
++ (NSError *)createDefaultMembersForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if (!userId.length) {
+        return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
+    }
+    
+    //  查询用户表中存储的默认成员创建状态
+    FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTMEMBERTATE from BK_USER where CUSERID = ?", userId];
+    if (!reuslt) {
+        return [db lastError];
+    }
+    
+    NSError *error = nil;
+    if (![reuslt nextWithError:&error]) {
+        [reuslt close];
+        if (error) {
+            return error;
+        }
+        return nil;
+    }
+    
+    //  根据表中存储的状态判断是否需要创建以下默认成员
+    BOOL defaultFundAcctState = [reuslt boolForColumn:@"CDEFAULTMEMBERTATE"];
+    [reuslt close];
+    
+    if (defaultFundAcctState) {
+        return nil;
+    }
+    
+    if (![db executeUpdate:@"update BK_USER set CDEFAULTMEMBERTATE = 1"]) {
+        return [db lastError];
+    }
+    
+    NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (1, ?, ?, 0, ?, ?)", @"自己", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (2, ?, ?, 0, ?, ?)", @"爱人", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (3, ?, ?, 0, ?, ?)", @"小宝宝", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (4, ?, ?, 0, ?, ?)", @"爸爸", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (5, ?, ?, 0, ?, ?)", @"妈妈", userId, @(SSJSyncVersion()), writeDate];
     
     return nil;
 }

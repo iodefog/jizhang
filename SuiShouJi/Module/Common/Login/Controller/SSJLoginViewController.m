@@ -340,6 +340,11 @@
             [SSJUserDefaultDataCreater createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
         }
         
+        //  如果登录没有返回任何成员类型，说明服务器没有保存任何成员类型，就给用户创建默认的
+        if (self.loginService.membersArray.count == 0) {
+            [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
+        }
+        
         //  更新资金帐户余额
         [SSJFundAccountTable updateBalanceForUserId:SSJUSERID() inDatabase:db];
     }];

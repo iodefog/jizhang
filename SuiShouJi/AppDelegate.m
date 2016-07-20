@@ -204,6 +204,9 @@ NSDate *SCYEnterBackgroundTime() {
             
             //  创建默认的账本
             [SSJUserDefaultDataCreater createDefaultBooksTypeWithError:nil];
+            
+            //  创建默认的成员
+            [SSJUserDefaultDataCreater createDefaultMembersWithError:nil];
 
         } else {
             //  升级数据库

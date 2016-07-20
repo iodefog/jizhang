@@ -1376,6 +1376,8 @@
 		9C2E02781CAE419600C5F764 /* SSJQQUserInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02761CAE419600C5F764 /* SSJQQUserInfoItem.m */; };
 		9C2FC0461D3E3A9700A4C0C9 /* SSJMemberSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */; };
 		9C2FC0501D3E3AA100A4C0C9 /* SSJChargeMemberItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */; };
+		9C2FC0511D3E3C9000A4C0C9 /* SSJChargeMemberItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2FC04F1D3E3AA100A4C0C9 /* SSJChargeMemberItem.m */; };
+		9C2FC0521D3E3C9500A4C0C9 /* SSJMemberSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */; };
 		9C3276CC1CE339AC00109C4C /* home_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C3276CA1CE339AC00109C4C /* home_line@2x.png */; };
 		9C3276CD1CE339AC00109C4C /* home_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C3276CB1CE339AC00109C4C /* home_line@3x.png */; };
 		9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3276ED1CE4614700109C4C /* libz.tbd */; };
@@ -7891,6 +7893,7 @@
 				9C2A67811D194CA70010F1DA /* SSJBookKeepingHomePopView.m in Sources */,
 				9C2A67821D194CA70010F1DA /* SSJFundingItem.m in Sources */,
 				9C2A67831D194CA70010F1DA /* SSJLoginHelper.m in Sources */,
+				9C2FC0511D3E3C9000A4C0C9 /* SSJChargeMemberItem.m in Sources */,
 				9C2A67841D194CA70010F1DA /* SSJLayerAddition.m in Sources */,
 				9C2A67851D194CA70010F1DA /* SSJBaseTableViewCell.m in Sources */,
 				9C2A67861D194CA70010F1DA /* SSJBudgetDetailHeaderView.m in Sources */,
@@ -7976,6 +7979,7 @@
 				9C2A67D21D194CA70010F1DA /* SSJPatchUpdateService.m in Sources */,
 				9C2A67D31D194CA70010F1DA /* SSJImageSynchronizeTask.m in Sources */,
 				9C2A67D41D194CA70010F1DA /* SSJSettingViewController.m in Sources */,
+				9C2FC0521D3E3C9500A4C0C9 /* SSJMemberSelectView.m in Sources */,
 				9C2A67D51D194CA70010F1DA /* SSJSmallCalendarView.m in Sources */,
 				9C2A67D61D194CA70010F1DA /* SSJAlertViewDelegator.m in Sources */,
 				7D4CF70E1D38E38B009CC8ED /* SSJBannerHeaderView.m in Sources */,
