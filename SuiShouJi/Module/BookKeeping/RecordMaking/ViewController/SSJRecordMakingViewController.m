@@ -20,11 +20,13 @@
 #import "SSJChargeCircleSelectView.h"
 #import "SSJCategoryListHelper.h"
 #import "SSJImaageBrowseViewController.h"
+#import "SSJMemberSelectView.h"
 
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
+#import "SSJChargeMemBerItem.h"
 #import "YYKeyboardManager.h"
 #import "SSJRecordMakingStore.h"
 
@@ -41,6 +43,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 @property (nonatomic,strong) SSJDateSelectedView *DateSelectedView;
 
 @property (nonatomic,strong) SSJFundingTypeSelectView *FundingTypeSelectView;
+
+@property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
 
 @property (nonatomic) NSInteger selectChargeCircleType;
 
@@ -114,6 +118,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getCategoryList];
+    [self getmembersForTheCharge];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -228,6 +233,17 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     return _incomeTypeView;
 }
 
+-(SSJMemberSelectView *)memberSelectView{
+    if (!_memberSelectView) {
+        __weak typeof(self) weakSelf = self;
+        _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _memberSelectView.dismissBlock = ^(){
+            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+        };
+    }
+    return _memberSelectView;
+}
+
 - (SSJRecordMakingBillTypeInputAccessoryView *)accessoryView {
     if (!_accessoryView) {
         _accessoryView = [[SSJRecordMakingBillTypeInputAccessoryView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, 86)];
@@ -236,6 +252,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [_accessoryView.accountBtn addTarget:self action:@selector(selectFundAccountAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn addTarget:self action:@selector(selectBillDateAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.photoBtn addTarget:self action:@selector(selectPhotoAction) forControlEvents:UIControlEventTouchUpInside];
+        [_accessoryView.memberBtn addTarget:self action:@selector(selectMemberAction) forControlEvents:UIControlEventTouchUpInside];
         [_accessoryView.dateBtn setTitle:[NSString stringWithFormat:@"%ld月%ld日", _selectedMonth, _selectedDay] forState:UIControlStateNormal];
         [_accessoryView.photoBtn setTitle:@"照片" forState:UIControlStateNormal];
         _accessoryView.memoView.delegate = self;
@@ -402,6 +419,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     }
 }
 
+- (void)selectMemberAction{
+    [self.memberSelectView show];
+    [_billTypeInputView.moneyInput resignFirstResponder];
+    [_accessoryView.memoView resignFirstResponder];
+}
+
 //- (void)selectPeriodAction {
 //    [MobClick event:@"addRecord_cycle"];
 //    self.ChargeCircleSelectView.selectCircleType = _selectChargeCircleType;
@@ -522,6 +545,37 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
+    }];
+}
+
+-(void)getmembersForTheCharge{
+    __weak typeof(self) weakSelf = self;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and cuserid = ? and operatortype <> 2"]) {
+            FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.cuserid = ? and a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",userId,weakSelf.item.ID];
+            NSMutableArray *tempIdArr = [NSMutableArray arrayWithCapacity:0];
+            NSMutableArray *tempNameArr = [NSMutableArray arrayWithCapacity:0];
+            while ([result next]) {
+                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                item.memberId = [result stringForColumn:@"cmemberid"];
+                item.memberName = [result stringForColumn:@"cname"];
+                [tempIdArr addObject:item.memberId];
+                [tempNameArr addObject:item.memberName];
+            }
+            weakSelf.item.membersIdArr = tempIdArr;
+            weakSelf.item.membersNameArr = tempNameArr;
+        }else{
+            weakSelf.item.membersIdArr = @[@"1"];
+            weakSelf.item.membersNameArr = @[@"自己"];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakSelf.item.membersNameArr.count == 1) {
+                [weakSelf.accessoryView.memberBtn setTitle:[weakSelf.item.membersNameArr objectAtIndex:0] forState:UIControlStateNormal];
+            }else{
+                [weakSelf.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",weakSelf.item.membersNameArr.count] forState:UIControlStateNormal];
+            }
+        });
     }];
 }
 

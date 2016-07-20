@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong, readonly) UIButton *photoBtn;
 
+@property (nonatomic, strong, readonly) UIButton *memberBtn;
+
 @property (nonatomic, strong) UIColor *buttonTitleNormalColor;
 
 @property (nonatomic, strong) UIColor *buttonTitleSelectedColor;

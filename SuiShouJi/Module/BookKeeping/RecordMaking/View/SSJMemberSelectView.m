@@ -19,6 +19,8 @@
 
 @property(nonatomic, strong) UIImageView *accessoryView;
 
+@property(nonatomic, strong) UIView *topView;
+
 @end
 
 @implementation SSJMemberSelectView
@@ -28,11 +30,24 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        [self addSubview:self.topView];
         [self addSubview:self.tableView];
+        [self sizeToFit];
     }
     return self;
 }
 
+-(CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake(SSJSCREENWITH, 415);
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    self.topView.leftTop = CGPointMake(0, 0);
+    self.tableView.size = CGSizeMake(self.width, self.height - 85);
+    self.tableView.leftTop = CGPointMake(0, self.topView.bottom);
+    [self.tableView ssj_relayoutBorder];
+}
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -66,13 +81,15 @@
         cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.backgroundColor = [UIColor clearColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     NSString *title = item.memberName;
     NSString *memberId = item.memberId;
     cell.textLabel.text = title;
     cell.accessoryView = [self.selectedMembers containsObject:memberId] ? self.accessoryView : nil;
+    cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
+    cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     return cell;
 }
 
@@ -101,6 +118,27 @@
         _accessoryView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _accessoryView;
+}
+
+-(UIView *)topView{
+    if (!_topView) {
+        _topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 85)];
+        _topView.backgroundColor = [UIColor clearColor];
+        UILabel *titleLab = [[UILabel alloc]init];
+        titleLab.font = [UIFont systemFontOfSize:18];
+        titleLab.numberOfLines = 0;
+        titleLab.textAlignment = NSTextAlignmentCenter;
+        NSString *title = @"选择成员\n(可多选 , 多选即均分费用)";
+        NSMutableAttributedString *atrributedTitle = [[NSMutableAttributedString alloc]initWithString:title];
+        [atrributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[title rangeOfString:@"选择成员"]];
+        [atrributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[title rangeOfString:@"(可多选 , 多选即均分费用)"]];
+        titleLab.attributedText = atrributedTitle;
+        [titleLab sizeToFit];
+        [_topView addSubview:titleLab];
+        titleLab.centerX = _topView.width / 2;
+        titleLab.top = 25;
+    }
+    return _topView;
 }
 
 #pragma mark - Private
@@ -137,15 +175,19 @@
 -(void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select * from bk"];
+        NSString *userid = SSJUSERID();
+        FMResultSet *result = [db executeQuery:@"select * from bk_member where cuserid = ? and operatortype <> 2",userid];
         NSMutableArray *tempArr = [NSMutableArray array];
         while ([result next]) {
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberName = [result stringForColumn:@""];
-            item.memberId = [result stringForColumn:@""];
+            item.memberId = [result stringForColumn:@"CMEMBERID"];
+            item.memberName = [result stringForColumn:@"CNAME"];
             [tempArr addObject:item];
         }
-        self.items = [NSArray arrayWithArray:tempArr];
+        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+        item.memberName = @"添加新成员";
+        [tempArr addObject:item];
+        weakSelf.items = [NSArray arrayWithArray:tempArr];
         [weakSelf.tableView reloadData];
     }];
 }

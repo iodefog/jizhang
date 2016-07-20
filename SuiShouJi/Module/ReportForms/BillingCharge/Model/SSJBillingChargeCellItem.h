@@ -82,4 +82,10 @@
 
 @property(nonatomic, strong) NSString *transferSource;
 
+// 成员id
+@property(nonatomic, strong) NSArray *membersIdArr;
+
+// 成员名称
+@property(nonatomic, strong) NSArray *membersNameArr;
+
 @end
