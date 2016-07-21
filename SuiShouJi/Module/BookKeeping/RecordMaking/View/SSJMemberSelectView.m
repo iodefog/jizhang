@@ -21,6 +21,10 @@
 
 @property(nonatomic, strong) UIView *topView;
 
+@property(nonatomic, strong) NSMutableArray *newlyMembersArr;
+
+@property(nonatomic, strong) NSMutableArray *deleteMembersArr;
+
 @end
 
 @implementation SSJMemberSelectView
@@ -30,6 +34,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        self.newlyMembersArr = [NSMutableArray arrayWithCapacity:0];
+        self.deleteMembersArr = [NSMutableArray arrayWithCapacity:0];
         [self addSubview:self.topView];
         [self addSubview:self.tableView];
         [self sizeToFit];
@@ -59,8 +65,14 @@
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     if (indexPath.row != [tableView numberOfRowsInSection:0] - 1) {
         if ([self.selectedMembers containsObject:item.memberId]) {
+            if ([self.deleteMembersArr containsObject:item.memberId]) {
+                [self.deleteMembersArr addObject:item.memberId];
+            }
             [self.selectedMembers removeObject:item.memberId];
         }else{
+            if (![self.deleteMembersArr containsObject:item.memberId]) {
+                [self.newlyMembersArr addObject:item.memberId];
+            }
             [self.selectedMembers addObject:item.memberId];
         }
         [self.tableView reloadData];
@@ -87,7 +99,9 @@
     NSString *title = item.memberName;
     NSString *memberId = item.memberId;
     cell.textLabel.text = title;
-    cell.accessoryView = [self.selectedMembers containsObject:memberId] ? self.accessoryView : nil;
+    UIImageView *checkMarkImage = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    cell.accessoryView = [self.selectedMembers containsObject:memberId] ? checkMarkImage : nil;
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     return cell;
@@ -112,33 +126,40 @@
     return _tableView;
 }
 
-- (UIImageView *)accessoryView {
-    if (!_accessoryView) {
-        _accessoryView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        _accessoryView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    }
-    return _accessoryView;
-}
-
 -(UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.width, 85)];
         _topView.backgroundColor = [UIColor clearColor];
         UILabel *titleLab = [[UILabel alloc]init];
-        titleLab.font = [UIFont systemFontOfSize:18];
         titleLab.numberOfLines = 0;
         titleLab.textAlignment = NSTextAlignmentCenter;
         NSString *title = @"选择成员\n(可多选 , 多选即均分费用)";
         NSMutableAttributedString *atrributedTitle = [[NSMutableAttributedString alloc]initWithString:title];
         [atrributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[title rangeOfString:@"选择成员"]];
         [atrributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:[title rangeOfString:@"(可多选 , 多选即均分费用)"]];
+        [atrributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[title rangeOfString:@"选择成员"]];
+        [atrributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[title rangeOfString:@"(可多选 , 多选即均分费用)"]];
         titleLab.attributedText = atrributedTitle;
         [titleLab sizeToFit];
         [_topView addSubview:titleLab];
         titleLab.centerX = _topView.width / 2;
         titleLab.top = 25;
+        UIButton *comfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
+        [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        comfirmButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_topView addSubview:comfirmButton];
+        comfirmButton.size = CGSizeMake(50, 20);
+        comfirmButton.centerY = _topView.height / 2;
+        comfirmButton.right = _topView.width - 10;
     }
     return _topView;
+}
+
+#pragma mark - Event
+-(void)comfirmButtonClick:(id)sender{
+    
 }
 
 #pragma mark - Private

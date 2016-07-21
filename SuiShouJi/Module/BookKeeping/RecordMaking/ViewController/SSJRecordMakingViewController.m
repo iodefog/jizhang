@@ -567,7 +567,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.item.membersIdArr = tempIdArr;
             weakSelf.item.membersNameArr = tempNameArr;
         }else{
-            weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"1", nil];
+            weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"0", nil];
             weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
