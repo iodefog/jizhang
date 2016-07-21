@@ -12,6 +12,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJFundAccountTable.h"
 #import "SSJDailySumChargeTable.h"
+#import "DTTimePeriod.h"
 
 static NSString *const SSJRegularManagerNotificationIdKey = @"SSJRegularManagerNotificationIdKey";
 static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManagerNotificationIdValue";
@@ -219,7 +220,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *currentDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate day]];
         NSDate *recentEndDate = [NSDate dateWithString:[resultSet stringForColumn:@"max(cedate)"] formatString:@"yyyy-MM-dd"];
         
-        //  如果最近的一次预算周期等于当前周期，就忽略
+        //  如果最近的一次预算周期结束日期晚于或等于当前日期，就忽略
         if ([recentEndDate compare:currentDate] != NSOrderedAscending) {
             continue;
         }
@@ -240,11 +241,13 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *currentDateStr = [tDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
         
-        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
+//        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
         
-        for (SSJDatePeriod *period in periodArr) {
-            NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSArray *periodArr = [self periodsFromDate:[recentEndDate dateByAddingDays:1] toDate:currentDate type:itype];
+        
+        for (DTTimePeriod *period in periodArr) {
+            NSString *beginDate = [period.StartDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            NSString *endDate = [period.EndDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
             if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;
@@ -259,22 +262,44 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (SSJDatePeriodType)periodTypeForItype:(int)itype {
-    switch (itype) {
-        case 0:
-            return SSJDatePeriodTypeWeek;
-            break;
-        case 1:
-            return SSJDatePeriodTypeMonth;
-            break;
-        case 2:
-            return SSJDatePeriodTypeYear;
-            break;
-            
-        default:
-            return SSJDatePeriodTypeUnknown;
++ (NSArray *)periodsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate type:(int)type {
+    DTTimePeriodSize periodSize;
+    if (type == 0) {
+        periodSize = DTTimePeriodSizeWeek;
+    } else if (type == 1) {
+        periodSize = DTTimePeriodSizeMonth;
+    } else if (type == 2) {
+        periodSize = DTTimePeriodSizeYear;
     }
+    
+    NSMutableArray *periods = [NSMutableArray array];
+    DTTimePeriod *period = [DTTimePeriod timePeriodWithSize:periodSize startingAt:fromDate];
+    [periods addObject:period];
+    
+    if ([period.EndDate compare:toDate] == NSOrderedAscending) {
+        NSDate *tFromDate = [period.EndDate dateByAddingDays:1];
+        [periods addObjectsFromArray:[self periodsFromDate:tFromDate toDate:toDate type:type]];
+    }
+    
+    return periods;
 }
+
+//+ (SSJDatePeriodType)periodTypeForItype:(int)itype {
+//    switch (itype) {
+//        case 0:
+//            return SSJDatePeriodTypeWeek;
+//            break;
+//        case 1:
+//            return SSJDatePeriodTypeMonth;
+//            break;
+//        case 2:
+//            return SSJDatePeriodTypeYear;
+//            break;
+//            
+//        default:
+//            return SSJDatePeriodTypeUnknown;
+//    }
+//}
 
 + (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType containFromDate:(BOOL)contained {
     //  如果date为空或晚于当前日期，就返回nil

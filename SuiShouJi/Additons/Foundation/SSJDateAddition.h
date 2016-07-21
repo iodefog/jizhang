@@ -22,5 +22,9 @@
  */
 - (NSString *)ssj_systemCurrentDateWithFormat:(NSString *)format;
 
+- (NSUInteger)ssj_numberOfDaysInCurrentMonth;
+
+- (NSUInteger)ssj_numberOfDaysInCurrentYear;
+
 
 @end
