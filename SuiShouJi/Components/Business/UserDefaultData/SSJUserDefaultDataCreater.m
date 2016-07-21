@@ -336,11 +336,11 @@
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (1, ?, ?, 0, ?, ?)", @"自己", userId, @(SSJSyncVersion()), writeDate];
-    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (2, ?, ?, 0, ?, ?)", @"爱人", userId, @(SSJSyncVersion()), writeDate];
-    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (3, ?, ?, 0, ?, ?)", @"小宝宝", userId, @(SSJSyncVersion()), writeDate];
-    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (4, ?, ?, 0, ?, ?)", @"爸爸", userId, @(SSJSyncVersion()), writeDate];
-    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (5, ?, ?, 0, ?, ?)", @"妈妈", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (0, ?, ?, 0, ?, ?)", @"自己", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (1, ?, ?, 0, ?, ?)", @"爱人", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (2, ?, ?, 0, ?, ?)", @"小宝宝", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (3, ?, ?, 0, ?, ?)", @"爸爸", userId, @(SSJSyncVersion()), writeDate];
+    [db executeUpdate:@"INSERT INTO BK_MEMBER (CMEMBERID, CNAME, CUSERID, OPERATORTYPE, IVERSION, CWRITEDATE) VALUES (4, ?, ?, 0, ?, ?)", @"妈妈", userId, @(SSJSyncVersion()), writeDate];
     
     return nil;
 }
