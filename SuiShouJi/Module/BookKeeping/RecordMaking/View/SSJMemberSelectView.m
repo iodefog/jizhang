@@ -21,10 +21,6 @@
 
 @property(nonatomic, strong) UIView *topView;
 
-@property(nonatomic, strong) NSMutableArray *newlyMembersArr;
-
-@property(nonatomic, strong) NSMutableArray *deleteMembersArr;
-
 @end
 
 @implementation SSJMemberSelectView
@@ -34,8 +30,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-        self.newlyMembersArr = [NSMutableArray arrayWithCapacity:0];
-        self.deleteMembersArr = [NSMutableArray arrayWithCapacity:0];
         [self addSubview:self.topView];
         [self addSubview:self.tableView];
         [self sizeToFit];
@@ -64,16 +58,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     if (indexPath.row != [tableView numberOfRowsInSection:0] - 1) {
-        if ([self.selectedMembers containsObject:item.memberId]) {
-            if ([self.deleteMembersArr containsObject:item.memberId]) {
-                [self.deleteMembersArr addObject:item.memberId];
-            }
-            [self.selectedMembers removeObject:item.memberId];
+        if ([self.selectedMemberIds containsObject:item.memberId]) {
+            [self.selectedMemberIds removeObject:item.memberId];
+            [self.selectedMemberNames removeObject:item.memberName];
         }else{
-            if (![self.deleteMembersArr containsObject:item.memberId]) {
-                [self.newlyMembersArr addObject:item.memberId];
-            }
-            [self.selectedMembers addObject:item.memberId];
+            [self.selectedMemberIds addObject:item.memberId];
+            [self.selectedMemberNames addObject:item.memberName];
         }
         [self.tableView reloadData];
     }else{
@@ -101,7 +91,7 @@
     cell.textLabel.text = title;
     UIImageView *checkMarkImage = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    cell.accessoryView = [self.selectedMembers containsObject:memberId] ? checkMarkImage : nil;
+    cell.accessoryView = [self.selectedMemberIds containsObject:memberId] ? checkMarkImage : nil;
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     return cell;
@@ -159,7 +149,10 @@
 
 #pragma mark - Event
 -(void)comfirmButtonClick:(id)sender{
-    
+    [self dismiss];
+    if (self.comfirmBlock) {
+        self.comfirmBlock(self.selectedMemberIds,self.selectedMemberNames);
+    }
 }
 
 #pragma mark - Private

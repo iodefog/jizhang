@@ -5,14 +5,12 @@
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "DFF574CDD606896E274E3371441052B10480B888" : 0,
-    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : 0,
-    "D8B080C4DAB4AAB619ECF701263730F6567298DF" : 0
+    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : 0
   },
-  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "02B7E827-C8CC-4683-9CBF-E470E81C3769",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "982E53C2-EED1-40F2-BC30-412033F7FF21",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "DFF574CDD606896E274E3371441052B10480B888" : "SuiShouJi\/",
-    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : "AccountBook\/ZipZap\/",
-    "D8B080C4DAB4AAB619ECF701263730F6567298DF" : ""
+    "DFF574CDD606896E274E3371441052B10480B888" : "accountbook_ios\/",
+    "82DF43EF5CA016D15C41E0AF1AF686E9973475B7" : "accountbook_ios\/ZipZap\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "SuiShouJi",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -24,12 +22,7 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "82DF43EF5CA016D15C41E0AF1AF686E9973475B7"
     },
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.5.228\/caiyi.yydb\/ios.git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D8B080C4DAB4AAB619ECF701263730F6567298DF"
-    },
-    {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.5.228\/caiyi.financial.huishuaka.tools\/accountbook_ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/gitlab.gs.9188.com\/caiyi.financial.huishuaka.tools\/accountbook_ios.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "DFF574CDD606896E274E3371441052B10480B888"
     }
