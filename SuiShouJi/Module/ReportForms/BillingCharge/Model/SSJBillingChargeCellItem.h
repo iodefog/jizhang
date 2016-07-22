@@ -88,4 +88,11 @@
 // 成员名称
 @property(nonatomic, strong) NSMutableArray *membersNameArr;
 
+// 新增的成员
+@property(nonatomic, strong) NSArray *newlyAddMembers;
+
+//删除的成员
+@property(nonatomic, strong) NSArray *deletedMembers;
+
+
 @end

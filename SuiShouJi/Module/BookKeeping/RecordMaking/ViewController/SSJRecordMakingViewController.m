@@ -134,12 +134,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 #pragma mark - Getter
-- (void)updateFundingType {
-    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:UIControlStateNormal];
-    self.accessoryView.accountBtn.selected = YES;
-    self.FundingTypeSelectView.selectFundID = self.item.fundId;
-}
-
 -(SSJDateSelectedView*)DateSelectedView{
     if (!_DateSelectedView) {
         _DateSelectedView = [[SSJDateSelectedView alloc]initWithFrame:[UIScreen mainScreen].bounds forYear:self.selectedYear Month:self.selectedMonth Day:self.selectedDay];
@@ -239,6 +233,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _memberSelectView.dismissBlock = ^(){
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+        };
+        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberIds , NSArray *selectedMemberNames){
+            weakSelf.item.membersIdArr = [selectedMemberIds mutableCopy];
+            weakSelf.item.membersNameArr = [selectedMemberNames mutableCopy];
+            [weakSelf updateMembers];
         };
     }
     return _memberSelectView;
@@ -420,7 +419,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectMemberAction{
-    self.memberSelectView.selectedMembers = self.item.membersIdArr;
+    self.memberSelectView.selectedMemberIds = self.item.membersIdArr;
+    self.memberSelectView.selectedMemberNames = self.item.membersNameArr;
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -552,9 +552,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 -(void)getmembersForTheCharge{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *userId = SSJUSERID();
-        if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and operatortype <> 2"]) {
-            FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",userId,weakSelf.item.ID];
+        if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and operatortype <> 2"],weakSelf.item.ID) {
+            FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",weakSelf.item.ID,weakSelf.item.ID];
             NSMutableArray *tempIdArr = [NSMutableArray arrayWithCapacity:0];
             NSMutableArray *tempNameArr = [NSMutableArray arrayWithCapacity:0];
             while ([result next]) {
@@ -571,11 +570,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (weakSelf.item.membersNameArr.count == 1) {
-                [weakSelf.accessoryView.memberBtn setTitle:[weakSelf.item.membersNameArr objectAtIndex:0] forState:UIControlStateNormal];
-            }else{
-                [weakSelf.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",weakSelf.item.membersNameArr.count] forState:UIControlStateNormal];
-            }
+            [weakSelf updateMembers];
         });
     }];
 }
@@ -766,6 +761,20 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
         }
     }
+}
+
+-(void)updateMembers{
+    if (self.item.membersNameArr.count == 1) {
+        [self.accessoryView.memberBtn setTitle:[self.item.membersNameArr objectAtIndex:0] forState:UIControlStateNormal];
+    }else{
+        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",self.item.membersNameArr.count] forState:UIControlStateNormal];
+    }
+}
+
+- (void)updateFundingType {
+    [self.accessoryView.accountBtn setTitle:self.item.fundName forState:UIControlStateNormal];
+    self.accessoryView.accountBtn.selected = YES;
+    self.FundingTypeSelectView.selectFundID = self.item.fundId;
 }
 
 //-(void)closeButtonClicked:(id)sender{

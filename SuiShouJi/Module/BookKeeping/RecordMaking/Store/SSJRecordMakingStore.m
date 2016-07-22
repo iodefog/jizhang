@@ -160,6 +160,27 @@
                     }
                 }
             }
+            //修改成员流水表
+            for (NSString *memberid in item.membersIdArr) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype) values(?,?,?,0)",item.ID,memberid,editeTime]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersIdArr.count),item.ID]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
         }else{
             editeItem = item;
             editeItem.operatorType = 0;
@@ -289,6 +310,36 @@
                         return;
                     }
                 }
+            }
+            //修改成员流水表
+            if (![db executeUpdate:@"delete from bk_member_charge where ichargeid = ?",item.ID]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            for (NSString *memberid in item.membersIdArr) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype) values(?,?,?,0)",item.ID,memberid,editeTime]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersIdArr.count),item.ID]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
             }
         }
         if (success) {

@@ -12,7 +12,11 @@
 
 @property (nonatomic, copy) void(^dismissBlock)();
 
-@property(nonatomic, strong) NSMutableArray *selectedMembers;
+@property (nonatomic, copy) void(^comfirmBlock)(NSArray *selectedMemberIds , NSArray *selectedMemberNames);
+
+@property(nonatomic, strong) NSMutableArray *selectedMemberIds;
+
+@property(nonatomic, strong) NSMutableArray *selectedMemberNames;
 
 - (void)show;
 
