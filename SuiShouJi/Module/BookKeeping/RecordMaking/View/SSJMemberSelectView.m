@@ -93,6 +93,7 @@
     checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     cell.accessoryView = [self.selectedMemberIds containsObject:memberId] ? checkMarkImage : nil;
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
+    cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     return cell;
 }
@@ -108,7 +109,8 @@
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.scrollEnabled = NO;
-        
+        [_tableView ssj_clearExtendSeparator];
+
         [_tableView ssj_setBorderWidth:2];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
         [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
@@ -143,6 +145,15 @@
         comfirmButton.size = CGSizeMake(50, 20);
         comfirmButton.centerY = _topView.height / 2;
         comfirmButton.right = _topView.width - 10;
+        UIButton *manageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [manageButton setTitle:@"管理" forState:UIControlStateNormal];
+        [manageButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [manageButton addTarget:self action:@selector(manageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        manageButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_topView addSubview:manageButton];
+        manageButton.size = CGSizeMake(50, 20);
+        manageButton.centerY = _topView.height / 2;
+        manageButton.left = 10;
     }
     return _topView;
 }
@@ -152,6 +163,13 @@
     [self dismiss];
     if (self.comfirmBlock) {
         self.comfirmBlock(self.selectedMemberIds,self.selectedMemberNames);
+    }
+}
+
+- (void)manageButtonClick:(id)sender{
+    [self dismiss];
+    if (self.manageBlock) {
+        self.manageBlock();
     }
 }
 
@@ -202,7 +220,9 @@
         item.memberName = @"添加新成员";
         [tempArr addObject:item];
         weakSelf.items = [NSArray arrayWithArray:tempArr];
-        [weakSelf.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.tableView reloadData];
+        });
     }];
 }
 

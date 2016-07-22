@@ -21,6 +21,7 @@
 #import "SSJCategoryListHelper.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJMemberSelectView.h"
+#import "SSJMemberManagerViewController.h"
 
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
@@ -91,7 +92,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     if (!self.item) {
         self.item = [[SSJBillingChargeCellItem alloc]init];
     }
@@ -118,7 +119,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getCategoryList];
-    [self getmembersForTheCharge];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -238,6 +238,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.item.membersIdArr = [selectedMemberIds mutableCopy];
             weakSelf.item.membersNameArr = [selectedMemberNames mutableCopy];
             [weakSelf updateMembers];
+        };
+        _memberSelectView.manageBlock = ^(){
+            SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
+            [weakSelf.navigationController pushViewController:membermanageVc animated:YES];
         };
     }
     return _memberSelectView;
@@ -503,7 +507,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             [weakSelf updateFundingType];
         });
     }];
-
+    [self getmembersForTheCharge];
 }
 
 -(void)getCategoryList{
@@ -552,19 +556,24 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 -(void)getmembersForTheCharge{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and operatortype <> 2"],weakSelf.item.ID) {
-            FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",weakSelf.item.ID,weakSelf.item.ID];
-            NSMutableArray *tempIdArr = [NSMutableArray arrayWithCapacity:0];
-            NSMutableArray *tempNameArr = [NSMutableArray arrayWithCapacity:0];
-            while ([result next]) {
-                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                item.memberId = [result stringForColumn:@"cmemberid"];
-                item.memberName = [result stringForColumn:@"cname"];
-                [tempIdArr addObject:item.memberId];
-                [tempNameArr addObject:item.memberName];
+        if (weakSelf.item.ID.length) {
+            if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and operatortype <> 2"],weakSelf.item.ID) {
+                FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",weakSelf.item.ID,weakSelf.item.ID];
+                NSMutableArray *tempIdArr = [NSMutableArray arrayWithCapacity:0];
+                NSMutableArray *tempNameArr = [NSMutableArray arrayWithCapacity:0];
+                while ([result next]) {
+                    SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                    item.memberId = [result stringForColumn:@"cmemberid"];
+                    item.memberName = [result stringForColumn:@"cname"];
+                    [tempIdArr addObject:item.memberId];
+                    [tempNameArr addObject:item.memberName];
+                }
+                weakSelf.item.membersIdArr = tempIdArr;
+                weakSelf.item.membersNameArr = tempNameArr;
+            }else{
+                weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"0", nil];
+                weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];
             }
-            weakSelf.item.membersIdArr = tempIdArr;
-            weakSelf.item.membersNameArr = tempNameArr;
         }else{
             weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"0", nil];
             weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];

@@ -27,9 +27,9 @@ PODS:
   - FMDB/standard (2.6.2)
   - iOS-WebP (0.4):
     - libwebp (~> 0.4.2)
-  - JSPatch (1.0):
-    - JSPatch/Core (= 1.0)
-  - JSPatch/Core (1.0)
+  - JSPatch (1.1):
+    - JSPatch/Core (= 1.1)
+  - JSPatch/Core (1.1)
   - libwebp (0.4.4):
     - libwebp/core (= 0.4.4)
     - libwebp/dec (= 0.4.4)
@@ -55,7 +55,7 @@ PODS:
     - libwebp/core
   - libwebp/webp (0.4.4)
   - LxThroughPointsBezier (1.0.0)
-  - MJExtension (3.0.10)
+  - MJExtension (3.0.12)
   - MMDrawerController (0.5.7):
     - MMDrawerController/Core (= 0.5.7)
     - MMDrawerController/MMDrawerBarButtonItem (= 0.5.7)
@@ -104,10 +104,10 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   iOS-WebP: 436d3c506b7587bdef926d1d1c76f8dbf3905edc
-  JSPatch: c689ea4dde17441f2f4a95d40dfedb8900c20099
+  JSPatch: ade285ad1d8f06146ed6054a39cef87509453299
   libwebp: 7d74f1ab887df77f23493ce115c9424fad5411b5
   LxThroughPointsBezier: fdebe18dd4ddab9406d9827db77a078b4738b00f
-  MJExtension: d86aacb740c87519d20e3cca55b6fa4be6cc7548
+  MJExtension: 61bcf70d30acf0a09dde48e68502da0fde8eeafa
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
   UMengAnalytics-NO-IDFA: 965a219b05475ff2a4c09a164139a27bbaa0e25b
