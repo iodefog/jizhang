@@ -19,7 +19,7 @@
 
 @property (nonatomic, strong) UIPickerView *pickerView;
 
-@property (nonatomic, strong) NSDate *accountDay;
+@property (nonatomic, strong) NSDate *endDate;
 
 @end
 
@@ -54,6 +54,8 @@
         
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         
+        [self updateAccountDay];
+        
         _pickerView.layer.borderColor = [UIColor redColor].CGColor;
         _pickerView.layer.borderWidth = 1;
     }
@@ -81,6 +83,22 @@
 - (void)setPeriodType:(SSJBudgetPeriodType)periodType {
     _periodType = periodType;
     [_pickerView reloadAllComponents];
+    
+    switch (_periodType) {
+        case SSJBudgetPeriodTypeWeek:
+            [_pickerView selectRow:6 inComponent:0 animated:NO];
+            break;
+            
+        case SSJBudgetPeriodTypeMonth:
+            [_pickerView selectRow:28 inComponent:0 animated:NO];
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            [_pickerView selectRow:11 inComponent:0 animated:NO];
+            [_pickerView selectRow:30 inComponent:1 animated:NO];
+            break;
+    }
+    
     [self updateAccountDay];
 }
 
@@ -138,7 +156,7 @@
                     return 29;
                 } else {
                     NSDate *tDate = [NSDate dateWithYear:[[NSDate date] year] month:selectedMonth day:1];
-                    return [tDate ssj_numberOfDaysInCurrentMonth];
+                    return [tDate daysInMonth];
                 }
             } else {
                 return 0;
@@ -214,23 +232,29 @@
     switch (_periodType) {
         case SSJBudgetPeriodTypeWeek: {
             NSInteger selectedWeekday = [_pickerView selectedRowInComponent:0] + 1;
+            NSInteger currentWeekday = currentDate.weekday - 1;
             
-            if (selectedWeekday >= currentDate.weekday) {
-                _accountDay = [currentDate dateByAddingDays:selectedWeekday - currentDate.weekday];
+            if (selectedWeekday >= currentWeekday) {
+                _endDate = [currentDate dateByAddingDays:selectedWeekday - currentWeekday];
             } else {
-                _accountDay = [currentDate dateByAddingDays:selectedWeekday - currentDate.weekday + 7];
+                _endDate = [currentDate dateByAddingDays:selectedWeekday - currentWeekday + 7];
             }
+            _beginDate = [_endDate dateBySubtractingWeeks:1];
         }
             break;
             
         case SSJBudgetPeriodTypeMonth: {
-            NSInteger selectedDay = [_pickerView selectedRowInComponent:0] + 1;
+            NSInteger selectedRow = [_pickerView selectedRowInComponent:0];
+            NSInteger selectedDay = selectedRow == 28 ? [currentDate daysInMonth] : selectedRow + 1;
+            
             if (selectedDay >= currentDate.day) {
-                _accountDay = [currentDate dateByAddingDays:selectedDay - currentDate.weekday];
+                _endDate = [currentDate dateByAddingDays:selectedDay - currentDate.day];
             } else {
-                NSDate *selectedDate = [currentDate dateByAddingDays:selectedDay - currentDate.weekday];
-                _accountDay = [selectedDate dateByAddingMonths:1];
+                NSDate *selectedDate = [currentDate dateByAddingDays:selectedDay - currentDate.day];
+                _endDate = [selectedDate dateByAddingMonths:1];
             }
+            
+            _beginDate = [_endDate dateBySubtractingMonths:1];
         }
             break;
             
@@ -240,13 +264,16 @@
             NSDate *selectedDate = [NSDate dateWithYear:currentDate.year month:selectedMonth day:selectedDay];
             
             if ([selectedDate compare:currentDate] == NSOrderedAscending) {
-                _accountDay = [selectedDate dateByAddingYears:1];
+                _endDate = [selectedDate dateByAddingYears:1];
             } else {
-                _accountDay = selectedDate;
+                _endDate = selectedDate;
             }
+            _beginDate = [_endDate dateBySubtractingYears:1];
         }
             break;
     }
+    
+    _beginDate = [_beginDate dateByAddingDays:1];
 }
 
 @end

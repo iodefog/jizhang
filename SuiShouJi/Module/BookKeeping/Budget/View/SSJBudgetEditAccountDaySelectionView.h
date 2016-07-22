@@ -15,7 +15,9 @@
 
 @property (nonatomic, copy) void (^sureAction)(SSJBudgetEditAccountDaySelectionView *);
 
-@property (nonatomic, strong, readonly) NSDate *accountDay;
+@property (nonatomic, strong, readonly) NSDate *beginDate;
+
+@property (nonatomic, strong, readonly) NSDate *endDate;
 
 - (void)show;
 

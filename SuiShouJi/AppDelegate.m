@@ -37,9 +37,6 @@
 #import "JPEngine.h"
 #import "SSJNetworkReachabilityManager.h"
 
-#warning test
-#import "NSDate+DateTools.h"
-
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
 
@@ -72,10 +69,6 @@ NSDate *SCYEnterBackgroundTime() {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [self analyzeJspatch];
-    
-//    NSDate *date1 = [NSDate dateWithYear:2017 month:1 day:30];
-//    NSDate *date2 = [date1 dateByAddingMonths:1];
-//    NSLog(@"%@ ~ %@", [date1 formattedDateWithFormat:@"yyyy-MM-dd"], [date2 formattedDateWithFormat:@"yyyy-MM-dd"]);
     
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     

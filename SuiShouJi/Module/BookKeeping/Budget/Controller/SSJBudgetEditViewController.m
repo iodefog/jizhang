@@ -252,12 +252,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.type = self.periodSelectionView.periodType;
+    self.accountDaySelectionView.periodType = self.periodSelectionView.periodType;
     
     [self.tableView reloadData];
-}
-
-- (void)accountDaySelectionAction {
-    [self.accountDaySelectionView show];
 }
 
 - (void)saveButtonAction {
@@ -447,12 +444,24 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     } else if ([cellTitle isEqualToString:kAccountDayTitle]) {
         //  结算日
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
-        budgetPeriodCell.subtitleLab.text = [self budgetPeriod];
+        budgetPeriodCell.subtitleLab.text = [self accountday];
         budgetPeriodCell.detailTextLabel.text = nil;
         [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
+}
+
+- (NSString *)accountday {
+//    switch (_periodType) {
+//        case SSJBudgetPeriodTypeWeek:
+//            
+//        case SSJBudgetPeriodTypeMonth:
+//            
+//        case SSJBudgetPeriodTypeYear:
+//            
+//    }
+    return [self.accountDaySelectionView.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
 }
 
 - (void)updateCellTitles {
@@ -597,21 +606,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     if (!_accountDaySelectionView) {
         __weak typeof(self) wself = self;
         _accountDaySelectionView = [[SSJBudgetEditAccountDaySelectionView alloc] initWithFrame:CGRectMake(0, 0, self.viewIfLoaded.width, 200)];
+        _accountDaySelectionView.periodType = self.model.type;
         _accountDaySelectionView.sureAction = ^(SSJBudgetEditAccountDaySelectionView *view) {
-            wself.model.endDate = [view.accountDay formattedDateWithFormat:@"yyyy-MM-dd"];
-            switch (view.periodType) {
-                case SSJBudgetPeriodTypeWeek:
-                    [view.accountDay dateBySubtractingWeeks:1];
-                    break;
-                    
-                case SSJBudgetPeriodTypeMonth:
-                    [view.accountDay dateBySubtractingWeeks:1];
-                    break;
-                    
-                case SSJBudgetPeriodTypeYear:
-                    [view.accountDay dateBySubtractingWeeks:1];
-                    break;
-            }
+            wself.model.beginDate = [view.beginDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            wself.model.endDate = [view.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            [wself.tableView reloadData];
         };
     }
     return _accountDaySelectionView;
