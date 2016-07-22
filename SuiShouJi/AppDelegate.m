@@ -70,7 +70,6 @@ NSDate *SCYEnterBackgroundTime() {
     
     [self analyzeJspatch];
     
-    
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{

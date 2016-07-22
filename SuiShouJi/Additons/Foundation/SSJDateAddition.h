@@ -22,5 +22,4 @@
  */
 - (NSString *)ssj_systemCurrentDateWithFormat:(NSString *)format;
 
-
 @end
