@@ -268,7 +268,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     
     // 目前先吧收支id判断去掉，以后增加用户自选支出类别时再加上
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate = ? and cbooksid = ?", SSJUSERID(), model.ID, @(model.type), model.beginDate, model.booksId];
+        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate <= datetime('now', 'localtime') and cedate >= datetime('now', 'localtime') and cbooksid = ?", SSJUSERID(), model.ID, @(model.type), model.booksId];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(isConficted);
