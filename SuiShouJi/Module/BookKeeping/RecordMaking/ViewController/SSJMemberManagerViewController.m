@@ -10,6 +10,7 @@
 #import "SSJChargeMemBerItem.h"
 #import "SSJBaseTableViewCell.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJNewMemberViewController.h"
 
 @interface SSJMemberManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic, strong) NSMutableArray *items;
@@ -39,12 +40,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
-    
+    SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
+    if (item.memberId.length) {
+        newMemberVc.originalItem = item;
+    }
+    [self.navigationController pushViewController:newMemberVc animated:YES];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
-    if (!item.memberId.length) {
+    if (!item.memberId.length || [item.memberId isEqualToString:@"0"]) {
         return NO;
     }
     return YES;
@@ -94,6 +99,7 @@
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
             item.memberId = [result stringForColumn:@"CMEMBERID"];
             item.memberName = [result stringForColumn:@"CNAME"];
+            item.memberColor = [result stringForColumn:@"CCOLOR"];
             [tempArr addObject:item];
         }
         SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
@@ -109,7 +115,7 @@
 -(void)deleteMemberWithMemberId:(NSString *)Id{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         [db executeUpdate:@"update bk_member set operatortype = 2 where cmemberid = ?",Id];
-        [db executeUpdate:@"update bk_member_charge set operatortype = 2 where cmemberid = ?",Id];
+//        [db executeUpdate:@"update bk_member_charge set operatortype = 2 where cmemberid = ?",Id];
     }];
 }
 

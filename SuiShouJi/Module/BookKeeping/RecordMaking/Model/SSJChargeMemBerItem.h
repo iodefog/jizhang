@@ -10,8 +10,13 @@
 
 @interface SSJChargeMemberItem : SSJBaseItem
 
+//成员名称
 @property(nonatomic, strong) NSString *memberName;
 
+//成员id
 @property(nonatomic, strong) NSString *memberId;
+
+//成员颜色
+@property(nonatomic, strong) NSString *memberColor;
 
 @end
