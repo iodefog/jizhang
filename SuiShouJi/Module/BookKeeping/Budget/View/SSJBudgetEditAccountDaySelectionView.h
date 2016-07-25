@@ -19,6 +19,8 @@
 
 @property (nonatomic, strong, readonly) NSDate *endDate;
 
+@property (nonatomic, readonly) BOOL endOfMonth;
+
 - (void)show;
 
 - (void)dismiss;

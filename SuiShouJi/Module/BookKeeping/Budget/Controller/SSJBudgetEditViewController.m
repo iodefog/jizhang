@@ -453,15 +453,44 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)accountday {
-//    switch (_periodType) {
-//        case SSJBudgetPeriodTypeWeek:
-//            
-//        case SSJBudgetPeriodTypeMonth:
-//            
-//        case SSJBudgetPeriodTypeYear:
-//            
-//    }
-    return [self.accountDaySelectionView.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    
+    NSString *accountday = nil;
+    switch (self.accountDaySelectionView.periodType) {
+        case SSJBudgetPeriodTypeWeek:
+            accountday = [self stringForWeekday:self.accountDaySelectionView.endDate.weekday];
+            break;
+            
+        case SSJBudgetPeriodTypeMonth:
+            if (self.accountDaySelectionView.endOfMonth) {
+                accountday = @"每月末";
+            } else {
+                accountday = [NSString stringWithFormat:@"每月%d日", (int)self.accountDaySelectionView.endDate.day];
+            }
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            if (self.accountDaySelectionView.endOfMonth) {
+                accountday = @"每年2月末";
+            } else {
+                accountday = [NSString stringWithFormat:@"每年%@", [self.accountDaySelectionView.endDate formattedDateWithFormat:@"M月d日"]];
+            }
+            break;
+    }
+    
+    return accountday;
+}
+
+- (NSString *)stringForWeekday:(NSInteger)weekday {
+    switch (weekday) {
+        case 1:     return @"每周日";
+        case 2:     return @"每周一";
+        case 3:     return @"每周二";
+        case 4:     return @"每周三";
+        case 5:     return @"每周四";
+        case 6:     return @"每周五";
+        case 7:     return @"每周六";
+        default:    return @"";
+    }
 }
 
 - (void)updateCellTitles {

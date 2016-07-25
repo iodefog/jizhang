@@ -55,9 +55,6 @@
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         
         [self updateAccountDay];
-        
-        _pickerView.layer.borderColor = [UIColor redColor].CGColor;
-        _pickerView.layer.borderWidth = 1;
     }
     return self;
 }
@@ -71,7 +68,7 @@
     _cancelBtn.frame = CGRectMake(0, 0, 44, 44);
     _sureBtn.frame = CGRectMake(self.width - 44, 0, 44, 44);
     
-    _titleLab.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+    _titleLab.center = CGPointMake(self.width * 0.5, 22);
     
     _pickerView.top = 44;
     _pickerView.size = CGSizeMake(self.width, self.height - 44);
@@ -97,6 +94,7 @@
     }
     
     [self updateAccountDay];
+    [self updateEndOfMonth];
 }
 
 - (void)show {
@@ -196,6 +194,7 @@
     }
     
     [self updateAccountDay];
+    [self updateEndOfMonth];
 }
 
 #pragma mark - Event
@@ -220,6 +219,22 @@
         case 6:     return @"周六";
         case 7:     return @"周日";
         default:    return @"";
+    }
+}
+
+- (void)updateEndOfMonth {
+    switch (_periodType) {
+        case SSJBudgetPeriodTypeWeek:
+            _endOfMonth = NO;
+            break;
+            
+        case SSJBudgetPeriodTypeMonth:
+            _endOfMonth = [_pickerView selectedRowInComponent:0] == 28;
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            _endOfMonth = ([_pickerView selectedRowInComponent:0] == 1 && [_pickerView selectedRowInComponent:1] == 28);
+            break;
     }
 }
 
