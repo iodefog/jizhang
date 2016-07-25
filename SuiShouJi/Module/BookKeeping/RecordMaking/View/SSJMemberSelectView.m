@@ -208,7 +208,7 @@
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select * from bk_member where cuserid = ? and operatortype <> 2",userid];
+        FMResultSet *result = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0",userid];
         NSMutableArray *tempArr = [NSMutableArray array];
         while ([result next]) {
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
