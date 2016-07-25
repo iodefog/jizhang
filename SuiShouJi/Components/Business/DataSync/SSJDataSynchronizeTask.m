@@ -188,11 +188,11 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 //    __block NSString *userId = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
-        //  把当前同步的版本号插入到BK_SYNC表中
-        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
-            *error = [db lastError];
-            return;
-        }
+//        //  把当前同步的版本号插入到BK_SYNC表中
+//        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
+//            *error = [db lastError];
+//            return;
+//        }
         
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
@@ -339,7 +339,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 return;
             }
             
-            if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
+            if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] + 1 forUserId:self.userId inDatabase:db error:error]) {
                 updateVersionSuccess = NO;
             }
         }];

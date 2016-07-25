@@ -68,13 +68,10 @@
 }
 
 - (void)layoutSubviews {
-    [_cancelBtn sizeToFit];
-    _cancelBtn.leftTop = CGPointZero;
+    _cancelBtn.frame = CGRectMake(0, 0, 44, 44);
+    _sureBtn.frame = CGRectMake(self.width - 44, 0, 44, 44);
     
-    [_sureBtn sizeToFit];
-    _sureBtn.rightTop = CGPointMake(self.width, 0);
-    
-    _titleLab.centerX = self.width * 0.5;
+    _titleLab.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     
     _pickerView.top = 44;
     _pickerView.size = CGSizeMake(self.width, self.height - 44);

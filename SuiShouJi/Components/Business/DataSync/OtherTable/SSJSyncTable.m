@@ -35,14 +35,14 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     return version;
 }
 
-+ (BOOL)insertUnderwaySyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
-    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(version), userId]) {
-        return YES;
-    }
-    
-    SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
-    return NO;
-}
+//+ (BOOL)insertUnderwaySyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+//    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 1, ?)", @(version), userId]) {
+//        return YES;
+//    }
+//    
+//    SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
+//    return NO;
+//}
 
 + (BOOL)insertSuccessSyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
     if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values (?, 0, ?)", @(version), userId]) {
