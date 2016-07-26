@@ -85,4 +85,21 @@
     return YES;
 }
 
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        *error = [db lastError];
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    if (newVersion == SSJ_INVALID_SYNC_VERSION) {
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    return [db executeUpdate:@"update bk_member_charge set iversion = ? where iversion = ? and ichargeid in (select ichargeid from bk_user_charge where cuserid = ?)", @(newVersion), @(version + 2), userId];
+}
+
 @end
