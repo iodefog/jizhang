@@ -110,12 +110,13 @@
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *userId = SSJUSERID();
         if ([db intForQuery:@"select * from bk_member where cname = ? and cmemberid <> ?",weakSelf.header.nameInput.text ,weakSelf.originalItem.memberId]) {
-            [db executeUpdate:@""];
-        }
-        if (!weakSelf.originalItem.memberId.length) {
-            [db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, cuserid, operatortype, iversion, cwritedate) values (?, ?, ?, ?, 0, ?, ?)",SSJUUID(),weakSelf.header.nameInput.text,_selectColor,userId,@(SSJSyncVersion()),writeDate];
+            [db executeUpdate:@"update bk_member set istate = 1 where cname = ?",weakSelf.header.nameInput.text];
         }else{
-            [db executeUpdate:@"update bk_member set cname = ?, ccolor = ?, operatortype = 1, iversion = ?, cwritedate = ? where cmemberid = ?",weakSelf.header.nameInput.text,_selectColor,@(SSJSyncVersion()),writeDate,weakSelf.originalItem.memberId];
+            if (!weakSelf.originalItem.memberId.length) {
+                [db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, cuserid, operatortype, iversion, cwritedate, istate) values (?, ?, ?, ?, 0, ?, ?, 1)",SSJUUID(),weakSelf.header.nameInput.text,_selectColor,userId,@(SSJSyncVersion()),writeDate];
+            }else{
+                [db executeUpdate:@"update bk_member set cname = ?, ccolor = ?, operatortype = 1, iversion = ?, cwritedate = ? where cmemberid = ?",weakSelf.header.nameInput.text,_selectColor,@(SSJSyncVersion()),writeDate,weakSelf.originalItem.memberId];
+            }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.navigationController popViewControllerAnimated:YES];
