@@ -235,9 +235,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _memberSelectView.dismissBlock = ^(){
             [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
         };
-        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberIds , NSArray *selectedMemberNames){
-            weakSelf.item.membersIdArr = [selectedMemberIds mutableCopy];
-            weakSelf.item.membersNameArr = [selectedMemberNames mutableCopy];
+        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
+            weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };
         _memberSelectView.manageBlock = ^(){
@@ -430,8 +429,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectMemberAction{
-    self.memberSelectView.selectedMemberIds = self.item.membersIdArr;
-    self.memberSelectView.selectedMemberNames = self.item.membersNameArr;
+    self.memberSelectView.selectedMemberItems = self.item.membersItem;
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
@@ -564,26 +562,30 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if (weakSelf.item.ID.length) {
-            if ([db intForQuery:@"select * from bk_member_charge where ichargeid = ? and operatortype <> 2"],weakSelf.item.ID) {
-                FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and a.cmemberid = b.cmemberid",weakSelf.item.ID,weakSelf.item.ID];
-                NSMutableArray *tempIdArr = [NSMutableArray arrayWithCapacity:0];
-                NSMutableArray *tempNameArr = [NSMutableArray arrayWithCapacity:0];
+            if ([db intForQuery:@"select count(1) from bk_member_charge where ichargeid = ? and operatortype <> 2",weakSelf.item.ID]) {
+                FMResultSet *result = [db executeQuery:@"select * from bk_member_charge as a , bk_member as b  where a.ichargeid = ? and a.operatortype <> 2 and b.cuserid = ? and a.cmemberid = b.cmemberid",weakSelf.item.ID,SSJUSERID()];
+                NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
                 while ([result next]) {
                     SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
                     item.memberId = [result stringForColumn:@"cmemberid"];
                     item.memberName = [result stringForColumn:@"cname"];
-                    [tempIdArr addObject:item.memberId];
-                    [tempNameArr addObject:item.memberName];
+                    item.memberColor = [result stringForColumn:@"ccolor"];
+                    [tempArr addObject:item];
                 }
-                weakSelf.item.membersIdArr = tempIdArr;
-                weakSelf.item.membersNameArr = tempNameArr;
+                weakSelf.item.membersItem= tempArr;
             }else{
-                weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"0", nil];
-                weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];
+                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                item.memberId = @"0";
+                item.memberName = @"自己";
+                item.memberColor = @"#fc7a60";
+                weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
             }
         }else{
-            weakSelf.item.membersIdArr = [NSMutableArray arrayWithObjects:@"0", nil];
-            weakSelf.item.membersNameArr = [NSMutableArray arrayWithObjects:@"自己", nil];
+            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+            item.memberId = @"0";
+            item.memberName = @"自己";
+            item.memberColor = @"#fc7a60";
+            weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf updateMembers];
@@ -780,10 +782,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 -(void)updateMembers{
-    if (self.item.membersNameArr.count == 1) {
-        [self.accessoryView.memberBtn setTitle:[self.item.membersNameArr objectAtIndex:0] forState:UIControlStateNormal];
+    if (self.item.membersItem.count == 1) {
+        SSJChargeMemberItem *item = [self.item.membersItem objectAtIndex:0];
+        [self.accessoryView.memberBtn setTitle:item.memberName forState:UIControlStateNormal];
     }else{
-        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",self.item.membersNameArr.count] forState:UIControlStateNormal];
+        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",self.item.membersItem.count] forState:UIControlStateNormal];
     }
 }
 

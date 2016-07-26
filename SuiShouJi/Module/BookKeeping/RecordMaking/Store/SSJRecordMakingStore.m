@@ -161,8 +161,8 @@
                 }
             }
             //修改成员流水表
-            for (NSString *memberid in item.membersIdArr) {
-                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype) values(?,?,?,0)",item.ID,memberid,editeTime]) {
+            for (SSJChargeMemberItem *memberItem in item.membersItem) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype,iversion) values(?,?,?,0,?)",item.ID,memberItem.memberId,editeTime,SSJSyncVersion()]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -172,7 +172,7 @@
                     return;
                 }
             }
-            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersIdArr.count),item.ID]) {
+            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersItem.count),item.ID]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
@@ -321,8 +321,8 @@
                 }
                 return;
             }
-            for (NSString *memberid in item.membersIdArr) {
-                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype) values(?,?,?,0)",item.ID,memberid,editeTime]) {
+            for (SSJChargeMemberItem *memberItem in item.membersItem) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype,iversion) values(?,?,?,0,?)",item.ID,memberItem.memberId,editeTime,@(SSJSyncVersion())]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -332,7 +332,7 @@
                     return;
                 }
             }
-            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersIdArr.count),item.ID]) {
+            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersItem.count),item.ID]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{

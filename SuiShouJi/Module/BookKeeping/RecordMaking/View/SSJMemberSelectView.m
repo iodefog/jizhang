@@ -59,12 +59,10 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     if (indexPath.row != [tableView numberOfRowsInSection:0] - 1) {
-        if ([self.selectedMemberIds containsObject:item.memberId]) {
-            [self.selectedMemberIds removeObject:item.memberId];
-            [self.selectedMemberNames removeObject:item.memberName];
+        if ([self.selectedMemberItems containsObject:item]) {
+            [self.selectedMemberItems removeObject:item];
         }else{
-            [self.selectedMemberIds addObject:item.memberId];
-            [self.selectedMemberNames addObject:item.memberName];
+            [self.selectedMemberItems addObject:item];
         }
         [self.tableView reloadData];
     }else{
@@ -90,11 +88,10 @@
     }
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     NSString *title = item.memberName;
-    NSString *memberId = item.memberId;
     cell.textLabel.text = title;
     UIImageView *checkMarkImage = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    cell.accessoryView = [self.selectedMemberIds containsObject:memberId] ? checkMarkImage : nil;
+    cell.accessoryView = [self.selectedMemberItems containsObject:item] ? checkMarkImage : nil;
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
@@ -165,7 +162,7 @@
 -(void)comfirmButtonClick:(id)sender{
     [self dismiss];
     if (self.comfirmBlock) {
-        self.comfirmBlock(self.selectedMemberIds,self.selectedMemberNames);
+        self.comfirmBlock(self.selectedMemberItems);
     }
 }
 
@@ -220,16 +217,18 @@
             item.memberColor = [result stringForColumn:@"CCOLOR"];
             [tempArr addObject:item];
         }
+        for (SSJChargeMemberItem *memberItem in weakSelf.selectedMemberItems) {
+            if (![tempArr containsObject:memberItem]) {
+                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                item.memberId = memberItem.memberId;
+                item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberItem.memberId];
+                item.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",memberItem.memberId];
+                [tempArr addObject:item];
+            }
+        }
         SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
         item.memberName = @"添加新成员";
         [tempArr addObject:item];
-        for (NSString *memberId in weakSelf.selectedMemberIds) {
-            if (![tempArr containsObject:memberId]) {
-                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                item.memberId = memberId;
-                item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberId];
-            }
-        }
         weakSelf.items = [NSArray arrayWithArray:tempArr];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];

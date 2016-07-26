@@ -10,4 +10,25 @@
 
 @implementation SSJChargeMemberItem
 
+-(BOOL)isEqual:(id)object{
+    [super isEqual:object];
+    if (self == object) {
+        return YES;
+    }
+    
+    if (![object isKindOfClass:[SSJChargeMemberItem class]]) {
+        return NO;
+    }
+    
+    SSJChargeMemberItem *memberItem = (SSJChargeMemberItem *)object;
+    
+    if ([self.memberId isEqualToString:memberItem.memberId]) {
+        return YES;
+    }else{
+        return NO;
+    }
+    
+    return NO;
+}
+
 @end
