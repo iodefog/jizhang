@@ -16,6 +16,8 @@
 
 @property (nonatomic, copy) void(^manageBlock)();
 
+@property (nonatomic, copy) void(^addNewMemberBlock)();
+
 @property(nonatomic, strong) NSMutableArray *selectedMemberIds;
 
 @property(nonatomic, strong) NSMutableArray *selectedMemberNames;

@@ -22,6 +22,7 @@
 #import "SSJImaageBrowseViewController.h"
 #import "SSJMemberSelectView.h"
 #import "SSJMemberManagerViewController.h"
+#import "SSJNewMemberViewController.h"
 
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
@@ -242,6 +243,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _memberSelectView.manageBlock = ^(){
             SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
             [weakSelf.navigationController pushViewController:membermanageVc animated:YES];
+        };
+        _memberSelectView.addNewMemberBlock = ^(){
+            [weakSelf.billTypeInputView.moneyInput resignFirstResponder];
+            [weakSelf.accessoryView.memoView resignFirstResponder];
+            SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
+            [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
         };
     }
     return _memberSelectView;

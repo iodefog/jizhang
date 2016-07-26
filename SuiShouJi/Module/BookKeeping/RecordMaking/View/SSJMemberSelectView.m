@@ -10,6 +10,7 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJChargeMemberItem.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJNewMemberViewController.h"
 
 @interface SSJMemberSelectView()
 
@@ -67,7 +68,9 @@
         }
         [self.tableView reloadData];
     }else{
-        
+        if (self.addNewMemberBlock) {
+            self.addNewMemberBlock();
+        }
     }
 }
 
@@ -214,11 +217,19 @@
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
             item.memberId = [result stringForColumn:@"CMEMBERID"];
             item.memberName = [result stringForColumn:@"CNAME"];
+            item.memberColor = [result stringForColumn:@"CCOLOR"];
             [tempArr addObject:item];
         }
         SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
         item.memberName = @"添加新成员";
         [tempArr addObject:item];
+        for (NSString *memberId in weakSelf.selectedMemberIds) {
+            if (![tempArr containsObject:memberId]) {
+                SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                item.memberId = memberId;
+                item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberId];
+            }
+        }
         weakSelf.items = [NSArray arrayWithArray:tempArr];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
