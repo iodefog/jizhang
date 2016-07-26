@@ -7,6 +7,7 @@
 //
 
 #import "SSJMemberChargeSyncTable.h"
+#import "SSJSyncTable.h"
 
 @implementation SSJMemberChargeSyncTable
 
@@ -14,11 +15,43 @@
     return @"bk_member_charge";
 }
 
-+ (NSArray *)columns {
-    return @[@"ichargeid", @"cmemberid", @"imoney", @"cwritedate", @"operatortype", @"iversion"];
++ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        *error = [db lastError];
+        return nil;
+    }
+    
+    FMResultSet *result = [db executeQuery:@"select a.ichargeid, a.cmemberid, a.imoney, a.iversion, a.cwritedate, a.operatortype from bk_member_charge as a, bk_user_charge as b where a.ichargeid = b.ichargeid and b.cuserid = ? and a.iversion > ?", userId, @(version)];
+    if (!result) {
+        *error = [db lastError];
+        return nil;
+    }
+    
+    NSMutableArray *syncRecords = [NSMutableArray array];
+    
+    while ([result next]) {
+        NSString *chargeID = [result stringForColumn:@"ichargeid"];
+        NSString *memberID = [result stringForColumn:@"cmemberid"];
+        NSString *money = [result stringForColumn:@"imoney"];
+        NSString *version = [result stringForColumn:@"iversion"];
+        NSString *writeDate = [result stringForColumn:@"cwritedate"];
+        NSString *operatortype = [result stringForColumn:@"operatortype"];
+        
+        [syncRecords addObject:@{@"ichargeid":chargeID,
+                                 @"cmemberid":memberID,
+                                 @"imoney":money,
+                                 @"iversion":version,
+                                 @"cwritedate":writeDate,
+                                 @"operatortype":operatortype}];
+    }
+    
+    return syncRecords;
 }
 
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    // 提取端返回的数据中所有的chargeid，删除所有和该chargeid相关的成员流水记录删除，再逐条插入返回的数据
     NSMutableArray *chargeIds = [NSMutableArray array];
     for (NSDictionary *recordInfo in records) {
         NSString *chargeId = recordInfo[@"ichargeid"];
@@ -37,25 +70,36 @@
     }
     
     for (NSDictionary *recordInfo in records) {
-//        [db executeUpdate:@"insert into bk_member_charge ()"]
+        NSString *chargeID = recordInfo[@"ichargeid"];
+        NSString *memberID = recordInfo[@"cmemberid"];
+        NSString *money = recordInfo[@"imoney"];
+        NSString *version = recordInfo[@"iversion"];
+        NSString *writeDate = recordInfo[@"cwritedate"];
+        NSString *operatortype = recordInfo[@"operatortype"];
+        
+        if (![db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values(?, ?, ?, ?, ?, ?)", chargeID, memberID, money, version, writeDate, operatortype]) {
+            return NO;
+        }
     }
+    
     return YES;
 }
 
-
-//+ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-//    
-//    if (![db boolForQuery:@"select count(*) from bk_user_charge where ichargeid = ?", record[@"ichargeid"]]) {
-//        return NO;
-//    }
-//    
-//    if (![db boolForQuery:@"select count(*) from bk_member where cmemberid = ?", record[@"cmemberid"]]) {
-//        return NO;
-//    }
-//    
-//    if (<#condition#>) {
-//        <#statements#>
-//    }
-//}
++ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
+    if (version == SSJ_INVALID_SYNC_VERSION) {
+        *error = [db lastError];
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    if (newVersion == SSJ_INVALID_SYNC_VERSION) {
+        SSJPRINT(@">>>SSJ warning: invalid sync version");
+        return NO;
+    }
+    
+    return [db executeUpdate:@"update bk_member_charge set iversion = ? where iversion = ? and ichargeid in (select ichargeid from bk_user_charge where cuserid = ?)", @(newVersion), @(version + 2), userId];
+}
 
 @end
