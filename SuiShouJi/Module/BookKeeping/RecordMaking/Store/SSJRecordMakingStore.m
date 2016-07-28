@@ -162,7 +162,7 @@
             }
             //修改成员流水表
             for (SSJChargeMemberItem *memberItem in item.membersItem) {
-                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype,iversion) values(?,?,?,0,?)",item.ID,memberItem.memberId,editeTime,SSJSyncVersion()]) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype,iversion) values(?,?,?,0,?)",item.ID,memberItem.memberId,editeTime,@(SSJSyncVersion())]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{

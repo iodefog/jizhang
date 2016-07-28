@@ -71,7 +71,7 @@
 -(void)setModel:(SSJBudgetModel *)model{
     _model = model;
     [self.button setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.button setBackgroundColor:[UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha]];
     self.button.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
     if (_model == nil) {
         [self.button setTitle:@"添加预算" forState:UIControlStateNormal];

@@ -18,12 +18,14 @@
 #import "SSJAboutusViewController.h"
 #import "SSJStartChecker.h"
 #import "SSJStartUpgradeAlertView.h"
-
+#import "SSJDataClearHelper.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
-static NSString *const kTitle2 = @"分享APP";
-static NSString *const kTitle3 = @"关于我们";
-static NSString *const kTitle4 = @"检查更新";
+static NSString *const kTitle2 = @"数据重新拉取";
+static NSString *const kTitle3 = @"数据格式化";
+static NSString *const kTitle4 = @"分享APP";
+static NSString *const kTitle5 = @"关于我们";
+static NSString *const kTitle6 = @"检查更新";
 
 
 @interface SSJSettingViewController ()
@@ -51,9 +53,9 @@ static NSString *const kTitle4 = @"检查更新";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3]];
+        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4 , kTitle5]];
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4]];
+        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
     }
     
     [self.navigationController setNavigationBarHidden:NO];
@@ -101,7 +103,7 @@ static NSString *const kTitle4 = @"检查更新";
 //    }
 //    
     //  检查更新
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle6]) {
         [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
             if (type == SSJAppUpdateTypeNone) {
                 [CDAutoHideMessageHUD showMessage:@"当前已经是最新版本,不需要更新"];
@@ -112,13 +114,13 @@ static NSString *const kTitle4 = @"检查更新";
     }
     
     //  关于我们
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle5]) {
         SSJAboutusViewController *aboutUsVc = [[SSJAboutusViewController alloc] init];
         [self.navigationController pushViewController:aboutUsVc animated:YES];
     }
     
     //  把APP推荐给好友
-    if ([title isEqualToString:kTitle2]) {
+    if ([title isEqualToString:kTitle4]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:SSJDetailSettingForSource(@"UMAppKey")
@@ -134,6 +136,13 @@ static NSString *const kTitle4 = @"检查更新";
                                         shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                                delegate:self];
         }
+    }
+    if ([title isEqualToString:kTitle3]) {
+        [SSJDataClearHelper clearAllDataWithSuccess:^{
+            
+        } failure:^(NSError *error) {
+            NSLog(@"%@",[error localizedDescription]);
+        }];
     }
 }
 

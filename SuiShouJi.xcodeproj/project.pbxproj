@@ -1686,6 +1686,9 @@
 		9C9D0BBA1D0E91FD003A9F4E /* zhangben_mark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9D0BB61D0E91FD003A9F4E /* zhangben_mark@2x.png */; };
 		9C9D0BBB1D0E91FD003A9F4E /* zhangben_mark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9D0BB71D0E91FD003A9F4E /* zhangben_mark@3x.png */; };
 		9C9D0BBC1D0E91FD003A9F4E /* zhangben_bian@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9D0BB81D0E91FD003A9F4E /* zhangben_bian@2x.png */; };
+		9C9DD6561D475A13001FA3C5 /* SSJDataClearHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */; };
+		9C9DD6601D4768F5001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
+		9C9DD6611D484A07001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
 		9CB0F7D81D26605B0096E9B7 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9CB0F7E91D2771850096E9B7 /* defualtFund.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CB0F7E21D2771850096E9B7 /* defualtFund.png */; };
 		9CB0F7EA1D2771850096E9B7 /* defualtHome.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CB0F7E31D2771850096E9B7 /* defualtHome.png */; };
@@ -2964,6 +2967,10 @@
 		9C9D0BB61D0E91FD003A9F4E /* zhangben_mark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhangben_mark@2x.png"; sourceTree = "<group>"; };
 		9C9D0BB71D0E91FD003A9F4E /* zhangben_mark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhangben_mark@3x.png"; sourceTree = "<group>"; };
 		9C9D0BB81D0E91FD003A9F4E /* zhangben_bian@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zhangben_bian@2x.png"; sourceTree = "<group>"; };
+		9C9DD6541D475A13001FA3C5 /* SSJDataClearHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataClearHelper.h; sourceTree = "<group>"; };
+		9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataClearHelper.m; sourceTree = "<group>"; };
+		9C9DD65E1D4768F5001FA3C5 /* SSJClearUserDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJClearUserDataService.h; sourceTree = "<group>"; };
+		9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJClearUserDataService.m; sourceTree = "<group>"; };
 		9CB0F7E21D2771850096E9B7 /* defualtFund.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defualtFund.png; sourceTree = "<group>"; };
 		9CB0F7E31D2771850096E9B7 /* defualtHome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defualtHome.png; sourceTree = "<group>"; };
 		9CB0F7E41D2771850096E9B7 /* defualtImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defualtImage.png; sourceTree = "<group>"; };
@@ -5528,6 +5535,8 @@
 			children = (
 				9CD9BBAE1CFD2DAA0061803B /* SSJLocalNotificationHelper.h */,
 				9CD9BBAF1CFD2DAA0061803B /* SSJLocalNotificationHelper.m */,
+				9C9DD6541D475A13001FA3C5 /* SSJDataClearHelper.h */,
+				9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -5554,6 +5563,8 @@
 				9CD9BBB91CFD2DAA0061803B /* SSJUserInfoNetworkService.m */,
 				9CE7D7901D2F4FF80013E97B /* SSJBannerNetworkService.h */,
 				9CE7D7911D2F4FF80013E97B /* SSJBannerNetworkService.m */,
+				9C9DD65E1D4768F5001FA3C5 /* SSJClearUserDataService.h */,
+				9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -8143,6 +8154,7 @@
 				9C2A682D1D194CA70010F1DA /* SSJAboutusViewController.m in Sources */,
 				9C2A682E1D194CA70010F1DA /* SSJViewAddition.m in Sources */,
 				7D4CF7101D38E3A5009CC8ED /* SSJBannerNetworkService.m in Sources */,
+				9C9DD6611D484A07001FA3C5 /* SSJClearUserDataService.m in Sources */,
 				9C2A682F1D194CA70010F1DA /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				9C2A68301D194CA70010F1DA /* SSJBooksTypeStore.m in Sources */,
 				9C2A68311D194CA70010F1DA /* SSJBooksTypeSelectViewController.m in Sources */,
@@ -8275,6 +8287,7 @@
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				7D36AC561D46FDAE006526B3 /* SSJDatabaseVersion6.m in Sources */,
 				7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */,
+				9C9DD6601D4768F5001FA3C5 /* SSJClearUserDataService.m in Sources */,
 				7D5F33701CEAE6C10086B67E /* SSJCategoryListHelper.m in Sources */,
 				9C9471851CEB224C00D69079 /* SSJFundingDetailDateHeader.m in Sources */,
 				7D5F33461CEAE6C10086B67E /* SSJBudgetEditUnitTextField.m in Sources */,
@@ -8412,6 +8425,7 @@
 				9CD9BC041CFD2DAA0061803B /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				7D5F33441CEAE6C10086B67E /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
 				7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
+				9C9DD6561D475A13001FA3C5 /* SSJDataClearHelper.m in Sources */,
 				9CD9BC0D1CFD2DAA0061803B /* SSJMagicExportResultViewController.m in Sources */,
 				7D5F337F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.m in Sources */,
 				9C2FC0461D3E3A9700A4C0C9 /* SSJMemberSelectView.m in Sources */,
@@ -8833,8 +8847,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8865,7 +8879,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
+				PROVISIONING_PROFILE = "45fb5eeb-33d8-4143-ae88-3cff96858ae6";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

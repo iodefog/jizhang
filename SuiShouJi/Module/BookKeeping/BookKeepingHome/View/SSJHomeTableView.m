@@ -33,14 +33,14 @@
 //    self.lineView.top = 0;
     self.lineView.height = 0;
     self.lineView.centerX = self.width / 2;
-    self.lineView.height = self.lineHeight;
+    self.lineView.height = self.lineHeight + 1;
     self.lineView.top = -self.lineHeight;
 }
 
 
 -(UIView *)lineView{
     if (!_lineView) {
-        _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1, 0)];
+        _lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 3, 0)];
         _lineView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     }
     return _lineView;

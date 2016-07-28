@@ -120,10 +120,10 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     __weak typeof(self) weakSelf = self;
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
-        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
-            [MobClick event:@"download_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
-            [MobClick event:@"open_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
+            [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"下载失败"];
