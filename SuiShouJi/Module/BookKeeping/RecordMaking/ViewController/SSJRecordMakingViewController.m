@@ -576,14 +576,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }else{
                 SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
                 item.memberId = @"0";
-                item.memberName = @"自己";
+                item.memberName = @"我";
                 item.memberColor = @"#fc7a60";
                 weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
             }
         }else{
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
             item.memberId = @"0";
-            item.memberName = @"自己";
+            item.memberName = @"我";
             item.memberColor = @"#fc7a60";
             weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
         }

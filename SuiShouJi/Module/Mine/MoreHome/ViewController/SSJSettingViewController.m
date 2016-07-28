@@ -141,7 +141,7 @@ static NSString *const kTitle6 = @"检查更新";
         [SSJDataClearHelper clearAllDataWithSuccess:^{
             
         } failure:^(NSError *error) {
-            NSLog(@"%@",[error localizedDescription]);
+
         }];
     }
 }
