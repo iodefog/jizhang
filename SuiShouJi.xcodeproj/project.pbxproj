@@ -1691,6 +1691,8 @@
 		9C9DD6561D475A13001FA3C5 /* SSJDataClearHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */; };
 		9C9DD6601D4768F5001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
 		9C9DD6611D484A07001FA3C5 /* SSJClearUserDataService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */; };
+		9C9DD66A1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
+		9C9DD66B1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */; };
 		9CB0F7D81D26605B0096E9B7 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		9CB0F7E91D2771850096E9B7 /* defualtFund.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CB0F7E21D2771850096E9B7 /* defualtFund.png */; };
 		9CB0F7EA1D2771850096E9B7 /* defualtHome.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CB0F7E31D2771850096E9B7 /* defualtHome.png */; };
@@ -2975,6 +2977,8 @@
 		9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataClearHelper.m; sourceTree = "<group>"; };
 		9C9DD65E1D4768F5001FA3C5 /* SSJClearUserDataService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJClearUserDataService.h; sourceTree = "<group>"; };
 		9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJClearUserDataService.m; sourceTree = "<group>"; };
+		9C9DD6681D49FA31001FA3C5 /* SSJThemeManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeManagerViewController.h; sourceTree = "<group>"; };
+		9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeManagerViewController.m; sourceTree = "<group>"; };
 		9CB0F7E21D2771850096E9B7 /* defualtFund.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defualtFund.png; sourceTree = "<group>"; };
 		9CB0F7E31D2771850096E9B7 /* defualtHome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defualtHome.png; sourceTree = "<group>"; };
 		9CB0F7E41D2771850096E9B7 /* defualtImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defualtImage.png; sourceTree = "<group>"; };
@@ -5103,6 +5107,8 @@
 				9C66F1191D20C19B0094125D /* SSJThemeHomeViewController.m */,
 				9C66F13F1D214E330094125D /* SSJThemeDetailViewController.h */,
 				9C66F1401D214E330094125D /* SSJThemeDetailViewController.m */,
+				9C9DD6681D49FA31001FA3C5 /* SSJThemeManagerViewController.h */,
+				9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */,
 			);
 			name = ViewController;
 			path = SuiShouJi/Module/Mine/ThemeManager/ViewController;
@@ -8144,6 +8150,7 @@
 				9C2A681D1D194CA70010F1DA /* SSJDateAddition.m in Sources */,
 				7D46328F1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				9C2A681E1D194CA70010F1DA /* main.m in Sources */,
+				9C9DD66B1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */,
 				9C2A681F1D194CA70010F1DA /* SSJRegistCompleteViewController.m in Sources */,
 				9C2A68201D194CA70010F1DA /* SSJCircleChargeStore.m in Sources */,
 				9C2A68211D194CA70010F1DA /* SSJDatabaseVersion2.m in Sources */,
@@ -8456,6 +8463,7 @@
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
 				9CE7D78F1D2F4ECA0013E97B /* SSJBannerItem.m in Sources */,
+				9C9DD66A1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */,
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
 				9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */,
 				7D6F93311D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m in Sources */,
