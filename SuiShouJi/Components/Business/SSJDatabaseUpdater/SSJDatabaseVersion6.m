@@ -26,6 +26,11 @@
         return error;
     }
     
+    error = [self supplementMemberChargeRecordsInDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -47,6 +52,20 @@
     if (![db executeUpdate:@"alter table bk_user add cdefaultmembertate integer default 0"]) {
         return [db lastError];
     }
+    return nil;
+}
+
++ (NSError *)supplementMemberChargeRecordsInDatabase:(FMDatabase *)db {
+    [db beginTransaction];
+    
+    BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select ichargeid, '0', imoney, ?, ?, 0", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    if (!success) {
+        [db rollback];
+        return [db lastError];
+    }
+    
+    [db commit];
+    
     return nil;
 }
 
