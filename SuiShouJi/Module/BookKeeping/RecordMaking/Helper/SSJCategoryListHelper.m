@@ -129,7 +129,7 @@
         while ([result next]) {
             SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
             item.categoryImage = [result stringForColumn:@"ccoin"];
-            item.categoryTintColor = @"969696";
+            item.categoryTintColor = SSJ_CURRENT_THEME.secondaryColor;
             [tempArray addObject:item];
         }
         
