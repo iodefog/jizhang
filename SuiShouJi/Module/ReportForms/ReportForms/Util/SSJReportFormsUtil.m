@@ -450,4 +450,95 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
     return [SSJReportFormsCurveModel modelWithPayment:paymentStr income:incomeStr time:timeStr period:period];
 }
 
+//  查询成员记账数据
++ (void)queryForMemberChargeWithType:(SSJBillType)type
+                                startDate:(NSDate *)startDate
+                                  endDate:(NSDate *)endDate
+                                  success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                                  failure:(void (^)(NSError *error))failure {
+    
+    NSString *incomeOrPayType = nil;
+    switch (type) {
+        case SSJBillTypeIncome:
+            incomeOrPayType = @"0";
+            break;
+            
+        case SSJBillTypePay:
+            incomeOrPayType = @"1";
+            break;
+            
+        case SSJBillTypeSurplus:
+        case SSJBillTypeUnknown:
+            failure(nil);
+            return;
+    }
+    
+    if (!startDate || !endDate) {
+        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"startDate or endDate must not be nil"}]);
+        return;
+    }
+    
+    NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+    
+    if (!userItem.currentBooksId.length) {
+        userItem.currentBooksId = SSJUSERID();
+    }
+    
+    //  查询不同收支类型的总额
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *amountResultSet = [db executeQuery:@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.CBILLDATE >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.CUSERID = ? and a.OPERATORTYPE <> 2 and a.cbooksid = ? and b.istate <> 2 and b.ITYPE = ?", beginDateStr , endDateStr, SSJUSERID(), userItem.currentBooksId, incomeOrPayType];
+        
+        if (!amountResultSet) {
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        
+        double amount = 0;
+        while ([amountResultSet next]) {
+            amount = [amountResultSet doubleForColumnIndex:0];
+        }
+        
+        if (amount == 0) {
+            SSJDispatch_main_async_safe(^{
+                success(nil);
+            });
+            
+            return;
+        }
+        
+        //  查询不同收支类型相应的金额、名称、图标、颜色
+        FMResultSet *resultSet = [db executeQuery:@"select sum(c.imoney), d.cname , d.ccolor , d.cmemberid from bk_user_charge as a, bk_bill_type as b , bk_member_charge as c , bk_member as d where a.cuserid = ? and a.ibillid = b.id and a.cbilldate >= ? and c.ichargeid = a.ichargeid and d.cmemberid = c.cmemberid and d.cuserid = a.cuserid and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and b.itype = ? and b.istate <> 2 group by c.cmemberid", SSJUSERID(), beginDateStr, endDateStr, userItem.currentBooksId, incomeOrPayType];
+        
+        if (!resultSet) {
+            SSJPRINT(@">>>SSJ\n class:%@\n method:%@\n message:%@\n error:%@",NSStringFromClass([self class]), NSStringFromSelector(_cmd), [db lastErrorMessage], [db lastError]);
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return;
+        }
+        
+        NSMutableArray *result = [@[] mutableCopy];
+        while ([resultSet next]) {
+            SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.ID = [resultSet stringForColumn:@"cmemberid"];
+            item.money = [resultSet doubleForColumn:@"sum(c.imoney)"];
+            item.scale = item.money / amount;
+            item.colorValue = [resultSet stringForColumn:@"ccolor"];
+            item.incomeOrPayName = [resultSet stringForColumn:@"cname"];
+            item.titleColor = SSJ_CURRENT_THEME.mainColor;
+            [result addObject:item];
+        }
+        
+        SSJDispatch_main_async_safe(^{
+            success(result);
+        });
+    }];
+}
+
 @end
