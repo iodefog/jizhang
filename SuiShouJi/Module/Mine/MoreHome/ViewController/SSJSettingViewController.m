@@ -139,9 +139,9 @@ static NSString *const kTitle6 = @"检查更新";
     }
     if ([title isEqualToString:kTitle3]) {
         [SSJDataClearHelper clearAllDataWithSuccess:^{
-            
+            [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
         } failure:^(NSError *error) {
-
+            [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
         }];
     }
 }
@@ -173,7 +173,7 @@ static NSString *const kTitle6 = @"检查更新";
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
-    //根据`responseCode`得到发送结果,如果分享成功
+    //根据responseCode得到发送结果,如果分享成功
     if(response.responseCode == UMSResponseCodeSuccess)
     {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];

@@ -12,6 +12,7 @@
 #import "SSJThemeCollectionHeaderView.h"
 #import "SSJThemeDetailViewController.h"
 #import "SSJThemeService.h"
+#import "MMDrawerController.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -39,6 +40,8 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more_guanli"] style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightButton;
     [self.view addSubview:self.hintLabel];
     [self.view addSubview:self.themeSelectView];
     // Do any additional setup after loading the view.
@@ -74,7 +77,9 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     SSJThemeHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     __weak typeof(self) weakSelf = self;
     cell.themeChangeBlock = ^(){
-        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        tabVC.selectedIndex = 0;
+        [weakSelf.navigationController popToViewController:tabVC animated:YES];
     };
     cell.item = item;
     return cell;
@@ -163,6 +168,11 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _service = [[SSJThemeService alloc]initWithDelegate:self];
     }
     return _service;
+}
+
+#pragma mark - Event
+- (void)managerButtonClicked:(id)sender{
+    
 }
 
 #pragma mark - Private

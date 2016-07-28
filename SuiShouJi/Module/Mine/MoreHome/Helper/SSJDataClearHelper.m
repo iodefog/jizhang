@@ -32,23 +32,23 @@
     userItem.defaultMemberState = 0;
     userItem.defaultFundAcctState = 0;
     userItem.defaultBooksTypeState = 0;
-    if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
-        SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
-        [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
-            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
+    SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
+    [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
+        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
+            if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
                 if (success) {
                     success();
                 }
-            } failure:^(NSError *error) {
-                if (failure) {
-                    failure(error);
-                }
-            }];
+            }
         } failure:^(NSError *error) {
             if (failure) {
                 failure(error);
             }
         }];
-    }
+    } failure:^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
 }
 @end
