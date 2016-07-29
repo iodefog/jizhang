@@ -106,7 +106,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 - (void)reloadData {
     if (_isMemberCharge) {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = data;
             [self.tableView reloadData];
@@ -115,9 +115,10 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
             NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
         }];
+        
     } else {
         [self.view ssj_showLoadingIndicator];
-        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
+        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
             [self.view ssj_hideLoadingIndicator];
             self.datas = data;
             [self.tableView reloadData];

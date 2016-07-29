@@ -67,7 +67,7 @@ static const CGFloat imageDiam = 26;
         if (item.isMember) {
             self.imageView.hidden = YES;
             self.memberNameLabel.hidden = NO;
-            self.memberNameLabel.text = item.incomeOrPayName.length >= 1 ? [item.incomeOrPayName substringToIndex:1] : @"";
+            self.memberNameLabel.text = item.name.length >= 1 ? [item.name substringToIndex:1] : @"";
             self.memberNameLabel.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
             self.memberNameLabel.textColor = [UIColor ssj_colorWithHex:item.colorValue];
         } else {
@@ -78,7 +78,7 @@ static const CGFloat imageDiam = 26;
             self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
         }
         
-        self.textLabel.text = item.incomeOrPayName;
+        self.textLabel.text = item.name;
         self.percentLabel.text = [NSString stringWithFormat:@"%.1f％",item.scale * 100];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
         

@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 //  是否是成员流水（不是成员流水就是类别流水）
 @property (nonatomic) BOOL isMemberCharge;
 
+//  是否是支出流水（只有是成员流水时需要传值）
+@property (nonatomic) BOOL isPayment;
+
 @end
 
 NS_ASSUME_NONNULL_END

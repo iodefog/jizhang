@@ -188,8 +188,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
         billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
         billingChargeVC.period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
         billingChargeVC.isMemberCharge = item.isMember;
+        billingChargeVC.isPayment = _payAndIncomeSegmentControl.selectedIndex == 0;
         if (item.isMember) {
-            billingChargeVC.title = item.incomeOrPayName;
+            billingChargeVC.title = item.name;
         }
         [self.navigationController pushViewController:billingChargeVC animated:YES];
     }
@@ -481,7 +482,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
             circleItem.imageBorderShowed = YES;
             if (item.isMember) {
-                circleItem.customView = [self chartAdditionalViewWithMemberName:item.incomeOrPayName colorValue:item.colorValue];
+                circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
             }
             [self.circleItems addObject:circleItem];
             
