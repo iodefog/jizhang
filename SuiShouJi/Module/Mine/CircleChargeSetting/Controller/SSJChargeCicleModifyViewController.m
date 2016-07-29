@@ -12,11 +12,12 @@ static NSString *const kTitle2 = @"收支类型";
 static NSString *const kTitle3 = @"类别";
 static NSString *const kTitle4 = @"金额";
 static NSString *const kTitle5 = @"备注";
-static NSString *const kTitle6 = @"照片";
-static NSString *const kTitle7 = @"循环周期";
-static NSString *const kTitle8 = @"资金账户";
-static NSString *const kTitle9 = @"起始日期";
-static NSString *const kTitle10 = @"不支持设置历史日期的周期账";
+static NSString *const kTitle6 = @"成员";
+static NSString *const kTitle7 = @"照片";
+static NSString *const kTitle8 = @"循环周期";
+static NSString *const kTitle9 = @"资金账户";
+static NSString *const kTitle10 = @"起始日期";
+static NSString *const kTitle11 = @"不支持设置历史日期的周期账";
 
 static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
@@ -35,6 +36,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJChargeMemBerItem.h"
+#import "SSJMemberSelectView.h"
+#import "SSJMemberManagerViewController.h"
+#import "SSJNewMemberViewController.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic, strong) NSArray *titles;
@@ -44,6 +49,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
 @property(nonatomic, strong) SSJChargeCircleTimeSelectView *chargeCircleTimeView;
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
+@property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
 @property(nonatomic, strong) UIImage *selectedImage;
 
 @end
@@ -66,8 +72,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle6],@[kTitle7,kTitle8,kTitle9,kTitle10]];
-    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao"],@[@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@""]];
+    self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5,kTitle7],@[kTitle6,kTitle8,kTitle9,kTitle10,kTitle11]];
+    _images = @[@[@"xuhuan_zhangben",@"xuhuan_shouzhileixing"],@[@"xuhuan_leibie",@"xuhuan_jine",@"xuhuan_beizhu",@"xuhuan_paizhao" ],@[@"xunhuan_chengyuan",@"xuhuan_xuhuan",@"xuhuan_zijinzhanghu",@"xuhuan_riqi",@""]];
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJChargeCircleModifyCell class] forCellReuseIdentifier:SSJChargeCircleEditeCellIdentifier];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange)name:UITextFieldTextDidChangeNotification object:nil];
@@ -121,7 +127,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle10]) {
+    if ([title isEqualToString:kTitle11]) {
         return 30;
     }else{
         return 55;
@@ -149,11 +155,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle8]) {
+    if ([title isEqualToString:kTitle9]) {
         self.fundSelectView.selectFundID = self.item.fundId;
         [self.fundSelectView show];
     }
-    if ([title isEqualToString:kTitle7]) {
+    if ([title isEqualToString:kTitle8]) {
         self.circleSelectView.selectCircleType = self.item.chargeCircleType;
         [self.circleSelectView show];
     }
@@ -170,7 +176,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
         [self.navigationController pushViewController:billTypeSelectVC animated:YES];
     }
-    if ([title isEqualToString:kTitle9]) {
+    if ([title isEqualToString:kTitle10]) {
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd"];
         NSDate* date = [dateFormatter dateFromString:self.item.billDate];
@@ -181,6 +187,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.chargeTypeSelectView show];
     }
     if ([title isEqualToString:kTitle6]) {
+        self.memberSelectView.selectedMemberItems = self.item.membersItem;
+        [self.memberSelectView show];
+    }
+    if ([title isEqualToString:kTitle7]) {
         if (self.item.chargeImage.length || self.selectedImage != nil) {
             __weak typeof(self) weakSelf = self;
             SSJImaageBrowseViewController *imageBrowseVc = [[SSJImaageBrowseViewController alloc]init];
@@ -245,7 +255,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else{
         circleModifyCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
-    if ([title isEqualToString:kTitle10]) {
+    if ([title isEqualToString:kTitle11]) {
         circleModifyCell.cellSubTitle = title;
         circleModifyCell.cellSubTitleLabel.hidden = NO;
     }else{
@@ -265,7 +275,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.typeName;
         circleModifyCell.cellTypeImageName = self.item.imageName;
-    }else if ([title isEqualToString:kTitle7]) {
+    }else if ([title isEqualToString:kTitle8]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
             case 0:
@@ -292,15 +302,22 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             default:
                 break;
         }
-    }else if ([title isEqualToString:kTitle8]) {
+    }else if ([title isEqualToString:kTitle9]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.fundName;
         circleModifyCell.cellTypeImageName = self.item.fundImage;
-    }else if ([title isEqualToString:kTitle9]) {
+    }else if ([title isEqualToString:kTitle10]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
+    }else if ([title isEqualToString:kTitle6]){
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (self.item.membersItem.count == 1) {
+            circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem objectAtIndex:0]).memberName;
+        }else{
+            circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",self.item.membersItem.count];
+        }
     }
-    if ([title isEqualToString:kTitle6]) {
+    if ([title isEqualToString:kTitle7]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.chargeImage.length || self.selectedImage != nil) {
             circleModifyCell.cellImageView.image = [UIImage imageNamed:@"mark_pic"];
@@ -435,6 +452,26 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
     }
     return _chargeTypeSelectView;
+}
+
+-(SSJMemberSelectView *)memberSelectView{
+    if (!_memberSelectView) {
+        __weak typeof(self) weakSelf = self;
+        _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
+            weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
+            [weakSelf.tableView reloadData];
+        };
+        _memberSelectView.manageBlock = ^(){
+            SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
+            [weakSelf.navigationController pushViewController:membermanageVc animated:YES];
+        };
+        _memberSelectView.addNewMemberBlock = ^(){
+            SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
+            [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
+        };
+    }
+    return _memberSelectView;
 }
 
 #pragma mark - Private
