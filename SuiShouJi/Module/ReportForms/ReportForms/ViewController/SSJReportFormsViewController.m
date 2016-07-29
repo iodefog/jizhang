@@ -184,9 +184,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
     if (self.datas.count > indexPath.row) {
         SSJReportFormsItem *item = self.datas[indexPath.row];
         SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
-        billingChargeVC.billTypeID = item.ID;
+        billingChargeVC.ID = item.ID;
         billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
         billingChargeVC.period = _customPeriod ?: [_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex];
+        billingChargeVC.isMemberCharge = item.isMember;
+        if (item.isMember) {
+            billingChargeVC.title = item.incomeOrPayName;
+        }
         [self.navigationController pushViewController:billingChargeVC animated:YES];
     }
 }
@@ -476,6 +480,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
             circleItem.colorValue = item.colorValue;
             circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
             circleItem.imageBorderShowed = YES;
+            if (item.isMember) {
+                circleItem.customView = [self chartAdditionalViewWithMemberName:item.incomeOrPayName colorValue:item.colorValue];
+            }
             [self.circleItems addObject:circleItem];
             
         }/* else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
@@ -520,6 +527,19 @@ static NSString *const kSegmentTitleIncome = @"收入";
     //            }
     //            [self.surplusView setIncome:income pay:pay];
     //        }
+}
+
+- (UILabel *)chartAdditionalViewWithMemberName:(NSString *)name colorValue:(NSString *)colorValue {
+    UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 26, 26)];
+    lab.layer.borderColor = [UIColor ssj_colorWithHex:colorValue].CGColor;
+    lab.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+    lab.layer.cornerRadius = lab.width * 0.5;
+    lab.text = name.length >= 1 ? [name substringToIndex:1] : @"";
+    lab.textColor = [UIColor ssj_colorWithHex:colorValue];
+    lab.textAlignment = NSTextAlignmentCenter;
+    lab.font = [UIFont systemFontOfSize:16];
+    
+    return lab;
 }
 
 // 查询某个周期内的流水统计

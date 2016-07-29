@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *imageName;
 
+@property (nonatomic, strong) UIView *customView;
+
 @property (nonatomic) CGFloat imageRadius;
 
 @property (nonatomic) BOOL imageBorderShowed;

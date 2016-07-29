@@ -22,17 +22,29 @@ extern NSString *const SSJBillingChargeRecordKey;
 @interface SSJBillingChargeHelper : NSObject
 
 /**
- *  查询某个年份、月份的记账流水数据；如果月份传0，则查询整年的数据；月份最大不能超过12，年份小于1，否则返回nil
- *  如果是当前年或月，就查询截止到当天的数据
+ *  查询某个时间内的记账流水数据；
  *
- *  @param inYear    查询的年份，如果传0，则查询所有年份的数据
- *  @param month     查询的月份，如果传0，则查询整年的数据，最大不能超过12
- *  @param success   查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
- *  @param failure   查询失败的回调
+ *  @param ID           收支类别id
+ *  @param period       查询的时间段，如果超过当前时间，则截止到今天
+ *  @param success      查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
+ *  @param failure      查询失败的回调
  */
 + (void)queryDataWithBillTypeID:(NSString *)ID
                        inPeriod:(SSJDatePeriod *)period
                         success:(void (^)(NSArray <NSDictionary *>*data))success
                         failure:(void (^)(NSError *error))failure;
+
+/**
+ *  查询某个时间内的成员流水数据；
+ *
+ *  @param ID           成员id
+ *  @param period       查询的时间段，如果超过当前时间，则截止到今天
+ *  @param success      查询成功的回调；参数data中是字典类型，有两个key：SSJBillingChargeDateKey对应日期字符串，SSJBillingChargeRecordKey对应数组，数组中元素是SSJBillingChargeCellItem类型实例
+ *  @param failure      查询失败的回调
+ */
++ (void)queryMemberChargeWithMemberID:(NSString *)ID
+                             inPeriod:(SSJDatePeriod *)period
+                              success:(void (^)(NSArray <NSDictionary *>*data))success
+                              failure:(void (^)(NSError *error))failure;
 
 @end

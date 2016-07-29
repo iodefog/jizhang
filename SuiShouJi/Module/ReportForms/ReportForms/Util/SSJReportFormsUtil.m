@@ -532,6 +532,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
             item.incomeOrPayName = [resultSet stringForColumn:@"cname"];
             item.titleColor = SSJ_CURRENT_THEME.mainColor;
+            item.isMember = YES;
             [result addObject:item];
         }
         
