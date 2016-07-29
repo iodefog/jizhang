@@ -79,7 +79,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     cell.themeChangeBlock = ^(){
         UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
         tabVC.selectedIndex = 0;
-        [weakSelf.navigationController popToViewController:tabVC animated:YES];
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
     };
     cell.item = item;
     return cell;
