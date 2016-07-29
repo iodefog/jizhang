@@ -149,6 +149,8 @@
 		7D6AAB6E1C3146500007C0A3 /* SSJReportFormsUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB6D1C3146500007C0A3 /* SSJReportFormsUtil.m */; };
 		7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */ = {isa = PBXBuildFile; fileRef = 7D6AAB731C322E0C0007C0A3 /* mydatabase.db */; };
 		7D6AAB841C32A5480007C0A3 /* SSJReportFormsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */; };
+		7D6B12B71D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12B61D4B6C190036BF4E /* SSJReportFormsSwitchControl.m */; };
+		7D6B12B81D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6B12B61D4B6C190036BF4E /* SSJReportFormsSwitchControl.m */; };
 		7D6BEA801CC886AE00D4046B /* reportForms_left_disable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7C1CC886AE00D4046B /* reportForms_left_disable@2x.png */; };
 		7D6BEA811CC886AE00D4046B /* reportForms_left_disable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7D1CC886AE00D4046B /* reportForms_left_disable@3x.png */; };
 		7D6BEA821CC886AE00D4046B /* reportForms_right_diable@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D6BEA7E1CC886AE00D4046B /* reportForms_right_diable@2x.png */; };
@@ -2253,6 +2255,8 @@
 		7D6AAB731C322E0C0007C0A3 /* mydatabase.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = mydatabase.db; sourceTree = "<group>"; };
 		7D6AAB821C32A5480007C0A3 /* SSJReportFormsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsItem.h; sourceTree = "<group>"; };
 		7D6AAB831C32A5480007C0A3 /* SSJReportFormsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsItem.m; sourceTree = "<group>"; };
+		7D6B12B51D4B6C190036BF4E /* SSJReportFormsSwitchControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchControl.h; sourceTree = "<group>"; };
+		7D6B12B61D4B6C190036BF4E /* SSJReportFormsSwitchControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchControl.m; sourceTree = "<group>"; };
 		7D6BEA7C1CC886AE00D4046B /* reportForms_left_disable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left_disable@2x.png"; sourceTree = "<group>"; };
 		7D6BEA7D1CC886AE00D4046B /* reportForms_left_disable@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_left_disable@3x.png"; sourceTree = "<group>"; };
 		7D6BEA7E1CC886AE00D4046B /* reportForms_right_diable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_right_diable@2x.png"; sourceTree = "<group>"; };
@@ -4019,6 +4023,8 @@
 				7DABCA5A1D0D7994002886E8 /* SSJReportFormsCurveGridView.m */,
 				7DABCA641D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.h */,
 				7DABCA651D0E5A32002886E8 /* SSJReportFormsCurveDescriptionView.m */,
+				7D6B12B51D4B6C190036BF4E /* SSJReportFormsSwitchControl.h */,
+				7D6B12B61D4B6C190036BF4E /* SSJReportFormsSwitchControl.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8032,6 +8038,7 @@
 				9C2A67A61D194CA70010F1DA /* SSJFundingListDayItem.m in Sources */,
 				9C2A67A71D194CA70010F1DA /* SSJChargeCircleModifyCell.m in Sources */,
 				9C2A67A81D194CA70010F1DA /* SSJSynchronizeTaskQueue.m in Sources */,
+				7D6B12B81D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */,
 				9C2A67A91D194CA70010F1DA /* SCYSlidePagingHeaderView.m in Sources */,
 				9C2A67AA1D194CA70010F1DA /* SSJPersonalDetailViewController.m in Sources */,
 				9C2A67AB1D194CA70010F1DA /* SSJGlobalServiceManager.m in Sources */,
@@ -8550,6 +8557,7 @@
 				BD0433971C1A8DA50051E7AB /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				7DE2E9131C9C291C001868F5 /* SSJUmengManager.m in Sources */,
 				7D5F33471CEAE6C10086B67E /* SSJBudgetListCell.m in Sources */,
+				7D6B12B71D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */,
 				7D5F334C1CEAE6C10086B67E /* SSJCalendarView.m in Sources */,
 				9CD9BC0F1CFD2DAA0061803B /* SSJMagicExportService.m in Sources */,
 				9CD9BC1E1CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m in Sources */,
