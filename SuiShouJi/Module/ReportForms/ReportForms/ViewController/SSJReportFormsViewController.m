@@ -9,7 +9,7 @@
 #import "SSJReportFormsViewController.h"
 #import "SSJPercentCircleView.h"
 #import "SSJPageControl.h"
-#import "SSJSegmentedControl.h"
+#import "SSJReportFormsMemberAndCategorySwitchControl.h"
 #import "SSJReportFormsSwitchControl.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
@@ -30,7 +30,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 @interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate>
 
-@property (nonatomic, strong) SSJSegmentedControl *typeAndMemberControl;
+@property (nonatomic, strong) SSJReportFormsMemberAndCategorySwitchControl *typeAndMemberControl;
 
 //  收入、支出、结余切换控件
 @property (nonatomic, strong) SSJReportFormsSwitchControl *payAndIncomeSegmentControl;
@@ -547,37 +547,38 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 // 查询某个周期内的流水统计
 - (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
-    if (_typeAndMemberControl.selectedSegmentIndex == 0) {
-        [self.view ssj_showLoadingIndicator];
-        [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-            [self.view ssj_hideLoadingIndicator];
-            [self organiseDatasWithResult:result];
-        } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
-    } else if (_typeAndMemberControl.selectedSegmentIndex == 1) {
-        [self.view ssj_showLoadingIndicator];
-        [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
-            [self.view ssj_hideLoadingIndicator];
-            [self organiseDatasWithResult:result];
-        } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
+    switch (_typeAndMemberControl.option) {
+        case SSJReportFormsMemberAndCategorySwitchControlOptionCategory: {
+            [self.view ssj_showLoadingIndicator];
+            [SSJReportFormsUtil queryForIncomeOrPayType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                [self.view ssj_hideLoadingIndicator];
+                [self organiseDatasWithResult:result];
+            } failure:^(NSError *error) {
+                [self.view ssj_hideLoadingIndicator];
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        }
+            break;
+            
+        case SSJReportFormsMemberAndCategorySwitchControlOptionMember: {
+            [self.view ssj_showLoadingIndicator];
+            [SSJReportFormsUtil queryForMemberChargeWithType:[self currentType] startDate:period.startDate endDate:period.endDate success:^(NSArray<SSJReportFormsItem *> *result) {
+                [self.view ssj_hideLoadingIndicator];
+                [self organiseDatasWithResult:result];
+            } failure:^(NSError *error) {
+                [self.view ssj_hideLoadingIndicator];
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        }
+            break;
     }
 }
 
 #pragma mark - Getter
-- (SSJSegmentedControl *)typeAndMemberControl {
+- (SSJReportFormsMemberAndCategorySwitchControl *)typeAndMemberControl {
     if (!_typeAndMemberControl) {
-        _typeAndMemberControl = [[SSJSegmentedControl alloc] initWithItems:@[@"分类",@"成员"]];
-        _typeAndMemberControl.size = CGSizeMake(202, 30);
-        _typeAndMemberControl.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _typeAndMemberControl.selectedBorderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        [_typeAndMemberControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} forState:UIControlStateNormal];
-        [_typeAndMemberControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} forState:UIControlStateSelected];
-        [_typeAndMemberControl addTarget: self action: @selector(typeAndMemberControlAction)forControlEvents: UIControlEventValueChanged];
+        _typeAndMemberControl = [[SSJReportFormsMemberAndCategorySwitchControl alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+        [_typeAndMemberControl addTarget:self action:@selector(typeAndMemberControlAction) forControlEvents: UIControlEventValueChanged];
     }
     return _typeAndMemberControl;
 }
