@@ -228,6 +228,10 @@
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
+		7DC7D8221D4F24AF00462970 /* reportForms_category@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D81E1D4F24AF00462970 /* reportForms_category@2x.png */; };
+		7DC7D8231D4F24AF00462970 /* reportForms_category@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */; };
+		7DC7D8241D4F24AF00462970 /* reportForms_member@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */; };
+		7DC7D8251D4F24AF00462970 /* reportForms_member@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8211D4F24AF00462970 /* reportForms_member@3x.png */; };
 		7DD3E5781CFBF2D1005A1ACB /* SSJDatabaseVersion4.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */; };
 		7DD3E5831CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E5821CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m */; };
 		7DD7D6841C4C8E6A00ACE71A /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD7D5D81C4C8E6A00ACE71A /* back@2x.png */; };
@@ -2371,6 +2375,10 @@
 		7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterView.m; sourceTree = "<group>"; };
 		7DC5172E1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterViewItem.h; sourceTree = "<group>"; };
 		7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterViewItem.m; sourceTree = "<group>"; };
+		7DC7D81E1D4F24AF00462970 /* reportForms_category@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_category@2x.png"; sourceTree = "<group>"; };
+		7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_category@3x.png"; sourceTree = "<group>"; };
+		7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_member@2x.png"; sourceTree = "<group>"; };
+		7DC7D8211D4F24AF00462970 /* reportForms_member@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_member@3x.png"; sourceTree = "<group>"; };
 		7DD3E5761CFBF2D1005A1ACB /* SSJDatabaseVersion4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion4.h; sourceTree = "<group>"; };
 		7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion4.m; sourceTree = "<group>"; };
 		7DD3E5811CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeSyncTable.h; sourceTree = "<group>"; };
@@ -4583,6 +4591,10 @@
 		7DD7D6731C4C8E6A00ACE71A /* ReportForms */ = {
 			isa = PBXGroup;
 			children = (
+				7DC7D81E1D4F24AF00462970 /* reportForms_category@2x.png */,
+				7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */,
+				7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */,
+				7DC7D8211D4F24AF00462970 /* reportForms_member@3x.png */,
 				7D9E4A4C1D0EC32300EE254D /* reportForms_nodata@2x.png */,
 				7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */,
 				7DABCA681D0EA171002886E8 /* reportForms_curve@2x.png */,
@@ -7414,6 +7426,7 @@
 				9C4078331CE1FC3100A61956 /* tab_accounte_sel@3x.png in Resources */,
 				9C4078261CE1B92E00A61956 /* more_tixing@2x.png in Resources */,
 				9C991DFC1CE0A79F0031CD02 /* bt_chuchai@2x.png in Resources */,
+				7DC7D8231D4F24AF00462970 /* reportForms_category@3x.png in Resources */,
 				9C9D0BA11D0E54CF003A9F4E /* founds_yincang@2x.png in Resources */,
 				9C40780B1CE1B84000A61956 /* more_qiandao@3x.png in Resources */,
 				9C9D0BB91D0E91FD003A9F4E /* zhangben_bian@3x.png in Resources */,
@@ -7611,6 +7624,7 @@
 				7DD7D6C51C4C8E6A00ACE71A /* bt_pignzhangshouru@3x.png in Resources */,
 				BDF510871C925BB500A49D74 /* home_background@2x.png in Resources */,
 				BDEA87361C50D0D7002681BD /* delete@3x.png in Resources */,
+				7DC7D8241D4F24AF00462970 /* reportForms_member@2x.png in Resources */,
 				7D893F2A1C91144D00886995 /* budget_add@3x.png in Resources */,
 				BDA3FDF91C58CAC400FB57B1 /* ft_invest@2x.png in Resources */,
 				BDF5108D1C925BB500A49D74 /* home_none@3x.png in Resources */,
@@ -7708,6 +7722,7 @@
 				BDF069A71C5B4CCB001430BB /* founds_pop@3x.png in Resources */,
 				7D4A432D1CC87187002F0264 /* rain_sound_on@3x.png in Resources */,
 				9CB0F7EF1D2771850096E9B7 /* defualtThumbImage.png in Resources */,
+				7DC7D8221D4F24AF00462970 /* reportForms_category@2x.png in Resources */,
 				9C991E3C1CE0A79F0031CD02 /* bt_taobao@3x.png in Resources */,
 				7DD7D6AF1C4C8E6A00ACE71A /* bt_house@3x.png in Resources */,
 				9C991E451CE0A79F0031CD02 /* bt_youxi@2x.png in Resources */,
@@ -7724,6 +7739,7 @@
 				9C40780C1CE1B84000A61956 /* more_qq@2x.png in Resources */,
 				7DD7D7251C4C8E6A00ACE71A /* tab_form_nor@3x.png in Resources */,
 				9C5348F41D2CE327004EF053 /* more_pifu@3x.png in Resources */,
+				7DC7D8251D4F24AF00462970 /* reportForms_member@3x.png in Resources */,
 				9C9D0BA51D0E6412003A9F4E /* founds_transfer_none@3x.png in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
 				7DD7D6DC1C4C8E6A00ACE71A /* bt_tourism@2x.png in Resources */,

@@ -9,6 +9,10 @@
 #import "SSJBudgetWaveWaterView.h"
 #import "SSJWaveWaterView.h"
 
+static NSString *const kRedColorValue = @"ff654c";
+
+static NSString *const kGreenColorValue = @"0fceb6";
+
 @interface SSJBudgetWaveWaterView ()
 
 @property (nonatomic, strong) SSJWaveWaterView *growingView;
@@ -47,7 +51,9 @@
         [self addSubview:self.growingView];
         [self addSubview:self.fullView];
         
-        self.layer.borderColor = [UIColor ssj_colorWithHex:@"f4f4f4"].CGColor;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
+//        self.layer.borderColor = [UIColor ssj_colorWithHex:@"f4f4f4"].CGColor;
+//        self.layer.borderColor = [UIColor orangeColor].CGColor;
     }
     return self;
 }
@@ -154,6 +160,7 @@
     if (percent >= 0 && percent < 1) {
         self.growingView.hidden = NO;
         self.fullView.hidden = YES;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
         if (percent == 0) {
             [self.growingView reset];
         } else {
@@ -180,7 +187,8 @@
         [self.growingView stopWave];
         [self.fullView startWave];
 //        [self.fullView drawWave];
-        self.fullView.borderColor = [UIColor ssj_colorWithHex:@"0fceb6"];
+        self.fullView.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue];
+        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
         for (int i = 0; i < self.fullView.items.count; i ++) {
             SSJWaveWaterViewItem *item = self.fullView.items[i];
             item.waveColor = self.fullColors[i];
@@ -197,7 +205,8 @@
         [self.growingView stopWave];
         [self.fullView startWave];
 //        [self.fullView drawWave];
-        self.fullView.borderColor = [UIColor ssj_colorWithHex:@"ff654c"];
+        self.fullView.borderColor = [UIColor ssj_colorWithHex:kRedColorValue];
+        self.layer.borderColor = [UIColor ssj_colorWithHex:kRedColorValue alpha:0.1].CGColor;
         for (int i = 0; i < self.fullView.items.count; i ++) {
             SSJWaveWaterViewItem *item = self.fullView.items[i];
             item.waveColor = self.overrunColors[i];
@@ -222,7 +231,7 @@
         _growingView.topTitleColor = [UIColor blackColor];
         _growingView.bottomTitleColor = [UIColor blackColor];
         _growingView.titleGap = 2;
-        _growingView.borderColor = RGBCOLOR(38, 227, 198);
+        _growingView.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue];
     }
     return _growingView;
 }
