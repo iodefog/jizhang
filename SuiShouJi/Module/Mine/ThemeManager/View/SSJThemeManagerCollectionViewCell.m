@@ -20,7 +20,7 @@
 
 @property(nonatomic, strong) UIImageView *themeImage;
 
-@property(nonatomic, strong) UIView *maskView;
+@property(nonatomic, strong) UIView *blackMaskView;
 
 @property(nonatomic, strong) UIButton *deleteButton;
 
@@ -36,8 +36,8 @@
     if (self) {
         [self.contentView addSubview:self.themeImage];
         [self.themeImage addSubview:self.inuseImage];
-        [self.themeImage addSubview:self.maskView];
-        [self.maskView addSubview:self.deleteButton];
+        [self.themeImage addSubview:self.blackMaskView];
+        [self.blackMaskView addSubview:self.deleteButton];
         [self.contentView addSubview:self.themeTitleLabel];
         [self.contentView addSubview:self.themeSizeLabel];
     }
@@ -50,7 +50,7 @@
     self.themeImage.size = CGSizeMake(self.width, self.width / imageRatio);
     self.themeImage.leftTop = CGPointMake(0, 0);
     self.inuseImage.leftTop = CGPointMake(0, 10);
-    self.maskView.frame = self.themeImage.bounds;
+    self.blackMaskView.frame = self.themeImage.bounds;
     self.deleteButton.rightBottom = CGPointMake(self.themeImage.right, self.themeImage.bottom - 10);
     self.themeTitleLabel.leftTop = CGPointMake(5, self.themeImage.bottom + 15);
     self.themeSizeLabel.leftBottom = CGPointMake(self.themeTitleLabel.right + 10, self.themeTitleLabel.bottom);
@@ -61,6 +61,7 @@
         _themeImage = [[UIImageView alloc]init];
         _themeImage.layer.cornerRadius = 4.f;
         _themeImage.layer.masksToBounds = YES;
+        _themeImage.userInteractionEnabled = YES;
     }
     return _themeImage;
 }
@@ -83,12 +84,12 @@
     return _themeSizeLabel;
 }
 
--(UIView *)maskView{
-    if (!_maskView) {
-        _maskView = [[UIView alloc]init];
-        _maskView.backgroundColor = [UIColor ssj_colorWithHex:@"#000000" alpha:0.5];
+-(UIView *)blackMaskView{
+    if (!_blackMaskView) {
+        _blackMaskView = [[UIView alloc]init];
+        _blackMaskView.backgroundColor = [UIColor ssj_colorWithHex:@"#000000" alpha:0.5];
     }
-    return _maskView;
+    return _blackMaskView;
 }
 
 -(UIButton *)deleteButton{
@@ -111,7 +112,7 @@
 
 -(void)deleteButtonClicked:(id)sender{
     if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.ID]]) {
-        if ([[NSFileManager defaultManager] removeItemAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.ID] error:NULL]) {
+        if ([[NSFileManager defaultManager] removeItemAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.ID] error:NULL] && [SSJThemeSetting removeThemeModelWithID:self.item.ID]) {
             if (self.deleteThemeBlock) {
                 self.deleteThemeBlock();
             }
@@ -136,9 +137,9 @@
 -(void)setEditeModel:(BOOL)editeModel{
     _editeModel = editeModel;
     if (_editeModel && self.canEdite) {
-        self.maskView.hidden = NO;
+        self.blackMaskView.hidden = NO;
     }else{
-        self.maskView.hidden = YES;
+        self.blackMaskView.hidden = YES;
     }
 }
 
