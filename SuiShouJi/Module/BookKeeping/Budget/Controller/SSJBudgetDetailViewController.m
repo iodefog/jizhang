@@ -242,7 +242,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (UILabel *)periodLabel {
     if (!_periodLabel) {
-        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 20)];
+        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 26)];
         _periodLabel.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _periodLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _periodLabel.font = [UIFont systemFontOfSize:13];
