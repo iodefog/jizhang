@@ -256,14 +256,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self updateIncomeAndPaymentLabels];
     
     NSString *selectedTitle = [_payAndIncomeSegmentControl.titles ssj_safeObjectAtIndex:_payAndIncomeSegmentControl.selectedIndex];
-    if ([selectedTitle isEqualToString:kSegmentTitlePay]
-        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
-        
-        self.tableView.tableFooterView = [[UIView alloc] init];
-        
-    }/* else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-      self.tableView.tableFooterView = self.surplusView;
-      }*/
+//    if ([selectedTitle isEqualToString:kSegmentTitlePay]
+//        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
+//        
+//        self.tableView.tableFooterView = [[UIView alloc] init];
+//        
+//    } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+//        self.tableView.tableFooterView = self.surplusView;
+//    }
     
     if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
         [MobClick event:@"form_out"];
@@ -413,6 +413,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
             _customPeriodBtn.hidden = YES;
             self.tableView.hidden = YES;
             
+            _payAndIncomeSegmentControl.top = SSJ_NAVIBAR_BOTTOM;
+            _tableView.top = self.payAndIncomeSegmentControl.bottom;
+            _tableView.height = self.view.height - self.payAndIncomeSegmentControl.bottom - SSJ_TABBAR_HEIGHT;
+            
             [self.view ssj_hideLoadingIndicator];
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
             
@@ -424,6 +428,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _customPeriodBtn.hidden = NO;
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
+        
+        _payAndIncomeSegmentControl.top = _dateAxisView.bottom;
+        _tableView.top = self.payAndIncomeSegmentControl.bottom;
+        _tableView.height = self.view.height - self.payAndIncomeSegmentControl.bottom - SSJ_TABBAR_HEIGHT;
         
         _periods = periods;
         [_dateAxisView reloadData];
@@ -590,6 +598,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _dateAxisView.delegate = self;
+        [_dateAxisView ssj_setBorderWidth:1];
+        [_dateAxisView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
+        [_dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _dateAxisView;
 }
@@ -597,7 +608,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SSJReportFormsSwitchControl *)payAndIncomeSegmentControl {
     if (!_payAndIncomeSegmentControl) {
         _payAndIncomeSegmentControl = [[SSJReportFormsSwitchControl alloc] initWithTitles:@[kSegmentTitlePay, kSegmentTitleIncome]];
-        _payAndIncomeSegmentControl.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, 44);
+        _payAndIncomeSegmentControl.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, 26);
         [_payAndIncomeSegmentControl addTarget:self action:@selector(payAndIncomeSwitchControlAction) forControlEvents:UIControlEventValueChanged];
         _payAndIncomeSegmentControl.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -631,7 +642,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.payAndIncomeSegmentControl.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.payAndIncomeSegmentControl.bottom, self.view.width, self.view.height - self.payAndIncomeSegmentControl.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
@@ -681,7 +692,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (UILabel *)customPeriodLab {
     if (!_customPeriodLab) {
-        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.payAndIncomeSegmentControl.bottom + 10, 0, 30)];
+        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, 0, 30)];
         _customPeriodLab.backgroundColor = [UIColor clearColor];
         _customPeriodLab.textAlignment = NSTextAlignmentCenter;
         _customPeriodLab.font = [UIFont systemFontOfSize:15];
@@ -697,7 +708,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, self.payAndIncomeSegmentControl.bottom, 50, 50);
+        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
         [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_customPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }

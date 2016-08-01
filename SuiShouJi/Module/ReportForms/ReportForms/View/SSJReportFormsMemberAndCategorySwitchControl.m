@@ -38,7 +38,7 @@
     _titleLab.left = left;
     _titleLab.centerY = self.height * 0.5;
     _triangle.left = _titleLab.right + 3;
-    _triangle.bottom = _titleLab.bottom;
+    _triangle.bottom = _titleLab.bottom - 3;
 }
 
 - (void)setOption:(SSJReportFormsMemberAndCategorySwitchControlOption)option {
@@ -64,6 +64,7 @@
 
 - (void)listMenuSelectAction {
     _option = _listMenu.selectedIndex;
+    [_listMenu dismiss];
     [self updateTitle];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
