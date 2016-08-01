@@ -15,4 +15,13 @@
 
 @property(nonatomic) BOOL editeModel;
 
+@property(nonatomic) BOOL canEdite;
+
+@property(nonatomic) BOOL inUse;
+
+typedef void(^deleteThemeBlock)();
+
+@property (nonatomic, copy) deleteThemeBlock deleteThemeBlock;
+
+
 @end

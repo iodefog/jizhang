@@ -13,6 +13,7 @@
 #import "SSJThemeDetailViewController.h"
 #import "SSJThemeService.h"
 #import "MMDrawerController.h"
+#import "SSJThemeManagerViewController.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -150,6 +151,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _themeSelectView.showsHorizontalScrollIndicator = NO;
         _themeSelectView.showsVerticalScrollIndicator = NO;
         _themeSelectView.backgroundColor = [UIColor whiteColor];
+        _themeSelectView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
         [_themeSelectView registerClass:[SSJThemeHomeCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
         [_themeSelectView registerClass:[SSJThemeCollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderId];
     }
@@ -172,7 +174,8 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 #pragma mark - Event
 - (void)managerButtonClicked:(id)sender{
-    
+    SSJThemeManagerViewController *managerVc = [[SSJThemeManagerViewController alloc]init];
+    [self.navigationController pushViewController:managerVc animated:YES];
 }
 
 #pragma mark - Private

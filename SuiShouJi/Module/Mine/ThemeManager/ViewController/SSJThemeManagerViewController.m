@@ -7,12 +7,21 @@
 //
 
 #import "SSJThemeManagerViewController.h"
+#import "SSJThemeManagerCollectionViewCell.h"
 
-@interface SSJThemeManagerViewController ()
+static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 
+@interface SSJThemeManagerViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@property(nonatomic, strong) UICollectionView *themeSelectView;
+
+@property(nonatomic, strong) UICollectionViewFlowLayout *layout;
+
+@property(nonatomic, strong) NSArray *items;
 @end
 
-@implementation SSJThemeManagerViewController
+@implementation SSJThemeManagerViewController{
+    BOOL editeModel;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -25,7 +34,85 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    editeModel = NO;
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    [self.view addSubview:self.themeSelectView];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self getAllThemes];
+}
+
+#pragma mark - UICollectionViewDataSource
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    return self.items.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    SSJThemeModel *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeManagerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    if ([item.ID isEqualToString:SSJCurrentThemeID()]) {
+        cell.inUse = YES;
+    }else{
+        cell.inUse = NO;
+    }
+    if ([item.ID isEqualToString:SSJDefaultThemeID]) {
+        cell.canEdite = NO;
+    }else{
+        cell.canEdite = YES;
+    }
+    cell.editeModel = editeModel;
+    cell.item = item;
+    return cell;
+}
+
+
+#pragma mark - UICollectionViewDelegate
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    float cellWidth = (self.view.width - 45) / 3;
+    float imageRatio = 220.f / 358;
+    float imageHeight = cellWidth / imageRatio;
+    float cellHeight = imageHeight + 40;
+    return CGSizeMake(cellWidth, cellHeight);
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    return UIEdgeInsetsMake(17, 10, 0, 10);
+}
+
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
+    return CGSizeMake(self.view.width, 50);
+}
+
+#pragma mark - Getter
+- (UICollectionViewFlowLayout *)layout {
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.minimumLineSpacing = 25;
+    layout.minimumInteritemSpacing = 12;
+    return layout;
+}
+
+- (UICollectionView *)themeSelectView {
+    if (!_themeSelectView) {
+        _themeSelectView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:self.layout];
+        _themeSelectView.delegate = self;
+        _themeSelectView.dataSource = self;
+        _themeSelectView.alwaysBounceVertical = YES;
+        _themeSelectView.showsHorizontalScrollIndicator = NO;
+        _themeSelectView.showsVerticalScrollIndicator = NO;
+        _themeSelectView.backgroundColor = [UIColor whiteColor];
+        _themeSelectView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+        [_themeSelectView registerClass:[SSJThemeManagerCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
+    }
+    return _themeSelectView;
+}
+
+#pragma mark - Private
+-(void)getAllThemes{
+    self.items = [NSArray arrayWithArray:[SSJThemeSetting allThemeModels]];
+    [self.themeSelectView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

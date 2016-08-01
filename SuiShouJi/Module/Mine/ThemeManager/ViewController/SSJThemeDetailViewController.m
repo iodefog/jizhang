@@ -9,6 +9,7 @@
 #import "SSJThemeDetailViewController.h"
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeImageCollectionViewCell.h"
+#import "MMDrawerController.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
@@ -124,6 +125,8 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
             [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
             [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+            tabVC.selectedIndex = 0;
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"下载失败"];

@@ -199,6 +199,9 @@
                 originItem.billDate = [originResult stringForColumn:@"CBILLDATE"];
                 originItem.incomeOrExpence = [originResult intForColumn:@"ITYPE"];
                 originItem.booksId = [originResult stringForColumn:@"CBOOKSID"];
+                if (!originItem.booksId.length) {
+                    originItem.booksId = userId;
+                }
             }
             [originResult close];
             double originMoney = [originItem.money doubleValue];
