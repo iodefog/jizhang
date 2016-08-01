@@ -16,4 +16,6 @@
 
 @property (nonatomic, strong) UIColor *titleColor;
 
+@property (nonatomic, strong) UIColor *imageColor;
+
 @end

@@ -13,13 +13,26 @@
 
 @property (nonatomic, strong, readonly) NSArray <SSJListMenuItem *>*items;
 
+// 选中的cell下标
 @property (nonatomic) NSUInteger selectedIndex;
 
+// 标题为选中状态颜色
 @property (nonatomic, strong) UIColor *normalTitleColor;
 
+// 标题选中状态颜色
 @property (nonatomic, strong) UIColor *selectedTitleColor;
 
+// 背景填充色
 @property (nonatomic, strong) UIColor *fillColor;
+
+// cell分割线颜色
+@property (nonatomic, strong) UIColor *separatorColor;
+
+// 图片颜色
+@property (nonatomic, strong) UIColor *imageColor;
+
+// default 2;必须大于0
+@property (nonatomic) CGFloat displayRowCount;
 
 - (instancetype)initWithItems:(NSArray <SSJListMenuItem *>*)items;
 

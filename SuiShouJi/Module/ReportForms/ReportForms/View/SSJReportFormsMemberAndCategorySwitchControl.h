@@ -17,4 +17,6 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsMemberAndCategorySwitchControlOption) 
 
 @property (nonatomic) SSJReportFormsMemberAndCategorySwitchControlOption option;
 
+- (void)updateAppearance;
+
 @end

@@ -9,6 +9,8 @@
 #import "SSJListMenu.h"
 #import "SSJListMenuCell.h"
 
+static const NSTimeInterval kDuration = 0.2;
+
 @interface SSJListMenu () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -29,8 +31,8 @@
     if (self = [super initWithFrame:CGRectZero]) {
         
         self.backgroundColor = [UIColor clearColor];
-//        self.layer.borderColor = [UIColor redColor].CGColor;
-//        self.layer.borderWidth = 1;
+        
+        _displayRowCount = 2;
         
         _items = items;
         [self organiseCellItems];
@@ -43,6 +45,7 @@
 
 - (void)layoutSubviews {
     _tableView.frame = CGRectMake(0, 3, self.width, self.height - 3);
+    _tableView.rowHeight = _tableView.height / _displayRowCount;
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
@@ -87,6 +90,30 @@
     self.outlineLayer.fillColor = fillColor.CGColor;
 }
 
+- (void)setSeparatorColor:(UIColor *)separatorColor {
+    _separatorColor = separatorColor;
+    _tableView.separatorColor = _separatorColor;
+}
+
+- (void)setImageColor:(UIColor *)imageColor {
+    if (CGColorEqualToColor(_imageColor.CGColor, imageColor.CGColor)) {
+        return;
+    }
+    
+    _imageColor = imageColor;
+    for (int i = 0; i < _cellItems.count; i ++) {
+        SSJListMenuCellItem *cellItem = _cellItems[i];
+        cellItem.imageColor = _imageColor;
+    }
+}
+
+- (void)setDisplayRowCount:(CGFloat)displayRowCount {
+    if (displayRowCount <= 0) {
+        SSJPRINT(@"displayRowCount必须大于0");
+    }
+    [self setNeedsLayout];
+}
+
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point {
     [self showInView:view atPoint:point dismissHandle:NULL];
 }
@@ -107,6 +134,7 @@
         
         CGFloat scale = vertexX / self.width;
         
+        _tableView.alpha = 0;
         self.transform = CGAffineTransformMakeScale(0.1, 0.1);
         self.leftTop = point;
         
@@ -114,7 +142,12 @@
             self.transform = CGAffineTransformMakeScale(1, 1);
             self.top = point.y;
             self.left = point.x - scale * self.width;
-        } timeInterval:0.25 fininshed:NULL];
+        } timeInterval:kDuration fininshed:^(BOOL finished) {
+            [_tableView reloadData];
+            [UIView animateWithDuration:kDuration animations:^{
+                _tableView.alpha = 1;
+            }];
+        }];
         
         _dismissHandle = dismissHandle;
     }
@@ -130,7 +163,7 @@
             self.transform = CGAffineTransformMakeScale(0.1, 0.1);
             self.top = _showPoint.y;
             self.left = _showPoint.x - scale * self.width;
-        } timeInterval:0.25 fininshed:^(BOOL complation) {
+        } timeInterval:kDuration fininshed:^(BOOL complation) {
             self.transform = CGAffineTransformMakeScale(1, 1);
         }];
     }
@@ -190,7 +223,15 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     self.selectedIndex = indexPath.row;
+    
+    [self dismiss];
+    if (_dismissHandle) {
+        _dismissHandle(self);
+        _dismissHandle = NULL;
+    }
+    
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
@@ -201,8 +242,8 @@
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorColor = _separatorColor;
         [_tableView ssj_clearExtendSeparator];
         [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 10, 0, 10)];
     }
@@ -213,8 +254,8 @@
     if (!_outlineLayer) {
         _outlineLayer = [CAShapeLayer layer];
         _outlineLayer.fillColor = _fillColor.CGColor;
-        _outlineLayer.strokeColor = [UIColor lightGrayColor].CGColor;
-        _outlineLayer.lineWidth = 0.5;
+        _outlineLayer.shadowOpacity = 0.5;
+        _outlineLayer.shadowOffset = CGSizeMake(0, 3);
     }
     return _outlineLayer;
 }

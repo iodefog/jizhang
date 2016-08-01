@@ -125,6 +125,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [_tableView reloadData];
     
+    [_typeAndMemberControl updateAppearance];
+    
     _payAndIncomeSegmentControl.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     _payAndIncomeSegmentControl.normalBackgroundColor = [UIColor clearColor];
@@ -133,6 +135,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
