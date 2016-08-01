@@ -14,8 +14,8 @@
 //  预算周期类型
 @property (nonatomic, strong) UILabel *typeLab;
 
-//  开始时间
-@property (nonatomic, strong) UILabel *beginDateLab;
+//  预算周期
+@property (nonatomic, strong) UILabel *periodLab;
 
 //  已花金额
 @property (nonatomic, strong) UILabel *paymentLab;
@@ -30,14 +30,14 @@
 
 @implementation SSJBudgetListCell
 
-+ (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {
-    return 165;
++ (CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object {
+    return 314;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.typeLab];
-        [self.contentView addSubview:self.beginDateLab];
+        [self.contentView addSubview:self.periodLab];
         [self.contentView addSubview:self.paymentLab];
         [self.contentView addSubview:self.budgetLab];
         [self.contentView addSubview:self.waveView];
@@ -48,8 +48,8 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.typeLab.leftTop = CGPointMake(10, 18);
-    self.beginDateLab.rightTop = CGPointMake(self.contentView.width - 10, 18);
+    self.typeLab.center = CGPointMake(self.contentView.width * 0.5, 30);
+    self.periodLab.center = CGPointMake(self.contentView.width * 0.5, 55);
     self.paymentLab.leftBottom = CGPointMake(10, self.contentView.height - 15);
     self.budgetLab.rightBottom = CGPointMake(self.contentView.width - 10, self.contentView.height - 15);
     self.waveView.center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * 0.56);
@@ -64,16 +64,19 @@
     self.typeLab.text = item.typeName;
     [self.typeLab sizeToFit];
     
-    self.beginDateLab.text = [NSString stringWithFormat:@"开始时间：%@",item.beginDate];
-    [self.beginDateLab sizeToFit];
+    self.periodLab.text = item.period;
+    [self.periodLab sizeToFit];
     
-    UIColor *paymentColor = item.payment > item.budget ? [UIColor redColor] : [UIColor ssj_colorWithHex:@"eb4a64"];
     NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", item.payment]];
-    [paymentStr setAttributes:@{NSForegroundColorAttributeName:paymentColor} range:NSMakeRange(3, paymentStr.length - 3)];
+    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
+                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
     self.paymentLab.attributedText = paymentStr;
     [self.paymentLab sizeToFit];
     
-    self.budgetLab.text = [NSString stringWithFormat:@"计划：%.2f", item.budget];
+    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"计划：%.2f", item.budget]];
+    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
+                               NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, budgetStr.length - 3)];
+    self.budgetLab.attributedText = budgetStr;
     [self.budgetLab sizeToFit];
     
     self.waveView.percent = (item.payment / item.budget);
@@ -85,27 +88,27 @@
         _typeLab = [[UILabel alloc] init];
         _typeLab.backgroundColor = [UIColor clearColor];
         _typeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _typeLab.font = [UIFont systemFontOfSize:14];
+        _typeLab.font = [UIFont systemFontOfSize:18];
     }
     return _typeLab;
 }
 
-- (UILabel *)beginDateLab {
-    if (!_beginDateLab) {
-        _beginDateLab = [[UILabel alloc] init];
-        _beginDateLab.backgroundColor = [UIColor clearColor];
-        _beginDateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _beginDateLab.font = [UIFont systemFontOfSize:12];
+- (UILabel *)periodLab {
+    if (!_periodLab) {
+        _periodLab = [[UILabel alloc] init];
+        _periodLab.backgroundColor = [UIColor clearColor];
+        _periodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _periodLab.font = [UIFont systemFontOfSize:13];
     }
-    return _beginDateLab;
+    return _periodLab;
 }
 
 - (UILabel *)paymentLab {
     if (!_paymentLab) {
         _paymentLab = [[UILabel alloc] init];
         _paymentLab.backgroundColor = [UIColor clearColor];
-        _paymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _paymentLab.font = [UIFont systemFontOfSize:14];
+        _paymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _paymentLab.font = [UIFont systemFontOfSize:13];
     }
     return _paymentLab;
 }
@@ -114,22 +117,22 @@
     if (!_budgetLab) {
         _budgetLab = [[UILabel alloc] init];
         _budgetLab.backgroundColor = [UIColor clearColor];
-        _budgetLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _budgetLab.font = [UIFont systemFontOfSize:14];
+        _budgetLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _budgetLab.font = [UIFont systemFontOfSize:13];
     }
     return _budgetLab;
 }
 
 - (SSJBudgetWaveWaterView *)waveView {
     if (!_waveView) {
-        _waveView = [[SSJBudgetWaveWaterView alloc] initWithRadius:90];
-        _waveView.waveAmplitude = 6;
-        _waveView.waveSpeed = 4;
+        _waveView = [[SSJBudgetWaveWaterView alloc] initWithRadius:160];
+        _waveView.waveAmplitude = 12;
+        _waveView.waveSpeed = 5;
         _waveView.waveCycle = 1;
-        _waveView.waveGrowth = 2;
-        _waveView.waveOffset = 40;
-        _waveView.fullWaveAmplitude = 5;
-        _waveView.fullWaveSpeed = 3;
+        _waveView.waveGrowth = 3;
+        _waveView.waveOffset = 60;
+        _waveView.fullWaveAmplitude = 8;
+        _waveView.fullWaveSpeed = 4;
         _waveView.fullWaveCycle = 4;
         _waveView.outerBorderWidth = 5;
         _waveView.showText = YES;

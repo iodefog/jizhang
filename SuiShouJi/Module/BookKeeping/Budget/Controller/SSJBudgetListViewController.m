@@ -111,7 +111,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
             cellItem.typeName = @"年预算";
             break;
     }
-    cellItem.beginDate = [model.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy年M月dd日"];
+    cellItem.period = [NSString stringWithFormat:@"%@——%@", model.beginDate, model.endDate];
     cellItem.payment = model.payMoney;
     cellItem.budget = model.budgetMoney;
     return cellItem;
@@ -134,7 +134,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
-        _tableView.rowHeight = 165;
+        _tableView.rowHeight = 314;
     }
     return _tableView;
 }

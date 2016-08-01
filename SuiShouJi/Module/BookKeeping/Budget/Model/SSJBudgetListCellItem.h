@@ -12,7 +12,7 @@
 
 @property (nonatomic, copy) NSString *typeName;
 
-@property (nonatomic, copy) NSString *beginDate;
+@property (nonatomic, copy) NSString *period;
 
 @property (nonatomic) double payment;
 
