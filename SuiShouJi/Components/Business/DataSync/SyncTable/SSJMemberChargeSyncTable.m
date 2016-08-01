@@ -58,14 +58,16 @@
         if (!chargeId) {
             continue;
         }
-        if (![chargeIds containsObject:chargeId]) {
-            [chargeIds addObject:chargeId];
+        
+        NSString *tmpChargeId = [NSString stringWithFormat:@"'%@'", chargeId];
+        if (![chargeIds containsObject:tmpChargeId]) {
+            [chargeIds addObject:tmpChargeId];
         }
     }
     
     NSString *chargeIdStr = [chargeIds componentsJoinedByString:@","];
-    
-    if (![db executeUpdate:@"delete from bk_member_charge where ichargeid in (?)", chargeIdStr]) {
+    NSString *deleteStr = [NSString stringWithFormat:@"delete from bk_member_charge where ichargeid in (%@)", chargeIdStr];
+    if (![db executeUpdate:deleteStr]) {
         return NO;
     }
     
