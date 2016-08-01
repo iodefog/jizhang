@@ -17,6 +17,8 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 @property(nonatomic, strong) UICollectionViewFlowLayout *layout;
 
 @property(nonatomic, strong) NSArray *items;
+
+@property(nonatomic, strong) UIButton *rightButton;
 @end
 
 @implementation SSJThemeManagerViewController{
@@ -37,6 +39,8 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
     editeModel = NO;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self.view addSubview:self.themeSelectView];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithCustomView:self.rightButton];
+    self.navigationItem.rightBarButtonItem = rightButton;
     // Do any additional setup after loading the view.
 }
 
@@ -53,6 +57,10 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeModel *item = [self.items objectAtIndex:indexPath.item];
     SSJThemeManagerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    __weak typeof(self) weakSelf = self;
+    cell.deleteThemeBlock = ^(){
+        [weakSelf getAllThemes];
+    };
     if ([item.ID isEqualToString:SSJCurrentThemeID()]) {
         cell.inUse = YES;
     }else{
@@ -86,6 +94,13 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
     return CGSizeMake(self.view.width, 50);
 }
 
+#pragma mark - Event
+-(void)rightButtonClicked:(id)sender{
+    editeModel = !editeModel;
+    self.rightButton.selected = !self.rightButton.isSelected;
+    [self.themeSelectView reloadData];
+}
+
 #pragma mark - Getter
 - (UICollectionViewFlowLayout *)layout {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
@@ -107,6 +122,20 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
         [_themeSelectView registerClass:[SSJThemeManagerCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
     }
     return _themeSelectView;
+}
+
+-(UIButton *)rightButton{
+    if (!_rightButton) {
+        _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+        [_rightButton setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].naviBarTintColor] forState:UIControlStateNormal];
+        [_rightButton setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].naviBarTintColor] forState:UIControlStateSelected];
+        _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
+        [_rightButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
+        [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _rightButton.selected = NO;
+    }
+    return _rightButton;
 }
 
 #pragma mark - Private
