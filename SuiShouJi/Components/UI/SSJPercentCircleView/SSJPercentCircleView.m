@@ -120,6 +120,7 @@
             additionViewItem.angle = angle;
             additionViewItem.lineLength = 20;
             additionViewItem.imageName = item.imageName;
+            additionViewItem.customView = item.customView;
             additionViewItem.imageRadius = 13;
             additionViewItem.imageBorderShowed = item.imageBorderShowed;
             additionViewItem.borderColorValue = item.colorValue;

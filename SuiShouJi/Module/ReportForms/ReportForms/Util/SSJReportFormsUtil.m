@@ -189,7 +189,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             item.scale = item.money / amount;
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
             item.imageName = [resultSet stringForColumn:@"ccoin"];
-            item.incomeOrPayName = [resultSet stringForColumn:@"cname"];
+            item.name = [resultSet stringForColumn:@"cname"];
             item.titleColor = SSJ_CURRENT_THEME.mainColor;
             [result addObject:item];
         }
@@ -530,8 +530,9 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             item.money = [resultSet doubleForColumn:@"sum(c.imoney)"];
             item.scale = item.money / amount;
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
-            item.incomeOrPayName = [resultSet stringForColumn:@"cname"];
+            item.name = [resultSet stringForColumn:@"cname"];
             item.titleColor = SSJ_CURRENT_THEME.mainColor;
+            item.isMember = YES;
             [result addObject:item];
         }
         

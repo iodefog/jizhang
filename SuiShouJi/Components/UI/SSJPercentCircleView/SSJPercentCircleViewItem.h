@@ -19,6 +19,9 @@
 //  圆环组件图片
 @property (nonatomic, copy) NSString *imageName;
 
+//  圆环组件自定义图片，如果不为空，则取代imageName创建的图片
+@property (nonatomic, strong) UIView *customView;
+
 //  圆环组件图片的边框是否显示
 @property (nonatomic) BOOL imageBorderShowed;
 

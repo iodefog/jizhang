@@ -9,11 +9,15 @@
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsItem.h"
 
+static const CGFloat imageDiam = 26;
+
 @interface SSJReportFormsIncomeAndPayCell ()
 
 @property (nonatomic, strong) UILabel *percentLabel;
 
 @property (nonatomic, strong) UILabel *moneyLabel;
+
+@property (nonatomic, strong) UILabel *memberNameLabel;
 
 @end
 
@@ -29,6 +33,7 @@
         self.textLabel.font = [UIFont systemFontOfSize:18];
         self.textLabel.backgroundColor = [UIColor clearColor];
         
+        [self.contentView addSubview:self.memberNameLabel];
         [self.contentView addSubview:self.percentLabel];
         [self.contentView addSubview:self.moneyLabel];
     }
@@ -38,11 +43,12 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    CGFloat imageDiam = 26;
     self.imageView.size = CGSizeMake(imageDiam, imageDiam);
     self.imageView.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
     self.imageView.layer.cornerRadius = imageDiam * 0.5;
     self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
+    
+    self.memberNameLabel.leftTop = CGPointMake(10, (self.contentView.height - imageDiam) * 0.5);
     
     self.textLabel.left = self.imageView.right + 10;
     
@@ -58,11 +64,21 @@
     if (cellItem) {
         SSJReportFormsItem *item = (SSJReportFormsItem *)cellItem;
         
-        self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        self.imageView.tintColor = [UIColor ssj_colorWithHex:item.colorValue];
-        self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+        if (item.isMember) {
+            self.imageView.hidden = YES;
+            self.memberNameLabel.hidden = NO;
+            self.memberNameLabel.text = item.name.length >= 1 ? [item.name substringToIndex:1] : @"";
+            self.memberNameLabel.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+            self.memberNameLabel.textColor = [UIColor ssj_colorWithHex:item.colorValue];
+        } else {
+            self.memberNameLabel.hidden = YES;
+            self.imageView.hidden = NO;
+            self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            self.imageView.tintColor = [UIColor ssj_colorWithHex:item.colorValue];
+            self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+        }
         
-        self.textLabel.text = item.incomeOrPayName;
+        self.textLabel.text = item.name;
         self.percentLabel.text = [NSString stringWithFormat:@"%.1f％",item.scale * 100];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.money];
         
@@ -92,6 +108,17 @@
         _moneyLabel.textAlignment = NSTextAlignmentRight;
     }
     return _moneyLabel;
+}
+
+- (UILabel *)memberNameLabel {
+    if (!_memberNameLabel) {
+        _memberNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, imageDiam, imageDiam)];
+        _memberNameLabel.font = [UIFont systemFontOfSize:16];
+        _memberNameLabel.textAlignment = NSTextAlignmentCenter;
+        _memberNameLabel.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+        _memberNameLabel.layer.cornerRadius = imageDiam * 0.5;
+    }
+    return _memberNameLabel;
 }
 
 @end

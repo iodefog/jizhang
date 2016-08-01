@@ -18,8 +18,6 @@
 #import "SSJMemberChargeSyncTable.h"
 
 #import "SSJSyncTable.h"
-#import "SSJFundAccountTable.h"
-#import "SSJDailySumChargeTable.h"
 
 #import "SSJDatabaseQueue.h"
 #import "AFNetworking.h"
@@ -159,9 +157,19 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
+                    
+                    // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
+                    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+                        BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, '0', a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
+                        if (!success) {
+                            *rollback = YES;
+                        }
+                    }];
+                    
                     //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
                     [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
                     [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
+                    
                     if (success) {
                         SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
                         success();

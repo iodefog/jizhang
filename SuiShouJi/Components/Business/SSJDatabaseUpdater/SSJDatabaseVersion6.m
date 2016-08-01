@@ -58,7 +58,7 @@
 + (NSError *)supplementMemberChargeRecordsInDatabase:(FMDatabase *)db {
     [db beginTransaction];
     
-    BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select ichargeid, '0', imoney, ?, ?, 0", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select ichargeid, '0', imoney, ?, ?, 0 from bk_user_charge", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
     if (!success) {
         [db rollback];
         return [db lastError];
