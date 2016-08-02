@@ -82,16 +82,18 @@
     static NSString *cellId = @"SSJMemberCell";
     SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[SSJBaseTableViewCell alloc] initWithStyle :UITableViewCellStyleValue1 reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     NSString *title = item.memberName;
+    cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.textLabel.text = title;
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:18];
     cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     if ([item.memberId isEqualToString:@"0"]) {
         cell.detailTextLabel.text = @"默认";

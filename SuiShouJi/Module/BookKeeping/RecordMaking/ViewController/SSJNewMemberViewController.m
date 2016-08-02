@@ -105,6 +105,11 @@
 -(void)rightButtonClicked:(id)sender{
     if (!self.header.nameInput.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入成员名称"];
+        return;
+    }
+    if (self.header.nameInput.text.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"成员名称最多只能输入5个字"];
+        return;
     }
     [self saveMember];
 }
