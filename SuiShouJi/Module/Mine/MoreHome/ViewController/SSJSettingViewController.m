@@ -19,13 +19,16 @@
 #import "SSJStartChecker.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJDataClearHelper.h"
+#import "WXApi.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
 static NSString *const kTitle3 = @"数据格式化";
 static NSString *const kTitle4 = @"分享APP";
-static NSString *const kTitle5 = @"关于我们";
-static NSString *const kTitle6 = @"检查更新";
+static NSString *const kTitle6 = @"关于我们";
+static NSString *const kTitle5 = @"检查更新";
+static NSString *const kTitle7 = @"微信公众号";
+static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信查找即可";
 
 
 @interface SSJSettingViewController ()
@@ -53,9 +56,17 @@ static NSString *const kTitle6 = @"检查更新";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4 , kTitle5]];
+        if ([WXApi isWXAppInstalled]) {
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7]];
+        }else{
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6]];
+        }
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
+        if ([WXApi isWXAppInstalled]) {
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7]];
+        }else{
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
+        }
     }
     
     [self.navigationController setNavigationBarHidden:NO];
@@ -144,6 +155,16 @@ static NSString *const kTitle6 = @"检查更新";
             [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
         }];
     }
+    
+    if ([title isEqualToString:kTitle7]) {
+        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = @"youyuwjr";
+            [WXApi openWXApp];
+        }];
+        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"复制微信号成功啦，现在就跳转到微信在搜索栏粘贴，即刻关注我们吧！" action:comfirmAction,cancelAction,nil];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -165,8 +186,9 @@ static NSString *const kTitle6 = @"检查更新";
     mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
         mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
+    }else if([mineHomeCell.cellTitle isEqualToString:kTitle7]){
+        mineHomeCell.cellDetail = @"youyuwjr";
     }
-    
     return mineHomeCell;
 }
 
@@ -176,11 +198,9 @@ static NSString *const kTitle6 = @"检查更新";
     //根据responseCode得到发送结果,如果分享成功
     if(response.responseCode == UMSResponseCodeSuccess)
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享失败"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享失败" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
     }
 }
 

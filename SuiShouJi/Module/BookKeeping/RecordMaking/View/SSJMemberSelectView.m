@@ -146,12 +146,12 @@
         comfirmButton.centerY = _topView.height / 2;
         comfirmButton.right = _topView.width - 10;
         UIButton *manageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [manageButton setTitle:@"管理" forState:UIControlStateNormal];
+        [manageButton setImage:[UIImage imageNamed:@"chengyuan_guanli"] forState:UIControlStateNormal];
         [manageButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [manageButton addTarget:self action:@selector(manageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         manageButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_topView addSubview:manageButton];
-        manageButton.size = CGSizeMake(50, 20);
+        manageButton.size = CGSizeMake(40, 40);
         manageButton.centerY = _topView.height / 2;
         manageButton.left = 10;
     }
