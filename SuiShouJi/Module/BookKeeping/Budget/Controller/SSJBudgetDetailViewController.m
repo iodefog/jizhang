@@ -29,6 +29,9 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 //  底层滚动视图
 @property (nonatomic, strong) UIScrollView *scrollView;
 
+//  周期
+@property (nonatomic, strong) UILabel *periodLabel;
+
 //  包含本月预算、距结算日、已花、超支、波浪图表的视图
 @property (nonatomic, strong) SSJBudgetDetailHeaderView *headerView;
 
@@ -70,6 +73,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     
     self.navigationItem.titleView = self.titleView;
     
+    [self.view addSubview:self.periodLabel];
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.headerView];
     [self.scrollView addSubview:self.middleView];
@@ -192,12 +196,14 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     }
     
     if (!self.budgetModel) {
+        self.periodLabel.hidden = YES;
         self.scrollView.hidden = YES;
         self.noDataRemindView.title = [NSString stringWithFormat:@"您在这个%@没有设置预算哦", tStr];
         [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         return;
     }
     
+    self.periodLabel.hidden = NO;
     self.scrollView.hidden = NO;
     self.headerView.isHistory = ![self.budgetModel.ID isEqualToString:self.budgetId];
     [self.headerView setBudgetModel:self.budgetModel];
@@ -221,7 +227,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-d"];
     NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-d"];
     [self.middleView setTitle:[NSString stringWithFormat:@"%@预算消费明细", tStr]];
-    [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
+//    [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
+    self.periodLabel.text = [NSString stringWithFormat:@"%@——%@", beginDate, endDate];
 }
 
 #pragma mark - Getter
@@ -233,9 +240,21 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     return _titleView;
 }
 
+- (UILabel *)periodLabel {
+    if (!_periodLabel) {
+        _periodLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 26)];
+        _periodLabel.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _periodLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _periodLabel.font = [UIFont systemFontOfSize:13];
+        _periodLabel.textAlignment = NSTextAlignmentCenter;
+        _periodLabel.hidden = YES;
+    }
+    return _periodLabel;
+}
+
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
+        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.periodLabel.bottom, self.view.width, self.view.height - self.periodLabel.bottom)];
         _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.hidden = YES;
     }

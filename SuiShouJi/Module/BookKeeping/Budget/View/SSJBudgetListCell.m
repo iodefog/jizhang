@@ -134,7 +134,7 @@
         _waveView.fullWaveAmplitude = 8;
         _waveView.fullWaveSpeed = 4;
         _waveView.fullWaveCycle = 4;
-        _waveView.outerBorderWidth = 5;
+        _waveView.outerBorderWidth = 8;
         _waveView.showText = YES;
     }
     return _waveView;
