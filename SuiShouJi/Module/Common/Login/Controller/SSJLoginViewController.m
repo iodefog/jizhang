@@ -194,17 +194,18 @@
         SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
         if (![self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
             NSString *userName;
-            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+            int loginType = [lastUserItem.loginType intValue];
+            if (loginType == 0) {
                 userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
             }else{
                 userName = lastUserItem.nickName;
             }
             NSString *hintStr;
-            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+            if (loginType == 0) {
                 hintStr = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
-            }else if ([lastUserItem.loginType isEqualToString:@"1"]) {
+            }else if (loginType == 1) {
                 hintStr = [NSString stringWithFormat:@"您已使用过qq%@登陆过,确定使用新账户登录",userName];
-            }else if ([lastUserItem.loginType isEqualToString:@"2"]) {
+            }else if (loginType == 2) {
                 hintStr = [NSString stringWithFormat:@"您已使用过微信%@登陆过,确定使用新账户登录",userName];
             }
             NSString *fullhint = [NSString stringWithFormat:@"%@\n\n登陆后新的记账数据将同步到新账号",hintStr];
