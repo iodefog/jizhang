@@ -210,6 +210,8 @@
         if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
             SSJUpdateSyncVersion(SSJDefaultSyncVersion + 1);
             return nil;
+        } else {
+            return [db lastError];
         }
     }
 //    if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) select ?, 0, ? where not exists (select count(*) from BK_SYNC where CUSERID = ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
@@ -217,7 +219,7 @@
 //        return nil;
 //    }
     
-    return [db lastError];
+    return nil;
 }
 
 //  如果当前用户没有创建过默认的资金帐户，则创建默认资金帐户
