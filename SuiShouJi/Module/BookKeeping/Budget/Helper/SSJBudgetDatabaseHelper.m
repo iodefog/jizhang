@@ -172,10 +172,9 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-        NSString *currentPeriodBeginDate = [currentPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2 and csdate <= ? and cbooksid = ?", userid, currentPeriodBeginDate, userItem.currentBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2 and csdate <= ? and cbooksid = ?", userid, today, userItem.currentBooksId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
