@@ -611,7 +611,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SSJReportFormsSwitchControl *)payAndIncomeSegmentControl {
     if (!_payAndIncomeSegmentControl) {
         _payAndIncomeSegmentControl = [[SSJReportFormsSwitchControl alloc] initWithTitles:@[kSegmentTitlePay, kSegmentTitleIncome]];
-        _payAndIncomeSegmentControl.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, 26);
+        _payAndIncomeSegmentControl.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, 40);
         [_payAndIncomeSegmentControl addTarget:self action:@selector(payAndIncomeSwitchControlAction) forControlEvents:UIControlEventValueChanged];
         _payAndIncomeSegmentControl.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
