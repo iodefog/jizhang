@@ -462,7 +462,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             
         case SSJBudgetPeriodTypeMonth:
             if (self.accountDaySelectionView.endOfMonth) {
-                accountday = @"每月末";
+                accountday = @"每月最后一天";
             } else {
                 accountday = [NSString stringWithFormat:@"每月%d日", (int)self.accountDaySelectionView.endDate.day];
             }

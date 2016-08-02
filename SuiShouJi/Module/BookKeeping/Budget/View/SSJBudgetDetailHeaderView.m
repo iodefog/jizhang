@@ -147,7 +147,7 @@ static const CGFloat kBottomViewHeight = 265;
     NSString *dateString = [self.formatter stringFromDate:[NSDate date]];
     NSDate *currentDate = [self.formatter dateFromString:dateString];
     NSDate *endDate = [self.formatter dateFromString:model.endDate];
-    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60) + 1;
+    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60);
     self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
     [self.intervalLab sizeToFit];
     

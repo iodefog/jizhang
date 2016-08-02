@@ -167,7 +167,7 @@
             
         case SSJBudgetPeriodTypeMonth:
             if (row == 28) {
-                return @"月末";
+                return @"每月最后一天";
             } else {
                 return [NSString stringWithFormat:@"%d日", (int)row + 1];
             }
@@ -179,6 +179,7 @@
                 NSInteger selectedMonth = [pickerView selectedRowInComponent:0] + 1;
                 if (selectedMonth == 2 && row == 28) {
                     return @"月末";
+//                    return @"每月最后一天";
                 } else {
                     return [NSString stringWithFormat:@"%d日", (int)row + 1];
                 }
