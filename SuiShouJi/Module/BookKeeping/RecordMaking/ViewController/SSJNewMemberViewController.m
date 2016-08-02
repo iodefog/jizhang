@@ -35,6 +35,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.header.nameInput becomeFirstResponder];
     if (!self.originalItem.memberName.length) {
         self.title = @"新建成员";
         _selectColor = @"#fc7a60";
@@ -43,6 +44,11 @@
         _selectColor = self.originalItem.memberColor;
     }
     self.header.selectedColor = _selectColor;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.header.nameInput resignFirstResponder];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -99,6 +105,11 @@
 -(void)rightButtonClicked:(id)sender{
     if (!self.header.nameInput.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入成员名称"];
+        return;
+    }
+    if (self.header.nameInput.text.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"成员名称最多只能输入5个字"];
+        return;
     }
     [self saveMember];
 }

@@ -47,7 +47,7 @@
 
 -(void)viewDidLayoutSubviews{
     _headerView.top = SSJ_NAVIBAR_BOTTOM + 10;
-    _headerView.size = CGSizeMake(self.view.width, 55);
+    _headerView.size = CGSizeMake(self.view.width, 63);
     _nameLabel.left = 10;
     _nameLabel.centerY = self.headerView.height / 2;
     _amountLabel.right = self.headerView.width - 10;

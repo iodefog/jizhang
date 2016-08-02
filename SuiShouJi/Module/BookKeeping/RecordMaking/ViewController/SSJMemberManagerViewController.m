@@ -15,25 +15,34 @@
 @interface SSJMemberManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic, strong) NSMutableArray *items;
 @property(nonatomic, strong) UITableView *tableView;
+@property(nonatomic, strong) UIButton *editeButton;
 @end
 
 @implementation SSJMemberManagerViewController
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.extendedLayoutIncludesOpaqueBars = NO;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"成员管理";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.editeButton];
     [self.view addSubview:self.tableView];
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 10);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 10 - SSJ_NAVIBAR_BOTTOM);
     self.tableView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
     // Do any additional setup after loading the view.
 }
 
--(void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self getDataFromDb];
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 50;
 }
 
@@ -67,7 +76,7 @@
 }
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
 }
 
@@ -75,21 +84,27 @@
     static NSString *cellId = @"SSJMemberCell";
     SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
-        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[SSJBaseTableViewCell alloc] initWithStyle :UITableViewCellStyleValue1 reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
     NSString *title = item.memberName;
+    cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.textLabel.text = title;
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    cell.detailTextLabel.font = [UIFont systemFontOfSize:18];
+    cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    if ([item.memberId isEqualToString:@"0"]) {
+        cell.detailTextLabel.text = @"默认";
+    }
     return cell;
 }
 
 #pragma mark - Private
--(void)getDataFromDb{
+- (void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
@@ -112,7 +127,7 @@
     }];
 }
 
--(void)deleteMemberWithMemberId:(NSString *)Id{
+- (void)deleteMemberWithMemberId:(NSString *)Id{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         [db executeUpdate:@"update bk_member set istate = 0 where cmemberid = ?",Id];
 //        [db executeUpdate:@"update bk_member_charge set operatortype = 2 where cmemberid = ?",Id];
@@ -129,14 +144,27 @@
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
-        _tableView.scrollEnabled = NO;
         [_tableView ssj_clearExtendSeparator];
-
         [_tableView ssj_setBorderWidth:2];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
         [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _tableView;
+}
+
+- (UIButton *)editeButton{
+    if (!_editeButton) {
+        _editeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
+        [_editeButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_editeButton setTitle:@"完成" forState:UIControlStateSelected];
+        [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _editeButton;
+}
+
+- (void)editeButtonClicked:(id)sender{
+    _editeButton.selected = !_editeButton.isSelected;
+    [self.tableView setEditing:_editeButton.isSelected animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
