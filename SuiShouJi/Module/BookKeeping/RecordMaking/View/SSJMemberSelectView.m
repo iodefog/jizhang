@@ -108,7 +108,6 @@
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
-        _tableView.scrollEnabled = NO;
         [_tableView ssj_clearExtendSeparator];
 
         [_tableView ssj_setBorderWidth:2];
@@ -146,8 +145,8 @@
         comfirmButton.centerY = _topView.height / 2;
         comfirmButton.right = _topView.width - 10;
         UIButton *manageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [manageButton setImage:[UIImage imageNamed:@"chengyuan_guanli"] forState:UIControlStateNormal];
-        [manageButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [manageButton setImage:[[UIImage imageNamed:@"chengyuan_guanli"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        manageButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [manageButton addTarget:self action:@selector(manageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         manageButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_topView addSubview:manageButton];
@@ -160,6 +159,10 @@
 
 #pragma mark - Event
 -(void)comfirmButtonClick:(id)sender{
+    if (!self.selectedMemberItems.count) {
+        [CDAutoHideMessageHUD showMessage:@"至少选择一个成员"];
+        return;
+    }
     [self dismiss];
     if (self.comfirmBlock) {
         self.comfirmBlock(self.selectedMemberItems);

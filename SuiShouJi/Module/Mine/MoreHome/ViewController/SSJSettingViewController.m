@@ -57,13 +57,13 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7]];
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7,kTitle8]];
         }else{
             self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6]];
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7]];
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
         }else{
             self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
         }
@@ -183,11 +183,18 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
-        mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
-    }else if([mineHomeCell.cellTitle isEqualToString:kTitle7]){
-        mineHomeCell.cellDetail = @"youyuwjr";
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle8]) {
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryNone;
+        mineHomeCell.cellSubTitle = title;
+    }else{
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.cellTitle = title;
+        if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
+            mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
+        }else if([mineHomeCell.cellTitle isEqualToString:kTitle7]){
+            mineHomeCell.cellDetail = @"youyuwjr";
+        }
     }
     return mineHomeCell;
 }

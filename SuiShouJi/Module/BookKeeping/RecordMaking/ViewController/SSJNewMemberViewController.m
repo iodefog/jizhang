@@ -35,6 +35,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.header.nameInput becomeFirstResponder];
     if (!self.originalItem.memberName.length) {
         self.title = @"新建成员";
         _selectColor = @"#fc7a60";
@@ -43,6 +44,11 @@
         _selectColor = self.originalItem.memberColor;
     }
     self.header.selectedColor = _selectColor;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.header.nameInput resignFirstResponder];
 }
 
 -(void)viewDidLayoutSubviews{

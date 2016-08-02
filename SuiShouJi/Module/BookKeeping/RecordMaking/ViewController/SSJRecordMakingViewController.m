@@ -233,19 +233,21 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         __weak typeof(self) weakSelf = self;
         _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _memberSelectView.dismissBlock = ^(){
-            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+            if ([[weakSelf.navigationController.viewControllers lastObject] isKindOfClass:[SSJRecordMakingViewController class]]) {
+                [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+            }
         };
         _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };
         _memberSelectView.manageBlock = ^(){
+            [weakSelf.billTypeInputView.moneyInput resignFirstResponder];
+            [weakSelf.accessoryView.memoView resignFirstResponder];
             SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
             [weakSelf.navigationController pushViewController:membermanageVc animated:YES];
         };
         _memberSelectView.addNewMemberBlock = ^(){
-            [weakSelf.billTypeInputView.moneyInput resignFirstResponder];
-            [weakSelf.accessoryView.memoView resignFirstResponder];
             SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
             [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
         };

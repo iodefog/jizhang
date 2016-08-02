@@ -18,11 +18,18 @@
 @end
 
 @implementation SSJMemberManagerViewController
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.extendedLayoutIncludesOpaqueBars = NO;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"成员管理";
     [self.view addSubview:self.tableView];
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 10);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - 10 - SSJ_NAVIBAR_BOTTOM);
     self.tableView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
     // Do any additional setup after loading the view.
 }
@@ -85,6 +92,10 @@
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    if ([item.memberId isEqualToString:@"0"]) {
+        cell.detailTextLabel.text = @"默认";
+    }
     return cell;
 }
 
@@ -129,9 +140,7 @@
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.separatorInset = UIEdgeInsetsZero;
-        _tableView.scrollEnabled = NO;
         [_tableView ssj_clearExtendSeparator];
-
         [_tableView ssj_setBorderWidth:2];
         [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
         [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
