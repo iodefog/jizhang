@@ -15,6 +15,7 @@
 @interface SSJMemberManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic, strong) NSMutableArray *items;
 @property(nonatomic, strong) UITableView *tableView;
+@property(nonatomic, strong) UIButton *editeButton;
 @end
 
 @implementation SSJMemberManagerViewController
@@ -28,19 +29,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"成员管理";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.editeButton];
     [self.view addSubview:self.tableView];
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - 10 - SSJ_NAVIBAR_BOTTOM);
     self.tableView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
     // Do any additional setup after loading the view.
 }
 
--(void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self getDataFromDb];
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 50;
 }
 
@@ -74,7 +76,7 @@
 }
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
 }
 
@@ -102,7 +104,7 @@
 }
 
 #pragma mark - Private
--(void)getDataFromDb{
+- (void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
@@ -125,7 +127,7 @@
     }];
 }
 
--(void)deleteMemberWithMemberId:(NSString *)Id{
+- (void)deleteMemberWithMemberId:(NSString *)Id{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         [db executeUpdate:@"update bk_member set istate = 0 where cmemberid = ?",Id];
 //        [db executeUpdate:@"update bk_member_charge set operatortype = 2 where cmemberid = ?",Id];
@@ -148,6 +150,21 @@
         [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor]];
     }
     return _tableView;
+}
+
+- (UIButton *)editeButton{
+    if (!_editeButton) {
+        _editeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
+        [_editeButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_editeButton setTitle:@"完成" forState:UIControlStateSelected];
+        [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _editeButton;
+}
+
+- (void)editeButtonClicked:(id)sender{
+    _editeButton.selected = !_editeButton.isSelected;
+    [self.tableView setEditing:_editeButton.isSelected animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
