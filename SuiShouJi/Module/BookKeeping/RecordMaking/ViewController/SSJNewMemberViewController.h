@@ -10,5 +10,9 @@
 #import "SSJChargeMemBerItem.h"
 
 @interface SSJNewMemberViewController : SSJBaseViewController
+
 @property(nonatomic, strong) SSJChargeMemberItem *originalItem;
+
+@property (nonatomic, copy) void (^addNewMemberAction)(SSJChargeMemberItem *item);
+
 @end

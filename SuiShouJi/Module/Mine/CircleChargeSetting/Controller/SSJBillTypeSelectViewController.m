@@ -10,6 +10,7 @@
 #import "SSJCategoryListHelper.h"
 #import "SSJBillTypeSelectCell.h"
 #import "SSJADDNewTypeViewController.h"
+#import "SSJDatabaseQueue.h"
 
 static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifier";
 
@@ -102,10 +103,27 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 #pragma mark - Event
 -(void)comfirmButtonClicked:(id)sender{
-    if (self.typeSelectBlock) {
-        self.typeSelectBlock(self.selectedItem);
+    if (!self.selectedItem.ID.length) {
+        __weak typeof(self) weakSelf = self;
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = [[SSJRecordMakingBillTypeSelectionCellItem alloc]init];
+            item.ID = weakSelf.selectedId;
+            item.title = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.ID];
+            item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.ID];
+            item.colorValue = [db stringForQuery:@"select ccolor from bk_bill_type where id = ?",item.ID];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.typeSelectBlock) {
+                    self.typeSelectBlock(item);
+                }
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+    }else{
+        if (self.typeSelectBlock) {
+            self.typeSelectBlock(self.selectedItem);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Private
