@@ -19,8 +19,6 @@
 
 @property (nonatomic, strong) UIPickerView *pickerView;
 
-@property (nonatomic, strong) NSDate *endDate;
-
 @end
 
 @implementation SSJBudgetEditAccountDaySelectionView
@@ -95,6 +93,16 @@
     
     [self updateAccountDay];
     [self updateEndOfMonth];
+}
+
+- (void)setEndDate:(NSDate *)endDate {
+    _endDate = endDate;
+    [self updateSelectedRow];
+}
+
+- (void)setEndOfMonth:(BOOL)endOfMonth {
+    _endOfMonth = endOfMonth;
+    [self updateSelectedRow];
 }
 
 - (void)show {
@@ -179,7 +187,6 @@
                 NSInteger selectedMonth = [pickerView selectedRowInComponent:0] + 1;
                 if (selectedMonth == 2 && row == 28) {
                     return @"月末";
-//                    return @"每月最后一天";
                 } else {
                     return [NSString stringWithFormat:@"%d日", (int)row + 1];
                 }
@@ -287,6 +294,40 @@
     }
     
     _beginDate = [_beginDate dateByAddingDays:1];
+}
+
+- (void)updateSelectedRow {
+    switch (_periodType) {
+        case SSJBudgetPeriodTypeWeek: {
+            NSInteger weekday = _endDate.weekday - 1;
+            if (weekday == 0) {
+                weekday = 7;
+            }
+            [_pickerView selectRow:weekday - 1 inComponent:0 animated:NO];
+        }
+            break;
+            
+        case SSJBudgetPeriodTypeMonth: {
+            if (_endOfMonth) {
+                [_pickerView selectRow:28 inComponent:0 animated:NO];
+            } else {
+                NSInteger maxRow = MIN(_endDate.day - 1, [_pickerView numberOfRowsInComponent:0]);
+                [_pickerView selectRow:maxRow inComponent:0 animated:NO];
+            }
+        }
+            break;
+            
+        case SSJBudgetPeriodTypeYear: {
+            [_pickerView selectRow:_endDate.month - 1 inComponent:0 animated:NO];
+            if (_endDate.month == 2 && _endOfMonth) {
+                [_pickerView selectRow:28 inComponent:1 animated:NO];
+            } else {
+                NSInteger maxRow = MIN(_endDate.day - 1, [_pickerView numberOfRowsInComponent:1]);
+                [_pickerView selectRow:maxRow inComponent:1 animated:NO];
+            }
+        }
+            break;
+    }
 }
 
 @end

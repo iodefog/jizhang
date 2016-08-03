@@ -19,10 +19,10 @@ extern NSString *const SSJBudgetModelKey;
 extern NSString *const SSJBudgetCircleItemsKey;
 
 //  月预算编号key
-extern NSString *const SSJBudgetMonthIDKey;
+extern NSString *const SSJBudgetIDKey;
 
 //  月预算标题key
-extern NSString *const SSJBudgetMonthTitleKey;
+extern NSString *const SSJBudgetPeriodKey;
 
 
 @interface SSJBudgetDatabaseHelper : NSObject

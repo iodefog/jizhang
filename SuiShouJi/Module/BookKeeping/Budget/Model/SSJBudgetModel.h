@@ -50,4 +50,7 @@
 //  是否已经提醒过
 @property (nonatomic) BOOL isAlreadyReminded;
 
+//  是否是每月最后一天（在月预算和年预算2月份用到）
+@property (nonatomic) BOOL isLastDay;
+
 @end

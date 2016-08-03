@@ -179,7 +179,6 @@
     return true;
 }
 
-
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];

@@ -14,6 +14,6 @@
 
 @property (nonatomic, strong, readonly) SSJPercentCircleView *circleView;
 
-@property (nonatomic, strong, readonly) SSJBorderButton *button;
+//@property (nonatomic, strong, readonly) SSJBorderButton *button;
 
 @end

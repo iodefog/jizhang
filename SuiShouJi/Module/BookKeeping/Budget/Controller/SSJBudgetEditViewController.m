@@ -298,15 +298,18 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         }
         
         [self updateCellTitles];
-        
         _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
-        
         [self.tableView reloadData];
         if (self.tableView.tableFooterView != self.footerView) {
             self.tableView.tableFooterView = self.footerView;
         }
         
         self.periodSelectionView.periodType = self.model.type;
+        
+        self.accountDaySelectionView.periodType = self.model.type;
+        self.accountDaySelectionView.endDate = [NSDate dateWithString:self.model.endDate formatString:@"yyyy-MM-dd"];
+        self.accountDaySelectionView.endOfMonth = self.model.isLastDay;
+        
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
@@ -330,6 +333,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.isAutoContinued = YES;
     self.model.isRemind = YES;
     self.model.isAlreadyReminded = NO;
+    self.model.isLastDay = YES;
 }
 
 - (NSString *)reuseCellIdForIndexPath:(NSIndexPath *)indexPath {
@@ -453,26 +457,32 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)accountday {
-    
+    // 这里没有判断一种情况，如果是2月份，并且只有28天，选择的截止日是28日的话，如何区分是每月28号还是每月最后一天
     NSString *accountday = nil;
-    switch (self.accountDaySelectionView.periodType) {
+    NSDate *endDate = [NSDate dateWithString:_model.endDate formatString:@"yyyy-MM-dd"];
+    
+    switch (_model.type) {
         case SSJBudgetPeriodTypeWeek:
-            accountday = [self stringForWeekday:self.accountDaySelectionView.endDate.weekday];
+            accountday = [self stringForWeekday:endDate.weekday];
             break;
             
         case SSJBudgetPeriodTypeMonth:
-            if (self.accountDaySelectionView.endOfMonth) {
+            if (_model.isLastDay || endDate.day > 28) {
                 accountday = @"每月最后一天";
             } else {
-                accountday = [NSString stringWithFormat:@"每月%d日", (int)self.accountDaySelectionView.endDate.day];
+                accountday = [NSString stringWithFormat:@"每月%d日", (int)endDate.day];
             }
             break;
             
         case SSJBudgetPeriodTypeYear:
-            if (self.accountDaySelectionView.endOfMonth) {
-                accountday = @"每年2月末";
+            if (endDate.month == 2) {
+                if (_model.isLastDay || endDate.day > 28) {
+                    accountday = @"每年2月末";
+                } else {
+                    accountday = [NSString stringWithFormat:@"每年2月%d日", (int)endDate.day];
+                }
             } else {
-                accountday = [NSString stringWithFormat:@"每年%@", [self.accountDaySelectionView.endDate formattedDateWithFormat:@"M月d日"]];
+                accountday = [NSString stringWithFormat:@"每年%@", [endDate formattedDateWithFormat:@"M月d日"]];
             }
             break;
     }
@@ -639,6 +649,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         _accountDaySelectionView.sureAction = ^(SSJBudgetEditAccountDaySelectionView *view) {
             wself.model.beginDate = [view.beginDate formattedDateWithFormat:@"yyyy-MM-dd"];
             wself.model.endDate = [view.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            wself.model.isLastDay = view.endOfMonth;
             [wself.tableView reloadData];
         };
     }

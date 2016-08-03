@@ -13,13 +13,13 @@
 
 @property (nonatomic) SSJBudgetPeriodType periodType;
 
-@property (nonatomic, copy) void (^sureAction)(SSJBudgetEditAccountDaySelectionView *);
-
 @property (nonatomic, strong, readonly) NSDate *beginDate;
 
-@property (nonatomic, strong, readonly) NSDate *endDate;
+@property (nonatomic, strong) NSDate *endDate;
 
-@property (nonatomic, readonly) BOOL endOfMonth;
+@property (nonatomic) BOOL endOfMonth;
+
+@property (nonatomic, copy) void (^sureAction)(SSJBudgetEditAccountDaySelectionView *);
 
 - (void)show;
 

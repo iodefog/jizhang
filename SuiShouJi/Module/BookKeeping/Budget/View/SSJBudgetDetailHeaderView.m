@@ -126,20 +126,6 @@ static const CGFloat kBottomViewHeight = 265;
 
 - (void)setBudgetModel:(SSJBudgetModel *)model {
     [self setNeedsLayout];
-    switch (model.type) {
-        case 0:
-            self.budgetMoneyTitleLab.text = @"本周预算";
-            break;
-            
-        case 1:
-            self.budgetMoneyTitleLab.text = @"本月预算";
-            break;
-            
-        case 2:
-            self.budgetMoneyTitleLab.text = @"本年预算";
-            break;
-    }
-    [self.budgetMoneyTitleLab sizeToFit];
     
     self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", model.budgetMoney];
     [self.budgetMoneyLab sizeToFit];
@@ -207,6 +193,8 @@ static const CGFloat kBottomViewHeight = 265;
         _budgetMoneyTitleLab.backgroundColor = [UIColor clearColor];
         _budgetMoneyTitleLab.textColor = [UIColor whiteColor];
         _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:13];
+        _budgetMoneyTitleLab.text = @"预算金额";
+        [_budgetMoneyTitleLab sizeToFit];
     }
     return _budgetMoneyTitleLab;
 }

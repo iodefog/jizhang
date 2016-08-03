@@ -25,7 +25,25 @@
     model.isAutoContinued = self.isAutoContinued;
     model.isRemind = self.isRemind;
     model.isAlreadyReminded = self.isAlreadyReminded;
+    model.isLastDay = self.isLastDay;
     return model;
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@", @{@"ID":(_ID ?: @""),
+                                               @"userId":(_userId ?: @""),
+                                               @"booksId":(_booksId ?: @""),
+                                               @"billIds":(_billIds ?: [NSNull null]),
+                                               @"type":@(_type),
+                                               @"budgetMoney":@(_budgetMoney),
+                                               @"remindMoney":@(_remindMoney),
+                                               @"payMoney":@(_payMoney),
+                                               @"beginDate":(_beginDate ?: @""),
+                                               @"endDate":(_endDate ?: @""),
+                                               @"isAutoContinued":@(_isAutoContinued),
+                                               @"isRemind":@(_isRemind),
+                                               @"isAlreadyReminded":@(_isAlreadyReminded),
+                                               @"isLastDay":@(_isLastDay)}];
 }
 
 @end
