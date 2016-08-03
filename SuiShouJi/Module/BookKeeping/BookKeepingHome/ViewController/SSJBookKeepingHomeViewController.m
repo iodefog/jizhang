@@ -35,6 +35,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJBookKeepingHomeNoDataHeader.h"
+#import "UIViewController+SSJMotionPassword.h"
 
 BOOL kHomeNeedLoginPop;
 
@@ -124,6 +125,10 @@ BOOL kHomeNeedLoginPop;
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self ssj_remindUserToSetMotionPasswordIfNeeded];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

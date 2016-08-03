@@ -40,6 +40,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJStartChecker.h"
 #import <YWFeedbackFMWK/YWFeedbackKit.h>
+#import "UIViewController+SSJMotionPassword.h"
 
 
 static NSString *const kTitle1 = @"记账提醒";
@@ -68,11 +69,6 @@ static BOOL kNeedBannerDisplay = YES;
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
-
-
-
-//  手势密码开关
-@property (nonatomic, strong) UISwitch *motionSwitch;
 
 @end
 
@@ -127,15 +123,13 @@ static BOOL kNeedBannerDisplay = YES;
     SSJBookkeepingTreeCheckInModel *checkInModel = [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() error:nil];
     self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
     
-    //  查询手势密码是否开启
-    if (SSJIsUserLogined()) {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWDState"] forUserId:SSJUSERID()];
-        [self.motionSwitch setOn:[userItem.motionPWDState boolValue]];
-    } else {
-        [self.motionSwitch setOn:NO];
-    }
     [self getCircleChargeState];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self ssj_remindUserToSetMotionPasswordIfNeeded];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -481,70 +475,12 @@ static BOOL kNeedBannerDisplay = YES;
     }];
 }
 
-//  手势密码开关
-- (void)motionSwitchAction {
-    if (self.motionSwitch.isOn) {
-        if (!SSJIsUserLogined()) {
-            //  如果用户没有登录，提示用户登录或注册
-            [self alertUserToLoginOrRegister];
-        } else {
-            //  如果保存了手势密码，就保存开启状态，反之进入设置手势密码页面
-            SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD"] forUserId:SSJUSERID()];
-            if (userItem.motionPWD.length > 0) {
-                [self saveMotionPasswordState:YES];
-            } else {
-                SSJMotionPasswordViewController *motinoVC = [[SSJMotionPasswordViewController alloc] init];
-                motinoVC.type = SSJMotionPasswordViewControllerTypeSetting;
-                [self.navigationController pushViewController:motinoVC animated:YES];
-            }
-        }
-    } else {
-        [self saveMotionPasswordState:NO];
-    }
-}
-
 #pragma mark - Private
 -(void)updateAppearanceAfterThemeChanged{
     [super updateAppearanceAfterThemeChanged];
     [self.header updateAfterThemeChange];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
-
-//  提示用户登录或注册
-- (void)alertUserToLoginOrRegister {
-    [self.motionSwitch setOn:NO animated:YES];
-    __weak typeof(self) weakSelf = self;
-    SSJAlertViewAction *registAction = [SSJAlertViewAction actionWithTitle:@"注册" handler:^(SSJAlertViewAction *action) {
-        SSJRegistGetVerViewController *registerVc = [[SSJRegistGetVerViewController alloc] init];
-        registerVc.finishHandle = ^(UIViewController *controller){
-            if ([controller isKindOfClass:[SSJRegistCompleteViewController class]]) {
-                //  注册完成后返回个人中心
-                [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-            } else if ([controller isKindOfClass:[SSJForgetPasswordSecondStepViewController class]]) {
-                //  忘记密码完成后返回登录页面
-                SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-                loginVC.backController = weakSelf;
-                [weakSelf.navigationController setViewControllers:@[weakSelf, loginVC] animated:YES];
-            }
-        };
-        [weakSelf.navigationController pushViewController:registerVc animated:YES];
-    }];
-    SSJAlertViewAction *loginAction = [SSJAlertViewAction actionWithTitle:@"登录" handler:^(SSJAlertViewAction *action) {
-        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-        loginVC.backController = weakSelf;
-        [weakSelf.navigationController pushViewController:loginVC animated:YES];
-    }];
-    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"开启手势密码，需要您登录后方可使用哦！" action:registAction, loginAction, nil];
-}
-
-//  保存手势密码开启状态
-- (void)saveMotionPasswordState:(BOOL)state {
-    SSJUserItem *item = [[SSJUserItem alloc] init];
-    item.userId = SSJUSERID();
-    item.motionPWDState = state ? @"1" : @"0";
-    [SSJUserTableManager saveUserItem:item];
-}
-
 
 -(void)getCircleChargeState{
     __weak typeof(self) weakSelf = self;
@@ -595,15 +531,6 @@ static BOOL kNeedBannerDisplay = YES;
 }
 
 #pragma mark - Getter
-- (UISwitch *)motionSwitch {
-    if (!_motionSwitch) {
-        _motionSwitch = [[UISwitch alloc] init];
-        [_motionSwitch addTarget:self action:@selector(motionSwitchAction) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _motionSwitch;
-}
-
-
 //-(SSJMineHomeTableViewHeader *)header{
 //    if (!_header) {
 //        _header = [SSJMineHomeTableViewHeader MineHomeHeader];

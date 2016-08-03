@@ -413,6 +413,8 @@
 		7DE4A7E61D20DC7D00F05BF0 /* NSString+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */; };
 		7DE4A7E71D20DC8500F05BF0 /* SSJThemeSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7DA1D20C0BA00F05BF0 /* SSJThemeSetting.m */; };
 		7DE4A7EC1D20DD8C00F05BF0 /* UIImage+SSJTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */; };
+		7DE681651E42FBE30023622E /* UIViewController+SSJMotionPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE681641E42FBE30023622E /* UIViewController+SSJMotionPassword.m */; };
+		7DE681661E42FBE30023622E /* UIViewController+SSJMotionPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE681641E42FBE30023622E /* UIViewController+SSJMotionPassword.m */; };
 		7DE69B611C8D26E7001D31C1 /* SSJImageSynchronizeTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */; };
 		7DE69C2D1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C2C1C8EA84A001D31C1 /* SSJDatabaseUpgrader.m */; };
 		7DE69C391C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C301C8EC401001D31C1 /* SCYMotionEncryptionCircleLayer.m */; };
@@ -2583,6 +2585,8 @@
 		7DE4A7E41D20DC7000F05BF0 /* NSString+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SSJTheme.m"; sourceTree = "<group>"; };
 		7DE4A7EA1D20DD8C00F05BF0 /* UIImage+SSJTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SSJTheme.h"; sourceTree = "<group>"; };
 		7DE4A7EB1D20DD8C00F05BF0 /* UIImage+SSJTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SSJTheme.m"; sourceTree = "<group>"; };
+		7DE681631E42FBE30023622E /* UIViewController+SSJMotionPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SSJMotionPassword.h"; sourceTree = "<group>"; };
+		7DE681641E42FBE30023622E /* UIViewController+SSJMotionPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SSJMotionPassword.m"; sourceTree = "<group>"; };
 		7DE69B5F1C8D26E7001D31C1 /* SSJImageSynchronizeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJImageSynchronizeTask.h; sourceTree = "<group>"; };
 		7DE69B601C8D26E7001D31C1 /* SSJImageSynchronizeTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJImageSynchronizeTask.m; sourceTree = "<group>"; };
 		7DE69C2B1C8EA84A001D31C1 /* SSJDatabaseUpgrader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseUpgrader.h; sourceTree = "<group>"; };
@@ -5739,6 +5743,8 @@
 				9CD9BBE21CFD2DAA0061803B /* SSJMotionPasswordSettingViewController.m */,
 				9CD9BBE31CFD2DAA0061803B /* SSJMotionPasswordViewController.h */,
 				9CD9BBE41CFD2DAA0061803B /* SSJMotionPasswordViewController.m */,
+				7DE681631E42FBE30023622E /* UIViewController+SSJMotionPassword.h */,
+				7DE681641E42FBE30023622E /* UIViewController+SSJMotionPassword.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -7988,6 +7994,7 @@
 				9C2A67211D194CA70010F1DA /* SSJServerLaunchView.m in Sources */,
 				9C2A67221D194CA70010F1DA /* TPKeyboardAvoidingTableView.m in Sources */,
 				9C2A67231D194CA70010F1DA /* SSJImageAddition.m in Sources */,
+				7DE681661E42FBE30023622E /* UIViewController+SSJMotionPassword.m in Sources */,
 				9C2A67241D194CA70010F1DA /* SSJMagicExportCalendarSwitchStartAndEndDateControl.m in Sources */,
 				9C2A67251D194CA70010F1DA /* SSJFundingDetailListFirstLineCell.m in Sources */,
 				9C2A67261D194CA70010F1DA /* SSJTableView.m in Sources */,
@@ -8582,6 +8589,7 @@
 				7D5F33731CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
 				9CD9BC211CFD2DAA0061803B /* SSJBookkeepingRiminderCell.m in Sources */,
 				7DD3E5781CFBF2D1005A1ACB /* SSJDatabaseVersion4.m in Sources */,
+				7DE681651E42FBE30023622E /* UIViewController+SSJMotionPassword.m in Sources */,
 				7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */,
 				BD543C441C1A6DBC00910D61 /* AppDelegate.m in Sources */,
 				BD542B601CB5457800655EE2 /* SSJThirdPartyLoginManger.m in Sources */,
@@ -8945,7 +8953,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8989,8 +8997,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9021,7 +9029,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "45fb5eeb-33d8-4143-ae88-3cff96858ae6";
+				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
