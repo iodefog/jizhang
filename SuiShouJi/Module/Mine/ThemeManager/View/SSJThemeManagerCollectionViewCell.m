@@ -112,7 +112,7 @@
 
 -(void)deleteButtonClicked:(id)sender{
     if ([self.item.ID isEqualToString:SSJCurrentThemeID()]) {
-        SSJSetCurrentThemeID(SSJDefaultThemeID);
+        [SSJThemeSetting switchToThemeID:SSJDefaultThemeID];
     }
     if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.ID]]) {
         if ([[NSFileManager defaultManager] removeItemAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.ID] error:NULL] && [SSJThemeSetting removeThemeModelWithID:self.item.ID]) {

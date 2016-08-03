@@ -155,8 +155,11 @@
 - (UIButton *)editeButton{
     if (!_editeButton) {
         _editeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
+        _editeButton.contentHorizontalAlignment = NSTextAlignmentRight;
         [_editeButton setTitle:@"编辑" forState:UIControlStateNormal];
         [_editeButton setTitle:@"完成" forState:UIControlStateSelected];
+        [_editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
+        [_editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
         [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _editeButton;
