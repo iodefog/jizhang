@@ -16,7 +16,7 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 
 @property(nonatomic, strong) UICollectionViewFlowLayout *layout;
 
-@property(nonatomic, strong) NSArray *items;
+@property(nonatomic, strong) NSMutableArray *items;
 
 @property(nonatomic, strong) UIButton *rightButton;
 @end
@@ -87,7 +87,7 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    return UIEdgeInsetsMake(17, 10, 0, 10);
+    return UIEdgeInsetsMake(27 - SSJ_NAVIBAR_BOTTOM, 10, 0, 10);
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
@@ -140,7 +140,8 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 
 #pragma mark - Private
 -(void)getAllThemes{
-    self.items = [NSArray arrayWithArray:[SSJThemeSetting allThemeModels]];
+    self.items = [NSMutableArray arrayWithArray:[SSJThemeSetting allThemeModels]];
+    [self.items removeObjectAtIndex:0];
     [self.themeSelectView reloadData];
 }
 

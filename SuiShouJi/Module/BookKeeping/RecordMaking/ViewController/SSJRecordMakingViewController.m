@@ -257,6 +257,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         _memberSelectView.addNewMemberBlock = ^(){
             [weakSelf.memberSelectView dismiss];
             SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
+            newMemberVc.addNewMemberAction = ^(SSJChargeMemberItem *item){
+                [weakSelf.item.membersItem addObject:item];
+                [weakSelf updateMembers];
+            };
             [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
         };
     }

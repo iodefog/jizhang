@@ -122,16 +122,30 @@
         NSString *userId = SSJUSERID();
         if ([db intForQuery:@"select * from bk_member where cname = ? and cmemberid <> ?",weakSelf.header.nameInput.text ,weakSelf.originalItem.memberId]) {
             [db executeUpdate:@"update bk_member set istate = 1 where cname = ?",weakSelf.header.nameInput.text];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            });
         }else{
             if (!weakSelf.originalItem.memberId.length) {
-                [db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, cuserid, operatortype, iversion, cwritedate, istate) values (?, ?, ?, ?, 0, ?, ?, 1)",SSJUUID(),weakSelf.header.nameInput.text,_selectColor,userId,@(SSJSyncVersion()),writeDate];
+                NSString *memberId = SSJUUID();
+                [db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, cuserid, operatortype, iversion, cwritedate, istate) values (?, ?, ?, ?, 0, ?, ?, 1)",memberId,weakSelf.header.nameInput.text,_selectColor,userId,@(SSJSyncVersion()),writeDate];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+                    item.memberId = memberId;
+                    item.memberColor = _selectColor;
+                    item.memberName = weakSelf.header.nameInput.text;
+                    if (self.addNewMemberAction) {
+                        self.addNewMemberAction(item);
+                    }
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                });
             }else{
                 [db executeUpdate:@"update bk_member set cname = ?, ccolor = ?, operatortype = 1, iversion = ?, cwritedate = ? where cmemberid = ?",weakSelf.header.nameInput.text,_selectColor,@(SSJSyncVersion()),writeDate,weakSelf.originalItem.memberId];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                });
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        });
     }];
 }
 
