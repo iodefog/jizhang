@@ -19,6 +19,7 @@
 #import "SSJStartChecker.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJDataClearHelper.h"
+#import "SSJWeixinFooter.h"
 #import "WXApi.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
@@ -33,7 +34,7 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
 
 @interface SSJSettingViewController ()
 @property (nonatomic, strong) NSArray *titles;
-@property (nonatomic,strong) UIView *loggedFooterView;
+@property (nonatomic,strong) SSJWeixinFooter *weixinFooter;
 @end
 
 @implementation SSJSettingViewController
@@ -74,6 +75,10 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle8]) {
+        return 35;
+    }
     return 55;
 }
 
@@ -82,17 +87,18 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-//    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-//        return self.loggedFooterView;
-//    }
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
-    return footerView;
+    if (section == [self.tableView numberOfSections] - 1) {
+        return self.weixinFooter;
+    }
+    return nil;
+//    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
+//    return footerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-//    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-//        return 80;
-//    }
+    if (section == [self.tableView numberOfSections] - 1) {
+        return 150;
+    }
     return 0.1f;
 }
 
@@ -223,21 +229,12 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
 
 
 #pragma mark - Getter
-//-(UIView *)loggedFooterView{
-//    if (_loggedFooterView == nil) {
-//        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-//        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _loggedFooterView.width - 20, 40)];
-//        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
-//        quitLogButton.layer.cornerRadius = 3.f;
-//        quitLogButton.layer.masksToBounds = YES;
-//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
-//        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
-//        [_loggedFooterView addSubview:quitLogButton];
-//    }
-//    return _loggedFooterView;
-//}
+-(SSJWeixinFooter *)weixinFooter{
+    if (_weixinFooter == nil) {
+        _weixinFooter = [[SSJWeixinFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 150)];
+    }
+    return _weixinFooter;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

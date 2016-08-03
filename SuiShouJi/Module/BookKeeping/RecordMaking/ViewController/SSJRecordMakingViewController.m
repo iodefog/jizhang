@@ -117,6 +117,13 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if (![self showGuideViewIfNeeded]) {
+        [self.billTypeInputView.moneyInput becomeFirstResponder];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self getCategoryList];
@@ -551,9 +558,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         }];
         weakSelf.billTypeInputView.billTypeName = selectedItem.title;
         
-        if (![self showGuideViewIfNeeded]) {
-            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
-        }
+
         
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {

@@ -34,17 +34,21 @@
     userItem.defaultBooksTypeState = 0;
     SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
     [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
-        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
-            if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
-                if (success) {
-                    success();
-                }
-            }
-        } failure:^(NSError *error) {
-            if (failure) {
-                failure(error);
-            }
-        }];
+        if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (success) {
+                        success();
+                    }
+                });
+            } failure:^(NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failure) {
+                        failure(error);
+                    }
+                });
+            }];
+        }
     } failure:^(NSError *error) {
         if (failure) {
             failure(error);
