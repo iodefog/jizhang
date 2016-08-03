@@ -52,6 +52,7 @@
         _descLab = [[UILabel alloc]init];
         _descLab.numberOfLines = 0;
         _descLab.text = @"涵盖记账理财、玩转信用卡、查询公积金，还有其它实用金融小工具搭配，省钱赚钱等多样资讯给你愉快的金融服务。\n\n本记账APP隶属于有鱼金融集团";
+        _descLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _descLab.font = [UIFont systemFontOfSize:15];
     }
     return _descLab;
