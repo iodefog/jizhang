@@ -111,7 +111,7 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 
 - (UICollectionView *)themeSelectView {
     if (!_themeSelectView) {
-        _themeSelectView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:self.layout];
+        _themeSelectView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 10 + SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height) collectionViewLayout:self.layout];
         _themeSelectView.delegate = self;
         _themeSelectView.dataSource = self;
         _themeSelectView.alwaysBounceVertical = YES;
