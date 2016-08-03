@@ -247,7 +247,8 @@
 }
 
 - (void)updateAccountDay {
-    NSDate *currentDate = [NSDate date];
+    NSDate *today = [NSDate date];
+    NSDate *currentDate = [NSDate dateWithYear:today.year month:today.month day:today.day];
     
     switch (_periodType) {
         case SSJBudgetPeriodTypeWeek: {
