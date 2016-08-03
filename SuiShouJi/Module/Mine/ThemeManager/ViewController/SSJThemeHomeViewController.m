@@ -41,8 +41,6 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more_guanli"] style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
-    self.navigationItem.rightBarButtonItem = rightButton;
     [self.view addSubview:self.hintLabel];
     [self.view addSubview:self.themeSelectView];
     // Do any additional setup after loading the view.
@@ -52,6 +50,10 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self checkNetwork];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more_guanli"] style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
+    if ([SSJThemeSetting allThemeModels].count - 1) {
+        self.navigationItem.rightBarButtonItem = rightButton;
+    }
 }
 
 -(void)viewDidLayoutSubviews{

@@ -36,6 +36,11 @@
         return error;
     }
     
+    error = [self updateChargePeriodTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -55,6 +60,13 @@
 
 + (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"alter table bk_user add cdefaultmembertate integer default 0"]) {
+        return [db lastError];
+    }
+    return nil;
+}
+
++ (NSError *)updateChargePeriodTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table bk_charge_period_config add CMEMBERIDS text default '0'"]) {
         return [db lastError];
     }
     return nil;
