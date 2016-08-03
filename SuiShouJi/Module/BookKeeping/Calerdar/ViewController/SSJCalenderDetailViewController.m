@@ -49,7 +49,7 @@
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"BillingChargeCell"];
+    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCell"];
     [self.tableView registerClass:[SSJCalenderDetailCell class] forCellReuseIdentifier:@"calenderDetailCellID"];
     [self.tableView registerClass:[SSJChargeDetailMemoCell class] forCellReuseIdentifier:@"calenderDetailMemoCellID"];
 
@@ -69,7 +69,7 @@
     if (indexPath.row == 0) {
         return 55;
     }
-    if (indexPath.row == 4) {
+    if (indexPath.row == 5) {
         return 85;
     }
     return 50;
@@ -98,15 +98,15 @@
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
-        return 5;
+        return 6;
     }
-    return 4;
+    return 5;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
-        SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCell" forIndexPath:indexPath];
+        SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCell" forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setCellItem:self.item];
         return cell;
@@ -134,6 +134,12 @@
         detailcell.detailLabel.text = booksItem.booksName;
         [detailcell.detailLabel sizeToFit];
         detailcell.cellLabel.text = @"账本类型";
+        [detailcell.cellLabel sizeToFit];
+        return detailcell;
+    }else if(indexPath.row == 4){
+        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
+        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
+        detailcell.cellLabel.text = @"成员";
         [detailcell.cellLabel sizeToFit];
         return detailcell;
     }else{
