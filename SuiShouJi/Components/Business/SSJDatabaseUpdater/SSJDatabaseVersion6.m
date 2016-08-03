@@ -31,6 +31,11 @@
         return error;
     }
     
+    error = [self updateUserBudgetWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -66,6 +71,13 @@
     
     [db commit];
     
+    return nil;
+}
+
++ (NSError *)updateUserBudgetWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table bk_user_budget add islastday integer default 0"]) {
+        return [db lastError];
+    }
     return nil;
 }
 
