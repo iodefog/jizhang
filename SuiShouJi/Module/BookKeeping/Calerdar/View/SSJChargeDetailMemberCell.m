@@ -42,7 +42,9 @@
     if (!_memberIcon) {
         _memberIcon = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
         _memberIcon.layer.cornerRadius = _memberIcon.width / 2;
+        _memberIcon.font = [UIFont systemFontOfSize:15];
         _memberIcon.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+        _memberIcon.textAlignment = NSTextAlignmentCenter;
     }
     return _memberIcon;
 }

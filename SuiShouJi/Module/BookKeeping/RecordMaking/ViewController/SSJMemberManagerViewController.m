@@ -21,7 +21,7 @@
 @implementation SSJMemberManagerViewController
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.extendedLayoutIncludesOpaqueBars = NO;
+//        self.extendedLayoutIncludesOpaqueBars = NO;
     }
     return self;
 }
@@ -99,6 +99,8 @@
     cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     if ([item.memberId isEqualToString:@"0"]) {
         cell.detailTextLabel.text = @"默认";
+    }else{
+        cell.detailTextLabel.text = @"";
     }
     return cell;
 }

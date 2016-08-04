@@ -256,6 +256,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
     if ([title isEqualToString:kTitle11]) {
+        circleModifyCell.cellTitle = @"";
+        circleModifyCell.cellDetail = @"";
         circleModifyCell.cellSubTitle = title;
         circleModifyCell.cellSubTitleLabel.hidden = NO;
     }else{

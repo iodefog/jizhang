@@ -12,6 +12,8 @@
 #import "SSJCalenderDetailCell.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalenderTableViewCell.h"
+#import "SSJCanlenderChargeDetailCell.h"
+#import "SSJChargeDetailMemberCell.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJChargeDetailMemoCell.h"
@@ -21,6 +23,9 @@
 #import "SSJBooksTypeItem.h"
 #import "SSJReportFormsViewController.h"
 #import "FMDB.h"
+#import "SSJChargeMemBerItem.h"
+#import "SSJCalenderDetailHeader.h"
+
 
 @interface SSJCalenderDetailViewController ()
 @property (nonatomic,strong) UIView *footerView;
@@ -30,6 +35,7 @@
 @property (nonatomic)BOOL incomeOrExpence;
 @property (nonatomic,strong) UIBarButtonItem *rightBarButton;
 @property(nonatomic, strong) SSJCalenderDetaiImagelFooterView *imageFooter;
+@property(nonatomic, strong) NSMutableArray *items;
 @end
 
 @implementation SSJCalenderDetailViewController
@@ -49,9 +55,9 @@
     self.navigationItem.rightBarButtonItem = self.rightBarButton;
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:self.cellColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:@"BillingChargeCell"];
-    [self.tableView registerClass:[SSJCalenderDetailCell class] forCellReuseIdentifier:@"calenderDetailCellID"];
-    [self.tableView registerClass:[SSJChargeDetailMemoCell class] forCellReuseIdentifier:@"calenderDetailMemoCellID"];
+    [self.tableView registerClass:[SSJCalenderTableViewCell class] forCellReuseIdentifier:@"CalenderTableViewCell"];
+    [self.tableView registerClass:[SSJChargeDetailMemberCell class] forCellReuseIdentifier:@"ChargeDetailMemberCell"];
+    [self.tableView registerClass:[SSJCanlenderChargeDetailCell class] forCellReuseIdentifier:@"CanlenderChargeDetailCell"];
 
 }
 
@@ -66,25 +72,41 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0) {
-        return 55;
+    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    if ([item isKindOfClass:[SSJBillingChargeCellItem class]] && indexPath.section == 1) {
+        if (self.item.chargeMemo) {
+            return 142;
+        }else{
+            return 129;
+        }
     }
-    if (indexPath.row == 5) {
-        return 85;
-    }
-    return 50;
+    return 55;
 }
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (section == 1) {
+        SSJCalenderDetailHeader *header = [[SSJCalenderDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 44)];
+        header.item = self.item;
+        return header;
+    }
+    return [UIView new];
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 0.1;
+    if (section == 1) {
+        return 44;
+    }
+    return 10;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
-        return 300;
+    if (section == 1) {
+        if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
+            return 300;
+        }
+        return 100;
     }
-    return 100;
+    return 0.1f;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
@@ -97,74 +119,39 @@
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (![self.item.chargeMemo isEqualToString:@""] && self.item.chargeMemo != nil) {
-        return 6;
-    }
-    return 5;
+    return [self.items[section] count];
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.items.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
-        SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BillingChargeCell" forIndexPath:indexPath];
+    SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
+    if (indexPath.section == 0) {
+        SSJCalenderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CalenderTableViewCell" forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell setCellItem:self.item];
+        [cell setCellItem:item];
         return cell;
-    }else if (indexPath.row == 1){
-        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-        detailcell.detailLabel.text = self.item.billDate;
-        [detailcell.detailLabel sizeToFit];
-        detailcell.cellLabel.text = @"时间";
-        [detailcell.cellLabel sizeToFit];
-        return detailcell;
-    }else if(indexPath.row == 2){
-        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
-        detailcell.detailLabel.text = [self getParentFundingNameWithParentfundingID:self.item.fundId];
-        [detailcell.detailLabel sizeToFit];
-        detailcell.cellLabel.text = @"资金类型";
-        [detailcell.cellLabel sizeToFit];
-        return detailcell;
-    }else if(indexPath.row == 3){
-        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
-        SSJBooksTypeItem *booksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:self.item.booksId];
-        detailcell.detailLabel.text = booksItem.booksName;
-        [detailcell.detailLabel sizeToFit];
-        detailcell.cellLabel.text = @"账本类型";
-        [detailcell.cellLabel sizeToFit];
-        return detailcell;
-    }else if(indexPath.row == 4){
-        SSJCalenderDetailCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailCellID" forIndexPath:indexPath];
-        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
-        detailcell.cellLabel.text = @"成员";
-        [detailcell.cellLabel sizeToFit];
-        return detailcell;
-    }else{
-        SSJChargeDetailMemoCell *detailcell = [tableView dequeueReusableCellWithIdentifier:@"calenderDetailMemoCellID" forIndexPath:indexPath];
-        detailcell.selectionStyle = UITableViewCellSelectionStyleNone;
-        detailcell.cellMemo = self.item.chargeMemo;
-        detailcell.cellTitle = @"备注";
-        return detailcell;
+    }else if (indexPath.section == 1){
+        if ([item isKindOfClass:[SSJChargeMemberItem class]]) {
+            SSJChargeDetailMemberCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChargeDetailMemberCell" forIndexPath:indexPath];
+            float money = [self.item.money floatValue];
+            cell.memberMoney = [NSString stringWithFormat:@"%.2f",money / (self.item.membersItem.count - 1)];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.memberItem = (SSJChargeMemberItem *)item;
+            return cell;
+        }else{
+            SSJCanlenderChargeDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CanlenderChargeDetailCell" forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.item = (SSJBillingChargeCellItem *)item;
+            return cell;
+        }
     }
+    return nil;
 }
 
--(NSString*)getParentFundingNameWithParentfundingID:(NSString*)fundingID{
-    NSString *fundingName;
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        NSLog(@"Could not open db");
-        return nil;
-    }
-    FMResultSet *rs = [db executeQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",fundingID];
-    while ([rs next]) {
-        fundingName = [rs stringForColumn:@"CACCTNAME"];
-    }
-    [db close];
-    return fundingName;
-}
 
 #pragma mark - UIAlertViewDelegate
 
@@ -227,19 +214,36 @@
  */
 -(void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
-
     [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT A.* , B.* FROM BK_USER_CHARGE AS A , BK_BILL_TYPE AS B WHERE A.ICHARGEID = ? AND A.CUSERID = ?  AND A.IBILLID = B.ID",self.item.ID,SSJUSERID()];
-        while ([rs next]) {
-            weakSelf.item.money = [rs stringForColumn:@"IMONEY"];
-            weakSelf.item.billId = [rs stringForColumn:@"IBILLID"];
-            weakSelf.item.billDate = [rs stringForColumn:@"CBILLDATE"];
-            weakSelf.item.fundId = [rs stringForColumn:@"IFUNSID"];
-            weakSelf.item.typeName = [rs stringForColumn:@"CNAME"];
-            weakSelf.item.imageName = [rs stringForColumn:@"CCOIN"];
-            weakSelf.item.colorValue = [rs stringForColumn:@"CCOLOR"];
-            weakSelf.item.incomeOrExpence = [rs boolForColumn:@"ITYPE"];
+        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.* , B.* , c.* FROM BK_USER_CHARGE AS A , BK_BILL_TYPE AS B , bk_fund_info as c WHERE A.ICHARGEID = ? AND A.CUSERID = ?  AND A.IBILLID = B.ID and a.ifunsid = c.cfundid",self.item.ID,SSJUSERID()];
+        while ([chargeResult next]) {
+            weakSelf.item.money = [chargeResult stringForColumn:@"IMONEY"];
+            weakSelf.item.billId = [chargeResult stringForColumn:@"IBILLID"];
+            weakSelf.item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
+            weakSelf.item.fundId = [chargeResult stringForColumn:@"IFUNSID"];
+            weakSelf.item.typeName = [chargeResult stringForColumn:@"CNAME"];
+            weakSelf.item.imageName = [chargeResult stringForColumn:@"CCOIN"];
+            weakSelf.item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
+            weakSelf.item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
+            weakSelf.item.fundName = [chargeResult stringForColumn:@"cacctname"];
+            weakSelf.item.booksId = [chargeResult stringForColumn:@"cbooksid"];
+            weakSelf.item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",weakSelf.item.booksId];
         }
+        [chargeResult close];
+        FMResultSet *memberResult = [db executeQuery:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.ichargeid = ? and a.cmemberid = b.cmemberid and b.cuserid = ?",weakSelf.item.ID,SSJUSERID()];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        while ([memberResult next]) {
+            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
+            memberItem.memberId = [memberResult stringForColumn:@"cmemberId"];
+            memberItem.memberName = [memberResult stringForColumn:@"cname"];
+            memberItem.memberColor = [memberResult stringForColumn:@"ccolor"];
+            [tempArr addObject:memberItem];
+        }
+        weakSelf.item.membersItem = tempArr;
+        weakSelf.items = [NSMutableArray arrayWithCapacity:0];
+        [weakSelf.items addObject:@[weakSelf.item]];
+        [tempArr addObject:weakSelf.item];
+        [weakSelf.items addObject:tempArr];
         SSJDispatch_main_async_safe(^(){
             [weakSelf.tableView reloadData];
         })

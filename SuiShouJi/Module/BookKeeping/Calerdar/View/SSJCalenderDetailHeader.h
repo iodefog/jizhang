@@ -1,14 +1,16 @@
 //
-//  SSJCanlenderChargeDetailCell.h
+//  SSJCalenderDetailHeader.h
 //  SuiShouJi
 //
 //  Created by ricky on 16/8/4.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseTableViewCell.h"
+#import <UIKit/UIKit.h>
 #import "SSJBillingChargeCellItem.h"
 
-@interface SSJCanlenderChargeDetailCell : SSJBaseTableViewCell
+@interface SSJCalenderDetailHeader : UIView
+
 @property(nonatomic, strong) SSJBillingChargeCellItem *item;
+
 @end
