@@ -129,6 +129,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     _payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    _payAndIncomeSegmentControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    [_payAndIncomeSegmentControl ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -591,13 +593,16 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SCYSlidePagingHeaderView *)payAndIncomeSegmentControl {
     if (!_payAndIncomeSegmentControl) {
         _payAndIncomeSegmentControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40)];
-        _payAndIncomeSegmentControl.backgroundColor = [UIColor clearColor];
+        _payAndIncomeSegmentControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _payAndIncomeSegmentControl.customDelegate = self;
         _payAndIncomeSegmentControl.buttonClickAnimated = YES;
         _payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_payAndIncomeSegmentControl setTabSize:CGSizeMake(_payAndIncomeSegmentControl.width * 0.5, 3)];
         _payAndIncomeSegmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome];
+        [_payAndIncomeSegmentControl ssj_setBorderWidth:1];
+        [_payAndIncomeSegmentControl ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
+        [_payAndIncomeSegmentControl ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _payAndIncomeSegmentControl;
 }
@@ -610,7 +615,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _dateAxisView.delegate = self;
         [_dateAxisView ssj_setBorderWidth:1];
-        [_dateAxisView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
+        [_dateAxisView ssj_setBorderStyle:(SSJBorderStyleBottom)];
         [_dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _dateAxisView;
