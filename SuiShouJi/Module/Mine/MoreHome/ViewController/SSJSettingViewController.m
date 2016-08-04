@@ -154,13 +154,20 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
                                                delegate:self];
         }
     }
+    
+    //数据格式化
     if ([title isEqualToString:kTitle3]) {
-        [SSJDataClearHelper clearAllDataWithSuccess:^{
-            [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
-        } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
+        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [SSJDataClearHelper clearAllDataWithSuccess:^{
+                [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
+            }];
         }];
+        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"云端和本地的数据将被彻底清除且不可恢复，确定要执行此操作？" action:comfirmAction,cancelAction,nil];
     }
+    
     
     if ([title isEqualToString:kTitle7]) {
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {

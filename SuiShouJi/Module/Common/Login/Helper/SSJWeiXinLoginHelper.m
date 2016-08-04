@@ -80,8 +80,8 @@
                 {
                     NSLog(@"%@",[dict objectForKey:@"errmsg"]);
                 }else{
-                    NSString *iconUrl = [dict objectForKey:@"headimgurl"];
-                    NSString *nickName = [dict objectForKey:@"nickname"];
+                    NSString *iconUrl = [dict objectForKey:@"headimgurl"] ? : @"";
+                    NSString *nickName = [dict objectForKey:@"nickname"] ? : @"";
                     if (self.sucessBlock) {
                         self.sucessBlock(nickName,iconUrl,openId);
                     }

@@ -42,6 +42,7 @@
         _nameInput.font = [UIFont systemFontOfSize:18];
         _nameInput.textAlignment = NSTextAlignmentLeft;
         _nameInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入成员名称" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18],NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        _nameInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _nameInput;
 }
