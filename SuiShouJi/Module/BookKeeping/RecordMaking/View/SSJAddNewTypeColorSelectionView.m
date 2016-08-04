@@ -23,6 +23,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 
 - (instancetype)initWithWidth:(CGFloat)width {
     if (self = [super initWithFrame:CGRectMake(0, 0, width, 0)]) {
+        _displayRowCount = 2;
         [self addSubview:self.collectionView];
         self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         
@@ -35,7 +36,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(self.width, 30 + ITEM_SIZE_WIDTH * 2);
+    return CGSizeMake(self.width, 30 + ITEM_SIZE_WIDTH * _displayRowCount);
 }
 
 - (void)layoutSubviews {
@@ -46,6 +47,13 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
     if (![_colors isEqualToArray:colors]) {
         _colors = colors;
         [_collectionView reloadData];
+    }
+}
+
+- (void)setDisplayRowCount:(CGFloat)displayRowCount {
+    if (_displayRowCount != displayRowCount) {
+        _displayRowCount = displayRowCount;
+        [self sizeToFit];
     }
 }
 
