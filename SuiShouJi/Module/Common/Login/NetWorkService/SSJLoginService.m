@@ -22,6 +22,8 @@
 
 @property (nonatomic,strong) NSArray *booksTypeArray;
 
+@property (nonatomic,strong) NSArray *membersArray;
+
 //登录用户的accesstoken
 @property (nonatomic,strong) NSString *accesstoken;
 
@@ -134,6 +136,7 @@
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
         self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"booksType"]];
+        self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
         self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }
 }
