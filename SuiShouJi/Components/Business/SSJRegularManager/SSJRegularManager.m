@@ -166,7 +166,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     
     //  查询没有生成过流水的定期记账
     NSString *tConfigIdStr = [configIdArr componentsJoinedByString:@","];
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid, cmemberids from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
     if (tConfigIdStr.length) {
         [query appendFormat:@" and iconfigid not in (%@)", tConfigIdStr];
     }
@@ -189,6 +189,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
             thumbUrl = [imgName stringByAppendingPathExtension:imgExtension];
         }
+        
         NSString *booksid = [resultSet stringForColumn:@"cbooksid"];
         
         int periodType = [resultSet intForColumn:@"itype"];
@@ -200,12 +201,24 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             billDates = [NSMutableArray array];
         }
         
+        NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
+        CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         for (NSDate *billDate in billDates) {
+            NSString *chargeId = SSJUUID();
+            
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksid, @(SSJSyncVersion()), writeDate, @0]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", chargeId, userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksid, @(SSJSyncVersion()), writeDate, @0]) {
                 *rollback = YES;
                 return NO;
+            }
+            
+            // 根据周期记账配置成员生成成员流水
+            for (NSString *memberId in memberIds) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeId, memberId, @(memberMoney), @(SSJSyncVersion()), writeDate, @0]) {
+                    *rollback = YES;
+                    return NO;
+                }
             }
         }
     }
