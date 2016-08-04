@@ -548,6 +548,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 // 查询某个周期内的流水统计
 - (void)reloadDatasInPeriod:(SSJDatePeriod *)period {
+    if (!period) {
+        return;
+    }
+    
     switch (_typeAndMemberControl.option) {
         case SSJReportFormsMemberAndCategorySwitchControlOptionCategory: {
             [self.view ssj_showLoadingIndicator];
