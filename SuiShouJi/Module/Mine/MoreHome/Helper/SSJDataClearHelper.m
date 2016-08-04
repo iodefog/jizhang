@@ -12,14 +12,42 @@
 #import "SSJUserTableManager.h"
 #import "SSJClearUserDataService.h"
 #import "SSJUserDefaultDataCreater.h"
+#import "SSJDataSynchronizer.h"
 
 @implementation SSJDataClearHelper
 
 + (void)clearLocalDataWithSuccess:(void(^)())success
                           failure:(void (^)(NSError *error))failure{
     
+    NSString *userId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *userId = SSJUSERID();
+        if ([db executeUpdate:@"delete from bk_member_charge where ichargeid in (select ichargeid from bk_user_charge where cuserid = ?)", userId]
+            && [db executeUpdate:@"delete from bk_member where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_user_budget where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_user_charge where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_charge_period_config where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_fund_info where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_bill_type where id in (select cbillid from bk_user_bill where cuserid = ?) and icustom = 1", userId]
+            && [db executeUpdate:@"delete from bk_user_bill where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_books_type where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_dailysum_charge where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_funs_acct where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_sync where cuserid = ?", userId]) {
+            
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
+                if (success) {
+                    success();
+                }
+            } failure:^(SSJDataSynchronizeType type, NSError *error) {
+                if (failure) {
+                    failure(error);
+                }
+            }];
+        } else {
+            if (failure) {
+                failure([db lastError]);
+            }
+        }
     }];
 }
 
