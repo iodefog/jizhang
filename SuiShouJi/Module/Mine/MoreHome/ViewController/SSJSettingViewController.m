@@ -9,7 +9,6 @@
 #import "SSJSettingViewController.h"
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTabelviewCell.h"
-#import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJSyncSettingViewController.h"
@@ -21,6 +20,8 @@
 #import "SSJDataClearHelper.h"
 #import "SSJWeixinFooter.h"
 #import "WXApi.h"
+#import "SSJStartUpgradeAlertView.h"
+#import "SSJNetworkReachabilityManager.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
@@ -111,6 +112,29 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
         SSJSyncSettingViewController *syncSettingVC = [[SSJSyncSettingViewController alloc]init];
         [self.navigationController pushViewController:syncSettingVC animated:YES];
     }
+    
+    //  重新拉去
+    if ([title isEqualToString:kTitle2]) {
+        NSAttributedString *massage = [[NSAttributedString alloc] initWithString:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"立即拉取" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            [alert dismiss];
+        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            [alert dismiss];
+            
+            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+                [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
+                return;
+            }
+            
+            [SSJDataClearHelper clearLocalDataWithSuccess:^{
+                [CDAutoHideMessageHUD showMessage:@"重新拉取数据成功"];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        }];
+        [alert show];
+    }
+    
     
 //    //  用户协议与隐私说明
 //    if ([title isEqualToString:kTitle4]) {

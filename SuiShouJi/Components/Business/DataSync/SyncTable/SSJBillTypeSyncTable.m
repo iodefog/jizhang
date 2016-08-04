@@ -68,6 +68,7 @@
 }
 
 + (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    // 因为自定义类别不能修改，这里什么都不用做
     return YES;
 }
 
