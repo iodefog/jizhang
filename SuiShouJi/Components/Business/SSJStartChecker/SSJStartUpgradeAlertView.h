@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param sureHandler 确认按钮点击回调
  *  @return (instancetype) 返回实例对象
  */
-- (instancetype)initWithTitle:(NSString *)title
+- (instancetype)initWithTitle:(nullable NSString *)title
                       message:(NSAttributedString *)message
             cancelButtonTitle:(nullable NSString *)cancelButtonTitle
               sureButtonTitle:(nullable NSString *)sureButtonTitle

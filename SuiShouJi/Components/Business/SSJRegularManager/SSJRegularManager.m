@@ -222,7 +222,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 
 + (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
     //  根据周期类型、支出类型分类，查询离今天最近的一次预算
-    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
+    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid, islastday from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
     if (!resultSet) {
         [resultSet close];
         return NO;
@@ -253,16 +253,17 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         int iremind = [resultSet intForColumn:@"iremind"];
         NSString *currentDateStr = [tDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
+        BOOL isLastDay = [resultSet boolForColumn:@"islastday"];
         
 //        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
         
-        NSArray *periodArr = [self periodsFromDate:[recentEndDate dateByAddingDays:1] toDate:currentDate type:itype];
+        NSArray *periodArr = [self periodsWithAccountday:recentEndDate untilDate:currentDate type:itype isLastDay:isLastDay];
         
         for (DTTimePeriod *period in periodArr) {
             NSString *beginDate = [period.StartDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *endDate = [period.EndDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
-            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, currentDateStr, @(SSJSyncVersion())]) {
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, islastday, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, @(isLastDay), currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;
                 [resultSet close];
                 return NO;
@@ -275,44 +276,37 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (NSArray *)periodsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate type:(int)type {
-    DTTimePeriodSize periodSize;
-    if (type == 0) {
-        periodSize = DTTimePeriodSizeWeek;
-    } else if (type == 1) {
-        periodSize = DTTimePeriodSizeMonth;
-    } else if (type == 2) {
-        periodSize = DTTimePeriodSizeYear;
-    }
-    
++ (NSArray *)periodsWithAccountday:(NSDate *)accountday untilDate:(NSDate *)untilDate type:(int)type isLastDay:(BOOL)isLastDay {
     NSMutableArray *periods = [NSMutableArray array];
-    DTTimePeriod *period = [DTTimePeriod timePeriodWithSize:periodSize startingAt:fromDate];
-    [periods addObject:period];
+    NSDate *beginDate = [accountday dateByAddingDays:1];
+    NSDate *endDate = nil;
     
-    if ([period.EndDate compare:toDate] == NSOrderedAscending) {
-        NSDate *tFromDate = [period.EndDate dateByAddingDays:1];
-        [periods addObjectsFromArray:[self periodsFromDate:tFromDate toDate:toDate type:type]];
+    if (type == 0) {
+        endDate = [accountday dateByAddingDays:7];
+    } else if (type == 1) {
+        if (isLastDay) {
+            NSDate *tmpDate = [beginDate dateByAddingMonths:1];
+            endDate = [tmpDate dateBySubtractingDays:1];
+        } else {
+            endDate = [accountday dateByAddingMonths:1];
+        }
+    } else if (type == 2) {
+        if (accountday.month == 2 && isLastDay) {
+            NSDate *tmpDate = [beginDate dateByAddingYears:1];
+            endDate = [tmpDate dateBySubtractingDays:1];
+        } else {
+            endDate = [accountday dateByAddingYears:1];
+        }
+    }
+
+    [periods addObject:[DTTimePeriod timePeriodWithStartDate:beginDate endDate:endDate]];
+    
+    if ([endDate compare:untilDate] == NSOrderedAscending) {
+        [periods addObjectsFromArray:[self periodsWithAccountday:endDate untilDate:untilDate type:type isLastDay:isLastDay]];
     }
     
     return periods;
 }
-
-//+ (SSJDatePeriodType)periodTypeForItype:(int)itype {
-//    switch (itype) {
-//        case 0:
-//            return SSJDatePeriodTypeWeek;
-//            break;
-//        case 1:
-//            return SSJDatePeriodTypeMonth;
-//            break;
-//        case 2:
-//            return SSJDatePeriodTypeYear;
-//            break;
-//            
-//        default:
-//            return SSJDatePeriodTypeUnknown;
-//    }
-//}
 
 + (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType containFromDate:(BOOL)contained {
     //  如果date为空或晚于当前日期，就返回nil
