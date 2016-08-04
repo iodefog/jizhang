@@ -8,6 +8,9 @@
 
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
+#define SSJ_BUTTON_NORMAL_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:0.5].CGColor
+#define SSJ_BUTTON_SELECTED_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor
+
 @interface SSJRecordMakingBillTypeInputAccessoryView ()
 
 @property (nonatomic, strong) UIView *topView;
@@ -30,6 +33,10 @@
 
 @implementation SSJRecordMakingBillTypeInputAccessoryView
 
+- (void)dealloc {
+    [self.photoBtn removeObserver:self forKeyPath:@"selected"];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.topView];
@@ -41,6 +48,8 @@
         [self.bottomView addSubview:self.dateBtn];
         [self.bottomView addSubview:self.memberBtn];
         [self.bottomView addSubview:self.photoBtn];
+        
+        [self.photoBtn addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
@@ -77,6 +86,12 @@
     [_dateBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
     [_memberBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_photoBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
+    if ([keyPath isEqualToString:@"selected"] && object == _photoBtn) {
+        _photoBtn.layer.borderColor = _photoBtn.selected ? SSJ_BUTTON_SELECTED_BORDER_COLOR : SSJ_BUTTON_NORMAL_BORDER_COLOR;
+    }
 }
 
 #pragma mark - Getter
@@ -134,7 +149,7 @@
         _accountBtn.frame = CGRectMake(0, 0, 70, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _accountBtn.layer.borderWidth = 1;
-        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _accountBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
     }
     return _accountBtn;
@@ -146,7 +161,7 @@
         _dateBtn.frame = CGRectMake(0, 0, 70, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _dateBtn.layer.borderWidth = 1;
-        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _dateBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
     }
     return _dateBtn;
@@ -159,7 +174,7 @@
         _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _memberBtn.layer.borderWidth = 1;
         [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-        _memberBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _memberBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _memberBtn.layer.cornerRadius = _memberBtn.height * 0.5;
     }
     return _memberBtn;
@@ -171,7 +186,7 @@
         _photoBtn.frame = CGRectMake(0, 0, 70, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _photoBtn.layer.borderWidth = 1;
-        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _photoBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
     }
     return _photoBtn;

@@ -96,7 +96,7 @@
 - (void)updateTitle {
     switch (_option) {
         case SSJReportFormsMemberAndCategorySwitchControlOptionCategory:
-            _titleLab.text = @"类别";
+            _titleLab.text = @"分类";
             break;
             
         case SSJReportFormsMemberAndCategorySwitchControlOptionMember:
