@@ -316,6 +316,10 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (!scrollView.tracking && !scrollView.dragging && !scrollView.decelerating) {
+        return;
+    }
+    
     if (scrollView.contentOffset.x == -scrollView.contentInset.left) {
         _selectedAxisXIndex = 0;
         [self adjustPaymentAndIncomePoint];
