@@ -218,8 +218,8 @@
         
         if (_datas.count > 0) {
             [_curveView reloadData];
-            if (_datas.count >= 4) {
-                [_curveView scrollToAxisXAtIndex:_datas.count - 4 animated:NO];
+            if (_datas.count >= 1) {
+                [_curveView scrollToAxisXAtIndex:_datas.count - 1 animated:NO];
             }
             [self updatePeriodLabelWithResult:result];
             [self updateGirdViewWithResult:result];

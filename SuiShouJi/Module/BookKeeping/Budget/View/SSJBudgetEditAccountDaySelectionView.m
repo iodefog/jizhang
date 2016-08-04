@@ -168,33 +168,72 @@
 }
 
 #pragma mark - UIPickerViewDelegate
-- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+- (nullable NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    NSString *title = nil;
     switch (_periodType) {
         case SSJBudgetPeriodTypeWeek:
-            return [self stringForWeekday:row + 1];
+            title = [self stringForWeekday:row + 1];
+            break;
             
         case SSJBudgetPeriodTypeMonth:
             if (row == 28) {
-                return @"每月最后一天";
+                title = @"每月最后一天";
             } else {
-                return [NSString stringWithFormat:@"%d日", (int)row + 1];
+                title = [NSString stringWithFormat:@"%d日", (int)row + 1];
             }
+            break;
             
         case SSJBudgetPeriodTypeYear:
             if (component == 0) {
-                return [NSString stringWithFormat:@"%d月", (int)row + 1];
+                title = [NSString stringWithFormat:@"%d月", (int)row + 1];
             } else if (component == 1) {
                 NSInteger selectedMonth = [pickerView selectedRowInComponent:0] + 1;
                 if (selectedMonth == 2 && row == 28) {
-                    return @"月末";
+                    title = @"月末";
                 } else {
-                    return [NSString stringWithFormat:@"%d日", (int)row + 1];
+                    title = [NSString stringWithFormat:@"%d日", (int)row + 1];
                 }
             } else {
-                return nil;
+                title = nil;
             }
+            break;
+    }
+    
+    if (title) {
+        NSAttributedString *attributeTitle = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]}];
+        return attributeTitle;
+    } else {
+        return nil;
     }
 }
+
+//- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+//    switch (_periodType) {
+//        case SSJBudgetPeriodTypeWeek:
+//            return [self stringForWeekday:row + 1];
+//            
+//        case SSJBudgetPeriodTypeMonth:
+//            if (row == 28) {
+//                return @"每月最后一天";
+//            } else {
+//                return [NSString stringWithFormat:@"%d日", (int)row + 1];
+//            }
+//            
+//        case SSJBudgetPeriodTypeYear:
+//            if (component == 0) {
+//                return [NSString stringWithFormat:@"%d月", (int)row + 1];
+//            } else if (component == 1) {
+//                NSInteger selectedMonth = [pickerView selectedRowInComponent:0] + 1;
+//                if (selectedMonth == 2 && row == 28) {
+//                    return @"月末";
+//                } else {
+//                    return [NSString stringWithFormat:@"%d日", (int)row + 1];
+//                }
+//            } else {
+//                return nil;
+//            }
+//    }
+//}
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (_periodType == SSJBudgetPeriodTypeYear && component == 0) {

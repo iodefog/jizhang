@@ -18,4 +18,7 @@
 
 @property (nonatomic) NSInteger selectedIndex;
 
+// default 2
+@property (nonatomic) CGFloat displayRowCount;
+
 @end

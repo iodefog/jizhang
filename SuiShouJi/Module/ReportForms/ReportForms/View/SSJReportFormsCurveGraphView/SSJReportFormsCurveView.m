@@ -41,12 +41,10 @@
     
     // 填充颜色
     CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
-//    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"e9f4ea" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
     CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
-//    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"fae5e5" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
@@ -60,6 +58,10 @@
     CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:NO].CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
+    
+//    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
+//    CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:YES].CGPath);
+//    CGContextDrawPath(ctx, kCGPathStroke);
 }
 
 - (void)setIncomeValues:(NSArray *)incomeValues {
@@ -107,9 +109,17 @@
     if (close) {
         CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
         
-        [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
-        [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
-        [path closePath];
+        if (points.count == 2) {
+            // 如果只有2个坐标点，创建的path是从第二个点到第一个点，而且不能用closePath，否则会出现奇葩的现象。。。
+            [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
+            [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
+            [path addLineToPoint:[points[1] CGPointValue]];
+        } else {
+            // 如果超过2个坐标点，行为是正常的。。。
+            [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
+            [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
+            [path closePath];
+        }
     }
     
     return path;

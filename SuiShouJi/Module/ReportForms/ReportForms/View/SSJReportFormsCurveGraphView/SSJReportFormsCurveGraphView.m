@@ -179,13 +179,6 @@ static const CGFloat kBottomSpaceHeight = 32;
     CGFloat width = _unitX * (_axisXCount - 1);
     _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight);
     
-//#warning test
-//    _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight + 40);
-//    _curveView.layer.borderColor = [UIColor orangeColor].CGColor;
-//    _curveView.layer.borderWidth = 1;
-//    _curveView.layer.zPosition = 100;
-//    _curveView.contentInsets = UIEdgeInsetsMake(0, 0, 40, 0);
-    
     _axisXView.frame = CGRectMake(0, self.height - kBottomSpaceHeight, width, kBottomSpaceHeight);
     
     _scrollView.frame = self.bounds;
@@ -202,6 +195,16 @@ static const CGFloat kBottomSpaceHeight = 32;
     
     [self adjustPaymentAndIncomePoint];
     [self updateSurplus];
+    
+//#warning test
+//    _scrollView.clipsToBounds = NO;
+//    _scrollView.layer.borderColor = [UIColor blueColor].CGColor;
+//    _scrollView.layer.borderWidth = 1;
+//    _curveView.frame = CGRectMake(0, kTopSpaceHeight, width, self.height - kTopSpaceHeight - kBottomSpaceHeight + 40);
+//    _curveView.layer.borderColor = [UIColor yellowColor].CGColor;
+//    _curveView.layer.borderWidth = 1;
+//    _curveView.layer.zPosition = 100;
+//    _curveView.contentInsets = UIEdgeInsetsMake(0, 0, 40, 0);
 }
 
 - (void)reloadData {
@@ -316,6 +319,10 @@ static const CGFloat kBottomSpaceHeight = 32;
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (!scrollView.tracking && !scrollView.dragging && !scrollView.decelerating) {
+        return;
+    }
+    
     if (scrollView.contentOffset.x == -scrollView.contentInset.left) {
         _selectedAxisXIndex = 0;
         [self adjustPaymentAndIncomePoint];

@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 // 顶部标题字体大小，default 12
 @property (nonatomic) CGFloat topTitleFontSize;
 
-// 底部标题字体大小，default 18
+// 底部标题字体大小，default 22
 @property (nonatomic) CGFloat bottomTitleFontSize;
 
 // 顶部标题字体大小，default white

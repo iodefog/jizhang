@@ -316,7 +316,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (SSJAddNewTypeColorSelectionView *)colorSelectionView {
     if (!_colorSelectionView) {
         _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithWidth:self.scrollView.width];
-        [_colorSelectionView sizeToFit];
+        _colorSelectionView.displayRowCount = 2.5;
         _colorSelectionView.leftBottom = CGPointMake(self.scrollView.width, self.scrollView.height);
         _colorSelectionView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
         [_colorSelectionView ssj_setBorderWidth:1];

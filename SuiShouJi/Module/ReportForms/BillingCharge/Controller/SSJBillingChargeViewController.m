@@ -141,7 +141,9 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        if (![[SSJThemeSetting currentThemeModel].ID isEqualToString:@"0"]) {
+            _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        }
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.rowHeight = 90;
         _tableView.sectionHeaderHeight = 40;

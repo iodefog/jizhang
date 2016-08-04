@@ -10,11 +10,11 @@
 #import "SSJPercentCircleView.h"
 #import "SSJPageControl.h"
 #import "SSJReportFormsMemberAndCategorySwitchControl.h"
-#import "SSJReportFormsSwitchControl.h"
 #import "SSJReportFormsSurplusView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJReportFormsScaleAxisView.h"
 #import "SSJBudgetNodataRemindView.h"
+#import "SCYSlidePagingHeaderView.h"
 
 #import "SSJBillingChargeViewController.h"
 #import "SSJMagicExportCalendarViewController.h"
@@ -28,12 +28,12 @@ static NSString *const kSegmentTitlePay = @"支出";
 static NSString *const kSegmentTitleIncome = @"收入";
 //static NSString *const kSegmentTitleSurplus = @"结余";
 
-@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate>
+@interface SSJReportFormsViewController () <UITableViewDataSource, UITableViewDelegate, UITabBarControllerDelegate, SSJReportFormsPercentCircleDataSource, SSJReportFormsScaleAxisViewDelegate, SCYSlidePagingHeaderViewDelegate>
 
 @property (nonatomic, strong) SSJReportFormsMemberAndCategorySwitchControl *typeAndMemberControl;
 
 //  收入、支出、结余切换控件
-@property (nonatomic, strong) SSJReportFormsSwitchControl *payAndIncomeSegmentControl;
+@property (nonatomic, strong) SCYSlidePagingHeaderView *payAndIncomeSegmentControl;
 
 //  切换年份、月份控件
 @property (nonatomic, strong) SSJReportFormsScaleAxisView *dateAxisView;
@@ -127,11 +127,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     
     [_typeAndMemberControl updateAppearance];
     
-    _payAndIncomeSegmentControl.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-    _payAndIncomeSegmentControl.normalBackgroundColor = [UIColor clearColor];
-    _payAndIncomeSegmentControl.selectedBackgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    _payAndIncomeSegmentControl.lineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -202,6 +199,30 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
 }
 
+#pragma mark - SCYSlidePagingHeaderViewDelegate
+- (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+    [self reloadDatas];
+    [self updateIncomeAndPaymentLabels];
+    
+    NSString *selectedTitle = [_payAndIncomeSegmentControl.titles ssj_safeObjectAtIndex:_payAndIncomeSegmentControl.selectedIndex];
+    //    if ([selectedTitle isEqualToString:kSegmentTitlePay]
+    //        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
+    //
+    //        self.tableView.tableFooterView = [[UIView alloc] init];
+    //
+    //    } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
+    //        self.tableView.tableFooterView = self.surplusView;
+    //    }
+    
+    if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
+        [MobClick event:@"form_out"];
+    }else if ([selectedTitle isEqualToString:kSegmentTitleIncome]){
+        [MobClick event:@"form_in"];
+    }else{
+        [MobClick event:@"form_total"];
+    }
+}
+
 #pragma mark - SSJReportFormsPercentCircleDataSource
 - (NSUInteger)numberOfComponentsInPercentCircle:(SSJPercentCircleView *)circle {
     return self.circleItems.count;
@@ -254,29 +275,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 #pragma mark - Event
-- (void)payAndIncomeSwitchControlAction {
-    [self reloadDatas];
-    [self updateIncomeAndPaymentLabels];
-    
-    NSString *selectedTitle = [_payAndIncomeSegmentControl.titles ssj_safeObjectAtIndex:_payAndIncomeSegmentControl.selectedIndex];
-//    if ([selectedTitle isEqualToString:kSegmentTitlePay]
-//        || [selectedTitle isEqualToString:kSegmentTitleIncome]) {
-//        
-//        self.tableView.tableFooterView = [[UIView alloc] init];
-//        
-//    } else if ([selectedTitle isEqualToString:kSegmentTitleSurplus]) {
-//        self.tableView.tableFooterView = self.surplusView;
-//    }
-    
-    if ([selectedTitle isEqualToString:kSegmentTitlePay]) {
-        [MobClick event:@"form_out"];
-    }else if ([selectedTitle isEqualToString:kSegmentTitleIncome]){
-        [MobClick event:@"form_in"];
-    }else{
-        [MobClick event:@"form_total"];
-    }
-}
-
 // 切换分类和成员
 - (void)typeAndMemberControlAction {
     [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
@@ -416,10 +414,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
             _customPeriodBtn.hidden = YES;
             self.tableView.hidden = YES;
             
-            _payAndIncomeSegmentControl.top = SSJ_NAVIBAR_BOTTOM;
-            _tableView.top = self.payAndIncomeSegmentControl.bottom;
-            _tableView.height = self.view.height - self.payAndIncomeSegmentControl.bottom - SSJ_TABBAR_HEIGHT;
-            
             [self.view ssj_hideLoadingIndicator];
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
             
@@ -431,10 +425,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _customPeriodBtn.hidden = NO;
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
-        
-        _payAndIncomeSegmentControl.top = _dateAxisView.bottom;
-        _tableView.top = self.payAndIncomeSegmentControl.bottom;
-        _tableView.height = self.view.height - self.payAndIncomeSegmentControl.bottom - SSJ_TABBAR_HEIGHT;
         
         _periods = periods;
         [_dateAxisView reloadData];
@@ -594,9 +584,23 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _typeAndMemberControl;
 }
 
+- (SCYSlidePagingHeaderView *)payAndIncomeSegmentControl {
+    if (!_payAndIncomeSegmentControl) {
+        _payAndIncomeSegmentControl = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 40)];
+        _payAndIncomeSegmentControl.backgroundColor = [UIColor clearColor];
+        _payAndIncomeSegmentControl.customDelegate = self;
+        _payAndIncomeSegmentControl.buttonClickAnimated = YES;
+        _payAndIncomeSegmentControl.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+        [_payAndIncomeSegmentControl setTabSize:CGSizeMake(_payAndIncomeSegmentControl.width * 0.5, 3)];
+        _payAndIncomeSegmentControl.titles = @[kSegmentTitlePay, kSegmentTitleIncome];
+    }
+    return _payAndIncomeSegmentControl;
+}
+
 - (SSJReportFormsScaleAxisView *)dateAxisView {
     if (!_dateAxisView) {
-        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 50)];
+        _dateAxisView = [[SSJReportFormsScaleAxisView alloc] initWithFrame:CGRectMake(0, self.payAndIncomeSegmentControl.bottom, self.view.width, 50)];
         _dateAxisView.backgroundColor = [UIColor clearColor];
         _dateAxisView.scaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _dateAxisView.selectedScaleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
@@ -606,20 +610,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
         [_dateAxisView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
     return _dateAxisView;
-}
-
-- (SSJReportFormsSwitchControl *)payAndIncomeSegmentControl {
-    if (!_payAndIncomeSegmentControl) {
-        _payAndIncomeSegmentControl = [[SSJReportFormsSwitchControl alloc] initWithTitles:@[kSegmentTitlePay, kSegmentTitleIncome]];
-        _payAndIncomeSegmentControl.frame = CGRectMake(0, self.dateAxisView.bottom, self.view.width, 40);
-        [_payAndIncomeSegmentControl addTarget:self action:@selector(payAndIncomeSwitchControlAction) forControlEvents:UIControlEventValueChanged];
-        _payAndIncomeSegmentControl.normalTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _payAndIncomeSegmentControl.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        _payAndIncomeSegmentControl.normalBackgroundColor = [UIColor clearColor];
-        _payAndIncomeSegmentControl.selectedBackgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _payAndIncomeSegmentControl.lineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    }
-    return _payAndIncomeSegmentControl;
 }
 
 - (SSJPercentCircleView *)chartView {
@@ -645,7 +635,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.payAndIncomeSegmentControl.bottom, self.view.width, self.view.height - self.payAndIncomeSegmentControl.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.dateAxisView.bottom, self.view.width, self.view.height - self.dateAxisView.bottom - SSJ_TABBAR_HEIGHT) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.rowHeight = 55;
         _tableView.sectionHeaderHeight = 0;
@@ -695,7 +685,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 - (UILabel *)customPeriodLab {
     if (!_customPeriodLab) {
-        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, 0, 30)];
+        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.dateAxisView.top + 10, 0, 30)];
         _customPeriodLab.backgroundColor = [UIColor clearColor];
         _customPeriodLab.textAlignment = NSTextAlignmentCenter;
         _customPeriodLab.font = [UIFont systemFontOfSize:15];
@@ -711,7 +701,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, SSJ_NAVIBAR_BOTTOM, 50, 50);
+        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, self.dateAxisView.top, 50, 50);
         [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [_customPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
