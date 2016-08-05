@@ -84,7 +84,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     NSArray *currentItems = (_titleSegmentView.selectedIndex ? _customItems : _items);
-    cell.item = (SSJRecordMakingCategoryItem*)[currentItems objectAtIndex:indexPath.row];
+    cell.item = (SSJRecordMakingCategoryItem*)[currentItems ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 

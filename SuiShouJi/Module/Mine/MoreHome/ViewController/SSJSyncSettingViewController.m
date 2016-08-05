@@ -67,7 +67,7 @@
     if (!mineHomeCell) {
         mineHomeCell = [[SSJSyncSettingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    mineHomeCell.cellTitle = [titleArray objectAtIndex:indexPath.row];
+    mineHomeCell.cellTitle = [titleArray ssj_safeObjectAtIndex:indexPath.row];
     if ([indexPath compare:_selectedIndex] == NSOrderedSame) {
         mineHomeCell.selectedOrNot = YES;
     }else{

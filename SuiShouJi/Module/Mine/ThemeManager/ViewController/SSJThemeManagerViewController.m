@@ -55,7 +55,7 @@ static NSString *const kCellId = @"SSJThemeManagerCollectionViewCell";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeModel *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeModel *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     SSJThemeManagerCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     __weak typeof(self) weakSelf = self;
     cell.deleteThemeBlock = ^(){

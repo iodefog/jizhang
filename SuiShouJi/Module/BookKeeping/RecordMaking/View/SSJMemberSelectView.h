@@ -14,11 +14,13 @@
 
 @property (nonatomic, copy) void(^comfirmBlock)(NSArray *selectedMemberItems);
 
-@property (nonatomic, copy) void(^manageBlock)();
+@property (nonatomic, copy) void(^manageBlock)(NSMutableArray *items);
 
 @property (nonatomic, copy) void(^addNewMemberBlock)();
 
 @property(nonatomic, strong) NSMutableArray *selectedMemberItems;
+
+@property(nonatomic, strong) NSString *chargeId;
 
 - (void)show;
 

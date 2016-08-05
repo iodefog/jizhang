@@ -99,7 +99,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
             item.chargeIndex = count;
             // 将新增的数据独立拿出一个数组
             for (int i = 0; i < newCharge.count; i++) {
-                SSJBillingChargeCellItem *newItem = [newCharge objectAtIndex:i];
+                SSJBillingChargeCellItem *newItem = [newCharge ssj_safeObjectAtIndex:i];
                 if ([item.ID isEqualToString:newItem.ID]) {
                     [newAddChargeArr addObject:item];
                 }
@@ -109,7 +109,7 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
         }
         // 在每日的流水总数中减掉新增的数量
         for (int i = 0; i < newAddChargeArr.count; i++) {
-            SSJBillingChargeCellItem *item = [newAddChargeArr objectAtIndex:i];
+            SSJBillingChargeCellItem *item = [newAddChargeArr ssj_safeObjectAtIndex:i];
             int chargeCount = [[summaryDic valueForKey:item.billDate] intValue];
             [summaryDic setValue:@(chargeCount - 1) forKey:item.billDate];
         }

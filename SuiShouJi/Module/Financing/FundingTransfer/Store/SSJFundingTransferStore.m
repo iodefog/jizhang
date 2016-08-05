@@ -79,11 +79,11 @@
     SSJBillingChargeCellItem *transferInItem;
     SSJBillingChargeCellItem *transferOutItem;
     for (int i = 0; i < array.count; i ++) {
-        SSJBillingChargeCellItem *item = [array objectAtIndex:i];
+        SSJBillingChargeCellItem *item = [array ssj_safeObjectAtIndex:i];
         if ([item.billId isEqualToString:@"3"]) {
-            transferInItem = [array objectAtIndex:i];
+            transferInItem = [array ssj_safeObjectAtIndex:i];
         }else{
-            transferOutItem = [array objectAtIndex:i];
+            transferOutItem = [array ssj_safeObjectAtIndex:i];
         }
     }
     if (![transferInItem.billId isEqualToString:@"3"]) {

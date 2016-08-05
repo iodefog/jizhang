@@ -84,7 +84,7 @@ static id _instance;
 
 -(void)layoutSubviews{
     for (int i = 0; i < 9; i ++) {
-        ((SSJCustomKeyBoardButton*)([self.numButtonArray objectAtIndex:i])).frame = CGRectMake(i % 3 * _buttonWight, i / 3 * _buttonHeight, _buttonWight, _buttonHeight);
+        ((SSJCustomKeyBoardButton*)([self.numButtonArray ssj_safeObjectAtIndex:i])).frame = CGRectMake(i % 3 * _buttonWight, i / 3 * _buttonHeight, _buttonWight, _buttonHeight);
     }
     self.DecimalButton.size = CGSizeMake(_buttonWight, _buttonHeight);
     self.DecimalButton.leftBottom = CGPointMake(0, self.bottom);

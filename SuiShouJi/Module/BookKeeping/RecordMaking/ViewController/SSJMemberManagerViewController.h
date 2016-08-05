@@ -9,5 +9,5 @@
 #import "SSJBaseViewController.h"
 
 @interface SSJMemberManagerViewController : SSJBaseViewController
-
+@property(nonatomic, strong) NSMutableArray *items;
 @end

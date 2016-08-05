@@ -13,7 +13,6 @@
 #import "SSJNewMemberViewController.h"
 
 @interface SSJMemberManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
-@property(nonatomic, strong) NSMutableArray *items;
 @property(nonatomic, strong) UITableView *tableView;
 @property(nonatomic, strong) UIButton *editeButton;
 @end
@@ -48,7 +47,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
     if (item.memberId.length) {
         newMemberVc.originalItem = item;
@@ -57,7 +56,7 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (!item.memberId.length || [item.memberId isEqualToString:@"0"]) {
         return NO;
     }
@@ -69,7 +68,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     [self deleteMemberWithMemberId:item.memberId];
     [self.items removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -88,7 +87,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
-    SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     NSString *title = item.memberName;
     cell.textLabel.font = [UIFont systemFontOfSize:18];
     cell.textLabel.text = title;

@@ -342,7 +342,7 @@ BOOL kHomeNeedLoginPop;
         }else{
             CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
             NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
-            SSJBillingChargeCellItem *item = [self.items objectAtIndex:currentRow];
+            SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
             NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(6, 2)] integerValue];
             NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
             if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
@@ -397,7 +397,7 @@ BOOL kHomeNeedLoginPop;
     }else{
         bookKeepingCell.isLastRowOrNot = YES;
     }
-    bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
+    bookKeepingCell.item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
         if (weakSelf.selectIndex == nil) {

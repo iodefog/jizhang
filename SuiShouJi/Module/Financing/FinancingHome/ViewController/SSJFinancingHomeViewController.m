@@ -62,7 +62,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     [self getDateFromDateBase];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
-        SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] objectAtIndex:0];
+        SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] ssj_safeObjectAtIndex:0];
         popView.frame = [UIScreen mainScreen].bounds;
         [[UIApplication sharedApplication].keyWindow addSubview:popView];
         [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveEnterFundingHomeKey];
@@ -202,11 +202,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
-    SSJFinancingHomeitem *currentItem = [self.items objectAtIndex:fromIndexPath.row];
+    SSJFinancingHomeitem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
     [self.items removeObjectAtIndex:fromIndexPath.row];
     [self.items insertObject:currentItem atIndex:toIndexPath.row];
     for (int i = 0; i < self.items.count; i ++) {
-        SSJFinancingHomeitem *tempItem = [self.items objectAtIndex:i];
+        SSJFinancingHomeitem *tempItem = [self.items ssj_safeObjectAtIndex:i];
         tempItem.fundingOrder = i + 1;
     }
 }

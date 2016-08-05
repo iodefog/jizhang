@@ -167,7 +167,7 @@ static NSString *const kTitle3 = @"定期提醒";
             }else{
                 NSMutableArray *array = [[NSMutableArray alloc]init];
                 for (int i = 0; i < tempArr.count; i ++) {
-                    NSInteger date = [[tempArr objectAtIndex:i] intValue];
+                    NSInteger date = [[tempArr ssj_safeObjectAtIndex:i] intValue];
                     switch (date) {
                         case 1:
                             [array addObject:@"周日"];

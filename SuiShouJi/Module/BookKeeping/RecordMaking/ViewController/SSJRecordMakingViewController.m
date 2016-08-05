@@ -120,6 +120,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if (![self showGuideViewIfNeeded]) {
+        [self.FundingTypeSelectView dismiss];
+        [self.DateSelectedView dismiss];
+        [self.memberSelectView dismiss];
         [self.billTypeInputView.moneyInput becomeFirstResponder];
     }
 }
@@ -248,10 +251,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };
-        _memberSelectView.manageBlock = ^(){
+        _memberSelectView.manageBlock = ^(NSMutableArray *items){
             [weakSelf.billTypeInputView.moneyInput resignFirstResponder];
             [weakSelf.accessoryView.memoView resignFirstResponder];
             SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
+            membermanageVc.items = items;
             [weakSelf.navigationController pushViewController:membermanageVc animated:YES];
         };
         _memberSelectView.addNewMemberBlock = ^(){
@@ -443,7 +447,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectMemberAction{
-    self.memberSelectView.selectedMemberItems = self.item.membersItem;
+    self.memberSelectView.selectedMemberItems = [self.item.membersItem mutableCopy];
     self.memberSelectView.chargeId = self.item.ID;
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
@@ -796,7 +800,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 -(void)updateMembers{
     if (self.item.membersItem.count == 1) {
-        SSJChargeMemberItem *item = [self.item.membersItem objectAtIndex:0];
+        SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
         [self.accessoryView.memberBtn setTitle:item.memberName forState:UIControlStateNormal];
     }else{
         [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",self.item.membersItem.count] forState:UIControlStateNormal];
