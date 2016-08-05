@@ -444,7 +444,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (void)selectMemberAction{
     self.memberSelectView.selectedMemberItems = self.item.membersItem;
-    self.memberSelectView.chargeId = self.item.ID;
+//    self.memberSelectView.chargeId = self.item.ID;
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
