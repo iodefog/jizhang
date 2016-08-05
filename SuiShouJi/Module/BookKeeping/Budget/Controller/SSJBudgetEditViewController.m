@@ -70,7 +70,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 @implementation SSJBudgetEditViewController
 
 #pragma mark - Lifecycle
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
