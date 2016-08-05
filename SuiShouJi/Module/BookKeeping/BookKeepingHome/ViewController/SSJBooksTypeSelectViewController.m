@@ -130,7 +130,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }else{
             flowLayout.minimumInteritemSpacing = 15;
         }
-        _collectionView=[[UICollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height) collectionViewLayout:flowLayout];
+        _collectionView=[[UICollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) collectionViewLayout:flowLayout];
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.delegate=self;
         _collectionView.dataSource=self;

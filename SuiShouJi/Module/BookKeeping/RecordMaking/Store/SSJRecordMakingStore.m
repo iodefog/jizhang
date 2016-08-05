@@ -277,14 +277,26 @@
                     }
                 }
                 if (item.incomeOrExpence) {
-                    if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
+                    if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
+                        if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
                         }
-                        return;
+                    }else{
+                        if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount,sumamount,cwritedate,cuserid,cbooksid,cbilldate) values (?,0,?,?,?,?,?)",@(money),@(-money),editeTime,userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        }
                     }
+
                     if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
                         *rollback = YES;
                         if (failure) {
@@ -295,14 +307,26 @@
                         return;
                     }
                 }else{
-                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
+                    if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
+                        if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
                         }
-                        return;
+                    }else{
+                        if (![db executeUpdate:@"insert into bk_dailysum_charge (incomeamount,expenceamount,sumamount,cwritedate,cuserid,cbooksid,cbilldate) values (?,0,?,?,?,?,?)",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        }
                     }
+
                     if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
                         *rollback = YES;
                         if (failure) {
@@ -313,7 +337,15 @@
                         return;
                     }
                 }
-                [db executeUpdate:@"delete from bk_dailysum_charge where incomeamount = 0 and expenceamount = 0  and sumamount = 0"];
+                if (![db executeUpdate:@"delete from bk_dailysum_charge where incomeamount = 0 and expenceamount = 0 and sumamount = 0"]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
             }
             //修改成员流水表
             if (![db executeUpdate:@"delete from bk_member_charge where ichargeid = ?",item.ID]) {

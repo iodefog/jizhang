@@ -592,14 +592,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 weakSelf.item.membersItem= tempArr;
             }else{
                 SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                item.memberId = @"0";
+                item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
                 item.memberName = @"我";
                 item.memberColor = @"#fc7a60";
                 weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];
             }
         }else{
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = @"0";
+            item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
             item.memberName = @"我";
             item.memberColor = @"#fc7a60";
             weakSelf.item.membersItem = [NSMutableArray arrayWithObjects:item, nil];

@@ -96,7 +96,7 @@
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     cell.detailTextLabel.font = [UIFont systemFontOfSize:18];
     cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    if ([item.memberId isEqualToString:@"0"]) {
+    if ([item.memberId isEqualToString:[NSString stringWithFormat:@"%@-0",SSJUSERID()]]) {
         cell.detailTextLabel.text = @"默认";
     }else{
         cell.detailTextLabel.text = @"";
