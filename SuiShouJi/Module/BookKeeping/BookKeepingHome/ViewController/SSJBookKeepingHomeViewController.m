@@ -602,15 +602,20 @@ BOOL kHomeNeedLoginPop;
     __weak typeof(self) weakSelf = self;
     if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
         kHomeNeedLoginPop = NO;
-        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
-        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-            [alert dismiss];
-        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            [alert dismiss];
+//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+//            [weakSelf.navigationController pushViewController:loginVc animated:YES];
+//            [alert dismiss];
+//        }];
+//        [alert show];
+        
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"当前未登录，请登录后再去记账吧~" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction * _Nonnull action) {
             SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
             [weakSelf.navigationController pushViewController:loginVc animated:YES];
-            [alert dismiss];
-        }];
-        [alert show];
+        }], nil];
     }
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];

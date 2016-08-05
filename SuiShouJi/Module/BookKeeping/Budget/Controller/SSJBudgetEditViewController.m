@@ -212,6 +212,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 #pragma mark - Event
+- (void)goBackAction {
+    // 如果没有预算直接返回首页
+    if (_budgetList.count == 0) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } else {
+        [super goBackAction];
+    }
+}
+
 - (void)deleteBudgetAction {
     __weak typeof(self) weakSelf = self;
     SSJAlertViewAction *cancel = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
@@ -290,16 +299,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 #pragma mark - Private
 - (void)queryData {
-    if (self.model) {
-        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            _budgetList = result;
-            [self queryBillTypeList];
-        } failure:^(NSError * _Nullable error) {
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
-    } else {
+    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+        _budgetList = result;
         [self queryBillTypeList];
-    }
+    } failure:^(NSError * _Nullable error) {
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
 - (void)queryBillTypeList {
@@ -592,13 +597,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper deleteBudgetWithID:self.model.ID success:^{
         [self.view ssj_hideLoadingIndicator];
-        //  删除成功后自动同步
+        
         [self syncIfNeeded];
+        
+        // 如果删除后没有预算直接返回首页
         if (_budgetList.count == 1) {
-            SSJBookKeepingHomeViewController *homeVC = [self ssj_previousViewControllerBySubtractingIndex:3];
-            if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-                [self.navigationController popToViewController:homeVC animated:YES];
-            }
+            [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
             SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
             if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {

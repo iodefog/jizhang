@@ -46,22 +46,33 @@ void SSJDidRemindUserSettingMotionPassword() {
         
         __weak typeof(self) weakSelf = self;
         
-        NSAttributedString *message = [[NSAttributedString alloc] initWithString:@"为保障您的隐私，建议您设置下手势密码哦！" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+//        NSAttributedString *message = [[NSAttributedString alloc] initWithString:@"为保障您的隐私，建议您设置下手势密码哦！" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+//        
+//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc] initWithTitle:nil message:message cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert){
+//            [alert dismiss];
+//            SSJDidRemindUserSettingMotionPassword();
+//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            [alert dismiss];
+//            SSJDidRemindUserSettingMotionPassword();
+//            
+//            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+//            motionVC.finishHandle = weakSelf.finishHandle;
+//            motionVC.backController = weakSelf.backController;
+//            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+//            [weakSelf.navigationController pushViewController:motionVC animated:YES];
+//        }];
+//        [alert show];
         
-        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc] initWithTitle:nil message:message cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert){
-            [alert dismiss];
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
             SSJDidRemindUserSettingMotionPassword();
-        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-            [alert dismiss];
+        }], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
             SSJDidRemindUserSettingMotionPassword();
-            
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.finishHandle = weakSelf.finishHandle;
             motionVC.backController = weakSelf.backController;
             motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
             [weakSelf.navigationController pushViewController:motionVC animated:YES];
-        }];
-        [alert show];
+        }], nil];
     }
 }
 

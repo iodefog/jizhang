@@ -207,19 +207,23 @@
             }else if (loginType == 2) {
                 hintStr = [NSString stringWithFormat:@"您已使用过微信%@登陆过,确定使用新账户登录",userName];
             }
-            NSString *fullhint = [NSString stringWithFormat:@"%@\n\n登陆后新的记账数据将同步到新账号",hintStr];
-            NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:fullhint];
-            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[fullhint rangeOfString:hintStr]];
-            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
-            [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[fullhint rangeOfString:userName]];
-            [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
-            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-                [alert dismiss];
-            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            NSString *fullhint = [NSString stringWithFormat:@"%@\n\n登陆后新的记账数据将同步到新账号",hintStr];
+//            NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:fullhint];
+//            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[fullhint rangeOfString:hintStr]];
+//            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
+//            [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[fullhint rangeOfString:userName]];
+//            [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
+//            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//                [alert dismiss];
+//            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//                [weakSelf comfirmTologin];
+//                [alert dismiss];
+//            }];
+//            [alert show];
+            
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:hintStr action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
                 [weakSelf comfirmTologin];
-                [alert dismiss];
-            }];
-            [alert show];
+            }], nil];
         }else{
             [self comfirmTologin];
         }
