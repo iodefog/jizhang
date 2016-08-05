@@ -74,7 +74,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJBaseItem *item = [self.items ssj_objectAtIndexPath:indexPath];
     if ([item isKindOfClass:[SSJBillingChargeCellItem class]] && indexPath.section == 1) {
-        if (self.item.chargeMemo) {
+        if (self.item.chargeMemo.length) {
             return 142;
         }else{
             return 120;

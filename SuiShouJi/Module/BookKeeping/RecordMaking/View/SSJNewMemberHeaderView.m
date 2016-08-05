@@ -10,6 +10,7 @@
 
 @interface SSJNewMemberHeaderView()
 @property(nonatomic, strong) UIView *colorSelectView;
+@property(nonatomic, strong) UILabel *nameLab;
 @end
 
 @implementation SSJNewMemberHeaderView
@@ -21,6 +22,7 @@
         self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.colorSelectView];
         [self addSubview:self.nameInput];
+        [self addSubview:self.nameLab];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     }
@@ -33,6 +35,7 @@
     self.colorSelectView.centerY = self.height / 2;
     self.nameInput.centerY = self.height / 2;
     self.nameInput.left = self.colorSelectView.right + 10;
+    self.nameLab.center = self.colorSelectView.center;
     [self ssj_relayoutBorder];
 }
 
@@ -47,12 +50,29 @@
     return _nameInput;
 }
 
+-(UILabel *)nameLab{
+    if (!_nameLab) {
+        _nameLab = [[UILabel alloc]init];
+        _nameLab.textColor = [UIColor whiteColor];
+        _nameLab.textAlignment = NSTextAlignmentCenter;
+        _nameLab.font = [UIFont systemFontOfSize:15];
+    }
+    return _nameLab;
+}
+
 -(UIView *)colorSelectView{
     if (!_colorSelectView) {
         _colorSelectView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 34, 34)];
         _colorSelectView.layer.cornerRadius = _colorSelectView.height / 2;
     }
     return _colorSelectView;
+}
+
+-(void)setFirstWord:(NSString *)firstWord{
+    _firstWord = firstWord;
+    self.nameLab.text = firstWord;
+    [self.nameLab sizeToFit];
+    [self setNeedsLayout];
 }
 
 -(void)setSelectedColor:(NSString *)selectedColor{

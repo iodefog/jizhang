@@ -14,4 +14,6 @@
 
 @property(nonatomic, strong) NSString *selectedColor;
 
+@property(nonatomic, strong) NSString *firstWord;
+
 @end

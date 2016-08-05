@@ -13,7 +13,7 @@
 #import "SSJNewMemberHeaderView.h"
 #import "SSJDatabaseQueue.h"
 
-@interface SSJNewMemberViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface SSJNewMemberViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate>
 @property(nonatomic, strong) UICollectionView *collectionView;
 @property(nonatomic, strong) SSJNewMemberHeaderView *header;
 @end
@@ -87,6 +87,19 @@
     }];
     [collectionView reloadData];
 }
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSString *text = textField.text ? : @"";
+    text = [text stringByReplacingCharactersInRange:range withString:string];
+    if (text.length >= 1) {
+        self.header.firstWord = [text substringWithRange:NSMakeRange(0, 1)];
+    }else{
+        self.header.firstWord = @"";
+    }
+    return YES;
+}
+
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -169,6 +182,8 @@
     if (!_header) {
         _header = [[SSJNewMemberHeaderView alloc]init];
         _header.nameInput.text = self.originalItem.memberName;
+        _header.nameInput.delegate = self;
+        _header.firstWord = [self.originalItem.memberName substringWithRange:NSMakeRange(0, 1)];
     }
     return _header;
 }

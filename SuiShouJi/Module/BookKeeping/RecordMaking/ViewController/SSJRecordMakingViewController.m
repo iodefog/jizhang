@@ -803,7 +803,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         SSJChargeMemberItem *item = [self.item.membersItem ssj_safeObjectAtIndex:0];
         [self.accessoryView.memberBtn setTitle:item.memberName forState:UIControlStateNormal];
     }else{
-        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%lu人",self.item.membersItem.count] forState:UIControlStateNormal];
+        [self.accessoryView.memberBtn setTitle:[NSString stringWithFormat:@"%ld人",self.item.membersItem.count] forState:UIControlStateNormal];
     }
 }
 

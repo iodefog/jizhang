@@ -189,7 +189,7 @@ static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信
             }];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"云端和本地的数据将被彻底清除且不可恢复，确定要执行此操作？" action:comfirmAction,cancelAction,nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"云端和本地的数据将被彻底清除且不可恢复，确定要执行此操作？" action:cancelAction,comfirmAction,nil];
     }
     
     
