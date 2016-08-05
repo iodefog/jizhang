@@ -379,7 +379,9 @@
             }
         }
         if (success) {
-            success(editeItem);
+            SSJDispatch_main_async_safe(^{
+                success(editeItem);
+            });
         }
     }];
 }
