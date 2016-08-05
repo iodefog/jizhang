@@ -8,6 +8,7 @@
 
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetListViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 #import "SSJBudgetEditPeriodSelectionView.h"
 #import "SSJBudgetEditAccountDaySelectionView.h"
 #import "TPKeyboardAvoidingTableView.h"
@@ -55,6 +56,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 @property (nonatomic, strong) NSArray *budgetTypeList;
 
+@property (nonatomic, strong) NSArray *budgetList;
+
 @property (nonatomic, strong) NSDictionary *budgetTypeMap;
 
 @property (nonatomic, copy) NSString *bookName;
@@ -87,7 +90,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.navigationItem.title = @"添加预算";
     }
     
-    [self queryBillTypeList];
+    [self queryData];
     [self.view addSubview:self.tableView];
 }
 
@@ -286,6 +289,19 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 #pragma mark - Private
+- (void)queryData {
+    if (self.model) {
+        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+            _budgetList = result;
+            [self queryBillTypeList];
+        } failure:^(NSError * _Nullable error) {
+            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        }];
+    } else {
+        [self queryBillTypeList];
+    }
+}
+
 - (void)queryBillTypeList {
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
@@ -578,9 +594,16 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self.view ssj_hideLoadingIndicator];
         //  删除成功后自动同步
         [self syncIfNeeded];
-        SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
-        if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {
-            [self.navigationController popToViewController:budgetListVC animated:YES];
+        if (_budgetList.count == 1) {
+            SSJBookKeepingHomeViewController *homeVC = [self ssj_previousViewControllerBySubtractingIndex:3];
+            if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+                [self.navigationController popToViewController:homeVC animated:YES];
+            }
+        } else {
+            SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
+            if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {
+                [self.navigationController popToViewController:budgetListVC animated:YES];
+            }
         }
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
