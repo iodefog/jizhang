@@ -55,8 +55,7 @@ PODS:
     - libwebp/core
   - libwebp/webp (0.4.4)
   - LxThroughPointsBezier (1.0.0)
-  - MJExtension (3.0.12)
-  - MLeaksFinder (0.1.1)
+  - MJExtension (3.0.13)
   - MMDrawerController (0.5.7):
     - MMDrawerController/Core (= 0.5.7)
     - MMDrawerController/MMDrawerBarButtonItem (= 0.5.7)
@@ -75,7 +74,7 @@ PODS:
   - SDWebImage/WebP (3.7.6):
     - libwebp
     - SDWebImage/Core
-  - UMengAnalytics-NO-IDFA (4.0.5)
+  - UMengAnalytics-NO-IDFA (4.1.1)
   - UMengSocialCOM (5.2.1)
   - YYKeyboardManager (1.0.1)
   - YYText (1.0.5)
@@ -90,7 +89,6 @@ DEPENDENCIES:
   - JSPatch
   - LxThroughPointsBezier (~> 1.0.0)
   - MJExtension
-  - MLeaksFinder
   - MMDrawerController (~> 0.5.7)
   - SDWebImage (~> 3.7)
   - SDWebImage/WebP
@@ -109,11 +107,10 @@ SPEC CHECKSUMS:
   JSPatch: ade285ad1d8f06146ed6054a39cef87509453299
   libwebp: 7d74f1ab887df77f23493ce115c9424fad5411b5
   LxThroughPointsBezier: fdebe18dd4ddab9406d9827db77a078b4738b00f
-  MJExtension: 61bcf70d30acf0a09dde48e68502da0fde8eeafa
-  MLeaksFinder: 25e38f8ca9438354aa4184f65148e671f5d18620
+  MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
-  UMengAnalytics-NO-IDFA: 965a219b05475ff2a4c09a164139a27bbaa0e25b
+  UMengAnalytics-NO-IDFA: 1064992c1b7aaa22823179c0b33a664813fd7a85
   UMengSocialCOM: 074c135ce349aa4c8848d3fb8458757bcb6ffb67
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
   YYText: ac09660c9ccd9b817f409a20caa6f5587444d2ae

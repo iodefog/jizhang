@@ -7,7 +7,7 @@ pod 'YYKeyboardManager'
 
 pod 'YYText'
 
-pod 'MLeaksFinder'
+#pod 'MLeaksFinder', '~> 0.2.0'
 
 platform :ios, '6.0'
 pod 'JSPatch'

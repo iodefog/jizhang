@@ -82,6 +82,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     long _originaldDay;
 }
 #pragma mark - Lifecycle
+-(void)dealloc{
+    
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"记一笔";
