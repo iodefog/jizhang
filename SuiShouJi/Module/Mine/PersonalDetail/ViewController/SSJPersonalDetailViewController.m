@@ -242,17 +242,34 @@ extern BOOL kHomeNeedLoginPop;
 
 -(void)quitLogButtonClicked:(id)sender {
     kHomeNeedLoginPop = YES;
-    NSString *hintStr = @"退出登录后,后续记账请登录同个帐号哦。\n\n未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。";
-    NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:hintStr];
-    [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
-    [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
-    [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"393939"] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
-    [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[hintStr rangeOfString:@"同个帐号"]];
-    [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
+//    NSString *hintStr = @"退出登录后,后续记账请登录同个帐号哦。\n\n未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。";
+//    NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:hintStr];
+//    [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
+//    [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
+//    [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"393939"] range:[hintStr rangeOfString:@"退出登录后,后续记账请登录同个帐号哦。"]];
+//    [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[hintStr rangeOfString:@"同个帐号"]];
+//    [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[hintStr rangeOfString:@"未登录记账或换帐号使用，新的记账数据会被绑定于不同的ID。"]];
     __weak typeof(self) weakSelf = self;
-    SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-        [alert dismiss];
-    } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//    SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//        [alert dismiss];
+//    } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//        //  退出登陆后强制同步一次
+//        SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
+//        NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
+//        [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
+//        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+//        SSJClearLoginInfo();
+//        [SSJUserTableManager reloadUserIdWithError:nil];
+//        [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
+//        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
+//        [weakSelf.tableView reloadData];
+//        [weakSelf.navigationController popViewControllerAnimated:YES];
+//        [alert dismiss];
+//    }];
+//    
+//    [alert show];
+    
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"退出登录后,后续记账请登录同个帐号哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
         //  退出登陆后强制同步一次
         SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
         NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
@@ -264,10 +281,7 @@ extern BOOL kHomeNeedLoginPop;
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
         [weakSelf.tableView reloadData];
         [weakSelf.navigationController popViewControllerAnimated:YES];
-        [alert dismiss];
-    }];
-    
-    [alert show];
+    }], nil];
 }
 
 #pragma mark - Getter
