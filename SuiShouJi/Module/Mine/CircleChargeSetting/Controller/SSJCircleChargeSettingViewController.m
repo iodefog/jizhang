@@ -123,8 +123,8 @@
             self.navigationItem.rightBarButtonItem = nil;
         }else{
             [self.tableView ssj_hideWatermark:YES];
-            UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
-            self.navigationItem.rightBarButtonItem = rightBarItem;
+            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
+            self.navigationItem.rightBarButtonItem = rightItem;
         }
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         [weakSelf.tableView ssj_hideLoadingIndicator];

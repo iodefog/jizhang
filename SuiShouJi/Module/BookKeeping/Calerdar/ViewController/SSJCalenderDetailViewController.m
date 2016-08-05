@@ -77,7 +77,7 @@
         if (self.item.chargeMemo) {
             return 142;
         }else{
-            return 129;
+            return 120;
         }
     }
     return 55;
