@@ -62,7 +62,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJRecordMakingBillTypeSelectionCellItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJRecordMakingBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if ([item.title isEqualToString:@"添加"]) {
         SSJADDNewTypeViewController *newTypeVc = [[SSJADDNewTypeViewController alloc]init];
         __weak typeof(self) weakSelf = self;

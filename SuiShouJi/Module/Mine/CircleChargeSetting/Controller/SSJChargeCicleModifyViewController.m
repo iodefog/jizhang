@@ -314,7 +314,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else if ([title isEqualToString:kTitle6]){
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.membersItem.count == 1) {
-            circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem objectAtIndex:0]).memberName;
+            circleModifyCell.cellDetail = ((SSJChargeMemberItem *)[self.item.membersItem ssj_safeObjectAtIndex:0]).memberName;
         }else{
             circleModifyCell.cellDetail = [NSString stringWithFormat:@"%ld人",self.item.membersItem.count];
         }
@@ -464,8 +464,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf.tableView reloadData];
         };
-        _memberSelectView.manageBlock = ^(){
+        _memberSelectView.manageBlock = ^(NSMutableArray *items){
             SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
+            membermanageVc.items = items;
             [weakSelf.navigationController pushViewController:membermanageVc animated:YES];
         };
         _memberSelectView.addNewMemberBlock = ^(){

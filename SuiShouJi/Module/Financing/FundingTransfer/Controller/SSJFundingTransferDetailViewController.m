@@ -80,8 +80,8 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
         NSComparisonResult result = [obj1 compare:obj2];
         return result==NSOrderedAscending;
     }];
-    NSArray *items = [self.datas objectForKey:[arr objectAtIndex:indexPath.section]];
-    SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
+    NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:indexPath.section]];
+    SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
     SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     transferEditeVc.item = item;
     [self.navigationController pushViewController:transferEditeVc animated:YES];
@@ -95,7 +95,7 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
         NSComparisonResult result = [obj1 compare:obj2];
         return result==NSOrderedAscending;
     }];
-    NSArray *items = [self.datas objectForKey:[arr objectAtIndex:section]];
+    NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:section]];
     return items.count;
 }
 
@@ -109,7 +109,7 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
         NSComparisonResult result = [obj1 compare:obj2];
         return result==NSOrderedAscending;
     }];
-    NSArray *items = [self.datas objectForKey:[arr objectAtIndex:indexPath.section]];    SSJFundingTransferDetailItem *item = [items objectAtIndex:indexPath.row];
+    NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:indexPath.section]];    SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
     SSJFundingTransferDetailCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJTransferDetailCellIdentifier forIndexPath:indexPath];
     cell.item = item;
     return cell;
@@ -123,7 +123,7 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
         return result==NSOrderedAscending;
     }];
     header.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    header.currentMonth = [arr objectAtIndex:section];
+    header.currentMonth = [arr ssj_safeObjectAtIndex:section];
     return header;
 }
 

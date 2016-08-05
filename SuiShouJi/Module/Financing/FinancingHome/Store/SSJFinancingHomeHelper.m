@@ -40,7 +40,7 @@
         }
         if ([orderArr containsObject:@(0)]) {
             for (int i = 0; i < fundingList.count; i ++) {
-                SSJFinancingHomeitem *item = [fundingList objectAtIndex:i];
+                SSJFinancingHomeitem *item = [fundingList ssj_safeObjectAtIndex:i];
                 item.fundingOrder = i + 1;
             }
         }

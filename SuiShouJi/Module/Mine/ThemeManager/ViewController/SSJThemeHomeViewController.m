@@ -76,7 +76,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     SSJThemeHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     __weak typeof(self) weakSelf = self;
     cell.themeChangeBlock = ^(){
@@ -91,7 +91,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     return CGSizeMake((self.view.width - 45) / 3, item.cellHeight);
 }
 
@@ -111,7 +111,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
     themeDetailVc.item = item;
     [self.navigationController pushViewController:themeDetailVc animated:YES];

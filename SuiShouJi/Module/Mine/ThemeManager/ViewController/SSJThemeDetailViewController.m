@@ -99,9 +99,9 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     if ([self.item.themeId isEqualToString:@"0"]) {
-        cell.imageName = [_images objectAtIndex:indexPath.item];
+        cell.imageName = [_images ssj_safeObjectAtIndex:indexPath.item];
     }else{
-        cell.imageUrl = [self.item.images objectAtIndex:indexPath.item][@"imgUrl"];
+        cell.imageUrl = [self.item.images ssj_safeObjectAtIndex:indexPath.item][@"imgUrl"];
     }
     return cell;
 }

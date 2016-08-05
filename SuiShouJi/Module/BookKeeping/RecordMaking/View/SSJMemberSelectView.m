@@ -57,7 +57,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row != [tableView numberOfRowsInSection:0] - 1) {
         if ([self.selectedMemberItems containsObject:item]) {
             [self.selectedMemberItems removeObject:item];
@@ -86,7 +86,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
-    SSJChargeMemberItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     NSString *title = item.memberName;
     cell.textLabel.text = title;
     UIImageView *checkMarkImage = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -172,7 +172,7 @@
 - (void)manageButtonClick:(id)sender{
     [self dismiss];
     if (self.manageBlock) {
-        self.manageBlock();
+        self.manageBlock([self.items mutableCopy]);
     }
 }
 
@@ -211,32 +211,42 @@
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0",userid];
-        NSMutableArray *tempArr = [NSMutableArray array];
-        while ([result next]) {
+        FMResultSet *allMembersResult = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0",userid];
+        NSMutableArray *allMembersArr = [NSMutableArray array];
+        NSMutableArray *idsArr = [NSMutableArray array];
+        while ([allMembersResult next]) {
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = [result stringForColumn:@"CMEMBERID"];
-            item.memberName = [result stringForColumn:@"CNAME"];
-            item.memberColor = [result stringForColumn:@"CCOLOR"];
-            [tempArr addObject:item];
+            item.memberId = [allMembersResult stringForColumn:@"CMEMBERID"];
+            [idsArr addObject:[NSString stringWithFormat:@"'%@'",item.memberId]];
+            item.memberName = [allMembersResult stringForColumn:@"CNAME"];
+            item.memberColor = [allMembersResult stringForColumn:@"CCOLOR"];
+            [allMembersArr addObject:item];
         }
-        for (SSJChargeMemberItem *memberItem in weakSelf.selectedMemberItems) {
-            if (![tempArr containsObject:memberItem]) {
+        [allMembersResult close];
+        if (self.chargeId.length) {
+            NSString *sql = [NSString stringWithFormat:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.cmemberid not in (%@) and a.ichargeid = '%@' and a.cmemberid = b.cmemberid and b.cuserid = '%@'",[idsArr componentsJoinedByString:@","],weakSelf.chargeId,userid];
+            FMResultSet *result = [db executeQuery:sql];
+            while ([result next]) {
                 SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-                item.memberId = memberItem.memberId;
-                item.memberName = [db stringForQuery:@"select cname from bk_member where cmemberid = ?",memberItem.memberId];
-                item.memberColor = [db stringForQuery:@"select ccolor from bk_member where cmemberid = ?",memberItem.memberId];
-                [tempArr addObject:item];
+                item.memberId = [result stringForColumn:@"CMEMBERID"];
+                item.memberName = [result stringForColumn:@"CNAME"];
+                item.memberColor = [result stringForColumn:@"CCOLOR"];
+                [allMembersArr addObject:item];
             }
         }
         SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
         item.memberName = @"添加新成员";
-        [tempArr addObject:item];
-        weakSelf.items = [NSArray arrayWithArray:tempArr];
+        [allMembersArr addObject:item];
+        weakSelf.items = [NSArray arrayWithArray:allMembersArr];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
         });
     }];
+}
+
+-(void)setSelectedMemberItems:(NSMutableArray *)selectedMemberItems{
+    _selectedMemberItems = selectedMemberItems;
+    [self.tableView reloadData];
 }
 
 /*
