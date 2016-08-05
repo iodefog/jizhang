@@ -505,7 +505,11 @@ BOOL kHomeNeedLoginPop;
         _budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
             if (model == nil) {
                 SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
-                [weakSelf.navigationController pushViewController:budgetEditVC animated:YES];
+                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc] init];
+                NSMutableArray *viewControllers = [weakSelf.navigationController.viewControllers mutableCopy];
+                [viewControllers addObject:budgetListVC];
+                [viewControllers addObject:budgetEditVC];
+                [weakSelf.navigationController setViewControllers:viewControllers animated:YES];
             }else{
                 SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
                 [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
