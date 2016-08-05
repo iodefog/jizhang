@@ -42,6 +42,9 @@ static const CGFloat kBottomViewHeight = 265;
 //  已花费金额
 @property (nonatomic, strong) UILabel *payMoneyLab;
 
+//  历史预算的已花费金额
+@property (nonatomic, strong) UILabel *historyPaymentLab;
+
 //  预算金额（只在历史预算中显示）
 @property (nonatomic, strong) UILabel *estimateMoneyLab;
 
@@ -82,12 +85,15 @@ static const CGFloat kBottomViewHeight = 265;
     
     if (self.isHistory) {
         self.bottomView.frame = CGRectMake(0, 0, self.width, kBottomViewHeight);
+        self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
         
-        self.payMoneyLab.width = MIN(self.payMoneyLab.width, (self.width - 80) * 0.5);
+//        self.payMoneyLab.width = MIN(self.payMoneyLab.width, (self.width - 80) * 0.5);
         self.estimateMoneyLab.width = MIN(self.estimateMoneyLab.width, (self.width - 80) * 0.5);
-        self.payMoneyLab.top = self.estimateMoneyLab.top = self.waveView.bottom + 15;
-        self.payMoneyLab.left = 30;
-        self.estimateMoneyLab.right = self.width - 30;
+//        self.payMoneyLab.top = self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
+//        self.payMoneyLab.left = 30;
+        self.estimateMoneyLab.right = self.width - 10;
+        self.historyPaymentLab.width = MIN(self.historyPaymentLab.width, (self.width - 80) * 0.5);
+        self.historyPaymentLab.left = 10;
     } else {
         self.topView.frame = CGRectMake(0, 0, self.width, kTopViewHeight);
         self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, kBottomViewHeight);
@@ -118,7 +124,9 @@ static const CGFloat kBottomViewHeight = 265;
     _isHistory = isHistory;
     
     self.topView.hidden = isHistory;
+    self.payMoneyLab.hidden = isHistory;
     self.estimateMoneyLab.hidden = !isHistory;
+    self.historyPaymentLab.hidden = !isHistory;
     self.bottomLab.hidden = isHistory;
     
     [self sizeToFit];
@@ -126,6 +134,28 @@ static const CGFloat kBottomViewHeight = 265;
 
 - (void)setBudgetModel:(SSJBudgetModel *)model {
     [self setNeedsLayout];
+    
+    NSString *budgetType = @"";
+    
+    switch (model.type) {
+        case SSJBudgetPeriodTypeWeek:
+            budgetType = @"周";
+            self.budgetMoneyTitleLab.text = @"周预算金额";
+            break;
+            
+        case SSJBudgetPeriodTypeMonth:
+            budgetType = @"月";
+            self.budgetMoneyTitleLab.text = @"月预算金额";
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            budgetType = @"年";
+            
+            break;
+    }
+    
+    self.budgetMoneyTitleLab.text = [NSString stringWithFormat:@"%@预算金额", budgetType];
+    [self.budgetMoneyTitleLab sizeToFit];
     
     self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", model.budgetMoney];
     [self.budgetMoneyLab sizeToFit];
@@ -144,7 +174,16 @@ static const CGFloat kBottomViewHeight = 265;
     self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     [self.payMoneyLab sizeToFit];
     
-    self.estimateMoneyLab.text = [NSString stringWithFormat:@"预算：%.2f", model.budgetMoney];
+    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", model.payMoney]];
+    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
+                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
+    self.historyPaymentLab.attributedText = paymentStr;
+    [self.historyPaymentLab sizeToFit];
+    
+    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算：%.2f", budgetType, model.payMoney]];
+    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
+                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(4, budgetStr.length - 4)];
+    self.estimateMoneyLab.attributedText = budgetStr;
     [self.estimateMoneyLab sizeToFit];
     
     double balance = model.budgetMoney - model.payMoney;
@@ -182,6 +221,7 @@ static const CGFloat kBottomViewHeight = 265;
         [_bottomView addSubview:self.waveView];
         [_bottomView addSubview:self.payMoneyLab];
         [_bottomView addSubview:self.bottomLab];
+        [_bottomView addSubview:self.historyPaymentLab];
         [_bottomView addSubview:self.estimateMoneyLab];
     }
     return _bottomView;
@@ -193,8 +233,6 @@ static const CGFloat kBottomViewHeight = 265;
         _budgetMoneyTitleLab.backgroundColor = [UIColor clearColor];
         _budgetMoneyTitleLab.textColor = [UIColor whiteColor];
         _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:13];
-        _budgetMoneyTitleLab.text = @"预算金额";
-        [_budgetMoneyTitleLab sizeToFit];
     }
     return _budgetMoneyTitleLab;
 }
@@ -204,7 +242,7 @@ static const CGFloat kBottomViewHeight = 265;
         _budgetMoneyLab = [[UILabel alloc] init];
         _budgetMoneyLab.backgroundColor = [UIColor clearColor];
         _budgetMoneyLab.textColor = [UIColor whiteColor];
-        _budgetMoneyLab.font = [UIFont systemFontOfSize:27];
+        _budgetMoneyLab.font = [UIFont systemFontOfSize:22];
         _budgetMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
     return _budgetMoneyLab;
@@ -227,7 +265,7 @@ static const CGFloat kBottomViewHeight = 265;
         _intervalLab = [[UILabel alloc] init];
         _intervalLab.backgroundColor = [UIColor clearColor];
         _intervalLab.textColor = [UIColor whiteColor];
-        _intervalLab.font = [UIFont systemFontOfSize:27];
+        _intervalLab.font = [UIFont systemFontOfSize:22];
     }
     return _intervalLab;
 }
@@ -276,13 +314,24 @@ static const CGFloat kBottomViewHeight = 265;
     return _payMoneyLab;
 }
 
+- (UILabel *)historyPaymentLab {
+    if (!_historyPaymentLab) {
+        _historyPaymentLab = [[UILabel alloc] init];
+        _historyPaymentLab.backgroundColor = [UIColor clearColor];
+        _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _historyPaymentLab.font = [UIFont systemFontOfSize:13];
+        _historyPaymentLab.adjustsFontSizeToFitWidth = YES;
+    }
+    return _historyPaymentLab;
+}
+
 - (UILabel *)estimateMoneyLab {
     if (!_estimateMoneyLab) {
         _estimateMoneyLab = [[UILabel alloc] init];
         _estimateMoneyLab.backgroundColor = [UIColor clearColor];
         _estimateMoneyLab.textAlignment = NSTextAlignmentRight;
-        _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _estimateMoneyLab.font = [UIFont systemFontOfSize:20];
+        _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _estimateMoneyLab.font = [UIFont systemFontOfSize:13];
         _estimateMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
     return _estimateMoneyLab;
