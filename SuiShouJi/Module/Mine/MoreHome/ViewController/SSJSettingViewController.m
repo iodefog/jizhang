@@ -213,7 +213,7 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
             [WXApi openWXApp];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"复制微信号成功啦，现在就跳转到微信在搜索栏粘贴，即刻关注我们吧！" action:comfirmAction,cancelAction,nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"复制微信号成功啦，现在就跳转到微信在搜索栏粘贴，即刻关注我们吧！" action:cancelAction,comfirmAction,nil];
     }
 }
 

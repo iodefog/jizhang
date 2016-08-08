@@ -112,8 +112,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.view addSubview:self.accessoryView];
     [self.scrollView addSubview:self.paymentTypeView];
     [self.scrollView addSubview:self.incomeTypeView];
-    
-    
+        
     if (self.item.ID.length && self.item.incomeOrExpence == 0) {
         _lastSelectedIndex = 1;
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.width, 0)];

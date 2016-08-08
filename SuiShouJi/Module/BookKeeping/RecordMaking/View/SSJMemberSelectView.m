@@ -39,7 +39,7 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake(SSJSCREENWITH, 415);
+    return CGSizeMake(SSJSCREENWITH, 295);
 }
 
 -(void)layoutSubviews{
