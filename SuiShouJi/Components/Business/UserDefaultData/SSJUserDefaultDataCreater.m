@@ -255,10 +255,10 @@
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金', '1', '#fc7a60', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", SSJUUID(), writeDate, @(SSJSyncVersion()), userId];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '储蓄卡', '2', '#faa94a', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2'", SSJUUID(), writeDate, @(SSJSyncVersion()), userId];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '信用卡', '3', '#8bb84a', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3'", SSJUUID(), writeDate, @(SSJSyncVersion()), userId];
-    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝', '7', '#5a98de', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'", SSJUUID() , writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '现金', '1', '#fc7a60', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '1'", [NSString stringWithFormat:@"%@-1",userId], writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR , CWRITEDATE , OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '储蓄卡', '2', '#faa94a', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '2'",  [NSString stringWithFormat:@"%@-2",userId],userId, writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '信用卡', '3', '#8bb84a', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '3'",  [NSString stringWithFormat:@"%@-3",userId],userId, writeDate, @(SSJSyncVersion()), userId];
+    [db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) SELECT ?, '支付宝', '7', '#5a98de', ?, 0, ?, ?, CICOIN FROM BK_FUND_INFO WHERE CFUNDID= '7'",  [NSString stringWithFormat:@"%@-4",userId] , writeDate, @(SSJSyncVersion()), userId];
     
     //  根据默认的资金帐户创建资金帐户余额
     [db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID , CUSERID , IBALANCE) SELECT CFUNDID , ? , ? FROM BK_FUND_INFO WHERE CPARENT <> 'root' and cuserid = ?", userId, @0.00, userId];
@@ -301,10 +301,10 @@
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)",userId, @"日常账本", @"#7FB04F", writeDate, @(SSJSyncVersion()), userId,@(1),@""];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"生意账本", @"#F5A237", writeDate, @(SSJSyncVersion()), userId,@(2),@"books_shengyi"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"books_jiehun"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId,@(4),@"books_zhuangxiu"];
-    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", SSJUUID(), @"旅行账本", @"#AD82DD", writeDate, @(SSJSyncVersion()), userId,@(5),@"books_lvxing"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-1",userId], @"生意账本", @"#F5A237", writeDate, @(SSJSyncVersion()), userId,@(2),@"books_shengyi"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-2",userId], @"结婚账本", @"#FF6363", writeDate, @(SSJSyncVersion()), userId,@(3),@"books_jiehun"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID , IORDER ,CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-3",userId], @"装修账本", @"#5CA0D9", writeDate, @(SSJSyncVersion()), userId,@(4),@"books_zhuangxiu"];
+    [db executeUpdate:@"INSERT INTO BK_BOOKS_TYPE (CBOOKSID, CBOOKSNAME, CBOOKSCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, IORDER, CICOIN) VALUES (?, ?, ?, ?, 0, ?, ? , ? , ?)", [NSString stringWithFormat:@"%@-4",userId], @"旅行账本", @"#AD82DD", writeDate, @(SSJSyncVersion()), userId,@(5),@"books_lvxing"];
     
     return nil;
 }

@@ -27,6 +27,7 @@
     [super viewDidLoad];
     _colorArray = @[@"#fc7a60",@"#b1c23e",@"#25b4dd",@"#5a98de",@"#8bb84a",@"#a883db",@"#20cac0",@"#faa94a",@"#ef6161",@"#f16189",@"#ba2e8b",@"#3260b5",@"#d96421",@"#ba4747",@"#bda337"];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     self.navigationItem.rightBarButtonItem = rightButton;
     [self.view addSubview:self.header];
     [self.view addSubview:self.collectionView];
@@ -89,15 +90,12 @@
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *text = textField.text ? : @"";
-    text = [text stringByReplacingCharactersInRange:range withString:string];
-    if (text.length >= 1) {
-        self.header.firstWord = [text substringWithRange:NSMakeRange(0, 1)];
+- (void)textFieldDidChange {
+    if (self.header.nameInput.text.length >= 1) {
+        self.header.firstWord = [self.header.nameInput.text substringWithRange:NSMakeRange(0, 1)];
     }else{
         self.header.firstWord = @"";
     }
-    return YES;
 }
 
 

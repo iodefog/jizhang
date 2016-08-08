@@ -110,11 +110,14 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
-        self.imageFooter.imageName = self.item.chargeImage;
-        return self.imageFooter;
+    if (section == 1) {
+        if (self.item.chargeImage != nil && ![self.item.chargeImage isEqualToString:@""]) {
+            self.imageFooter.imageName = self.item.chargeImage;
+            return self.imageFooter;
+        }
+        return self.footerView;
     }
-    return self.footerView;
+    return nil;
 }
 
 #pragma mark - UITableViewDataSource
@@ -151,10 +154,6 @@
     }
     return nil;
 }
-
-
-#pragma mark - UIAlertViewDelegate
-
 
 #pragma mark - Getter
 -(UIView *)footerView{
