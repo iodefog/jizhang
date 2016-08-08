@@ -679,11 +679,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             weakSelf.item.chargeImage = imageName;
         }
     }
-    [weakSelf goBackAction];
     [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
         if (weakSelf.addNewChargeBlock) {
             weakSelf.addNewChargeBlock(@[editeItem]);
         }
+        [weakSelf goBackAction];
     } failure:^{
         
     }];
