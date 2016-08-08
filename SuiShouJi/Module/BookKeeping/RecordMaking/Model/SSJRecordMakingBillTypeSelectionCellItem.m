@@ -10,12 +10,13 @@
 
 @implementation SSJRecordMakingBillTypeSelectionCellItem
 
-+ (instancetype)itemWithTitle:(NSString *)title imageName:(NSString *)imageName colorValue:(NSString *)colorValue ID:(NSString *)ID {
++ (instancetype)itemWithTitle:(NSString *)title imageName:(NSString *)imageName colorValue:(NSString *)colorValue ID:(NSString *)ID order:(int)order {
     SSJRecordMakingBillTypeSelectionCellItem *item = [[SSJRecordMakingBillTypeSelectionCellItem alloc] init];
     item.title = title;
     item.imageName = imageName;
     item.colorValue = colorValue;
     item.ID = ID;
+    item.order = order;
     return item;
 }
 
@@ -26,7 +27,8 @@
                                                @"colorValue":(_colorValue ?: [NSNull null]),
                                                @"selected":@(_selected),
                                                @"editable":@(_editable),
-                                               @"deselected":@(_deselected)}];
+                                               @"deselected":@(_deselected),
+                                               @"order":@(_order)}];
 }
 
 @end

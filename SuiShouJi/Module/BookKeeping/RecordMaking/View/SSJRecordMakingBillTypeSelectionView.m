@@ -165,7 +165,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     if (items) {
         [_internalItems addObjectsFromArray:items];
     }
-    [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@""]];
+    [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@"" order:0]];
     [_collectionView reloadData];
 }
 

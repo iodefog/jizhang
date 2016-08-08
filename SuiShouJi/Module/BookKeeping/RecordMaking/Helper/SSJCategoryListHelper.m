@@ -19,17 +19,19 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
                 NSString *categoryImage = [result stringForColumn:@"CCOIN"];
                 NSString *categoryColor = [result stringForColumn:@"CCOLOR"];
                 NSString *categoryID = [result stringForColumn:@"ID"];
+                int order = [result intForColumn:@"IORDER"];
                 [categoryList addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:categoryTitle
                                                                                       imageName:categoryImage
                                                                                      colorValue:categoryColor
-                                                                                             ID:categoryID]];
+                                                                                             ID:categoryID
+                                                                                          order:order]];
             }
         
         if (success) {
@@ -216,6 +218,10 @@
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        SSJRecordMakingBillTypeSelectionCellItem *firstItem = [items firstObject];
+        int firstOrder = firstItem.order;
+        
         for (int i = 0; i < items.count; i ++) {
             SSJRecordMakingBillTypeSelectionCellItem *item = items[i];
             if (item.ID.length == 0) {
@@ -230,7 +236,7 @@
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(i + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
+            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(i + firstOrder), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         SSJDispatch_main_async_safe(^{
