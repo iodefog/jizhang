@@ -45,6 +45,9 @@
             item.chargeCircleType = [chargeResult intForColumn:@"ITYPE"];
             item.fundName = [chargeResult stringForColumn:@"CACCTNAME"];
             NSString *memberStr = [chargeResult stringForColumn:@"CMEMBERIDS"];
+            if (!memberStr.length) {
+                memberStr = [NSString stringWithFormat:@"%@-0",userid];
+            }
             NSArray *idArr = [memberStr componentsSeparatedByString:@","];
             for (NSString *memberId in idArr) {
                 SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];

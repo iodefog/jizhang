@@ -30,7 +30,7 @@ static NSString *const kTitle4 = @"分享APP";
 static NSString *const kTitle6 = @"关于我们";
 static NSString *const kTitle5 = @"检查更新";
 static NSString *const kTitle7 = @"微信公众号";
-static NSString *const kTitle8 = @"点击上方微信号即可复制并在微信查找即可";
+static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信查找即可";
 
 
 @interface SSJSettingViewController ()

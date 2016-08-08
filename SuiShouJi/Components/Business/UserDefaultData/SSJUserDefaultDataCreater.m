@@ -205,7 +205,6 @@
     if (!SSJUSERID().length) {
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
-#warning test
     if (![db intForQuery:@"select count(*) from BK_SYNC where CUSERID = ?",SSJUSERID()]) {
         if ([db executeUpdate:@"insert into BK_SYNC (VERSION, TYPE, CUSERID) values(?, 0, ?)", @(SSJDefaultSyncVersion), SSJUSERID(), SSJUSERID()]) {
             SSJUpdateSyncVersion(SSJDefaultSyncVersion + 1);

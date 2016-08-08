@@ -239,6 +239,13 @@
             memberItem.memberColor = [memberResult stringForColumn:@"ccolor"];
             [tempArr addObject:memberItem];
         }
+        if (!tempArr.count) {
+            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
+            item.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
+            item.memberName = @"我";
+            item.memberColor = @"#fc7a60";
+            [tempArr addObject:item];
+        }
         weakSelf.item.membersItem = tempArr;
         weakSelf.items = [NSMutableArray arrayWithCapacity:0];
         [weakSelf.items addObject:@[weakSelf.item]];
