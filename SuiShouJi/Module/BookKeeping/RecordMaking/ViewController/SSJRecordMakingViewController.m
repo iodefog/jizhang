@@ -80,6 +80,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     long _originaldMonth;
     long _originaldYear;
     long _originaldDay;
+    BOOL _needToDismiss;
 }
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -94,6 +95,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    _needToDismiss = YES;
+    
     if (!self.item) {
         self.item = [[SSJBillingChargeCellItem alloc]init];
     }
@@ -122,8 +125,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     if (![self showGuideViewIfNeeded]) {
         [self.FundingTypeSelectView dismiss];
         [self.DateSelectedView dismiss];
-        [self.memberSelectView dismiss];
-        [self.billTypeInputView.moneyInput becomeFirstResponder];
+        if (_needToDismiss) {
+            [self.memberSelectView dismiss];
+            [self.billTypeInputView.moneyInput becomeFirstResponder];
+        }
     }
 }
 
@@ -247,11 +252,15 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
             }
         };
+        _memberSelectView.showBlock = ^(){
+            _needToDismiss = YES;
+        };
         _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };
         _memberSelectView.manageBlock = ^(NSMutableArray *items){
+            _needToDismiss = YES;
             [weakSelf.billTypeInputView.moneyInput resignFirstResponder];
             [weakSelf.accessoryView.memoView resignFirstResponder];
             SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
@@ -262,8 +271,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             [weakSelf.memberSelectView dismiss];
             SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
             newMemberVc.addNewMemberAction = ^(SSJChargeMemberItem *item){
-                [weakSelf.item.membersItem addObject:item];
+                if (item.memberId.length) {
+                    [weakSelf.item.membersItem addObject:item];
+                }
                 [weakSelf updateMembers];
+                weakSelf.memberSelectView.selectedMemberItems = [weakSelf.item.membersItem mutableCopy];
+                weakSelf.memberSelectView.chargeId = weakSelf.item.ID;
+                [weakSelf.memberSelectView show];
+                _needToDismiss = NO;
             };
             [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
         };

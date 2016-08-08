@@ -46,8 +46,9 @@
     self.imageView.layer.cornerRadius = imageDiam * 0.5;
     self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
     
-    self.textLabel.left = self.imageView.right + 10;
     [self.textLabel sizeToFit];
+    self.textLabel.left = self.imageView.right + 10;
+    self.textLabel.centerY = self.height / 2;
     
     self.moneyLab.right = self.contentView.width - 10;
     self.moneyLab.centerY = self.contentView.height * 0.5;

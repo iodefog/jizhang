@@ -46,15 +46,15 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.dateLab.leftTop = CGPointMake(20, 10);
+    self.dateLab.leftTop = CGPointMake(10, 10);
     self.dateDetailLab.rightBottom = CGPointMake(self.width - 10, self.dateLab.bottom);
-    self.fundLab.leftTop = CGPointMake(20, self.dateLab.bottom + 17);
+    self.fundLab.leftTop = CGPointMake(10, self.dateLab.bottom + 17);
     self.fundDetailLab.rightBottom = CGPointMake(self.width - 10, self.fundLab.bottom);
-    self.booksLab.leftTop = CGPointMake(20, self.fundLab.bottom + 17);
+    self.booksLab.leftTop = CGPointMake(10, self.fundLab.bottom + 17);
     self.booksDetailLab.rightBottom = CGPointMake(self.width - 10, self.booksLab.bottom);
     if (self.item.chargeMemo.length) {
         self.memoLab.hidden = NO;
-        self.memoLab.leftTop = CGPointMake(20, self.booksLab.bottom + 17);
+        self.memoLab.leftTop = CGPointMake(10, self.booksLab.bottom + 17);
         self.memoDetailLab.rightBottom = CGPointMake(self.width - 10, self.memoLab.bottom);
     }else{
         self.memoLab.hidden = YES;

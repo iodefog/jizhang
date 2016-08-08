@@ -203,9 +203,9 @@
             if (loginType == 0) {
                 message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
             }else if (loginType == 1) {
-                message = [NSString stringWithFormat:@"您已使用过qq%@登陆过,确定使用新账户登录",userName];
+                message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
             }else if (loginType == 2) {
-                message = [NSString stringWithFormat:@"您已使用过微信%@登陆过,确定使用新账户登录",userName];
+                message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
             }
             
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {

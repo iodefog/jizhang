@@ -188,6 +188,9 @@
     self.top = keyWindow.height;
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
         self.bottom = keyWindow.height;
+        if (_showBlock) {
+            _showBlock();
+        }
     } timeInterval:0.25 fininshed:NULL];
 }
 
