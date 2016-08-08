@@ -136,6 +136,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
+        if (!memberIds) {
+            memberIds = @[@"0"];
+        }
         CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
@@ -202,6 +205,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         }
         
         NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
+        if (!memberIds) {
+            memberIds = @[@"0"];
+        }
         CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         for (NSDate *billDate in billDates) {

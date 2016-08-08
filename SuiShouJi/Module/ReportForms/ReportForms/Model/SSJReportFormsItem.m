@@ -10,4 +10,16 @@
 
 @implementation SSJReportFormsItem
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@", @{@"scale":@(_scale),
+                                               @"money":@(_money),
+                                               @"type":@(_type),
+                                               @"imageName":(_imageName ?: @""),
+                                               @"name":(_name ?: @""),
+                                               @"colorValue":(_colorValue ?: @""),
+                                               @"ID":(_ID ?: @""),
+                                               @"titleColor":(_titleColor ?: @""),
+                                               @"isMember":@(_isMember)}];
+}
+
 @end
