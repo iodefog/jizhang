@@ -34,7 +34,7 @@
         
         [self createContentViews];
         [self addSubview:self.scrollView];
-        [self addSubview:self.pageControl];
+//        [self addSubview:self.pageControl];
     }
     return self;
 }
@@ -49,7 +49,7 @@
     
     self.pageControl.center = CGPointMake(self.width * 0.5, self.height * 0.93);
     self.beginButton.center = CGPointMake(self.width * 0.5, self.height * 0.88);
-//    self.beginButton.center = self.pageControl.center;
+    self.beginButton.center = self.pageControl.center;
 }
 
 - (void)showInView:(UIView *)view finish:(SSJGuideViewBeginBlock)finish {

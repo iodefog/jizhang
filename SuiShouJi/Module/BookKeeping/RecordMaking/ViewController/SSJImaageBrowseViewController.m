@@ -184,7 +184,7 @@
 }
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{
-        _item = item;
+    _item = item;
     if (self.type == SSJImageBrowseVcTypeBrowse) {
         self.deleteButton.hidden = YES;
         self.changeImageButton.hidden = YES;

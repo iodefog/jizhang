@@ -174,7 +174,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if ([title isEqualToString:kTitle3]) {
         SSJBillTypeSelectViewController *billTypeSelectVC = [[SSJBillTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         __weak typeof(self) weakSelf = self;
-        billTypeSelectVC.incomeOrExpenture = !self.item.incomeOrExpence;
+        billTypeSelectVC.incomeOrExpenture = self.item.incomeOrExpence;
         billTypeSelectVC.selectedId = self.item.billId;
         billTypeSelectVC.typeSelectBlock = ^(SSJRecordMakingBillTypeSelectionCellItem *item){
             weakSelf.item.typeName = item.title;
@@ -276,7 +276,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellDetail = self.item.booksName;
     }else if ([title isEqualToString:kTitle2]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        if (!self.item.incomeOrExpence) {
+        if (self.item.incomeOrExpence) {
             circleModifyCell.cellDetail = @"支出";
         }else{
             circleModifyCell.cellDetail = @"收入";
@@ -454,8 +454,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         __weak typeof(self) weakSelf = self;
         
         _chargeTypeSelectView.chargeTypeSelectBlock = ^(NSInteger selectType){
-            weakSelf.item.incomeOrExpence = selectType;
-            SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:!weakSelf.item.incomeOrExpence];
+            weakSelf.item.incomeOrExpence = !selectType;
+            SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:weakSelf.item.incomeOrExpence];
             weakSelf.item.typeName = categoryItem.categoryTitle;
             weakSelf.item.billId = categoryItem.categoryID;
             [weakSelf.tableView reloadData];
