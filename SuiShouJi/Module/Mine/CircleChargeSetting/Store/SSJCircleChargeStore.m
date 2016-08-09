@@ -45,6 +45,7 @@
             item.chargeCircleType = [chargeResult intForColumn:@"ITYPE"];
             item.fundName = [chargeResult stringForColumn:@"CACCTNAME"];
             NSString *memberStr = [chargeResult stringForColumn:@"CMEMBERIDS"];
+            item.membersItem = [NSMutableArray arrayWithCapacity:0];
             if (!memberStr.length) {
                 memberStr = [NSString stringWithFormat:@"%@-0",userid];
             }

@@ -92,6 +92,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (self.item == nil) {
         __weak typeof(self) weakSelf = self;
         [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:1 Success:^(SSJBillingChargeCellItem *item) {
+            item.incomeOrExpence = 1;
             weakSelf.item = item;
             [weakSelf.tableView reloadData];
         } failure:^(NSError *error) {

@@ -32,7 +32,7 @@
         
         [self createContentViews];
         [self addSubview:self.scrollView];
-//        [self addSubview:self.pageControl];
+        [self addSubview:self.pageControl];
     }
     return self;
 }
