@@ -13,12 +13,12 @@
 #import "SSJMagicExportResultViewController.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJMagicExportAnnouncementViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 #import "SSJMagicExportService.h"
 #import "SSJMagicExportStore.h"
 #import "SSJBorderButton.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJUserTableManager.h"
-//#import "SSJBaseTableViewCell.h"
 #import "SSJMagicExportBookTypeSelectionCell.h"
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -147,9 +147,24 @@
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     [super serverDidFinished:service];
     if ([service.returnCode isEqualToString:@"1"]) {
-        SSJMagicExportResultViewController *resultVC = [[SSJMagicExportResultViewController alloc] init];
-        resultVC.backController = [self.navigationController.viewControllers firstObject];
-        [self.navigationController pushViewController:resultVC animated:YES];
+        
+        UITabBarController *tabVC = (UITabBarController *)self.navigationController.tabBarController;
+        if ([tabVC isKindOfClass:[UITabBarController class]]) {
+            UINavigationController *homeNavi = [tabVC.viewControllers firstObject];
+            if ([homeNavi isKindOfClass:[UINavigationController class]]) {
+                SSJBookKeepingHomeViewController *homeVC = [homeNavi.viewControllers firstObject];
+                if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+                    tabVC.selectedIndex = 0;
+                    [self.navigationController popToRootViewControllerAnimated:NO];
+                }
+            }
+        }
+        
+        [CDAutoHideMessageHUD showMessage:@"提交成功，请至您的邮箱查看"];
+        
+//        SSJMagicExportResultViewController *resultVC = [[SSJMagicExportResultViewController alloc] init];
+//        resultVC.backController = [self.navigationController.viewControllers firstObject];
+//        [self.navigationController pushViewController:resultVC animated:YES];
     }
 }
 
