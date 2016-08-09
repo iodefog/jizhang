@@ -552,8 +552,10 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         
         for (SSJReportFormsItem *item in result) {
             resultSet = [db executeQuery:@"select cname, ccolor from bk_member where cmemberid = ? and cuserid = ?", item.ID, userID];
-            item.colorValue = [resultSet stringForColumn:@"ccolor"];
-            item.name = [resultSet stringForColumn:@"cname"];
+            while ([resultSet next]) {
+                item.name = [resultSet stringForColumnIndex:0];
+                item.colorValue = [resultSet stringForColumnIndex:1];
+            }
             [resultSet close];
         }
         
