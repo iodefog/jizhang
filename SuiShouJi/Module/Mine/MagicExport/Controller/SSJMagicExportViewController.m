@@ -10,7 +10,6 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMagicExportSelectDateView.h"
 #import "SSJMagicExportCalendarViewController.h"
-#import "SSJMagicExportResultViewController.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJMagicExportAnnouncementViewController.h"
 #import "SSJBookKeepingHomeViewController.h"
@@ -20,6 +19,7 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJUserTableManager.h"
 #import "SSJMagicExportBookTypeSelectionCell.h"
+#import "SSJMagicExportSuccessAlertView.h"
 
 @interface SSJMagicExportViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -126,10 +126,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return 30;
-//}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     _selectedBookItem = [_bookTypes ssj_safeObjectAtIndex:indexPath.row];
@@ -148,23 +144,10 @@
     [super serverDidFinished:service];
     if ([service.returnCode isEqualToString:@"1"]) {
         
-        UITabBarController *tabVC = (UITabBarController *)self.navigationController.tabBarController;
-        if ([tabVC isKindOfClass:[UITabBarController class]]) {
-            UINavigationController *homeNavi = [tabVC.viewControllers firstObject];
-            if ([homeNavi isKindOfClass:[UINavigationController class]]) {
-                SSJBookKeepingHomeViewController *homeVC = [homeNavi.viewControllers firstObject];
-                if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-                    tabVC.selectedIndex = 0;
-                    [self.navigationController popToRootViewControllerAnimated:NO];
-                }
-            }
-        }
-        
-        [CDAutoHideMessageHUD showMessage:@"提交成功，请至您的邮箱查看"];
-        
-//        SSJMagicExportResultViewController *resultVC = [[SSJMagicExportResultViewController alloc] init];
-//        resultVC.backController = [self.navigationController.viewControllers firstObject];
-//        [self.navigationController pushViewController:resultVC animated:YES];
+        __weak typeof(self) wself = self;
+        [SSJMagicExportSuccessAlertView show:^{
+            [wself goBackToHome];
+        }];
     }
 }
 
@@ -270,6 +253,20 @@
 - (void)updateBeginAndEndButton {
     self.selectDateView.beginDate = self.beginDate;
     self.selectDateView.endDate = self.endDate;
+}
+
+- (void)goBackToHome {
+    UITabBarController *tabVC = (UITabBarController *)self.navigationController.tabBarController;
+    if ([tabVC isKindOfClass:[UITabBarController class]]) {
+        UINavigationController *homeNavi = [tabVC.viewControllers firstObject];
+        if ([homeNavi isKindOfClass:[UINavigationController class]]) {
+            SSJBookKeepingHomeViewController *homeVC = [homeNavi.viewControllers firstObject];
+            if ([homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+                tabVC.selectedIndex = 0;
+                [self.navigationController popToRootViewControllerAnimated:NO];
+            }
+        }
+    }
 }
 
 #pragma mark - Event

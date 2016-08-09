@@ -14,4 +14,6 @@
 
 - (void)show:(void(^)())completion;
 
++ (void)show:(void(^)())completion;
+
 @end
