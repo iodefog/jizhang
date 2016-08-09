@@ -163,7 +163,7 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
     }];
 }
 
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:userid];
     if (!userItem.currentBooksId.length) {
@@ -174,7 +174,7 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         
         NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, today, userItem.currentBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = ? and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, @(type), today, userItem.currentBooksId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
