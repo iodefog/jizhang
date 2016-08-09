@@ -45,7 +45,11 @@
     }
     self.cellDetailLabel.centerY = self.height / 2;
     self.cellImageView.size = CGSizeMake(30, 30);
-    self.cellImageView.right = self.width - 10;
+    if (self.contentView.width == self.width) {
+        self.cellImageView.right = self.width - 10;
+    }else{
+        self.cellImageView.right = self.contentView.width;
+    }
     self.cellImageView.centerY = self.height / 2;
     self.cellInput.size = CGSizeMake(self.width / 2, self.height);
     self.cellInput.right = self.width - 10;

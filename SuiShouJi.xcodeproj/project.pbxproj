@@ -8833,8 +8833,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = YouYuIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8865,7 +8865,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "21c6d3ba-9c4c-4c2d-a7e2-5a92130f8c4e";
+				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -8910,7 +8910,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0ff696ac-ed5e-4530-b65d-8e45ce7ab385";
+				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
