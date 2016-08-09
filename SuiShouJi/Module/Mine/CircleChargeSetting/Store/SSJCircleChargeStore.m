@@ -82,7 +82,7 @@
         item.fundImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",item.fundId ];
         item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.billId];
         SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
-        memberItem.memberId = @"0";
+        memberItem.memberId = [NSString stringWithFormat:@"%@-0",userid];
         memberItem.memberName = @"我";
         item.membersItem = [@[memberItem] mutableCopy];
         item.chargeCircleType = 0;

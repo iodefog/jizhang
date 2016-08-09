@@ -157,7 +157,7 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
 //    }
 //    
     //  检查更新
-    if ([title isEqualToString:kTitle6]) {
+    if ([title isEqualToString:kTitle5]) {
         [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
             if (type == SSJAppUpdateTypeNone) {
                 [CDAutoHideMessageHUD showMessage:@"当前已经是最新版本,不需要更新"];
@@ -168,7 +168,7 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     }
     
     //  关于我们
-    if ([title isEqualToString:kTitle5]) {
+    if ([title isEqualToString:kTitle6]) {
         SSJAboutusViewController *aboutUsVc = [[SSJAboutusViewController alloc] init];
         [self.navigationController pushViewController:aboutUsVc animated:YES];
     }

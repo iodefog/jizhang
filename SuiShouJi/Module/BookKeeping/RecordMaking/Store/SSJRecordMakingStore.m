@@ -216,20 +216,22 @@
                 return;
             }
             if (item.chargeImage.length) {
-                if (![db intForQuery:@"select count(1) from bk_img_sync where cimgname = ?",item.chargeImage]) {
-                    //修改图片同步表
-                    if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,[NSString stringWithFormat:@"%@.jpg",item.chargeImage],[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
+                if (![item.chargeImage isEqualToString:originItem.chargeImage]) {
+                    if (![db intForQuery:@"select count(1) from bk_img_sync where cimgname = ?",item.chargeImage]) {
+                        //修改图片同步表
+                        if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,[NSString stringWithFormat:@"%@.jpg",item.chargeImage],[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
             }
             //删掉已经被删掉的图片
-            if (!originItem.chargeImage.length && item.chargeImage.length) {
+            if (originItem.chargeImage.length && item.chargeImage.length && ![item.chargeImage isEqualToString:originItem.chargeImage]) {
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeImage) error:nil];
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeThumbImage) error:nil];
                 [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",originItem.chargeImage];
