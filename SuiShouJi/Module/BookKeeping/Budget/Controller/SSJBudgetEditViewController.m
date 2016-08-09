@@ -283,6 +283,21 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 [self syncIfNeeded];
                 [self updateSaveButtonState:NO];
                 [self ssj_backOffAction];
+                
+                switch (self.model.type) {
+                    case SSJBudgetPeriodTypeWeek:
+                        [MobClick event:@"budget_cycle_week"];
+                        break;
+                        
+                    case SSJBudgetPeriodTypeMonth:
+                        [MobClick event:@"budget_cycle_month"];
+                        break;
+                        
+                    case SSJBudgetPeriodTypeYear:
+                        [MobClick event:@"budget_cycle_year"];
+                        break;
+                }
+                
             } failure:^(NSError * _Nonnull error) {
                 [self updateSaveButtonState:NO];
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];

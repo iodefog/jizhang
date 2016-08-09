@@ -198,6 +198,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
             billingChargeVC.title = item.name;
         }
         [self.navigationController pushViewController:billingChargeVC animated:YES];
+        
+        if (item.isMember) {
+            [MobClick event:@"form_member_detail"];
+        }
     }
 }
 
@@ -280,6 +284,16 @@ static NSString *const kSegmentTitleIncome = @"收入";
 // 切换分类和成员
 - (void)typeAndMemberControlAction {
     [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
+    
+    switch (_typeAndMemberControl.option) {
+        case SSJReportFormsMemberAndCategorySwitchControlOptionCategory:
+            [MobClick event:@"form_category"];
+            break;
+            
+        case SSJReportFormsMemberAndCategorySwitchControlOptionMember:
+            [MobClick event:@"form_member"];
+            break;
+    }
 }
 
 //  切换周期（年、月）
