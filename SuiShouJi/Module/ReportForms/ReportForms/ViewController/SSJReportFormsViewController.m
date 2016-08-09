@@ -250,7 +250,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - Event
 // 切换分类和成员
 - (void)typeAndMemberControlAction {
-    [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
+    if (_customPeriod) {
+        [self reloadDatasInPeriod:_customPeriod];
+    } else {
+        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
+    }
     
     switch (_typeAndMemberControl.option) {
         case SSJReportFormsMemberAndCategorySwitchControlOptionCategory:
@@ -297,6 +301,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
             wself.customPeriodLab.hidden = NO;
             [wself updateCustomPeriodLab];
             [wself.customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+            [wself reloadDatas];
         };
         [self.navigationController pushViewController:calendarVC animated:YES];
         
