@@ -37,8 +37,13 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.extendedLayoutIncludesOpaqueBars = YES;
         _appliesTheme = YES;
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
     }
     return self;
 }
@@ -46,11 +51,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self addObserver];
-    
     self.view.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
     
     if (_appliesTheme) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        
         _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
         _backgroundView.frame = self.view.bounds;
         [self.view addSubview:_backgroundView];
@@ -209,17 +214,6 @@
 }
 
 #pragma mark - Private
-- (void)addObserver {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSyncLoadingIndicator) name:SSJShowSyncLoadingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSyncLoadingIndicator) name:SSJHideSyncLoadingNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
-    
-    if (_appliesTheme) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
-    }
-}
-
 - (UIBarButtonItem *)syncLoadingItem {
     if (!_syncLoadingItem) {
         UIView *syncLoadingView = [[UIView alloc] init];
