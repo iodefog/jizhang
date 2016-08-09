@@ -45,14 +45,14 @@
 }
 
 + (NSError *)createMemberTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists (cmemberid text not null, cname text not null, cuserid text, cwritedate text, operatortype integer, iversion integer, ccolor text , istate integer , primary key(cmemberid, cuserid))"]) {
+    if (![db executeUpdate:@"create table if not exists bk_member (cmemberid text not null, cname text not null, cuserid text, cwritedate text, operatortype integer, iversion integer, ccolor text , istate integer , primary key(cmemberid, cuserid))"]) {
         return [db lastError];
     }
     return nil;
 }
 
 + (NSError *)createMemberChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists (ichargeid text not null, cmemberid text not null, imoney text, cwritedate text, operatortype integer, iversion integer , primary key(cmemberid, cuserid))"]) {
+    if (![db executeUpdate:@"create table if not exists bk_member_charge (ichargeid text not null, cmemberid text not null, imoney text, cwritedate text, operatortype integer, iversion integer , primary key(ichargeid, cmemberid))"]) {
         return [db lastError];
     }
     return nil;

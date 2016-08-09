@@ -77,14 +77,13 @@ static const int kDatabaseVersion = 6;
     return error;
 }
 
-
 + (NSDictionary *)databaseVersionInfo {
     return @{@1:[SSJDatabaseVersion1 class],
              @2:[SSJDatabaseVersion2 class],
              @3:[SSJDatabaseVersion3 class],
              @4:[SSJDatabaseVersion4 class],
-             @4:[SSJDatabaseVersion5 class],
-             @4:[SSJDatabaseVersion6 class]};
+             @5:[SSJDatabaseVersion5 class],
+             @6:[SSJDatabaseVersion6 class]};
 }
 
 @end
