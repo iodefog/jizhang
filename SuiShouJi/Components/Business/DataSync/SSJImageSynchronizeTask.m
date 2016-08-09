@@ -47,7 +47,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         }
         
         //  查询当前用户的顶起记账中没有同步的图片
-        resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_charge_operiod_config as b where a.rid = b.iconfigid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
+        resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_charge_period_config as b where a.rid = b.iconfigid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
         if (!resultSet) {
             if (failure) {
                 failure([db lastError]);
