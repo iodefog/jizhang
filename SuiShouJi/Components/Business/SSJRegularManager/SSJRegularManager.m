@@ -341,7 +341,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每天
         case 0: {
             NSInteger daycount = [nowDate daysFrom:date];
-            daycount ++;
+//            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
                 [billDates addObject:[date dateByAddingDays:i]];
@@ -353,7 +353,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每个工作日
         case 1: {
             NSInteger daycount = [nowDate daysFrom:date];
-            daycount ++;
+//            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
                 NSDate *billDate = [date dateByAddingDays:i];
@@ -368,7 +368,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每个周末
         case 2: {
             NSInteger daycount = [nowDate daysFrom:date];
-            daycount ++;
+//            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
                 NSDate *billDate = [date dateByAddingDays:i];
@@ -383,7 +383,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每周
         case 3: {
             NSInteger weekCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeWeek];
-            weekCount ++;
+//            weekCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:weekCount];
             for (int i = dayInterval; i <= weekCount; i ++) {
                 NSDate *newDate = [date dateByAddingWeeks:i];
@@ -398,7 +398,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每月
         case 4: {
             NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
-            monthCount ++;
+//            monthCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
                 NSDate *newDate = [date dateByAddingMonths:i];
@@ -413,7 +413,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每月最后一天
         case 5: {
             NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
-            monthCount ++;
+//            monthCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
                 NSDate *tDate = [date dateByAddingMonths:i];
@@ -429,7 +429,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每年
         case 6: {
             NSInteger yearCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeYear];
-            yearCount ++;
+//            yearCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:yearCount];
             for (int i = dayInterval; i <= yearCount; i ++) {
                 NSDate *newDate = [date dateByAddingYears:i];
