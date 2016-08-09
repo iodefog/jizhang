@@ -75,10 +75,32 @@
 + (NSError *)supplementMemberChargeRecordsInDatabase:(FMDatabase *)db {
     [db beginTransaction];
     
-    BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select ichargeid, '0', imoney, ?, ?, 0 from bk_user_charge", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
-    if (!success) {
-        [db rollback];
+    FMResultSet *result = [db executeQuery:@"select ichargeid, imoney, cuserid from bk_user_charge where operatortype <> 2"];
+    if (!result) {
         return [db lastError];
+    }
+    
+    NSMutableArray *memberChargeList = [NSMutableArray array];
+    
+    while ([result next]) {
+        NSString *chargeID = [result stringForColumn:@"ichargeid"];
+        NSString *money = [result stringForColumn:@"imoney"];
+        NSString *userID = [result stringForColumn:@"cuserid"];
+        [memberChargeList addObject:@{@"ichargeid":chargeID,
+                                      @"imoney":money,
+                                      @"cmemberid":[NSString stringWithFormat:@"%@-0", userID]}];
+    }
+    
+    for (NSDictionary *memberChargeInfo in memberChargeList) {
+        NSString *chargeID = memberChargeInfo[@"ichargeid"];
+        NSString *memberID = memberChargeInfo[@"cmemberid"];
+        NSString *money = memberChargeInfo[@"imoney"];
+        
+        BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeID, memberID, money, @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @0];
+        if (!success) {
+            [db rollback];
+            return [db lastError];
+        }
     }
     
     [db commit];
