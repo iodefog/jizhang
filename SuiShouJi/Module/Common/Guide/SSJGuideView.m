@@ -32,7 +32,7 @@
         
         [self createContentViews];
         [self addSubview:self.scrollView];
-        [self addSubview:self.pageControl];
+//        [self addSubview:self.pageControl];
     }
     return self;
 }
@@ -135,11 +135,10 @@
         [_beginButton setCornerRadius:20];
         [_beginButton setFontSize:18];
         [_beginButton setTitle:@"立即体验" forState:SSJBorderButtonStateNormal];
-        [_beginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
+        [_beginButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
         [_beginButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [_beginButton setBorderColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
-        [_beginButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
-        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateHighlighted];
+        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#f17272"] forState:SSJBorderButtonStateNormal];
+        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#f17272"] forState:SSJBorderButtonStateHighlighted];
         [_beginButton addTarget:self action:@selector(beginButtonAciton)];
     }
     return _beginButton;
