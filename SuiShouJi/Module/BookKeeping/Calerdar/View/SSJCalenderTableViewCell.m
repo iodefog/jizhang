@@ -66,7 +66,8 @@
     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
     self.textLabel.text = item.typeName;
     [self.textLabel sizeToFit];
-    self.moneyLab.text = [NSString stringWithFormat:@"%@%@", item.incomeOrExpence ? @"－" : @"＋", item.money];
+    float money = [item.money floatValue];
+    self.moneyLab.text = [NSString stringWithFormat:@"%.2f", money];
     [self.moneyLab sizeToFit];
     [self setNeedsLayout];
 }

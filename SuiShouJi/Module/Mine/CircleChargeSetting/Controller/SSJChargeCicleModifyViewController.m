@@ -97,6 +97,14 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         } failure:^(NSError *error) {
             
         }];
+    }else{
+        if (![self.item.membersItem count]) {
+            SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
+            memberItem.memberId = [NSString stringWithFormat:@"%@-0",SSJUSERID()];
+            memberItem.memberName = @"我";
+            self.item.membersItem = [@[memberItem] mutableCopy];
+            [self.tableView reloadData];
+        }
     }
 }
 

@@ -51,6 +51,8 @@
     SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
     if (item.memberId.length) {
         newMemberVc.originalItem = item;
+    }else{
+        [MobClick event:@"dialog_add_member"];
     }
     [self.navigationController pushViewController:newMemberVc animated:YES];
 }
@@ -69,6 +71,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    [MobClick event:@"delete_member"];
     [self deleteMemberWithMemberId:item.memberId];
     [self.items removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];

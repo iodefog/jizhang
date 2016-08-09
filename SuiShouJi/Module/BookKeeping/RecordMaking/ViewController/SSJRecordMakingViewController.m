@@ -461,6 +461,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)selectMemberAction{
+    [MobClick event:@"addRecord_member"];
     self.memberSelectView.selectedMemberItems = [self.item.membersItem mutableCopy];
     self.memberSelectView.chargeId = self.item.ID;
     [self.memberSelectView show];

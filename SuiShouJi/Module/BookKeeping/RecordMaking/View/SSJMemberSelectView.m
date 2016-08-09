@@ -66,6 +66,7 @@
         }
         [self.tableView reloadData];
     }else{
+        [MobClick event:@"dialog_add_member"];
         if (self.addNewMemberBlock) {
             self.addNewMemberBlock();
         }
