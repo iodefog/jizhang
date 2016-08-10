@@ -40,6 +40,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJMemberSelectView.h"
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic, strong) NSArray *titles;
@@ -536,6 +537,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }
     [SSJCircleChargeStore saveCircleChargeItem:self.item success:^{
         [CDAutoHideMessageHUD showMessage:@"周期记账保存成功"];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:@"周期记账保存失败"];
     }];

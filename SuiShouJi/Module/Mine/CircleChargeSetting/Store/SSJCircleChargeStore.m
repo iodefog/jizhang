@@ -297,6 +297,11 @@
                 *rollback = YES;
             }
         }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
     }];
 }
 
