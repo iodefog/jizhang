@@ -69,6 +69,8 @@
 
 @property(nonatomic, strong) NSString *loginType;
 
+@property(nonatomic, strong) NSString *openId;
+
 + (NSDictionary *)propertyMapping;
 
 @end

@@ -31,6 +31,8 @@
     [aCoder encodeObject:_loginType forKey:@"loginType"];
     [aCoder encodeObject:_defaultMemberState forKey:@"defaultMemberState"];
     [aCoder encodeObject:_defaultBooksTypeState forKey:@"defaultBooksTypeState"];
+    [aCoder encodeObject:_openId forKey:@"openId"];
+
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -53,6 +55,7 @@
         _loginType = [aDecoder decodeObjectForKey:@"loginType"];
         _defaultMemberState = [aDecoder decodeObjectForKey:@"defaultMemberState"];
         _defaultBooksTypeState = [aDecoder decodeObjectForKey:@"defaultBooksTypeState"];
+        _openId = [aDecoder decodeObjectForKey:@"openId"];
      }
     return self;
 }
@@ -80,7 +83,8 @@
                     @"currentBooksId":@"ccurrentBooksId",
                     @"loginType":@"loginType",
                     @"defaultMemberState":@"cdefaultmembertate",
-                    @"defaultBooksTypeState":@"cdefaultbookstypestate"};
+                    @"defaultBooksTypeState":@"cdefaultbookstypestate",
+                    @"openid":@"copenid"};
     }
     return mapping;
 }
