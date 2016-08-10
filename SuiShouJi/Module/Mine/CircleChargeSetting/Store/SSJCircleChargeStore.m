@@ -171,7 +171,6 @@
                 NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
                 [formatter setDateFormat:@"yyyy-MM-dd"];
                 NSDate *date = [formatter dateFromString:item.billDate];
-                NSLog(@"%ld",date.weekday);
                 if (item.chargeCircleType == 1 && (date.weekday == 1 || date.weekday == 7)) {
                     
                 }else if (item.chargeCircleType == 2 && (date.weekday != 1 && date.weekday != 7)) {

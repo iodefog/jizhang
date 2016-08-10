@@ -142,7 +142,7 @@
         }else{
             if (!weakSelf.originalItem.memberId.length) {
                 NSString *memberId = SSJUUID();
-                [db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, cuserid, operatortype, iversion, cwritedate, istate) values (?, ?, ?, ?, 0, ?, ?, 1)",memberId,weakSelf.header.nameInput.text,_selectColor,userId,@(SSJSyncVersion()),writeDate];
+                [db executeUpdate:@"insert into bk_member (cmemberid, cname, ccolor, cuserid, operatortype, iversion, cwritedate, istate, cadddate) values (?, ?, ?, ?, 0, ?, ?, 1,?)",memberId,weakSelf.header.nameInput.text,_selectColor,userId,@(SSJSyncVersion()),writeDate,writeDate];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
                     item.memberId = memberId;
