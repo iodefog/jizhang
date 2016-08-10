@@ -364,7 +364,7 @@ NSString *SSJImagePath(NSString *imageName){
 };
 
 NSString *SSJGetChargeImageUrl(NSString *imageName){
-    if (![imageName hasSuffix:@".jpg"]) {
+    if (![imageName hasSuffix:@".jpg"] && ![imageName hasSuffix:@".webp"]) {
         imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
     }
     NSString *path = [NSString stringWithFormat:@"/image/sync/%@", imageName];
