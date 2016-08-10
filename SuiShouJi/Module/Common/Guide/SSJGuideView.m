@@ -48,8 +48,7 @@
     }
     
     self.pageControl.center = CGPointMake(self.width * 0.5, self.height * 0.93);
-    self.beginButton.center = CGPointMake(self.width * 0.5, self.height * 0.88);
-    self.beginButton.center = self.pageControl.center;
+    self.beginButton.center = CGPointMake(self.width * 0.5, self.height * 0.86);
 }
 
 - (void)showInView:(UIView *)view finish:(SSJGuideViewBeginBlock)finish {
