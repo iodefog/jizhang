@@ -79,8 +79,8 @@
         item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ? order by b.iorder limit 1",userid,@(incomeOrExpence)];
         item.typeName = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.billId];
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
-        item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
-        item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? order by iorder limit 1",userid];
+        item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 order by iorder limit 1",userid];
+        item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",item.fundId];
         item.fundImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",item.fundId ];
         item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.billId];
         SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
