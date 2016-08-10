@@ -71,6 +71,9 @@
 
 @property(nonatomic, strong) NSString *openId;
 
+// 是否提示过用户设置手势密码
+@property(nonatomic, strong) NSString *remindSettingMotionPWD;
+
 + (NSDictionary *)propertyMapping;
 
 @end

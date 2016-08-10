@@ -67,6 +67,10 @@
         return [db lastError];
     }
     
+    if (![db executeUpdate:@"alter table bk_user add remindsettingmotionpwd integer"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
