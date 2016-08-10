@@ -191,7 +191,7 @@
         __weak typeof(self) weakSelf = self;
         NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
         SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-        if ([self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] && [self.loginService.item.openId isEqualToString:lastUserItem.openId]) {
+        if (![self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] || ![self.loginService.item.openId isEqualToString:lastUserItem.openId] || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
             NSString *userName;
             int loginType = [lastUserItem.loginType intValue];
             if (loginType == 0) {
