@@ -90,6 +90,7 @@
 -(UIImageView *)booksIcionImageView{
     if (!_booksIcionImageView) {
         _booksIcionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 34, 34)];
+        _booksIcionImageView.tintColor = [UIColor ssj_colorWithHex:@"#000000" alpha:0.1];
     }
     return _booksIcionImageView;
 }
