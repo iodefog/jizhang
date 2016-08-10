@@ -132,7 +132,7 @@
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *userId = SSJUSERID();
         if ([db intForQuery:@"select count(1) from bk_member where cname = ? and cuserid = ?",weakSelf.header.nameInput.text,userId]) {
-            [db executeUpdate:@"update bk_member set istate = 1 ,cwritedate = ? ,iversion = ? where cname = ? and cuserid = ?",weakSelf.header.nameInput.text,writeDate,@(SSJSyncVersion()),userId];
+            [db executeUpdate:@"update bk_member set istate = 1 ,ccolor =? ,cwritedate = ? ,iversion = ? , operatortype = 1 where cname = ? and cuserid = ?",_selectColor,writeDate,@(SSJSyncVersion()),weakSelf.header.nameInput.text,userId];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.addNewMemberAction) {
                     self.addNewMemberAction(nil);
@@ -154,7 +154,7 @@
                     [weakSelf.navigationController popViewControllerAnimated:YES];
                 });
             }else{
-                [db executeUpdate:@"update bk_member set cname = ?, ccolor = ?, operatortype = 1, iversion = ?, cwritedate = ? where cmemberid = ?",weakSelf.header.nameInput.text,_selectColor,@(SSJSyncVersion()),writeDate,weakSelf.originalItem.memberId];
+                [db executeUpdate:@"update bk_member set cname = ?, ccolor =?, operatortype = 1, iversion = ?, cwritedate = ? where cmemberid = ?",weakSelf.header.nameInput.text,_selectColor,@(SSJSyncVersion()),writeDate,weakSelf.originalItem.memberId];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (self.addNewMemberAction) {
                         self.addNewMemberAction(nil);
