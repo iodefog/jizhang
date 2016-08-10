@@ -132,6 +132,8 @@
         [resultSet close];
     }];
     
+    item.userId = userId;
+    
     return item;
 }
 
