@@ -39,6 +39,9 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         
         while ([resultSet next]) {
             NSString *imageName = [resultSet stringForColumn:@"cimgname"];
+            if (![imageName hasSuffix:@".jpg"]) {
+                imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+            }
             NSString *syncType = [resultSet stringForColumn:@"isynctype"];
             if (imageName.length) {
                 [imageInfoArr addObject:@{kImageNameKey:imageName,
@@ -58,6 +61,9 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         while ([resultSet next]) {
             NSString *imageName = [resultSet stringForColumn:@"cimgname"];
             NSString *syncType = [resultSet stringForColumn:@"isynctype"];
+            if (![imageName hasSuffix:@".jpg"]) {
+                imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+            }
             if (imageName.length) {
                 [imageInfoArr addObject:@{kImageNameKey:imageName,
                                           kSyncTypeKey:syncType}];

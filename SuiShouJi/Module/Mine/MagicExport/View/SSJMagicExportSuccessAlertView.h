@@ -10,4 +10,10 @@
 
 @interface SSJMagicExportSuccessAlertView : UIView
 
+- (instancetype)initWithSize:(CGSize)size;
+
+- (void)show:(void(^)())completion;
+
++ (void)show:(void(^)())completion;
+
 @end
