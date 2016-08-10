@@ -353,7 +353,9 @@ static const int kVerifyFailureTimesLimit = 5;
             SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
             loginVC.mobileNo = _userItem.mobileNo;
             loginVC.finishHandle = self.finishHandle;
+            loginVC.cancelHandle = self.finishHandle;
             loginVC.backController = self.backController;
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
             [self.navigationController setViewControllers:@[loginVC] animated:YES];
         }
         
@@ -369,7 +371,9 @@ static const int kVerifyFailureTimesLimit = 5;
     } else {
         SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
         loginVC.finishHandle = self.finishHandle;
+        loginVC.cancelHandle = self.finishHandle;
         loginVC.backController = self.backController;
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
     }
     
