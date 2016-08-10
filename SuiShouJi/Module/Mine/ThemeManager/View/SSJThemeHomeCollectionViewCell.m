@@ -10,6 +10,7 @@
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeDownLoaderManger.h"
 #import "SSJThemeDownLoaderManger.h"
+#import "SSJThemeDownLoadCompleteService.h"
 
 @interface SSJThemeHomeCollectionViewCell()
 @property(nonatomic, strong) UIImageView *themeImage;
@@ -137,6 +138,8 @@
             [SSJThemeSetting switchToThemeID:item.themeId];
             [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
             [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":   item.themeTitle}];
+            SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
+            [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
             if (weakSelf.themeChangeBlock) {
                 weakSelf.themeChangeBlock();
             }

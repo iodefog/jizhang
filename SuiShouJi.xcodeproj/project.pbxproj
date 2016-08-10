@@ -1533,6 +1533,7 @@
 		9C564F121CEDBBE5009F7A30 /* founds_yindao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C564F101CEDBBE5009F7A30 /* founds_yindao@2x.png */; };
 		9C56E1301D1A87640057895D /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
 		9C56E1311D1A87640057895D /* SSJRecordMakingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */; };
+		9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */; };
 		9C65C9FE1D4AF7DA0058D0A4 /* xunhuan_chengyuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C65C9FC1D4AF7DA0058D0A4 /* xunhuan_chengyuan@2x.png */; };
 		9C65C9FF1D4AF7DA0058D0A4 /* xunhuan_chengyuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C65C9FC1D4AF7DA0058D0A4 /* xunhuan_chengyuan@2x.png */; };
 		9C65CA001D4AF7DA0058D0A4 /* xunhuan_chengyuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C65C9FD1D4AF7DA0058D0A4 /* xunhuan_chengyuan@3x.png */; };
@@ -2839,6 +2840,8 @@
 		9C564F101CEDBBE5009F7A30 /* founds_yindao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_yindao@2x.png"; sourceTree = "<group>"; };
 		9C56E12E1D1A87640057895D /* SSJRecordMakingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingStore.h; sourceTree = "<group>"; };
 		9C56E12F1D1A87640057895D /* SSJRecordMakingStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingStore.m; sourceTree = "<group>"; };
+		9C61AAA51D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeDownLoadCompleteService.h; sourceTree = "<group>"; };
+		9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeDownLoadCompleteService.m; sourceTree = "<group>"; };
 		9C65C9FC1D4AF7DA0058D0A4 /* xunhuan_chengyuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xunhuan_chengyuan@2x.png"; sourceTree = "<group>"; };
 		9C65C9FD1D4AF7DA0058D0A4 /* xunhuan_chengyuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xunhuan_chengyuan@3x.png"; sourceTree = "<group>"; };
 		9C65CA091D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeManagerCollectionViewCell.h; sourceTree = "<group>"; };
@@ -5197,6 +5200,8 @@
 			children = (
 				9C47E6F01D224BEF005F338A /* SSJThemeService.h */,
 				9C47E6F11D224BEF005F338A /* SSJThemeService.m */,
+				9C61AAA51D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.h */,
+				9C61AAA61D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -8430,6 +8435,7 @@
 				9C4C527F1CF6A017006A0CD6 /* SSJBooksTypeItem.m in Sources */,
 				9C9471911CEB224C00D69079 /* SSJNewFundingViewController.m in Sources */,
 				BD0433961C1A8DA50051E7AB /* SSJLoadMoreCell.m in Sources */,
+				9C61AAA71D5B30DE005DC9BD /* SSJThemeDownLoadCompleteService.m in Sources */,
 				7D5F33311CEAE6C10086B67E /* SSJHomeReminderView.m in Sources */,
 				7D5F33271CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m in Sources */,
 				7D5F33291CEAE6C10086B67E /* SSJBookKeepingHeader.m in Sources */,

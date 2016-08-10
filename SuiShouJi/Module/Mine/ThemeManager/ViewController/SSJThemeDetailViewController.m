@@ -10,6 +10,7 @@
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeImageCollectionViewCell.h"
 #import "MMDrawerController.h"
+#import "SSJThemeDownLoadCompleteService.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
@@ -124,6 +125,8 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
             [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
+            [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
             [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
             UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
             tabVC.selectedIndex = 0;
