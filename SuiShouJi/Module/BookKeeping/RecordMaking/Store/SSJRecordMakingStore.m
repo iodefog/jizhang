@@ -31,7 +31,11 @@
             item.ID = SSJUUID();
         }
         if (item.chargeImage.length && !item.chargeThumbImage.length) {
-            item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb",item.chargeImage];
+            NSString *imageName = [item.chargeImage copy];
+            if (![item.chargeImage hasSuffix:@".jpg"]) {
+                item.chargeImage = [NSString stringWithFormat:@"%@.jpg",imageName];
+            }
+            item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
         }
         SSJBillingChargeCellItem *editeItem = [[SSJBillingChargeCellItem alloc]init];
         double money = [item.money doubleValue];
@@ -51,7 +55,7 @@
             }
             //修改图片同步表
             if (item.chargeImage.length) {
-                if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,[NSString stringWithFormat:@"%@.jpg",item.chargeImage],[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+                if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,item.chargeImage,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
@@ -219,7 +223,7 @@
                 if (![item.chargeImage isEqualToString:originItem.chargeImage]) {
                     if (![db intForQuery:@"select count(1) from bk_img_sync where cimgname = ?",item.chargeImage]) {
                         //修改图片同步表
-                        if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,[NSString stringWithFormat:@"%@.jpg",item.chargeImage],[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+                        if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,item.chargeImage,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
                             if (failure) {
                                 SSJDispatch_main_async_safe(^{
                                     failure([db lastError]);
