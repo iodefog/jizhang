@@ -136,6 +136,9 @@
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
         self.item.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+        if (self.loginType != SSJLoginTypeNormal) {
+            self.item.mobileNo = @"";
+        }
         self.item.loginPWD = [_loginPassword ssj_md5HexDigest];
         self.item.openId = self.openId;
 
