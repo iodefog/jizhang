@@ -7,32 +7,10 @@
 //
 
 #import "UIViewController+SSJMotionPassword.h"
-#import "SSJUserTableManager.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJMotionPasswordViewController.h"
 #import "UIViewController+SSJPageFlow.h"
-
-static NSString *const kRemindUserSettingMotionPasswordKey = @"kRemindUserSettingMotionPasswordKey";
-
-BOOL SSJHasRemindUserSettingMotionPassword() {
-    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kRemindUserSettingMotionPasswordKey];
-    if (SSJUSERID()) {
-        return dic[SSJUSERID()];
-    } else {
-        return NO;
-    }
-}
-
-void SSJDidRemindUserSettingMotionPassword() {
-    if (SSJUSERID()) {
-        NSMutableDictionary *dic = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:kRemindUserSettingMotionPasswordKey] mutableCopy];
-        if (!dic) {
-            dic = [NSMutableDictionary dictionary];
-        }
-        [dic setObject:@YES forKey:SSJUSERID()];
-        [[NSUserDefaults standardUserDefaults] setObject:dic forKey:kRemindUserSettingMotionPasswordKey];
-    }
-}
+#import "SSJUserTableManager.h"
 
 @implementation UIViewController (SSJMotionPassword)
 
@@ -41,32 +19,22 @@ void SSJDidRemindUserSettingMotionPassword() {
         return;
     }
     
-    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD"] forUserId:SSJUSERID()];
-    if (!SSJHasRemindUserSettingMotionPassword() && !userItem.motionPWD.length) {
-        
+    NSString *userId = SSJUSERID();
+    
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"motionPWD", @"remindSettingMotionPWD"] forUserId:userId];
+    
+    if (![userItem.remindSettingMotionPWD boolValue] && !userItem.motionPWD.length) {
         __weak typeof(self) weakSelf = self;
-        
-//        NSAttributedString *message = [[NSAttributedString alloc] initWithString:@"为保障您的隐私，建议您设置下手势密码哦！" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
-//        
-//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc] initWithTitle:nil message:message cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert){
-//            [alert dismiss];
-//            SSJDidRemindUserSettingMotionPassword();
-//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-//            [alert dismiss];
-//            SSJDidRemindUserSettingMotionPassword();
-//            
-//            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-//            motionVC.finishHandle = weakSelf.finishHandle;
-//            motionVC.backController = weakSelf.backController;
-//            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-//            [weakSelf.navigationController pushViewController:motionVC animated:YES];
-//        }];
-//        [alert show];
-        
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"为保障您的隐私，建议您设置下手势密码哦！" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
-            SSJDidRemindUserSettingMotionPassword();
+            
+            userItem.remindSettingMotionPWD = @"1";
+            [SSJUserTableManager saveUserItem:userItem];
+            
         }], [SSJAlertViewAction actionWithTitle:@"立即设置" handler:^(SSJAlertViewAction * _Nonnull action) {
-            SSJDidRemindUserSettingMotionPassword();
+            
+            userItem.remindSettingMotionPWD = @"1";
+            [SSJUserTableManager saveUserItem:userItem];
+            
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.finishHandle = weakSelf.finishHandle;
             motionVC.backController = weakSelf.backController;

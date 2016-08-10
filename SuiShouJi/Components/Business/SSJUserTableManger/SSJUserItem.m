@@ -32,6 +32,7 @@
     [aCoder encodeObject:_defaultMemberState forKey:@"defaultMemberState"];
     [aCoder encodeObject:_defaultBooksTypeState forKey:@"defaultBooksTypeState"];
     [aCoder encodeObject:_openId forKey:@"openId"];
+    [aCoder encodeObject:_remindSettingMotionPWD forKey:@"remindSettingMotionPWD"];
 
 }
 
@@ -56,6 +57,7 @@
         _defaultMemberState = [aDecoder decodeObjectForKey:@"defaultMemberState"];
         _defaultBooksTypeState = [aDecoder decodeObjectForKey:@"defaultBooksTypeState"];
         _openId = [aDecoder decodeObjectForKey:@"openId"];
+        _remindSettingMotionPWD = [aDecoder decodeObjectForKey:@"remindSettingMotionPWD"];
      }
     return self;
 }
@@ -84,7 +86,8 @@
                     @"loginType":@"loginType",
                     @"defaultMemberState":@"cdefaultmembertate",
                     @"defaultBooksTypeState":@"cdefaultbookstypestate",
-                    @"openId":@"copenid"};
+                    @"openId":@"copenid",
+                    @"remindSettingMotionPWD":@"remindsettingmotionpwd"};
     }
     return mapping;
 }
