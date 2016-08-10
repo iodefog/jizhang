@@ -14,6 +14,6 @@
 @property (nonatomic, copy) NSString *mobileNo;
 
 // 从外部指定的返回按钮点击事件
-- (void)backOffAction;
+//- (void)backOffAction;
 
 @end

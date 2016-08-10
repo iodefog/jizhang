@@ -33,7 +33,7 @@
         [controller ssj_backOffAction];
     };
     
-    [loginVC ssj_showBackButtonWithTarget:loginVC selector:@selector(backOffAction)];
+//    [loginVC ssj_showBackButtonWithTarget:loginVC selector:@selector(backOffAction)];
     UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
     [currentVC presentViewController:naviVC animated:YES completion:NULL];
     

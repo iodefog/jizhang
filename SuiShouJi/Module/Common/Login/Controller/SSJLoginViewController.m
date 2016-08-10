@@ -87,10 +87,14 @@
     [scrollView addSubview:self.tencentLoginButton];
     [scrollView addSubview:self.weixinLoginButton];
     [self.view addSubview:scrollView];
+    
+    [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+//    NSLog(@"%d", self.navigationController.navigationBarHidden);
     
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -268,11 +272,11 @@
     [self.navigationController pushViewController:registerVc animated:YES];
 }
 
-- (void)backOffAction {
+- (void)goBackAction {
     if (self.cancelHandle) {
         self.cancelHandle(self);
     } else {
-       [super ssj_backOffAction];
+       [super goBackAction];
     }
 }
 
