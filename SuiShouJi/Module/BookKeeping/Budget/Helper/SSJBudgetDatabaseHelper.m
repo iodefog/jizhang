@@ -190,10 +190,23 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         NSMutableArray *budgetIDs = [NSMutableArray array];
         NSMutableArray *budgetPeriods = [NSMutableArray array];
         
+        NSString *dateFormat = nil;
+        
+        switch (type) {
+            case SSJBudgetPeriodTypeWeek:
+            case SSJBudgetPeriodTypeMonth:
+                dateFormat = @"M.d";
+                break;
+                
+            case SSJBudgetPeriodTypeYear:
+                dateFormat = @"yyyy.M.d";
+                break;
+        }
+        
         while ([resultSet next]) {
             NSString *budgetId = [resultSet stringForColumn:@"ibid"];
-            NSString *beginDateStr = [[resultSet stringForColumn:@"csdate"] ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"M.d"];
-            NSString *endDateStr = [[resultSet stringForColumn:@"cedate"] ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"M.d"];
+            NSString *beginDateStr = [[resultSet stringForColumn:@"csdate"] ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:dateFormat];
+            NSString *endDateStr = [[resultSet stringForColumn:@"cedate"] ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:dateFormat];
             
             [budgetIDs addObject:budgetId ?: @""];
             [budgetPeriods addObject:[NSString stringWithFormat:@"%@~%@", beginDateStr ?: @"", endDateStr ?: @""]];

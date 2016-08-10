@@ -128,20 +128,18 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 #pragma mark - Private
 - (void)updateTitle {
-    if (self.budgetPeriods) {
-        self.titleView.titles = self.budgetPeriods;
-    } else {
-        NSString *toFormat = @"M.d";
-        self.titleView.titleSize = 18;
-        if (self.budgetModel.type == SSJBudgetPeriodTypeYear) {
-            toFormat = @"yyyy.M.d";
-            self.titleView.titleSize = 15;
-        }
-        NSString *beginDateStr = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:toFormat];
-        NSString *endDateStr = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:toFormat];
-        NSString *title = [NSString stringWithFormat:@"%@~%@", beginDateStr, endDateStr];
-        self.titleView.titles = @[title];
+    switch (self.budgetModel.type) {
+        case SSJBudgetPeriodTypeWeek:
+        case SSJBudgetPeriodTypeMonth:
+            self.titleView.titleSize = 21;
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            self.titleView.titleSize = 13;
+            break;
     }
+    
+    self.titleView.titles = self.budgetPeriods;
     self.titleView.selectedIndex = self.titleView.titles.count - 1;
 }
 
