@@ -340,7 +340,25 @@ static const int kVerifyFailureTimesLimit = 5;
     if (_userItem.loginPWD.length) {
         [self.passwordAlertView show];
     } else {
-        [self logout];
+        // 注销登录状态、清空用户的手势密码，并跳转至登录页面
+        _userItem.motionPWD = @"";
+        [SSJUserTableManager saveUserItem:_userItem];
+        
+        UIViewController *previousVC = [self ssj_previousViewController];
+        if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
+            SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
+            loginVC.mobileNo = _userItem.mobileNo;
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
+            loginVC.mobileNo = _userItem.mobileNo;
+            loginVC.finishHandle = self.finishHandle;
+            loginVC.backController = self.backController;
+            [self.navigationController setViewControllers:@[loginVC] animated:YES];
+        }
+        
+        SSJClearLoginInfo();
+        [SSJUserTableManager reloadUserIdWithError:nil];
     }
 }
 
@@ -354,6 +372,9 @@ static const int kVerifyFailureTimesLimit = 5;
         loginVC.backController = self.backController;
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
     }
+    
+    SSJClearLoginInfo();
+    [SSJUserTableManager reloadUserIdWithError:nil];
 }
 
 //  验证touchID
@@ -400,29 +421,6 @@ static const int kVerifyFailureTimesLimit = 5;
         _passwordAlertView.passwordInput.text = nil;
         [CDAutoHideMessageHUD showMessage:@"密码输入错误，请重新输入"];
     }
-}
-
-// 退出登录
-- (void)logout {
-    // 注销登录状态、清空用户的手势密码，并跳转至登录页面
-    _userItem.motionPWD = @"";
-    [SSJUserTableManager saveUserItem:_userItem];
-    
-    UIViewController *previousVC = [self ssj_previousViewController];
-    if ([previousVC isKindOfClass:[SSJLoginViewController class]]) {
-        SSJLoginViewController *loginVC = (SSJLoginViewController *)previousVC;
-        loginVC.mobileNo = _userItem.mobileNo;
-        [self.navigationController popViewControllerAnimated:YES];
-    } else {
-        SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] init];
-        loginVC.mobileNo = _userItem.mobileNo;
-        loginVC.finishHandle = self.finishHandle;
-        loginVC.backController = self.backController;
-        [self.navigationController setViewControllers:@[loginVC] animated:YES];
-    }
-    
-    SSJClearLoginInfo();
-    [SSJUserTableManager reloadUserIdWithError:nil];
 }
 
 #pragma mark - Getter
