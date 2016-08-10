@@ -171,8 +171,8 @@
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-        flowLayout.minimumInteritemSpacing = 10;
-        flowLayout.minimumLineSpacing = 10;
+        flowLayout.minimumInteritemSpacing = 25;
+        flowLayout.minimumLineSpacing = 25;
         _collectionView =[[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _collectionView.dataSource=self;
