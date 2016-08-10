@@ -8,6 +8,7 @@
 
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 @implementation SSJFinancingHomeHelper
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
@@ -106,6 +107,8 @@
                 [db executeUpdate:sql];
             }
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+
     }];
 }
 

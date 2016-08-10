@@ -143,6 +143,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             NSIndexPath *deleteIndex = [self.collectionView indexPathForCell:cell];
             [weakSelf.items removeObjectAtIndex:deleteIndex.item];
             [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         };
         return cell;
     }else{
