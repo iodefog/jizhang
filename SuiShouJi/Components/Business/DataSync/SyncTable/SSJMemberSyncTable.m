@@ -15,7 +15,7 @@
 }
 
 + (NSArray *)columns {
-    return @[@"cmemberid", @"cname", @"cuserid", @"ccolor", @"istate", @"cwritedate", @"operatortype", @"iversion"];
+    return @[@"cmemberid", @"cname", @"cuserid", @"ccolor", @"istate", @"cwritedate", @"operatortype", @"iversion", @"cadddate"];
 }
 
 + (NSArray *)primaryKeys {
