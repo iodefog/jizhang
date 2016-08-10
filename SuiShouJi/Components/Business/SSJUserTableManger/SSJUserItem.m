@@ -84,7 +84,7 @@
                     @"loginType":@"loginType",
                     @"defaultMemberState":@"cdefaultmembertate",
                     @"defaultBooksTypeState":@"cdefaultbookstypestate",
-                    @"openid":@"copenid"};
+                    @"openId":@"copenid"};
     }
     return mapping;
 }
