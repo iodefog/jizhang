@@ -99,7 +99,7 @@
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
-    self.booksIcionImageView.image = [UIImage imageNamed:_item.booksIcoin];
+    self.booksIcionImageView.image = [[UIImage imageNamed:_item.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self setNeedsLayout];
 }
 

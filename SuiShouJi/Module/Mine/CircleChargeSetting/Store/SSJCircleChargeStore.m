@@ -135,10 +135,10 @@
         for (SSJChargeMemberItem *memberItem in item.membersItem) {
             [membersIdArr addObject:memberItem.memberId];
         }
-        if (item.chargeImage.length && ![item.chargeImage hasSuffix:@".jpg"]) {
+        if (item.chargeImage.length && ![item.chargeImage hasSuffix:@".jpg"] && ![item.chargeImage hasSuffix:@".webp"]) {
             item.chargeImage = [NSString stringWithFormat:@"%@.jpg",item.chargeImage];
         }
-        if (item.chargeThumbImage.length && ![item.chargeThumbImage hasSuffix:@".jpg"]) {
+        if (item.chargeThumbImage.length && ![item.chargeThumbImage hasSuffix:@".jpg"] && ![item.chargeImage hasSuffix:@".webp"]) {
             item.chargeThumbImage = [NSString stringWithFormat:@"%@.jpg",item.chargeThumbImage];
         }
         NSString *membersStr = [membersIdArr componentsJoinedByString:@","];
@@ -288,7 +288,7 @@
             }
         }else{
             //修改周期记账
-            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 where cuserid = ? and cbooksid = ? and iconfigid = ? and cmemberids = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,userid,item.booksId,item.configId,membersStr]) {
+            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ? where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,userid,item.booksId,item.configId]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
