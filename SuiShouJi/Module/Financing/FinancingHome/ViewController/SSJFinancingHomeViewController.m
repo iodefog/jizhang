@@ -91,7 +91,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self collectionViewEndEditing];
+    if (self.collectionView.editing) {
+        [self collectionViewEndEditing];
+    }
 }
 
 #pragma mark - UICollectionViewDelegate

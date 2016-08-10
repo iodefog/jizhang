@@ -108,7 +108,6 @@
             }
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-
     }];
 }
 
