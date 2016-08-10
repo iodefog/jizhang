@@ -52,7 +52,7 @@
 }
 
 + (NSError *)createMemberChargeTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists bk_member_charge (ichargeid text not null, cmemberid text not null, imoney text, cwritedate text, operatortype integer, iversion integer , primary key(ichargeid, cmemberid))"]) {
+    if (![db executeUpdate:@"create table if not exists bk_member_charge (ichargeid text not null, cmemberid text not null, imoney text, cwritedate text, operatortype integer, iversion integer , cadddate text, primary key(ichargeid, cmemberid))"]) {
         return [db lastError];
     }
     return nil;
