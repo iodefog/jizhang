@@ -214,7 +214,7 @@
 -(void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db){
-        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.* , B.* , c.* FROM BK_USER_CHARGE AS A , BK_BILL_TYPE AS B , bk_fund_info as c WHERE A.ICHARGEID = ? AND A.CUSERID = ?  AND A.IBILLID = B.ID and a.ifunsid = c.cfundid",self.item.ID,SSJUSERID()];
+        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.* , B.* , c.cacctname FROM BK_USER_CHARGE AS A , BK_BILL_TYPE AS B , bk_fund_info as c WHERE A.ICHARGEID = ? AND A.CUSERID = ?  AND A.IBILLID = B.ID and a.ifunsid = c.cfundid",self.item.ID,SSJUSERID()];
         while ([chargeResult next]) {
             weakSelf.item.money = [chargeResult stringForColumn:@"IMONEY"];
             weakSelf.item.billId = [chargeResult stringForColumn:@"IBILLID"];
