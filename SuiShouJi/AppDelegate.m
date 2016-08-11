@@ -200,12 +200,6 @@ NSDate *SCYEnterBackgroundTime() {
             
             //  创建默认的资金帐户
             [SSJUserDefaultDataCreater createDefaultFundAccountsWithError:nil];
-            
-            //  创建默认的账本
-            [SSJUserDefaultDataCreater createDefaultBooksTypeWithError:nil];
-            
-            //  创建默认的成员
-            [SSJUserDefaultDataCreater createDefaultMembersWithError:nil];
 
         } else {
             //  升级数据库
@@ -214,6 +208,12 @@ NSDate *SCYEnterBackgroundTime() {
 
         //  创建默认的收支类型
         [SSJUserDefaultDataCreater createDefaultBillTypesIfNeededWithError:nil];
+        
+        //  创建默认的账本
+        [SSJUserDefaultDataCreater createDefaultBooksTypeWithError:nil];
+        
+        //  创建默认的成员
+        [SSJUserDefaultDataCreater createDefaultMembersWithError:nil];
         
         SSJDispatchMainSync(^{
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:nil];
