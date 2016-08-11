@@ -45,7 +45,7 @@
         [_titleLab sizeToFit];
         [self addSubview:_titleLab];
         
-        _pickerView = [[UIPickerView alloc] initWithFrame:CGRectZero];
+        _pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - 44)];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
         [self addSubview:_pickerView];
@@ -57,10 +57,10 @@
     return self;
 }
 
-- (CGSize)sizeThatFits:(CGSize)size {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-    return CGSizeMake(keyWindow.width, 44 + _pickerView.height);
-}
+//- (CGSize)sizeThatFits:(CGSize)size {
+//    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+//    return CGSizeMake(keyWindow.width, 44 + _pickerView.height);
+//}
 
 - (void)layoutSubviews {
     _cancelBtn.frame = CGRectMake(0, 0, 44, 44);
@@ -69,7 +69,7 @@
     _titleLab.center = CGPointMake(self.width * 0.5, 22);
     
     _pickerView.top = 44;
-    _pickerView.size = CGSizeMake(self.width, self.height - 44);
+    _pickerView.centerX = self.width * 0.5;
 }
 
 - (void)setPeriodType:(SSJBudgetPeriodType)periodType {
@@ -206,34 +206,6 @@
         return nil;
     }
 }
-
-//- (nullable NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-//    switch (_periodType) {
-//        case SSJBudgetPeriodTypeWeek:
-//            return [self stringForWeekday:row + 1];
-//            
-//        case SSJBudgetPeriodTypeMonth:
-//            if (row == 28) {
-//                return @"每月最后一天";
-//            } else {
-//                return [NSString stringWithFormat:@"%d日", (int)row + 1];
-//            }
-//            
-//        case SSJBudgetPeriodTypeYear:
-//            if (component == 0) {
-//                return [NSString stringWithFormat:@"%d月", (int)row + 1];
-//            } else if (component == 1) {
-//                NSInteger selectedMonth = [pickerView selectedRowInComponent:0] + 1;
-//                if (selectedMonth == 2 && row == 28) {
-//                    return @"月末";
-//                } else {
-//                    return [NSString stringWithFormat:@"%d日", (int)row + 1];
-//                }
-//            } else {
-//                return nil;
-//            }
-//    }
-//}
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (_periodType == SSJBudgetPeriodTypeYear && component == 0) {
