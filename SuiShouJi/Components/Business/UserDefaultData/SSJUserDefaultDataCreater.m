@@ -272,31 +272,9 @@
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
     
-    //  查询用户表中存储的默认账本创建状态
-    FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTBOOKSTYPESTATE from BK_USER where CUSERID = ?", userId];
-    if (!reuslt) {
-        return [db lastError];
-    }
-    
-    NSError *error = nil;
-    if (![reuslt nextWithError:&error]) {
-        [reuslt close];
-        if (error) {
-            return error;
-        }
+    // 如果当前用户有账本，就不需要创建默认账本了
+    if ([db boolForQuery:@"select count(*) from bk_books_type where cuserid = ?", userId]) {
         return nil;
-    }
-    
-    //  根据表中存储的状态判断是否需要创建以下默认账本
-    BOOL defaultBooksTypeState = [reuslt boolForColumn:@"CDEFAULTBOOKSTYPESTATE"];
-    [reuslt close];
-    
-    if (defaultBooksTypeState) {
-        return nil;
-    }
-    
-    if (![db executeUpdate:@"update BK_USER set CDEFAULTBOOKSTYPESTATE = 1"]) {
-        return [db lastError];
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -315,31 +293,9 @@
         return [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"current user id is invalid"}];
     }
     
-    //  查询用户表中存储的默认成员创建状态
-    FMResultSet *reuslt = [db executeQuery:@"select CDEFAULTMEMBERTATE from BK_USER where CUSERID = ?", userId];
-    if (!reuslt) {
-        return [db lastError];
-    }
-    
-    NSError *error = nil;
-    if (![reuslt nextWithError:&error]) {
-        [reuslt close];
-        if (error) {
-            return error;
-        }
+    // 如果当前用户有成员，就不需要创建默认成员了
+    if ([db boolForQuery:@"select count(*) from bk_member where cuserid = ?", userId]) {
         return nil;
-    }
-    
-    //  根据表中存储的状态判断是否需要创建以下默认成员
-    BOOL defaultFundAcctState = [reuslt boolForColumn:@"CDEFAULTMEMBERTATE"];
-    [reuslt close];
-    
-    if (defaultFundAcctState) {
-        return nil;
-    }
-    
-    if (![db executeUpdate:@"update BK_USER set CDEFAULTMEMBERTATE = 1"]) {
-        return [db lastError];
     }
     
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
