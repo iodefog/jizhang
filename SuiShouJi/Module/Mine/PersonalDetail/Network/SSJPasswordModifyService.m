@@ -9,6 +9,7 @@
 #import "SSJPasswordModifyService.h"
 
 @implementation SSJPasswordModifyService
+
 -(void)modifyPasswordWithOldPassword:(NSString *)oldPassword newPassword:(NSString *)newPassword{
     self.showLodingIndicator = YES;
     NSString *userid = SSJUSERID();
@@ -18,4 +19,5 @@
             @"newValue":newPassword};
     [self request:SSJURLWithAPI(@"/user/modify.go") params:dict];
 }
+
 @end

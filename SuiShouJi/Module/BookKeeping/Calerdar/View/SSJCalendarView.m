@@ -91,7 +91,7 @@
 //返回cell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCalendarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NormalCell" forIndexPath:indexPath];
-    cell.item = [self.items objectAtIndex:indexPath.row];
+    cell.item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     cell.isSelectOnly = self.isSelectOnly;
     return cell;
 }
@@ -216,7 +216,7 @@
     for (int i = 0; i < 49; i++) {
         SSJCalenderCellItem *item = [[SSJCalenderCellItem alloc]init];
         if (i < 7) {
-            item.dateStr = [_weekArray objectAtIndex:i];
+            item.dateStr = [_weekArray ssj_safeObjectAtIndex:i];
             item.backGroundColor = @"FFFFFF";
             item.titleColor = SSJ_CURRENT_THEME.secondaryColor;
             item.isSelectable = NO;

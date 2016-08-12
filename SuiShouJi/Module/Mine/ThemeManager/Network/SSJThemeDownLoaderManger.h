@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJThemeItem.h"
 
 typedef void(^SSJThemeDownLoaderProgressBlock)(float);
 
@@ -18,15 +19,13 @@ typedef void(^SSJThemeDownLoaderProgressBlock)(float);
 /**
  *  下载主题
  *
- *  @param ID      主题id
- *  @param urlStr  主题下载地址
+ *  @param item      主题item
  *  @param success 下载成功的回调
  *  @param failure 下载失败的回调
  */
-- (void)downloadThemeWithID:(NSString *)ID
-                        url:(NSString *)urlStr
-                    success:(void(^)())success
-                    failure:(void (^)(NSError *error))failure;
+- (void)downloadThemeWithItem:(SSJThemeItem *)item
+                       success:(void(^)(SSJThemeItem *item))success
+                       failure:(void (^)(NSError *error))failure;
 
 /**
  *  添加一个下载进度的回调

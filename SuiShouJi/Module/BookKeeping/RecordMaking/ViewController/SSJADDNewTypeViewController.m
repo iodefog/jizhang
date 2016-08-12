@@ -84,7 +84,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     NSArray *currentItems = (_titleSegmentView.selectedIndex ? _customItems : _items);
-    cell.item = (SSJRecordMakingCategoryItem*)[currentItems objectAtIndex:indexPath.row];
+    cell.item = (SSJRecordMakingCategoryItem*)[currentItems ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -316,7 +316,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (SSJAddNewTypeColorSelectionView *)colorSelectionView {
     if (!_colorSelectionView) {
         _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithWidth:self.scrollView.width];
-        [_colorSelectionView sizeToFit];
+        _colorSelectionView.displayRowCount = 2.5;
         _colorSelectionView.leftBottom = CGPointMake(self.scrollView.width, self.scrollView.height);
         _colorSelectionView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
         [_colorSelectionView ssj_setBorderWidth:1];

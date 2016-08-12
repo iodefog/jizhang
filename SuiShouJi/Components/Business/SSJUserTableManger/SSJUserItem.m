@@ -29,6 +29,11 @@
     [aCoder encodeObject:_fingerPrintState forKey:@"fingerPrintState"];
     [aCoder encodeObject:_currentBooksId forKey:@"currentBooksId"];
     [aCoder encodeObject:_loginType forKey:@"loginType"];
+    [aCoder encodeObject:_defaultMemberState forKey:@"defaultMemberState"];
+    [aCoder encodeObject:_defaultBooksTypeState forKey:@"defaultBooksTypeState"];
+    [aCoder encodeObject:_openId forKey:@"openId"];
+    [aCoder encodeObject:_remindSettingMotionPWD forKey:@"remindSettingMotionPWD"];
+
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -49,6 +54,10 @@
         _fingerPrintState = [aDecoder decodeObjectForKey:@"fingerPrintState"];
         _currentBooksId = [aDecoder decodeObjectForKey:@"currentBooksId"];
         _loginType = [aDecoder decodeObjectForKey:@"loginType"];
+        _defaultMemberState = [aDecoder decodeObjectForKey:@"defaultMemberState"];
+        _defaultBooksTypeState = [aDecoder decodeObjectForKey:@"defaultBooksTypeState"];
+        _openId = [aDecoder decodeObjectForKey:@"openId"];
+        _remindSettingMotionPWD = [aDecoder decodeObjectForKey:@"remindSettingMotionPWD"];
      }
     return self;
 }
@@ -74,7 +83,11 @@
                     @"motionTrackState":@"cmotionPwdTrackState",
                     @"fingerPrintState":@"cfingerPrintState",
                     @"currentBooksId":@"ccurrentBooksId",
-                    @"loginType":@"loginType"};
+                    @"loginType":@"loginType",
+                    @"defaultMemberState":@"cdefaultmembertate",
+                    @"defaultBooksTypeState":@"cdefaultbookstypestate",
+                    @"openId":@"copenid",
+                    @"remindSettingMotionPWD":@"remindsettingmotionpwd"};
     }
     return mapping;
 }

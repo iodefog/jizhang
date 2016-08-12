@@ -10,6 +10,7 @@
 #import "SSJCategoryListHelper.h"
 #import "SSJBillTypeSelectCell.h"
 #import "SSJADDNewTypeViewController.h"
+#import "SSJDatabaseQueue.h"
 
 static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifier";
 
@@ -61,7 +62,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJRecordMakingBillTypeSelectionCellItem *item = [self.items objectAtIndex:indexPath.row];
+    SSJRecordMakingBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if ([item.title isEqualToString:@"添加"]) {
         SSJADDNewTypeViewController *newTypeVc = [[SSJADDNewTypeViewController alloc]init];
         __weak typeof(self) weakSelf = self;
@@ -102,17 +103,34 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 #pragma mark - Event
 -(void)comfirmButtonClicked:(id)sender{
-    if (self.typeSelectBlock) {
-        self.typeSelectBlock(self.selectedItem);
+    if (!self.selectedItem.ID.length) {
+        __weak typeof(self) weakSelf = self;
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = [[SSJRecordMakingBillTypeSelectionCellItem alloc]init];
+            item.ID = weakSelf.selectedId;
+            item.title = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.ID];
+            item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.ID];
+            item.colorValue = [db stringForQuery:@"select ccolor from bk_bill_type where id = ?",item.ID];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.typeSelectBlock) {
+                    self.typeSelectBlock(item);
+                }
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }];
+    }else{
+        if (self.typeSelectBlock) {
+            self.typeSelectBlock(self.selectedItem);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Private
 -(void)getdataFromDb{
     __weak typeof(self) weakSelf = self;
     [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.incomeOrExpenture Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *result) {
-        SSJRecordMakingBillTypeSelectionCellItem *item = [SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"cccccc" ID:@""];
+        SSJRecordMakingBillTypeSelectionCellItem *item = [SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"cccccc" ID:@"" order:0];
         [result addObject:item];
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         [weakSelf.tableView reloadData];

@@ -32,6 +32,7 @@ static CGSize kButtonSize = {36, 30};
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
+    [self.titleLabel sizeToFit];
     return CGSizeMake(self.titleLabel.width + self.preButton.width + self.nextButton.width, MAX(self.titleLabel.height, kButtonSize.height));
 }
 
@@ -42,41 +43,44 @@ static CGSize kButtonSize = {36, 30};
     self.titleLabel.centerY = self.preButton.centerY = self.nextButton.centerY = self.height * 0.5;
 }
 
-#pragma mark - Event
-- (void)preButtonAction {
-    switch (self.periodType) {
-        case SSJBudgetPeriodTypeWeek:
-            self.currentDate = [self.currentDate dateBySubtractingWeeks:1];
-            break;
-            
-        case SSJBudgetPeriodTypeMonth:
-            self.currentDate = [self.currentDate dateBySubtractingMonths:1];
-            break;
-            
-        case SSJBudgetPeriodTypeYear:
-            self.currentDate = [self.currentDate dateBySubtractingYears:1];
-            break;
+- (void)setTitles:(NSArray *)titles {
+    if (![_titles isEqualToArray:titles]) {
+        _titles = titles;
+        _selectedIndex = MIN(_selectedIndex, _titles.count - 1);
+        
+        [self updateTitle];
+        [self updateButtonEnable];
+    }
+}
+
+- (void)setSelectedIndex:(NSUInteger)selectedIndex {
+    if (selectedIndex >= _titles.count) {
+        SSJPRINT(@"selectedIndex超出数组titles的最大范围");
+        return;
     }
     
+    if (_selectedIndex != selectedIndex) {
+        _selectedIndex = selectedIndex;
+        [self updateTitle];
+        [self updateButtonEnable];
+    }
+}
+
+- (void)setTitleSize:(CGFloat)titleSize {
+    _titleLabel.font = [UIFont systemFontOfSize:titleSize];
+    [self sizeToFit];
+}
+
+#pragma mark - Event
+- (void)preButtonAction {
+    _selectedIndex = MAX(0, _selectedIndex - 1);
     [self updateTitle];
     [self updateButtonEnable];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 - (void)nextButtonAction {
-    switch (self.periodType) {
-        case SSJBudgetPeriodTypeWeek:
-            self.currentDate = [self.currentDate dateByAddingWeeks:1];
-            break;
-            
-        case SSJBudgetPeriodTypeMonth:
-            self.currentDate = [self.currentDate dateByAddingMonths:1];
-            break;
-            
-        case SSJBudgetPeriodTypeYear:
-            self.currentDate = [self.currentDate dateByAddingYears:1];
-            break;
-    }
+    _selectedIndex = MIN(_titles.count - 1, _selectedIndex + 1);
     [self updateTitle];
     [self updateButtonEnable];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -84,64 +88,13 @@ static CGSize kButtonSize = {36, 30};
 
 #pragma mark - Private
 - (void)updateButtonEnable {
-    if (!self.lastDate || !self.currentDate) {
-        return;
-    }
-    self.nextButton.enabled = [self.currentDate compare:self.lastDate] == NSOrderedAscending;
+    _preButton.enabled = _selectedIndex > 0;
+    _nextButton.enabled = _selectedIndex < _titles.count - 1;
 }
 
 - (void)updateTitle {
-    switch (self.periodType) {
-        case SSJBudgetPeriodTypeWeek:
-            self.titleLabel.text = @"周预算";
-            self.preButton.hidden = YES;
-            self.nextButton.hidden = YES;
-            break;
-            
-        case SSJBudgetPeriodTypeMonth: {
-            if (self.currentDate) {
-                NSMutableString *title = [NSMutableString string];
-                if ([[NSDate date] year] != [self.currentDate year]) {
-                    [title appendFormat:@"%d年", (int)[self.currentDate year]];
-                }
-                [title appendFormat:@"%d月预算", (int)[self.currentDate month]];
-                self.titleLabel.text = title;
-                self.preButton.hidden = NO;
-                self.nextButton.hidden = NO;
-            }
-        }
-            break;
-            
-        case SSJBudgetPeriodTypeYear:
-            self.titleLabel.text = @"年预算";
-            self.preButton.hidden = YES;
-            self.nextButton.hidden = YES;
-            break;
-    }
-    
-    [self.titleLabel sizeToFit];
+    _titleLabel.text = [_titles ssj_safeObjectAtIndex:_selectedIndex];
     [self sizeToFit];
-}
-
-#pragma mark - Setter
-- (void)setPeriodType:(SSJBudgetPeriodType)periodType {
-    _periodType = periodType;
-    [self updateTitle];
-}
-
-- (void)setLastDate:(NSDate *)lastDate {
-    if (!_lastDate || [_lastDate compare:lastDate] != NSOrderedSame) {
-        _lastDate = lastDate;
-        [self updateButtonEnable];
-    }
-}
-
-- (void)setCurrentDate:(NSDate *)currentDate {
-    if (!_currentDate || [_currentDate compare:currentDate] != NSOrderedSame) {
-        _currentDate = currentDate;
-        [self updateButtonEnable];
-        [self updateTitle];
-    }
 }
 
 #pragma mark - Getter

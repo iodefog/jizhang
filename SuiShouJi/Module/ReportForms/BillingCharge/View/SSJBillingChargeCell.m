@@ -101,7 +101,9 @@
     
     self.textLabel.text = item.typeName;
     
-    self.moneyLab.text = [NSString stringWithFormat:@"%@%@", item.incomeOrExpence ? @"－" : @"＋", item.money];
+    float money = [item.money floatValue];
+    
+    self.moneyLab.text = [NSString stringWithFormat:@"%@%.2f", item.incomeOrExpence ? @"－" : @"＋", money];
     [self.moneyLab sizeToFit];
     
     _photo.hidden = item.chargeImage.length == 0;

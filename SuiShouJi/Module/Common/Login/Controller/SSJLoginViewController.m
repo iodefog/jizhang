@@ -87,10 +87,14 @@
     [scrollView addSubview:self.tencentLoginButton];
     [scrollView addSubview:self.weixinLoginButton];
     [self.view addSubview:scrollView];
+    
+    [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+//    NSLog(@"%d", self.navigationController.navigationBarHidden);
     
     [self.tfPhoneNum becomeFirstResponder];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
@@ -179,7 +183,6 @@
     return true;
 }
 
-
 #pragma mark - SSJBaseNetworkServiceDelegate
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
     [super serverDidFinished:service];
@@ -192,34 +195,26 @@
         __weak typeof(self) weakSelf = self;
         NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
         SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-        if (![self.loginService.item.userId isEqualToString:lastUserItem.userId]) {
+        if (![self.loginService.item.mobileNo isEqualToString:lastUserItem.mobileNo] || ![self.loginService.item.openId isEqualToString:lastUserItem.openId] || ![self.loginService.item.loginType isEqualToString:lastUserItem.loginType]) {
             NSString *userName;
-            if ([lastUserItem.loginType isEqualToString:@"0"]) {
+            int loginType = [lastUserItem.loginType intValue];
+            if (loginType == 0) {
                 userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
             }else{
                 userName = lastUserItem.nickName;
             }
-            NSString *hintStr;
-            if ([lastUserItem.loginType isEqualToString:@"0"]) {
-                hintStr = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
-            }else if ([lastUserItem.loginType isEqualToString:@"1"]) {
-                hintStr = [NSString stringWithFormat:@"您已使用过qq%@登陆过,确定使用新账户登录",userName];
-            }else if ([lastUserItem.loginType isEqualToString:@"2"]) {
-                hintStr = [NSString stringWithFormat:@"您已使用过微信%@登陆过,确定使用新账户登录",userName];
+            NSString *message;
+            if (loginType == 0) {
+                message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+            }else if (loginType == 1) {
+                message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
+            }else if (loginType == 2) {
+                message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
             }
-            NSString *fullhint = [NSString stringWithFormat:@"%@\n\n登陆后新的记账数据将同步到新账号",hintStr];
-            NSMutableAttributedString *massage = [[NSMutableAttributedString alloc]initWithString:fullhint];
-            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:[fullhint rangeOfString:hintStr]];
-            [massage addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
-            [massage addAttribute:NSForegroundColorAttributeName value:SSJ_THEME_RED_COLOR range:[fullhint rangeOfString:userName]];
-            [massage addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:@"929292"] range:[fullhint rangeOfString:@"登陆后新的记账数据将同步到新账号"]];
-            SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"确定" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-                [alert dismiss];
-            } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+            
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
                 [weakSelf comfirmTologin];
-                [alert dismiss];
-            }];
-            [alert show];
+            }], nil];
         }else{
             [self comfirmTologin];
         }
@@ -277,11 +272,11 @@
     [self.navigationController pushViewController:registerVc animated:YES];
 }
 
-- (void)backOffAction {
+- (void)goBackAction {
     if (self.cancelHandle) {
         self.cancelHandle(self);
     } else {
-       [super ssj_backOffAction];
+       [super goBackAction];
     }
 }
 
@@ -338,6 +333,11 @@
         //  如果登录没有返回任何账本类型，说明服务器没有保存任何账本类型，就给用户创建默认的
         if (self.loginService.booksTypeArray.count == 0) {
             [SSJUserDefaultDataCreater createDefaultBooksTypeForUserId:SSJUSERID() inDatabase:db];
+        }
+        
+        //  如果登录没有返回任何成员类型，说明服务器没有保存任何成员类型，就给用户创建默认的
+        if (self.loginService.membersArray.count == 0) {
+            [SSJUserDefaultDataCreater createDefaultMembersForUserId:SSJUSERID() inDatabase:db];
         }
         
         //  更新资金帐户余额

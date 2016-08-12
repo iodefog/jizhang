@@ -20,7 +20,9 @@
 
 @property (nonatomic, strong) SSJPageControl *pageControl;
 
-@property (nonatomic, strong) SSJBorderButton *beginButton;
+//@property (nonatomic, strong) SSJBorderButton *beginButton;
+
+@property (nonatomic, strong) UIButton *beginButton;
 
 @end
 
@@ -46,8 +48,7 @@
     }
     
     self.pageControl.center = CGPointMake(self.width * 0.5, self.height * 0.93);
-    self.beginButton.center = CGPointMake(self.width * 0.5, self.height * 0.88);
-//    self.beginButton.center = self.pageControl.center;
+    self.beginButton.center = CGPointMake(self.width * 0.5, self.height * 0.86);
 }
 
 - (void)showInView:(UIView *)view finish:(SSJGuideViewBeginBlock)finish {
@@ -129,18 +130,33 @@
     return _pageControl;
 }
 
-- (SSJBorderButton *)beginButton {
+//- (SSJBorderButton *)beginButton {
+//    if (!_beginButton) {
+//        _beginButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(0, 0, 132, 40)];
+//        [_beginButton setCornerRadius:20];
+//        [_beginButton setFontSize:18];
+//        [_beginButton setTitle:@"立即体验" forState:SSJBorderButtonStateNormal];
+//        [_beginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
+//        [_beginButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
+//        [_beginButton setBorderColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
+//        [_beginButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
+//        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateHighlighted];
+//        [_beginButton addTarget:self action:@selector(beginButtonAciton)];
+//    }
+//    return _beginButton;
+//}
+
+- (UIButton *)beginButton {
     if (!_beginButton) {
-        _beginButton = [[SSJBorderButton alloc] initWithFrame:CGRectMake(0, 0, 132, 40)];
-        [_beginButton setCornerRadius:20];
-        [_beginButton setFontSize:18];
-        [_beginButton setTitle:@"立即体验" forState:SSJBorderButtonStateNormal];
-        [_beginButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
-        [_beginButton setTitleColor:[UIColor whiteColor] forState:SSJBorderButtonStateHighlighted];
-        [_beginButton setBorderColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateNormal];
-        [_beginButton setBackgroundColor:[UIColor whiteColor] forState:SSJBorderButtonStateNormal];
-        [_beginButton setBackgroundColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:SSJBorderButtonStateHighlighted];
-        [_beginButton addTarget:self action:@selector(beginButtonAciton)];
+        _beginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _beginButton.clipsToBounds = YES;
+        _beginButton.layer.cornerRadius = 6;
+        _beginButton.frame = CGRectMake(0, 0, 200, 40);
+        _beginButton.titleLabel.font = [UIFont systemFontOfSize:18];
+        [_beginButton setTitle:@"立即体验" forState:UIControlStateNormal];
+        [_beginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_beginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f17272"] forState:UIControlStateNormal];
+        [_beginButton addTarget:self action:@selector(beginButtonAciton) forControlEvents:UIControlEventTouchUpInside];
     }
     return _beginButton;
 }

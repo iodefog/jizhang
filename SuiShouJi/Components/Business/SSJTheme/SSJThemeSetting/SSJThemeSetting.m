@@ -27,6 +27,14 @@
     return [NSKeyedArchiver archiveRootObject:newModelInfo toFile:[self settingFilePath]];
 }
 
++ (BOOL)removeThemeModelWithID:(NSString *)ID {
+    NSDictionary *modelInfo = [NSKeyedUnarchiver unarchiveObjectWithFile:[self settingFilePath]];
+    NSMutableDictionary *newModelInfo = [modelInfo mutableCopy];
+    [newModelInfo removeObjectForKey:ID];
+    
+    return [NSKeyedArchiver archiveRootObject:newModelInfo toFile:[self settingFilePath]];
+}
+
 + (BOOL)switchToThemeID:(NSString *)ID {
     if (!ID.length) {
         return NO;

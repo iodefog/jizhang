@@ -9,7 +9,6 @@
 #import "SSJSettingViewController.h"
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTabelviewCell.h"
-#import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJSyncSettingViewController.h"
@@ -18,17 +17,25 @@
 #import "SSJAboutusViewController.h"
 #import "SSJStartChecker.h"
 #import "SSJStartUpgradeAlertView.h"
-
+#import "SSJDataClearHelper.h"
+#import "SSJWeixinFooter.h"
+#import "WXApi.h"
+#import "SSJStartUpgradeAlertView.h"
+#import "SSJNetworkReachabilityManager.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
-static NSString *const kTitle2 = @"分享APP";
-static NSString *const kTitle3 = @"关于我们";
-static NSString *const kTitle4 = @"检查更新";
+static NSString *const kTitle2 = @"数据重新拉取";
+static NSString *const kTitle3 = @"数据格式化";
+static NSString *const kTitle4 = @"分享APP";
+static NSString *const kTitle6 = @"关于我们";
+static NSString *const kTitle5 = @"检查更新";
+static NSString *const kTitle7 = @"微信公众号";
+static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信查找即可";
 
 
 @interface SSJSettingViewController ()
 @property (nonatomic, strong) NSArray *titles;
-@property (nonatomic,strong) UIView *loggedFooterView;
+@property (nonatomic,strong) SSJWeixinFooter *weixinFooter;
 @end
 
 @implementation SSJSettingViewController
@@ -51,9 +58,17 @@ static NSString *const kTitle4 = @"检查更新";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3]];
+        if ([WXApi isWXAppInstalled]) {
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7,kTitle8]];
+        }else{
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6]];
+        }
     } else {
-        self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4]];
+        if ([WXApi isWXAppInstalled]) {
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+        }else{
+            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
+        }
     }
     
     [self.navigationController setNavigationBarHidden:NO];
@@ -61,6 +76,10 @@ static NSString *const kTitle4 = @"检查更新";
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle8]) {
+        return 35;
+    }
     return 55;
 }
 
@@ -69,17 +88,18 @@ static NSString *const kTitle4 = @"检查更新";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-//    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-//        return self.loggedFooterView;
-//    }
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
-    return footerView;
+    if (section == [self.tableView numberOfSections] - 1) {
+        return self.weixinFooter;
+    }
+    return nil;
+//    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
+//    return footerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-//    if (SSJIsUserLogined() && section == [self.tableView numberOfSections] - 1) {
-//        return 80;
-//    }
+    if (section == [self.tableView numberOfSections] - 1) {
+        return 150;
+    }
     return 0.1f;
 }
 
@@ -93,6 +113,42 @@ static NSString *const kTitle4 = @"检查更新";
         [self.navigationController pushViewController:syncSettingVC animated:YES];
     }
     
+    //  重新拉去
+    if ([title isEqualToString:kTitle2]) {
+//        NSAttributedString *massage = [[NSAttributedString alloc] initWithString:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"取消" sureButtonTitle:@"立即拉取" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            [alert dismiss];
+//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            [alert dismiss];
+//            
+//            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+//                [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
+//                return;
+//            }
+//            
+//            [SSJDataClearHelper clearLocalDataWithSuccess:^{
+//                [CDAutoHideMessageHUD showMessage:@"重新拉取数据成功"];
+//            } failure:^(NSError *error) {
+//                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+//            }];
+//        }];
+//        [alert show];
+        
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"手机上的记账数据将重新从云端获取，若您多个手机使用APP且数据不一致时可重新拉取，请在WIFi下操作。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即拉取" handler:^(SSJAlertViewAction * _Nonnull action) {
+            if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+                [CDAutoHideMessageHUD showMessage:@"请连接网络后重试"];
+                return;
+            }
+            
+            [SSJDataClearHelper clearLocalDataWithSuccess:^{
+                [CDAutoHideMessageHUD showMessage:@"重新拉取数据成功"];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+            }];
+        }], nil];
+    }
+    
+    
 //    //  用户协议与隐私说明
 //    if ([title isEqualToString:kTitle4]) {
 //        SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
@@ -101,7 +157,7 @@ static NSString *const kTitle4 = @"检查更新";
 //    }
 //    
     //  检查更新
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle5]) {
         [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
             if (type == SSJAppUpdateTypeNone) {
                 [CDAutoHideMessageHUD showMessage:@"当前已经是最新版本,不需要更新"];
@@ -112,13 +168,13 @@ static NSString *const kTitle4 = @"检查更新";
     }
     
     //  关于我们
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle6]) {
         SSJAboutusViewController *aboutUsVc = [[SSJAboutusViewController alloc] init];
         [self.navigationController pushViewController:aboutUsVc animated:YES];
     }
     
     //  把APP推荐给好友
-    if ([title isEqualToString:kTitle2]) {
+    if ([title isEqualToString:kTitle4]) {
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:SSJDetailSettingForSource(@"UMAppKey")
@@ -134,6 +190,30 @@ static NSString *const kTitle4 = @"检查更新";
                                         shareToSnsNames:[NSArray arrayWithObjects:UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,nil]
                                                delegate:self];
         }
+    }
+    
+    //数据格式化
+    if ([title isEqualToString:kTitle3]) {
+        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [SSJDataClearHelper clearAllDataWithSuccess:^{
+                [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
+            }];
+        }];
+        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"云端和本地的数据将被彻底清除且不可恢复，确定要执行此操作？" action:cancelAction,comfirmAction,nil];
+    }
+    
+    
+    if ([title isEqualToString:kTitle7]) {
+        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = @"youyuwjr";
+            [WXApi openWXApp];
+        }];
+        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"复制微信号成功啦，现在就跳转到微信在搜索栏粘贴，即刻关注我们吧！" action:cancelAction,comfirmAction,nil];
     }
 }
 
@@ -153,25 +233,31 @@ static NSString *const kTitle4 = @"检查更新";
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    mineHomeCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
-    if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
-        mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle8]) {
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryNone;
+        mineHomeCell.cellSubTitle = title;
+    }else{
+        mineHomeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        mineHomeCell.cellTitle = title;
+        if ([[self.titles ssj_objectAtIndexPath:indexPath] isEqualToString:@"检查更新"]) {
+            mineHomeCell.cellDetail = [NSString stringWithFormat:@"v%@",SSJAppVersion()];
+        }else if([mineHomeCell.cellTitle isEqualToString:kTitle7]){
+            mineHomeCell.cellDetail = @"youyuwjr";
+        }
     }
-    
     return mineHomeCell;
 }
 
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
-    //根据`responseCode`得到发送结果,如果分享成功
+    //根据responseCode得到发送结果,如果分享成功
     if(response.responseCode == UMSResponseCodeSuccess)
     {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享成功"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享成功" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
     }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"分享失败"] delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [alert show];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"分享失败" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],nil];
     }
 }
 
@@ -187,21 +273,12 @@ static NSString *const kTitle4 = @"检查更新";
 
 
 #pragma mark - Getter
-//-(UIView *)loggedFooterView{
-//    if (_loggedFooterView == nil) {
-//        _loggedFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
-//        UIButton *quitLogButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _loggedFooterView.width - 20, 40)];
-//        [quitLogButton setTitle:@"退出登录" forState:UIControlStateNormal];
-//        quitLogButton.layer.cornerRadius = 3.f;
-//        quitLogButton.layer.masksToBounds = YES;
-//        [quitLogButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
-//        [quitLogButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [quitLogButton addTarget:self action:@selector(quitLogButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-//        quitLogButton.center = CGPointMake(_loggedFooterView.width / 2, _loggedFooterView.height / 2);
-//        [_loggedFooterView addSubview:quitLogButton];
-//    }
-//    return _loggedFooterView;
-//}
+-(SSJWeixinFooter *)weixinFooter{
+    if (_weixinFooter == nil) {
+        _weixinFooter = [[SSJWeixinFooter alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 150)];
+    }
+    return _weixinFooter;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

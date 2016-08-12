@@ -107,7 +107,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseItem *item;
     if (indexPath.row >= 1) {
-        item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        item = [[self.listItems objectAtIndex:indexPath.section].chargeArray ssj_safeObjectAtIndex:indexPath.row - 1];
     }
     if (indexPath.row == 0) {
         SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListFirstLineCellID forIndexPath:indexPath];

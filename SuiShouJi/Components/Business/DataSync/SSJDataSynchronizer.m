@@ -130,6 +130,14 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 }
 
 - (void)startSyncWithSuccess:(void (^)(SSJDataSynchronizeType type))success failure:(void (^)(SSJDataSynchronizeType type, NSError *error))failure {
+    
+    if ([SSJNetworkReachabilityManager networkReachabilityStatus] == SSJNetworkReachabilityStatusNotReachable) {
+        if (failure) {
+            failure(0, nil);
+        }
+        return;
+    }
+    
     [self.dataSuccessBlocks addBlock:success];
     [self.dataFailureBlocks addBlock:failure];
     

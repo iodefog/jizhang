@@ -34,10 +34,10 @@
 // percent>=1的情况下，波纹周期，默认是1
 @property (nonatomic) CGFloat fullWaveCycle;
 
-// 外部边框宽度，default 1
+// 内部边框宽度，default 1
 @property (nonatomic) CGFloat innerBorderWidth;
 
-// 内部边框宽度，default 1
+// 外部边框宽度，default 1
 @property (nonatomic) CGFloat outerBorderWidth;
 
 // 金额

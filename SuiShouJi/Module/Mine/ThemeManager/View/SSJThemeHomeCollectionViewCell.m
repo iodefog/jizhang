@@ -10,6 +10,7 @@
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeDownLoaderManger.h"
 #import "SSJThemeDownLoaderManger.h"
+#import "SSJThemeDownLoadCompleteService.h"
 
 @interface SSJThemeHomeCollectionViewCell()
 @property(nonatomic, strong) UIImageView *themeImage;
@@ -133,10 +134,12 @@
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         __weak typeof(self) weakSelf = self;
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
-        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
-            [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
-            [MobClick event:@"download_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
-            [MobClick event:@"open_skin" attributes:@{@"ID":self.item.themeId,@"Name":self.item.themeTitle}];
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
+            [SSJThemeSetting switchToThemeID:item.themeId];
+            [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":   item.themeTitle}];
+            SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
+            [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
             if (weakSelf.themeChangeBlock) {
                 weakSelf.themeChangeBlock();
             }

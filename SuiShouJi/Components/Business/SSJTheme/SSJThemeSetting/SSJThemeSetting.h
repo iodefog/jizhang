@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)addThemeModel:(SSJThemeModel *)model;
 
++ (BOOL)removeThemeModelWithID:(NSString *)ID;
+
 + (BOOL)switchToThemeID:(NSString *)ID;
 
 + (NSArray *)allThemeModels;

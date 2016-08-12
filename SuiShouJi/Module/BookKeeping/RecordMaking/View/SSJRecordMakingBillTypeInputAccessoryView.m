@@ -8,6 +8,9 @@
 
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
 
+#define SSJ_BUTTON_NORMAL_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor alpha:0.5].CGColor
+#define SSJ_BUTTON_SELECTED_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor
+
 @interface SSJRecordMakingBillTypeInputAccessoryView ()
 
 @property (nonatomic, strong) UIView *topView;
@@ -24,9 +27,15 @@
 
 @property (nonatomic, strong) UIButton *photoBtn;
 
+@property (nonatomic, strong) UIButton *memberBtn;
+
 @end
 
 @implementation SSJRecordMakingBillTypeInputAccessoryView
+
+- (void)dealloc {
+    [self.photoBtn removeObserver:self forKeyPath:@"selected"];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
@@ -37,7 +46,10 @@
         [self.topView addSubview:self.memoView];
         [self.bottomView addSubview:self.accountBtn];
         [self.bottomView addSubview:self.dateBtn];
+        [self.bottomView addSubview:self.memberBtn];
         [self.bottomView addSubview:self.photoBtn];
+        
+        [self.photoBtn addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionNew context:NULL];
     }
     return self;
 }
@@ -46,11 +58,12 @@
     _topView.frame = CGRectMake(0, 0, self.width, 50);
     _bottomView.frame = CGRectMake(0, _topView.bottom, self.width, 37);
     
-    CGFloat horizontalGap = (_bottomView.width - _accountBtn.width - _dateBtn.width - _photoBtn.width) * 0.25;
+    CGFloat horizontalGap = (_bottomView.width - _accountBtn.width - _dateBtn.width - _photoBtn.width - _memberBtn.width) * 0.2;
     _accountBtn.left = horizontalGap;
     _dateBtn.left = _accountBtn.right + horizontalGap;
-    _photoBtn.left = _dateBtn.right + horizontalGap;
-    _accountBtn.centerY = _dateBtn.centerY = _photoBtn.centerY = _bottomView.height * 0.5;
+    _memberBtn.left = _dateBtn.right + horizontalGap;
+    _photoBtn.left = _memberBtn.right + horizontalGap;
+    _accountBtn.centerY = _dateBtn.centerY = _photoBtn.centerY =_memberBtn.centerY = _bottomView.height * 0.5;
 }
 
 - (void)setButtonTitleNormalColor:(UIColor *)buttonTitleNormalColor {
@@ -60,6 +73,7 @@
     
     [_accountBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_dateBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
+    [_memberBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_photoBtn setTitleColor:buttonTitleNormalColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
 }
 
@@ -70,7 +84,14 @@
     
     [_accountBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
     [_dateBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+    [_memberBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateNormal | UIControlStateHighlighted)];
     [_photoBtn setTitleColor:buttonTitleSelectedColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
+    if ([keyPath isEqualToString:@"selected"] && object == _photoBtn) {
+        _photoBtn.layer.borderColor = _photoBtn.selected ? SSJ_BUTTON_SELECTED_BORDER_COLOR : SSJ_BUTTON_NORMAL_BORDER_COLOR;
+    }
 }
 
 #pragma mark - Getter
@@ -125,10 +146,10 @@
 - (UIButton *)accountBtn {
     if (!_accountBtn) {
         _accountBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _accountBtn.frame = CGRectMake(0, 0, 90, 24);
+        _accountBtn.frame = CGRectMake(0, 0, 70, 24);
         _accountBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _accountBtn.layer.borderWidth = 1;
-        _accountBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _accountBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _accountBtn.layer.cornerRadius = _accountBtn.height * 0.5;
     }
     return _accountBtn;
@@ -137,22 +158,35 @@
 - (UIButton *)dateBtn {
     if (!_dateBtn) {
         _dateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _dateBtn.frame = CGRectMake(0, 0, 90, 24);
+        _dateBtn.frame = CGRectMake(0, 0, 70, 24);
         _dateBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _dateBtn.layer.borderWidth = 1;
-        _dateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _dateBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _dateBtn.layer.cornerRadius = _dateBtn.height * 0.5;
     }
     return _dateBtn;
 }
 
+- (UIButton *)memberBtn {
+    if (!_memberBtn) {
+        _memberBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _memberBtn.frame = CGRectMake(0, 0, 70, 24);
+        _memberBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        _memberBtn.layer.borderWidth = 1;
+        [_memberBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        _memberBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
+        _memberBtn.layer.cornerRadius = _memberBtn.height * 0.5;
+    }
+    return _memberBtn;
+}
+
 - (UIButton *)photoBtn {
     if (!_photoBtn) {
         _photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _photoBtn.frame = CGRectMake(0, 0, 90, 24);
+        _photoBtn.frame = CGRectMake(0, 0, 70, 24);
         _photoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         _photoBtn.layer.borderWidth = 1;
-        _photoBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _photoBtn.layer.borderColor = SSJ_BUTTON_SELECTED_BORDER_COLOR;
         _photoBtn.layer.cornerRadius = _photoBtn.height * 0.5;
     }
     return _photoBtn;

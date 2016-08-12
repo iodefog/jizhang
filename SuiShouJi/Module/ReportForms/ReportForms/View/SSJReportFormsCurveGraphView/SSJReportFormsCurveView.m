@@ -41,12 +41,10 @@
     
     // 填充颜色
     CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
-//    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"e9f4ea" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
     CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
-//    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:@"fae5e5" alpha:0.4].CGColor);
     CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:YES].CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
@@ -100,13 +98,21 @@
     }
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-    CGPoint beginPoint = [[points firstObject] CGPointValue];
-    [path moveToPoint:beginPoint];
-    [path addBezierThroughPoints:points];
+    
+    for (int i = 0; i < points.count; i ++) {
+        CGPoint point = [points[i] CGPointValue];
+        if (i == 0) {
+            [path moveToPoint:point];
+        } else {
+            CGFloat offset = (point.x - path.currentPoint.x) * 0.35;
+            CGPoint controlPoint1 = CGPointMake(path.currentPoint.x + offset, path.currentPoint.y);
+            CGPoint controlPoint2 = CGPointMake(point.x - offset, point.y);
+            [path addCurveToPoint:point controlPoint1:controlPoint1 controlPoint2:controlPoint2];
+        }
+    }
     
     if (close) {
         CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
-        
         [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
         [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
         [path closePath];

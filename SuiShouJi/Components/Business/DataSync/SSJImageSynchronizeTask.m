@@ -28,7 +28,7 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
     
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
-        //  查询当前用户没有同步的图片
+        //  查询当前用户的流水表中没有同步的图片
         FMResultSet *resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_user_charge as b where a.rid = b.ichargeid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
         if (!resultSet) {
             if (failure) {
@@ -39,7 +39,31 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
         
         while ([resultSet next]) {
             NSString *imageName = [resultSet stringForColumn:@"cimgname"];
+            if (![imageName hasSuffix:@".jpg"]) {
+                imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+            }
             NSString *syncType = [resultSet stringForColumn:@"isynctype"];
+            if (imageName.length) {
+                [imageInfoArr addObject:@{kImageNameKey:imageName,
+                                          kSyncTypeKey:syncType}];
+            }
+        }
+        
+        //  查询当前用户的顶起记账中没有同步的图片
+        resultSet = [db executeQuery:@"select a.cimgname, a.isynctype from bk_img_sync as a, bk_charge_period_config as b where a.rid = b.iconfigid and a.operatortype <> 2 and a.isyncstate = 0 and b.cuserid = ?", self.userId];
+        if (!resultSet) {
+            if (failure) {
+                failure([db lastError]);
+            }
+            return;
+        }
+        
+        while ([resultSet next]) {
+            NSString *imageName = [resultSet stringForColumn:@"cimgname"];
+            NSString *syncType = [resultSet stringForColumn:@"isynctype"];
+            if (![imageName hasSuffix:@".jpg"]) {
+                imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+            }
             if (imageName.length) {
                 [imageInfoArr addObject:@{kImageNameKey:imageName,
                                           kSyncTypeKey:syncType}];

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJBillingChargeCellItem.h"
+#import "SSJChargeMemBerItem.h"
 
 @interface SSJRecordMakingStore : NSObject
 

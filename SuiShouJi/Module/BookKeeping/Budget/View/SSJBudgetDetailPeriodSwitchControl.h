@@ -13,10 +13,10 @@
 
 @interface SSJBudgetDetailPeriodSwitchControl : UIControl
 
-@property (nonatomic) SSJBudgetPeriodType periodType;
+@property (nonatomic, strong) NSArray *titles;
 
-@property (nonatomic, strong) NSDate *lastDate;
+@property (nonatomic) NSUInteger selectedIndex;
 
-@property (nonatomic, strong) NSDate *currentDate;
+@property (nonatomic) CGFloat titleSize;
 
 @end

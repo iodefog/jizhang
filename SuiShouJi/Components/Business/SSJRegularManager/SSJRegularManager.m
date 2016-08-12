@@ -12,6 +12,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJFundAccountTable.h"
 #import "SSJDailySumChargeTable.h"
+#import "DTTimePeriod.h"
 
 static NSString *const SSJRegularManagerNotificationIdKey = @"SSJRegularManagerNotificationIdKey";
 static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManagerNotificationIdValue";
@@ -115,7 +116,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
     
     //  查询当前用户所有有效定期记账最近一次的流水记录
-    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
+    FMResultSet *resultSet = [db executeQuery:@"select max(a.cbilldate), a.thumburl, a.cbooksid, b.iconfigid, b.ibillid, b.ifunsid, b.itype, b.imoney, b.cimgurl, b.cmemo, b.cmemberids from bk_user_charge as a, bk_charge_period_config as b where a.iconfigid = b.iconfigid and a.cuserid = ? and b.cuserid = ? and b.istate = 1 and b.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime') group by b.iconfigid", userId, userId];
     if (!resultSet) {
         return NO;
     }
@@ -130,9 +131,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSString *money = [resultSet stringForColumn:@"imoney"];
         NSString *imgUrl = [resultSet stringForColumn:@"cimgurl"];
         NSString *memo = [resultSet stringForColumn:@"cmemo"];
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *thumbUrl = [resultSet stringForColumn:@"thumburl"];
         NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
+        
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
+        if (!memberIds) {
+            memberIds = @[[NSString stringWithFormat:@"%@-0", userId]];
+        }
+        CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         [configIdArr addObject:[NSString stringWithFormat:@"'%@'", configId]];
         
@@ -143,16 +150,26 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         for (NSDate *billDate in billDates) {
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksId, @(SSJSyncVersion()), writeDate]) {
+            NSString *chargeId = SSJUUID();
+            
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)", chargeId, userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksId, @(SSJSyncVersion()), writeDate]) {
                 *rollback = YES;
                 return NO;
+            }
+            
+            // 根据周期记账配置成员生成成员流水
+            for (NSString *memberId in memberIds) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeId, memberId, @(memberMoney), @(SSJSyncVersion()), writeDate, @0]) {
+                    *rollback = YES;
+                    return NO;
+                }
             }
         }
     }
     
     //  查询没有生成过流水的定期记账
     NSString *tConfigIdStr = [configIdArr componentsJoinedByString:@","];
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
+    NSMutableString *query = [NSMutableString stringWithFormat:@"select iconfigid, ibillid, ifunsid, itype, imoney, cimgurl, cmemo, cbilldate, cbooksid, cmemberids from bk_charge_period_config where cuserid = '%@' and istate = 1 and operatortype <> 2", userId];
     if (tConfigIdStr.length) {
         [query appendFormat:@" and iconfigid not in (%@)", tConfigIdStr];
     }
@@ -175,6 +192,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             NSString *imgName = [NSString stringWithFormat:@"%@-thumb", [imgUrl stringByDeletingPathExtension]];
             thumbUrl = [imgName stringByAppendingPathExtension:imgExtension];
         }
+        
         NSString *booksid = [resultSet stringForColumn:@"cbooksid"];
         
         int periodType = [resultSet intForColumn:@"itype"];
@@ -186,12 +204,27 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             billDates = [NSMutableArray array];
         }
         
+        NSArray *memberIds = [[resultSet stringForColumn:@"cmemberids"] componentsSeparatedByString:@","];
+        if (!memberIds) {
+            memberIds = @[[NSString stringWithFormat:@"%@-0", userId]];
+        }
+        CGFloat memberMoney = [money doubleValue] / memberIds.count;
         
         for (NSDate *billDate in billDates) {
+            NSString *chargeId = SSJUUID();
+            
             NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksid, @(SSJSyncVersion()), writeDate, @0]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, iconfigid, cbilldate, cmemo, cimgurl, thumburl, cbooksid, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", chargeId, userId, money, billId, funsid, configId, billDateStr, memo, imgUrl, thumbUrl, booksid, @(SSJSyncVersion()), writeDate, @0]) {
                 *rollback = YES;
                 return NO;
+            }
+            
+            // 根据周期记账配置成员生成成员流水
+            for (NSString *memberId in memberIds) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", chargeId, memberId, @(memberMoney), @(SSJSyncVersion()), writeDate, @0]) {
+                    *rollback = YES;
+                    return NO;
+                }
             }
         }
     }
@@ -208,7 +241,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 
 + (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db rollback:(BOOL *)rollback {
     //  根据周期类型、支出类型分类，查询离今天最近的一次预算
-    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
+    FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid, islastday from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
     if (!resultSet) {
         [resultSet close];
         return NO;
@@ -219,7 +252,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         NSDate *currentDate = [NSDate dateWithYear:[tDate year] month:[tDate month] day:[tDate day]];
         NSDate *recentEndDate = [NSDate dateWithString:[resultSet stringForColumn:@"max(cedate)"] formatString:@"yyyy-MM-dd"];
         
-        //  如果最近的一次预算周期等于当前周期，就忽略
+        //  如果最近的一次预算周期结束日期晚于或等于当前日期，就忽略
         if ([recentEndDate compare:currentDate] != NSOrderedAscending) {
             continue;
         }
@@ -239,14 +272,17 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         int iremind = [resultSet intForColumn:@"iremind"];
         NSString *currentDateStr = [tDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *booksId = [resultSet stringForColumn:@"cbooksid"];
+        BOOL isLastDay = [resultSet boolForColumn:@"islastday"];
         
-        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
+//        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
         
-        for (SSJDatePeriod *period in periodArr) {
-            NSString *beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            NSString *endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSArray *periodArr = [self periodsWithAccountday:recentEndDate untilDate:currentDate type:itype isLastDay:isLastDay];
+        
+        for (DTTimePeriod *period in periodArr) {
+            NSString *beginDate = [period.StartDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            NSString *endDate = [period.EndDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
-            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, currentDateStr, @(SSJSyncVersion())]) {
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, islastday, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, @(isLastDay), currentDateStr, @(SSJSyncVersion())]) {
                 *rollback = YES;
                 [resultSet close];
                 return NO;
@@ -259,21 +295,36 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (SSJDatePeriodType)periodTypeForItype:(int)itype {
-    switch (itype) {
-        case 0:
-            return SSJDatePeriodTypeWeek;
-            break;
-        case 1:
-            return SSJDatePeriodTypeMonth;
-            break;
-        case 2:
-            return SSJDatePeriodTypeYear;
-            break;
-            
-        default:
-            return SSJDatePeriodTypeUnknown;
++ (NSArray *)periodsWithAccountday:(NSDate *)accountday untilDate:(NSDate *)untilDate type:(int)type isLastDay:(BOOL)isLastDay {
+    NSMutableArray *periods = [NSMutableArray array];
+    NSDate *beginDate = [accountday dateByAddingDays:1];
+    NSDate *endDate = nil;
+    
+    if (type == 0) {
+        endDate = [accountday dateByAddingDays:7];
+    } else if (type == 1) {
+        if (isLastDay) {
+            NSDate *tmpDate = [beginDate dateByAddingMonths:1];
+            endDate = [tmpDate dateBySubtractingDays:1];
+        } else {
+            endDate = [accountday dateByAddingMonths:1];
+        }
+    } else if (type == 2) {
+        if (accountday.month == 2 && isLastDay) {
+            NSDate *tmpDate = [beginDate dateByAddingYears:1];
+            endDate = [tmpDate dateBySubtractingDays:1];
+        } else {
+            endDate = [accountday dateByAddingYears:1];
+        }
     }
+
+    [periods addObject:[DTTimePeriod timePeriodWithStartDate:beginDate endDate:endDate]];
+    
+    if ([endDate compare:untilDate] == NSOrderedAscending) {
+        [periods addObjectsFromArray:[self periodsWithAccountday:endDate untilDate:untilDate type:type isLastDay:isLastDay]];
+    }
+    
+    return periods;
 }
 
 + (NSArray *)billDatesFromDate:(NSDate *)date periodType:(int)periodType containFromDate:(BOOL)contained {
@@ -290,7 +341,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每天
         case 0: {
             NSInteger daycount = [nowDate daysFrom:date];
-            daycount ++;
+//            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
                 [billDates addObject:[date dateByAddingDays:i]];
@@ -302,7 +353,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每个工作日
         case 1: {
             NSInteger daycount = [nowDate daysFrom:date];
-            daycount ++;
+//            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
                 NSDate *billDate = [date dateByAddingDays:i];
@@ -317,7 +368,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每个周末
         case 2: {
             NSInteger daycount = [nowDate daysFrom:date];
-            daycount ++;
+//            daycount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:daycount];
             for (int i = dayInterval; i <= daycount; i ++) {
                 NSDate *billDate = [date dateByAddingDays:i];
@@ -332,7 +383,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每周
         case 3: {
             NSInteger weekCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeWeek];
-            weekCount ++;
+//            weekCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:weekCount];
             for (int i = dayInterval; i <= weekCount; i ++) {
                 NSDate *newDate = [date dateByAddingWeeks:i];
@@ -347,7 +398,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每月
         case 4: {
             NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
-            monthCount ++;
+//            monthCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
                 NSDate *newDate = [date dateByAddingMonths:i];
@@ -362,7 +413,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每月最后一天
         case 5: {
             NSInteger monthCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeMonth];
-            monthCount ++;
+//            monthCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:monthCount];
             for (int i = dayInterval; i <= monthCount; i ++) {
                 NSDate *tDate = [date dateByAddingMonths:i];
@@ -378,7 +429,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             // 每年
         case 6: {
             NSInteger yearCount = [SSJDatePeriod periodCountFromDate:date toDate:nowDate periodType:SSJDatePeriodTypeYear];
-            yearCount ++;
+//            yearCount ++;
             NSMutableArray *billDates = [NSMutableArray arrayWithCapacity:yearCount];
             for (int i = dayInterval; i <= yearCount; i ++) {
                 NSDate *newDate = [date dateByAddingYears:i];

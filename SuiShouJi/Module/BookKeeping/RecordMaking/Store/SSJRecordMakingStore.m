@@ -31,7 +31,11 @@
             item.ID = SSJUUID();
         }
         if (item.chargeImage.length && !item.chargeThumbImage.length) {
-            item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb",item.chargeImage];
+            NSString *imageName = [item.chargeImage copy];
+            if (![item.chargeImage hasSuffix:@".jpg"]) {
+                item.chargeImage = [NSString stringWithFormat:@"%@.jpg",imageName];
+            }
+            item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
         }
         SSJBillingChargeCellItem *editeItem = [[SSJBillingChargeCellItem alloc]init];
         double money = [item.money doubleValue];
@@ -51,7 +55,7 @@
             }
             //修改图片同步表
             if (item.chargeImage.length) {
-                if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,[NSString stringWithFormat:@"%@.jpg",item.chargeImage],[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+                if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,item.chargeImage,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
@@ -160,6 +164,27 @@
                     }
                 }
             }
+            //修改成员流水表
+            for (SSJChargeMemberItem *memberItem in item.membersItem) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype,iversion) values(?,?,?,0,?)",item.ID,memberItem.memberId,editeTime,@(SSJSyncVersion())]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersItem.count),item.ID]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
         }else{
             editeItem = item;
             editeItem.operatorType = 0;
@@ -178,6 +203,9 @@
                 originItem.billDate = [originResult stringForColumn:@"CBILLDATE"];
                 originItem.incomeOrExpence = [originResult intForColumn:@"ITYPE"];
                 originItem.booksId = [originResult stringForColumn:@"CBOOKSID"];
+                if (!originItem.booksId.length) {
+                    originItem.booksId = userId;
+                }
             }
             [originResult close];
             double originMoney = [originItem.money doubleValue];
@@ -192,25 +220,27 @@
                 return;
             }
             if (item.chargeImage.length) {
-                if (![db intForQuery:@"select count(1) from bk_img_sync where cimgname = ?",item.chargeImage]) {
-                    //修改图片同步表
-                    if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,[NSString stringWithFormat:@"%@.jpg",item.chargeImage],[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
+                if (![item.chargeImage isEqualToString:originItem.chargeImage]) {
+                    if (![db intForQuery:@"select count(1) from bk_img_sync where cimgname = ?",item.chargeImage]) {
+                        //修改图片同步表
+                        if (![db executeUpdate:@"insert into bk_img_sync (rid , cimgname , cwritedate , operatortype , isynctype , isyncstate) values (?,?,?,0,0,0)",item.ID,item.chargeImage,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
             }
             //删掉已经被删掉的图片
-            if (!originItem.chargeImage.length && item.chargeImage.length) {
+            if (originItem.chargeImage.length && item.chargeImage.length && ![item.chargeImage isEqualToString:originItem.chargeImage]) {
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeImage) error:nil];
                 [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeThumbImage) error:nil];
                 [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",originItem.chargeImage];
             }
-            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence) {
+            if (money != [originItem.money doubleValue] || item.incomeOrExpence != originItem.incomeOrExpence || ![item.billDate isEqualToString:originItem.billDate]) {
                 if (originItem.incomeOrExpence) {
                     //修改每日汇总表
                     if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount - ? , sumamount = sumamount + ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(originMoney),@(originMoney),editeTime,userId,originItem.booksId,originItem.billDate]) {
@@ -253,14 +283,26 @@
                     }
                 }
                 if (item.incomeOrExpence) {
-                    if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
+                    if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
+                        if (![db executeUpdate:@"update bk_dailysum_charge set expenceamount = expenceamount + ? , sumamount = sumamount - ?, cwritedate = ?  where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
                         }
-                        return;
+                    }else{
+                        if (![db executeUpdate:@"insert into bk_dailysum_charge (expenceamount,incomeamount,sumamount,cwritedate,cuserid,cbooksid,cbilldate) values (?,0,?,?,?,?,?)",@(money),@(-money),editeTime,userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        }
                     }
+
                     if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
                         *rollback = YES;
                         if (failure) {
@@ -271,14 +313,26 @@
                         return;
                     }
                 }else{
-                    if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
-                        if (failure) {
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
+                    if ([db intForQuery:@"select count(1) from bk_dailysum_charge where cuserid = ? and cbooksid = ? and cbilldate = ?",userId,item.booksId,item.billDate]) {
+                        if (![db executeUpdate:@"update bk_dailysum_charge set incomeamount = incomeamount - ? , sumamount = sumamount + ? where cuserid = ? and cbooksid = ? and cbilldate = ?",@(money),@(money),userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
                         }
-                        return;
+                    }else{
+                        if (![db executeUpdate:@"insert into bk_dailysum_charge (incomeamount,expenceamount,sumamount,cwritedate,cuserid,cbooksid,cbilldate) values (?,0,?,?,?,?,?)",@(money),@(money),editeTime,userId,item.booksId,item.billDate]) {
+                            if (failure) {
+                                SSJDispatch_main_async_safe(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        }
                     }
+
                     if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cuserid = ? and cfundid = ?",@(money),userId,item.fundId]) {
                         *rollback = YES;
                         if (failure) {
@@ -289,10 +343,51 @@
                         return;
                     }
                 }
+                if (![db executeUpdate:@"delete from bk_dailysum_charge where incomeamount = 0 and expenceamount = 0 and sumamount = 0"]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+            //修改成员流水表
+            if (![db executeUpdate:@"delete from bk_member_charge where ichargeid = ?",item.ID]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            for (SSJChargeMemberItem *memberItem in item.membersItem) {
+                if (![db executeUpdate:@"insert into bk_member_charge (ichargeid ,cmemberid ,cwritedate ,operatortype,iversion) values(?,?,?,0,?)",item.ID,memberItem.memberId,editeTime,@(SSJSyncVersion())]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+            }
+            if (![db executeUpdate:@"update bk_member_charge set imoney = ? where ichargeid = ?",@(money / item.membersItem.count),item.ID]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
             }
         }
         if (success) {
-            success(editeItem);
+            SSJDispatch_main_async_safe(^{
+                success(editeItem);
+            });
         }
     }];
 }

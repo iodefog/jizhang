@@ -22,6 +22,8 @@
 
 @property (nonatomic,strong) NSArray *booksTypeArray;
 
+@property (nonatomic,strong) NSArray *membersArray;
+
 //登录用户的accesstoken
 @property (nonatomic,strong) NSString *accesstoken;
 
@@ -34,6 +36,8 @@
 
 @property (nonatomic, copy) NSString *loginPassword;
 
+@property(nonatomic, strong) NSString *openId;
+
 @end
 
 @implementation SSJLoginService
@@ -43,6 +47,7 @@
     
     self.loginType = SSJLoginTypeNormal;
     self.showLodingIndicator = YES;
+    self.openId = @"";
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";
     NSString *strKey=@"A9FK25RHT487ULMI";
@@ -78,6 +83,7 @@
 - (void)loadLoginModelWithLoginType:(SSJLoginType)loginType openID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon{
     self.loginType = loginType;
     self.showLodingIndicator = YES;
+    self.openId = openID;
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";
     NSString *strKey=@"iwannapie?!";
@@ -125,15 +131,21 @@
             return @{@"userId":@"cuserid",
                      @"nickName":@"crealname",  // 第三方登录时，服务器返回的crealname就是用户昵称
                      @"mobileNo":@"cmobileno",
-                     @"icon":@"cicon"};
+                     @"icon":@"cicon",
+                     @"openid":@"oauthid"};
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
         self.item.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+        if (self.loginType != SSJLoginTypeNormal) {
+            self.item.mobileNo = @"";
+        }
         self.item.loginPWD = [_loginPassword ssj_md5HexDigest];
-        
+        self.item.openId = self.openId;
+
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
         self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"booksType"]];
+        self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
         self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }
 }

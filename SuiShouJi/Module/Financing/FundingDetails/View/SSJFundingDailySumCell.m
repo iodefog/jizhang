@@ -56,14 +56,53 @@
 
 -(void)setItem:(SSJFundingListDayItem *)item{
     _item = item;
-    self.dateLabel.text = _item.date;
+    NSDate *billDate = [NSDate dateWithString:_item.date formatString:@"yyyy-MM-dd"];
+    NSString *dateStr = [billDate formattedDateWithFormat:@"yyyy年MM月dd日"];
+    NSString *weekStr;
+
+    switch (billDate.weekday) {
+        case 1 : {
+            weekStr = @"星期日";
+            break;
+        }
+        case 2 : {
+            weekStr = @"星期一";
+            break;
+        }
+        case 3 : {
+            weekStr = @"星期二";
+            break;
+        }
+        case 4 : {
+            weekStr = @"星期三";
+            break;
+        }
+        case 5 : {
+            weekStr = @"星期四";
+            break;
+        }
+        case 6 : {
+            weekStr = @"星期五";
+            break;
+        }
+        case 7 : {
+            weekStr = @"星期六";
+            break;
+        }
+                
+        default : {
+            weekStr = @"";
+            break;
+        }
+    }
+    self.dateLabel.text = [NSString stringWithFormat:@"%@ %@",dateStr,weekStr];
     [self.dateLabel sizeToFit];
     double sumMoney = _item.income - _item.expenture;
     if (sumMoney > 0) {
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
-        self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",sumMoney];
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
+        self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",sumMoney];
     }else{
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
+        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",sumMoney];
     }
     [self.moneyLabel sizeToFit];

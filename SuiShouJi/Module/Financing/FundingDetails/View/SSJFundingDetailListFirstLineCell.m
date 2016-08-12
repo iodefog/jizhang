@@ -53,9 +53,9 @@
 
 -(void)setItem:(SSJFundingDetailListItem *)item{
     _item = item;
-    self.incomeLabel.text = [NSString stringWithFormat:@"收入+%.2f",_item.income];
+    self.incomeLabel.text = [NSString stringWithFormat:@"收入:%.2f",_item.income];
     [self.incomeLabel sizeToFit];
-    self.expentureLabel.text = [NSString stringWithFormat:@"支出%.2f",_item.expenture];
+    self.expentureLabel.text = [NSString stringWithFormat:@"支出:%.2f",_item.expenture];
     [self.expentureLabel sizeToFit];
 }
 

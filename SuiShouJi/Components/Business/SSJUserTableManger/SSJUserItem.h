@@ -45,6 +45,12 @@
 
 //  默认资金帐户创建状态（0:为创建 1:已创建）
 @property (nonatomic, copy) NSString *defaultFundAcctState;
+//
+//  默认资金帐户创建状态（0:为创建 1:已创建）
+@property (nonatomic, copy) NSString *defaultBooksTypeState;
+//
+//  默认资金帐户创建状态（0:为创建 1:已创建）
+@property (nonatomic, copy) NSString *defaultMemberState;
 
 //  个性签名
 @property (nonatomic, strong) NSString *signature;
@@ -62,6 +68,11 @@
 @property(nonatomic, strong) NSString *currentBooksId;
 
 @property(nonatomic, strong) NSString *loginType;
+
+@property(nonatomic, strong) NSString *openId;
+
+// 是否提示过用户设置手势密码
+@property(nonatomic, strong) NSString *remindSettingMotionPWD;
 
 + (NSDictionary *)propertyMapping;
 

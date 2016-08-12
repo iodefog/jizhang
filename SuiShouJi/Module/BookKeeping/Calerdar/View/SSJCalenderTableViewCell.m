@@ -46,7 +46,9 @@
     self.imageView.layer.cornerRadius = imageDiam * 0.5;
     self.imageView.contentScaleFactor = [UIScreen mainScreen].scale * self.imageView.image.size.width / (imageDiam * 0.75);
     
+    [self.textLabel sizeToFit];
     self.textLabel.left = self.imageView.right + 10;
+    self.textLabel.centerY = self.height / 2;
     
     self.moneyLab.right = self.contentView.width - 10;
     self.moneyLab.centerY = self.contentView.height * 0.5;
@@ -64,7 +66,8 @@
     self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
     self.textLabel.text = item.typeName;
     [self.textLabel sizeToFit];
-    self.moneyLab.text = [NSString stringWithFormat:@"%@%@", item.incomeOrExpence ? @"－" : @"＋", item.money];
+    float money = [item.money floatValue];
+    self.moneyLab.text = [NSString stringWithFormat:@"%.2f", money];
     [self.moneyLab sizeToFit];
     [self setNeedsLayout];
 }

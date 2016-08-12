@@ -58,7 +58,7 @@ const UIEdgeInsets kTextInset = {15, 5, 10, 5};
     NSString *beginDateStr = [_period.startDate formattedDateWithFormat:@"M月d日"];
     NSString *endDateStr = [_period.endDate formattedDateWithFormat:@"M月d日"];
     NSAttributedString *titleText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@-%@\n\n", beginDateStr, endDateStr] attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"]}];
-    NSMutableAttributedString *bodyText = [[NSMutableAttributedString alloc] initWithString:@"注：选择自定义时间，第一周以截止到周日计，最有一周计至截止日的最后一天，其它周则以正常7天计数。" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"929292"]}];
+    NSMutableAttributedString *bodyText = [[NSMutableAttributedString alloc] initWithString:@"注：选择自定义时间，第一周以截止到周日计，最后一周计至截止日的最后一天，其它周则以正常7天计数。" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"929292"]}];
     [bodyText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"393939"]} range:NSMakeRange(0, 2)];
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
     [text appendAttributedString:titleText];

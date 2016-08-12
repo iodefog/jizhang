@@ -55,7 +55,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CategoryCollectionViewCellIdentifier" forIndexPath:indexPath];
-    cell.item = (SSJRecordMakingCategoryItem*)[self.items objectAtIndex:indexPath.row];
+    cell.item = (SSJRecordMakingCategoryItem*)[self.items ssj_safeObjectAtIndex:indexPath.row];
     cell.EditeModel = self.EditeModel;
     if ([cell.item.categoryID isEqualToString:self.selectedId]) {
         cell.categorySelected = YES;

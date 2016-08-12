@@ -14,10 +14,10 @@
 #import "SSJUserChargePeriodConfigSyncTable.h"
 #import "SSJUserBudgetSyncTable.h"
 #import "SSJBooksTypeSyncTable.h"
+#import "SSJMemberSyncTable.h"
+#import "SSJMemberChargeSyncTable.h"
 
 #import "SSJSyncTable.h"
-#import "SSJFundAccountTable.h"
-#import "SSJDailySumChargeTable.h"
 
 #import "SSJDatabaseQueue.h"
 #import "AFNetworking.h"
@@ -26,6 +26,8 @@
 #import "SSJRegularManager.h"
 
 #import <ZipZap/ZipZap.h>
+
+#import "SSJLoginViewController+SSJCategory.h"
 
 //
 static const NSTimeInterval kTimeoutInterval = 30;
@@ -55,7 +57,9 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                                   [SSJFundInfoSyncTable class],
                                   [SSJUserChargePeriodConfigSyncTable class],
                                   [SSJUserChargeSyncTable class],
-                                  [SSJUserBudgetSyncTable class]];
+                                  [SSJUserBudgetSyncTable class],
+                                  [SSJMemberSyncTable class],
+                                  [SSJMemberChargeSyncTable class]];
     }
     return self;
 }
@@ -131,10 +135,18 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                 
                 SSJPRINT(@">>> SSJ Wanings:同步失败-----code:%ld desc:%@", (long)code, desc);
-                //                SSJPRINT(@">>> SSJ sync response data:%@", responseObject);
-                if (failure) {
-                    failure(tError);
+                
+                // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
+                if (code == -5555) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                        [SSJLoginViewController reloginIfNeeded];
+                    }], nil];
+                } else {
+                    if (failure) {
+                        failure(tError);
+                    }
                 }
+                
                 return;
             }
             
@@ -155,9 +167,19 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 
                 //  合并数据
                 if ([self mergeJsonData:jsonData error:&tError]) {
+                    
                     //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
                     [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
                     [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
+                    
+                    // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
+                    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+                        BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", self.userId], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
+                        if (!success) {
+                            *rollback = YES;
+                        }
+                    }];
+                    
                     if (success) {
                         SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
                         success();
@@ -188,11 +210,11 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 //    __block NSString *userId = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
-        //  把当前同步的版本号插入到BK_SYNC表中
-        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
-            *error = [db lastError];
-            return;
-        }
+//        //  把当前同步的版本号插入到BK_SYNC表中
+//        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
+//            *error = [db lastError];
+//            return;
+//        }
         
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
@@ -339,7 +361,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 return;
             }
             
-            if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] forUserId:self.userId inDatabase:db error:error]) {
+            if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] + 1 forUserId:self.userId inDatabase:db error:error]) {
                 updateVersionSuccess = NO;
             }
         }];

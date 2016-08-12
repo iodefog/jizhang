@@ -56,8 +56,8 @@
 -(void)getUserInfoResponse:(APIResponse *)response
 {
     NSLog(@"respons:%@",response.jsonResponse);
-    NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
-    NSString *realName = [response.jsonResponse objectForKey:@"nickname"];
+    NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"] ? : @"";
+    NSString *realName = [response.jsonResponse objectForKey:@"nickname"] ? : @"";
     NSString *openId = [self.tencentOAuth openId];
     if (self.sucessBlock) {
         self.sucessBlock(realName,icon,openId);

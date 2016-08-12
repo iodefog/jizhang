@@ -9,6 +9,8 @@
 #import "SSJThemeDetailViewController.h"
 #import "SSJDownLoadProgressButton.h"
 #import "SSJThemeImageCollectionViewCell.h"
+#import "MMDrawerController.h"
+#import "SSJThemeDownLoadCompleteService.h"
 
 @interface SSJThemeDetailViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UIScrollView *scrollView;
@@ -98,9 +100,9 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJThemeImageCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     if ([self.item.themeId isEqualToString:@"0"]) {
-        cell.imageName = [_images objectAtIndex:indexPath.item];
+        cell.imageName = [_images ssj_safeObjectAtIndex:indexPath.item];
     }else{
-        cell.imageUrl = [self.item.images objectAtIndex:indexPath.item][@"imgUrl"];
+        cell.imageUrl = [self.item.images ssj_safeObjectAtIndex:indexPath.item][@"imgUrl"];
     }
     return cell;
 }
@@ -120,16 +122,25 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
     __weak typeof(self) weakSelf = self;
     if([((UIButton *)sender).titleLabel.text isEqualToString:@"下载"] && ![[SSJThemeDownLoaderManger sharedInstance].downLoadingArr containsObject:self.item.themeId]) {
         [((UIButton *)sender) setTitle:@"" forState:UIControlStateNormal];
-        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithID:self.item.themeId url:self.item.downLoadUrl success:^{
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:self.item success:^(SSJThemeItem *item){
             [SSJThemeSetting switchToThemeID:weakSelf.item.themeId];
-            [MobClick event:@"download_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
-            [MobClick event:@"open_skin" attributes:@{@"ID":weakSelf.item.themeId,@"Name":weakSelf.item.themeTitle}];
+            [MobClick event:@"download_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            SSJThemeDownLoadCompleteService *downloadCompleteService = [[SSJThemeDownLoadCompleteService alloc]initWithDelegate:nil];
+            [downloadCompleteService downloadCompleteThemeWithThemeId:item.themeId];
+            [MobClick event:@"open_skin" attributes:@{@"ID":item.themeId,@"Name":item.themeTitle}];
+            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+            tabVC.selectedIndex = 0;
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"下载失败"];
             [weakSelf.themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
         }];
         [[SSJThemeDownLoaderManger sharedInstance] addProgressHandler:^(float progress) {
+            if (progress == 1) {
+                [weakSelf.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
+            }else{
+                [weakSelf.themeDownLoadButton.button setTitle:@"" forState:UIControlStateNormal];
+            }
             weakSelf.themeDownLoadButton.downloadProgress = progress;
         } forID:self.item.themeId];
     }else if ([((UIButton *)sender).titleLabel.text isEqualToString:@"启用"]){

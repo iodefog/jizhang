@@ -19,10 +19,10 @@ extern NSString *const SSJBudgetModelKey;
 extern NSString *const SSJBudgetCircleItemsKey;
 
 //  月预算编号key
-extern NSString *const SSJBudgetMonthIDKey;
+extern NSString *const SSJBudgetIDKey;
 
 //  月预算标题key
-extern NSString *const SSJBudgetMonthTitleKey;
+extern NSString *const SSJBudgetPeriodKey;
 
 
 @interface SSJBudgetDatabaseHelper : NSObject
@@ -60,13 +60,15 @@ extern NSString *const SSJBudgetMonthTitleKey;
                    failure:(void (^)(NSError * _Nullable error))failure;
 
 /**
- *  查询截止到当前周期的月预算id列表
+ *  查询截止到当前周期的预算id列表
  *
+ *  @param type      查询的预算类型
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success
-                                     failure:(void (^)(NSError * _Nullable error))failure;
++ (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type
+                             success:(void(^)(NSDictionary *result))success
+                             failure:(void (^)(NSError *error))failure;
 
 /**
  *  根据预算模型查询类别名称与类别id的映射表；映射表结构：@{@"1000":@"餐饮", @"1001":@"烟酒"}

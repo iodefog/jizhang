@@ -35,6 +35,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJBookKeepingHomeNoDataHeader.h"
+#import "UIViewController+SSJMotionPassword.h"
 
 BOOL kHomeNeedLoginPop;
 
@@ -80,7 +81,8 @@ BOOL kHomeNeedLoginPop;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
- //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+
+//    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 //    _hasLoad = YES;
     [self popIfNeeded];
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
@@ -123,6 +125,10 @@ BOOL kHomeNeedLoginPop;
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self ssj_remindUserToSetMotionPasswordIfNeeded];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -336,7 +342,7 @@ BOOL kHomeNeedLoginPop;
         }else{
             CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
             NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
-            SSJBillingChargeCellItem *item = [self.items objectAtIndex:currentRow];
+            SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
             NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(6, 2)] integerValue];
             NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
             if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
@@ -391,7 +397,7 @@ BOOL kHomeNeedLoginPop;
     }else{
         bookKeepingCell.isLastRowOrNot = YES;
     }
-    bookKeepingCell.item = [self.items objectAtIndex:indexPath.row];
+    bookKeepingCell.item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     bookKeepingCell.beginEditeBtnClickBlock = ^(SSJBookKeepingHomeTableViewCell *cell){
         if (weakSelf.selectIndex == nil) {
@@ -499,7 +505,11 @@ BOOL kHomeNeedLoginPop;
         _budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
             if (model == nil) {
                 SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
-                [weakSelf.navigationController pushViewController:budgetEditVC animated:YES];
+                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc] init];
+                NSMutableArray *viewControllers = [weakSelf.navigationController.viewControllers mutableCopy];
+                [viewControllers addObject:budgetListVC];
+                [viewControllers addObject:budgetEditVC];
+                [weakSelf.navigationController setViewControllers:viewControllers animated:YES];
             }else{
                 SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
                 [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
@@ -592,15 +602,20 @@ BOOL kHomeNeedLoginPop;
     __weak typeof(self) weakSelf = self;
     if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastLoggedUserItemKey] && !SSJIsUserLogined() && kHomeNeedLoginPop) {
         kHomeNeedLoginPop = NO;
-        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
-        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
-            [alert dismiss];
-        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//        NSAttributedString *massage = [[NSAttributedString alloc]initWithString:@"当前未登录，请登录后再去记账吧~" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}];
+//        SSJStartUpgradeAlertView *alert = [[SSJStartUpgradeAlertView alloc]initWithTitle:@"温馨提示" message:massage cancelButtonTitle:@"关闭" sureButtonTitle:@"立即登录" cancelButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            [alert dismiss];
+//        } sureButtonClickHandler:^(SSJStartUpgradeAlertView * _Nonnull alert) {
+//            SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
+//            [weakSelf.navigationController pushViewController:loginVc animated:YES];
+//            [alert dismiss];
+//        }];
+//        [alert show];
+        
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"当前未登录，请登录后再去记账吧~" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:NULL], [SSJAlertViewAction actionWithTitle:@"立即登录" handler:^(SSJAlertViewAction * _Nonnull action) {
             SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
             [weakSelf.navigationController pushViewController:loginVc animated:YES];
-            [alert dismiss];
-        }];
-        [alert show];
+        }], nil];
     }
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveLoginOrRegistKey]) {
         NSDate *currentDate = [NSDate date];

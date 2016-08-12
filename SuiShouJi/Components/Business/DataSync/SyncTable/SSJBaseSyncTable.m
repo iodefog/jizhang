@@ -88,7 +88,7 @@
         return NO;
     }
     
-    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION > %lld and CUSERID = '%@'", [self tableName], newVersion, version + 1, userId];
+    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION = %lld and CUSERID = '%@'", [self tableName], newVersion, version + 2, userId];
     NSString *additionalCondition = [self updateSyncVersionAdditionalCondition];
     if (additionalCondition.length) {
         [update appendFormat:@" and %@", additionalCondition];

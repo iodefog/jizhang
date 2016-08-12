@@ -10,6 +10,7 @@
 
 @interface SSJMineHomeTabelviewCell()
 @property (nonatomic,strong) UILabel *titleLabel;
+@property(nonatomic, strong) UILabel *subTitleLabel;
 @end
 
 @implementation SSJMineHomeTabelviewCell
@@ -17,6 +18,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLabel];
+        [self.contentView addSubview:self.subTitleLabel];
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.portraitImage];
     }
@@ -27,6 +29,8 @@
     [super layoutSubviews];
     self.titleLabel.left = 10;
     self.titleLabel.centerY = self.height / 2;
+    self.subTitleLabel.left = 10;
+    self.subTitleLabel.centerY = self.height / 2;
     self.detailLabel.width = 200;
     self.detailLabel.centerY = self.height / 2;
     if (self.contentView.width == self.width) {
@@ -65,6 +69,15 @@
     return _portraitImage;
 }
 
+-(UILabel *)subTitleLabel{
+    if (!_subTitleLabel) {
+        _subTitleLabel = [[UILabel alloc]init];
+        _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _subTitleLabel.font = [UIFont systemFontOfSize:13];
+    }
+    return _subTitleLabel;
+}
+
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     _titleLabel.text = _cellTitle;
@@ -76,6 +89,20 @@
     self.detailLabel.text = _cellDetail;
     [self.detailLabel sizeToFit];
 }
+
+-(void)setCellSubTitle:(NSString *)cellSubTitle{
+    _cellSubTitle = cellSubTitle;
+    self.subTitleLabel.text = _cellSubTitle;
+    [self.subTitleLabel sizeToFit];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged{
+    [super updateCellAppearanceAfterThemeChanged];
+    self.titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

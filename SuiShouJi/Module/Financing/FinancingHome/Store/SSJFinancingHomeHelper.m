@@ -8,6 +8,7 @@
 
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 @implementation SSJFinancingHomeHelper
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
@@ -40,7 +41,7 @@
         }
         if ([orderArr containsObject:@(0)]) {
             for (int i = 0; i < fundingList.count; i ++) {
-                SSJFinancingHomeitem *item = [fundingList objectAtIndex:i];
+                SSJFinancingHomeitem *item = [fundingList ssj_safeObjectAtIndex:i];
                 item.fundingOrder = i + 1;
             }
         }
@@ -106,12 +107,13 @@
                 [db executeUpdate:sql];
             }
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     }];
 }
 
 + (void)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",item.fundingID,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion())];
+        [db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
     }];
 }
 @end

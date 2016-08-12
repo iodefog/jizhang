@@ -60,4 +60,19 @@ extern NSString *const SSJReportFormsCurveModelEndDateKey;
                                success:(void(^)(NSDictionary *result))success
                                failure:(void (^)(NSError *error))failure;
 
+/**
+ *  查询某个时间段内有效的收入／支出成员流水统计
+ *
+ *  @param type         查询的类型
+ *  @param startDate    开始时间
+ *  @param endDate      结束时间
+ *  @param success      查询成功的回调
+ *  @param failure      查询失败的回调
+ */
++ (void)queryForMemberChargeWithType:(SSJBillType)type
+                           startDate:(NSDate *)startDate
+                             endDate:(NSDate *)endDate
+                             success:(void (^)(NSArray <SSJReportFormsItem *> *result))success
+                             failure:(void (^)(NSError *error))failure;
+
 @end

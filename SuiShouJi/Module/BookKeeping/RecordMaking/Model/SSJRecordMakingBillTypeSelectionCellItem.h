@@ -18,6 +18,8 @@
 
 @property (nonatomic, copy) NSString *ID;
 
+@property (nonatomic) int order;
+
 @property (nonatomic) BOOL showDeleteBtn;
 
 @property (nonatomic) BOOL selected;
@@ -31,6 +33,7 @@
 + (instancetype)itemWithTitle:(NSString *)title
                     imageName:(NSString *)imageName
                    colorValue:(NSString *)colorValue
-                           ID:(NSString *)ID;
+                           ID:(NSString *)ID
+                        order:(int)order;
 
 @end

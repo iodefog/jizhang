@@ -1226,7 +1226,7 @@
 		<dict>
 			<key>children</key>
 			<array>
-				<string>5D3D9B0CC6F310ED5CD74C21EC701A2C</string>
+				<string>7371A7E8632C5E9D06CD9AF481B6A608</string>
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
@@ -5247,19 +5247,6 @@
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
-		<key>5D3D9B0CC6F310ED5CD74C21EC701A2C</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>9FD5A1A2ED8D63FA53152410FE7EEE78</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
 		<key>5D551922510EE22913FB510C343D4606</key>
 		<dict>
 			<key>fileRef</key>
@@ -6510,6 +6497,19 @@
 			<string>PBXGroup</string>
 			<key>name</key>
 			<string>Reachability</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
+		</dict>
+		<key>7371A7E8632C5E9D06CD9AF481B6A608</key>
+		<dict>
+			<key>children</key>
+			<array>
+				<string>F9800145FB7D3E12A24A617D59E58FB7</string>
+			</array>
+			<key>isa</key>
+			<string>PBXGroup</string>
+			<key>name</key>
+			<string>Frameworks</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -8758,19 +8758,6 @@
 			<string>LWApiConfig.h</string>
 			<key>path</key>
 			<string>Umeng_SDK_Social_iOS_ARM64_5.2.1/UMSocial_Sdk_Extra_Frameworks/LaiWang/LWApiConfig.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>9FD5A1A2ED8D63FA53152410FE7EEE78</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
-			<key>name</key>
-			<string>UMMobClick.framework</string>
-			<key>path</key>
-			<string>umsdk_IOS_analyics_no-idfa_v4.0.5/UMMobClick.framework</string>
 			<key>sourceTree</key>
 			<string>&lt;group&gt;</string>
 		</dict>
@@ -14038,6 +14025,19 @@
 			<string>0C10F836FA026228867292007319A144</string>
 			<key>isa</key>
 			<string>PBXBuildFile</string>
+		</dict>
+		<key>F9800145FB7D3E12A24A617D59E58FB7</key>
+		<dict>
+			<key>isa</key>
+			<string>PBXFileReference</string>
+			<key>lastKnownFileType</key>
+			<string>wrapper.framework</string>
+			<key>name</key>
+			<string>UMMobClick.framework</string>
+			<key>path</key>
+			<string>umsdk_IOS_analyics_no-idfa_v4.1.1/UMMobClick.framework</string>
+			<key>sourceTree</key>
+			<string>&lt;group&gt;</string>
 		</dict>
 		<key>F99C75095DC2C6DD4ACE64D7BA3EB3E6</key>
 		<dict>

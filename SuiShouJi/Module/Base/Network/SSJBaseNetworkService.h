@@ -72,11 +72,6 @@ typedef NS_ENUM(NSUInteger, SSJBaseNetworkServiceHttpMethod) {
 @property (nonatomic) BOOL showMessageIfErrorOccured;
 
 /**
- *  如果token无效，是否显示登录界面，默认为YES
- */
-@property (nonatomic) BOOL showLoginControllerIfTokenInvalid;
-
-/**
  *  是否成功加载过，不区分成功、失败
  *
  *  @return (BOOL)

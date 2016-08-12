@@ -15,8 +15,8 @@
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
-NSString *const SSJBudgetMonthIDKey = @"SSJBudgetMonthIDKey";
-NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
+NSString *const SSJBudgetIDKey = @"SSJBudgetIDKey";
+NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
 
 @implementation SSJBudgetDatabaseHelper
 
@@ -29,7 +29,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *budgetList = [NSMutableArray array];
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ?", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ?", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -78,7 +78,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid from bk_user_budget where ibid = ? and operatortype <> 2", ID];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -163,7 +163,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     }];
 }
 
-+ (void)queryForMonthBudgetIdListWithSuccess:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:userid];
     if (!userItem.currentBooksId.length) {
@@ -172,10 +172,9 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        SSJDatePeriod *currentPeriod = [SSJDatePeriod datePeriodWithPeriodType:SSJDatePeriodTypeMonth date:[NSDate date]];
-        NSString *currentPeriodBeginDate = [currentPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate from bk_user_budget where cuserid = ? and itype = 1 and operatortype <> 2 and csdate <= ? and cbooksid = ?", userid, currentPeriodBeginDate, userItem.currentBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = ? and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, @(type), today, userItem.currentBooksId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -188,16 +187,35 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd";
         
-        NSMutableDictionary *result = [NSMutableDictionary dictionary];
+        NSMutableArray *budgetIDs = [NSMutableArray array];
+        NSMutableArray *budgetPeriods = [NSMutableArray array];
+        
+        NSString *dateFormat = nil;
+        
+        switch (type) {
+            case SSJBudgetPeriodTypeWeek:
+            case SSJBudgetPeriodTypeMonth:
+                dateFormat = @"M.d";
+                break;
+                
+            case SSJBudgetPeriodTypeYear:
+                dateFormat = @"yyyy.M.d";
+                break;
+        }
+        
         while ([resultSet next]) {
             NSString *budgetId = [resultSet stringForColumn:@"ibid"];
-            NSString *beginDateStr = [resultSet stringForColumn:@"csdate"];
-            [result setObject:budgetId forKey:beginDateStr];
+            NSString *beginDateStr = [[resultSet stringForColumn:@"csdate"] ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:dateFormat];
+            NSString *endDateStr = [[resultSet stringForColumn:@"cedate"] ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:dateFormat];
+            
+            [budgetIDs addObject:budgetId ?: @""];
+            [budgetPeriods addObject:[NSString stringWithFormat:@"%@~%@", beginDateStr ?: @"", endDateStr ?: @""]];
         }
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success([result copy]);
+                success(@{SSJBudgetIDKey:budgetIDs,
+                          SSJBudgetPeriodKey:budgetPeriods});
             });
         }
     }];
@@ -268,7 +286,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     
     // 目前先吧收支id判断去掉，以后增加用户自选支出类别时再加上
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate = ? and cbooksid = ?", SSJUSERID(), model.ID, @(model.type), model.beginDate, model.booksId];
+        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate <= datetime('now', 'localtime') and cedate >= datetime('now', 'localtime') and cbooksid = ?", SSJUSERID(), model.ID, @(model.type), model.booksId];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(isConficted);
@@ -297,7 +315,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
             //  如果此记录没有被删除，就保存
-            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, ihasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1, cbooksid = :booksId where ibid = :ID and operatortype <> 2" withParameterDictionary:parametersInfo]) {
+            if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, ihasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1, cbooksid = :booksId, islastday = :isLastDay where ibid = :ID and operatortype <> 2" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -317,7 +335,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
             [parametersInfo setObject:[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             [parametersInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
             
-            if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cwritedate, iversion, operatortype, cbooksid) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :isAlreadyReminded, :cwritedate, :iversion, 0, :booksId)" withParameterDictionary:parametersInfo]) {
+            if ([db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cwritedate, iversion, operatortype, cbooksid, islastday) values (:ID, :userId, :type, :budgetMoney, :remindMoney, :beginDate, :endDate, :isAutoContinued, :ccadddate, :cbilltype, :isRemind, :isAlreadyReminded, :cwritedate, :iversion, 0, :booksId, :isLastDay)" withParameterDictionary:parametersInfo]) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
                         success();
@@ -355,6 +373,7 @@ NSString *const SSJBudgetMonthTitleKey = @"SSJBudgetMonthTitleKey";
     budgetModel.isAutoContinued = [set boolForColumn:@"istate"];
     budgetModel.isRemind = [set boolForColumn:@"iremind"];
     budgetModel.isAlreadyReminded = [set boolForColumn:@"ihasremind"];
+    budgetModel.isLastDay = [set boolForColumn:@"islastday"];
     
     // 当前账本所有有效支出流水的总金额
     budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];

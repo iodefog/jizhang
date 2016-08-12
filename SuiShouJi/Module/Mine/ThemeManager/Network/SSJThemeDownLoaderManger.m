@@ -68,33 +68,32 @@ static id _instance;
     return self;
 }
 
-- (void)downloadThemeWithID:(NSString *)ID
-                        url:(NSString *)urlStr
-                    success:(void(^)())success
+- (void)downloadThemeWithItem:(SSJThemeItem *)item
+                    success:(void(^)(SSJThemeItem *item))success
                     failure:(void (^)(NSError *error))failure {
     
-    if (![urlStr hasPrefix:@"http"]) {
-        urlStr = [NSString stringWithFormat:@"http://%@",urlStr];
+    if (![item.downLoadUrl hasPrefix:@"http"]) {
+        item.downLoadUrl = [NSString stringWithFormat:@"http://%@",item.downLoadUrl];
     }
-    NSURL *URL = [NSURL URLWithString:urlStr];
+    NSURL *URL = [NSURL URLWithString:item.downLoadUrl];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
     
     NSProgress *tProgress = nil;
     
-    [self.downLoadingArr addObject:ID];
+    [self.downLoadingArr addObject:item.themeId];
     
     NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:&tProgress destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         if (![[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] withIntermediateDirectories:YES attributes:nil error:nil];
+            [[NSFileManager defaultManager] createDirectoryAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:item.themeId] withIntermediateDirectories:YES attributes:nil error:nil];
         }
         NSString *path = [[NSString ssj_themeDirectory] stringByAppendingPathComponent:response.suggestedFilename];
         NSURL *fileURL = [NSURL fileURLWithPath:path];
         return fileURL;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        [_blockerMapping removeObjectForKey:ID];
+        [_blockerMapping removeObjectForKey:item.themeId];
         
         if (error) {
-            [self.downLoadingArr removeObject:ID];
+            [self.downLoadingArr removeObject:item.themeId];
             SSJPRINT(@"%@",[error localizedDescription]);
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -104,7 +103,7 @@ static id _instance;
             return;
         }
         
-        [self.downLoadingArr removeObject:ID];
+        [self.downLoadingArr removeObject:item.themeId];
         [tProgress removeObserver:self forKeyPath:@"fractionCompleted"];
         
         NSError *tError = nil;
@@ -124,7 +123,7 @@ static id _instance;
         }
         
         // 解析主题配置文件，
-        NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:ID] stringByAppendingPathComponent:@"themeSettings.json"];
+        NSString *themeSettingPath = [[[NSString ssj_themeDirectory] stringByAppendingPathComponent:item.themeId] stringByAppendingPathComponent:@"themeSettings.json"];
         NSData *jsonData = [NSData dataWithContentsOfFile:themeSettingPath];
         
         if (!jsonData) {
@@ -153,7 +152,7 @@ static id _instance;
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success();
+                success(item);
             });
         }
     }];
@@ -162,12 +161,12 @@ static id _instance;
 //        
 //    }];
     
-    [tProgress setUserInfoObject:ID forKey:@"ID"];
+    [tProgress setUserInfoObject:item.themeId forKey:@"ID"];
     [tProgress addObserver:self forKeyPath:@"fractionCompleted" options:NSKeyValueObservingOptionNew context:NULL];
     
     SSJThemeDownLoaderProgressBlocker *progressBlocker = [[SSJThemeDownLoaderProgressBlocker alloc] init];
-    progressBlocker.ID = ID;
-    [_blockerMapping setObject:progressBlocker forKey:ID];
+    progressBlocker.ID = item.themeId;
+    [_blockerMapping setObject:progressBlocker forKey:item.themeId];
     [downloadTask resume];
 }
 

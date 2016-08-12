@@ -27,9 +27,9 @@ PODS:
   - FMDB/standard (2.6.2)
   - iOS-WebP (0.4):
     - libwebp (~> 0.4.2)
-  - JSPatch (1.0):
-    - JSPatch/Core (= 1.0)
-  - JSPatch/Core (1.0)
+  - JSPatch (1.1):
+    - JSPatch/Core (= 1.1)
+  - JSPatch/Core (1.1)
   - libwebp (0.4.4):
     - libwebp/core (= 0.4.4)
     - libwebp/dec (= 0.4.4)
@@ -55,7 +55,7 @@ PODS:
     - libwebp/core
   - libwebp/webp (0.4.4)
   - LxThroughPointsBezier (1.0.0)
-  - MJExtension (3.0.10)
+  - MJExtension (3.0.13)
   - MMDrawerController (0.5.7):
     - MMDrawerController/Core (= 0.5.7)
     - MMDrawerController/MMDrawerBarButtonItem (= 0.5.7)
@@ -74,7 +74,7 @@ PODS:
   - SDWebImage/WebP (3.7.6):
     - libwebp
     - SDWebImage/Core
-  - UMengAnalytics-NO-IDFA (4.0.5)
+  - UMengAnalytics-NO-IDFA (4.1.1)
   - UMengSocialCOM (5.2.1)
   - YYKeyboardManager (1.0.1)
   - YYText (1.0.5)
@@ -104,13 +104,13 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   iOS-WebP: 436d3c506b7587bdef926d1d1c76f8dbf3905edc
-  JSPatch: c689ea4dde17441f2f4a95d40dfedb8900c20099
+  JSPatch: ade285ad1d8f06146ed6054a39cef87509453299
   libwebp: 7d74f1ab887df77f23493ce115c9424fad5411b5
   LxThroughPointsBezier: fdebe18dd4ddab9406d9827db77a078b4738b00f
-  MJExtension: d86aacb740c87519d20e3cca55b6fa4be6cc7548
+  MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   SDWebImage: c325cf02c30337336b95beff20a13df489ec0ec9
-  UMengAnalytics-NO-IDFA: 965a219b05475ff2a4c09a164139a27bbaa0e25b
+  UMengAnalytics-NO-IDFA: 1064992c1b7aaa22823179c0b33a664813fd7a85
   UMengSocialCOM: 074c135ce349aa4c8848d3fb8458757bcb6ffb67
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
   YYText: ac09660c9ccd9b817f409a20caa6f5587444d2ae

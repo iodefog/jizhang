@@ -104,16 +104,30 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 #pragma mark - Private
 - (void)reloadData {
-    [self.view ssj_showLoadingIndicator];
-    [SSJBillingChargeHelper queryDataWithBillTypeID:_billTypeID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
-        [self.view ssj_hideLoadingIndicator];
-        self.datas = data;
-        [self.tableView reloadData];
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-    }];
+    if (_isMemberCharge) {
+        [self.view ssj_showLoadingIndicator];
+        [SSJBillingChargeHelper queryMemberChargeWithMemberID:_ID inPeriod:_period isPayment:_isPayment success:^(NSArray<NSDictionary *> *data) {
+            [self.view ssj_hideLoadingIndicator];
+            self.datas = data;
+            [self.tableView reloadData];
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        }];
+        
+    } else {
+        [self.view ssj_showLoadingIndicator];
+        [SSJBillingChargeHelper queryDataWithBillTypeID:_ID inPeriod:_period success:^(NSArray<NSDictionary *> *data) {
+            [self.view ssj_hideLoadingIndicator];
+            self.datas = data;
+            [self.tableView reloadData];
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+            NSString *message = [error localizedDescription].length ? [error localizedDescription] : SSJ_ERROR_MESSAGE;
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+        }];
+    }
 }
 
 - (void)reloadDataAfterSync {
@@ -127,7 +141,9 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        if (![[SSJThemeSetting currentThemeModel].ID isEqualToString:@"0"]) {
+            _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
+        }
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.rowHeight = 90;
         _tableView.sectionHeaderHeight = 40;

@@ -36,15 +36,15 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         
         self.brokenLineLayer.strokeColor = [UIColor ssj_colorWithHex:self.item.borderColorValue].CGColor;
         [self.layer addSublayer:self.brokenLineLayer];
-        [self addSubview:self.imageView];
+        [self addSubview:[self additionView]];
         [self addSubview:self.textLabel];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    self.imageView.center = [self imageCenterForItem:self.item];
-    self.textLabel.center = [self labelCenterForItem:self.item];
+    [self additionView].center = [self imageCenterForItem:self.item];
+    _textLabel.center = [self labelCenterForItem:self.item];
 }
 
 - (BOOL)testOverlap:(SSJPercentCircleAdditionNode *)view {
@@ -106,16 +106,16 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 - (void)showImageView {
     [UIView animateKeyframesWithDuration:0.36 delay:0 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
         [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.25 animations:^{
-            self.imageView.transform = CGAffineTransformMakeScale(0.7, 0.7);
+            [self additionView].transform = CGAffineTransformMakeScale(0.7, 0.7);
         }];
         [UIView addKeyframeWithRelativeStartTime:0.25 relativeDuration:0.25 animations:^{
-            self.imageView.transform = CGAffineTransformMakeScale(0.9, 0.9);
+            [self additionView].transform = CGAffineTransformMakeScale(0.9, 0.9);
         }];
         [UIView addKeyframeWithRelativeStartTime:0.5 relativeDuration:0.25 animations:^{
-            self.imageView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+            [self additionView].transform = CGAffineTransformMakeScale(1.2, 1.2);
         }];
         [UIView addKeyframeWithRelativeStartTime:0.75 relativeDuration:0.25 animations:^{
-            self.imageView.transform = CGAffineTransformMakeScale(1, 1);
+            [self additionView].transform = CGAffineTransformMakeScale(1, 1);
         }];
     } completion:^(BOOL finished) {
         [self showTextLabel];
@@ -123,8 +123,8 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 - (void)showTextLabel {
-    [UIView transitionWithView:self.textLabel duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        self.textLabel.hidden = NO;
+    [UIView transitionWithView:_textLabel duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        _textLabel.hidden = NO;
     } completion:^(BOOL finished) {
         if (self.completion) {
             self.completion();
@@ -234,6 +234,14 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     }
     
     return labelCenter;
+}
+
+- (UIView *)additionView {
+    if (self.item.customView) {
+        return self.item.customView;
+    } else {
+        return self.imageView;
+    }
 }
 
 #pragma mark - Getter

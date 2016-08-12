@@ -8,7 +8,9 @@
 
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetListViewController.h"
+#import "SSJBookKeepingHomeViewController.h"
 #import "SSJBudgetEditPeriodSelectionView.h"
+#import "SSJBudgetEditAccountDaySelectionView.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJBudgetEditLabelCell.h"
 #import "SSJBudgetEditTextFieldCell.h"
@@ -30,6 +32,7 @@ static NSString *const kBudgetMoneyTitle = @"金额";
 static NSString *const kBudgetRemindTitle = @"预算提醒";
 static NSString *const kBudgetRemindScaleTitle = @"预算占比提醒";
 static NSString *const kBudgetPeriodTitle = @"周期";
+static NSString *const kAccountDayTitle = @"结算日";
 
 //  预算金额输入框
 static const NSInteger kBudgetMoneyTextFieldTag = 1000;
@@ -47,9 +50,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 @property (nonatomic, strong) SSJBudgetEditPeriodSelectionView *periodSelectionView;
 
+@property (nonatomic, strong) SSJBudgetEditAccountDaySelectionView *accountDaySelectionView;
+
 @property (nonatomic, strong) NSArray *cellTitles;
 
 @property (nonatomic, strong) NSArray *budgetTypeList;
+
+@property (nonatomic, strong) NSArray *budgetList;
 
 @property (nonatomic, strong) NSDictionary *budgetTypeMap;
 
@@ -63,7 +70,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 @implementation SSJBudgetEditViewController
 
 #pragma mark - Lifecycle
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
@@ -83,7 +89,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.navigationItem.title = @"添加预算";
     }
     
-    [self queryBillTypeList];
+    [self queryData];
     [self.view addSubview:self.tableView];
 }
 
@@ -128,8 +134,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     } else if ([cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
         //  预算占比提醒
         return 62;
-    } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
-        //  周期
+    } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]
+               || [cellTitle isEqualToString:kAccountDayTitle]) {
+        //  周期、结算日
         return 54;
     } else {
         return 0;
@@ -150,6 +157,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     NSString *title = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kBudgetPeriodTitle]) {
         [self.periodSelectionView show];
+    } else if ([title isEqualToString:kAccountDayTitle]) {
+        [self.accountDaySelectionView show];
     }
 }
 
@@ -202,6 +211,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 #pragma mark - Event
+- (void)goBackAction {
+    // 如果没有预算直接返回首页
+    if (_budgetList.count == 0) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } else {
+        [super goBackAction];
+    }
+}
+
 - (void)deleteBudgetAction {
     __weak typeof(self) weakSelf = self;
     SSJAlertViewAction *cancel = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
@@ -245,6 +263,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.beginDate = [period.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.endDate = [period.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     self.model.type = self.periodSelectionView.periodType;
+    self.accountDaySelectionView.periodType = self.periodSelectionView.periodType;
     
     [self.tableView reloadData];
 }
@@ -264,6 +283,21 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 [self syncIfNeeded];
                 [self updateSaveButtonState:NO];
                 [self ssj_backOffAction];
+                
+                switch (self.model.type) {
+                    case SSJBudgetPeriodTypeWeek:
+                        [MobClick event:@"budget_cycle_week"];
+                        break;
+                        
+                    case SSJBudgetPeriodTypeMonth:
+                        [MobClick event:@"budget_cycle_month"];
+                        break;
+                        
+                    case SSJBudgetPeriodTypeYear:
+                        [MobClick event:@"budget_cycle_year"];
+                        break;
+                }
+                
             } failure:^(NSError * _Nonnull error) {
                 [self updateSaveButtonState:NO];
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
@@ -278,6 +312,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 #pragma mark - Private
+- (void)queryData {
+    [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+        _budgetList = result;
+        [self queryBillTypeList];
+    } failure:^(NSError * _Nullable error) {
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
+}
+
 - (void)queryBillTypeList {
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
@@ -290,15 +333,18 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         }
         
         [self updateCellTitles];
-        
         _bookName = [SSJBudgetDatabaseHelper queryBookNameForBookId:self.model.booksId];
-        
         [self.tableView reloadData];
         if (self.tableView.tableFooterView != self.footerView) {
             self.tableView.tableFooterView = self.footerView;
         }
         
         self.periodSelectionView.periodType = self.model.type;
+        
+        self.accountDaySelectionView.periodType = self.model.type;
+        self.accountDaySelectionView.endDate = [NSDate dateWithString:self.model.endDate formatString:@"yyyy-MM-dd"];
+        self.accountDaySelectionView.endOfMonth = self.model.isLastDay;
+        
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
@@ -322,13 +368,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.isAutoContinued = YES;
     self.model.isRemind = YES;
     self.model.isAlreadyReminded = NO;
+    self.model.isLastDay = YES;
 }
 
 - (NSString *)reuseCellIdForIndexPath:(NSIndexPath *)indexPath {
     NSString *cellTitle = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([cellTitle isEqualToString:kBudgetTypeTitle]
         || [cellTitle isEqualToString:kBudgetPeriodTitle]
-        || [cellTitle isEqualToString:kBooksTypeTitle]) {
+        || [cellTitle isEqualToString:kBooksTypeTitle]
+        || [cellTitle isEqualToString:kAccountDayTitle]) {
         return kBudgetEditLabelCellId;
     } else if ([cellTitle isEqualToString:kBudgetMoneyTitle]
                || [cellTitle isEqualToString:kBudgetRemindScaleTitle]) {
@@ -422,6 +470,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
         budgetScaleCell.textField.rightView = percentLab;
         budgetScaleCell.textField.rightViewMode = UITextFieldViewModeAlways;
+        
     } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
         //  周期
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
@@ -430,14 +479,70 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+        
+    } else if ([cellTitle isEqualToString:kAccountDayTitle]) {
+        //  结算日
+        SSJBudgetEditLabelCell *budgetPeriodCell = cell;
+        budgetPeriodCell.subtitleLab.text = [self accountday];
+        budgetPeriodCell.detailTextLabel.text = nil;
+        [budgetPeriodCell.detailTextLabel sizeToFit];
+        budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+    }
+}
+
+- (NSString *)accountday {
+    // 这里没有判断一种情况，如果是2月份，并且只有28天，选择的截止日是28日的话，如何区分是每月28号还是每月最后一天
+    NSString *accountday = nil;
+    NSDate *endDate = [NSDate dateWithString:_model.endDate formatString:@"yyyy-MM-dd"];
+    
+    switch (_model.type) {
+        case SSJBudgetPeriodTypeWeek:
+            accountday = [self stringForWeekday:endDate.weekday];
+            break;
+            
+        case SSJBudgetPeriodTypeMonth:
+            if (_model.isLastDay || endDate.day > 28) {
+                accountday = @"每月最后一天";
+            } else {
+                accountday = [NSString stringWithFormat:@"每月%d日", (int)endDate.day];
+            }
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            if (endDate.month == 2) {
+                if (_model.isLastDay || endDate.day > 28) {
+                    accountday = @"每年2月末";
+                } else {
+                    accountday = [NSString stringWithFormat:@"每年2月%d日", (int)endDate.day];
+                }
+            } else {
+                accountday = [NSString stringWithFormat:@"每年%@", [endDate formattedDateWithFormat:@"M月d日"]];
+            }
+            break;
+    }
+    
+    return accountday;
+}
+
+- (NSString *)stringForWeekday:(NSInteger)weekday {
+    switch (weekday) {
+        case 1:     return @"每周日";
+        case 2:     return @"每周一";
+        case 3:     return @"每周二";
+        case 4:     return @"每周三";
+        case 5:     return @"每周四";
+        case 6:     return @"每周五";
+        case 7:     return @"每周六";
+        default:    return @"";
     }
 }
 
 - (void)updateCellTitles {
     if (self.model.isRemind) {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle]];
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
     } else {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle]];
+        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
     }
 }
 
@@ -506,11 +611,17 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper deleteBudgetWithID:self.model.ID success:^{
         [self.view ssj_hideLoadingIndicator];
-        //  删除成功后自动同步
+        
         [self syncIfNeeded];
-        SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
-        if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {
-            [self.navigationController popToViewController:budgetListVC animated:YES];
+        
+        // 如果删除后没有预算直接返回首页
+        if (_budgetList.count == 1) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        } else {
+            SSJBudgetListViewController *budgetListVC = [self ssj_previousViewControllerBySubtractingIndex:2];
+            if ([budgetListVC isKindOfClass:[SSJBudgetListViewController class]]) {
+                [self.navigationController popToViewController:budgetListVC animated:YES];
+            }
         }
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
@@ -569,6 +680,21 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [_periodSelectionView addTarget:self action:@selector(periodSelectionViewAction) forControlEvents:UIControlEventValueChanged];
     }
     return _periodSelectionView;
+}
+
+- (SSJBudgetEditAccountDaySelectionView *)accountDaySelectionView {
+    if (!_accountDaySelectionView) {
+        __weak typeof(self) wself = self;
+        _accountDaySelectionView = [[SSJBudgetEditAccountDaySelectionView alloc] initWithFrame:CGRectMake(0, 0, self.viewIfLoaded.width, 200)];
+        _accountDaySelectionView.periodType = self.model.type;
+        _accountDaySelectionView.sureAction = ^(SSJBudgetEditAccountDaySelectionView *view) {
+            wself.model.beginDate = [view.beginDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            wself.model.endDate = [view.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            wself.model.isLastDay = view.endOfMonth;
+            [wself.tableView reloadData];
+        };
+    }
+    return _accountDaySelectionView;
 }
 
 @end

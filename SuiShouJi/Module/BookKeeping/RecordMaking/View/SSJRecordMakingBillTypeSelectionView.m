@@ -165,7 +165,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     if (items) {
         [_internalItems addObjectsFromArray:items];
     }
-    [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@""]];
+    [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@"" order:0]];
     [_collectionView reloadData];
 }
 
@@ -197,7 +197,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _collectionView.alwaysBounceVertical = YES;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.showsVerticalScrollIndicator = NO;
-        _collectionView.backgroundColor = nil;
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [_collectionView registerClass:[SSJRecordMakingBillTypeSelectionCell class] forCellWithReuseIdentifier:kCellId];
         _collectionView.exchangeCellRegion = UIEdgeInsetsMake(11, (kCellWidth - 52) * 0.5, 25, (kCellWidth - 52) * 0.5);
     }

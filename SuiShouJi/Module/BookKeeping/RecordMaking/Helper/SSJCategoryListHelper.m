@@ -19,17 +19,19 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *categoryList =[NSMutableArray array];
-        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId];
+        NSString *sql = [NSString stringWithFormat:@"SELECT A.CNAME , A.CCOLOR , A.CCOIN , B.CWRITEDATE , A.ID, B.IORDER FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE B.ISTATE = 1 AND A.ITYPE = %d AND A.ID = B.CBILLID AND B.CUSERID = '%@' AND A.CPARENT is null ORDER BY B.IORDER, B.CWRITEDATE , A.ID",incomeOrExpenture,userId];
             FMResultSet *result = [db executeQuery:sql];
             while ([result next]) {
                 NSString *categoryTitle = [result stringForColumn:@"CNAME"];
                 NSString *categoryImage = [result stringForColumn:@"CCOIN"];
                 NSString *categoryColor = [result stringForColumn:@"CCOLOR"];
                 NSString *categoryID = [result stringForColumn:@"ID"];
+                int order = [result intForColumn:@"IORDER"];
                 [categoryList addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:categoryTitle
                                                                                       imageName:categoryImage
                                                                                      colorValue:categoryColor
-                                                                                             ID:categoryID]];
+                                                                                             ID:categoryID
+                                                                                          order:order]];
             }
         
         if (success) {
@@ -129,7 +131,7 @@
         while ([result next]) {
             SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
             item.categoryImage = [result stringForColumn:@"ccoin"];
-            item.categoryTintColor = @"969696";
+            item.categoryTintColor = SSJ_CURRENT_THEME.secondaryColor;
             [tempArray addObject:item];
         }
         
@@ -202,6 +204,7 @@
         }
         
         int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
+        
         if ([db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, cwritedate, iversion, operatortype, iorder) values (?, ?, 1, ?, ?, 0, ?)", SSJUSERID(), newCategoryId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(maxOrder + 1)]) {
             if (success) {
                 SSJDispatch_main_async_safe(^{
@@ -216,6 +219,10 @@
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        SSJRecordMakingBillTypeSelectionCellItem *firstItem = [items firstObject];
+        int firstOrder = firstItem.order;
+        
         for (int i = 0; i < items.count; i ++) {
             SSJRecordMakingBillTypeSelectionCellItem *item = items[i];
             if (item.ID.length == 0) {
@@ -230,7 +237,7 @@
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(i + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
+            if (![db executeUpdate:@"update bk_user_bill set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(i + firstOrder), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         SSJDispatch_main_async_safe(^{
@@ -258,11 +265,11 @@
 }
 
 + (NSArray *)payOutColors {
-    return @[@"#c55553", @"#c6632f", @"#a90868", @"#d29361", @"#a8a67e", @"#006f5f", @"#ac3b2b", @"#6293b0", @"#ab94c6", @"#d96421", @"#a74257", @"#c1af65"];
+    return @[@"#c55553", @"#c6632f", @"#a90868", @"#d29361", @"#a8a67e", @"#006f5f", @"#ac3b2b", @"#6293b0", @"#ab94c6", @"#d96421", @"#a74257", @"#c1af65", @"#af5e53", @"#c77a3a", @"#008e59", @"#a1558b", @"#0d7473", @"#569597", @"#1ec3e9", @"#8ecbae", @"#f12b5f", @"#61348a", @"#746b07", @"#8a5736"];
 }
 
 + (NSArray *)incomeColors {
-    return @[@"#f4a755", @"#50b7c0", @"#018792", @"#c55553", @"#7d5786", @"#eb66a7", @"#ac3b2b", @"#6293b0", @"#ab94c6", @"#d96421", @"#b3d236", @"#c1af65"];
+    return @[@"#f4a755", @"#50b7c0", @"#018792", @"#c55553", @"#7d5786", @"#eb66a7", @"#ac3b2b", @"#6293b0", @"#ab94c6", @"#d96421", @"#b3d236", @"#c1af65", @"#af5e53", @"#c77a3a", @"#008e59", @"#a1558b", @"#0d7473", @"#569597", @"#1ec3e9", @"#8ecbae", @"#f12b5f", @"#61348a", @"#746b07", @"#8a5736"];
 }
 
 @end

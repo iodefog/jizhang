@@ -12,6 +12,8 @@
 #import "SSJThemeCollectionHeaderView.h"
 #import "SSJThemeDetailViewController.h"
 #import "SSJThemeService.h"
+#import "MMDrawerController.h"
+#import "SSJThemeManagerViewController.h"
 
 @interface SSJThemeHomeViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic, strong) UILabel *hintLabel;
@@ -48,6 +50,10 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
     [super viewWillAppear:animated];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     [self checkNetwork];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more_guanli"] style:UIBarButtonItemStylePlain target:self action:@selector(managerButtonClicked:)];
+    if ([SSJThemeSetting allThemeModels].count - 1) {
+        self.navigationItem.rightBarButtonItem = rightButton;
+    }
 }
 
 -(void)viewDidLayoutSubviews{
@@ -70,10 +76,12 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     SSJThemeHomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     __weak typeof(self) weakSelf = self;
     cell.themeChangeBlock = ^(){
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        tabVC.selectedIndex = 0;
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
     };
     cell.item = item;
@@ -83,7 +91,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 
 #pragma mark - UICollectionViewDelegate
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     return CGSizeMake((self.view.width - 45) / 3, item.cellHeight);
 }
 
@@ -103,7 +111,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJThemeItem *item = [self.items objectAtIndex:indexPath.item];
+    SSJThemeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.item];
     SSJThemeDetailViewController *themeDetailVc = [[SSJThemeDetailViewController alloc]init];
     themeDetailVc.item = item;
     [self.navigationController pushViewController:themeDetailVc animated:YES];
@@ -145,6 +153,7 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _themeSelectView.showsHorizontalScrollIndicator = NO;
         _themeSelectView.showsVerticalScrollIndicator = NO;
         _themeSelectView.backgroundColor = [UIColor whiteColor];
+        _themeSelectView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
         [_themeSelectView registerClass:[SSJThemeHomeCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
         [_themeSelectView registerClass:[SSJThemeCollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderId];
     }
@@ -163,6 +172,12 @@ static NSString *const kHeaderId = @"SSJThemeCollectionHeaderView";
         _service = [[SSJThemeService alloc]initWithDelegate:self];
     }
     return _service;
+}
+
+#pragma mark - Event
+- (void)managerButtonClicked:(id)sender{
+    SSJThemeManagerViewController *managerVc = [[SSJThemeManagerViewController alloc]init];
+    [self.navigationController pushViewController:managerVc animated:YES];
 }
 
 #pragma mark - Private

@@ -44,14 +44,17 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 //  预算数据模型
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
+@property (nonatomic, strong) UIBarButtonItem *editItem;
+
 //  预算消费明细图表的数据源
 @property (nonatomic, strong) NSArray *circleItems;
 
-//  月预算历史id、日期映射表
-@property (nonatomic, strong) NSDictionary *monthBudgetIdMap;
+@property (nonatomic, strong) NSArray *budgetIDs;
+
+@property (nonatomic, strong) NSArray *budgetPeriods;
 
 //  周期类型
-@property (nonatomic) SSJBudgetPeriodType periodType;
+//@property (nonatomic) SSJBudgetPeriodType periodType;
 
 @end
 
@@ -69,6 +72,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     [super viewDidLoad];
     
     self.navigationItem.titleView = self.titleView;
+    self.navigationItem.rightBarButtonItem = self.editItem;
     
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.headerView];
@@ -98,13 +102,16 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 }
 
 - (void)changeSelectedMonth {
-    NSString *budgetId = [self.monthBudgetIdMap objectForKey:[self.titleView.currentDate formattedDateWithFormat:@"yyy-MM-dd"]];
+    NSString *budgetId = [self.budgetIDs ssj_safeObjectAtIndex:self.titleView.selectedIndex];
     if (!budgetId.length) {
         self.budgetModel = nil;
         self.circleItems = nil;
         [self updateView];
         return;
     }
+    
+    UIBarButtonItem *item = [budgetId isEqualToString:_budgetId] ? self.editItem : nil;
+    [self.navigationItem setRightBarButtonItem:item animated:YES];
     
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
@@ -120,51 +127,51 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 }
 
 #pragma mark - Private
+- (void)updateTitle {
+    switch (self.budgetModel.type) {
+        case SSJBudgetPeriodTypeWeek:
+        case SSJBudgetPeriodTypeMonth:
+            self.titleView.titleSize = 21;
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            self.titleView.titleSize = 13;
+            break;
+    }
+    
+    self.titleView.titles = self.budgetPeriods;
+    self.titleView.selectedIndex = self.titleView.titles.count - 1;
+}
+
 - (void)loadAllData {
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:self.budgetId success:^(NSDictionary * _Nonnull result) {
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
-        self.titleView.periodType = self.budgetModel.type;
-        self.titleView.currentDate = [NSDate dateWithString:self.budgetModel.beginDate formatString:kDateFomat];
         
-        if (self.budgetModel) {
-            self.periodType = self.budgetModel.type;
-        }
+//        if (self.budgetModel) {
+//            self.periodType = self.budgetModel.type;
+//        }
         
-        //  如果是月预算，需要再查询历史月预算id；否则直接刷新页面
-        if (self.budgetModel.type == SSJBudgetPeriodTypeMonth) {
-            [SSJBudgetDatabaseHelper queryForMonthBudgetIdListWithSuccess:^(NSDictionary * _Nonnull result) {
-                [self.view ssj_hideLoadingIndicator];
-                
-                self.monthBudgetIdMap = result;
-                
-                //  对日期进行生序排序
-                NSArray *sortedDates = [[self.monthBudgetIdMap allKeys] sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-                    NSDate *date1 = [NSDate dateWithString:obj1 formatString:kDateFomat];
-                    NSDate *date2 = [NSDate dateWithString:obj2 formatString:kDateFomat];
-                    return [date1 compare:date2];
-                }];
-                
-                self.titleView.lastDate = [NSDate dateWithString:[sortedDates lastObject] formatString:kDateFomat];
-                
-                if (![[self.monthBudgetIdMap allValues] containsObject:self.budgetId]) {
-                    SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-                    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-                    return;
-                }
-                
-                [self updateView];
-                
-            } failure:^(NSError * _Nullable error) {
-                [self.view ssj_hideLoadingIndicator];
+        [SSJBudgetDatabaseHelper queryForBudgetIdListWithType:self.budgetModel.type success:^(NSDictionary * _Nonnull result) {
+            [self.view ssj_hideLoadingIndicator];
+            
+            self.budgetIDs = result[SSJBudgetIDKey];
+            self.budgetPeriods = result[SSJBudgetPeriodKey];
+            
+            if (![self.budgetIDs containsObject:self.budgetId]) {
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-            }];
-        } else {
-            [self.view ssj_hideLoadingIndicator];
+                return;
+            }
+            
+            [self updateTitle];
             [self updateView];
-        }
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+        }];
         
     } failure:^(NSError * _Nullable error) {
         
@@ -177,7 +184,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (void)updateView {
     NSString *tStr = nil;
-    switch (self.periodType) {
+    switch (self.budgetModel.type) {
         case 0:
             tStr = @"周";
             break;
@@ -208,7 +215,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     self.bottomView.top = self.middleView.bottom;
     
     [self.bottomView.circleView reloadData];
-    self.bottomView.button.hidden = ![self.budgetModel.ID isEqualToString:self.budgetId];
+//    self.bottomView.button.hidden = ![self.budgetModel.ID isEqualToString:self.budgetId];
     
     if (self.circleItems.count > 0) {
         [self.view ssj_hideWatermark:YES];
@@ -218,10 +225,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         [self.bottomView.circleView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
     }
     
-    NSString *beginDate = [self.budgetModel.beginDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-d"];
-    NSString *endDate = [self.budgetModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy-M-d"];
     [self.middleView setTitle:[NSString stringWithFormat:@"%@预算消费明细", tStr]];
-    [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
+//    [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
 }
 
 #pragma mark - Getter
@@ -258,11 +263,18 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 
 - (SSJBudgetDetailBottomView *)bottomView {
     if (!_bottomView) {
-        _bottomView = [[SSJBudgetDetailBottomView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 466)];
+        _bottomView = [[SSJBudgetDetailBottomView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 340)];
         _bottomView.circleView.dataSource = self;
-        [_bottomView.button addTarget:self action:@selector(editButtonAction)];
+//        [_bottomView.button addTarget:self action:@selector(editButtonAction)];
     }
     return _bottomView;
+}
+
+- (UIBarButtonItem *)editItem {
+    if (!_editItem) {
+        _editItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editButtonAction)];
+    }
+    return _editItem;
 }
 
 - (SSJBudgetNodataRemindView *)noDataRemindView {

@@ -28,7 +28,6 @@
     if (self = [super init]) {
         _isLoginService = YES;
         _showMessageIfErrorOccured = YES;
-        _showLoginControllerIfTokenInvalid = YES;
         _delegate = delegate;
         _httpMethod = SSJBaseNetworkServiceHttpMethodPOST;
         _timeoutInterval = 60;

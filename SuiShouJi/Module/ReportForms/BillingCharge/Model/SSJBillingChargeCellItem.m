@@ -26,4 +26,34 @@
     return item;
 }
 
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"imageName":(_imageName ?: [NSNull null]),
+                                                       @"typeName":(_typeName ?: [NSNull null]),
+                                                       @"money":(_money ?: [NSNull null]),
+                                                       @"colorValue":(_colorValue ?: [NSNull null]),
+                                                       @"ID":(_ID ?: [NSNull null]),
+                                                       @"incomeOrExpence":@(_incomeOrExpence),
+                                                       @"billDate":(_billDate ?: [NSNull null]),
+                                                       @"fundId":(_fundId ?: [NSNull null]),
+                                                       @"fundName":(_fundName ?: [NSNull null]),
+                                                       @"fundImage":(_fundImage ?: [NSNull null]),
+                                                       @"fundOperatorType":@(_fundOperatorType),
+                                                       @"editeDate":(_editeDate ?: [NSNull null]),
+                                                       @"billId":(_billId ?: [NSNull null]),
+                                                       @"chargeMemo":(_chargeMemo ?: [NSNull null]),
+                                                       @"chargeImage":(_chargeImage ?: [NSNull null]),
+                                                       @"chargeThumbImage":(_chargeThumbImage ?: [NSNull null]),
+                                                       @"configId":(_configId ?: [NSNull null]),
+                                                       @"booksId":(_booksId ?: [NSNull null]),
+                                                       @"booksName":(_booksName ?: [NSNull null]),
+                                                       @"chargeCircleType":@(_chargeCircleType),
+                                                       @"isOnOrNot":@(_isOnOrNot),
+                                                       @"chargeIndex":@(_chargeIndex),
+                                                       @"operatorType":@(_operatorType),
+                                                       @"transferSource":(_transferSource ?: [NSNull null]),
+                                                       @"membersItem":(_membersItem ?: [NSNull null]),
+                                                       @"newlyAddMembers":(_newlyAddMembers ?: [NSNull null]),
+                                                       @"deletedMembers":(_deletedMembers ?: [NSNull null])}];
+}
+
 @end
