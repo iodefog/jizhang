@@ -120,6 +120,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self reloadDatas];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [_typeAndMemberControl.listMenu dismiss];
+}
+
 #pragma mark - UITabBarControllerDelegate
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     if ([viewController isKindOfClass:[UINavigationController class]]) {

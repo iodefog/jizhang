@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJListMenu.h"
 
 typedef NS_ENUM(NSUInteger, SSJReportFormsMemberAndCategorySwitchControlOption) {
     SSJReportFormsMemberAndCategorySwitchControlOptionCategory = 0,
@@ -16,6 +17,8 @@ typedef NS_ENUM(NSUInteger, SSJReportFormsMemberAndCategorySwitchControlOption) 
 @interface SSJReportFormsMemberAndCategorySwitchControl : UIControl
 
 @property (nonatomic) SSJReportFormsMemberAndCategorySwitchControlOption option;
+
+@property (nonatomic, strong, readonly) SSJListMenu *listMenu;
 
 - (void)updateAppearance;
 
