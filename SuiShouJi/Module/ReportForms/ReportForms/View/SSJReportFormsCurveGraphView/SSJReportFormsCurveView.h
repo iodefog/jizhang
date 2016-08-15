@@ -18,8 +18,10 @@
 
 @property (nonatomic) UIEdgeInsets contentInsets;
 
+// 获取支出曲线上X轴坐标对应的Y轴坐标，此方法目前没有实现
 - (CGFloat)paymentAxisYAtAxisX:(CGFloat)axisX;
 
+// 获取收入曲线上X轴坐标对应的Y轴坐标，此方法目前没有实现
 - (CGFloat)incomeAxisYAtAxisX:(CGFloat)axisX;
 
 @end
