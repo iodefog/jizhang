@@ -62,6 +62,7 @@
     userItem.defaultMemberState = 0;
     userItem.defaultFundAcctState = 0;
     userItem.defaultBooksTypeState = 0;
+    userItem.currentBooksId = @"";
     SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
     [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
         if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
