@@ -55,38 +55,47 @@
 
 + (void)clearAllDataWithSuccess:(void(^)())success
                         failure:(void (^)(NSError *error))failure{
-    NSString *originalUserid = SSJUSERID();
-    NSString *newUserId = SSJUUID();
-    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:originalUserid];
-    userItem.userId = newUserId;
-    userItem.defaultMemberState = 0;
-    userItem.defaultFundAcctState = 0;
-    userItem.defaultBooksTypeState = 0;
-    userItem.currentBooksId = @"";
-    SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
-    [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
-        if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
-            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (success) {
-                        success();
-                    }
-                });
+    // 初始化之前先同步，防止用户头像、昵称等数据丢失
+    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
+        if (type == SSJDataSynchronizeTypeData) {
+            NSString *originalUserid = SSJUSERID();
+            NSString *newUserId = SSJUUID();
+            SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:originalUserid];
+            userItem.userId = newUserId;
+            userItem.defaultMemberState = 0;
+            userItem.defaultFundAcctState = 0;
+            userItem.defaultBooksTypeState = 0;
+            userItem.currentBooksId = @"";
+            SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
+            [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
+                if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
+                    [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (success) {
+                                success();
+                            }
+                        });
+                    } failure:^(NSError *error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if ([service.returnCode isEqualToString:@"-5555"]) {
+                                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                                    [SSJLoginViewController reloginIfNeeded];
+                                }], nil];
+                            } else {
+                                if (failure) {
+                                    failure(error);
+                                }
+                            }
+                        });
+                    }];
+                }
             } failure:^(NSError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if ([service.returnCode isEqualToString:@"-5555"]) {
-                        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                            [SSJLoginViewController reloginIfNeeded];
-                        }], nil];
-                    } else {
-                        if (failure) {
-                            failure(error);
-                        }
-                    }
-                });
+                if (failure) {
+                    failure(error);
+                }
             }];
         }
-    } failure:^(NSError *error) {
+    } failure:^(SSJDataSynchronizeType type, NSError *error) {
         if (failure) {
             failure(error);
         }
