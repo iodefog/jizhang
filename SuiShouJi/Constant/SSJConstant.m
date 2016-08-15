@@ -34,8 +34,6 @@ NSString *const SSJSyncPrivateKey = @"accountbook";
 
 NSString *const SSJUserProtocolUrl = @"http://1.9188.com/h5/about_shq/protocol.html";
 
-NSString *const SSJLastSelectFundItemKey = @"lastSelectFundKey";
-
 NSString *const SSJLastPopTimeKey = @"lastPopTimeKey";
 
 NSString *const SSJHaveLoginOrRegistKey = @"haveLoginOrRegistKey";

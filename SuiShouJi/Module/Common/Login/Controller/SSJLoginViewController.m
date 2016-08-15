@@ -366,7 +366,6 @@
     [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveLoginOrRegistKey];
     [[NSUserDefaults standardUserDefaults]setInteger:self.loginService.loginType forKey:SSJUserLoginTypeKey];
     [CDAutoHideMessageHUD showMessage:@"登录成功"];
-    [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
     [[NSNotificationCenter defaultCenter]postNotificationName:SSJLoginOrRegisterNotification object:nil];
     
     //  如果用户手势密码开启，进入手势密码页面

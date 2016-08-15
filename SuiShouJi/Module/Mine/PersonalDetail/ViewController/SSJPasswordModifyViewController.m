@@ -160,7 +160,6 @@
         SSJClearLoginInfo();
         [SSJUserTableManager reloadUserIdWithError:nil];
         [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
         SSJLoginViewController *loginVc = [[SSJLoginViewController alloc]init];
         loginVc.backController = [self.navigationController.viewControllers firstObject];
         [self.navigationController pushViewController:loginVc animated:YES];

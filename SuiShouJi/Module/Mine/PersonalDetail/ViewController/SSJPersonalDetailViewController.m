@@ -253,7 +253,6 @@ extern BOOL kHomeNeedLoginPop;
         SSJClearLoginInfo();
         [SSJUserTableManager reloadUserIdWithError:nil];
         [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
-        [[NSUserDefaults standardUserDefaults]removeObjectForKey:SSJLastSelectFundItemKey];
         [weakSelf.tableView reloadData];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }], nil];

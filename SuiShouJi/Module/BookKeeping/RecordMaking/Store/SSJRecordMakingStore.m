@@ -40,6 +40,15 @@
         SSJBillingChargeCellItem *editeItem = [[SSJBillingChargeCellItem alloc]init];
         double money = [item.money doubleValue];
         NSString *moneyStr = [NSString stringWithFormat:@"%.2f",[item.money doubleValue]];
+        if (![db executeUpdate:@"update bk_user set lastselectfundid = ? where cuserid = ?",item.fundId,userId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
         if (![db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and ichargeid = ?",userId,item.ID]) {
             editeItem = item;
             editeItem.operatorType = 0;
