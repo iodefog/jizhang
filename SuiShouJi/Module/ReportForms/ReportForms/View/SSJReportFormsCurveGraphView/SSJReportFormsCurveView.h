@@ -16,8 +16,10 @@
 
 @property (nonatomic) CGFloat maxValue;
 
-@property (nonatomic) CGFloat bezierSmoothingTension;
-
 @property (nonatomic) UIEdgeInsets contentInsets;
+
+- (CGFloat)paymentAxisYAtAxisX:(CGFloat)axisX;
+
+- (CGFloat)incomeAxisYAtAxisX:(CGFloat)axisX;
 
 @end
