@@ -536,6 +536,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             if (!weakSelf.item.fundName.length) {
                 if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = ?",weakSelf.item.fundId] == 2) {
                     weakSelf.item.fundName = @"选择账户";
+                    weakSelf.item.fundOperatorType = 2;
                 }else{
                     weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
                     weakSelf.item.fundOperatorType = [db intForQuery:@"select operatortype from bk_fund_info where cfundid = ? and cuserid = ?",weakSelf.item.fundId,userId];
