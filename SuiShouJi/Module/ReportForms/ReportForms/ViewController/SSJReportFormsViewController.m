@@ -57,10 +57,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
 @property (nonatomic, strong) UILabel *incomeAndPaymentMoneyLab;
 
 //  自定义时间
-@property (nonatomic, strong) UILabel *customPeriodLab;
+@property (nonatomic, strong) UIButton *customPeriodBtn;
 
 //  编辑、删除自定义时间按钮
-@property (nonatomic, strong) UIButton *customPeriodBtn;
+@property (nonatomic, strong) UIButton *addOrDeleteCustomPeriodBtn;
 
 //  数据源
 @property (nonatomic, strong) NSArray *datas;
@@ -103,8 +103,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     self.navigationItem.titleView = self.typeAndMemberControl;
     [self.view addSubview:self.payAndIncomeSegmentControl];
     [self.view addSubview:self.dateAxisView];
-    [self.view addSubview:self.customPeriodLab];
     [self.view addSubview:self.customPeriodBtn];
+    [self.view addSubview:self.addOrDeleteCustomPeriodBtn];
     [self.view addSubview:self.tableView];
     
     UIView *headerView = [[UIView alloc] initWithFrame:self.chartView.frame];
@@ -118,6 +118,11 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self updateIncomeAndPaymentLabels];
     
     [self reloadDatas];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [_typeAndMemberControl.listMenu dismiss];
 }
 
 #pragma mark - UITabBarControllerDelegate
@@ -279,33 +284,13 @@ static NSString *const kSegmentTitleIncome = @"收入";
     if (_customPeriod) {
         _customPeriod = nil;
         _dateAxisView.hidden = NO;
-        _customPeriodLab.hidden = YES;
-        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+        _customPeriodBtn.hidden = YES;
+        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
         [self reloadDatas];
         
         [MobClick event:@"form_date_custom_delete"];
     } else {
-        SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
-        
-        if (!userItem.currentBooksId.length) {
-            userItem.currentBooksId = SSJUSERID();
-        }
-        __weak typeof(self) wself = self;
-        SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
-        calendarVC.title = @"自定义时间";
-        calendarVC.billType = [self currentType];
-        calendarVC.booksId = userItem.currentBooksId;
-        calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
-            wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
-            wself.dateAxisView.hidden = YES;
-            wself.customPeriodLab.hidden = NO;
-            [wself updateCustomPeriodLab];
-            [wself.customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
-            [wself reloadDatas];
-        };
-        [self.navigationController pushViewController:calendarVC animated:YES];
-        
-        [MobClick event:@"form_date_custom"];
+        [self enterCalendarVC];
     }
 }
 
@@ -340,9 +325,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [_surplusView updateThemeColor];
     
     if (_customPeriod) {
-        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
     } else {
-        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
     }
 }
 
@@ -374,13 +359,14 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
 }
 
-- (void)updateCustomPeriodLab {
+- (void)updateCustomPeriodBtn {
     NSString *startDateStr = [_customPeriod.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    _customPeriodLab.text = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
-    CGSize textSize = [_customPeriodLab.text sizeWithAttributes:@{NSFontAttributeName:_customPeriodLab.font}];
-    _customPeriodLab.width = textSize.width + 28;
-    _customPeriodLab.centerX = self.view.width * 0.5;
+    NSString *title = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
+    [_customPeriodBtn setTitle:title forState:UIControlStateNormal];
+    CGSize textSize = [title sizeWithAttributes:@{NSFontAttributeName:_customPeriodBtn.font}];
+    _customPeriodBtn.width = textSize.width + 28;
+    _customPeriodBtn.centerX = self.view.width * 0.5;
 }
 
 //  更新总收入\总支出
@@ -431,8 +417,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
         
         if (periods.count == 0) {
             _dateAxisView.hidden = YES;
-            _customPeriodLab.hidden = YES;
             _customPeriodBtn.hidden = YES;
+            _addOrDeleteCustomPeriodBtn.hidden = YES;
             self.tableView.hidden = YES;
             
             [self.view ssj_hideLoadingIndicator];
@@ -442,8 +428,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
         }
         
         _dateAxisView.hidden = NO;
-        _customPeriodLab.hidden = !_customPeriod;
-        _customPeriodBtn.hidden = NO;
+        _customPeriodBtn.hidden = !_customPeriod;
+        _addOrDeleteCustomPeriodBtn.hidden = NO;
         self.tableView.hidden = NO;
         [self.view ssj_hideWatermark:YES];
         
@@ -600,6 +586,30 @@ static NSString *const kSegmentTitleIncome = @"收入";
     }
 }
 
+- (void)enterCalendarVC {
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+    
+    if (!userItem.currentBooksId.length) {
+        userItem.currentBooksId = SSJUSERID();
+    }
+    __weak typeof(self) wself = self;
+    SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
+    calendarVC.title = @"自定义时间";
+    calendarVC.billType = [self currentType];
+    calendarVC.booksId = userItem.currentBooksId;
+    calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
+        wself.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
+        wself.dateAxisView.hidden = YES;
+        wself.customPeriodBtn.hidden = NO;
+        [wself updateCustomPeriodBtn];
+        [wself.addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_delete"] forState:UIControlStateNormal];
+        [wself reloadDatas];
+    };
+    [self.navigationController pushViewController:calendarVC animated:YES];
+    
+    [MobClick event:@"form_date_custom"];
+}
+
 #pragma mark - Getter
 - (SSJReportFormsMemberAndCategorySwitchControl *)typeAndMemberControl {
     if (!_typeAndMemberControl) {
@@ -711,29 +721,29 @@ static NSString *const kSegmentTitleIncome = @"收入";
     return _incomeAndPaymentMoneyLab;
 }
 
-- (UILabel *)customPeriodLab {
-    if (!_customPeriodLab) {
-        _customPeriodLab = [[UILabel alloc] initWithFrame:CGRectMake(0, self.dateAxisView.top + 10, 0, 30)];
-        _customPeriodLab.backgroundColor = [UIColor clearColor];
-        _customPeriodLab.textAlignment = NSTextAlignmentCenter;
-        _customPeriodLab.font = [UIFont systemFontOfSize:15];
-        _customPeriodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _customPeriodLab.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
-        _customPeriodLab.layer.borderWidth = 1;
-        _customPeriodLab.layer.cornerRadius = 15;
-        _customPeriodLab.hidden = YES;
-    }
-    return _customPeriodLab;
-}
-
 - (UIButton *)customPeriodBtn {
     if (!_customPeriodBtn) {
         _customPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _customPeriodBtn.frame = CGRectMake(self.view.width - 50, self.dateAxisView.top, 50, 50);
-        [_customPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
-        [_customPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _customPeriodBtn.frame = CGRectMake(0, self.dateAxisView.top + 10, 0, 30);
+        _customPeriodBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_customPeriodBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        _customPeriodBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        _customPeriodBtn.layer.borderWidth = 1;
+        _customPeriodBtn.layer.cornerRadius = 15;
+        _customPeriodBtn.hidden = YES;
+        [_customPeriodBtn addTarget:self action:@selector(enterCalendarVC) forControlEvents:UIControlEventTouchUpInside];
     }
     return _customPeriodBtn;
+}
+
+- (UIButton *)addOrDeleteCustomPeriodBtn {
+    if (!_addOrDeleteCustomPeriodBtn) {
+        _addOrDeleteCustomPeriodBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addOrDeleteCustomPeriodBtn.frame = CGRectMake(self.view.width - 50, self.dateAxisView.top, 50, 50);
+        [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
+        [_addOrDeleteCustomPeriodBtn addTarget:self action:@selector(customPeriodBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _addOrDeleteCustomPeriodBtn;
 }
 
 @end
