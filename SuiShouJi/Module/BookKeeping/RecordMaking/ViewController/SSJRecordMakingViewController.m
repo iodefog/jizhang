@@ -692,6 +692,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         return;
     }
     if (self.item.fundOperatorType == 2) {
+        [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
         return;
     }
