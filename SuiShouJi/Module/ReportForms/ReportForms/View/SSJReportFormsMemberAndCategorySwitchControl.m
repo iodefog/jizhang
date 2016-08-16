@@ -7,7 +7,6 @@
 //
 
 #import "SSJReportFormsMemberAndCategorySwitchControl.h"
-#import "SSJListMenu.h"
 
 @interface SSJReportFormsMemberAndCategorySwitchControl ()
 

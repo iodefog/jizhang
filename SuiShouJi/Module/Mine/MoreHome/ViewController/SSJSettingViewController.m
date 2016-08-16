@@ -22,6 +22,7 @@
 #import "WXApi.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJNetworkReachabilityManager.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";
@@ -197,6 +198,7 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
             [SSJDataClearHelper clearAllDataWithSuccess:^{
                 [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
             } failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
             }];

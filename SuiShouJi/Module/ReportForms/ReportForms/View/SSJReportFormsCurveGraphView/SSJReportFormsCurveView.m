@@ -9,11 +9,67 @@
 #import "SSJReportFormsCurveView.h"
 #import "UIBezierPath+LxThroughPointsBezier.h"
 
+void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
+    NSMutableDictionary *mapping = (__bridge NSMutableDictionary *)info;
+    
+    CGPoint *points = element->points;
+    CGPathElementType type = element->type;
+    
+    switch(type) {
+        case kCGPathElementMoveToPoint: {
+            // contains 1 point
+            CGPoint point = points[0];
+            [mapping setObject:@(point.y) forKey:@(point.x)];
+        }
+            break;
+            
+        case kCGPathElementAddLineToPoint: {
+            // contains 1 point
+            CGPoint point = points[0];
+            [mapping setObject:@(point.y) forKey:@(point.x)];
+        }
+            break;
+            
+        case kCGPathElementAddQuadCurveToPoint: {
+            // contains 2 points
+            CGPoint point1 = points[0];
+            CGPoint point2 = points[1];
+            
+            [mapping setObject:@(point1.y) forKey:@(point1.x)];
+            [mapping setObject:@(point2.y) forKey:@(point2.x)];
+        }
+            break;
+            
+        case kCGPathElementAddCurveToPoint: {
+            // contains 3 points
+            CGPoint point1 = points[0];
+            CGPoint point2 = points[1];
+            CGPoint point3 = points[2];
+            
+            [mapping setObject:@(point1.y) forKey:@(point1.x)];
+            [mapping setObject:@(point2.y) forKey:@(point2.x)];
+            [mapping setObject:@(point3.y) forKey:@(point3.x)];
+        }
+            break;
+            
+        case kCGPathElementCloseSubpath: // contains no point
+            break;
+    }
+}
+
 @interface SSJReportFormsCurveView ()
 
-@property (nonatomic, strong) NSMutableArray *incomePoints;
+@property (nonatomic, strong) UIBezierPath *incomeCurvePath;
 
-@property (nonatomic, strong) NSMutableArray *paymentPoints;
+@property (nonatomic, strong) UIBezierPath *incomeFillPath;
+
+@property (nonatomic, strong) UIBezierPath *paymentCurvePath;
+
+@property (nonatomic, strong) UIBezierPath *paymentFillPath;
+
+@property (nonatomic, strong) NSMutableDictionary *incomePointMapping;
+
+@property (nonatomic, strong) NSMutableDictionary *paymentPointMapping;
 
 @end
 
@@ -23,63 +79,96 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         
-        _bezierSmoothingTension = 0.3;
-        _incomePoints = [[NSMutableArray alloc] init];
-        _paymentPoints = [[NSMutableArray alloc] init];
+        _incomeCurvePath = [UIBezierPath bezierPath];
+        _incomeFillPath = [UIBezierPath bezierPath];
+        _paymentCurvePath = [UIBezierPath bezierPath];
+        _paymentFillPath = [UIBezierPath bezierPath];
+        
+        _incomePointMapping = [NSMutableDictionary dictionary];
+        _paymentPointMapping = [NSMutableDictionary dictionary];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    [self updatePoints:_incomePoints withValues:_incomeValues];
-    [self updatePoints:_paymentPoints withValues:_paymentValues];
+    [self updateIncomePath];
+    [self updatePaymentPath];
 }
 
 - (void)drawRect:(CGRect)rect {
+    if (_incomeCurvePath.empty
+        || _incomeFillPath.empty
+        || _paymentCurvePath.empty
+        || _paymentFillPath.empty) {
+        return;
+    }
+    
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSetBlendMode(ctx, kCGBlendModeXOR);
     
     // 填充颜色
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
-    CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:YES].CGPath);
+    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
+    CGContextAddPath(ctx, _incomeFillPath.CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
-    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeFillColor].CGColor);
-    CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:YES].CGPath);
+    CGContextSetFillColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentFillColor].CGColor);
+    CGContextAddPath(ctx, _paymentFillPath.CGPath);
     CGContextDrawPath(ctx, kCGPathFill);
     
     // 曲线
     CGContextSetLineWidth(ctx, 1);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
-    CGContextAddPath(ctx, [self getLinePathWithPoints:_paymentPoints close:NO].CGPath);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
+    CGContextAddPath(ctx, _incomeCurvePath.CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
     
-    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor].CGColor);
-    CGContextAddPath(ctx, [self getLinePathWithPoints:_incomePoints close:NO].CGPath);
+    CGContextSetStrokeColorWithColor(ctx, [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor].CGColor);
+    CGContextAddPath(ctx, _paymentCurvePath.CGPath);
     CGContextDrawPath(ctx, kCGPathStroke);
 }
 
 - (void)setIncomeValues:(NSArray *)incomeValues {
     if (![_incomeValues isEqualToArray:incomeValues]) {
         _incomeValues = incomeValues;
-        [self updatePoints:_incomePoints withValues:_incomeValues];
+        [self updateIncomePath];
     }
 }
 
 - (void)setPaymentValues:(NSArray *)paymentValues {
     if (![_paymentValues isEqualToArray:paymentValues]) {
         _paymentValues = paymentValues;
-        [self updatePoints:_paymentPoints withValues:_paymentValues];
+        [self updatePaymentPath];
     }
 }
 
-- (void)updatePoints:(NSMutableArray *)points withValues:(NSArray *)values {
-    if (!values.count || CGRectIsEmpty(self.bounds)) {
+- (CGFloat)paymentAxisYAtAxisX:(CGFloat)axisX {
+    return [_paymentPointMapping[@(axisX)] floatValue];
+}
+
+- (CGFloat)incomeAxisYAtAxisX:(CGFloat)axisX {
+    return [_incomePointMapping[@(axisX)] floatValue];
+}
+
+- (void)updateIncomePath {
+    [self updateCurvePath:_incomeCurvePath WithValues:_incomeValues];
+    [self updateFillPath:_incomeFillPath withCurvePath:_incomeCurvePath];
+    // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
+//    CGPathApply(_incomeCurvePath.CGPath, (__bridge void * _Nullable)(_incomePointMapping), MyCGPathApplierFunc);
+}
+
+- (void)updatePaymentPath {
+    [self updateCurvePath:_paymentCurvePath WithValues:_paymentValues];
+    [self updateFillPath:_paymentFillPath withCurvePath:_paymentCurvePath];
+    // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
+//    CGPathApply(_paymentCurvePath.CGPath, (__bridge void * _Nullable)(_paymentPointMapping), MyCGPathApplierFunc);
+}
+
+- (void)updateCurvePath:(UIBezierPath *)path WithValues:(NSArray *)values {
+    if (!path || !values.count || CGRectIsEmpty(self.bounds)) {
         return;
     }
     
-    [points removeAllObjects];
+    [path removeAllPoints];
     
     CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
     
@@ -88,19 +177,8 @@
         NSNumber *value = values[i];
         CGFloat x = unitX * i + contentFrame.origin.x;
         CGFloat y = contentFrame.size.height * (1 - [value floatValue] / _maxValue) + contentFrame.origin.y;
-        [points addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
-    }
-}
-
-- (UIBezierPath *)getLinePathWithPoints:(NSArray *)points close:(BOOL)close {
-    if (points.count == 0) {
-        return nil;
-    }
-    
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    
-    for (int i = 0; i < points.count; i ++) {
-        CGPoint point = [points[i] CGPointValue];
+        
+        CGPoint point = CGPointMake(x, y);
         if (i == 0) {
             [path moveToPoint:point];
         } else {
@@ -110,15 +188,20 @@
             [path addCurveToPoint:point controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         }
     }
-    
-    if (close) {
-        CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
-        [path addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
-        [path addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
-        [path closePath];
+}
+
+- (void)updateFillPath:(UIBezierPath *)fillPath withCurvePath:(UIBezierPath *)curvePath {
+    if (curvePath.empty) {
+        return;
     }
     
-    return path;
+    [fillPath removeAllPoints];
+    
+    CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, _contentInsets);
+    [fillPath appendPath:curvePath];
+    [fillPath addLineToPoint:CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMaxY(contentFrame))];
+    [fillPath addLineToPoint:CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame))];
+    [fillPath closePath];
 }
 
 @end

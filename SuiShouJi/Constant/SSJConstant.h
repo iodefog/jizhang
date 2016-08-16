@@ -104,9 +104,6 @@ extern NSString *const SSJWeiBoAppKey;
 extern NSString *const SSJWeiBoSecret;
 
 /** -------------------- KEY -------------------- */
-//上一次选择的资金账户类型
-extern NSString *const SSJLastSelectFundItemKey;
-
 //保存上次弹窗的时间
 extern NSString *const SSJLastPopTimeKey;
 

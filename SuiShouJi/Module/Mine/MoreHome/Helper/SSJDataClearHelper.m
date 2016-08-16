@@ -55,6 +55,7 @@
 
 + (void)clearAllDataWithSuccess:(void(^)())success
                         failure:(void (^)(NSError *error))failure{
+    
     NSString *originalUserid = SSJUSERID();
     NSString *newUserId = SSJUUID();
     SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:originalUserid];
@@ -62,6 +63,7 @@
     userItem.defaultMemberState = 0;
     userItem.defaultFundAcctState = 0;
     userItem.defaultBooksTypeState = 0;
+    userItem.currentBooksId = @"";
     SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
     [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
         if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {

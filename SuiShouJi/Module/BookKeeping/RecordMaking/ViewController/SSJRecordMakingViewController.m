@@ -83,9 +83,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     BOOL _needToDismiss;
 }
 #pragma mark - Lifecycle
--(void)dealloc{
-    
-}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -133,6 +130,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             [self.billTypeInputView.moneyInput becomeFirstResponder];
         }
     }
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -187,15 +188,15 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
                 weakSelf.item.fundId = fundingItem.fundingID;
                 weakSelf.item.fundName = fundingItem.fundingName;
+                weakSelf.item.fundOperatorType = 1;
                 [weakSelf updateFundingType];
-                 NSData *lastSelectFundingDate = [NSKeyedArchiver archivedDataWithRootObject:fundingItem];
-                [[NSUserDefaults standardUserDefaults] setObject:lastSelectFundingDate forKey:SSJLastSelectFundItemKey];
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
                 NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
                     [weakSelf.FundingTypeSelectView reloadDate];
                     weakSelf.item.fundId = fundingItem.fundingID;
                     weakSelf.item.fundName = fundingItem.fundingName;
+                    weakSelf.item.fundOperatorType = 0;
                     [weakSelf updateFundingType];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
@@ -533,17 +534,26 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         NSString *userId = SSJUSERID();
         if (weakSelf.item.ID.length != 0) {
             if (!weakSelf.item.fundName.length) {
-                weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
+                if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = ?",weakSelf.item.fundId] == 2) {
+                    weakSelf.item.fundName = @"选择账户";
+                    weakSelf.item.fundOperatorType = 2;
+                }else{
+                    weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
+                    weakSelf.item.fundOperatorType = [db intForQuery:@"select operatortype from bk_fund_info where cfundid = ? and cuserid = ?",weakSelf.item.fundId,userId];
+                }
             }
         }else{
-            if ([[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey] == nil) {
+            if (![db stringForQuery:@"select lastselectfundid from bk_user where cuserid = ?",userId].length) {
                 weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
                 weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
             }else{
-                NSData *lastSelectFundingData = [[NSUserDefaults standardUserDefaults]objectForKey:SSJLastSelectFundItemKey];
-                SSJFundingItem *fundItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastSelectFundingData];
-                weakSelf.item.fundId = fundItem.fundingID;
-                weakSelf.item.fundName = fundItem.fundingName;
+                if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = (select lastselectfundid from bk_user where cuserid = ?)",userId] == 2) {
+                    weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                    weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                }else{
+                    weakSelf.item.fundId = [db stringForQuery:@"select lastselectfundid from bk_user as a where a.cuserid = ? and a.lastselectfundid in (select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 and cparent != 'root')",userId,userId];
+                    weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
@@ -682,7 +692,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [CDAutoHideMessageHUD showMessage:@"金额不能小于0"];
         return;
     }
-    if (self.item.fundId == nil) {
+    if (self.item.fundOperatorType == 2) {
+        [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
         return;
     }
