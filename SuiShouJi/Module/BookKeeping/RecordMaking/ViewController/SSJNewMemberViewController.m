@@ -187,7 +187,9 @@
         _header = [[SSJNewMemberHeaderView alloc]init];
         _header.nameInput.text = self.originalItem.memberName;
         _header.nameInput.delegate = self;
-        _header.firstWord = [self.originalItem.memberName substringWithRange:NSMakeRange(0, 1)];
+        if (self.originalItem.memberName.length >= 1) {
+            _header.firstWord = [self.originalItem.memberName substringWithRange:NSMakeRange(0, 1)];
+        }
     }
     return _header;
 }
