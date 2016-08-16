@@ -685,7 +685,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (SSJBudgetEditAccountDaySelectionView *)accountDaySelectionView {
     if (!_accountDaySelectionView) {
         __weak typeof(self) wself = self;
-        _accountDaySelectionView = [[SSJBudgetEditAccountDaySelectionView alloc] initWithFrame:CGRectMake(0, 0, self.viewIfLoaded.width, 200)];
+        _accountDaySelectionView = [[SSJBudgetEditAccountDaySelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 200)];
         _accountDaySelectionView.periodType = self.model.type;
         _accountDaySelectionView.sureAction = ^(SSJBudgetEditAccountDaySelectionView *view) {
             wself.model.beginDate = [view.beginDate formattedDateWithFormat:@"yyyy-MM-dd"];
