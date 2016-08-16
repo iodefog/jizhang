@@ -1850,6 +1850,7 @@
 		9CF0AC0F1D58752200475C5B /* SSJNewMemberHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3BF1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m */; };
 		9CF0AC101D58753700475C5B /* SSJDataClearHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */; };
 		9CF0AC111D58754800475C5B /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
+		9CF593891D62A70300006594 /* SSJNewCrediteCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593881D62A70300006594 /* SSJNewCrediteCardViewController.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
@@ -3243,6 +3244,8 @@
 		9CEB85BE1CC5D8FC00AE8F8D /* mark_pic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@3x.png"; sourceTree = "<group>"; };
 		9CF0AC001D58583B00475C5B /* tianjia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia@3x.png"; sourceTree = "<group>"; };
 		9CF0AC0A1D58584400475C5B /* tianjia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia@2x.png"; sourceTree = "<group>"; };
+		9CF593871D62A70300006594 /* SSJNewCrediteCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewCrediteCardViewController.h; sourceTree = "<group>"; };
+		9CF593881D62A70300006594 /* SSJNewCrediteCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewCrediteCardViewController.m; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -4089,6 +4092,8 @@
 				9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */,
 				9C53A3B81D420A01003BA2F0 /* SSJNewMemberViewController.h */,
 				9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */,
+				9CF593871D62A70300006594 /* SSJNewCrediteCardViewController.h */,
+				9CF593881D62A70300006594 /* SSJNewCrediteCardViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -8700,6 +8705,7 @@
 				9C94718B1CEB224C00D69079 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,
 				9C1723871D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m in Sources */,
+				9CF593891D62A70300006594 /* SSJNewCrediteCardViewController.m in Sources */,
 				7DE0896F1D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
 				7D5F33741CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m in Sources */,
@@ -9071,7 +9077,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

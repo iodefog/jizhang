@@ -64,7 +64,11 @@
     localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
 }
 
-+(void)cancelLocalNotificationWithKey:(NSString *)key{
++(void)cancelLocalNotificationWithKey:(nullable NSString *)key{
+    if (!key.length) {
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        return;
+    }
     // 获取所有本地通知数组
     NSArray *localNotifications = [[NSArray alloc]init];
     localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
