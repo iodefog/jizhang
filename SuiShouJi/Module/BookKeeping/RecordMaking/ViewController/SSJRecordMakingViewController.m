@@ -257,14 +257,16 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
         };
         _memberSelectView.showBlock = ^(){
-            _needToDismiss = YES;
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf -> _needToDismiss = YES;
         };
         _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };
         _memberSelectView.manageBlock = ^(NSMutableArray *items){
-            _needToDismiss = YES;
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf -> _needToDismiss = YES;
             [weakSelf.billTypeInputView.moneyInput resignFirstResponder];
             [weakSelf.accessoryView.memoView resignFirstResponder];
             SSJMemberManagerViewController *membermanageVc = [[SSJMemberManagerViewController alloc]init];
@@ -275,6 +277,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             [weakSelf.memberSelectView dismiss];
             SSJNewMemberViewController *newMemberVc = [[SSJNewMemberViewController alloc]init];
             newMemberVc.addNewMemberAction = ^(SSJChargeMemberItem *item){
+                __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (item.memberId.length) {
                     [weakSelf.item.membersItem addObject:item];
                 }
@@ -282,7 +285,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 weakSelf.memberSelectView.selectedMemberItems = [weakSelf.item.membersItem mutableCopy];
                 weakSelf.memberSelectView.chargeId = weakSelf.item.ID;
                 [weakSelf.memberSelectView show];
-                _needToDismiss = NO;
+                strongSelf -> _needToDismiss = NO;
             };
             [weakSelf.navigationController pushViewController:newMemberVc animated:YES];
         };
