@@ -17,7 +17,6 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.fundingImage];
         [self.contentView addSubview:self.fundingTitle];
         [self addSubview:self.checkMark];

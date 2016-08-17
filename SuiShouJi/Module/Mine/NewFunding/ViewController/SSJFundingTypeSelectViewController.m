@@ -10,7 +10,6 @@
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJFundingTypeTableViewCell.h"
 #import "SSJFundingItem.h"
-#import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "FMDB.h"
 
@@ -26,7 +25,6 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"选择账户类型";
         self.extendedLayoutIncludesOpaqueBars = YES;
-        self.hidesBottomBarWhenPushed = YES;
     }
     return self;
 }
@@ -57,17 +55,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJFundingItem *item = [_items objectAtIndex:indexPath.section];
-    if ([item.fundingID isEqualToString:@"10"]) {
-        
-    }else if ([item.fundingID isEqualToString:@"11"]){
-        
-    }else if ([item.fundingID isEqualToString:@"3"]){
-        
-    }else{
-        SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
-        [self.navigationController pushViewController:normalFundingVc animated:YES];
-    }
+    if (self.typeSelectedBlock) {
+        self.typeSelectedBlock(((SSJFundingItem*)[_items ssj_safeObjectAtIndex:indexPath.section]).fundingID , ((SSJFundingItem*)[_items ssj_safeObjectAtIndex:indexPath.section]).fundingIcon);
+    };
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -87,6 +78,20 @@
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     FundingTypeCell.item = [_items objectAtIndex:indexPath.section];
+    if (!self.selectFundID || self.selectFundID.length == 0) {
+        if (indexPath.section == 0) {
+            FundingTypeCell.selectedOrNot = YES;
+        }else{
+            FundingTypeCell.selectedOrNot = NO;
+            
+        }
+    }else{
+        if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
+            FundingTypeCell.selectedOrNot = YES;
+        }else{
+            FundingTypeCell.selectedOrNot = NO;
+        }
+    }
     FundingTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return FundingTypeCell;
 }
@@ -104,21 +109,10 @@
             item.fundingIcon = [rs stringForColumn:@"CICOIN"];
             item.fundingMemo = [rs stringForColumn:@"CMEMO"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            if (![item.fundingID isEqualToString:@"9"]) {
-                [tempArray addObject:item];
-            }
+            [tempArray addObject:item];
         }
-        NSArray *tempSortedArr =  [tempArray sortedArrayUsingComparator:^NSComparisonResult(SSJFundingItem *item1, SSJFundingItem *item2){
-            if ([item1.fundingID intValue] > [item2.fundingID intValue]){
-                return NSOrderedDescending;
-            }
-            if ([item1.fundingID intValue] < [item2.fundingID intValue]){
-                return NSOrderedAscending;
-            }
-            return NSOrderedSame;
-        }];
         SSJDispatch_main_async_safe(^(){
-            _items = [tempSortedArr mutableCopy];
+            _items = tempArray;
             [weakSelf.tableView reloadData];
         });
     }];

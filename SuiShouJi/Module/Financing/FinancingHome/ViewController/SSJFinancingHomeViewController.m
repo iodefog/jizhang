@@ -25,6 +25,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJFinancingHomeHeader.h"
 #import "SSJFinancingHomeAddCell.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJFundingTypeSelectViewController.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -105,12 +106,12 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         fundingDetailVC.item = item;
         [self.navigationController pushViewController:fundingDetailVC animated:YES];
     }else{
-        SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
-        __weak typeof(self) weakSelf = self;
-        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-            weakSelf.newlyAddFundId = newFundingItem.fundingID;
-        };
-        [self.navigationController pushViewController:newFundingVC animated:YES];
+        SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+//        __weak typeof(self) weakSelf = self;
+//        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+//            weakSelf.newlyAddFundId = newFundingItem.fundingID;
+//        };
+        [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
     }
 
 }
