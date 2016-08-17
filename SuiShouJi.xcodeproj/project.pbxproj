@@ -5332,11 +5332,8 @@
 		9C9471301CEB224C00D69079 /* Financing */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				9CF593E51D63FFBB00006594 /* NewFunding */,
-=======
 				7D87AE8F1D6319490024D33C /* Loan */,
->>>>>>> 2618454b11f78cc12b2937d8ac6058cd9ce97bbb
 				9CD9BC3C1CFD2E070061803B /* FundingTransfer */,
 				9C9471311CEB224C00D69079 /* FinancingHome */,
 				9C9471471CEB224C00D69079 /* FundingDetails */,
