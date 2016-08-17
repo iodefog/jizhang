@@ -22,10 +22,6 @@
     return @[@"iconfigid"];
 }
 
-+ (NSArray *)optionalColumns {
-    return @[@"cimgurl", @"cmemo"];
-}
-
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];

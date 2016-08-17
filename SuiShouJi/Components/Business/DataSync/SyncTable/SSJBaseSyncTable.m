@@ -23,10 +23,6 @@
     return nil;
 }
 
-+ (NSArray *)optionalColumns {
-    return nil;
-}
-
 + (NSString *)queryRecordsForSyncAdditionalCondition {
     return nil;
 }
@@ -112,6 +108,8 @@
             SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", recordInfo);
             return NO;
         }
+        
+        
         
         if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
             if (error && *error) {
@@ -210,7 +208,6 @@
             [resultSet close];
             return nil;
         } else {
-//            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeImageSyncFailed userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"local record's operatortype value is error,undefined value %d", localOperatorType]}];
             SSJPRINT(@">>> SSJ Warning:local record's operatortype value is error,undefined value %d", localOperatorType);
             [resultSet close];
             return nil;
@@ -228,22 +225,15 @@
 
 //  返回插入新纪录的sql语句
 + (NSString *)insertStatementForMergeRecord:(NSDictionary *)recordInfo {
-    NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[[self columns] count]];
-    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[[self columns] count]];
-    for (NSString *column in [self columns]) {
-        id value = [recordInfo objectForKey:column];
-        if (!value) {
-            if ([[self optionalColumns] indexOfObject:column] == NSNotFound) {
-                SSJPRINT(@">>>SSJ warning: merge record lack of column '%@'\n record:%@", column, recordInfo);
-                return nil;
-            } else {
-               continue;
-            }
+    NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[recordInfo count]];
+    NSMutableArray *values = [NSMutableArray arrayWithCapacity:[recordInfo count]];
+    
+    [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([[self columns] containsObject:key]) {
+            [columns addObject:key];
+            [values addObject:[NSString stringWithFormat:@"'%@'", obj]];
         }
-        
-        [columns addObject:column];
-        [values addObject:[NSString stringWithFormat:@"'%@'", value]];
-    }
+    }];
     
     NSString *columnsStr = [columns componentsJoinedByString:@", "];
     NSString *valuesStr = [values componentsJoinedByString:@", "];
@@ -260,20 +250,13 @@
 }
 
 + (NSString *)spliceKeyAndValueForKeys:(NSArray *)keys record:(NSDictionary *)recordInfo joinString:(NSString *)joinString {
-    NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:keys.count];
-    for (NSString *key in keys) {
-        id value = recordInfo[key];
-        if (!value) {
-            if ([[self optionalColumns] indexOfObject:key] == NSNotFound) {
-                SSJPRINT(@">>>SSJ warning: splice record lack of key '%@'\n record:%@", key, recordInfo);
-                return nil;
-            } else {
-                continue;
-            }
+    NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
+    [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([keys containsObject:key]) {
+            [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, obj]];
         }
-        
-        [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
-    }
+    }];
+    
     return [keyValues componentsJoinedByString:joinString];
 }
 

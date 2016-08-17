@@ -41,13 +41,6 @@
 + (NSArray *)primaryKeys;
 
 /**
- *  返回可选的列名，根据需要子类可以覆写
- *
- *  @return 返回对应的表的列名
- */
-+ (NSArray *)optionalColumns;
-
-/**
  *  返回查询需要同步的记录的其它条件，根据需要子类可以覆写
  *
  *  @return (BOOL) 查询需要同步的记录的其它条件

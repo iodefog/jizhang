@@ -22,10 +22,6 @@
     return @[@"cfundid"];
 }
 
-+ (NSArray *)optionalColumns {
-    return @[@"cmemo", @"iorder"];
-}
-
 + (NSString *)queryRecordsForSyncAdditionalCondition {
     return @"cparent <> 'root'";
 }
