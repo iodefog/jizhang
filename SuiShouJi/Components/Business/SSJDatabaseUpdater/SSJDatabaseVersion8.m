@@ -64,19 +64,21 @@
         NSString *lendFundID = [NSString stringWithFormat:@"%@-5",userId];
         NSString *borrowFundID = [NSString stringWithFormat:@"%@-6",userId];
         
-        if (![db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) VALUES (?, '借出款', '10', '', ?, 0, ?, ?, '')", lendFundID, writeDate, @(SSJSyncVersion()), userId]) {
+        int maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ?", userId];
+        
+        if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) values (?, '借出款', '10', '', ?, 0, ?, ?, '', ?)", lendFundID, writeDate, @(SSJSyncVersion()), userId, @(maxOrder + 1)]) {
             return [db lastError];
         }
         
-        if (![db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) VALUES (?, '欠款', '11', '', ?, 0, ?, ?, '')", borrowFundID, writeDate, @(SSJSyncVersion()), userId]) {
+        if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN, IORDER) values (?, '欠款', '11', '', ?, 0, ?, ?, '', ?)", borrowFundID, writeDate, @(SSJSyncVersion()), userId, @(maxOrder + 2)]) {
             return [db lastError];
         }
         
-        if (![db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
+        if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
             return [db lastError];
         }
         
-        if (![db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
+        if (![db executeUpdate:@"insert into BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", borrowFundID, userId, @0.00]) {
             return [db lastError];
         }
     }
@@ -93,7 +95,7 @@
 }
 
 + (NSError *)createUserCreditTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists BK_USER_CREDIT (CFUNDID TEXT NOT NULL, IQUOTA NUMERIC, CBILLDATE TEXT, CREPAYMENTDATE TEXT, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, CREMINDID TEXT, IDELAYDATE INTEGER, IISEND INTEGER), PRIMARY KEY(CFUNDID)"]) {
+    if (![db executeUpdate:@"create table if not exists BK_USER_CREDIT (CFUNDID TEXT NOT NULL, IQUOTA NUMERIC, CBILLDATE TEXT, CREPAYMENTDATE TEXT, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, CREMINDID TEXT, IDELAYDATE INTEGER, IISEND INTEGER, PRIMARY KEY(CFUNDID))"]) {
         return [db lastError];
     }
     
