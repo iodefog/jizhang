@@ -99,14 +99,15 @@
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
     }else if (indexPath.section == 3) {
-//        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//        __weak typeof(self) weakSelf = self;
-//        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent,NSString *selectIcon){
-//            _selectParent = selectParent;
-//            _selectIcoin = selectIcon;
-//            [weakSelf.tableView reloadData];
-//        };
-//        [self.navigationController pushViewController:fundingTypeVC animated:YES];
+        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        fundingTypeVC.selectFundID = _selectParent;
+        __weak typeof(self) weakSelf = self;
+        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent,NSString *selectIcon){
+            _selectParent = selectParent;
+            _selectIcoin = selectIcon;
+            [weakSelf.tableView reloadData];
+        };
+        [self.navigationController pushViewController:fundingTypeVC animated:YES];
     }
 }
 

@@ -77,13 +77,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 @end
 
 @implementation SSJRecordMakingViewController{
-    long _originaldMonth;
-    long _originaldYear;
-    long _originaldDay;
     BOOL _needToDismiss;
 }
 #pragma mark - Lifecycle
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"记一笔";

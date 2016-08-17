@@ -84,7 +84,8 @@
     }else if (indexPath.section == 3) {
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         __weak typeof(self) weakSelf = self;
-            fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent , NSString *selectIcon){
+        fundingTypeVC.selectFundID = _selectParent;
+        fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent , NSString *selectIcon){
             _selectParent = selectParent;
             _selectIcoin = selectIcon;
             [weakSelf.tableview reloadData];
