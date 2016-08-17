@@ -11,7 +11,7 @@
 @implementation SSJDatabaseVersion8
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
-    NSError *error = [self updateFundInfoTableWithDatabase:db];
+    NSError *error = [self updateFundInfoTableAndFunsAcctTableWithDatabase:db];
     if (error) {
         return error;
     }
@@ -34,7 +34,7 @@
     return nil;
 }
 
-+ (NSError *)updateFundInfoTableWithDatabase:(FMDatabase *)db {
++ (NSError *)updateFundInfoTableAndFunsAcctTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"alter table bk_fund_info add idisplay integer default 1"]) {
         return [db lastError];
     }
@@ -61,12 +61,22 @@
     
     while ([result next]) {
         NSString *userId = [result stringForColumn:@"cuserid"];
+        NSString *lendFundID = [NSString stringWithFormat:@"%@-5",userId];
+        NSString *borrowFundID = [NSString stringWithFormat:@"%@-6",userId];
         
-        if (![db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) VALUES (?, '借出款', '10', '', ?, 0, ?, ?, '')", [NSString stringWithFormat:@"%@-5",userId], writeDate, @(SSJSyncVersion()), userId]) {
+        if (![db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) VALUES (?, '借出款', '10', '', ?, 0, ?, ?, '')", lendFundID, writeDate, @(SSJSyncVersion()), userId]) {
             return [db lastError];
         }
         
-        if (![db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) VALUES (?, '欠款', '11', '', ?, 0, ?, ?, '')", [NSString stringWithFormat:@"%@-6",userId], writeDate, @(SSJSyncVersion()), userId]) {
+        if (![db executeUpdate:@"INSERT INTO BK_FUND_INFO (CFUNDID, CACCTNAME, CPARENT, CCOLOR, CWRITEDATE, OPERATORTYPE, IVERSION, CUSERID, CICOIN) VALUES (?, '欠款', '11', '', ?, 0, ?, ?, '')", borrowFundID, writeDate, @(SSJSyncVersion()), userId]) {
+            return [db lastError];
+        }
+        
+        if (![db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
+            return [db lastError];
+        }
+        
+        if (![db executeUpdate:@"INSERT INTO BK_FUNS_ACCT (CFUNDID, CUSERID, IBALANCE) values (?, ?, ?)", lendFundID, userId, @0.00]) {
             return [db lastError];
         }
     }
@@ -75,7 +85,7 @@
 }
 
 + (NSError *)createLoanTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists BK_LOAN (LOANID text not null, CUSERID text, LENDER text, JMONEY numeric, YMONEY numeric, CFUNDID text, CBORROWDATE text, CREPAYMENTDATE text, RATE numeric, MEMO text, INTEREST integer, CREMINDID text, CWRITEDATE text, IVERSION integer, OPERATORTYPE integer, IEND integer, ITYPE integer, primary key(LOANID))"]) {
+    if (![db executeUpdate:@"create table if not exists BK_LOAN (LOANID text not null, CUSERID text, LENDER text, JMONEY numeric, CTHEFUNDID text, CTARGETFUNDID text, CBORROWDATE text, CREPAYMENTDATE text, RATE numeric, MEMO text, INTEREST integer, CREMINDID text, CWRITEDATE text, IVERSION integer, OPERATORTYPE integer, IEND integer, ITYPE integer, primary key(LOANID))"]) {
         return [db lastError];
     }
     
