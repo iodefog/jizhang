@@ -40,6 +40,12 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 // 目标转账流水
 @property (nonatomic, copy) NSString *targetChargeID;
 
+// 结清所属转账流水
+@property (nonatomic, copy) NSString *endChargeID;
+
+// 结清目标转账流水
+@property (nonatomic, copy) NSString *endTargetChargeID;
+
 // 借入／借出日期
 @property (nonatomic, copy) NSString *borrowDate;
 

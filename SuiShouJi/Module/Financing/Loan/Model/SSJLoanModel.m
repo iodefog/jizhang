@@ -21,6 +21,8 @@
     model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
     model.chargeID = [resultSet stringForColumn:@"cthecharge"];
     model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
+    model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
+    model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
     model.borrowDate = [resultSet stringForColumn:@"cborrowdate"];
     model.repaymentDate = [resultSet stringForColumn:@"crepaymentdate"];
     model.endDate = [resultSet stringForColumn:@"cenddate"];
@@ -68,6 +70,8 @@
                                                @"targetFundID":(_targetFundID ?: @""),
                                                @"chargeID":(_chargeID ?: @""),
                                                @"targetChargeID":(_targetChargeID ?: @""),
+                                               @"endChargeID":(_endChargeID ?: @""),
+                                               @"endTargetChargeID":(_endTargetChargeID ?: @""),
                                                @"borrowDate":(_borrowDate ?: @""),
                                                @"repaymentDate":(_repaymentDate ?: @""),
                                                @"enddate":(_endDate ?: @""),
