@@ -320,5 +320,17 @@
     }
 }
 
++ (void)cancelLocalNotificationWithremindItem:(SSJReminderItem *)item{
+    NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
+    for (UILocalNotification *notification in localNotifications) {
+        NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
+        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+        if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
+            if ([remindItem.remindId isEqualToString:item.remindId]) {
+                [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            }
+        }
+    }
+}
 
 @end
