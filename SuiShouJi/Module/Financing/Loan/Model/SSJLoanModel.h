@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class FMResultSet;
+
 typedef NS_ENUM(NSInteger, SSJLoanType) {
     SSJLoanTypeLend,    // 借出
     SSJLoanTypeBorrow   // 借入
@@ -32,11 +34,20 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 // 借入／借出目标账户
 @property (nonatomic, copy) NSString *targetFundID;
 
+// 所属转账流水
+@property (nonatomic, copy) NSString *chargeID;
+
+// 目标转账流水
+@property (nonatomic, copy) NSString *targetChargeID;
+
 // 借入／借出日期
 @property (nonatomic, copy) NSString *borrowDate;
 
 // 期限日期
 @property (nonatomic, copy) NSString *repaymentDate;
+
+// 结清日期
+@property (nonatomic, copy) NSString *endDate;
 
 // 利率
 @property (nonatomic, copy) NSString *rate;
@@ -62,6 +73,6 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 
 @property (nonatomic, copy) NSString *writeDate;
 
-+ (NSDictionary *)propertyMapping;
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
 @end
