@@ -15,7 +15,7 @@
 }
 
 + (NSArray *)columns {
-    return @[@"loanid", @"cuserid", @"lender", @"jmoney", @"cthefundid", @"ctargetfundid", @"cthecharge", @"ctargetcharge", @"cborrowdate", @"crepaymentdate", @"cenddate", @"rate", @"memo", @"cremindid", @"interest", @"iend", @"itype", @"operatorType", @"iversion", @"cwritedate"];
+    return @[@"loanid", @"cuserid", @"lender", @"jmoney", @"cthefundid", @"ctargetfundid", @"cthecharge", @"ctargetcharge", @"cethecharge", @"cetargetcharge", @"cborrowdate", @"crepaymentdate", @"cenddate", @"rate", @"memo", @"cremindid", @"interest", @"iend", @"itype", @"operatorType", @"iversion", @"cwritedate"];
 }
 
 + (NSArray *)primaryKeys {

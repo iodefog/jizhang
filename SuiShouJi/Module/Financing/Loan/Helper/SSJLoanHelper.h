@@ -36,6 +36,17 @@
               failure:(void (^)(NSError *error))failure;
 
 /**
+ *  删除借贷模型
+ *
+ *  @param model     借贷模型
+ *  @param success   成功的回调
+ *  @param failure   失败的回调
+ */
++ (void)deleteLoanModel:(SSJLoanModel *)model
+                success:(void (^)())success
+                failure:(void (^)(NSError *error))failure;
+
+/**
  *  结清借贷
  *
  *  @param model     借贷模型
@@ -45,5 +56,16 @@
 + (void)closeOutLoanModel:(SSJLoanModel *)model
                   success:(void (^)())success
                   failure:(void (^)(NSError *error))failure;
+
+/**
+ *  恢复已结清借贷
+ *
+ *  @param model     借贷模型
+ *  @param success   成功的回调
+ *  @param failure   失败的回调
+ */
++ (void)recoverLoanModel:(SSJLoanModel *)model
+                 success:(void (^)())success
+                 failure:(void (^)(NSError *error))failure;
 
 @end
