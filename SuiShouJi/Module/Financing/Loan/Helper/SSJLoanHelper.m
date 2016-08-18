@@ -56,24 +56,7 @@
         NSMutableArray *list3 = [NSMutableArray array];
         
         while ([result next]) {
-            SSJLoanModel *model = [[SSJLoanModel alloc] init];
-            model.ID = [result stringForColumn:@"loanid"];
-            model.userID = [result stringForColumn:@"cuserid"];
-            model.lender = [result stringForColumn:@"lender"];
-            model.jMoney = [result stringForColumn:@"jmoney"];
-            model.fundID = [result stringForColumn:@"cthefundid"];
-            model.targetFundID = [result stringForColumn:@"ctargetfundid"];
-            model.borrowDate = [result stringForColumn:@"cborrowdate"];
-            model.repaymentDate = [result stringForColumn:@"crepaymentdate"];
-            model.rate = [result stringForColumn:@"rate"];
-            model.memo = [result stringForColumn:@"memo"];
-            model.remindID = [result stringForColumn:@"cremindid"];
-            model.interest = [result boolForColumn:@"interest"];
-            model.closeOut = [result boolForColumn:@"iend"];
-            model.type = [result intForColumn:@"itype"];
-            model.operatorType = [result intForColumn:@"operatorType"];
-            model.version = [result longLongIntForColumn:@"iversion"];
-            model.writeDate = [result stringForColumn:@"cwritedate"];
+            SSJLoanModel *model = [SSJLoanModel modelWithResultSet:result];
             
             NSDate *repaymentDate = [NSDate dateWithString:model.repaymentDate formatString:@"yyyy-MM-dd"];
             NSDate *nowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
@@ -103,24 +86,131 @@
               success:(void (^)())success
               failure:(void (^)(NSError *error))failure {
     
+    NSString *booksID = SSJGetCurrentBooksType();
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        [SSJLoanModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
-            return [SSJLoanModel propertyMapping];
-        }];
         
-        BOOL successfull = [db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype) values (:ID, :userID, :lender, :jMoney, :fundID, :targetFundID, :borrowDate, :repaymentDate, :rate, :memo, :remindID, :interest, :closeOut, :type, :writeDate, :operatorType, :version)", model.mj_keyValues];
         
-        if (successfull) {
-            if (success) {
-                success();
-            }
-        } else {
+//        if (successfull) {
+//            if (success) {
+//                success();
+//            }
+//        } else {
+//            if (failure) {
+//                failure([db lastError]);
+//            }
+//        }
+    }];
+}
+
++ (void)closeOutLoanModel:(SSJLoanModel *)model
+                  success:(void (^)())success
+                  failure:(void (^)(NSError *error))failure {
+    
+    NSString *booksID = SSJGetCurrentBooksType();
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        if (![db executeUpdate:@"update bk_loan set iend = ?, cenddate = ? where loanid = ?", @1, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"], model.ID]) {
+            
+            *rollback = YES;
             if (failure) {
                 failure([db lastError]);
             }
+            
+            return;
+        }
+        
+        
+        NSString *rollOutFundID = nil;
+        NSString *rollInFundID = nil;
+        
+        switch (model.type) {
+            case SSJLoanTypeLend:
+                rollOutFundID = model.fundID;
+                rollInFundID = model.targetFundID;
+                
+                break;
+                
+            case SSJLoanTypeBorrow:
+                rollOutFundID = model.targetFundID;
+                rollInFundID = model.fundID;
+                
+                break;
+        }
+        
+        // 转出流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), model.userID, model.jMoney, @4, rollOutFundID, model.borrowDate, booksID, @(model.version), @(model.operatorType), model.writeDate]) {
+            
+            *rollback = YES;
+            if (failure) {
+                failure([db lastError]);
+            }
+            
+            return;
+        }
+        
+        // 转入流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), model.userID, model.jMoney, @3, rollInFundID, model.borrowDate, booksID, @(model.version), @(model.operatorType), model.writeDate]) {
+            
+            *rollback = YES;
+            if (failure) {
+                failure([db lastError]);
+            }
+            
+            return;
+        }
+        
+        // 关闭提醒
+#warning todo
+        
+        if (success) {
+            success();
         }
     }];
+}
+
++ (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
+    
+    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype) values (:ID, :userID, :lender, :jMoney, :fundID, :targetFundID, :borrowDate, :repaymentDate, :rate, :memo, :remindID, :interest, :closeOut, :type, :writeDate, :operatorType, :version)", model.mj_keyValues]) {
+        return NO;
+    }
+    
+    NSString *rollOutFundID = nil;
+    NSString *rollInFundID = nil;
+    NSString *rollOutChargeID = nil;
+    NSString *rollInChargeID = nil;
+    
+    switch (model.type) {
+        case SSJLoanTypeLend:
+            rollOutFundID = model.targetFundID;
+            rollInFundID = model.fundID;
+            rollOutChargeID = model.targetChargeID;
+            rollInChargeID = model.chargeID;
+            
+            break;
+            
+        case SSJLoanTypeBorrow:
+            rollOutFundID = model.fundID;
+            rollInFundID = model.targetFundID;
+            rollOutChargeID = model.chargeID;
+            rollInChargeID = model.targetChargeID;
+            
+            break;
+    }
+    
+    // 转出流水
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, model.jMoney, @4, rollOutFundID, model.borrowDate, booksID, @(model.version), @(model.operatorType), model.writeDate]) {
+        return NO;
+    }
+    
+    // 转入流水
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInChargeID, model.userID, model.jMoney, @3, rollInFundID, model.borrowDate, booksID, @(model.version), @(model.operatorType), model.writeDate]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 @end

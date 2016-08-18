@@ -15,7 +15,7 @@
 }
 
 + (NSArray *)columns {
-    return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"iorder", @"cwritedate", @"iversion", @"operatortype"];
+    return @[@"cfundid", @"cacctname", @"cicoin", @"cparent", @"ccolor", @"cmemo", @"cuserid", @"iorder", @"idisplay", @"cwritedate", @"iversion", @"operatortype"];
 }
 
 + (NSArray *)primaryKeys {
