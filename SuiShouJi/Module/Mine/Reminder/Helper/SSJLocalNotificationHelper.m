@@ -29,16 +29,6 @@
 + (void)registerLocalNotificationWithremindItem:(SSJReminderItem *)item
 {
     NSMutableArray *notificationsArr = [NSMutableArray array];
-//    // 设置触发通知的时间
-//    notification.fireDate = fireDate;
-//    // 时区
-//    notification.timeZone = [NSTimeZone defaultTimeZone];
-//    // 设置重复的间隔
-//    notification.repeatInterval = repeatIterval;
-//    // 通知内容
-//    notification.alertBody =  str;
-//
-//    notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
     
     NSDate * fireDate = [NSDate dateWithString:item.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
     

@@ -1866,6 +1866,8 @@
 		9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594211D654AC900006594 /* SSJReminderItem.m */; };
 		9CF594231D654AC900006594 /* SSJReminderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594211D654AC900006594 /* SSJReminderItem.m */; };
 		9CF5942F1D65AE6200006594 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
+		9CF594321D65B59B00006594 /* SSJLocalNotificationStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594311D65B59B00006594 /* SSJLocalNotificationStore.m */; };
+		9CF594331D65B5A000006594 /* SSJLocalNotificationStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594311D65B59B00006594 /* SSJLocalNotificationStore.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
@@ -3277,6 +3279,8 @@
 		9CF594211D654AC900006594 /* SSJReminderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderItem.m; sourceTree = "<group>"; };
 		9CF5942D1D65AE6200006594 /* SSJLocalNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLocalNotificationHelper.h; sourceTree = "<group>"; };
 		9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLocalNotificationHelper.m; sourceTree = "<group>"; };
+		9CF594301D65B59B00006594 /* SSJLocalNotificationStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLocalNotificationStore.h; sourceTree = "<group>"; };
+		9CF594311D65B59B00006594 /* SSJLocalNotificationStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLocalNotificationStore.m; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -6098,6 +6102,8 @@
 		9CF594241D655EA000006594 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				9CF594301D65B59B00006594 /* SSJLocalNotificationStore.h */,
+				9CF594311D65B59B00006594 /* SSJLocalNotificationStore.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -8369,6 +8375,7 @@
 				9C2A679D1D194CA70010F1DA /* SSJBudgetEditPeriodSelectionView.m in Sources */,
 				9C2A679E1D194CA70010F1DA /* SSJBillingChargeHeaderView.m in Sources */,
 				9C2A679F1D194CA70010F1DA /* SSJGuideView.m in Sources */,
+				9CF594331D65B5A000006594 /* SSJLocalNotificationStore.m in Sources */,
 				9C2A67A01D194CA70010F1DA /* SSJDataAddition.m in Sources */,
 				9C2A67A11D194CA70010F1DA /* SSJFinancingHomeitem.m in Sources */,
 				9C2A67A21D194CA70010F1DA /* SSJBudgetTypeModel.m in Sources */,
@@ -8846,6 +8853,7 @@
 				9C9DD66A1D49FA31001FA3C5 /* SSJThemeManagerViewController.m in Sources */,
 				9C94719C1CEB473E00D69079 /* SSJCalendarViewController.m in Sources */,
 				9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */,
+				9CF594321D65B59B00006594 /* SSJLocalNotificationStore.m in Sources */,
 				7D6F93311D0809E0000CCDB3 /* SSJReportFormsCurveGraphView.m in Sources */,
 				9CD9BC181CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m in Sources */,
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
