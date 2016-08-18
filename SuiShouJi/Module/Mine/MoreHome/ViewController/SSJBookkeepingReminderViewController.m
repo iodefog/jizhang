@@ -51,9 +51,9 @@ static NSString *const kTitle3 = @"定期提醒";
 
 }
 
--(void)goBackAction{
-    [self saveChargeReminder];
-}
+//-(void)goBackAction{
+//    [self saveChargeReminder];
+//}
 
 #pragma mark - Getter
 -(SSJChargeReminderTimeView *)chargeReminderTime{
@@ -203,50 +203,50 @@ static NSString *const kTitle3 = @"定期提醒";
     }];
 }
 
--(void)saveChargeReminder{
-    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
-    if (self.item.isOnOrNot) {
-        NSArray *tempArr = [self.selectNumCircle componentsSeparatedByString:@","];
-        NSString *baseDateStr = [NSString stringWithFormat:@"%@ %@:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],self.selectTime];
-        NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
-        if (tempArr.count == 7) {
-            if ([baseDate isEarlierThan:[NSDate date]]) {
-                baseDate = [baseDate dateByAddingDays:1];
-            }
-            [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
-        }else if (tempArr.count == 1){
-            if ([baseDate isEarlierThan:[NSDate date]]) {
-                baseDate = [baseDate dateByAddingDays:7];
-            }
-            [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
-        }else{
-            for (int i = 0; i < tempArr.count; i ++) {
-                NSDate *firedate = [NSDate date];
-                if ([(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] > [NSDate date].weekday){
-                    firedate = [baseDate dateByAddingDays:[(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] - [NSDate date].weekday];
-                    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:firedate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
-                }else if ([(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] < [NSDate date].weekday){
-                    firedate = [baseDate dateByAddingDays:[(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] - [NSDate date].weekday + 7];
-                    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:firedate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
-                }else{
-                    if ([baseDate isEarlierThan:[NSDate date]]) {
-                        baseDate = [baseDate dateByAddingDays:7];
-                        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
-                    }else{
-                        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
-                    }
-                }
-            }
-        }
-    }
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update BK_CHARGE_REMINDER set ISONORNOT = ? ,TIME = ?, CIRCLE = ?",[NSNumber numberWithBool:weakSelf.item.isOnOrNot],weakSelf.selectTime,weakSelf.selectNumCircle];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        });
-    }];
-}
+//-(void)saveChargeReminder{
+//    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
+//    if (self.item.isOnOrNot) {
+//        NSArray *tempArr = [self.selectNumCircle componentsSeparatedByString:@","];
+//        NSString *baseDateStr = [NSString stringWithFormat:@"%@ %@:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],self.selectTime];
+//        NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
+//        if (tempArr.count == 7) {
+//            if ([baseDate isEarlierThan:[NSDate date]]) {
+//                baseDate = [baseDate dateByAddingDays:1];
+//            }
+//            [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
+//        }else if (tempArr.count == 1){
+//            if ([baseDate isEarlierThan:[NSDate date]]) {
+//                baseDate = [baseDate dateByAddingDays:7];
+//            }
+//            [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
+//        }else{
+//            for (int i = 0; i < tempArr.count; i ++) {
+//                NSDate *firedate = [NSDate date];
+//                if ([(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] > [NSDate date].weekday){
+//                    firedate = [baseDate dateByAddingDays:[(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] - [NSDate date].weekday];
+//                    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:firedate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
+//                }else if ([(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] < [NSDate date].weekday){
+//                    firedate = [baseDate dateByAddingDays:[(NSString *)[tempArr ssj_safeObjectAtIndex:i] intValue] - [NSDate date].weekday + 7];
+//                    [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:firedate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
+//                }else{
+//                    if ([baseDate isEarlierThan:[NSDate date]]) {
+//                        baseDate = [baseDate dateByAddingDays:7];
+//                        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
+//                    }else{
+//                        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSWeekCalendarUnit notificationKey:SSJChargeReminderNotification];
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    __weak typeof(self) weakSelf = self;
+//    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+//        [db executeUpdate:@"update BK_CHARGE_REMINDER set ISONORNOT = ? ,TIME = ?, CIRCLE = ?",[NSNumber numberWithBool:weakSelf.item.isOnOrNot],weakSelf.selectTime,weakSelf.selectNumCircle];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [weakSelf.navigationController popViewControllerAnimated:YES];
+//        });
+//    }];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

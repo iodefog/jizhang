@@ -6047,6 +6047,7 @@
 		9CF594131D654A5300006594 /* Reminder */ = {
 			isa = PBXGroup;
 			children = (
+				9CF594241D655EA000006594 /* Store */,
 				9CF5941F1D654A9300006594 /* Helper */,
 				9CF594141D654A5300006594 /* Model */,
 				9CF594151D654A5300006594 /* Network */,
@@ -6093,6 +6094,13 @@
 				9CD9BBAF1CFD2DAA0061803B /* SSJLocalNotificationHelper.m */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		9CF594241D655EA000006594 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		BD0432CB1C1A772A0051E7AB /* Macro */ = {

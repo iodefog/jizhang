@@ -98,15 +98,6 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
     
-    if (SSJIsFirstLaunchForCurrentVersion()) {
-        NSString *baseDateStr = [NSString stringWithFormat:@"%@ 20:00:00",[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
-        NSDate *baseDate = [NSDate dateWithString:baseDateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
-        if ([baseDate isEarlierThan:[NSDate date]]) {
-            baseDate = [baseDate dateByAddingDays:1];
-        }
-        [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJChargeReminderNotification];
-        [SSJLocalNotificationHelper registerLocalNotificationWithFireDate:baseDate repeatIterval:NSCalendarUnitDay notificationKey:SSJChargeReminderNotification];
-    }
     
     [SSJRegularManager registerRegularTaskNotification];
     

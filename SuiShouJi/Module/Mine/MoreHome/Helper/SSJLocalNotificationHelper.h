@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJReminderItem.h"
 
 @interface SSJLocalNotificationHelper : NSObject
 /**
@@ -16,14 +17,13 @@
  *  @param repeatIterval   触发频率
  *  @param notificationKey 触发通知的key
  */
-+(void)registerLocalNotificationWithFireDate:(NSDate*)fireDate
-                               repeatIterval:(NSCalendarUnit)repeatIterval
-                             notificationKey:(NSString *)notificationKey;
++ (void)registerLocalNotificationWithremindItem:(SSJReminderItem *)item;
+
 
 /**
  *  取消本地通知
  *
  *  @param key 要取消的本地通知的key
  */
-+(void)cancelLocalNotificationWithKey:(NSString *)key;
++ (void)cancelLocalNotificationWithKey:(NSString *)key;
 @end
