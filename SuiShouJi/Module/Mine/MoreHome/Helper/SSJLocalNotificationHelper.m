@@ -27,6 +27,7 @@
 //}
 
 +(void)registerLocalNotificationWithFireDate:(NSDate*)fireDate
+                                     hintStr:(NSString *)str
                                repeatIterval:(NSCalendarUnit)repeatIterval
                              notificationKey:(NSString *)notificationKey
 {
@@ -38,18 +39,17 @@
     // 设置重复的间隔
     notification.repeatInterval = repeatIterval;
     // 通知内容
-    if ([SSJStartChecker sharedInstance].remindMassage) {
-        notification.alertBody =  [SSJStartChecker sharedInstance].remindMassage;
-    }else{
-        notification.alertBody =  @"精打细算，有吃有穿，小主快来记账啦～";
-    }
+    notification.alertBody =  str;
 
     notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+    
     // 通知被触发时播放的声音
     notification.soundName = @"pushsound.wav";
+    
     // 通知参数
     NSDictionary *userDict = [NSDictionary dictionaryWithObject:notificationKey forKey:@"key"];
     notification.userInfo = userDict;
+    
     // ios8后，需要添加这个注册，才能得到授权
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
