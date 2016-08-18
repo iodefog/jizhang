@@ -143,6 +143,26 @@
         }
         break;
         
+        // 如果是每年
+        case 6:{
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            // 时区
+            notification.timeZone = [NSTimeZone defaultTimeZone];
+            // 通知内容
+            notification.alertBody = item.remindContent;
+            // 通知被触发时播放的声音
+            notification.soundName = @"pushsound.wav";
+            // 通知参数
+            NSDictionary *userDict = @{@"remindItem":item,
+                                       @"key":SSJReminderNotificationKey};
+            notification.userInfo = userDict;
+            notification.fireDate = fireDate;
+            notification.repeatInterval = NSCalendarUnitYear;
+            [notificationsArr addObject:notification];
+        }
+        break;
+
+        
         // 如果是每月最后一天
         case 4:{
             NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
@@ -175,6 +195,7 @@
         
         // 如果是每月
         case 5:{
+            // 如果是大于28号,则只要添加一次推送
             if (fireDate.day > 28) {
                 NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
                 for (UILocalNotification *notification in localNotifications) {
