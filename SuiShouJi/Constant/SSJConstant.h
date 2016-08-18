@@ -125,6 +125,9 @@ extern NSString *const SSJCurrentBooksTypeKey;
 //上一次下载的补丁的key
 extern NSString *const SSJLastLoggedUserItemKey;
 
+//  本地通知的key
+extern NSString *const SSJReminderNotificationKey;
+
 
 /** --------------- Notification --------------- */
 //  数据同步成功通知
@@ -141,9 +144,6 @@ extern NSString *const SSJShowSyncLoadingNotification;
 
 //  隐藏同步中通知
 extern NSString *const SSJHideSyncLoadingNotification;
-
-//  记账提醒的通知
-extern NSString *const SSJChargeReminderNotification;
 
 //  初始化数据库开始的通知
 extern NSString *const SSJInitDatabaseDidBeginNotification;

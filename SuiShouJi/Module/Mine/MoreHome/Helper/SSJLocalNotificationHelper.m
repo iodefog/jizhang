@@ -53,7 +53,8 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            NSDictionary *userDict = @{@"remindItem":item,
+                                       @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.repeatInterval = NSCalendarUnitDay;
             notification.fireDate = fireDate;
@@ -71,14 +72,16 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            NSDictionary *userDict = @{@"remindItem":item,
+                                       @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
-            notification.repeatInterval = NSWeekdayCalendarUnit;
+            notification.repeatInterval = NSWeekCalendarUnit;
             notification.fireDate = fireDate;
             [notificationsArr addObject:notification];
         }
         break;
         
+        // 如果是仅一次
         case 7:{
             UILocalNotification *notification = [[UILocalNotification alloc] init];
             // 时区
@@ -88,7 +91,8 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            NSDictionary *userDict = @{@"remindItem":item,
+                                       @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             if ([fireDate isEarlierThan:[NSDate date]]) {
                 fireDate = [fireDate dateByAddingDays:1];
@@ -98,6 +102,124 @@
         }
         break;
         
+        // 如果是没周末,添加两个推送
+        case 2:{
+            NSDate *firstDayOfTheWeek = [[fireDate dateBySubtractingDays:fireDate.weekday] dateByAddingDays:2];
+            if (fireDate.weekday != 1) {
+                for (int i = 5; i < 7; i ++) {
+                    UILocalNotification *notification = [[UILocalNotification alloc] init];
+                    // 时区
+                    notification.timeZone = [NSTimeZone defaultTimeZone];
+                    // 通知内容
+                    notification.alertBody = item.remindContent;
+                    // 通知被触发时播放的声音
+                    notification.soundName = @"pushsound.wav";
+                    // 通知参数
+                    NSDictionary *userDict = @{@"remindItem":item,
+                                               @"key":SSJReminderNotificationKey};
+                    notification.userInfo = userDict;
+                    notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
+                    notification.repeatInterval = NSWeekCalendarUnit;
+                    [notificationsArr addObject:notification];
+                }
+            }else{
+                for (int i = 0; i < 2 ; i ++) {
+                    UILocalNotification *notification = [[UILocalNotification alloc] init];
+                    // 时区
+                    notification.timeZone = [NSTimeZone defaultTimeZone];
+                    // 通知内容
+                    notification.alertBody = item.remindContent;
+                    // 通知被触发时播放的声音
+                    notification.soundName = @"pushsound.wav";
+                    // 通知参数
+                    NSDictionary *userDict = @{@"remindItem":item,
+                                               @"key":SSJReminderNotificationKey};
+                    notification.userInfo = userDict;
+                    notification.fireDate = [fireDate dateBySubtractingDays:i];
+                    notification.repeatInterval = NSWeekCalendarUnit;
+                    [notificationsArr addObject:notification];
+                }
+            }
+        }
+        break;
+        
+        // 如果是每月最后一天
+        case 4:{
+            NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
+            for (UILocalNotification *notification in localNotifications) {
+                NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
+                SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
+                    NSDate *remindDate = [NSDate dateWithString:remindItem.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
+                    if ([remindItem.remindId isEqualToString:item.remindId] && remindDate.month == fireDate.month) {
+                        return;
+                    }
+                }
+            }
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            // 时区
+            notification.timeZone = [NSTimeZone defaultTimeZone];
+            // 通知内容
+            notification.alertBody = item.remindContent;
+            // 通知被触发时播放的声音
+            notification.soundName = @"pushsound.wav";
+            // 通知参数
+            NSDictionary *userDict = @{@"remindItem":item,
+                                       @"key":SSJReminderNotificationKey};
+            notification.userInfo = userDict;
+            NSDate *lastDayOfTheMonth = [NSDate dateWithYear:fireDate.year month:fireDate.month day:fireDate.daysInMonth hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
+            notification.fireDate = lastDayOfTheMonth;
+            [notificationsArr addObject:notification];
+        }
+        break;
+        
+        // 如果是每月
+        case 5:{
+            if (fireDate.day > 28) {
+                NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
+                for (UILocalNotification *notification in localNotifications) {
+                    NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
+                    SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                    if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
+                        NSDate *remindDate = [NSDate dateWithString:remindItem.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
+                        if ([remindItem.remindId isEqualToString:item.remindId] && remindDate.month == fireDate.month) {
+                            return;
+                        }
+                    }
+                }
+                UILocalNotification *notification = [[UILocalNotification alloc] init];
+                // 时区
+                notification.timeZone = [NSTimeZone defaultTimeZone];
+                // 通知内容
+                notification.alertBody = item.remindContent;
+                // 通知被触发时播放的声音
+                notification.soundName = @"pushsound.wav";
+                // 通知参数
+                NSDictionary *userDict = @{@"remindItem":item,
+                                           @"key":SSJReminderNotificationKey};
+                notification.userInfo = userDict;
+                notification.fireDate = fireDate;
+                [notificationsArr addObject:notification];
+            }else{
+                UILocalNotification *notification = [[UILocalNotification alloc] init];
+                // 时区
+                notification.timeZone = [NSTimeZone defaultTimeZone];
+                // 通知内容
+                notification.alertBody = item.remindContent;
+                // 通知被触发时播放的声音
+                notification.soundName = @"pushsound.wav";
+                // 通知参数
+                NSDictionary *userDict = @{@"remindItem":item,
+                                           @"key":SSJReminderNotificationKey};
+                notification.userInfo = userDict;
+                notification.repeatInterval = NSCalendarUnitMonth;
+                notification.fireDate = fireDate;
+                [notificationsArr addObject:notification];
+            }
+        }
+        break;
+        
+        // 如果是每个工作日,添加五个推送
         case 1:{
             NSDate *firstDayOfTheWeek = [[fireDate dateBySubtractingDays:fireDate.weekday] dateByAddingDays:2];
             for (int i = 0; i < 5; i ++) {
@@ -109,9 +231,11 @@
                 // 通知被触发时播放的声音
                 notification.soundName = @"pushsound.wav";
                 // 通知参数
-                NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+                NSDictionary *userDict = @{@"remindItem":item,
+                                           @"key":SSJReminderNotificationKey};
                 notification.userInfo = userDict;
                 notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
+                notification.repeatInterval = NSWeekdayCalendarUnit;
                 [notificationsArr addObject:notification];
             }
         }
@@ -126,7 +250,8 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            NSDictionary *userDict = @{@"remindItem":item,
+                                       @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             if ([fireDate isEarlierThan:[NSDate date]]) {
                 fireDate = [fireDate dateByAddingDays:1];
