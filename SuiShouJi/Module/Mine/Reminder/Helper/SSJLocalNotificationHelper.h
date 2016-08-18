@@ -16,7 +16,7 @@
 *
 *  @param item 通知的item
 */
-+ (void)registerLocalNotificationWithremindItem:(SSJReminderItem *)item;
++ (void)registerLocalNotificationWithremindItem:(SSJReminderItem * __nonnull)item;
 
 
 /**
@@ -24,12 +24,12 @@
  *
  *  @param key 要取消的本地通知的key
  */
-+ (void)cancelLocalNotificationWithKey:(nullable NSString *)key;
++ (void)cancelLocalNotificationWithKey:(NSString * __nullable)key;
 
 /**
  *  取消一个本地通知
  *
  *  @param item 通知的item
  */
-+ (void)cancelLocalNotificationWithremindItem:(SSJReminderItem *)item;
++ (void)cancelLocalNotificationWithremindItem:(SSJReminderItem * __nonnull)item;
 @end
