@@ -813,7 +813,6 @@
 		9C2A683F1D194CA70010F1DA /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
 		9C2A68401D194CA70010F1DA /* SSJMineSyncButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBCF1CFD2DAA0061803B /* SSJMineSyncButton.m */; };
 		9C2A68411D194CA70010F1DA /* SSJPagingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = BD04339D1C1A99170051E7AB /* SSJPagingNetworkService.m */; };
-		9C2A68421D194CA70010F1DA /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBAF1CFD2DAA0061803B /* SSJLocalNotificationHelper.m */; };
 		9C2A68431D194CA70010F1DA /* SCYMotionEncryptionTriangleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C341C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m */; };
 		9C2A68441D194CA70010F1DA /* SSJSyncSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBDE1CFD2DAA0061803B /* SSJSyncSettingViewController.m */; };
 		9C2A68451D194CA70010F1DA /* SSJADDNewTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33221CEAE6C10086B67E /* SSJADDNewTypeViewController.m */; };
@@ -1787,7 +1786,6 @@
 		9CD9BC181CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA71CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m */; };
 		9CD9BC191CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBA91CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m */; };
 		9CD9BC1A1CFD2DAA0061803B /* SSJMagicExportSelectDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBAB1CFD2DAA0061803B /* SSJMagicExportSelectDateView.m */; };
-		9CD9BC1B1CFD2DAA0061803B /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBAF1CFD2DAA0061803B /* SSJLocalNotificationHelper.m */; };
 		9CD9BC1C1CFD2DAA0061803B /* SSJChargeReminderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB21CFD2DAA0061803B /* SSJChargeReminderItem.m */; };
 		9CD9BC1D1CFD2DAA0061803B /* SSJUserInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB41CFD2DAA0061803B /* SSJUserInfoItem.m */; };
 		9CD9BC1E1CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBB71CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m */; };
@@ -1867,6 +1865,7 @@
 		9CF594111D64571900006594 /* SSJNewCreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5940F1D64571900006594 /* SSJNewCreditCardViewController.m */; };
 		9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594211D654AC900006594 /* SSJReminderItem.m */; };
 		9CF594231D654AC900006594 /* SSJReminderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF594211D654AC900006594 /* SSJReminderItem.m */; };
+		9CF5942F1D65AE6200006594 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		B10901D63166F7C1976D8083 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9C2C669BC49A563D49451D /* libPods.a */; };
 		BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		BD0432EB1C1A77BB0051E7AB /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */; };
@@ -3160,8 +3159,6 @@
 		9CD9BBA91CFD2DAA0061803B /* SSJMagicExportResultCheckMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportResultCheckMarkView.m; sourceTree = "<group>"; };
 		9CD9BBAA1CFD2DAA0061803B /* SSJMagicExportSelectDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportSelectDateView.h; sourceTree = "<group>"; };
 		9CD9BBAB1CFD2DAA0061803B /* SSJMagicExportSelectDateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportSelectDateView.m; sourceTree = "<group>"; };
-		9CD9BBAE1CFD2DAA0061803B /* SSJLocalNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJLocalNotificationHelper.h; path = ../../MoreHome/Helper/SSJLocalNotificationHelper.h; sourceTree = "<group>"; };
-		9CD9BBAF1CFD2DAA0061803B /* SSJLocalNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJLocalNotificationHelper.m; path = ../../MoreHome/Helper/SSJLocalNotificationHelper.m; sourceTree = "<group>"; };
 		9CD9BBB11CFD2DAA0061803B /* SSJChargeReminderItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeReminderItem.h; sourceTree = "<group>"; };
 		9CD9BBB21CFD2DAA0061803B /* SSJChargeReminderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeReminderItem.m; sourceTree = "<group>"; };
 		9CD9BBB31CFD2DAA0061803B /* SSJUserInfoItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserInfoItem.h; sourceTree = "<group>"; };
@@ -3278,6 +3275,8 @@
 		9CF5940F1D64571900006594 /* SSJNewCreditCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewCreditCardViewController.m; sourceTree = "<group>"; };
 		9CF594201D654AC900006594 /* SSJReminderItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderItem.h; sourceTree = "<group>"; };
 		9CF594211D654AC900006594 /* SSJReminderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderItem.m; sourceTree = "<group>"; };
+		9CF5942D1D65AE6200006594 /* SSJLocalNotificationHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLocalNotificationHelper.h; sourceTree = "<group>"; };
+		9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLocalNotificationHelper.m; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
 		BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		BD0432D01C1A77BB0051E7AB /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -6090,8 +6089,8 @@
 		9CF5941F1D654A9300006594 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9BBAE1CFD2DAA0061803B /* SSJLocalNotificationHelper.h */,
-				9CD9BBAF1CFD2DAA0061803B /* SSJLocalNotificationHelper.m */,
+				9CF5942D1D65AE6200006594 /* SSJLocalNotificationHelper.h */,
+				9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -8558,7 +8557,6 @@
 				7D87AE871D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */,
 				9C2A68411D194CA70010F1DA /* SSJPagingNetworkService.m in Sources */,
 				9CF5940B1D63FFBB00006594 /* SSJModifyFundingViewController.m in Sources */,
-				9C2A68421D194CA70010F1DA /* SSJLocalNotificationHelper.m in Sources */,
 				9C2A68431D194CA70010F1DA /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9C2A68441D194CA70010F1DA /* SSJSyncSettingViewController.m in Sources */,
 				7D87AEA41D658E3F0024D33C /* SSJLoanSyncTable.m in Sources */,
@@ -8715,6 +8713,7 @@
 				7D5F33401CEAE6C10086B67E /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9CD9BC171CFD2DAA0061803B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				7D5848801CE5BB4A0027DAFA /* SSJBillTypeSyncTable.m in Sources */,
+				9CF5942F1D65AE6200006594 /* SSJLocalNotificationHelper.m in Sources */,
 				BD70DF661C4751EA000E6CC9 /* SSJRegistGetVerViewController.m in Sources */,
 				7D2BF36A1D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m in Sources */,
 				7D5F337C1CEAE6C10086B67E /* SSJFundingTypeSelectView.m in Sources */,
@@ -8957,7 +8956,6 @@
 				9CD9BC2A1CFD2DAA0061803B /* SSJMineSyncButton.m in Sources */,
 				9C66F1361D211FE60094125D /* SSJThemeCollectionHeaderView.m in Sources */,
 				BD04339E1C1A99170051E7AB /* SSJPagingNetworkService.m in Sources */,
-				9CD9BC1B1CFD2DAA0061803B /* SSJLocalNotificationHelper.m in Sources */,
 				7DE69C3B1C8EC401001D31C1 /* SCYMotionEncryptionTriangleLayer.m in Sources */,
 				9CD9BC311CFD2DAA0061803B /* SSJSyncSettingViewController.m in Sources */,
 				7D5F33881CEAE6C10086B67E /* SSJADDNewTypeViewController.m in Sources */,
