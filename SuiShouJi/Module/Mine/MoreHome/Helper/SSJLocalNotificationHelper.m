@@ -26,29 +26,116 @@
 //    }
 //}
 
-+(void)registerLocalNotificationWithFireDate:(NSDate*)fireDate
-                                     hintStr:(NSString *)str
-                               repeatIterval:(NSCalendarUnit)repeatIterval
-                             notificationKey:(NSString *)notificationKey
++ (void)registerLocalNotificationWithremindItem:(SSJReminderItem *)item
 {
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    // 设置触发通知的时间
-    notification.fireDate = fireDate;
-    // 时区
-    notification.timeZone = [NSTimeZone defaultTimeZone];
-    // 设置重复的间隔
-    notification.repeatInterval = repeatIterval;
-    // 通知内容
-    notification.alertBody =  str;
-
-    notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+    NSMutableArray *notificationsArr = [NSMutableArray array];
+//    // 设置触发通知的时间
+//    notification.fireDate = fireDate;
+//    // 时区
+//    notification.timeZone = [NSTimeZone defaultTimeZone];
+//    // 设置重复的间隔
+//    notification.repeatInterval = repeatIterval;
+//    // 通知内容
+//    notification.alertBody =  str;
+//
+//    notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
     
-    // 通知被触发时播放的声音
-    notification.soundName = @"pushsound.wav";
+    NSDate * fireDate = [NSDate dateWithString:item.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
     
-    // 通知参数
-    NSDictionary *userDict = [NSDictionary dictionaryWithObject:notificationKey forKey:@"key"];
-    notification.userInfo = userDict;
+    switch (item.remindCycle) {
+        // 如果是每天
+        case 0:{
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            // 时区
+            notification.timeZone = [NSTimeZone defaultTimeZone];
+            // 通知内容
+            notification.alertBody = item.remindContent;
+            // 通知被触发时播放的声音
+            notification.soundName = @"pushsound.wav";
+            // 通知参数
+            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            notification.userInfo = userDict;
+            notification.repeatInterval = NSCalendarUnitDay;
+            notification.fireDate = fireDate;
+            [notificationsArr addObject:notification];
+        }
+        break;
+        
+        // 如果是每周
+        case 3:{
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            // 时区
+            notification.timeZone = [NSTimeZone defaultTimeZone];
+            // 通知内容
+            notification.alertBody = item.remindContent;
+            // 通知被触发时播放的声音
+            notification.soundName = @"pushsound.wav";
+            // 通知参数
+            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            notification.userInfo = userDict;
+            notification.repeatInterval = NSWeekdayCalendarUnit;
+            notification.fireDate = fireDate;
+            [notificationsArr addObject:notification];
+        }
+        break;
+        
+        case 7:{
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            // 时区
+            notification.timeZone = [NSTimeZone defaultTimeZone];
+            // 通知内容
+            notification.alertBody = item.remindContent;
+            // 通知被触发时播放的声音
+            notification.soundName = @"pushsound.wav";
+            // 通知参数
+            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            notification.userInfo = userDict;
+            if ([fireDate isEarlierThan:[NSDate date]]) {
+                fireDate = [fireDate dateByAddingDays:1];
+            }
+            notification.fireDate = fireDate;
+            [notificationsArr addObject:notification];
+        }
+        break;
+        
+        case 1:{
+            NSDate *firstDayOfTheWeek = [[fireDate dateBySubtractingDays:fireDate.weekday] dateByAddingDays:2];
+            for (int i = 0; i < 5; i ++) {
+                UILocalNotification *notification = [[UILocalNotification alloc] init];
+                // 时区
+                notification.timeZone = [NSTimeZone defaultTimeZone];
+                // 通知内容
+                notification.alertBody = item.remindContent;
+                // 通知被触发时播放的声音
+                notification.soundName = @"pushsound.wav";
+                // 通知参数
+                NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+                notification.userInfo = userDict;
+                notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
+                [notificationsArr addObject:notification];
+            }
+        }
+        break;
+        
+        default:{
+            UILocalNotification *notification = [[UILocalNotification alloc] init];
+            // 时区
+            notification.timeZone = [NSTimeZone defaultTimeZone];
+            // 通知内容
+            notification.alertBody = item.remindContent;
+            // 通知被触发时播放的声音
+            notification.soundName = @"pushsound.wav";
+            // 通知参数
+            NSDictionary *userDict = [NSDictionary dictionaryWithObject:item forKey:@"key"];
+            notification.userInfo = userDict;
+            if ([fireDate isEarlierThan:[NSDate date]]) {
+                fireDate = [fireDate dateByAddingDays:1];
+            }
+            notification.fireDate = fireDate;
+            [notificationsArr addObject:notification];
+        }
+        break;
+    }
     
     // ios8后，需要添加这个注册，才能得到授权
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
@@ -56,15 +143,16 @@
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type
                                                                                  categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        notification.repeatInterval = repeatIterval;
     }
     // 执行通知注册
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-    NSArray *localNotifications = [[NSArray alloc]init];
-    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    for (UILocalNotification *notification in notificationsArr) {
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+//    NSArray *localNotifications = [[NSArray alloc]init];
+//    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
 }
 
-+(void)cancelLocalNotificationWithKey:(nullable NSString *)key{
++ (void)cancelLocalNotificationWithKey:(nullable NSString *)key{
     if (!key.length) {
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
         return;
