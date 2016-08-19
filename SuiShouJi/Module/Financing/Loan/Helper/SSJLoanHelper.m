@@ -8,6 +8,7 @@
 
 #import "SSJLoanHelper.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJLocalNotificationStore.h"
 
 @implementation SSJLoanHelper
 
@@ -88,7 +89,8 @@
     }];
 }
 
-+ (void)saveLoanModel:(SSJLoanModel *)model
++ (void)saveLoanModel:(SSJLoanModel *)loanModel
+          remindModel:(SSJReminderItem *)remindModel
               success:(void (^)())success
               failure:(void (^)(NSError *error))failure {
     
@@ -96,7 +98,7 @@
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", model.ID];
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", loanModel.ID];
         if (!resultSet) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -122,7 +124,8 @@
         }
         
         // 创建或更新借贷记录、转账流水
-        if (![self saveLoanModel:model booksID:booksID inDatabase:db]) {
+        if (![self saveLoanModel:loanModel booksID:booksID inDatabase:db]) {
+            *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
@@ -131,9 +134,19 @@
             return;
         }
         
-        // 创建或更新提醒
-#warning todo
-        
+        // 存储提醒记录
+        if (remindModel) {
+            NSError *error = [SSJLocalNotificationStore saveReminderWithReminderItem:remindModel inDatabase:db];
+            if (error) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        }
         
         if (success) {
             SSJDispatchMainAsync(^{
