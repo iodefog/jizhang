@@ -36,6 +36,7 @@
 #import "SSJBooksTypeSelectViewController.h"
 #import "JPEngine.h"
 #import "SSJNetworkReachabilityManager.h"
+#import "SSJUmengManager.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -73,6 +74,9 @@ NSDate *SCYEnterBackgroundTime() {
 //    [JPEngine evaluateScript:script];
 #endif
     [self analyzeJspatch];
+    
+    [SSJUmengManager umengTrack];
+    [SSJUmengManager umengShare];
     
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     

@@ -10,4 +10,10 @@
 
 @interface SSJUmengManager : NSObject
 
+/* 友盟统计 */
++ (void)umengTrack;
+
+/* 友盟分享 */
++ (void)umengShare;
+
 @end
