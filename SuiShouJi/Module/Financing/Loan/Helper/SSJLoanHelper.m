@@ -357,6 +357,75 @@
                  success:(void (^)())success
                  failure:(void (^)(NSError *error))failure {
     
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", model.ID];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        SSJLoanModel *newestModel = nil;
+        if ([resultSet next]) {
+            newestModel = [SSJLoanModel modelWithResultSet:resultSet];
+        }
+        
+        // 如果当前的借贷记录已结清或删除，直接执行成功回调
+        if (newestModel.operatorType == 2) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+            return;
+        }
+        
+        NSString *writedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        // 把结清借贷产生的转帐流水状态改为删除
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where ichargeid = ? or ichargeid = ?", @2, @(SSJSyncVersion()), writedate, model.endChargeID, model.endTargetChargeID]) {
+            
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 修改借贷记录的结清状态，并且清空结清转帐流水ID
+        if (![db executeUpdate:@"update bk_loan set iend = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @0, @"", @"", @(SSJSyncVersion()), @1, writedate, model.ID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 开启提醒
+        if (![db executeUpdate:@"update bk_user_remind set istate = ?, operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @1, @1, @(SSJSyncVersion()), writedate, model.remindID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
 }
 
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
