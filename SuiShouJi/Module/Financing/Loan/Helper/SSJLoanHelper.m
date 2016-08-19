@@ -148,7 +148,7 @@
                 failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@""];
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
             if (failure) {
@@ -213,6 +213,31 @@
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", model.ID];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        SSJLoanModel *newestModel = nil;
+        if ([resultSet next]) {
+            newestModel = [SSJLoanModel modelWithResultSet:resultSet];
+        }
+        
+        // 如果当前的借贷记录已结清或删除，直接执行成功回调
+        if (newestModel.operatorType == 2 || newestModel.closeOut) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+            return;
+        }
+        
         NSString *rollOutChargeID = SSJUUID();
         NSString *rollInChargeID = SSJUUID();
         
@@ -240,10 +265,10 @@
                 break;
         }
         
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        // 转出流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, model.jMoney, @4, rollOutFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        // 结清转出流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, model.jMoney, @4, rollOutFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -255,9 +280,36 @@
             return;
         }
         
-        // 转入流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInFundID, model.userID, model.jMoney, @3, rollInFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        // 结清转入流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInFundID, model.userID, model.jMoney, @3, rollInFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            
+            return;
+        }
+        
+        // 创建借贷记录产生的转帐流水的writedate不能和结清借贷产生的转帐流水的writedate一样，否则匹配转帐时会错乱
+        writeDate = [[[NSDate date] dateByAddingTimeInterval:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        // 修改所属转帐流水
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", model.jMoney, @(SSJSyncVersion()), @1, writeDate, model.chargeID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            
+            return;
+        }
+        
+        // 修改目标转帐流水
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", model.jMoney, model.targetFundID, @(SSJSyncVersion()), @1, writeDate, model.targetChargeID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -269,7 +321,7 @@
         }
         
         // 修改当前借贷记录的结清状态
-        if (![db executeUpdate:@"update bk_loan set iend = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, model.endDate, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
+        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, model.jMoney, model.rate, model.targetFundID, model.endDate, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
             
             *rollback = YES;
             if (failure) {
@@ -282,7 +334,7 @@
         }
         
         // 关闭提醒
-        if (![db executeUpdate:@"update bk_user_remind set istate = ?, iversion = ?, operatortype = ?, cwritedate = ? where cremindid = ?", @0, @(SSJSyncVersion()), @1, writeDate, model.remindID]) {
+        if (![db executeUpdate:@"update bk_user_remind set istate = ?, iversion = ?, operatortype = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @0, @(SSJSyncVersion()), @1, writeDate, model.remindID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -332,7 +384,7 @@
             break;
     }
     
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 转出流水
     if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, model.jMoney, @4, rollOutFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
