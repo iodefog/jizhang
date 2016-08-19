@@ -193,6 +193,10 @@
 		7D87AE9B1D6319DC0024D33C /* SSJLoanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AE991D6319DC0024D33C /* SSJLoanModel.m */; };
 		7D87AEA31D658E3F0024D33C /* SSJLoanSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AEA21D658E3F0024D33C /* SSJLoanSyncTable.m */; };
 		7D87AEA41D658E3F0024D33C /* SSJLoanSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AEA21D658E3F0024D33C /* SSJLoanSyncTable.m */; };
+		7D87AEB11D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AEB01D66DF3F0024D33C /* SSJUserRemindSyncTable.m */; };
+		7D87AEB21D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AEB01D66DF3F0024D33C /* SSJUserRemindSyncTable.m */; };
+		7D87AEBC1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AEBB1D66E05B0024D33C /* SSJUserCreditSyncTable.m */; };
+		7D87AEBD1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D87AEBB1D66E05B0024D33C /* SSJUserCreditSyncTable.m */; };
 		7D893F291C91144D00886995 /* budget_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F1F1C91144D00886995 /* budget_add@2x.png */; };
 		7D893F2A1C91144D00886995 /* budget_add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F201C91144D00886995 /* budget_add@3x.png */; };
 		7D893F2B1C91144D00886995 /* budget_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D893F211C91144D00886995 /* budget_left@2x.png */; };
@@ -2375,6 +2379,10 @@
 		7D87AE991D6319DC0024D33C /* SSJLoanModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanModel.m; sourceTree = "<group>"; };
 		7D87AEA11D658E3F0024D33C /* SSJLoanSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanSyncTable.h; sourceTree = "<group>"; };
 		7D87AEA21D658E3F0024D33C /* SSJLoanSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanSyncTable.m; sourceTree = "<group>"; };
+		7D87AEAF1D66DF3F0024D33C /* SSJUserRemindSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserRemindSyncTable.h; sourceTree = "<group>"; };
+		7D87AEB01D66DF3F0024D33C /* SSJUserRemindSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserRemindSyncTable.m; sourceTree = "<group>"; };
+		7D87AEBA1D66E05B0024D33C /* SSJUserCreditSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserCreditSyncTable.h; sourceTree = "<group>"; };
+		7D87AEBB1D66E05B0024D33C /* SSJUserCreditSyncTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserCreditSyncTable.m; sourceTree = "<group>"; };
 		7D893F1F1C91144D00886995 /* budget_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@2x.png"; sourceTree = "<group>"; };
 		7D893F201C91144D00886995 /* budget_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_add@3x.png"; sourceTree = "<group>"; };
 		7D893F211C91144D00886995 /* budget_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_left@2x.png"; sourceTree = "<group>"; };
@@ -3706,8 +3714,12 @@
 				7D36AC461D461704006526B3 /* SSJMemberSyncTable.m */,
 				7D36AC501D461D80006526B3 /* SSJMemberChargeSyncTable.h */,
 				7D36AC511D461D80006526B3 /* SSJMemberChargeSyncTable.m */,
+				7D87AEAF1D66DF3F0024D33C /* SSJUserRemindSyncTable.h */,
+				7D87AEB01D66DF3F0024D33C /* SSJUserRemindSyncTable.m */,
 				7D87AEA11D658E3F0024D33C /* SSJLoanSyncTable.h */,
 				7D87AEA21D658E3F0024D33C /* SSJLoanSyncTable.m */,
+				7D87AEBA1D66E05B0024D33C /* SSJUserCreditSyncTable.h */,
+				7D87AEBB1D66E05B0024D33C /* SSJUserCreditSyncTable.m */,
 			);
 			path = SyncTable;
 			sourceTree = "<group>";
@@ -8239,6 +8251,7 @@
 				9C2A672B1D194CA70010F1DA /* SSJLoadMoreCell.m in Sources */,
 				7D5432CE1D5C0A340021106E /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C2A672C1D194CA70010F1DA /* SSJHomeReminderView.m in Sources */,
+				7D87AEBD1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
 				9C2A672D1D194CA70010F1DA /* SSJBookKeepingHomeHelper.m in Sources */,
 				9C2A672E1D194CA70010F1DA /* SSJBookKeepingHeader.m in Sources */,
 				9C2A672F1D194CA70010F1DA /* SSJBaseItem.m in Sources */,
@@ -8459,6 +8472,7 @@
 				9C2A67E61D194CA70010F1DA /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				9C2A67E71D194CA70010F1DA /* SSJPasswordModifyCell.m in Sources */,
 				9C2A67E81D194CA70010F1DA /* SSJWeiXinLoginHelper.m in Sources */,
+				7D87AEB21D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */,
 				9C2A67EA1D194CA70010F1DA /* SSJMagicExportCalendarViewController.m in Sources */,
 				7D36AC571D46FDAE006526B3 /* SSJDatabaseVersion6.m in Sources */,
 				9C2A67EB1D194CA70010F1DA /* SSJMineHeaderView.m in Sources */,
@@ -8926,6 +8940,7 @@
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
+				7D87AEBC1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
 				7D6B12DC1D4CBC140036BF4E /* SSJListMenuItem.m in Sources */,
 				9CD9BC091CFD2DAA0061803B /* SSJCircleChargeStore.m in Sources */,
 				7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */,
@@ -8973,6 +8988,7 @@
 				7D8F7C381D2CAED200F7DF6A /* SSJThemeUtil.m in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
 				9C65CA0B1D4B39AE0058D0A4 /* SSJThemeManagerCollectionViewCell.m in Sources */,
+				7D87AEB11D66DF3F0024D33C /* SSJUserRemindSyncTable.m in Sources */,
 				7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */,
 				7D5F333B1CEAE6C10086B67E /* SSJBudgetListCellItem.m in Sources */,
 				9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */,
