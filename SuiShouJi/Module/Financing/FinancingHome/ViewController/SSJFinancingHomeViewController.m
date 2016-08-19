@@ -26,6 +26,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJFinancingHomeAddCell.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJLoanListViewController.h"
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -101,19 +102,29 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
-        SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
-        fundingDetailVC.item = item;
-        [self.navigationController pushViewController:fundingDetailVC animated:YES];
-    }else{
-        SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
-//        __weak typeof(self) weakSelf = self;
-//        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-//            weakSelf.newlyAddFundId = newFundingItem.fundingID;
-//        };
-        [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
+    
+    if ([item.fundingParent isEqualToString:@"10"]
+        || [item.fundingParent isEqualToString:@"11"]) {
+        // 借贷
+        SSJLoanListViewController *loanListVC = [[SSJLoanListViewController alloc] init];
+        loanListVC.item = item;
+        [self.navigationController pushViewController:loanListVC animated:YES];
+    } else {
+        if ([item.fundingName isEqualToString:@"添加资金账户"]) {
+            SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+            //        __weak typeof(self) weakSelf = self;
+            //        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+            //            weakSelf.newlyAddFundId = newFundingItem.fundingID;
+            //        };
+            [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
+        }else{
+            SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
+            fundingDetailVC.item = item;
+            [self.navigationController pushViewController:fundingDetailVC animated:YES];
+        }
     }
-
+    
+    
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{

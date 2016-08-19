@@ -20,6 +20,7 @@
              @"cbilldate",
              @"crepaymentdate",
              @"cremindid",
+             @"cuserid",
              @"cwritedate",
              @"iversion",
              @"operatortype"];
