@@ -17,18 +17,6 @@
 
 @implementation SSJUmengManager
 
-+ (void)load {
-//    NSDate *beginDate = [NSDate date];
-    //  添加友盟统计
-    [self umengTrack];
-    
-    //  添加友盟分享
-    [self umengShare];
-    
-    
-//    NSLog(@">>> 友盟加载时间：%f",  ,[[NSDate date] timeIntervalSinceDate:beginDate]);
-}
-
 /* 友盟统计 */
 + (void)umengTrack {
     [MobClick setCrashReportEnabled:YES]; // 如果不需要捕捉异常，注释掉此行
