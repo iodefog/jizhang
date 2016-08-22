@@ -51,4 +51,13 @@
 + (void)queryForreminderListWithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
                                failure:(void (^)(NSError *error))failure;
 
+/**
+ *  获取某个提醒的详情
+ *
+ *  @param remindId 提醒的id
+ *
+ *  @return 提醒的item
+ */
++ (SSJReminderItem *)queryReminderItemForID:(NSString *)remindId;
+
 @end

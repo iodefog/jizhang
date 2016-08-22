@@ -105,5 +105,29 @@
     }];
 }
 
++ (SSJReminderItem *)queryReminderItemForID:(NSString *)remindId {
+    SSJReminderItem *item = [[SSJReminderItem alloc] init];
+    NSString *userId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_user_remind where cremindid = ?",remindId];
+        item.remindId = [resultSet stringForColumn:@"cremindid"];
+        item.remindName = [resultSet stringForColumn:@"cremindname"];
+        item.remindMemo = [resultSet stringForColumn:@"cmemo"];
+        item.remindCycle = [resultSet intForColumn:@"icycle"];
+        item.remindType = [resultSet intForColumn:@"itype"];
+        NSString *dateStr = [resultSet stringForColumn:@"cstartdate"];
+        item.remindDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
+        item.remindState = [resultSet stringForColumn:@"istate"];
+        item.remindAtTheEndOfMonth = [resultSet stringForColumn:@"iisend"];
+        if (item.remindType == SSJReminderTypeCreditCard) {
+            item.remindFundid = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindId,userId];
+        }else if (item.remindType == SSJReminderTypeBorrowing){
+            item.remindFundid = [db stringForQuery:@"select cfundid from bk_loan where cremindid = ? and cuserid = ?",remindId,userId];
+        }else{
+            item.remindFundid = @"";
+        }
+    }];
+    return item;
+}
 
 @end

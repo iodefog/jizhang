@@ -201,10 +201,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
     // 算出下一次提示时间
     NSDate *today = [NSDate date];
+    NSDate *baseDate = [NSDate dateWithYear:today.year month:today.month day:self.item.remindDate.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second];
     switch (self.item.remindCycle) {
         case 0:{
             // 如果是每天
-            if ([self.item.remindDate isEarlierThan:[NSDate date]]) {
+            if ([baseDate isEarlierThan:[NSDate date]]) {
                 // 如果已经早于现在,则加一天
                 self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingDays:1];
             }else{
@@ -216,16 +217,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         case 1:{
             //若是每周末
             if ([[NSDate date] isWeekend]) {
-                // 如果是礼拜天
                 if ([NSDate date].weekday == 1) {
-                    if ([self.item.remindDate isEarlierThan:today]) {
+                    // 如果是礼拜天
+                    if ([baseDate isEarlierThan:today]) {
                         // 如果设置的时间早于现在则加六天
                         self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingDays:6];
                     }else{
                         self.nextRemindDate = [NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second];
                     }
                 }else{
-                    if ([self.item.remindDate isEarlierThan:today]) {
+                    // 如果是礼拜六
+                    if ([baseDate isEarlierThan:today]) {
                         // 如果设置的时间早于现在则加一天
                         self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingDays:1];
                     }else{
@@ -243,13 +245,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             // 如果是每个工作日
             if (![today isWeekend]) {
                 // 如果是工作日
-                if ([self.item.remindDate isEarlierThan:today]) {
+                if ([baseDate isEarlierThan:today]) {
                     // 如果时间早于现在
                     if (today.weekday == 6) {
                         // 如果是礼拜五则要加到下个礼拜一
                         self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingDays:3];
                     }else{
-                        self.nextRemindDate = [NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second];
+                        self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingDays:1];
                     }
                 }else{
                     self.nextRemindDate = [NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second];
@@ -266,9 +268,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             break;
             
         case 3:{
+            // 如果是每个工作日
             if (self.item.remindDate.weekday == today.weekday) {
                 // 如果每周是今天记账
-                if ([self.item.remindDate isEarlierThan:today]) {
+                if ([baseDate isEarlierThan:today]) {
                     // 如果是早于现在则要到下周提醒
                     self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:today.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingDays:7];
                 }else{
@@ -290,9 +293,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             if (self.item.remindDate.day > 28 && self.item.remindDate.day < today.daysInMonth) {
                 // 如果提醒时间大于28号,并且日期大于本月的最大日期
                 if (self.item.remindAtTheEndOfMonth) {
-                    
+                    self.nextRemindDate = [NSDate dateWithYear:today.year month:today.month day:self.item.remindDate.daysInMonth hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second];
                 }else{
-                
+                    self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:self.item.remindDate.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingMonths:1];
                 }
             }else{
                 if (self.item.remindDate.day > today.day) {
@@ -301,7 +304,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 }else if (self.item.remindDate.day < today.day){
                     self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:self.item.remindDate.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingMonths:1];
                 }else{
-                    if ([self.item.remindDate isEarlierThan:today]) {
+                    if ([baseDate isEarlierThan:today]) {
                         //如果提醒过了
                         self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:self.item.remindDate.day hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingMonths:1];
                     }else{
@@ -314,7 +317,15 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             
         case 5:{
             // 如果是每月最后一天
-            
+            if (today.day != today.daysInMonth) {
+                self.nextRemindDate = [NSDate dateWithYear:today.year month:today.month day:today.daysInMonth hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second];
+            }else{
+                if ([baseDate isEarlierThan:today]) {
+                    self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:[today dateByAddingMonths:1].daysInMonth hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingMonths:1];
+                }else{
+                    self.nextRemindDate = [[NSDate dateWithYear:today.year month:today.month day:[today dateByAddingMonths:1].daysInMonth hour:self.item.remindDate.hour minute:self.item.remindDate.minute second:self.item.remindDate.second] dateByAddingMonths:1];
+                }
+            }
         }
             break;
             
@@ -324,7 +335,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             break;
             
         case 7:{
-            //仅一次`
+            //仅一次
             self.nextRemindDate = self.item.remindDate;
         }
             break;
