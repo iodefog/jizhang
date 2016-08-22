@@ -250,6 +250,14 @@
 		7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */; };
 		7DBA55271D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */; };
 		7DBA55281D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */; };
+		7DBA55331D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */; };
+		7DBA55341D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */; };
+		7DBA553E1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */; };
+		7DBA553F1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */; };
+		7DBA55421D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55411D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m */; };
+		7DBA55431D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55411D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m */; };
+		7DBA55461D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55451D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m */; };
+		7DBA55471D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55451D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -2461,6 +2469,14 @@
 		7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYWinCowryHomeBannerView.m; sourceTree = "<group>"; };
 		7DBA55251D6AE05B00C02D79 /* SSJLoanListCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanListCellItem.h; sourceTree = "<group>"; };
 		7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanListCellItem.m; sourceTree = "<group>"; };
+		7DBA55311D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanLabelCell.h; sourceTree = "<group>"; };
+		7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanLabelCell.m; sourceTree = "<group>"; };
+		7DBA553C1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanTextFieldCell.h; sourceTree = "<group>"; };
+		7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanTextFieldCell.m; sourceTree = "<group>"; };
+		7DBA55401D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanSwitchCell.h; sourceTree = "<group>"; };
+		7DBA55411D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanSwitchCell.m; sourceTree = "<group>"; };
+		7DBA55441D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddOrEditLoanMultiLabelCell.h; sourceTree = "<group>"; };
+		7DBA55451D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddOrEditLoanMultiLabelCell.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -4391,6 +4407,14 @@
 				7DFFD5BD1D670BB7000FDAA6 /* SSJLoanListCell.m */,
 				7D1DB4341D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.h */,
 				7D1DB4351D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m */,
+				7DBA55311D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.h */,
+				7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */,
+				7DBA553C1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.h */,
+				7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */,
+				7DBA55401D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.h */,
+				7DBA55411D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m */,
+				7DBA55441D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.h */,
+				7DBA55451D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8260,6 +8284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DBA55471D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
 				9C2A670A1D194CA70010F1DA /* SSJAlertViewAction.m in Sources */,
 				9CF594111D64571900006594 /* SSJNewCreditCardViewController.m in Sources */,
 				7DE4A7E71D20DC8500F05BF0 /* SSJThemeSetting.m in Sources */,
@@ -8377,6 +8402,7 @@
 				9C2A67671D194CA70010F1DA /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				9C2A67681D194CA70010F1DA /* SSJChargeDetailMemoCell.m in Sources */,
 				9C2A67691D194CA70010F1DA /* SSJDatePeriod.m in Sources */,
+				7DBA55431D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m in Sources */,
 				9C2A676A1D194CA70010F1DA /* SSJRecordMakingBillTypeInputAccessoryView.m in Sources */,
 				9C2A676B1D194CA70010F1DA /* SSJBudgetDatabaseHelper.m in Sources */,
 				9C2A676C1D194CA70010F1DA /* SSJArrayAddition.m in Sources */,
@@ -8399,6 +8425,7 @@
 				9C2A67791D194CA70010F1DA /* SSJViewControllerAddition.m in Sources */,
 				7DE089701D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
 				9CF594231D654AC900006594 /* SSJReminderItem.m in Sources */,
+				7DBA55341D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m in Sources */,
 				9C2A677A1D194CA70010F1DA /* SSJUserItem.m in Sources */,
 				9C2A677B1D194CA70010F1DA /* SSJMemoMakingView.m in Sources */,
 				9C47E6E41D222372005F338A /* SSJThemeDetailViewController.m in Sources */,
@@ -8445,6 +8472,7 @@
 				9C2A679C1D194CA70010F1DA /* SSJLoginViewController.m in Sources */,
 				9C2A679D1D194CA70010F1DA /* SSJBudgetEditPeriodSelectionView.m in Sources */,
 				9C2A679E1D194CA70010F1DA /* SSJBillingChargeHeaderView.m in Sources */,
+				7DBA553F1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9C2A679F1D194CA70010F1DA /* SSJGuideView.m in Sources */,
 				9CF594331D65B5A000006594 /* SSJLocalNotificationStore.m in Sources */,
 				9C2A67A01D194CA70010F1DA /* SSJDataAddition.m in Sources */,
@@ -8782,6 +8810,7 @@
 				9C66F11A1D20C19B0094125D /* SSJThemeHomeViewController.m in Sources */,
 				9CD9BBFF1CFD2DAA0061803B /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				7D5F33521CEAE6C10086B67E /* SSJChargeDetailMemoCell.m in Sources */,
+				7DBA55331D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m in Sources */,
 				7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */,
 				7D5F33821CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.m in Sources */,
 				7D5F333A1CEAE6C10086B67E /* SSJBudgetDatabaseHelper.m in Sources */,
@@ -8810,6 +8839,7 @@
 				9C9D0B861D080E09003A9F4E /* SSJCircleChargeTypeSelectView.m in Sources */,
 				BD04332A1C1A78B40051E7AB /* UIBarButtonItem+CDCategory.m in Sources */,
 				7D6B12D61D4CBC140036BF4E /* SSJListMenu.m in Sources */,
+				7DBA553E1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9C94717D1CEB224C00D69079 /* SSJFinancingHomeViewController.m in Sources */,
 				7D5F332B1CEAE6C10086B67E /* SSJBookKeepingHomePopView.m in Sources */,
 				7D5F33721CEAE6C10086B67E /* SSJFundingItem.m in Sources */,
@@ -8895,6 +8925,7 @@
 				BD70DF6B1C4B26B3000E6CC9 /* UIViewController+SSJPageFlow.m in Sources */,
 				9CD9BC2E1CFD2DAA0061803B /* SSJBookkeepingReminderViewController.m in Sources */,
 				7D6B12CB1D4CA3DA0036BF4E /* SSJReportFormsMemberAndCategorySwitchControl.m in Sources */,
+				7DBA55421D6AFFF800C02D79 /* SSJAddOrEditLoanSwitchCell.m in Sources */,
 				BD0433991C1A8DA50051E7AB /* SSJBaseViewController.m in Sources */,
 				BD0433211C1A78B40051E7AB /* SSJButtonAddition.m in Sources */,
 				7D581EB81C5107C300E202A2 /* SSJSyncTable.m in Sources */,
@@ -9009,6 +9040,7 @@
 				BD04331E1C1A78B40051E7AB /* SSJDateAddition.m in Sources */,
 				BD543C411C1A6DBC00910D61 /* main.m in Sources */,
 				7D46328E1D21029F0040BABD /* UIImageView+SSJTheme.m in Sources */,
+				7DBA55461D6B000D00C02D79 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
 				BD70DF651C4751EA000E6CC9 /* SSJRegistCompleteViewController.m in Sources */,
 				7D87AEBC1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
 				7D6B12DC1D4CBC140036BF4E /* SSJListMenuItem.m in Sources */,

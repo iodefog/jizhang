@@ -39,6 +39,34 @@
     return model;
 }
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    SSJLoanModel *model = [[SSJLoanModel alloc] init];
+    model.ID = _ID;
+    model.userID = _userID;
+    model.lender = _lender;
+    model.jMoney = _jMoney;
+    model.fundID = _fundID;
+    model.targetFundID = _targetFundID;
+    model.chargeID = _chargeID;
+    model.targetChargeID = _targetChargeID;
+    model.endChargeID = _endChargeID;
+    model.endTargetChargeID = _endTargetChargeID;
+    model.borrowDate = _borrowDate;
+    model.repaymentDate = _repaymentDate;
+    model.endDate = _endDate;
+    model.rate = _rate;
+    model.memo = _memo;
+    model.remindID = _remindID;
+    model.interest = _interest;
+    model.closeOut = _closeOut;
+    model.type = _type;
+    model.operatorType = _operatorType;
+    model.version = _version;
+    model.writeDate = _writeDate;
+    
+    return model;
+}
+
 //+ (NSDictionary *)propertyMapping {
 //    return @{@"ID":@"loanid",
 //             @"userID":@"cuserid",

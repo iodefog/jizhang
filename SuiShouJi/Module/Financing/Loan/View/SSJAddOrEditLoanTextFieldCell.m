@@ -1,0 +1,48 @@
+//
+//  SSJAddOrEditLoanTextFieldCell.m
+//  SuiShouJi
+//
+//  Created by old lang on 16/8/22.
+//  Copyright © 2016年 ___9188___. All rights reserved.
+//
+
+#import "SSJAddOrEditLoanTextFieldCell.h"
+
+@implementation SSJAddOrEditLoanTextFieldCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.textLabel.font = [UIFont systemFontOfSize:18];
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        
+        _textField = [[UITextField alloc] init];
+        _textField.font = [UIFont systemFontOfSize:18];
+        _textField.textAlignment = NSTextAlignmentRight;
+        _textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [self.contentView addSubview:_textField];
+    }
+    return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    [self.imageView sizeToFit];
+    self.imageView.left = 16;
+    self.imageView.centerY = self.contentView.height * 0.5;
+    
+    [self.textLabel sizeToFit];
+    self.textLabel.left = 48;
+    self.textLabel.centerY = self.contentView.height * 0.5;
+    
+    _textField.frame = CGRectMake(self.textLabel.right + 10, 0, self.contentView.width - self.textLabel.right - 38, self.contentView.height);
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
+
+@end
