@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseTableViewCell.h"
+#import "SSJLoanListCellItem.h"
 
 @interface SSJLoanListCell : SSJBaseTableViewCell
 

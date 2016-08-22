@@ -248,6 +248,8 @@
 		7DAD4B161C4FAE85004B7FF0 /* libZipZap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DAD4B151C4FAE85004B7FF0 /* libZipZap.a */; };
 		7DB429011CAE3E5000B46F32 /* SSJDatabaseVersion2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */; };
 		7DB6140C1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */; };
+		7DBA55271D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */; };
+		7DBA55281D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */; };
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
@@ -2450,6 +2452,8 @@
 		7DB429001CAE3E5000B46F32 /* SSJDatabaseVersion2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion2.m; sourceTree = "<group>"; };
 		7DB6140A1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCYWinCowryHomeBannerView.h; sourceTree = "<group>"; };
 		7DB6140B1D2F4BB6009A6F87 /* SCYWinCowryHomeBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCYWinCowryHomeBannerView.m; sourceTree = "<group>"; };
+		7DBA55251D6AE05B00C02D79 /* SSJLoanListCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanListCellItem.h; sourceTree = "<group>"; };
+		7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanListCellItem.m; sourceTree = "<group>"; };
 		7DC517281CA93D3F00D23CF0 /* SSJWaveWaterPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterPath.h; sourceTree = "<group>"; };
 		7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJWaveWaterPath.m; sourceTree = "<group>"; };
 		7DC5172C1CA93D3F00D23CF0 /* SSJWaveWaterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJWaveWaterView.h; sourceTree = "<group>"; };
@@ -4359,6 +4363,8 @@
 			children = (
 				7D87AE981D6319DC0024D33C /* SSJLoanModel.h */,
 				7D87AE991D6319DC0024D33C /* SSJLoanModel.m */,
+				7DBA55251D6AE05B00C02D79 /* SSJLoanListCellItem.h */,
+				7DBA55261D6AE05B00C02D79 /* SSJLoanListCellItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -8248,6 +8254,7 @@
 				9C2A67131D194CA70010F1DA /* SSJReportFormsItem.m in Sources */,
 				9C2A67141D194CA70010F1DA /* SSJMagicExportCalendarHeaderView.m in Sources */,
 				9C2A67151D194CA70010F1DA /* SSJFundingDetailHelper.m in Sources */,
+				7DBA55281D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */,
 				9C2A67161D194CA70010F1DA /* SSJBillingChargeCell.m in Sources */,
 				9C2A67171D194CA70010F1DA /* SSJSyncFileModel.m in Sources */,
 				9C2A67181D194CA70010F1DA /* SCYSlidePagingView.m in Sources */,
@@ -8824,6 +8831,7 @@
 				7D5F333D1CEAE6C10086B67E /* SSJBudgetTypeModel.m in Sources */,
 				7DEF545D1C75F81B00A90153 /* SSJPercentCircleNode.m in Sources */,
 				7D581EB51C5106CE00E202A2 /* SSJBaseSyncTable.m in Sources */,
+				7DBA55271D6AE05B00C02D79 /* SSJLoanListCellItem.m in Sources */,
 				7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */,
 				9C9471811CEB224C00D69079 /* SSJFundingListDayItem.m in Sources */,
 				9CD9BC681CFFD3600061803B /* SSJChargeCircleModifyCell.m in Sources */,

@@ -102,7 +102,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJLoanListCell *cell = [tableView dequeueReusableCellWithIdentifier:kLoanListCellId forIndexPath:indexPath];
-//    cell.cellItem =
+    cell.cellItem = [SSJLoanListCellItem itemWithLoanModel:[self.list ssj_safeObjectAtIndex:indexPath.section]];
     return cell;
 }
 
