@@ -9,6 +9,7 @@
 #import "SSJLoanListViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
 #import "SCYSlidePagingHeaderView.h"
+#import "SSJLoanListSectionHeaderAmountView.h"
 #import "SSJLoanListCell.h"
 #import "SSJLoanHelper.h"
 
@@ -24,11 +25,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 @property (nonatomic, strong) UIImageView *noDataRemindView;
 
-@property (nonatomic, strong) UIView *amountView;
-
-@property (nonatomic, strong) UILabel *amountTitleLab;
-
-@property (nonatomic, strong) UILabel *amountValueLab;
+@property (nonatomic, strong) SSJLoanListSectionHeaderAmountView *amountView;
 
 @end
 
@@ -51,7 +48,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     self.navigationItem.rightBarButtonItem = addItem;
     
     [self.view addSubview:self.headerSegmentView];
-    [self.view addSubview:self.amountView];
+//    [self.view addSubview:self.amountView];
     [self.view addSubview:self.tableView];
     
     [self updateAppearance];
@@ -69,6 +66,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
                     [self.view ssj_hideLoadingIndicator];
                     self.list = list;
                     [self.tableView reloadData];
+                    self.amountView.amount = [self.list valueForKeyPath:@"@sum.jMoney"];
                     if (list.count == 0) {
                         [self.view ssj_showWatermarkWithImageName:@"" animated:YES target:nil action:NULL];
                     } else {
@@ -82,6 +80,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
                 [self.view ssj_hideLoadingIndicator];
                 self.list = list;
                 [self.tableView reloadData];
+                self.amountView.amount = [self.list valueForKeyPath:@"@sum.jMoney"];
             }
         } failure:^(NSError * _Nonnull error) {
             [self.view ssj_hideLoadingIndicator];
@@ -108,6 +107,25 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return 40;
+    } else {
+        return 10;
+    }
+}
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return self.amountView;
+    } else {
+        return [[UIView alloc] init];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
@@ -121,6 +139,11 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 }
 
 #pragma mark - Private
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
 - (void)updateAppearance {
     _headerSegmentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     _headerSegmentView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
@@ -130,6 +153,8 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 1 : 0.1;
     _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:alpha];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    
+    [_amountView updateAppearance];
 }
 
 - (void)reloadDataAccordingToHeaderViewIndex {
@@ -138,6 +163,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         [self.view ssj_hideLoadingIndicator];
         self.list = list;
         [self.tableView reloadData];
+        self.amountView.amount = [self.list valueForKeyPath:@"@sum.jMoney"];
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
@@ -172,38 +198,18 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     return _tableView;
 }
 
-- (UIView *)amountView {
+- (SSJLoanListSectionHeaderAmountView *)amountView {
     if (!_amountView) {
-        _amountView = [[UIView alloc] initWithFrame:CGRectMake(0, self.headerSegmentView.bottom, self.view.width, 40)];
-        [_amountView addSubview:self.amountTitleLab];
-        [_amountView addSubview:self.amountValueLab];
-        self.amountTitleLab.left = 19;
-        self.amountValueLab.right = _amountView.width - 19;
-        self.amountTitleLab.centerY = self.amountValueLab.centerY = _amountView.height * 0.5;
+        _amountView = [[SSJLoanListSectionHeaderAmountView alloc] initWithFrame:CGRectMake(0, self.headerSegmentView.bottom, self.view.width, 40)];
+        if ([_item.fundingParent isEqualToString:@"10"]) {
+            _amountView.title = @"累计借出款";
+        } else if ([_item.fundingParent isEqualToString:@"11"]) {
+            _amountView.title = @"累计欠款";
+        } else {
+            SSJPRINT(@"警告：借贷父账户ID错误：_item.fundingParent，有效值只能为10、11");
+        }
     }
     return _amountView;
-}
-
-- (UILabel *)amountTitleLab {
-    if (!_amountTitleLab) {
-        _amountTitleLab = [[UILabel alloc] init];
-        _amountTitleLab.font = [UIFont systemFontOfSize:14];
-        if ([_item.fundingParent isEqualToString:@"10"]) {
-            _amountTitleLab.text = @"累计借出款";
-        } else if ([_item.fundingParent isEqualToString:@"11"]) {
-            _amountTitleLab.text = @"累计欠款";
-        }
-        [_amountTitleLab sizeToFit];
-    }
-    return _amountTitleLab;
-}
-
-- (UILabel *)amountValueLab {
-    if (!_amountValueLab) {
-        _amountValueLab = [[UILabel alloc] init];
-        _amountValueLab.font = [UIFont systemFontOfSize:14];
-    }
-    return _amountValueLab;
 }
 
 @end
