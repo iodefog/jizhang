@@ -10,7 +10,50 @@
 
 @implementation SSJLocalNotificationStore
 
-+ (NSError *)saveReminderWithReminderItem:(SSJReminderItem *)item inDatabase:(FMDatabase *)db {
++ (void)queryForreminderListWithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
+                               failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        FMResultSet * resultSet = [db executeQuery:@"select * from bk_user_remind where cuserid = ? and operatortype <> 2",userId];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        while ([resultSet next]) {
+            SSJReminderItem *item = [[SSJReminderItem alloc]init];
+            item.remindId = [resultSet stringForColumn:@"cremindid"];
+            item.remindName = [resultSet stringForColumn:@"cremindname"];
+            item.remindMemo = [resultSet stringForColumn:@"cmemo"];
+            item.remindCycle = [resultSet intForColumn:@"icycle"];
+            item.remindType = [resultSet intForColumn:@"itype"];
+            NSString *dateStr = [resultSet stringForColumn:@"cstartdate"];
+            item.remindDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
+            item.remindState = [resultSet stringForColumn:@"istate"];
+            item.remindAtTheEndOfMonth = [resultSet stringForColumn:@"iisend"];
+            if (item.remindType == SSJReminderTypeCreditCard) {
+                item.remindFundid = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",item.remindId,userId];
+            }else if (item.remindType == SSJReminderTypeBorrowing){
+                item.remindFundid = [db stringForQuery:@"select cfundid from bk_loan where cremindid = ? and cuserid = ?",item.remindId,userId];
+            }else{
+                item.remindFundid = @"";
+            }
+            [tempArr addObject:item];
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(tempArr);
+            });
+        }
+    }];
+}
+
++ (NSError *)saveReminderWithReminderItem:(SSJReminderItem *)item
+                               inDatabase:(FMDatabase *)db {
     if (!item.remindId.length) {
         item.remindId = SSJUUID();
     }
@@ -21,11 +64,11 @@
     
     // 判断是编辑还是新增
     if (![db intForQuery:@"select count(1) from bk_user_remind where cuserid = ? and cremindid = ?",userId,item.remindId]) {
-        if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = ?, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operationtype = 1, iversion = ?",item.remindName,item.remindMemo,item.remindDate,item.remindState,item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
+        if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = ?, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operationtype = 1, iversion = ?",item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],item.remindState,item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
             return [db lastError];
         }
     }else{
-        if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operationtype,iversion) values (?,?,?,?,?,?,?,?,?,0,?)",item.remindId,item.remindName,item.remindMemo,item.remindDate,item.remindState,item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
+        if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operationtype,iversion) values (?,?,?,?,?,?,?,?,?,0,?)",item.remindId,item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],item.remindState,item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
             return [db lastError];
         }
     }
@@ -35,7 +78,7 @@
 
 + (void)syncSaveReminderWithReminderItem:(SSJReminderItem *)item
                                Error:(NSError **)error {
-    //  创建默认的资金帐户
+    //  保存提醒
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSError *tError = [self saveReminderWithReminderItem:item inDatabase:db];
         if (error) {
@@ -47,7 +90,7 @@
 + (void)asyncsaveReminderWithReminderItem:(SSJReminderItem *)item
                                   Success:(void (^)(void))success
                                   failure:(void (^)(NSError *error))failure {
-    //  创建默认的资金帐户
+    //  保存提醒
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSError *tError = [self saveReminderWithReminderItem:item inDatabase:db];
         if (tError) {

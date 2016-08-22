@@ -8,7 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJReminderItem : NSObject
+@interface SSJReminderItem : SSJBaseItem
+
+typedef NS_ENUM(NSInteger, SSJReminderType) {
+    SSJReminderTypeNormal,       //普通提醒
+    SSJReminderTypeCreditCard,   //信用卡提醒
+    SSJReminderTypeBorrowing,    //信用卡提醒
+    SSJReminderTypeCharge
+};
 
 // 提醒id
 @property(nonatomic, strong) NSString *remindId;
@@ -26,10 +33,10 @@
 @property(nonatomic) NSInteger remindCycle;
 
 // 提醒类别(0为其他,1为记账,2为信用卡,3为借贷)
-@property(nonatomic) NSInteger remindType;
+@property(nonatomic) SSJReminderType remindType;
 
 // 提醒时间
-@property(nonatomic, strong) NSString *remindDate;
+@property(nonatomic, strong) NSDate *remindDate;
 
 // 提醒开关(0为关闭,1为开启)
 @property(nonatomic) BOOL remindState;
