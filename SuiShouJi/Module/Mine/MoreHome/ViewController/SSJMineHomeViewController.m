@@ -35,6 +35,7 @@
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJBannerNetworkService.h"
 #import "SSJBannerHeaderView.h"
+#import "SSJReminderViewController.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -194,7 +195,7 @@ static BOOL kNeedBannerDisplay = YES;
     
     //  记账提醒
     if ([title isEqualToString:kTitle1]) {
-        SSJBookkeepingReminderViewController *BookkeepingReminderVC = [[SSJBookkeepingReminderViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+        SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }

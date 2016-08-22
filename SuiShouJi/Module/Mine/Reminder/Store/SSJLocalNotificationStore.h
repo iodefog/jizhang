@@ -31,8 +31,6 @@
 + (void)syncSaveReminderWithReminderItem:(SSJReminderItem *)item
                                    Error:(NSError **)error;
 
-
-
 /**
  *  异步保存提醒
  *
@@ -43,5 +41,14 @@
 + (void)asyncsaveReminderWithReminderItem:(SSJReminderItem *)item
                                   Success:(void (^)(void))success
                                   failure:(void (^)(NSError *error))failure;
+
+/**
+ *  异步保存提醒
+ *
+ *  @param success 保存成功的回调
+ *  @param failure 保存失败的回调
+ */
++ (void)queryForreminderListWithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
+                               failure:(void (^)(NSError *error))failure;
 
 @end

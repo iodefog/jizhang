@@ -30,7 +30,7 @@
 {
     NSMutableArray *notificationsArr = [NSMutableArray array];
     
-    NSDate * fireDate = [NSDate dateWithString:item.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate * fireDate = item.remindDate;
     
     switch (item.remindCycle) {
         // 如果是每天
@@ -160,8 +160,7 @@
                 NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
                 SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
                 if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-                    NSDate *remindDate = [NSDate dateWithString:remindItem.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
-                    if ([remindItem.remindId isEqualToString:item.remindId] && remindDate.month == fireDate.month) {
+                    if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                         return;
                     }
                 }
@@ -192,8 +191,7 @@
                     NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
                     SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
                     if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-                        NSDate *remindDate = [NSDate dateWithString:remindItem.remindDate formatString:@"yyyy-MM-dd HH:mm:ss"];
-                        if ([remindItem.remindId isEqualToString:item.remindId] && remindDate.month == fireDate.month) {
+                        if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                             return;
                         }
                     }
