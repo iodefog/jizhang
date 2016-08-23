@@ -9,6 +9,10 @@
 #import "SSJLoanHelper.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJLoanFundAccountSelectionViewItem.h"
+
+NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
+NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 
 @implementation SSJLoanHelper
 
@@ -436,6 +440,48 @@
         if (success) {
             SSJDispatchMainAsync(^{
                 success();
+            });
+        }
+    }];
+}
+
++ (void)queryFundModelListWithSuccess:(void (^)(NSDictionary <NSString *, NSArray *>*listDic))success
+                              failure:(void (^)(NSError *error))failure {
+    
+    NSString *userId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"SELECT CICOIN, CFUNDID, CACCTNAME FROM BK_FUND_INFO WHERE CPARENT != 'root' AND OPERATORTYPE <> 2 AND CUSERID = ? ORDER BY IORDER", userId];
+        if (!rs) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *fundItems = [NSMutableArray array];
+        NSMutableArray *fundIds = [NSMutableArray array];
+        
+        while ([rs next]) {
+            SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+            item.image = [rs stringForColumn:@"CICOIN"];
+            item.title = [rs stringForColumn:@"CACCTNAME"];
+            [fundItems addObject:item];
+            
+            NSString *ID = [rs stringForColumn:@"CFUNDID"];
+            [fundIds addObject:ID];
+        }
+        
+        SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+        item.image = @"add";
+        item.title = @"添加资金新的账户";
+        [fundItems addObject:item];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(@{SSJFundItemListKey:fundItems,
+                          SSJFundIDListKey:fundIds});
             });
         }
     }];

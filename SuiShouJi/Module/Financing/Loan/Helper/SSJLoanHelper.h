@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SSJReminderItem;
 
+extern NSString *const SSJFundItemListKey;
+extern NSString *const SSJFundIDListKey;
+
 @interface SSJLoanHelper : NSObject
 
 /**
@@ -72,6 +75,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)recoverLoanModel:(SSJLoanModel *)model
                  success:(void (^)())success
                  failure:(void (^)(NSError *error))failure;
+
++ (void)queryFundModelListWithSuccess:(void (^)(NSDictionary <NSString *, NSArray *>*listDic))success
+                              failure:(void (^)(NSError *error))failure;
 
 @end
 

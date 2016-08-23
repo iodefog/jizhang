@@ -7,10 +7,12 @@
 //
 
 #import "SSJAddOrEditLoanViewController.h"
+#import "SSJNewFundingViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanSwitchCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
+#import "SSJLoanFundAccountSelectionView.h"
 #import "SSJLoanHelper.h"
 
 static NSString *const kAddOrEditLoanLabelCellId = @"SSJAddOrEditLoanLabelCell";
@@ -25,6 +27,10 @@ static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiL
 @property (nonatomic, strong) UIView *footerView;
 
 @property (nonatomic, strong) UIButton *sureButton;
+
+@property (nonatomic, strong) SSJLoanFundAccountSelectionView *fundingSelectionView;
+
+@property (nonatomic, strong) NSArray *fundIds;
 
 @end
 
@@ -54,6 +60,8 @@ static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiL
     self.tableView.tableFooterView = self.footerView;
     
     [self updateAppearance];
+    
+    [self loadData];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -93,6 +101,8 @@ static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiL
                 cell.textLabel.text = @"欠谁钱款";
                 break;
         }
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        
         return cell;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:0]] == NSOrderedSame) {
@@ -107,6 +117,9 @@ static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiL
                 cell.textLabel.text = @"欠款金额";
                 break;
         }
+        
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        
         return cell;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
@@ -241,6 +254,28 @@ static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiL
     _loanModel.operatorType = 0;
 }
 
+- (void)loadData {
+    _tableView.hidden = YES;
+    [self.view ssj_showLoadingIndicator];
+    [SSJLoanHelper queryFundModelListWithSuccess:^(NSDictionary<NSString *,NSArray *> * _Nonnull listDic) {
+        
+        if (_loanModel.remindID.length) {
+            
+        } else {
+            _tableView.hidden = NO;
+            [self.view ssj_hideLoadingIndicator];
+            
+            _fundIds = listDic[SSJFundIDListKey];
+            _fundingSelectionView.items = listDic[SSJFundItemListKey];
+            [_tableView reloadData];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        _tableView.hidden = NO;
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+    }];
+}
+
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -275,6 +310,18 @@ static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiL
         _sureButton.frame = CGRectMake((self.footerView.width - 296) * 0.5, 30, 296, 48);
     }
     return _sureButton;
+}
+
+- (SSJLoanFundAccountSelectionView *)fundingSelectionView {
+    if (!_fundingSelectionView) {
+        __weak typeof(self) weakSelf = self;
+        _fundingSelectionView = [[SSJLoanFundAccountSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 0)];
+        _fundingSelectionView.selectAccountAction = ^(SSJLoanFundAccountSelectionView *selectionView) {
+            
+//            weakSelf.loanModel.targetFundID =
+        };
+    }
+    return _fundingSelectionView;
 }
 
 @end
