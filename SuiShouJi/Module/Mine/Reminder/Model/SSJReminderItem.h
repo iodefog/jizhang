@@ -12,9 +12,9 @@
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {
     SSJReminderTypeNormal,       //普通提醒
+    SSJReminderTypeCharge,       //记账提醒
     SSJReminderTypeCreditCard,   //信用卡提醒
-    SSJReminderTypeBorrowing,    //信用卡提醒
-    SSJReminderTypeCharge
+    SSJReminderTypeBorrowing     //借贷提醒提醒
 };
 
 // 提醒id

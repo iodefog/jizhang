@@ -27,10 +27,16 @@
     return self;
 }
 
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    self.titleLabel.left = 10;
+    self.titleLabel.centerY = self.height / 2;
+}
+
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLabel;
@@ -51,6 +57,7 @@
     }
     SSJReminderItem *item = (SSJReminderItem *)cellItem;
     self.titleLabel.text = item.remindName;
+    [self.titleLabel sizeToFit];
     self.switchButton.on = item.remindState;
 }
 

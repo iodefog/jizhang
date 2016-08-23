@@ -24,7 +24,7 @@
              @"itype",
              @"icycle",
              @"iisend",
-             @"ooperatortype",
+             @"operatortype",
              @"iversion",
              @"cwritedate"];
 }

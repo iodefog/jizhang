@@ -12,9 +12,9 @@
 
 @property (nonatomic) NSInteger selectCircleType;
 
-@property (nonatomic, copy, readonly) NSString *selectedPeriod;
-
 @property (nonatomic) BOOL incomeOrExpenture;
+
+@property(nonatomic, strong) NSString *title;
 
 //点击按钮的回调
 typedef void (^chargeCircleSelectBlock)(NSInteger chargeCircleType);

@@ -191,4 +191,10 @@
     }
 }
 
+-(void)setTitle:(NSString *)title{
+    _title = title;
+    self.titleLabel.text = title;
+    [self.titleLabel sizeToFit];
+}
+
 @end
