@@ -12,7 +12,8 @@
 
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"%@:%@", self, @{@"image":(_image ?: @""),
-                                                        @"loanTitle":(_title ?: @"")}];
+                                                        @"loanTitle":(_title ?: @""),
+                                                        @"ID":(_ID ?: @"")}];
 }
 
 @end

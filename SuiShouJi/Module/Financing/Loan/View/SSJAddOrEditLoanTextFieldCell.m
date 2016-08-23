@@ -14,13 +14,13 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         
         _textField = [[UITextField alloc] init];
         _textField.font = [UIFont systemFontOfSize:18];
         _textField.textAlignment = NSTextAlignmentRight;
-        _textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         [self.contentView addSubview:_textField];
+        
+        [self updateAppearance];
     }
     return self;
 }
@@ -41,6 +41,10 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }

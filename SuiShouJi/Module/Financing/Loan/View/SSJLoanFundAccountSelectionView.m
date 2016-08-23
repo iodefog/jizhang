@@ -40,31 +40,42 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
 
 - (void)layoutSubviews {
     _titleLabel.frame = CGRectMake(0, 0, self.width, 44);
-    _closeButton.frame = CGRectMake(0, 0, 23, 23);
+    _closeButton.frame = CGRectMake(0, 0, 44, 44);
     _tableView.top = 44;
     _tableView.height = self.height - 44;
+    
+    [_titleLabel ssj_relayoutBorder];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.items.count;
+    return self.cellItems.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJLoanFundAccountSelectionCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellId forIndexPath:indexPath];
-    SSJLoanFundAccountSelectionViewItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    cell.cellItem = [SSJLoanFundAccountSelectionCellItem cellItemWithViewItem:item];
+    cell.cellItem = [self.cellItems ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    self.selectedIndex = indexPath.row;
-    [self dismiss];
+    
+    BOOL shouldSelect = YES;
+    if (_shouldSelectAccountAction) {
+        shouldSelect = _shouldSelectAccountAction(self, indexPath.row);
+    }
+    
+    if (shouldSelect) {
+        self.selectedIndex = indexPath.row;
+    }
+    
     if (_selectAccountAction) {
         _selectAccountAction(self);
     }
+    
+    [self dismiss];
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
@@ -81,12 +92,13 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
 }
 
 - (void)setItems:(NSArray<SSJLoanFundAccountSelectionViewItem *> *)items {
+    _items = items;
     [_cellItems removeAllObjects];
     
     _selectedIndex = 0;
     
-    for (int i = 0; i < items.count; i ++) {
-        SSJLoanFundAccountSelectionViewItem *item = items[i];
+    for (int i = 0; i < _items.count; i ++) {
+        SSJLoanFundAccountSelectionViewItem *item = _items[i];
         SSJLoanFundAccountSelectionCellItem *cellItem = [SSJLoanFundAccountSelectionCellItem cellItemWithViewItem:item];
         cellItem.showCheckMark = i == _selectedIndex;
         [_cellItems addObject:cellItem];
@@ -100,9 +112,9 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
-    [_tableView ssj_setBorderWidth:1];
+    [_titleLabel ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_titleLabel ssj_setBorderStyle:SSJBorderStyleBottom];
+    [_titleLabel ssj_setBorderWidth:1];
 }
 
 - (void)show {
@@ -155,13 +167,14 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     return _closeButton;
 }
 
-- (UITableView *)tableview {
+- (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.width, 0) style:UITableViewStylePlain];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.rowHeight = 50;
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView registerClass:[SSJLoanFundAccountSelectionCell class] forCellReuseIdentifier:kCellId];
     }
     return _tableView;

@@ -14,4 +14,6 @@
 
 @property (nonatomic, strong) UILabel *subtitleLabel;
 
+@property (nonatomic, strong) UISwitch *switchControl;
+
 @end

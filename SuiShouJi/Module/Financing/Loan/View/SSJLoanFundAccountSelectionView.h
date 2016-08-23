@@ -15,6 +15,8 @@
 
 @property (nonatomic, strong) NSArray <SSJLoanFundAccountSelectionViewItem *>*items;
 
+@property (nonatomic, copy) BOOL (^shouldSelectAccountAction)(SSJLoanFundAccountSelectionView *view, NSUInteger index);
+
 @property (nonatomic, copy) void (^selectAccountAction)(SSJLoanFundAccountSelectionView *);
 
 - (void)updateAppearance;

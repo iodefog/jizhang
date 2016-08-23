@@ -24,6 +24,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.textLabel.font = [UIFont systemFontOfSize:15];
+        self.textLabel.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
     }
     return self;
@@ -34,6 +36,8 @@
     
     self.imageView.frame = CGRectMake(10, (self.contentView.height - 24) * 0.5, 24, 24);
     self.textLabel.frame = CGRectMake(self.imageView.right + 10, 0, self.contentView.width - self.imageView.right - 10, self.contentView.height);
+    self.checkMark.centerY = self.contentView.height * 0.5;
+    self.checkMark.right = self.width - 10;
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
@@ -67,9 +71,7 @@
 
 -(UIImageView *)checkMark {
     if (!_checkMark) {
-        _checkMark = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 17, 17)];
-        _checkMark.image = [[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _checkMark.hidden = YES;
+        _checkMark = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     }
     return _checkMark;
 }

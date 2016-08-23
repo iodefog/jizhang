@@ -8,13 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJLoanModel.h"
+#import "SSJLoanFundAccountSelectionViewItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class SSJReminderItem;
-
-extern NSString *const SSJFundItemListKey;
-extern NSString *const SSJFundIDListKey;
 
 @interface SSJLoanHelper : NSObject
 
@@ -76,7 +74,7 @@ extern NSString *const SSJFundIDListKey;
                  success:(void (^)())success
                  failure:(void (^)(NSError *error))failure;
 
-+ (void)queryFundModelListWithSuccess:(void (^)(NSDictionary <NSString *, NSArray *>*listDic))success
++ (void)queryFundModelListWithSuccess:(void (^)(NSArray <SSJLoanFundAccountSelectionViewItem *>*items))success
                               failure:(void (^)(NSError *error))failure;
 
 @end
