@@ -43,6 +43,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     __weak typeof(self) weakSelf = self;
     [SSJLocalNotificationStore queryForreminderListWithSuccess:^(NSArray<SSJReminderItem *> *result) {
         weakSelf.items = [NSArray arrayWithArray:result];
+        [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
         
     }];
@@ -53,6 +54,9 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     return 55;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 10;
+}
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
@@ -69,15 +73,15 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.items.count;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
 }
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return self.items.count;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderListCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJReminderListCellIdentifier forIndexPath:indexPath];
     [cell setCellItem:item];
     return cell;

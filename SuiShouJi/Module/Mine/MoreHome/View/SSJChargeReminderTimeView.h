@@ -14,6 +14,8 @@ typedef void (^timerSetBlock)(NSString *time , NSDate *date);
 
 @property (nonatomic, copy) timerSetBlock timerSetBlock;
 
+@property(nonatomic, strong) NSDate *currentDate;
+
 -(void)show;
 -(void)dismiss;
 @end

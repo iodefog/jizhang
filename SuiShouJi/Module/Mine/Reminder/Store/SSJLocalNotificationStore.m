@@ -63,12 +63,12 @@
     NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 判断是编辑还是新增
-    if (![db intForQuery:@"select count(1) from bk_user_remind where cuserid = ? and cremindid = ?",userId,item.remindId]) {
-        if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = ?, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operationtype = 1, iversion = ?",item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],item.remindState,item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
+    if ([db intForQuery:@"select count(1) from bk_user_remind where cuserid = ? and cremindid = ?",userId,item.remindId]) {
+        if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = 1, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operatortype = 1, iversion = ?",item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
             return [db lastError];
         }
     }else{
-        if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operationtype,iversion) values (?,?,?,?,?,?,?,?,?,0,?)",item.remindId,item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],item.remindState,item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion())]) {
+        if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operatortype,iversion,cuserid) values (?,?,?,?,1,?,?,?,?,0,?,?)",item.remindId,item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],item.remindType,item.remindCycle,item.remindAtTheEndOfMonth,cwriteDate,@(SSJSyncVersion()),userId]) {
             return [db lastError];
         }
     }
@@ -81,9 +81,11 @@
     //  保存提醒
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSError *tError = [self saveReminderWithReminderItem:item inDatabase:db];
-        if (error) {
-            *error = tError;
-        }
+        SSJDispatch_main_async_safe(^{
+            if (error) {
+                *error = tError;
+            }
+        });
     }];
 }
 
@@ -94,13 +96,17 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSError *tError = [self saveReminderWithReminderItem:item inDatabase:db];
         if (tError) {
-            if (failure) {
-                failure(tError);
-            }
+            SSJDispatch_main_async_safe(^{
+                if (failure) {
+                    failure(tError);
+                }
+            });
         } else {
-            if (success) {
-                success();
-            }
+            SSJDispatch_main_async_safe(^{
+                if (success) {
+                    success();
+                }
+            });
         }
     }];
 }

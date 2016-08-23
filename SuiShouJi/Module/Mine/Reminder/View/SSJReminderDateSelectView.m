@@ -1,26 +1,34 @@
 //
-//  SSJChargeReminderTimeView.m
+//  SSJReminderDateSelectView.m
 //  SuiShouJi
 //
-//  Created by 赵天立 on 16/3/3.
+//  Created by ricky on 16/8/23.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJChargeReminderTimeView.h"
+#import "SSJReminderDateSelectView.h"
 
-@interface SSJChargeReminderTimeView()
-@property (nonatomic,strong) UIDatePicker *datePicker;
+@interface SSJReminderDateSelectView()
+
+@property(nonatomic, strong) UIDatePicker *dateSelect;
+
 @property (nonatomic,strong) UIView *topView;
+
 @property (nonatomic,strong) UILabel *titleLabel;
+
 @property (nonatomic,strong) UIButton *closeButton;
+
 @property (nonatomic,strong) UIButton *comfirmButton;
+
 @end
 
-@implementation SSJChargeReminderTimeView
-- (instancetype)initWithFrame:(CGRect)frame{
+@implementation SSJReminderDateSelectView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.datePicker];
+        [self addSubview:self.dateSelect];
         [self addSubview:self.topView];
         [self sizeToFit];
     }
@@ -28,7 +36,7 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, self.datePicker.height + 50);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, self.dateSelect.height + 50);
 }
 
 - (void)show {
@@ -58,9 +66,9 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.datePicker.bottom = self.height;
+    self.dateSelect.bottom = self.height;
     self.topView.size = CGSizeMake(self.width, 50);
-    self.topView.leftTop = CGPointMake(0, self.datePicker.top);
+    self.topView.leftTop = CGPointMake(0, self.dateSelect.top);
     self.titleLabel.center = CGPointMake(self.topView.width / 2, self.topView.height / 2);
     self.closeButton.centerY = self.topView.height / 2;
     self.closeButton.left = 10;
@@ -68,21 +76,13 @@
     self.comfirmButton.right = self.width - 10;
 }
 
--(UIDatePicker *)datePicker{
-    if (!_datePicker) {
-        _datePicker = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
-        _datePicker.datePickerMode = UIDatePickerModeTime;
-        _datePicker.backgroundColor = [UIColor whiteColor];
-    }
-    return _datePicker;
-}
 
 -(UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]init];
         _topView.backgroundColor = [UIColor whiteColor];
         _titleLabel = [[UILabel alloc]init];
-        _titleLabel.text = @"提醒时间";
+        _titleLabel.text = @"选择日期";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
@@ -103,25 +103,31 @@
     return _topView;
 }
 
+-(UIDatePicker *)dateSelect{
+    if (!_dateSelect) {
+        _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
+        _dateSelect.datePickerMode = UIDatePickerModeDate;
+        _dateSelect.backgroundColor = [UIColor whiteColor];
+    }
+    return _dateSelect;
+}
+
+-(void)comfirmButtonClicked:(id)sender{
+    if (self.dateSetBlock) {
+        self.dateSetBlock([self.dateSelect date]);
+    }
+    [self dismiss];
+}
 
 -(void)closeButtonClicked:(id)sender{
     [self dismiss];
 }
 
--(void)comfirmButtonClicked:(id)sender{
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"HH:mm"];
-    NSString* dateStr = [dateFormatter stringFromDate:[self.datePicker date]];
-    if (self.timerSetBlock) {
-        self.timerSetBlock(dateStr,[self.datePicker date]);
-    }
-    [self dismiss];
-}
-
 -(void)setCurrentDate:(NSDate *)currentDate{
     _currentDate = currentDate;
-    self.datePicker.date = _currentDate;
+    self.dateSelect.date = _currentDate;
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

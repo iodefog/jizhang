@@ -1849,6 +1849,7 @@
 		9CEB85C01CC5D8FC00AE8F8D /* mark_jilu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */; };
 		9CEB85C11CC5D8FC00AE8F8D /* mark_pic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */; };
 		9CEB85C21CC5D8FC00AE8F8D /* mark_pic@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CEB85BE1CC5D8FC00AE8F8D /* mark_pic@3x.png */; };
+		9CECFB061D6BF36600DB2C8B /* SSJReminderDateSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CECFB051D6BF36600DB2C8B /* SSJReminderDateSelectView.m */; };
 		9CF0AC011D58583B00475C5B /* tianjia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CF0AC001D58583B00475C5B /* tianjia@3x.png */; };
 		9CF0AC021D58583B00475C5B /* tianjia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CF0AC001D58583B00475C5B /* tianjia@3x.png */; };
 		9CF0AC0B1D58584400475C5B /* tianjia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CF0AC0A1D58584400475C5B /* tianjia@2x.png */; };
@@ -1858,7 +1859,6 @@
 		9CF0AC0F1D58752200475C5B /* SSJNewMemberHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3BF1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m */; };
 		9CF0AC101D58753700475C5B /* SSJDataClearHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9DD6551D475A13001FA3C5 /* SSJDataClearHelper.m */; };
 		9CF0AC111D58754800475C5B /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
-		9CF593891D62A70300006594 /* SSJNewCrediteCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593881D62A70300006594 /* SSJNewCrediteCardViewController.m */; };
 		9CF593FC1D63FFBB00006594 /* SSJCreditCardItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593E81D63FFBB00006594 /* SSJCreditCardItem.m */; };
 		9CF593FD1D63FFBB00006594 /* SSJCreditCardItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593E81D63FFBB00006594 /* SSJCreditCardItem.m */; };
 		9CF593FE1D63FFBB00006594 /* SSJCreditCardStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593EB1D63FFBB00006594 /* SSJCreditCardStore.m */; };
@@ -3288,10 +3288,10 @@
 		9CEB85BC1CC5D8FC00AE8F8D /* mark_jilu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_jilu@3x.png"; sourceTree = "<group>"; };
 		9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@2x.png"; sourceTree = "<group>"; };
 		9CEB85BE1CC5D8FC00AE8F8D /* mark_pic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@3x.png"; sourceTree = "<group>"; };
+		9CECFB041D6BF36600DB2C8B /* SSJReminderDateSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderDateSelectView.h; sourceTree = "<group>"; };
+		9CECFB051D6BF36600DB2C8B /* SSJReminderDateSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderDateSelectView.m; sourceTree = "<group>"; };
 		9CF0AC001D58583B00475C5B /* tianjia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia@3x.png"; sourceTree = "<group>"; };
 		9CF0AC0A1D58584400475C5B /* tianjia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia@2x.png"; sourceTree = "<group>"; };
-		9CF593871D62A70300006594 /* SSJNewCrediteCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewCrediteCardViewController.h; sourceTree = "<group>"; };
-		9CF593881D62A70300006594 /* SSJNewCrediteCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewCrediteCardViewController.m; sourceTree = "<group>"; };
 		9CF593E71D63FFBB00006594 /* SSJCreditCardItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardItem.h; sourceTree = "<group>"; wrapsLines = 0; };
 		9CF593E81D63FFBB00006594 /* SSJCreditCardItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardItem.m; sourceTree = "<group>"; };
 		9CF593EA1D63FFBB00006594 /* SSJCreditCardStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardStore.h; sourceTree = "<group>"; };
@@ -4176,8 +4176,6 @@
 				9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */,
 				9C53A3B81D420A01003BA2F0 /* SSJNewMemberViewController.h */,
 				9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */,
-				9CF593871D62A70300006594 /* SSJNewCrediteCardViewController.h */,
-				9CF593881D62A70300006594 /* SSJNewCrediteCardViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -6140,6 +6138,8 @@
 				9CF594381D66D21300006594 /* SSJReminderListCell.m */,
 				9C0AB1671D670BAE0082B971 /* SSJCreditCardEditeCell.h */,
 				9C0AB1681D670BAE0082B971 /* SSJCreditCardEditeCell.m */,
+				9CECFB041D6BF36600DB2C8B /* SSJReminderDateSelectView.h */,
+				9CECFB051D6BF36600DB2C8B /* SSJReminderDateSelectView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8941,6 +8941,7 @@
 				9CD9BC181CFD2DAA0061803B /* SSJMagicExportCalendarWeekView.m in Sources */,
 				BD70DF5E1C4751EA000E6CC9 /* SSJGuideContentView.m in Sources */,
 				BD0433401C1A82730051E7AB /* SSJDebugUtil.m in Sources */,
+				9CECFB061D6BF36600DB2C8B /* SSJReminderDateSelectView.m in Sources */,
 				7D87AE961D6319770024D33C /* SSJLoanHelper.m in Sources */,
 				9C0AB1691D670BAE0082B971 /* SSJCreditCardEditeCell.m in Sources */,
 				9CD9BC221CFD2DAA0061803B /* SSJBookKeepingRiminderCircleView.m in Sources */,
@@ -8970,7 +8971,6 @@
 				9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,
 				9C1723871D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m in Sources */,
-				9CF593891D62A70300006594 /* SSJNewCrediteCardViewController.m in Sources */,
 				9CF594001D63FFBB00006594 /* SSJColorSelectCollectionViewCell.m in Sources */,
 				7DE0896F1D333ED4008431D6 /* SSJDatabaseVersion5.m in Sources */,
 				7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */,
