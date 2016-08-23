@@ -12,6 +12,7 @@
 #import "SSJReminderListCell.h"
 #import "SSJReminderEditeViewController.h"
 
+
 static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifier";
 
 @interface SSJReminderViewController ()
@@ -68,7 +69,10 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+    SSJReminderEditeViewController *reminderEditeVc = [[SSJReminderEditeViewController alloc]init];
+    reminderEditeVc.item = item;
+    [self.navigationController pushViewController:reminderEditeVc animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
@@ -83,6 +87,9 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderListCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJReminderListCellIdentifier forIndexPath:indexPath];
+    if (!cell) {
+        cell = [[SSJReminderListCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJReminderListCellIdentifier];
+    }
     [cell setCellItem:item];
     return cell;
 }

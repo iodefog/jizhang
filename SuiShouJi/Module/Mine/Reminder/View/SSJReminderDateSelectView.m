@@ -107,6 +107,7 @@
     if (!_dateSelect) {
         _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
         _dateSelect.datePickerMode = UIDatePickerModeDate;
+        _dateSelect.minimumDate = [NSDate date];
         _dateSelect.backgroundColor = [UIColor whiteColor];
     }
     return _dateSelect;
