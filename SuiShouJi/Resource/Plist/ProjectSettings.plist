@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>DefaultSource</key>
-	<string>11501</string>
+	<string>11505</string>
 	<key>AppStoreSources</key>
 	<array>
 		<string>11501</string>
@@ -71,6 +71,99 @@
 			<string>youyu_weibo_banner</string>
 			<key>AppStoreUrl</key>
 			<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-quan-min-kou/id1126210029?l=zh&amp;ls=1&amp;mt=8</string>
+		</dict>
+		<key>11503</key>
+		<dict>
+			<key>WeiXinKey</key>
+			<string></string>
+			<key>WeiXinSecret</key>
+			<string></string>
+			<key>QQAppId</key>
+			<string></string>
+			<key>QQAppKey</key>
+			<string></string>
+			<key>YWAppKey</key>
+			<string>23441285</string>
+			<key>WeiBoAppKey</key>
+			<string></string>
+			<key>WeiBoSecret</key>
+			<string></string>
+			<key>UMAppKey</key>
+			<string>57bd0407e0f55a12f800304d</string>
+			<key>ShareTitle</key>
+			<string></string>
+			<key>ShareUrl</key>
+			<string></string>
+			<key>ShareContent</key>
+			<string></string>
+			<key>ShareIcon</key>
+			<string></string>
+			<key>WeiboBanner</key>
+			<string></string>
+			<key>AppStoreUrl</key>
+			<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-guan-jia/id1147033267?l=zh&amp;ls=1&amp;mt=8</string>
+		</dict>
+		<key>11504</key>
+		<dict>
+			<key>WeiXinKey</key>
+			<string></string>
+			<key>WeiXinSecret</key>
+			<string></string>
+			<key>QQAppId</key>
+			<string></string>
+			<key>QQAppKey</key>
+			<string></string>
+			<key>YWAppKey</key>
+			<string>23440909</string>
+			<key>WeiBoAppKey</key>
+			<string></string>
+			<key>WeiBoSecret</key>
+			<string></string>
+			<key>UMAppKey</key>
+			<string>57bd0470e0f55a5d3f000d1f</string>
+			<key>ShareTitle</key>
+			<string></string>
+			<key>ShareUrl</key>
+			<string></string>
+			<key>ShareContent</key>
+			<string></string>
+			<key>ShareIcon</key>
+			<string></string>
+			<key>WeiboBanner</key>
+			<string></string>
+			<key>AppStoreUrl</key>
+			<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-ben-zui-bian/id1147038013?l=zh&amp;ls=1&amp;mt=8</string>
+		</dict>
+		<key>11505</key>
+		<dict>
+			<key>WeiXinKey</key>
+			<string></string>
+			<key>WeiXinSecret</key>
+			<string></string>
+			<key>QQAppId</key>
+			<string></string>
+			<key>QQAppKey</key>
+			<string></string>
+			<key>YWAppKey</key>
+			<string>23440910</string>
+			<key>WeiBoAppKey</key>
+			<string></string>
+			<key>WeiBoSecret</key>
+			<string></string>
+			<key>UMAppKey</key>
+			<string>57bd048ee0f55a351400299d</string>
+			<key>ShareTitle</key>
+			<string></string>
+			<key>ShareUrl</key>
+			<string></string>
+			<key>ShareContent</key>
+			<string></string>
+			<key>ShareIcon</key>
+			<string></string>
+			<key>WeiboBanner</key>
+			<string></string>
+			<key>AppStoreUrl</key>
+			<string>https://itunes.apple.com/cn/app/you-yu-ji-zhang-li-cai-zui/id1147038726?l=zh&amp;ls=1&amp;mt=8</string>
 		</dict>
 	</dict>
 </dict>

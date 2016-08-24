@@ -7,7 +7,10 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJLoanModel.h"
 
 @interface SSJAddOrEditLoanViewController : SSJBaseViewController
+
+@property (nonatomic, copy) SSJLoanModel *loanModel;
 
 @end

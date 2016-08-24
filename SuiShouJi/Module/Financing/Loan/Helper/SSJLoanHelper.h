@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJLoanModel.h"
+#import "SSJLoanFundAccountSelectionViewItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -72,6 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)recoverLoanModel:(SSJLoanModel *)model
                  success:(void (^)())success
                  failure:(void (^)(NSError *error))failure;
+
++ (void)queryFundModelListWithSuccess:(void (^)(NSArray <SSJLoanFundAccountSelectionViewItem *>*items))success
+                              failure:(void (^)(NSError *error))failure;
 
 @end
 

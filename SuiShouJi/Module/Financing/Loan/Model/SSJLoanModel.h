@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
     SSJLoanTypeBorrow   // 借入
 };
 
-@interface SSJLoanModel : NSObject
+@interface SSJLoanModel : NSObject <NSCopying>
 
 @property (nonatomic, copy) NSString *ID;
 

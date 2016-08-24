@@ -9,6 +9,10 @@
 #import "SSJLoanHelper.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJLoanFundAccountSelectionViewItem.h"
+
+NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
+NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 
 @implementation SSJLoanHelper
 
@@ -122,6 +126,9 @@
             }
             return;
         }
+        
+        loanModel.version = SSJSyncVersion();
+        loanModel.writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         // 创建或更新借贷记录、转账流水
         if (![self saveLoanModel:loanModel booksID:booksID inDatabase:db]) {
@@ -436,6 +443,44 @@
         if (success) {
             SSJDispatchMainAsync(^{
                 success();
+            });
+        }
+    }];
+}
+
++ (void)queryFundModelListWithSuccess:(void (^)(NSArray <SSJLoanFundAccountSelectionViewItem *>*items))success
+                              failure:(void (^)(NSError *error))failure {
+    
+    NSString *userId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *rs = [db executeQuery:@"SELECT CICOIN, CFUNDID, CACCTNAME FROM BK_FUND_INFO WHERE CPARENT != 'root' AND CPARENT != '10' AND CPARENT != '11' AND OPERATORTYPE <> 2 AND CUSERID = ? ORDER BY IORDER", userId];
+        if (!rs) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *fundItems = [NSMutableArray array];
+        
+        while ([rs next]) {
+            SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+            item.image = [rs stringForColumn:@"CICOIN"];
+            item.title = [rs stringForColumn:@"CACCTNAME"];
+            item.ID =  [rs stringForColumn:@"CFUNDID"];
+            [fundItems addObject:item];
+        }
+        
+        SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+        item.image = @"add";
+        item.title = @"添加资金新的账户";
+        [fundItems addObject:item];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(fundItems);
             });
         }
     }];
