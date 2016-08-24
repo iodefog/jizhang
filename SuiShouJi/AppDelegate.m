@@ -77,7 +77,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
-    
+        
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
