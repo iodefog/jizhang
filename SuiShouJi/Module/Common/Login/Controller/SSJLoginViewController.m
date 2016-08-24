@@ -81,11 +81,13 @@
     [scrollView addSubview:self.forgetButton];
     [scrollView addSubview:self.registerButton];
     [scrollView addSubview:self.tencentLoginButton];
-    [scrollView addSubview:self.thirdPartyLoginLabel];
-    [scrollView addSubview:self.leftSeperatorLine];
-    [scrollView addSubview:self.rightSeperatorLine];
-    [scrollView addSubview:self.tencentLoginButton];
-    [scrollView addSubview:self.weixinLoginButton];
+    if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+        [scrollView addSubview:self.thirdPartyLoginLabel];
+        [scrollView addSubview:self.leftSeperatorLine];
+        [scrollView addSubview:self.rightSeperatorLine];
+        [scrollView addSubview:self.tencentLoginButton];
+        [scrollView addSubview:self.weixinLoginButton];
+    }
     [self.view addSubview:scrollView];
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
