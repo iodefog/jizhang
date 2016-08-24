@@ -324,6 +324,8 @@ const NSInteger kRateTag = 1004;
 }
 
 - (void)sureButtonAction {
+    
+    
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
     [SSJLoanHelper saveLoanModel:_loanModel remindModel:_reminderItem success:^{
@@ -334,6 +336,56 @@ const NSInteger kRateTag = 1004;
         [_sureButton ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
     }];
+}
+
+- (BOOL)checkLoanModelIsValid {
+    switch (_loanModel.type) {
+        case SSJLoanTypeLend:
+            if (_loanModel.lender.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请输入借款人"];
+                return NO;
+            }
+            
+            if ([_loanModel.jMoney floatValue] <= 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            
+            if (_loanModel.borrowDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            
+            if (_loanModel.repaymentDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            break;
+            
+        case SSJLoanTypeBorrow:
+            if (_loanModel.lender.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            
+            if ([_loanModel.jMoney floatValue] <= 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            
+            if (_loanModel.borrowDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            
+            if (_loanModel.repaymentDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@""];
+                return NO;
+            }
+            break;
+    }
+    
+    return YES;
 }
 
 - (void)interestSwitchAction:(UISwitch *)switchCtrl {
