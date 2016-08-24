@@ -12,6 +12,7 @@
 #import "SSJFundingItem.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJNewCreditCardViewController.h"
 #import "FMDB.h"
 
 @interface SSJFundingTypeSelectViewController ()
@@ -63,7 +64,8 @@
     }else if ([item.fundingID isEqualToString:@"11"]){
         
     }else if ([item.fundingID isEqualToString:@"3"]){
-        
+        SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
+        [self.navigationController pushViewController:newCreditCardVc animated:YES];
     }else{
         SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
         [self.navigationController pushViewController:normalFundingVc animated:YES];

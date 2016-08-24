@@ -34,7 +34,7 @@
     return self;
 }
 
--(void)layoutSubviews{
+- (void)layoutSubviews{
     [super layoutSubviews];
     switch (self.type) {
         case SSJCreditCardCellTypeTextField:{
@@ -65,7 +65,10 @@
             }
             self.detailLabel.centerY = self.contentView.height /  2;
             self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-            self.cellDetailImage.hidden = YES;
+            self.cellDetailImage.right = self.detailLabel.left - 10;
+            self.cellDetailImage.centerY = self.contentView.height /  2;
+
+            self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
         }
@@ -84,7 +87,9 @@
             }
             self.detailLabel.centerY = self.contentView.height /  2;
             self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-            self.cellDetailImage.hidden = YES;
+            self.cellDetailImage.right = self.detailLabel.left - 10;
+            self.cellDetailImage.centerY = self.contentView.height /  2;
+            self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
         }
@@ -105,14 +110,14 @@
     }
 }
 
--(UIImageView *)cellImage{
+- (UIImageView *)cellImage{
     if (!_cellImage) {
         _cellImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     }
     return _cellImage;
 }
 
--(UILabel *)titleLabel{
+- (UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _titleLabel.font = [UIFont systemFontOfSize:15];
@@ -121,7 +126,7 @@
     return _titleLabel;
 }
 
--(UILabel *)detailLabel{
+- (UILabel *)detailLabel{
     if (!_detailLabel) {
         _detailLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _detailLabel.font = [UIFont systemFontOfSize:15];
@@ -129,7 +134,7 @@
     return _detailLabel;
 }
 
--(UILabel *)subTitleLabel{
+- (UILabel *)subTitleLabel{
     if (!_subTitleLabel) {
         _subTitleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _subTitleLabel.font = [UIFont systemFontOfSize:14];
@@ -138,14 +143,14 @@
     return _subTitleLabel;
 }
 
--(UIImageView *)cellDetailImage{
+- (UIImageView *)cellDetailImage{
     if (!_cellDetailImage) {
         _cellDetailImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     }
     return _cellDetailImage;
 }
 
--(UITextField *)textInput{
+- (UITextField *)textInput{
     if (!_textInput) {
         _textInput = [[UITextField alloc]init];
         _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
@@ -153,29 +158,30 @@
     return _textInput;
 }
 
--(void)setCellImageName:(NSString *)cellImageName{
+- (void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
     self.cellImage.image = [UIImage imageNamed:_cellImageName];
 }
 
--(void)setCellDetailImageName:(NSString *)cellDetailImageName{
+- (void)setCellDetailImageName:(NSString *)cellDetailImageName{
     _cellDetailImageName = cellDetailImageName;
     self.cellDetailImage.image = [UIImage imageNamed:_cellDetailImageName];
+    [self.cellDetailImage sizeToFit];
 }
 
--(void)setCellTitle:(NSString *)cellTitle{
+- (void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     self.titleLabel.text = _cellTitle;
     [self.titleLabel sizeToFit];
 }
 
--(void)setCellSubTitle:(NSString *)cellSubTitle{
+- (void)setCellSubTitle:(NSString *)cellSubTitle{
     _cellSubTitle = cellSubTitle;
     self.subTitleLabel.text = _cellSubTitle;
     [self.subTitleLabel sizeToFit];
 }
 
--(void)setType:(SSJCreditCardCellType)type{
+- (void)setType:(SSJCreditCardCellType)type{
     _type = type;
     [self setNeedsLayout];
 }
