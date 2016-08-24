@@ -36,6 +36,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) SSJReminderDateSelectView *dateSelectView;
 
+@property(nonatomic, strong) UIView *saveFooterView;
+
 @end
 
 @implementation SSJReminderEditeViewController
@@ -61,11 +63,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5]];
     if (self.item.remindId.length) {
         self.title = @"提醒详情";
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonCliked:)];
+        self.navigationItem.rightBarButtonItem = rightItem;
     }else{
         self.title = @"添加提醒";
     }
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonCliked:)];
-    self.navigationItem.rightBarButtonItem = rightItem;
+    
     // Do any additional setup after loading the view.
 }
 
@@ -76,11 +79,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectZero];
-    return footerView;
+    if (section == [self.tableView numberOfSections] - 1) {
+        return self.saveFooterView;
+    }
+    return nil;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (section == [self.tableView numberOfSections] - 1) {
+        return 80 ;
+    }
     return 0.1f;
 }
 
@@ -389,7 +397,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 #pragma mark - Event
-- (void)rightButtonCliked:(id)sender{
+- (void)saveButtonClicked:(id)sender{
     SSJCreditCardEditeCell *nameCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     SSJCreditCardEditeCell *memoCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
     self.item.remindName = nameCell.textInput.text;
@@ -413,6 +421,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 }
 
+- (void)rightButtonCliked:(id)sender{
+    
+}
 
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
@@ -463,6 +474,22 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         };
     }
     return _dateSelectView;
+}
+
+-(UIView *)saveFooterView{
+    if (_saveFooterView == nil) {
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
+        [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+        saveButton.layer.cornerRadius = 3.f;
+        saveButton.layer.masksToBounds = YES;
+        [saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        saveButton.center = CGPointMake(_saveFooterView.width / 2, _saveFooterView.height / 2);
+        [_saveFooterView addSubview:saveButton];
+    }
+    return _saveFooterView;
 }
 
 - (void)didReceiveMemoryWarning {
