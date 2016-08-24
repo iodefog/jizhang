@@ -10,4 +10,6 @@
 
 @interface SSJNewCreditCardViewController : SSJBaseViewController
 
+@property(nonatomic, strong) NSString *cardId;
+
 @end

@@ -19,16 +19,25 @@
 // 信用卡额度
 @property(nonatomic) float cardLimit;
 
+// 信用卡额度
+@property(nonatomic) float cardBalance;
+
+// 是否已账单日结算
+@property(nonatomic) BOOL settleAtRepaymentDay;
+
 // 账单日
-@property(nonatomic, strong) NSString *cardBillingDate;
+@property(nonatomic) NSInteger cardBillingDay;
 
 // 还款日
-@property(nonatomic, strong) NSString *cardRepaymentDate;
-
-// 还款日离账单日日期
-@property(nonatomic) NSInteger cardAddDate;
+@property(nonatomic) NSInteger cardRepaymentDay;
 
 // 信用卡备注
 @property(nonatomic, strong) NSString *cardMemo;
+
+// 提醒id
+@property(nonatomic, strong) NSString *remindId;
+
+// 提醒的状态
+@property(nonatomic) BOOL remindState;
 
 @end

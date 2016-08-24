@@ -7,7 +7,17 @@
 //
 
 #import "SSJCreditCardStore.h"
+#import "SSJCreditCardItem.h"
+#import "SSJDatabaseQueue.h"
 
 @implementation SSJCreditCardStore
+
++ (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)id{
+    SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+    }];
+    return item;
+}
 
 @end
