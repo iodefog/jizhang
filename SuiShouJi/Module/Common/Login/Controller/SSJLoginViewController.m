@@ -80,7 +80,6 @@
     [scrollView addSubview:self.loginButton];
     [scrollView addSubview:self.forgetButton];
     [scrollView addSubview:self.registerButton];
-    [scrollView addSubview:self.tencentLoginButton];
     if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
         [scrollView addSubview:self.thirdPartyLoginLabel];
         [scrollView addSubview:self.leftSeperatorLine];
