@@ -60,15 +60,31 @@ static NSString *const kTitle8 = @"点击上方微信号复制，接着去微信
     [super viewWillAppear:animated];
     if ([SSJStartChecker sharedInstance].isInReview) {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7,kTitle8]];
+            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6] ,@[kTitle7,kTitle8]];
+            }else{
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6] ,@[kTitle7,kTitle8]];
+            }
         }else{
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6]];
+            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle4], @[kTitle6]];
+            }else{
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3], @[kTitle6]];
+            }
         }
     } else {
         if ([WXApi isWXAppInstalled]) {
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+            }else{
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6],@[kTitle7,kTitle8]];
+            }
         }else{
-            self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
+            if ([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) {
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle4 , kTitle5], @[kTitle6]];
+            }else{
+                self.titles = @[@[kTitle1], @[kTitle2 , kTitle3] , @[kTitle5], @[kTitle6]];
+            }
         }
     }
     
