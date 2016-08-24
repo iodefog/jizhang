@@ -6234,10 +6234,8 @@
 		9CEB85BD1CC5D8FC00AE8F8D /* mark_pic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@2x.png"; sourceTree = "<group>"; };
 		9CEB85BE1CC5D8FC00AE8F8D /* mark_pic@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mark_pic@3x.png"; sourceTree = "<group>"; };
 		9CEC03001D6D41EB00DB2C8B /* YouYuJiZhangLiCai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangLiCai.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CEC03011D6D41EC00DB2C8B /* SuiShouJi copy3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SuiShouJi copy3-Info.plist"; path = "/Users/ricky/Documents/ios/老版本/渠道/SuiShouJi copy3-Info.plist"; sourceTree = "<absolute>"; };
 		9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy-Info.plist"; sourceTree = "<group>"; };
 		9CECFF081D6D41A700DB2C8B /* YouYuJiZhangBen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangBen.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9CECFF101D6D41A800DB2C8B /* SuiShouJi copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SuiShouJi copy2-Info.plist"; path = "/Users/ricky/Documents/ios/老版本/渠道/SuiShouJi copy2-Info.plist"; sourceTree = "<absolute>"; };
 		9CF0AC001D58583B00475C5B /* tianjia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia@3x.png"; sourceTree = "<group>"; };
 		9CF0AC0A1D58584400475C5B /* tianjia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tianjia@2x.png"; sourceTree = "<group>"; };
 		BD0432CC1C1A772A0051E7AB /* Macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macro.h; sourceTree = "<group>"; };
@@ -9363,8 +9361,6 @@
 				BD543C501C1A6DBC00910D61 /* Info.plist */,
 				9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */,
 				9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */,
-				9CECFF101D6D41A800DB2C8B /* SuiShouJi copy2-Info.plist */,
-				9CEC03011D6D41EC00DB2C8B /* SuiShouJi copy3-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -9788,11 +9784,11 @@
 			targets = (
 				BD543C3B1C1A6DBC00910D61 /* SuiShouJi */,
 				9C2A67071D194CA70010F1DA /* youyujizhang */,
-				BD543C541C1A6DBC00910D61 /* SuiShouJiTests */,
-				BD543C5F1C1A6DBC00910D61 /* SuiShouJiUITests */,
 				7DBA559D1D6D32B700C02D79 /* JiZhangGuanJia */,
 				9CECFB191D6D41A700DB2C8B /* YouYuJiZhangBen */,
 				9CECFF111D6D41EB00DB2C8B /* YouYuJiZhangLiCai */,
+				BD543C541C1A6DBC00910D61 /* SuiShouJiTests */,
+				BD543C5F1C1A6DBC00910D61 /* SuiShouJiUITests */,
 			);
 		};
 /* End PBXProject section */
