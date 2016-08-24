@@ -399,7 +399,7 @@ static BOOL kNeedBannerDisplay = YES;
         }else{
             avtarUrl = SSJImageURLWithAPI(_userItem.cicon);
         }
-        _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:SSJYWAppKey];
+        _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:SSJDetailSettingForSource(@"YWAppKey")];
         _feedbackKit.customUIPlist = @{@"bgColor":@"#ffffff",
                                        @"color":@"#393939",
                                        @"avatar":avtarUrl ?: @""};
