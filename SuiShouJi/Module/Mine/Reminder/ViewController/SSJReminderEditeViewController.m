@@ -93,6 +93,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle4]) {
         self.reminderTimeView.currentDate = self.item.remindDate;
@@ -103,8 +104,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [self.dateSelectView show];
     }
     if ([title isEqualToString:kTitle3]) {
-        self.circleSelectView.selectCircleType = self.item.remindCycle;
-        [self.circleSelectView show];
+        if (self.item.remindType == SSJReminderTypeCreditCard || self.item.remindType == SSJReminderTypeBorrowing ) {
+
+        }else{
+            self.circleSelectView.selectCircleType = self.item.remindCycle;
+            [self.circleSelectView show];
+        }
+
     }
 }
 
@@ -198,8 +204,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             default:
                 break;
         }
-        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        if (self.item.remindType == SSJReminderTypeCreditCard || self.item.remindType == SSJReminderTypeBorrowing ) {
+            newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        }else{
+            newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
     }
     
     // 提醒闹钟

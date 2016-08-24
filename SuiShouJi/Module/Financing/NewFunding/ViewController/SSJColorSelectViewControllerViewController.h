@@ -23,4 +23,5 @@
 typedef void (^colorSelectedBlock)(NSString *selectColor);
 
 @property(nonatomic,copy) colorSelectedBlock colorSelectedBlock;
+
 @end
