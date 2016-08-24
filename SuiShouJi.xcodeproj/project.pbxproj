@@ -15578,9 +15578,9 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "8993ccda-9472-41c4-a023-d658db628781";
+				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -15623,7 +15623,7 @@
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/SuiShouJi/Vendor/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
