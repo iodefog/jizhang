@@ -222,6 +222,11 @@
 		7D9E4A4E1D0EC32300EE254D /* reportForms_nodata@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E4A4C1D0EC32300EE254D /* reportForms_nodata@2x.png */; };
 		7D9E4A4F1D0EC32300EE254D /* reportForms_nodata@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */; };
 		7D9E4A531D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */; };
+		7D9F5BCB1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */; };
+		7D9F5BCC1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */; };
+		7D9F5BCD1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */; };
+		7D9F5BCE1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */; };
+		7D9F5BCF1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */; };
 		7DA4ACB11C918F57004E39E8 /* budget_no_data@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACAF1C918F57004E39E8 /* budget_no_data@2x.png */; };
 		7DA4ACB21C918F57004E39E8 /* budget_no_data@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */; };
 		7DA4ACB51C919F38004E39E8 /* budget_red_wave_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */; };
@@ -5532,6 +5537,8 @@
 		7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_nodata@3x.png"; sourceTree = "<group>"; };
 		7D9E4A511D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportBookTypeSelectionCell.h; sourceTree = "<group>"; };
 		7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportBookTypeSelectionCell.m; sourceTree = "<group>"; };
+		7D9F5BC91D6D9CA600362CFA /* SSJLoanDateSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanDateSelectionView.h; sourceTree = "<group>"; };
+		7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanDateSelectionView.m; sourceTree = "<group>"; };
 		7DA4ACAF1C918F57004E39E8 /* budget_no_data@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_no_data@2x.png"; sourceTree = "<group>"; };
 		7DA4ACB01C918F57004E39E8 /* budget_no_data@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_no_data@3x.png"; sourceTree = "<group>"; };
 		7DA4ACB31C919F38004E39E8 /* budget_red_wave_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "budget_red_wave_full@2x.png"; sourceTree = "<group>"; };
@@ -7603,6 +7610,8 @@
 				7DBA55491D6BED0D00C02D79 /* SSJLoanFundAccountSelectionView.m */,
 				7DBA55501D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.h */,
 				7DBA55511D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m */,
+				7D9F5BC91D6D9CA600362CFA /* SSJLoanDateSelectionView.h */,
+				7D9F5BCA1D6D9CA600362CFA /* SSJLoanDateSelectionView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -13624,6 +13633,7 @@
 				7DBA56191D6D32B700C02D79 /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C9A0C3B1D6D9666002AF046 /* SSJReminderEditeViewController.m in Sources */,
 				9C9A0C591D6D9749002AF046 /* SSJReminderDateSelectView.m in Sources */,
+				7D9F5BCD1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				7DBA561A1D6D32B700C02D79 /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				7DBA561B1D6D32B700C02D79 /* SSJBillTypeSyncTable.m in Sources */,
 				7DBA561C1D6D32B700C02D79 /* SSJRegistGetVerViewController.m in Sources */,
@@ -14098,6 +14108,7 @@
 				9C2A679B1D194CA70010F1DA /* SSJHomeTableView.m in Sources */,
 				9C2A679C1D194CA70010F1DA /* SSJLoginViewController.m in Sources */,
 				9C2A679D1D194CA70010F1DA /* SSJBudgetEditPeriodSelectionView.m in Sources */,
+				7D9F5BCC1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				9C2A679E1D194CA70010F1DA /* SSJBillingChargeHeaderView.m in Sources */,
 				7DBA553F1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9C2A679F1D194CA70010F1DA /* SSJGuideView.m in Sources */,
@@ -14459,6 +14470,7 @@
 				9CECFB951D6D41A700DB2C8B /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C9A0C3C1D6D9667002AF046 /* SSJReminderEditeViewController.m in Sources */,
 				9C9A0C5A1D6D9749002AF046 /* SSJReminderDateSelectView.m in Sources */,
+				7D9F5BCE1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				9CECFB961D6D41A700DB2C8B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				9CECFB971D6D41A700DB2C8B /* SSJBillTypeSyncTable.m in Sources */,
 				9CECFB981D6D41A700DB2C8B /* SSJRegistGetVerViewController.m in Sources */,
@@ -14879,6 +14891,7 @@
 				9CECFF8D1D6D41EB00DB2C8B /* SSJBudgetDetailMiddleTitleView.m in Sources */,
 				9C9A0C3D1D6D9667002AF046 /* SSJReminderEditeViewController.m in Sources */,
 				9C9A0C5B1D6D974A002AF046 /* SSJReminderDateSelectView.m in Sources */,
+				7D9F5BCF1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				9CECFF8E1D6D41EB00DB2C8B /* SSJMagicExportCalendarDateViewItem.m in Sources */,
 				9CECFF8F1D6D41EB00DB2C8B /* SSJBillTypeSyncTable.m in Sources */,
 				9CECFF901D6D41EB00DB2C8B /* SSJRegistGetVerViewController.m in Sources */,
@@ -15355,6 +15368,7 @@
 				9C40F1A81D4F6015003FF1C6 /* SSJWeixinFooter.m in Sources */,
 				7D2B24001C3A1FD3009A74A8 /* SSJBillingChargeHeaderView.m in Sources */,
 				BD70DF601C4751EA000E6CC9 /* SSJGuideView.m in Sources */,
+				7D9F5BCB1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
 				7D5C862E1D2F96D300C73A9A /* SSJThemePlugin.m in Sources */,
 				BD04331D1C1A78B40051E7AB /* SSJDataAddition.m in Sources */,
 				9C9471761CEB224C00D69079 /* SSJFinancingHomeitem.m in Sources */,

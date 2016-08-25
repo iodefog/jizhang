@@ -15,7 +15,7 @@
     SSJLoanListCellItem *item = [[SSJLoanListCellItem alloc] init];
     item.icon = @"";
     item.memo = model.memo;
-    item.money = [NSString stringWithFormat:@"%.2f", [model.jMoney doubleValue]];
+    item.money = [NSString stringWithFormat:@"%.2f", model.jMoney];
     item.showStamp = model.closeOut;
     switch (model.type) {
         case SSJLoanTypeLend:

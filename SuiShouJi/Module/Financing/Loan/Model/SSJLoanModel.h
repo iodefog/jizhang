@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 @property (nonatomic, copy) NSString *lender;
 
 // 借入／借出金额
-@property (nonatomic, copy) NSString *jMoney;
+@property (nonatomic) double jMoney;
 
 // 借入／借出所属账户
 @property (nonatomic, copy) NSString *fundID;
@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 @property (nonatomic, copy) NSString *endDate;
 
 // 利率
-@property (nonatomic, copy) NSString *rate;
+@property (nonatomic) double rate;
 
 // 备注
 @property (nonatomic, copy) NSString *memo;

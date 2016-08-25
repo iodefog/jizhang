@@ -8,6 +8,12 @@
 
 #import "SSJAddOrEditLoanMultiLabelCell.h"
 
+@interface SSJAddOrEditLoanMultiLabelCell ()
+
+@property (nonatomic, strong) UILabel *percentLab;
+
+@end
+
 @implementation SSJAddOrEditLoanMultiLabelCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -23,6 +29,13 @@
         _textField.font = [UIFont systemFontOfSize:18];
         _textField.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_textField];
+        
+        _percentLab = [[UILabel alloc] init];
+        _percentLab.text = @"%";
+        [_percentLab sizeToFit];
+        
+        _textField.rightView = _percentLab;
+        _textField.rightViewMode = UITextFieldViewModeAlways;
         
         [self updateAppearance];
     }
@@ -53,6 +66,7 @@
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _percentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
 @end

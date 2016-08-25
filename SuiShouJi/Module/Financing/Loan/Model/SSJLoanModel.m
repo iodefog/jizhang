@@ -16,7 +16,7 @@
     model.ID = [resultSet stringForColumn:@"loanid"];
     model.userID = [resultSet stringForColumn:@"cuserid"];
     model.lender = [resultSet stringForColumn:@"lender"];
-    model.jMoney = [resultSet stringForColumn:@"jmoney"];
+    model.jMoney = [resultSet doubleForColumn:@"jmoney"];
     model.fundID = [resultSet stringForColumn:@"cthefundid"];
     model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
     model.chargeID = [resultSet stringForColumn:@"cthecharge"];
@@ -26,7 +26,7 @@
     model.borrowDate = [resultSet stringForColumn:@"cborrowdate"];
     model.repaymentDate = [resultSet stringForColumn:@"crepaymentdate"];
     model.endDate = [resultSet stringForColumn:@"cenddate"];
-    model.rate = [resultSet stringForColumn:@"rate"];
+    model.rate = [resultSet doubleForColumn:@"rate"];
     model.memo = [resultSet stringForColumn:@"memo"];
     model.remindID = [resultSet stringForColumn:@"cremindid"];
     model.interest = [resultSet boolForColumn:@"interest"];
@@ -93,7 +93,7 @@
     return [NSString stringWithFormat:@"%@:%@", self, @{@"ID":(_ID ?: @""),
                                                         @"userID":(_userID ?: @""),
                                                         @"lender":(_lender ?: @""),
-                                                        @"jMoney":(_jMoney ?: @""),
+                                                        @"jMoney":@(_jMoney),
                                                         @"fundID":(_fundID ?: @""),
                                                         @"targetFundID":(_targetFundID ?: @""),
                                                         @"chargeID":(_chargeID ?: @""),
@@ -103,7 +103,7 @@
                                                         @"borrowDate":(_borrowDate ?: @""),
                                                         @"repaymentDate":(_repaymentDate ?: @""),
                                                         @"enddate":(_endDate ?: @""),
-                                                        @"rate":(_rate ?: @""),
+                                                        @"rate":@(_rate),
                                                         @"memo":(_memo ?: @""),
                                                         @"remindID":(_remindID ?: @""),
                                                         @"interest":@(_interest),

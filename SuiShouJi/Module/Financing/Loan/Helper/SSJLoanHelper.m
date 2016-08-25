@@ -514,12 +514,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 转出流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, model.jMoney, @4, rollOutFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, @(model.jMoney), @4, rollOutFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
     // 转入流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInChargeID, model.userID, model.jMoney, @3, rollInFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInChargeID, model.userID, @(model.jMoney), @3, rollInFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
@@ -527,9 +527,14 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     [modelInfo setObject:writeDate forKey:@"writeDate"];
     [modelInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
     
-    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cthecharge, ctargetcharge, cethecharge, cetargetcharge, cborrowdate, crepaymentdate, cenddate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (:ID, :userID, :lender, :jMoney, :fundID, :targetFundID, :chargeID, :targetChargeID, :endChargeID, :endTargetChargeID, :borrowDate, :repaymentDate, :endDate, :rate, :memo, :remindID, :interest, :closeOut, :type, :writeDate, :operatorType, :version)", modelInfo]) {
+//    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cthecharge, ctargetcharge, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (:ID, :userID, :lender, :jMoney, :fundID, :targetFundID, :chargeID, :targetChargeID, :borrowDate, :repaymentDate, :rate, :memo, :remindID, :interest, :closeOut, :type, :writeDate, :operatorType, :version)", modelInfo]) {
+//        return NO;
+//    }
+    
+    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cthecharge, ctargetcharge, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (:ID, :userID, :lender, :jMoney, :fundID, :targetFundID, :chargeID, :targetChargeID, :borrowDate, :repaymentDate, :rate, :memo, :remindID, :interest, :closeOut, :type, :writeDate, :operatorType, :version)" withParameterDictionary:modelInfo]) {
         return NO;
     }
+    
     
     return YES;
 }

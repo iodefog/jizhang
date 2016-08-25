@@ -128,6 +128,8 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
         self.bottom = keyWindow.height;
     } timeInterval:0.25 fininshed:NULL];
+    
+    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
 
 - (void)dismiss {
