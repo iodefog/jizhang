@@ -75,7 +75,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -104,6 +104,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.cardName;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 账户类型
@@ -114,6 +115,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [newReminderCell.detailLabel sizeToFit];
         newReminderCell.cellDetailImageName = @"ft_creditcard";
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 信用卡额度
@@ -121,16 +123,22 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
-        newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardLimit];
+        if (self.item.cardLimit != 0) {
+            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardLimit];
+        }
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 信用卡余额
     if ([title isEqualToString:kTitle4]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardBalance];
+        if (self.item.cardBalance != 0) {
+            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardBalance];
+        }
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 信用卡备注
@@ -139,6 +147,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 是否已账单日结算
@@ -149,6 +158,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.billDateSettleMentButton.on = self.item.settleAtRepaymentDay;
         newReminderCell.accessoryView = self.billDateSettleMentButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 账单日
@@ -161,7 +171,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardBillingDay]]];
         [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, detail.length)];
         newReminderCell.detailLabel.attributedText = attributeddetail;
-        newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     // 还款日
@@ -174,7 +184,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardRepaymentDay]]];
         [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, detail.length)];
         newReminderCell.detailLabel.attributedText = attributeddetail;
-        newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
     // 还款日提醒
@@ -184,6 +194,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.billDateSettleMentButton.on = self.item.remindState;
         newReminderCell.accessoryView = self.remindStateButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // 编辑卡片颜色

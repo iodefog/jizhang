@@ -11,7 +11,7 @@
 
 @interface SSJReminderEditeViewController : SSJBaseViewController
 
-@property(nonatomic, strong) SSJReminderItem *item;
+@property(nonatomic, copy) SSJReminderItem *item;
 
 @property (nonatomic, copy) void (^addNewReminderAction)(SSJReminderItem *item);
 
