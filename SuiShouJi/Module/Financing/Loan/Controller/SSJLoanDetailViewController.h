@@ -1,8 +1,8 @@
 //
-//  SSJAddOrEditLoanViewController.h
+//  SSJLoanDetailViewController.h
 //  SuiShouJi
 //
-//  Created by old lang on 16/8/19.
+//  Created by old lang on 16/8/25.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SSJAddOrEditLoanViewController : SSJBaseViewController
+@interface SSJLoanDetailViewController : SSJBaseViewController
 
 @property (nonatomic, copy) SSJLoanModel *loanModel;
 

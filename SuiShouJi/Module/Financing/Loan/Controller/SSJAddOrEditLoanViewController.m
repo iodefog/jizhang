@@ -9,6 +9,7 @@
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJReminderEditeViewController.h"
+#import "SSJLoanListViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
@@ -469,14 +470,10 @@ const int kMemoMaxLength = 13;
 
 #pragma mark - Event
 - (void)deleteButtonClicked {
-    self.navigationItem.rightBarButtonItem.enabled = NO;
-    [SSJLoanHelper deleteLoanModel:_loanModel success:^{
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSError * _Nonnull error) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
-    }];
+    __weak typeof(self) wself = self;
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"确认要删除此项目么？" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        [wself deleteLoanModel];
+    }], nil];
 }
 
 - (void)sureButtonAction {
@@ -701,6 +698,20 @@ const int kMemoMaxLength = 13;
                 break;
         }
     }
+}
+
+- (void)deleteLoanModel {
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    [SSJLoanHelper deleteLoanModel:_loanModel success:^{
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        UIViewController *listVC = [self ssj_previousViewControllerBySubtractingIndex:2];
+        if ([listVC isKindOfClass:[SSJLoanListViewController class]]) {
+            [self.navigationController popToViewController:listVC animated:YES];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+    }];
 }
 
 #pragma mark - Getter

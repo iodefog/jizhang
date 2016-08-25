@@ -8,6 +8,7 @@
 
 #import "SSJLoanListViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
+#import "SSJLoanDetailViewController.h"
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJLoanListSectionHeaderAmountView.h"
 #import "SSJLoanListCell.h"
@@ -57,11 +58,14 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if ([self isMovingToParentViewController]) {
-        [self loadAllDataIfHasNoUnclearedData];
-    } else {
-        [self reloadDataAccordingToHeaderViewIndex];
-    }
+    // 如果是push到此页面，先查询未结清的数据，如果没有再查询所有数据
+//    if ([self isMovingToParentViewController]) {
+//        [self loadAllDataIfHasNoUnclearedData];
+//    } else {
+//        [self reloadDataAccordingToHeaderViewIndex];
+//    }
+    
+    [self reloadDataAccordingToHeaderViewIndex];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -103,6 +107,10 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];
+    loanDetailVC.loanModel = [_list ssj_safeObjectAtIndex:indexPath.section];
+    [self.navigationController pushViewController:loanDetailVC animated:YES];
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
