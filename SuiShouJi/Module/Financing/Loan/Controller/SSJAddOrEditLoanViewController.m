@@ -8,6 +8,7 @@
 
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJNewFundingViewController.h"
+#import "SSJReminderEditeViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
@@ -25,6 +26,9 @@ const NSInteger kLenderTag = 1001;
 const NSInteger kMoneyTag = 1002;
 const NSInteger kMemoTag = 1003;
 const NSInteger kRateTag = 1004;
+
+const int kLenderMaxLength = 7;
+const int kMemoMaxLength = 13;
 
 @interface SSJAddOrEditLoanViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
@@ -137,6 +141,7 @@ const NSInteger kRateTag = 1004;
         cell.textField.text = _loanModel.lender;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.delegate = self;
+        cell.textField.clearsOnBeginEditing = YES;
         cell.textField.tag = kLenderTag;
         [cell setNeedsLayout];
         
@@ -158,6 +163,7 @@ const NSInteger kRateTag = 1004;
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         cell.textField.tag = kMoneyTag;
         [cell setNeedsLayout];
@@ -235,6 +241,8 @@ const NSInteger kRateTag = 1004;
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = _loanModel.memo;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
+        cell.textField.clearsOnBeginEditing = NO;
+        cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         cell.textField.delegate = self;
         cell.textField.tag = kMemoTag;
         [cell setNeedsLayout];
@@ -319,7 +327,7 @@ const NSInteger kRateTag = 1004;
         [self.repaymentDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
         if (_reminderItem) {
-#warning 跳转编辑提醒页面
+            [self enterReminderVC];
         }
     }
 }
@@ -327,20 +335,43 @@ const NSInteger kRateTag = 1004;
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
     if (textField.tag == kLenderTag) {
+        if (textField.text.length > kLenderMaxLength) {
+            switch (_loanModel.type) {
+                case SSJLoanTypeLend:
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
+                    break;
+            }
+            return NO;
+        }
         
-    } else if (textField.tag == kMoneyTag) {
+        return YES;
         
     } else if (textField.tag == kMemoTag) {
-        
+        if (textField.text.length > kMemoMaxLength) {
+            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
+            return NO;
+        }
     } else if (textField.tag == kRateTag) {
-        
+        if ([textField.text doubleValue] < 0) {
+            [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
+            return NO;
+        }
     }
     
     return YES;
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    
+    if (textField.tag == kMoneyTag) {
+        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+        textField.text = [NSString stringWithFormat:@"¥%.2f", [money doubleValue]];
+    } else if (textField.tag == kRateTag) {
+        textField.text = [NSString stringWithFormat:@"%.1f", [textField.text doubleValue]];
+    }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -413,6 +444,18 @@ const NSInteger kRateTag = 1004;
     } else {
         return YES;
     }
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField.tag == kLenderTag) {
+        _loanModel.lender = @"";
+    } else if (textField.tag == kMoneyTag) {
+        _loanModel.jMoney = 0;
+    } else if (textField.tag == kMemoTag) {
+        _loanModel.memo = @"";
+    } else if (textField.tag == kRateTag) {
+        _loanModel.rate = 0;
+    }
     
     return YES;
 }
@@ -436,72 +479,13 @@ const NSInteger kRateTag = 1004;
         [SSJLoanHelper saveLoanModel:_loanModel remindModel:_reminderItem success:^{
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
             [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
         }];
     }
-}
-
-- (BOOL)checkLoanModelIsValid {
-    switch (_loanModel.type) {
-        case SSJLoanTypeLend:
-            if (_loanModel.lender.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请输入借款人"];
-                return NO;
-            }
-            
-            if (_loanModel.jMoney <= 0) {
-                [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0"];
-                return NO;
-            }
-            
-            if (_loanModel.targetFundID.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借出账户"];
-                return NO;
-            }
-            
-            if (_loanModel.borrowDate.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借出日期"];
-                return NO;
-            }
-            
-            if (_loanModel.repaymentDate.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借款期限日"];
-                return NO;
-            }
-            break;
-            
-        case SSJLoanTypeBorrow:
-            if (_loanModel.lender.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请输入欠款人"];
-                return NO;
-            }
-            
-            if (_loanModel.jMoney <= 0) {
-                [CDAutoHideMessageHUD showMessage:@"借入金额必须大于0"];
-                return NO;
-            }
-            
-            if (_loanModel.targetFundID.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借入账户"];
-                return NO;
-            }
-            
-            if (_loanModel.borrowDate.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借入日期"];
-                return NO;
-            }
-            
-            if (_loanModel.repaymentDate.length == 0) {
-                [CDAutoHideMessageHUD showMessage:@"请选择还款期限日"];
-                return NO;
-            }
-            break;
-    }
-    
-    return YES;
 }
 
 - (void)interestSwitchAction:(UISwitch *)switchCtrl {
@@ -515,7 +499,7 @@ const NSInteger kRateTag = 1004;
     if (_reminderItem) {
         _reminderItem.remindState = switchCtrl.on;
     } else {
-#warning 跳转设置提醒页面
+        [self enterReminderVC];
     }
 }
 
@@ -587,6 +571,95 @@ const NSInteger kRateTag = 1004;
     NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预期利息为%@元", interestStr]];
     [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
     _interestLab.attributedText = richText;
+}
+
+- (BOOL)checkLoanModelIsValid {
+    switch (_loanModel.type) {
+        case SSJLoanTypeLend:
+            if (_loanModel.lender.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请输入借款人"];
+                return NO;
+            }
+            
+            if (_loanModel.lender.length > kLenderMaxLength) {
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
+            }
+            
+            if (_loanModel.jMoney <= 0) {
+                [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0"];
+                return NO;
+            }
+            
+            if (_loanModel.targetFundID.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请选择借出账户"];
+                return NO;
+            }
+            
+            if (_loanModel.borrowDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请选择借出日期"];
+                return NO;
+            }
+            
+            if (_loanModel.repaymentDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请选择借款期限日"];
+                return NO;
+            }
+            break;
+            
+        case SSJLoanTypeBorrow:
+            if (_loanModel.lender.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请输入欠款人"];
+                return NO;
+            }
+            
+            if (_loanModel.lender.length > kLenderMaxLength) {
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
+            }
+            
+            if (_loanModel.jMoney <= 0) {
+                [CDAutoHideMessageHUD showMessage:@"借入金额必须大于0"];
+                return NO;
+            }
+            
+            if (_loanModel.targetFundID.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请选择借入账户"];
+                return NO;
+            }
+            
+            if (_loanModel.borrowDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请选择借入日期"];
+                return NO;
+            }
+            
+            if (_loanModel.repaymentDate.length == 0) {
+                [CDAutoHideMessageHUD showMessage:@"请选择还款期限日"];
+                return NO;
+            }
+            break;
+    }
+    
+    if (_loanModel.memo.length > kMemoMaxLength) {
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
+        return NO;
+    }
+    
+    if (_loanModel.rate < 0) {
+        [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)enterReminderVC {
+    __weak typeof(self) wself = self;
+    SSJReminderEditeViewController *reminderVC = [[SSJReminderEditeViewController alloc] init];
+    reminderVC.item = _reminderItem;
+    reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
+        wself.reminderItem = item;
+        wself.loanModel.remindID = item.remindId;
+    };
+    [self.navigationController pushViewController:reminderVC animated:YES];
 }
 
 #pragma mark - Getter

@@ -28,6 +28,7 @@
         _textField = [[UITextField alloc] init];
         _textField.font = [UIFont systemFontOfSize:18];
         _textField.textAlignment = NSTextAlignmentRight;
+        _textField.clearsOnBeginEditing = YES;
         [self.contentView addSubview:_textField];
         
         _percentLab = [[UILabel alloc] init];
