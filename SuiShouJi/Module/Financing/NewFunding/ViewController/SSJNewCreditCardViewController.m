@@ -57,6 +57,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+
+    if ([title isEqualToString:kTitle6]) {
+        return 75;
+    }
     return 55;
 }
 

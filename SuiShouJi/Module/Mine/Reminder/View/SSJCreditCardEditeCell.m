@@ -97,11 +97,12 @@
             
         case SSJCreditCardCellTypeSubTitle:{
             self.cellImage.left = 10;
-            self.cellImage.top = 20;
+            self.cellImage.top = 10;
             self.accessoryView.centerY = self.cellImage.centerY;
             self.titleLabel.left = self.cellImage.right + 10;
-            self.titleLabel.left = 20;
-            self.subTitleLabel.bottom = self.height - 10;
+            self.titleLabel.top = 17;
+            self.subTitleLabel.top = self.titleLabel.bottom + 10;
+            self.subTitleLabel.left = self.titleLabel.left;
         }
             break;
             
@@ -120,7 +121,7 @@
 - (UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.font = [UIFont systemFontOfSize:18];
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLabel;
@@ -129,7 +130,7 @@
 - (UILabel *)detailLabel{
     if (!_detailLabel) {
         _detailLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _detailLabel.font = [UIFont systemFontOfSize:15];
+        _detailLabel.font = [UIFont systemFontOfSize:18];
     }
     return _detailLabel;
 }
@@ -137,7 +138,7 @@
 - (UILabel *)subTitleLabel{
     if (!_subTitleLabel) {
         _subTitleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _subTitleLabel.font = [UIFont systemFontOfSize:14];
+        _subTitleLabel.font = [UIFont systemFontOfSize:13];
         _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _subTitleLabel;
