@@ -7,7 +7,6 @@
 //
 
 #import "SSJCreditCardStore.h"
-#import "SSJCreditCardItem.h"
 #import "SSJDatabaseQueue.h"
 
 @implementation SSJCreditCardStore
@@ -15,22 +14,23 @@
 + (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)cardId{
     SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select "];
+        NSString *userId = SSJUSERID();
+        FMResultSet *resultSet = [db executeQuery:@"select a.* , b.istate , c.ccolor , c.cmemo , c.cacctname , d.iblance from bk_user_credit a , bk_user_remind b , bk_fund_info c , bk_funs_acct d where a.cfundid = ? and a.cfundid = c.cfundid and a.cuserid = ? and a.cremindid = b.cremindid a.cfundid = d.cfundid",cardId,userId];
         if (!resultSet) {
             return;
         }
         while([resultSet next]){
             item.cardId = cardId;
-            item.cardName = [resultSet stringForColumn:@""];
-            item.cardLimit = [resultSet doubleForColumn:@""];
-            item.cardBalance = [resultSet doubleForColumn:@""];
-            item.settleAtRepaymentDay = [resultSet boolForColumn:@""];
-            item.cardBillingDay = [resultSet intForColumn:@""];
-            item.cardRepaymentDay = [resultSet intForColumn:@""];
-            item.cardMemo = [resultSet stringForColumn:@""];
-            item.cardColor = [resultSet stringForColumn:@""];
-            item.remindId = [resultSet stringForColumn:@""];
-            item.remindState = [resultSet boolForColumn:@""];
+            item.cardName = [resultSet stringForColumn:@"cremindid"];
+            item.cardLimit = [resultSet doubleForColumn:@"iquota"];
+            item.cardBalance = [resultSet doubleForColumn:@"iblance"];
+            item.settleAtRepaymentDay = [resultSet boolForColumn:@"cmemo"];
+            item.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
+            item.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
+            item.cardMemo = [resultSet stringForColumn:@"cmemo"];
+            item.cardColor = [resultSet stringForColumn:@"ccolor"];
+            item.remindId = [resultSet stringForColumn:@"cremindid"];
+            item.remindState = [resultSet boolForColumn:@"istate"];
         }
     }];
     return item;

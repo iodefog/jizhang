@@ -12,6 +12,7 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJCreditCardEditeCell.h"
 #import "SSJCreditCardItem.h"
+#import "SSJCreditCardStore.h"
 
 static NSString *const kTitle1 = @"输入账户名称";
 static NSString *const kTitle2 = @"账户类型";
@@ -52,7 +53,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    
+    [super viewWillAppear:animated];
+    if (!self.cardId.length) {
+        self.item = [[SSJCreditCardItem alloc]init];
+        self.item.settleAtRepaymentDay = YES;
+        self.item.cardBillingDay = 1;
+        self.item.cardRepaymentDay = 10;
+        self.item.cardColor = @"";
+    }else{
+        self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -167,10 +178,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         NSString *detail = [NSString stringWithFormat:@"每月%ld日",self.item.cardBillingDay];
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardBillingDay]]];
-        [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, detail.length)];
+//        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, detail.length)];
         newReminderCell.detailLabel.attributedText = attributeddetail;
+        [newReminderCell.detailLabel sizeToFit];
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
@@ -180,10 +192,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         NSString *detail = [NSString stringWithFormat:@"每月%ld日",self.item.cardRepaymentDay];
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardRepaymentDay]]];
-        [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, detail.length)];
+//        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, detail.length)];
         newReminderCell.detailLabel.attributedText = attributeddetail;
+        [newReminderCell.detailLabel sizeToFit];
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
@@ -191,7 +204,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle9]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         newReminderCell.cellTitle = title;
-        self.billDateSettleMentButton.on = self.item.remindState;
+        self.remindStateButton.on = self.item.remindState;
         newReminderCell.accessoryView = self.remindStateButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
