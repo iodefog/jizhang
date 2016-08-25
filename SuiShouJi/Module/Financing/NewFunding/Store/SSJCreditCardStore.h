@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJCreditCardItem.h"
 
 @interface SSJCreditCardStore : NSObject
+
++ (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)cardId;
 
 @end
