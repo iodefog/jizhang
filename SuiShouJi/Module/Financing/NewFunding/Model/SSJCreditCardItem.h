@@ -34,10 +34,14 @@
 // 信用卡备注
 @property(nonatomic, strong) NSString *cardMemo;
 
+// 信用卡颜色
+@property(nonatomic, strong) NSString *cardColor;
+
 // 提醒id
 @property(nonatomic, strong) NSString *remindId;
 
 // 提醒的状态
 @property(nonatomic) BOOL remindState;
+
 
 @end

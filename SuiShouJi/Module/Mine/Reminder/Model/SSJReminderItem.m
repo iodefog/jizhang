@@ -10,4 +10,19 @@
 
 @implementation SSJReminderItem
 
+- (id)copyWithZone:(nullable NSZone *)zone {
+    SSJReminderItem *item = [[SSJReminderItem alloc] init];
+    item.remindId = self.remindId;
+    item.remindName = self.remindName;
+    item.remindMemo = self.remindMemo;
+    item.remindContent = self.remindContent;
+    item.remindCycle = self.remindCycle;
+    item.remindType = self.remindType;
+    item.remindDate = self.remindDate;
+    item.remindState = self.remindState;
+    item.remindAtTheEndOfMonth = self.remindAtTheEndOfMonth;
+    item.remindFundid = self.remindFundid;
+    return item;
+}
+
 @end
