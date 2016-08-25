@@ -58,37 +58,15 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     [super viewWillAppear:animated];
     
     if ([self isMovingToParentViewController]) {
-        // 默认显示未结清的数据，如果没有未结清就显示全部的
-        [self.view ssj_showLoadingIndicator];
-        [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:0 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-            if (list.count == 0) {
-                [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-                    [self.view ssj_hideLoadingIndicator];
-                    self.list = list;
-                    [self.tableView reloadData];
-                    self.amountView.amount = [self.list valueForKeyPath:@"@sum.jMoney"];
-                    if (list.count == 0) {
-                        [self.view ssj_showWatermarkWithImageName:@"" animated:YES target:nil action:NULL];
-                    } else {
-                        [self.view ssj_hideWatermark:YES];
-                    }
-                } failure:^(NSError * _Nonnull error) {
-                    [self.view ssj_hideLoadingIndicator];
-                    [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
-                }];
-            } else {
-                [self.view ssj_hideLoadingIndicator];
-                self.list = list;
-                [self.tableView reloadData];
-                self.amountView.amount = [self.list valueForKeyPath:@"@sum.jMoney"];
-            }
-        } failure:^(NSError * _Nonnull error) {
-            [self.view ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
-        }];
+        [self loadAllDataIfHasNoUnclearedData];
     } else {
         [self reloadDataAccordingToHeaderViewIndex];
     }
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - UITableViewDataSource
@@ -148,22 +126,49 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 }
 
 #pragma mark - Private
-- (void)updateAppearanceAfterThemeChanged {
-    [super updateAppearanceAfterThemeChanged];
-    [self updateAppearance];
-}
-
 - (void)updateAppearance {
     _headerSegmentView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     _headerSegmentView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _headerSegmentView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [_headerSegmentView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
-    CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 1 : 0.1;
+    CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
     _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:alpha];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     [_amountView updateAppearance];
+}
+
+// 如果没有未结清数据就加载全部数据
+- (void)loadAllDataIfHasNoUnclearedData {
+    [self.view ssj_showLoadingIndicator];
+    [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:0 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+        if (list.count == 0) {
+            [SSJLoanHelper queryForLoanModelsWithFundID:_item.fundingID colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+                [self.view ssj_hideLoadingIndicator];
+                self.list = list;
+                [self.tableView reloadData];
+                [self updateAmount];
+                
+                if (list.count == 0) {
+                    [self.view ssj_showWatermarkWithImageName:@"" animated:YES target:nil action:NULL];
+                } else {
+                    [self.view ssj_hideWatermark:YES];
+                }
+            } failure:^(NSError * _Nonnull error) {
+                [self.view ssj_hideLoadingIndicator];
+                [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+            }];
+        } else {
+            [self.view ssj_hideLoadingIndicator];
+            self.list = list;
+            [self.tableView reloadData];
+            [self updateAmount];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+    }];
 }
 
 - (void)reloadDataAccordingToHeaderViewIndex {
@@ -172,11 +177,20 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         [self.view ssj_hideLoadingIndicator];
         self.list = list;
         [self.tableView reloadData];
-        self.amountView.amount = [self.list valueForKeyPath:@"@sum.jMoney"];
+        [self updateAmount];
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
     }];
+}
+
+- (void)updateAmount {
+    double amount = [[self.list valueForKeyPath:@"@sum.jMoney"] doubleValue];
+    if ([_item.fundingParent isEqualToString:@"10"]) {
+        self.amountView.amount = [NSString stringWithFormat:@"+%.2f", amount];
+    } else if ([_item.fundingParent isEqualToString:@"11"]) {
+        self.amountView.amount = [NSString stringWithFormat:@"-%.2f", amount];
+    }
 }
 
 #pragma mark - Getter

@@ -90,28 +90,28 @@
 //}
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"%@:%@", self, @{@"ID":(_ID ?: @""),
-                                                        @"userID":(_userID ?: @""),
-                                                        @"lender":(_lender ?: @""),
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"ID":(_ID ?: [NSNull null]),
+                                                        @"userID":(_userID ?: [NSNull null]),
+                                                        @"lender":(_lender ?: [NSNull null]),
                                                         @"jMoney":@(_jMoney),
-                                                        @"fundID":(_fundID ?: @""),
-                                                        @"targetFundID":(_targetFundID ?: @""),
-                                                        @"chargeID":(_chargeID ?: @""),
-                                                        @"targetChargeID":(_targetChargeID ?: @""),
-                                                        @"endChargeID":(_endChargeID ?: @""),
-                                                        @"endTargetChargeID":(_endTargetChargeID ?: @""),
-                                                        @"borrowDate":(_borrowDate ?: @""),
-                                                        @"repaymentDate":(_repaymentDate ?: @""),
-                                                        @"enddate":(_endDate ?: @""),
+                                                        @"fundID":(_fundID ?:[NSNull null]),
+                                                        @"targetFundID":(_targetFundID ?: [NSNull null]),
+                                                        @"chargeID":(_chargeID ?: [NSNull null]),
+                                                        @"targetChargeID":(_targetChargeID ?: [NSNull null]),
+                                                        @"endChargeID":(_endChargeID ?: [NSNull null]),
+                                                        @"endTargetChargeID":(_endTargetChargeID ?: [NSNull null]),
+                                                        @"borrowDate":(_borrowDate ?: [NSNull null]),
+                                                        @"repaymentDate":(_repaymentDate ?: [NSNull null]),
+                                                        @"enddate":(_endDate ?: [NSNull null]),
                                                         @"rate":@(_rate),
-                                                        @"memo":(_memo ?: @""),
-                                                        @"remindID":(_remindID ?: @""),
+                                                        @"memo":(_memo ?: [NSNull null]),
+                                                        @"remindID":(_remindID ?: [NSNull null]),
                                                         @"interest":@(_interest),
                                                         @"closeOut":@(_closeOut),
                                                         @"type":@(_type),
                                                         @"operatorType":@(_operatorType),
                                                         @"version":@(_version),
-                                                        @"writeDate":(_writeDate ?: @"")}];
+                                                        @"writeDate":(_writeDate ?: [NSNull null])}];
 }
 
 @end

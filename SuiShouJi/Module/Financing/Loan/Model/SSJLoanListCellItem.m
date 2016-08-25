@@ -15,17 +15,21 @@
     SSJLoanListCellItem *item = [[SSJLoanListCellItem alloc] init];
     item.icon = @"";
     item.memo = model.memo;
-    item.money = [NSString stringWithFormat:@"%.2f", model.jMoney];
     item.showStamp = model.closeOut;
+    
+    NSString *borrowDate = [model.borrowDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
     switch (model.type) {
         case SSJLoanTypeLend:
+            item.money = [NSString stringWithFormat:@"+%.2f", model.jMoney];
             item.loanTitle = [NSString stringWithFormat:@"被%@借", model.lender];
-            item.date = [NSString stringWithFormat:@"借出日期：%@", model.borrowDate];
+            item.date = [NSString stringWithFormat:@"借出日期：%@", borrowDate];
+            
             break;
             
         case SSJLoanTypeBorrow:
+            item.money = [NSString stringWithFormat:@"-%.2f", model.jMoney];
             item.loanTitle = [NSString stringWithFormat:@"向%@借", model.lender];
-            item.date = [NSString stringWithFormat:@"借入日期：%@", model.borrowDate];
+            item.date = [NSString stringWithFormat:@"借入日期：%@", borrowDate];
             break;
     }
     
@@ -33,11 +37,11 @@
 }
 
 - (NSString *)debugDescription {
-    return [NSString stringWithFormat:@"%@:%@", self, @{@"icon":(_icon ?: @""),
-                                                        @"loanTitle":(_loanTitle ?: @""),
-                                                        @"memo":(_memo ?: @""),
-                                                        @"money":(_money ?: @""),
-                                                        @"date":(_date ?: @"")}];
+    return [NSString stringWithFormat:@"%@:%@", self, @{@"icon":(_icon ?: [NSNull null]),
+                                                        @"loanTitle":(_loanTitle ?: [NSNull null]),
+                                                        @"memo":(_memo ?: [NSNull null]),
+                                                        @"money":(_money ?: [NSNull null]),
+                                                        @"date":(_date ?: [NSNull null])}];
 }
 
 @end

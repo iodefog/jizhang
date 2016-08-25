@@ -22,6 +22,7 @@
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.amountTitleLab];
         [self addSubview:self.amountValueLab];
+        [self updateAppearance];
     }
     return self;
 }
@@ -36,7 +37,7 @@
 }
 
 - (void)setTitle:(NSString *)title {
-    if ([_title isEqualToString:title]) {
+    if (![_title isEqualToString:title]) {
         _title = title;
         _amountTitleLab.text = _title;
         [self setNeedsLayout];
@@ -44,7 +45,7 @@
 }
 
 - (void)setAmount:(NSString *)amount {
-    if ([_amount isEqualToString:amount]) {
+    if (![_amount isEqualToString:amount]) {
         _amount = amount;
         _amountValueLab.text = _amount;
         [self setNeedsLayout];
