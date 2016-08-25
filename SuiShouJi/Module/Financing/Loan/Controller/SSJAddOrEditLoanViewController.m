@@ -100,6 +100,11 @@ const int kMemoMaxLength = 13;
     [self loadData];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [_tableView reloadData];
+}
+
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self updateAppearance];
@@ -325,7 +330,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
         [self.repaymentDateSelectionView show];
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
+    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
         if (_reminderItem) {
             [self enterReminderVC];
         }
@@ -380,6 +385,7 @@ const int kMemoMaxLength = 13;
     if (textField.tag == kLenderTag) {
         
         _loanModel.lender = newStr;
+        [self updateRemindName];
         
         return YES;
         
@@ -408,6 +414,7 @@ const int kMemoMaxLength = 13;
         }
         
         _loanModel.jMoney = [[newStr stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
+        [self updateRemindName];
         
         return shouldChange;
         
@@ -534,6 +541,7 @@ const int kMemoMaxLength = 13;
             _loanModel.borrowDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
             _loanModel.repaymentDate = [[[NSDate date] dateByAddingMonths:1] formattedDateWithFormat:@"yyyy-MM-dd"];
             _loanModel.interest = YES;
+            _loanModel.lender = @"";
             _loanModel.memo = @"";
             _loanModel.operatorType = 0;
         }
@@ -652,14 +660,47 @@ const int kMemoMaxLength = 13;
 }
 
 - (void)enterReminderVC {
+    SSJReminderItem *tmpRemindItem = _reminderItem;
+    if (!tmpRemindItem) {
+        tmpRemindItem = [[SSJReminderItem alloc] init];
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                tmpRemindItem.remindName = [NSString stringWithFormat:@"被%@借%.2f元", _loanModel.lender, _loanModel.jMoney];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                tmpRemindItem.remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", _loanModel.lender, _loanModel.jMoney];
+                break;
+        }
+        tmpRemindItem.remindCycle = 7;
+        tmpRemindItem.remindType = SSJReminderTypeBorrowing;
+        tmpRemindItem.remindDate = [NSDate dateWithString:[NSString stringWithFormat:@"%@ 20:00:00", _loanModel.repaymentDate] formatString:@"yyyy-MM-dd HH:mm:ss"];
+        tmpRemindItem.remindState = YES;
+    }
+    
     __weak typeof(self) wself = self;
     SSJReminderEditeViewController *reminderVC = [[SSJReminderEditeViewController alloc] init];
-    reminderVC.item = _reminderItem;
+    reminderVC.item = tmpRemindItem;
     reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
         wself.reminderItem = item;
         wself.loanModel.remindID = item.remindId;
+        [wself.tableView reloadData];
     };
     [self.navigationController pushViewController:reminderVC animated:YES];
+}
+
+- (void)updateRemindName {
+    if (_reminderItem) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                _reminderItem.remindName = [NSString stringWithFormat:@"被%@借%.2f元", _loanModel.lender ?: @"", _loanModel.jMoney];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                _reminderItem.remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", _loanModel.lender ?: @"", _loanModel.jMoney];
+                break;
+        }
+    }
 }
 
 #pragma mark - Getter
