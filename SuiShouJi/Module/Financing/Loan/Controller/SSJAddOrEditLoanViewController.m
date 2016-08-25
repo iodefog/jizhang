@@ -487,7 +487,7 @@ const int kMemoMaxLength = 13;
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
-            [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
         }];
     }
 }
@@ -556,7 +556,7 @@ const int kMemoMaxLength = 13;
     } failure:^(NSError * _Nonnull error) {
         _tableView.hidden = NO;
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
     }];
 }
 
@@ -710,7 +710,7 @@ const int kMemoMaxLength = 13;
         }
     } failure:^(NSError * _Nonnull error) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
     }];
 }
 

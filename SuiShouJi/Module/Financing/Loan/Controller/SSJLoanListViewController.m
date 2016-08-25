@@ -165,7 +165,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
                 }
             } failure:^(NSError * _Nonnull error) {
                 [self.view ssj_hideLoadingIndicator];
-                [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
             }];
         } else {
             [self.view ssj_hideLoadingIndicator];
@@ -175,7 +175,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         }
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
     }];
 }
 
@@ -188,7 +188,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         [self updateAmount];
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
     }];
 }
 

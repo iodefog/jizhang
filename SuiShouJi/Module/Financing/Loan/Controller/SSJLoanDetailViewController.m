@@ -8,6 +8,7 @@
 
 #import "SSJLoanDetailViewController.h"
 #import "SSJAddOrEditLoanViewController.h"
+#import "SSJLoanCloseOutViewController.h"
 #import "SSJLoanDetailCell.h"
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
@@ -25,6 +26,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 @property (nonatomic, strong) UIButton *deleteBtn;
 
 @property (nonatomic, strong) UIImageView *stampView;
+
+@property (nonatomic, strong) UIBarButtonItem *editItem;
 
 @property (nonatomic, strong) NSArray *cellItems;
 
@@ -54,20 +57,14 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
     
     [self.view addSubview:self.tableView];
-    
-    if (_loanModel.closeOut) {
-        [self.view addSubview:self.revertBtn];
-        [self.view addSubview:self.deleteBtn];
-        [self.view addSubview:self.stampView];
-    } else {
-        [self.view addSubview:self.closeOutBtn];
-        
-        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editAction)];
-        self.navigationItem.rightBarButtonItem = editItem;
-    }
+    [self.view addSubview:self.revertBtn];
+    [self.view addSubview:self.deleteBtn];
+    [self.view addSubview:self.stampView];
+    [self.view addSubview:self.closeOutBtn];
     
     [self updateAppearance];
     [self organiseCellItems];
+    [self updateSubViewHidden];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -233,6 +230,33 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
 }
 
+- (void)deleteLoanModel {
+    self.deleteBtn.enabled = NO;
+    [SSJLoanHelper deleteLoanModel:_loanModel success:^{
+        self.deleteBtn.enabled = YES;
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError * _Nonnull error) {
+        self.deleteBtn.enabled = YES;
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+    }];
+}
+
+- (void)updateSubViewHidden {
+    if (_loanModel.closeOut) {
+        self.revertBtn.hidden = NO;
+        self.deleteBtn.hidden = NO;
+        self.stampView.hidden = NO;
+        self.closeOutBtn.hidden = YES;
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    } else {
+        self.revertBtn.hidden = YES;
+        self.deleteBtn.hidden = YES;
+        self.stampView.hidden = YES;
+        self.closeOutBtn.hidden = NO;
+        [self.navigationItem setRightBarButtonItem:self.editItem animated:YES];
+    }
+}
+
 #pragma mark - Event
 - (void)editAction {
     SSJAddOrEditLoanViewController *editLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
@@ -245,11 +269,23 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)revertBtnAction {
-    
+    self.revertBtn.enabled = NO;
+    [SSJLoanHelper recoverLoanModel:_loanModel success:^{
+        self.revertBtn.enabled = YES;
+        [self organiseCellItems];
+        [self updateSubViewHidden];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        self.revertBtn.enabled = YES;
+        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+    }];
 }
 
 - (void)deleteBtnAction {
-    
+    __weak typeof(self) wself = self;
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"确认要删除此项目么？" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        [wself deleteLoanModel];
+    }], nil];
 }
 
 #pragma mark - Getter
@@ -308,6 +344,13 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _stampView.center = CGPointMake(self.tableView.width * 0.5, self.tableView.height * 0.32);
     }
     return _stampView;
+}
+
+- (UIBarButtonItem *)editItem {
+    if (!_editItem) {
+        _editItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(editAction)];
+    }
+    return _editItem;
 }
 
 @end
