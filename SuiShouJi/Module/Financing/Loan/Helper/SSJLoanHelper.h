@@ -74,8 +74,21 @@ NS_ASSUME_NONNULL_BEGIN
                  success:(void (^)())success
                  failure:(void (^)(NSError *error))failure;
 
+/**
+ *  查询除借贷以外，当前用户的资金账户列表
+ *
+ *  @param success   成功的回调
+ *  @param failure   失败的回调
+ */
 + (void)queryFundModelListWithSuccess:(void (^)(NSArray <SSJLoanFundAccountSelectionViewItem *>*items))success
                               failure:(void (^)(NSError *error))failure;
+
+/**
+ *  查询资金账户名称
+ *
+ *  @param ID 资金账户ID
+ */
++ (NSString *)queryForFundNameWithID:(NSString *)ID;
 
 @end
 

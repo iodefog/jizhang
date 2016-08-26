@@ -486,6 +486,15 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
++ (NSString *)queryForFundNameWithID:(NSString *)ID {
+    __block NSString *fundName = nil;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?", ID];
+    }];
+    
+    return fundName;
+}
+
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
     
     NSString *rollOutFundID = nil;
