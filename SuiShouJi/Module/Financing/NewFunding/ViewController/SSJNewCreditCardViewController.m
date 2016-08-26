@@ -13,6 +13,8 @@
 #import "SSJCreditCardEditeCell.h"
 #import "SSJCreditCardItem.h"
 #import "SSJCreditCardStore.h"
+#import "SSJBillingDaySelectView.h"
+#import "SSJDatabaseQueue.h"
 
 static NSString *const kTitle1 = @"输入账户名称";
 static NSString *const kTitle2 = @"账户类型";
@@ -40,6 +42,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 // 是否已账单日结算开关
 @property(nonatomic, strong) UISwitch *billDateSettleMentButton;
+
+@property(nonatomic, strong) SSJBillingDaySelectView *billingDateSelectView;
+
+@property(nonatomic, strong) SSJBillingDaySelectView *repaymentDateSelectView;
 
 @end
 
@@ -76,7 +82,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return 55;
 }
 
-
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     return nil;
 }
@@ -87,6 +92,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle7]) {
+        [self.billingDateSelectView show];
+    }
+    
+    if ([title isEqualToString:kTitle8]) {
+        [self.repaymentDateSelectView show];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -216,6 +229,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return newReminderCell;
 }
 
+#pragma mark - Event
+- (void)saveButtonClicked:(id)sender{
+    self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+    }];
+}
 
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
@@ -229,6 +249,20 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableView;
+}
+
+-(SSJBillingDaySelectView *)billingDateSelectView{
+    if (!_billingDateSelectView) {
+        _billingDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeShortMonth];
+    }
+    return _billingDateSelectView;
+}
+
+-(SSJBillingDaySelectView *)repaymentDateSelectView{
+    if (!_repaymentDateSelectView) {
+        _repaymentDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeFullMonth];
+    }
+    return _repaymentDateSelectView;
 }
 
 - (UISwitch *)remindStateButton{
