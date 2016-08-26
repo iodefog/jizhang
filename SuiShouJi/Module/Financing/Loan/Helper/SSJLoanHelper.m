@@ -80,6 +80,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             }
         }
         
+        [result close];
+        
         NSMutableArray *list = [NSMutableArray arrayWithCapacity:list1.count + list2.count + list3.count];
         [list addObjectsFromArray:list1];
         [list addObjectsFromArray:list2];
@@ -88,6 +90,41 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         if (success) {
             SSJDispatchMainAsync(^{
                 success(list);
+            });
+        }
+    }];
+}
+
++ (void)queryForLoanModelWithLoanID:(NSString *)loanID
+                            success:(void (^)(SSJLoanModel *model))success
+                            failure:(void (^)(NSError *error))failure {
+    
+    if (!loanID.length) {
+        SSJDispatchMainAsync(^{
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷ID不能为空"}];
+            failure(error);
+        });
+        return;
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", loanID];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        [resultSet next];
+        SSJLoanModel *model = [SSJLoanModel modelWithResultSet:resultSet];
+        [resultSet close];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(model);
             });
         }
     }];
@@ -116,6 +153,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         if ([resultSet next]) {
             newestModel = [SSJLoanModel modelWithResultSet:resultSet];
         }
+        [resultSet close];
         
         // 如果当前的借贷记录已经删除，就当作成功处理（这种情况发生在查询记录后在另一个客户端上删除了）
         if (newestModel.operatorType == 2) {
@@ -247,6 +285,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         if ([resultSet next]) {
             newestModel = [SSJLoanModel modelWithResultSet:resultSet];
         }
+        [resultSet close];
         
         // 如果当前的借贷记录已结清或删除，直接执行成功回调
         if (newestModel.operatorType == 2 || newestModel.closeOut) {
@@ -287,8 +326,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        // 结清转出流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, model.jMoney, @4, rollOutFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        // 插入结清转出流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, @(model.jMoney), @4, rollOutFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -300,8 +339,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 结清转入流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInFundID, model.userID, model.jMoney, @3, rollInFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        // 插入结清转入流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInFundID, model.userID, @(model.jMoney), @3, rollInFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -317,7 +356,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         writeDate = [[[NSDate date] dateByAddingTimeInterval:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         // 修改所属转帐流水
-        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", model.jMoney, @(SSJSyncVersion()), @1, writeDate, model.chargeID]) {
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", @(model.jMoney), @(SSJSyncVersion()), @1, writeDate, model.chargeID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -329,7 +368,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 修改目标转帐流水
-        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", model.jMoney, model.targetFundID, @(SSJSyncVersion()), @1, writeDate, model.targetChargeID]) {
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", @(model.jMoney), model.targetFundID, @(SSJSyncVersion()), @1, writeDate, model.targetChargeID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -341,7 +380,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 修改当前借贷记录的结清状态
-        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, model.jMoney, model.rate, model.targetFundID, model.endDate, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
+        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, model.endDate, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
             
             *rollback = YES;
             if (failure) {
@@ -353,8 +392,19 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 关闭提醒
-        if (![db executeUpdate:@"update bk_user_remind set istate = ?, iversion = ?, operatortype = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @0, @(SSJSyncVersion()), @1, writeDate, model.remindID]) {
+        NSString *remindName = nil;
+        switch (model.type) {
+            case SSJLoanTypeLend:
+                remindName = [NSString stringWithFormat:@"被%@借%.2f元", model.lender ?: @"", model.jMoney];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                remindName = [NSString stringWithFormat:@"欠%@钱款%.2f元", model.lender ?: @"", model.jMoney];
+                break;
+        }
+        
+        // 关闭提醒、更改提醒名称（因为结清时金额可以再次被用户编辑）
+        if (![db executeUpdate:@"update bk_user_remind set istate = ?, cremindname = ?, iversion = ?, operatortype = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @0, remindName, @(SSJSyncVersion()), @1, writeDate, model.remindID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -393,6 +443,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         if ([resultSet next]) {
             newestModel = [SSJLoanModel modelWithResultSet:resultSet];
         }
+        [resultSet close];
         
         // 如果当前的借贷记录已结清或删除，直接执行成功回调
         if (newestModel.operatorType == 2) {
@@ -472,6 +523,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             item.ID =  [rs stringForColumn:@"CFUNDID"];
             [fundItems addObject:item];
         }
+        [rs close];
         
         SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
         item.image = @"add";

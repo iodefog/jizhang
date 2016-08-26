@@ -129,7 +129,9 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
         self.bottom = keyWindow.height;
     } timeInterval:0.25 fininshed:NULL];
     
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+    if (_selectedIndex < [_tableView numberOfRowsInSection:0]) {
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+    }
 }
 
 - (void)dismiss {

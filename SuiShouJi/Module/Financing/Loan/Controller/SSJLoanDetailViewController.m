@@ -31,6 +31,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 @property (nonatomic, strong) NSArray *cellItems;
 
+@property (nonatomic, strong) SSJLoanModel *loanModel;
+
 @end
 
 @implementation SSJLoanDetailViewController
@@ -46,16 +48,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    switch (_loanModel.type) {
-        case SSJLoanTypeLend:
-            self.title = @"借出款详情";
-            break;
-            
-        case SSJLoanTypeBorrow:
-            self.title = @"欠款详情";
-            break;
-    }
-    
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.revertBtn];
     [self.view addSubview:self.deleteBtn];
@@ -63,8 +55,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.view addSubview:self.closeOutBtn];
     
     [self updateAppearance];
-    [self organiseCellItems];
-    [self updateSubViewHidden];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self loadLoanModel];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -146,8 +141,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 break;
                 
             case SSJLoanTypeBorrow:
-                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"向谁借款" subtitle:_loanModel.lender],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入金额" subtitle:borrowMoneyStr]],
+                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠谁钱款" subtitle:_loanModel.lender],
+                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款金额" subtitle:borrowMoneyStr]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"利息收入" subtitle:interestStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入账户" subtitle:accountName]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款日" subtitle:borrowDateStr],
@@ -190,13 +185,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[today daysFrom:repaymentDate]];
         }
         
-        NSString *remindDateStr = @"未设置";
+        NSString *remindDateStr = @"关闭";
         if (_loanModel.remindID.length) {
             SSJReminderItem *remindItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
             if (remindItem.remindState) {
                 remindDateStr = [remindItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
-            } else {
-                remindDateStr = @"关闭";
             }
         }
         
@@ -215,8 +208,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 break;
                 
             case SSJLoanTypeBorrow:
-                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠谁欠款" subtitle:_loanModel.lender],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入金额" subtitle:borrowMoneyStr]],
+                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠谁钱款" subtitle:_loanModel.lender],
+                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款金额" subtitle:borrowMoneyStr]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"已产生利息" subtitle:interestStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"预期利息" subtitle:expectedInterestStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入账户" subtitle:accountName]],
@@ -230,6 +223,21 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
 }
 
+- (void)loadLoanModel {
+    [self.view ssj_showLoadingIndicator];
+    [SSJLoanHelper queryForLoanModelWithLoanID:_loanID success:^(SSJLoanModel * _Nonnull model) {
+        [self.view ssj_hideLoadingIndicator];
+        self.loanModel = model;
+        [self updateTitle];
+        [self organiseCellItems];
+        [self updateSubViewHidden];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:nil], nil];
+    }];
+}
+
 - (void)deleteLoanModel {
     self.deleteBtn.enabled = NO;
     [SSJLoanHelper deleteLoanModel:_loanModel success:^{
@@ -237,7 +245,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {
         self.deleteBtn.enabled = YES;
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 
@@ -257,6 +265,18 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     }
 }
 
+- (void)updateTitle {
+    switch (_loanModel.type) {
+        case SSJLoanTypeLend:
+            self.title = @"借出款详情";
+            break;
+            
+        case SSJLoanTypeBorrow:
+            self.title = @"欠款详情";
+            break;
+    }
+}
+
 #pragma mark - Event
 - (void)editAction {
     SSJAddOrEditLoanViewController *editLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
@@ -265,19 +285,22 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)closeOutBtnAction {
-    
+    SSJLoanCloseOutViewController *closeOutVC = [[SSJLoanCloseOutViewController alloc] init];
+    closeOutVC.loanModel = _loanModel;
+    [self.navigationController pushViewController:closeOutVC animated:YES];
 }
 
 - (void)revertBtnAction {
     self.revertBtn.enabled = NO;
     [SSJLoanHelper recoverLoanModel:_loanModel success:^{
+        _loanModel.closeOut = NO;
         self.revertBtn.enabled = YES;
         [self organiseCellItems];
         [self updateSubViewHidden];
         [self.tableView reloadData];
     } failure:^(NSError * _Nonnull error) {
         self.revertBtn.enabled = YES;
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 
@@ -312,6 +335,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [_closeOutBtn setTitle:@"结清" forState:UIControlStateNormal];
         [_closeOutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_closeOutBtn addTarget:self action:@selector(closeOutBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _closeOutBtn.hidden = YES;
     }
     return _closeOutBtn;
 }
@@ -323,6 +347,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _revertBtn.titleLabel.font = [UIFont systemFontOfSize:22];
         [_revertBtn setTitle:@"恢复项目" forState:UIControlStateNormal];
         [_revertBtn addTarget:self action:@selector(revertBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _revertBtn.hidden = YES;
     }
     return _revertBtn;
 }
@@ -334,6 +359,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         _deleteBtn.titleLabel.font = [UIFont systemFontOfSize:22];
         [_deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
         [_deleteBtn addTarget:self action:@selector(deleteBtnAction) forControlEvents:UIControlEventTouchUpInside];
+        _deleteBtn.hidden = YES;
     }
     return _deleteBtn;
 }
@@ -342,6 +368,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_stampView) {
         _stampView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
         _stampView.center = CGPointMake(self.tableView.width * 0.5, self.tableView.height * 0.32);
+        _stampView.hidden = YES;
     }
     return _stampView;
 }

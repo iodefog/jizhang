@@ -19,6 +19,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
+        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         self.textLabel.font = [UIFont systemFontOfSize:18];
         
         _additionalIcon = [[UIImageView alloc] init];
