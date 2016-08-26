@@ -109,6 +109,7 @@ const int kMemoMaxLength = 13;
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self updateAppearance];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -194,6 +195,7 @@ const int kMemoMaxLength = 13;
         cell.subtitleLabel.text = selectedFundItem.title;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
+        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
         
         return cell;
@@ -215,6 +217,7 @@ const int kMemoMaxLength = 13;
         cell.subtitleLabel.text = [_loanModel.borrowDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
+        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
         
         return cell;
@@ -236,6 +239,7 @@ const int kMemoMaxLength = 13;
         cell.subtitleLabel.text = [_loanModel.repaymentDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
+        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
         
         return cell;
@@ -265,6 +269,7 @@ const int kMemoMaxLength = 13;
         [cell.switchControl setOn:_loanModel.interest animated:YES];
         [cell.switchControl addTarget:self action:@selector(interestSwitchAction:) forControlEvents:UIControlEventValueChanged];
         cell.customAccessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setNeedsLayout];
         
         return cell;
@@ -297,6 +302,7 @@ const int kMemoMaxLength = 13;
         cell.switchControl.hidden = NO;
         cell.switchControl.on = _reminderItem.remindState;
         [cell.switchControl addTarget:self action:@selector(remindSwitchAction:) forControlEvents:UIControlEventValueChanged];
+        cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
         [cell setNeedsLayout];
         
         return cell;
@@ -487,7 +493,7 @@ const int kMemoMaxLength = 13;
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
     }
 }
@@ -556,7 +562,7 @@ const int kMemoMaxLength = 13;
     } failure:^(NSError * _Nonnull error) {
         _tableView.hidden = NO;
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 
@@ -622,7 +628,7 @@ const int kMemoMaxLength = 13;
             }
             
             if (_loanModel.jMoney <= 0) {
-                [CDAutoHideMessageHUD showMessage:@"借入金额必须大于0"];
+                [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0"];
                 return NO;
             }
             
@@ -710,7 +716,7 @@ const int kMemoMaxLength = 13;
         }
     } failure:^(NSError * _Nonnull error) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 

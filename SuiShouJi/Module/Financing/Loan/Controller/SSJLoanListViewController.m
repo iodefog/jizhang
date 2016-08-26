@@ -108,8 +108,9 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    SSJLoanModel *model = [_list ssj_safeObjectAtIndex:indexPath.section];
     SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];
-    loanDetailVC.loanModel = [_list ssj_safeObjectAtIndex:indexPath.section];
+    loanDetailVC.loanID = model.ID;
     [self.navigationController pushViewController:loanDetailVC animated:YES];
 }
 
@@ -165,7 +166,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
                 }
             } failure:^(NSError * _Nonnull error) {
                 [self.view ssj_hideLoadingIndicator];
-                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
             }];
         } else {
             [self.view ssj_hideLoadingIndicator];
@@ -175,7 +176,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         }
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 
@@ -188,7 +189,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         [self updateAmount];
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:nil, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 

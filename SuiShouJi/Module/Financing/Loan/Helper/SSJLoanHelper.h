@@ -30,6 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
                              failure:(void (^)(NSError *error))failure;
 
 /**
+ *  查询借贷详情
+ *
+ *  @param loanID    借贷项目ID
+ *  @param success   查询成功的回调
+ *  @param failure   查询失败的回调
+ */
++ (void)queryForLoanModelWithLoanID:(NSString *)loanID
+                            success:(void (^)(SSJLoanModel *model))success
+                            failure:(void (^)(NSError *error))failure;
+
+/**
  *  保存借贷模型
  *
  *  @param model     借贷模型
