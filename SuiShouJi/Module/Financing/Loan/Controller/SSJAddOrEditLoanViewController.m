@@ -671,7 +671,8 @@ const int kMemoMaxLength = 13;
         }
         tmpRemindItem.remindCycle = 7;
         tmpRemindItem.remindType = SSJReminderTypeBorrowing;
-        tmpRemindItem.remindDate = [NSDate dateWithString:[NSString stringWithFormat:@"%@ 20:00:00", _loanModel.repaymentDate] formatString:@"yyyy-MM-dd HH:mm:ss"];
+        tmpRemindItem.remindDate = [NSDate dateWithYear:_loanModel.repaymentDate.year month:_loanModel.repaymentDate.month day:_loanModel.repaymentDate.day hour:20 minute:0 second:0];
+        tmpRemindItem.minimumDate = _loanModel.borrowDate;
         tmpRemindItem.remindState = YES;
     }
     
