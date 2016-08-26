@@ -15,6 +15,7 @@
 #import "SSJCreditCardStore.h"
 #import "SSJBillingDaySelectView.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJReminderItem.h"
 
 static NSString *const kTitle1 = @"输入账户名称";
 static NSString *const kTitle2 = @"账户类型";
@@ -46,6 +47,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 @property(nonatomic, strong) SSJBillingDaySelectView *billingDateSelectView;
 
 @property(nonatomic, strong) SSJBillingDaySelectView *repaymentDateSelectView;
+
+@property(nonatomic, strong) SSJReminderItem *remindItem;
 
 @end
 
@@ -99,7 +102,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
     
     if ([title isEqualToString:kTitle8]) {
-        self.billingDateSelectView.currentDate = self.item.cardRepaymentDay;
+        self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
         [self.repaymentDateSelectView show];
     }
 }
