@@ -105,7 +105,7 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    self.selectDate = [self.dateArr objectAtIndex:component];
+    self.currentDate = [[self.dateArr ssj_safeObjectAtIndex:row] integerValue];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
@@ -159,6 +159,9 @@
 }
 
 -(void)comfirmButtonClicked:(id)sender{
+    if (self.dateSetBlock) {
+        self.dateSetBlock(self.currentDate);
+    }
     [self dismiss];
 }
 
@@ -168,7 +171,7 @@
 
 -(void)setCurrentDate:(NSInteger)currentDate{
     _currentDate = currentDate;
-    [self.dateSelect selectRow:_currentDate - 1 inComponent:0 animated:YES];
+    [self.dateSelect selectRow:_currentDate - 1 inComponent:0 animated:NO];
 }
 
 /*

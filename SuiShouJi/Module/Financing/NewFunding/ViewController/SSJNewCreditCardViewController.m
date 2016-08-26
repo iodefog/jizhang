@@ -94,10 +94,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kTitle7]) {
+        self.billingDateSelectView.currentDate = self.item.cardBillingDay;
         [self.billingDateSelectView show];
     }
     
     if ([title isEqualToString:kTitle8]) {
+        self.billingDateSelectView.currentDate = self.item.cardRepaymentDay;
         [self.repaymentDateSelectView show];
     }
 }
@@ -254,6 +256,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(SSJBillingDaySelectView *)billingDateSelectView{
     if (!_billingDateSelectView) {
         _billingDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeShortMonth];
+        __weak typeof(self) weakSelf = self;
+        _billingDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
+            weakSelf.item.cardBillingDay = selectedDay;
+            [weakSelf.tableView reloadData];
+        };
     }
     return _billingDateSelectView;
 }
@@ -261,6 +268,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(SSJBillingDaySelectView *)repaymentDateSelectView{
     if (!_repaymentDateSelectView) {
         _repaymentDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeFullMonth];
+        __weak typeof(self) weakSelf = self;
+        _repaymentDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
+            weakSelf.item.cardRepaymentDay = selectedDay;
+            [weakSelf.tableView reloadData];
+        };
     }
     return _repaymentDateSelectView;
 }

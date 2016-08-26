@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, SSJDateSelectViewType) {
 
 @property(nonatomic) NSInteger currentDate;
 
-@property (nonatomic, copy) void (^dateSetBlock)(NSString *date);
+@property (nonatomic, copy) void (^dateSetBlock)(NSInteger selectedDay);
 
 - (instancetype)initWithFrame:(CGRect)frame Type:(SSJDateSelectViewType)type;
 
