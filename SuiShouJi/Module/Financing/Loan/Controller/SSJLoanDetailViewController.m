@@ -140,7 +140,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款金额" subtitle:borrowMoneyStr]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"利息收入" subtitle:interestStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入账户" subtitle:accountName]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款日" subtitle:borrowDateStr],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款日" subtitle:borrowDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"结算日" subtitle:closeOutDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"超出还款日" subtitle:overlapDaysStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:_loanModel.memo]]];
@@ -205,7 +205,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"已产生利息" subtitle:interestStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"预期利息" subtitle:expectedInterestStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入账户" subtitle:accountName]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款日" subtitle:borrowDateStr],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款日" subtitle:borrowDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"还款日" subtitle:repaymentDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:_loanModel.memo]],

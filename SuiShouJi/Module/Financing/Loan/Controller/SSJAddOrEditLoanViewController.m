@@ -205,11 +205,11 @@ const int kMemoMaxLength = 13;
         cell.imageView.image = [UIImage imageNamed:@""];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                cell.textLabel.text = @"借出日期";
+                cell.textLabel.text = @"借款日";
                 break;
                 
             case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"借入日期";
+                cell.textLabel.text = @"欠款日";
                 break;
         }
         
@@ -225,15 +225,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [UIImage imageNamed:@""];
-        switch (_loanModel.type) {
-            case SSJLoanTypeLend:
-                cell.textLabel.text = @"借款期限日";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"还款期限日";
-                break;
-        }
+        cell.textLabel.text = @"还款日";
         
         cell.additionalIcon.image = nil;
         cell.subtitleLabel.text = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
@@ -610,7 +602,7 @@ const int kMemoMaxLength = 13;
             }
             
             if (!_loanModel.repaymentDate) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借款期限日"];
+                [CDAutoHideMessageHUD showMessage:@"请选择借款日"];
                 return NO;
             }
             break;
@@ -636,12 +628,12 @@ const int kMemoMaxLength = 13;
             }
             
             if (!_loanModel.borrowDate) {
-                [CDAutoHideMessageHUD showMessage:@"请选择借入日期"];
+                [CDAutoHideMessageHUD showMessage:@"请选择欠款日"];
                 return NO;
             }
             
             if (!_loanModel.repaymentDate) {
-                [CDAutoHideMessageHUD showMessage:@"请选择还款期限日"];
+                [CDAutoHideMessageHUD showMessage:@"请选择还款日"];
                 return NO;
             }
             break;
@@ -794,6 +786,21 @@ const int kMemoMaxLength = 13;
             weakSelf.loanModel.borrowDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };
+        _borrowDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+            if ([date compare:weakSelf.loanModel.repaymentDate] == NSOrderedDescending) {
+                switch (weakSelf.loanModel.type) {
+                    case SSJLoanTypeLend:
+                        [CDAutoHideMessageHUD showMessage:@"借款日不能早于还款日"];
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        [CDAutoHideMessageHUD showMessage:@"欠款日不能早于还款日"];
+                        break;
+                }
+                return NO;
+            }
+            return YES;
+        };
     }
     return _borrowDateSelectionView;
 }
@@ -807,15 +814,15 @@ const int kMemoMaxLength = 13;
             weakSelf.loanModel.repaymentDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };
-        _repaymentDateSelectionView.shouldSelectDateAction =  ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
+        _repaymentDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
                 switch (weakSelf.loanModel.type) {
                     case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:@"还款期限日不能早于借出日期"];
+                        [CDAutoHideMessageHUD showMessage:@"还款日不能早于借款日"];
                         break;
                         
                     case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:@"还款期限日不能早于借入日期"];
+                        [CDAutoHideMessageHUD showMessage:@"还款日不能早于欠款日"];
                         break;
                 }
                 return NO;
