@@ -77,13 +77,14 @@
 
 - (void)sureButtonClicked {
     BOOL shouldSelect = YES;
+    NSDate *selectedDate = [NSDate dateWithYear:_datePicker.date.year month:_datePicker.date.month day:_datePicker.date.day];
     if (_shouldSelectDateAction) {
-        shouldSelect = _shouldSelectDateAction(self, _datePicker.date);
+        shouldSelect = _shouldSelectDateAction(self, selectedDate);
     }
     
     if (shouldSelect) {
         [self dismiss];
-        _selectedDate = _datePicker.date;
+        _selectedDate = selectedDate;
         if (_selectDateAction) {
             _selectDateAction(self);
         }

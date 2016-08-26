@@ -325,9 +325,11 @@ const int kMemoMaxLength = 13;
         [self.fundingSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
+        self.borrowDateSelectionView.selectedDate = _loanModel.borrowDate;
         [self.borrowDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         [self.view endEditing:YES];
+        self.repaymentDateSelectionView.selectedDate = _loanModel.repaymentDate;
         [self.repaymentDateSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
         if (_reminderItem) {
@@ -527,13 +529,15 @@ const int kMemoMaxLength = 13;
         [self.view ssj_hideLoadingIndicator];
         
         if (!_loanModel.ID.length) {
+            NSDate *today = [NSDate date];
+            
             _loanModel.ID = SSJUUID();
             _loanModel.userID = SSJUSERID();
             _loanModel.chargeID = SSJUUID();
             _loanModel.targetChargeID = SSJUUID();
             _loanModel.targetFundID = [items firstObject].ID;
             _loanModel.remindID = _reminderItem.remindId ?: @"";
-            _loanModel.borrowDate = [NSDate date];
+            _loanModel.borrowDate = [NSDate dateWithYear:today.year month:today.month day:today.day];
             _loanModel.repaymentDate = [_loanModel.borrowDate dateByAddingMonths:1];
             _loanModel.interest = YES;
             _loanModel.lender = @"";
@@ -781,7 +785,6 @@ const int kMemoMaxLength = 13;
     if (!_borrowDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _borrowDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _borrowDateSelectionView.selectedDate = _loanModel.borrowDate;
         _borrowDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
             weakSelf.loanModel.borrowDate = view.selectedDate;
             [weakSelf.tableView reloadData];
@@ -790,11 +793,11 @@ const int kMemoMaxLength = 13;
             if ([date compare:weakSelf.loanModel.repaymentDate] == NSOrderedDescending) {
                 switch (weakSelf.loanModel.type) {
                     case SSJLoanTypeLend:
-                        [CDAutoHideMessageHUD showMessage:@"借款日不能早于还款日"];
+                        [CDAutoHideMessageHUD showMessage:@"借款日不能晚于还款日"];
                         break;
                         
                     case SSJLoanTypeBorrow:
-                        [CDAutoHideMessageHUD showMessage:@"欠款日不能早于还款日"];
+                        [CDAutoHideMessageHUD showMessage:@"欠款日不能晚于还款日"];
                         break;
                 }
                 return NO;
@@ -809,7 +812,6 @@ const int kMemoMaxLength = 13;
     if (!_repaymentDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _repaymentDateSelectionView.selectedDate = _loanModel.repaymentDate;
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
             weakSelf.loanModel.repaymentDate = view.selectedDate;
             [weakSelf.tableView reloadData];
