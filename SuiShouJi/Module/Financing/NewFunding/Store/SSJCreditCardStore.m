@@ -15,7 +15,7 @@
     SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        FMResultSet *resultSet = [db executeQuery:@"select a.* , b.istate , c.ccolor , c.cmemo , c.cacctname , d.iblance from bk_user_credit a , bk_user_remind b , bk_fund_info c , bk_funs_acct d where a.cfundid = ? and a.cfundid = c.cfundid and a.cuserid = ? and a.cremindid = b.cremindid a.cfundid = d.cfundid",cardId,userId];
+        FMResultSet *resultSet = [db executeQuery:@"select a.* , b.istate , c.ccolor , c.cmemo , c.cacctname , d.ibalance from bk_user_credit a , bk_user_remind b , bk_fund_info c , bk_funs_acct d where a.cfundid = ? and a.cfundid = c.cfundid and a.cuserid = ? and a.cremindid = b.cremindid a.cfundid = d.cfundid",cardId,userId];
         if (!resultSet) {
             return;
         }
@@ -23,7 +23,7 @@
             item.cardId = cardId;
             item.cardName = [resultSet stringForColumn:@"cremindid"];
             item.cardLimit = [resultSet doubleForColumn:@"iquota"];
-            item.cardBalance = [resultSet doubleForColumn:@"iblance"];
+            item.cardBalance = [resultSet doubleForColumn:@"ibalance"];
             item.settleAtRepaymentDay = [resultSet boolForColumn:@"cmemo"];
             item.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
             item.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
@@ -34,6 +34,123 @@
         }
     }];
     return item;
+}
+
++ (void)syncSaveCreditCardWithCardItem:(SSJCreditCardItem *)item
+                                   Error:(NSError **)error {
+    //  保存提醒
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSError *tError = [self saveCreditCardWithCardItem:item inDatabase:db];
+        SSJDispatch_main_async_safe(^{
+            if (error) {
+                *error = tError;
+            }
+        });
+    }];
+}
+
++ (void)asyncSaveCreditCardWithCardItem:(SSJCreditCardItem *)item
+                                  Success:(void (^)(void))success
+                                  failure:(void (^)(NSError *error))failure {
+    //  保存提醒
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSError *tError = [self saveCreditCardWithCardItem:item inDatabase:db];
+        if (tError) {
+            SSJDispatch_main_async_safe(^{
+                if (failure) {
+                    failure(tError);
+                }
+            });
+        } else {
+            SSJDispatch_main_async_safe(^{
+                if (success) {
+                    success();
+                }
+            });
+        }
+    }];
+}
+
++ (NSError *)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
+                               inDatabase:(FMDatabase *)db {
+    NSString *editeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    NSString *userId = SSJUSERID();
+    
+    if (!item.cardId.length) {
+        item.cardId = SSJUUID();
+    }
+    
+    NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2"];
+
+    // 判断是新增还是删除
+    if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2"]) {
+        // 插入资金帐户表
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cprent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay) values (?,?,?,3,?,?,0,?,?,?,?,1)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder)]) {
+            return [db lastError];
+        }
+        
+        // 插入账户余额表
+        if (![db executeUpdate:@"insert into bk_funs_acct (cfundid ,ibalance ,cuserid) values (?,?,?)",item.cardId,@(item.cardBalance),userId]) {
+            return [db lastError];
+        }
+        
+        if (item.cardBalance > 0) {
+            // 如果余额大于0,在流水里插入一条平帐收入
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"1",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+                return [db lastError];
+            }
+        }else if(item.cardBalance < 0){
+            // 如果余额小于0,在流水里插入一条平帐支出
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+                return [db lastError];
+            }
+        }
+        
+        // 插入信用卡表
+        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement) values (?,?,?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay)]) {
+            return [db lastError];
+        }
+    }else{
+        // 修改资金帐户
+        if (![db executeUpdate:@"update bk_fund_info set cacctname = ? ,ccolor = ?,cwritedate = ?,operatortype = 1,iversion = ?,cmemo = ? where cfundid = ? and cuserid = ?",item.cardName,item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,item.cardId,userId]) {
+            return [db lastError];
+        }
+        
+        // 修改账户余额表
+        if (![db executeUpdate:@"update bk_funs_acct ibalance = ibalance + ? where cfundid = ? and cuserid = ?",@(item.cardBalance),item.cardId,userId]) {
+            return [db lastError];
+        }
+        
+        double differenceBalance = [db doubleForQuery:@"select ibalance from bk_fund_acct where cfundid = ? and cuserid = ?",item.cardId,userId] - item.cardBalance;
+        
+        if (differenceBalance > 0) {
+            // 如果余额大于0,在流水里插入一条平帐收入
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"1",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+                return [db lastError];
+            }
+        }else if(differenceBalance < 0){
+            // 如果余额小于0,在流水里插入一条平帐支出
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+                return [db lastError];
+            }
+        }
+        
+        // 查询在信用卡表中有没有数据,如果没有则插入一条(对老的信用卡账户)
+        if (![db intForQuery:@"select count(1) from bk_user_credit where cfundid = ? and cuserid = ?",item.cardId,userId]) {
+            // 插入信用卡表
+            if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement) values (?,?,?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay)]) {
+                return [db lastError];
+            }
+        }else{
+            if (![db executeUpdate:@"update bk_user_credit iquota = ?, cbilldate = ?, crepaymentdate = ?,  cwritedate = ?, iversion = ?, operatortype = 1, cremindid = ?, ibilldatesettlement = ? where cfundid = ? and cuserid = ?",@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),item.cardId,userId]) {
+                return [db lastError];
+            }
+        }
+    }
+
+    
+    return nil;
 }
 
 @end

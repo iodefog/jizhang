@@ -18,6 +18,8 @@
 
 @property (nonatomic,strong) UIImageView *cellDetailImage;
 
+@property(nonatomic, strong) UILabel *detailLabel;
+
 @end
 
 @implementation SSJCreditCardEditeCell
@@ -64,7 +66,9 @@
                 self.detailLabel.right = self.contentView.width;
             }
             self.detailLabel.centerY = self.contentView.height /  2;
-            self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            if (!self.cellAtrributedDetail.length) {
+                self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            }
             self.cellDetailImage.right = self.detailLabel.left - 10;
             self.cellDetailImage.centerY = self.contentView.height /  2;
 
@@ -86,7 +90,9 @@
                 self.detailLabel.right = self.contentView.width;
             }
             self.detailLabel.centerY = self.contentView.height /  2;
-            self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+            if (!self.cellAtrributedDetail.length) {
+                self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            }
             self.cellDetailImage.right = self.detailLabel.left - 10;
             self.cellDetailImage.centerY = self.contentView.height /  2;
             self.cellDetailImage.hidden = NO;
@@ -185,6 +191,18 @@
 - (void)setType:(SSJCreditCardCellType)type{
     _type = type;
     [self setNeedsLayout];
+}
+
+- (void)setCellDetail:(NSString *)cellDetail{
+    _cellDetail = cellDetail;
+    self.detailLabel.text = _cellDetail;
+    [self.detailLabel sizeToFit];
+}
+
+- (void)setCellAtrributedDetail:(NSAttributedString *)cellAtrributedDetail{
+    _cellAtrributedDetail = cellAtrributedDetail;
+    self.detailLabel.attributedText = _cellAtrributedDetail;
+    [self.detailLabel sizeToFit];
 }
 
 /*

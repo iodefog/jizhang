@@ -13,6 +13,8 @@
 #import "SSJCreditCardEditeCell.h"
 #import "SSJCreditCardItem.h"
 #import "SSJCreditCardStore.h"
+#import "SSJBillingDaySelectView.h"
+#import "SSJDatabaseQueue.h"
 
 static NSString *const kTitle1 = @"输入账户名称";
 static NSString *const kTitle2 = @"账户类型";
@@ -40,6 +42,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 // 是否已账单日结算开关
 @property(nonatomic, strong) UISwitch *billDateSettleMentButton;
+
+@property(nonatomic, strong) SSJBillingDaySelectView *billingDateSelectView;
+
+@property(nonatomic, strong) SSJBillingDaySelectView *repaymentDateSelectView;
 
 @end
 
@@ -76,7 +82,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return 55;
 }
 
-
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     return nil;
 }
@@ -87,6 +92,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:kTitle7]) {
+        self.billingDateSelectView.currentDate = self.item.cardBillingDay;
+        [self.billingDateSelectView show];
+    }
+    
+    if ([title isEqualToString:kTitle8]) {
+        self.billingDateSelectView.currentDate = self.item.cardRepaymentDay;
+        [self.repaymentDateSelectView show];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -122,8 +137,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle2]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         newReminderCell.cellTitle = title;
-        newReminderCell.detailLabel.text = @"信用卡";
-        [newReminderCell.detailLabel sizeToFit];
+        newReminderCell.cellDetail = @"信用卡";
         newReminderCell.cellDetailImageName = @"ft_creditcard";
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -178,11 +192,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         NSString *detail = [NSString stringWithFormat:@"每月%ld日",self.item.cardBillingDay];
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
-//        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardBillingDay]]];
         [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, detail.length)];
-        newReminderCell.detailLabel.attributedText = attributeddetail;
-        [newReminderCell.detailLabel sizeToFit];
+        newReminderCell.cellAtrributedDetail = attributeddetail;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
@@ -192,11 +205,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         NSString *detail = [NSString stringWithFormat:@"每月%ld日",self.item.cardRepaymentDay];
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
-//        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",self.item.cardRepaymentDay]]];
         [attributeddetail addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:18] range:NSMakeRange(0, detail.length)];
-        newReminderCell.detailLabel.attributedText = attributeddetail;
-        [newReminderCell.detailLabel sizeToFit];
+        newReminderCell.cellAtrributedDetail = attributeddetail;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     
@@ -219,6 +231,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return newReminderCell;
 }
 
+#pragma mark - Event
+- (void)saveButtonClicked:(id)sender{
+    self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+    }];
+}
 
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
@@ -232,6 +251,30 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableView;
+}
+
+-(SSJBillingDaySelectView *)billingDateSelectView{
+    if (!_billingDateSelectView) {
+        _billingDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeShortMonth];
+        __weak typeof(self) weakSelf = self;
+        _billingDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
+            weakSelf.item.cardBillingDay = selectedDay;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _billingDateSelectView;
+}
+
+-(SSJBillingDaySelectView *)repaymentDateSelectView{
+    if (!_repaymentDateSelectView) {
+        _repaymentDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeFullMonth];
+        __weak typeof(self) weakSelf = self;
+        _repaymentDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
+            weakSelf.item.cardRepaymentDay = selectedDay;
+            [weakSelf.tableView reloadData];
+        };
+    }
+    return _repaymentDateSelectView;
 }
 
 - (UISwitch *)remindStateButton{
