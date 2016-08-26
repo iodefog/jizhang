@@ -154,50 +154,42 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         switch (self.item.remindCycle) {
             case 0:{
-                newReminderCell.detailLabel.text = @"每天";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每天";
             }
                 break;
                 
             case 1:{
-                newReminderCell.detailLabel.text = @"每个工作日";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每个工作日";
             }
                 break;
                 
             case 2:{
-                newReminderCell.detailLabel.text = @"每周末";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每周末";
             }
                 break;
                 
             case 3:{
-                newReminderCell.detailLabel.text = @"每周";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每周";
             }
                 break;
                 
             case 4:{
-                newReminderCell.detailLabel.text = @"每月";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每月";
             }
                 break;
                 
             case 5:{
-                newReminderCell.detailLabel.text = @"每月最后一天";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每月最后一天";
             }
                 break;
                 
             case 6:{
-                newReminderCell.detailLabel.text = @"每年";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"每年";
             }
                 break;
                 
             case 7:{
-                newReminderCell.detailLabel.text = @"仅一次";
-                [newReminderCell.detailLabel sizeToFit];
+                newReminderCell.cellDetail = @"仅一次";
             }
                 break;
                 
@@ -215,8 +207,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle4]) {
         newReminderCell.type = SSJCreditCardCellTypeDetail;
         newReminderCell.cellTitle = title;
-        newReminderCell.detailLabel.text = [self.item.remindDate formattedDateWithFormat:@"HH:mm"];
-        [newReminderCell.detailLabel sizeToFit];
+        newReminderCell.cellDetail = [self.item.remindDate formattedDateWithFormat:@"HH:mm"];
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -225,8 +216,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle5]) {
         newReminderCell.type = SSJCreditCardCellTypeDetail;
         newReminderCell.cellTitle = title;
-        newReminderCell.detailLabel.text = [self.nextRemindDate formattedDateWithStyle:NSDateFormatterFullStyle];
-        [newReminderCell.detailLabel sizeToFit];
+        newReminderCell.cellDetail = [self.nextRemindDate formattedDateWithStyle:NSDateFormatterFullStyle];
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -414,6 +404,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!self.item.remindName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入提醒名称"];
         return;
+    }
+    if (!self.item.remindId.length) {
+        self.item.remindId = SSJUUID();
     }
     if (self.item.remindType == SSJReminderTypeNormal || self.item.remindType == SSJReminderTypeCharge) {
         __weak typeof(self) weakSelf = self;

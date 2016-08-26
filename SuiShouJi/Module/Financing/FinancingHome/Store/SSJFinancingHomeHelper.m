@@ -16,7 +16,7 @@
         NSString *userid = SSJUSERID();
         NSMutableArray *fundingList = [[NSMutableArray alloc]init];
         NSMutableArray *orderArr = [[NSMutableArray alloc]init];
-        FMResultSet * fundingResult = [db executeQuery:@"select a.* , b.ibalance from bk_fund_info  a , bk_funs_acct b where a.cparent != 'root' and a.cfundid = b.cfundid and a.operatortype <> 2 and a.cuserid = ? and a.idisplay = 1 order by a.iorder asc, a.cparent asc , a.cwritedate desc",userid];
+        FMResultSet * fundingResult = [db executeQuery:@"select a.* , b.ibalance from bk_fund_info  a , bk_funs_acct b where a.cparent != 'root' and a.cfundid = b.cfundid and a.operatortype <> 2 and a.cuserid = ? order by a.iorder asc, a.cparent asc , a.cwritedate desc",userid];
         if (!fundingResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -37,7 +37,9 @@
             item.fundingOrder = [fundingResult intForColumn:@"IORDER"];
             [orderArr addObject:@(item.fundingOrder)];
             item.isAddOrNot = NO;
-            [fundingList addObject:item];
+            if ([fundingResult boolForColumn:@"idisplay"] || (![item.fundingParent isEqualToString:@"11"] && ![item.fundingParent isEqualToString:@"10"])) {
+                [fundingList addObject:item];
+            }
         }
         if ([orderArr containsObject:@(0)]) {
             for (int i = 0; i < fundingList.count; i ++) {
