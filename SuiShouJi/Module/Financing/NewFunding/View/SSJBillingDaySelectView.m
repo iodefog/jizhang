@@ -105,7 +105,7 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    self.currentDate = [[self.dateArr ssj_safeObjectAtIndex:row] integerValue];
+    _currentDate = [[self.dateArr ssj_safeObjectAtIndex:row] integerValue];
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
