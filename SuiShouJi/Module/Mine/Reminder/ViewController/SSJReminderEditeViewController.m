@@ -401,6 +401,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     SSJCreditCardEditeCell *memoCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
     self.item.remindName = nameCell.textInput.text;
     self.item.remindMemo = memoCell.textInput.text;
+    if ([self.item.remindDate isEarlierThan:self.item.minimumDate] && self.item.remindType == SSJReminderTypeBorrowing) {
+        [CDAutoHideMessageHUD showMessage:@"提醒日期不能晚于借贷的借款日期"];
+        return;
+    }
     if (!self.item.remindName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入提醒名称"];
         return;
