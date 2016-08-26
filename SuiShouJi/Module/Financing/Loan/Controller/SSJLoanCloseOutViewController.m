@@ -57,9 +57,8 @@ static NSUInteger kInterestTag = 1002;
     [self loadData];
     
     NSDate *today = [NSDate date];
-    NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-    NSDate *endDate = [today isLaterThan:borrowDate] ? today : borrowDate;
-    _loanModel.endDate = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSDate *endDate = [today isLaterThan:_loanModel.borrowDate] ? today : _loanModel.borrowDate;
+    _loanModel.endDate = endDate;
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -159,7 +158,7 @@ static NSUInteger kInterestTag = 1002;
         cell.imageView.image = [UIImage imageNamed:@""];
         cell.textLabel.text = @"结清日";
         cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [_loanModel.endDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
+        cell.subtitleLabel.text = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         [cell setNeedsLayout];
@@ -296,10 +295,7 @@ static NSUInteger kInterestTag = 1002;
 }
 
 - (double)caculateInterest {
-    NSDate *endDate = [NSDate dateWithString:_loanModel.endDate formatString:@"yyyy-MM-dd"];
-    NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-    
-    NSInteger daysFromBorrow = [endDate daysFrom:borrowDate];
+    NSInteger daysFromBorrow = [_loanModel.endDate daysFrom:_loanModel.borrowDate];
     if (daysFromBorrow >= 0) {
         return (daysFromBorrow + 1) * _loanModel.rate / 365;
     } else {
@@ -308,10 +304,7 @@ static NSUInteger kInterestTag = 1002;
 }
 
 - (void)recaculateRateWithInterest:(double)interest {
-    NSDate *endDate = [NSDate dateWithString:_loanModel.endDate formatString:@"yyyy-MM-dd"];
-    NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-    
-    NSInteger daysFromBorrow = [endDate daysFrom:borrowDate];
+    NSInteger daysFromBorrow = [_loanModel.endDate daysFrom:_loanModel.borrowDate];
     if (daysFromBorrow >= 0) {
         _loanModel.rate = interest / (daysFromBorrow + 1) * 365;
     }
@@ -364,15 +357,12 @@ static NSUInteger kInterestTag = 1002;
         return;
     }
     
-    if (!_loanModel.endDate.length) {
+    if (!_loanModel.endDate) {
         [CDAutoHideMessageHUD showMessage:@"请选择结清日期"];
         return;
     }
     
-    NSDate *endDate = [NSDate dateWithString:_loanModel.endDate formatString:@"yyyy-MM-dd"];
-    NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-    
-    if ([endDate compare:borrowDate] == NSOrderedAscending) {
+    if ([_loanModel.endDate compare:_loanModel.borrowDate] == NSOrderedAscending) {
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 [CDAutoHideMessageHUD showMessage:@"结清日不能早于借出日期"];
@@ -465,14 +455,13 @@ static NSUInteger kInterestTag = 1002;
     if (!_endDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _endDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _endDateSelectionView.selectedDate = [NSDate dateWithString:_loanModel.endDate formatString:@"yyyy-MM-dd"];
+        _endDateSelectionView.selectedDate = _loanModel.endDate;
         _endDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            weakSelf.loanModel.endDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            weakSelf.loanModel.endDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };
         _endDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
-            NSDate *borrowDate = [NSDate dateWithString:weakSelf.loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-            if ([date compare:borrowDate] == NSOrderedAscending) {
+            if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
                 switch (weakSelf.loanModel.type) {
                     case SSJLoanTypeLend:
                         [CDAutoHideMessageHUD showMessage:@"结清日不能早于借出日期"];

@@ -214,7 +214,7 @@ const int kMemoMaxLength = 13;
         }
         
         cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [_loanModel.borrowDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
+        cell.subtitleLabel.text = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -236,7 +236,7 @@ const int kMemoMaxLength = 13;
         }
         
         cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [_loanModel.repaymentDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
+        cell.subtitleLabel.text = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -541,8 +541,8 @@ const int kMemoMaxLength = 13;
             _loanModel.targetChargeID = SSJUUID();
             _loanModel.targetFundID = [items firstObject].ID;
             _loanModel.remindID = _reminderItem.remindId ?: @"";
-            _loanModel.borrowDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
-            _loanModel.repaymentDate = [[[NSDate date] dateByAddingMonths:1] formattedDateWithFormat:@"yyyy-MM-dd"];
+            _loanModel.borrowDate = [NSDate date];
+            _loanModel.repaymentDate = [_loanModel.borrowDate dateByAddingMonths:1];
             _loanModel.interest = YES;
             _loanModel.lender = @"";
             _loanModel.memo = @"";
@@ -567,10 +567,8 @@ const int kMemoMaxLength = 13;
 }
 
 - (float)caculateInterest {
-    NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-    NSDate *repaymentDate = [NSDate dateWithString:_loanModel.repaymentDate formatString:@"yyyy-MM-dd"];
-    if (borrowDate && repaymentDate) {
-        NSUInteger interval = [repaymentDate daysFrom:borrowDate] + 1;
+    if (_loanModel.borrowDate && _loanModel.repaymentDate) {
+        NSUInteger interval = [_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1;
         return interval * (_loanModel.rate / 365);
     }
     
@@ -606,12 +604,12 @@ const int kMemoMaxLength = 13;
                 return NO;
             }
             
-            if (_loanModel.borrowDate.length == 0) {
+            if (!_loanModel.borrowDate) {
                 [CDAutoHideMessageHUD showMessage:@"请选择借出日期"];
                 return NO;
             }
             
-            if (_loanModel.repaymentDate.length == 0) {
+            if (!_loanModel.repaymentDate) {
                 [CDAutoHideMessageHUD showMessage:@"请选择借款期限日"];
                 return NO;
             }
@@ -637,12 +635,12 @@ const int kMemoMaxLength = 13;
                 return NO;
             }
             
-            if (_loanModel.borrowDate.length == 0) {
+            if (!_loanModel.borrowDate) {
                 [CDAutoHideMessageHUD showMessage:@"请选择借入日期"];
                 return NO;
             }
             
-            if (_loanModel.repaymentDate.length == 0) {
+            if (!_loanModel.repaymentDate) {
                 [CDAutoHideMessageHUD showMessage:@"请选择还款期限日"];
                 return NO;
             }
@@ -791,9 +789,9 @@ const int kMemoMaxLength = 13;
     if (!_borrowDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _borrowDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _borrowDateSelectionView.selectedDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
+        _borrowDateSelectionView.selectedDate = _loanModel.borrowDate;
         _borrowDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            weakSelf.loanModel.borrowDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            weakSelf.loanModel.borrowDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };
     }
@@ -804,14 +802,13 @@ const int kMemoMaxLength = 13;
     if (!_repaymentDateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        _repaymentDateSelectionView.selectedDate = [NSDate dateWithString:_loanModel.repaymentDate formatString:@"yyyy-MM-dd"];
+        _repaymentDateSelectionView.selectedDate = _loanModel.repaymentDate;
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            weakSelf.loanModel.repaymentDate = [view.selectedDate formattedDateWithFormat:@"yyyy-MM-dd"];;
+            weakSelf.loanModel.repaymentDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };
         _repaymentDateSelectionView.shouldSelectDateAction =  ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
-            NSDate *borrowDate = [NSDate dateWithString:weakSelf.loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-            if ([date compare:borrowDate] == NSOrderedAscending) {
+            if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
                 switch (weakSelf.loanModel.type) {
                     case SSJLoanTypeLend:
                         [CDAutoHideMessageHUD showMessage:@"还款期限日不能早于借出日期"];

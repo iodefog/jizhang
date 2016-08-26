@@ -23,9 +23,9 @@
     model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
     model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
     model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
-    model.borrowDate = [resultSet stringForColumn:@"cborrowdate"];
-    model.repaymentDate = [resultSet stringForColumn:@"crepaymentdate"];
-    model.endDate = [resultSet stringForColumn:@"cenddate"];
+    model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
+    model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
+    model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
     model.rate = [resultSet doubleForColumn:@"rate"];
     model.memo = [resultSet stringForColumn:@"memo"];
     model.remindID = [resultSet stringForColumn:@"cremindid"];
@@ -34,7 +34,7 @@
     model.type = [resultSet intForColumn:@"itype"];
     model.operatorType = [resultSet intForColumn:@"operatorType"];
     model.version = [resultSet longLongIntForColumn:@"iversion"];
-    model.writeDate = [resultSet stringForColumn:@"cwritedate"];
+    model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     return model;
 }

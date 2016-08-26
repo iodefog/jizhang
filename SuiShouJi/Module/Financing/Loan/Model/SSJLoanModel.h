@@ -47,13 +47,13 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 @property (nonatomic, copy) NSString *endTargetChargeID;
 
 // 借入／借出日期
-@property (nonatomic, copy) NSString *borrowDate;
+@property (nonatomic, copy) NSDate *borrowDate;
 
 // 期限日期
-@property (nonatomic, copy) NSString *repaymentDate;
+@property (nonatomic, copy) NSDate *repaymentDate;
 
 // 结清日期
-@property (nonatomic, copy) NSString *endDate;
+@property (nonatomic, copy) NSDate *endDate;
 
 // 利率
 @property (nonatomic) double rate;
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 
 @property (nonatomic) long long version;
 
-@property (nonatomic, copy) NSString *writeDate;
+@property (nonatomic, copy) NSDate *writeDate;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 

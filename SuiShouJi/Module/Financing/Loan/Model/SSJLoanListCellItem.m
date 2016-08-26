@@ -17,7 +17,7 @@
     item.memo = model.memo;
     item.showStamp = model.closeOut;
     
-    NSString *borrowDate = [model.borrowDate ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"yyyy.MM.dd"];
+    NSString *borrowDate = [model.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
     switch (model.type) {
         case SSJLoanTypeLend:
             item.money = [NSString stringWithFormat:@"+%.2f", model.jMoney];

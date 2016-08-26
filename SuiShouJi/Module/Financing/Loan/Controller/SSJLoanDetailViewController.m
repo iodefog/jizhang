@@ -108,25 +108,20 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         NSString *borrowMoneyStr = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
         
-        NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-        NSDate *repaymentDate = [NSDate dateWithString:_loanModel.repaymentDate formatString:@"yyyy-MM-dd"];
-        NSDate *closeOutDate = [NSDate dateWithString:_loanModel.endDate formatString:@"yyyy-MM-dd"];
-        
         double interest = 0;
-        if ([closeOutDate compare:borrowDate] != NSOrderedAscending) {
-            interest = ([closeOutDate daysFrom:borrowDate] + 1) * _loanModel.rate / 365;
+        if ([_loanModel.endDate compare:_loanModel.borrowDate] != NSOrderedAscending) {
+            interest = ([_loanModel.endDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate / 365;
         }
         NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
         
-        NSString *borrowDateStr = [borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
-        NSString *closeOutDateStr = [closeOutDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        NSString *closeOutDateStr = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
-        int overlapDays = (int)[closeOutDate daysFrom:repaymentDate];
+        int overlapDays = (int)[_loanModel.endDate daysFrom:_loanModel.repaymentDate];
         NSString *overlapDaysStr = [NSString stringWithFormat:@"%d天", MIN(overlapDays, 0)];
-        
         
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
@@ -155,34 +150,31 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         NSString *borrowMoneyStr = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
         
-        NSDate *borrowDate = [NSDate dateWithString:_loanModel.borrowDate formatString:@"yyyy-MM-dd"];
-        NSDate *repaymentDate = [NSDate dateWithString:_loanModel.repaymentDate formatString:@"yyyy-MM-dd"];
-        
         NSDate *today = [NSDate date];
         today = [NSDate dateWithYear:today.year month:today.month day:today.day];
         
         NSString *interestStr = @"¥0.00";
-        if ([today compare:borrowDate] != NSOrderedAscending) {
-            double interest = ([today daysFrom:borrowDate] + 1) * _loanModel.rate / 365;
+        if ([today compare:_loanModel.borrowDate] != NSOrderedAscending) {
+            double interest = ([today daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate / 365;
             interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
         }
         
-        double expectedInterest = ([repaymentDate daysFrom:borrowDate] + 1) * _loanModel.rate / 365;
+        double expectedInterest = ([_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate / 365;
         NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", expectedInterest];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
         
-        NSString *borrowDateStr = [borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        NSString *repaymentDateStr = [repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
+        NSString *repaymentDateStr = [_loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
         NSString *daysFromRepaymentTitle = nil;
         NSString *daysFromRepaymentDateStr = nil;
-        if ([today compare:repaymentDate] == NSOrderedAscending) {
+        if ([today compare:_loanModel.repaymentDate] == NSOrderedAscending) {
             daysFromRepaymentTitle = @"距还款日";
-            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[repaymentDate daysFrom:today]];
+            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.repaymentDate daysFrom:today]];
         } else {
             daysFromRepaymentTitle = @"超出还款日";
-            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[today daysFrom:repaymentDate]];
+            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[today daysFrom:_loanModel.repaymentDate]];
         }
         
         NSString *remindDateStr = @"关闭";

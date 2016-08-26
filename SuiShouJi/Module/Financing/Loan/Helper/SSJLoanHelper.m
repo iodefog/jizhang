@@ -67,13 +67,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         while ([result next]) {
             SSJLoanModel *model = [SSJLoanModel modelWithResultSet:result];
             
-            NSDate *repaymentDate = [NSDate dateWithString:model.repaymentDate formatString:@"yyyy-MM-dd"];
             NSDate *nowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
             
             // 排序顺序：1.到期未结算 2.未到期已结算 3.其他
-            if (!model.closeOut && [repaymentDate compare:nowDate] != NSOrderedDescending) {
+            if (!model.closeOut && [model.repaymentDate compare:nowDate] != NSOrderedDescending) {
                 [list1 addObject:model];
-            } else if (model.closeOut && [nowDate compare:repaymentDate] == NSOrderedDescending) {
+            } else if (model.closeOut && [nowDate compare:model.repaymentDate] == NSOrderedDescending) {
                 [list2 addObject:model];
             } else {
                 [list3 addObject:model];
@@ -166,7 +165,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         loanModel.version = SSJSyncVersion();
-        loanModel.writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        loanModel.writeDate = [NSDate date];
         
         // 创建或更新借贷记录、转账流水
         if (![self saveLoanModel:loanModel booksID:booksID inDatabase:db]) {
@@ -316,9 +315,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *endDateStr = [model.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
         // 插入所属结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -331,7 +331,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 插入目标结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(model.jMoney), endTargetBillID, model.targetFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(model.jMoney), endTargetBillID, model.targetFundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -371,7 +371,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 修改当前借贷记录的结清状态
-        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, model.endDate, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
+        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, endDateStr, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
             
             *rollback = YES;
             if (failure) {
@@ -564,18 +564,24 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *borrowDateStr = [model.borrowDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *repaymentDateStr = [model.repaymentDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     // 转出流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, @(model.jMoney), @4, rollOutFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, @(model.jMoney), @4, rollOutFundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
     // 转入流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInChargeID, model.userID, @(model.jMoney), @3, rollInFundID, model.borrowDate, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInChargeID, model.userID, @(model.jMoney), @3, rollInFundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
     NSMutableDictionary *modelInfo = model.mj_keyValues;
+    
+    [modelInfo setObject:(borrowDateStr ?: @"") forKey:@"borrowDate"];
+    [modelInfo setObject:(repaymentDateStr ?: @"") forKey:@"repaymentDate"];
+    
     [modelInfo setObject:writeDate forKey:@"writeDate"];
     [modelInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
     
