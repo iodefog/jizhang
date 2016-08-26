@@ -116,6 +116,7 @@
     NSString *userId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         FMResultSet *resultSet = [db executeQuery:@"select * from bk_user_remind where cremindid = ?",remindId];
+        [resultSet next];
         item.remindId = [resultSet stringForColumn:@"cremindid"];
         item.remindName = [resultSet stringForColumn:@"cremindname"];
         item.remindMemo = [resultSet stringForColumn:@"cmemo"];
@@ -132,6 +133,7 @@
         }else{
             item.remindFundid = @"";
         }
+        [resultSet close];
     }];
     return item;
 }
