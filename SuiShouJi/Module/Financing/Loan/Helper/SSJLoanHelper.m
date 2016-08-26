@@ -297,37 +297,28 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        NSString *rollOutChargeID = SSJUUID();
-        NSString *rollInChargeID = SSJUUID();
+        NSString *endChargeID = SSJUUID();
+        NSString *endTargetChargeID = SSJUUID();
         
-        NSString *rollOutFundID = nil;
-        NSString *rollInFundID = nil;
-        
-        NSString *endChargeID = nil;
-        NSString *endTargetChargeID = nil;
+        NSString *endBillID = nil;
+        NSString *endTargetBillID = nil;
         
         switch (model.type) {
             case SSJLoanTypeLend:
-                rollOutFundID = model.targetFundID;
-                rollInFundID = model.fundID;
-                endChargeID = rollInChargeID;
-                endTargetChargeID = rollOutChargeID;
-                
+                endBillID = @"4";
+                endTargetBillID = @"3";
                 break;
                 
             case SSJLoanTypeBorrow:
-                rollOutFundID = model.fundID;
-                rollInFundID = model.targetFundID;
-                endChargeID = rollOutChargeID;
-                endTargetChargeID = rollInChargeID;
-                
+                endBillID = @"3";
+                endTargetBillID = @"4";
                 break;
         }
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        // 插入结清转出流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, @(model.jMoney), @4, rollOutFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        // 插入所属结清流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -339,8 +330,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 插入结清转入流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInFundID, model.userID, @(model.jMoney), @3, rollInFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        // 插入目标结清流水
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(model.jMoney), endTargetBillID, model.targetFundID, model.endDate, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
