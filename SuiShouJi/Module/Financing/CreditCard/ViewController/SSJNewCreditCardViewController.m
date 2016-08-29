@@ -17,6 +17,7 @@
 #import "SSJReminderItem.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJColorSelectViewController.h"
+#import "SSJReminderEditeViewController.h"
 
 #define NUM @"+-.0123456789"
 
@@ -78,14 +79,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.navigationItem.rightBarButtonItem = rightItem;
         self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
     }
+    if (self.item.remindId.length) {
+        self.remindItem = [SSJLocalNotificationStore queryReminderItemForID:self.item.remindId];
+    }
     [self.view addSubview:self.tableView];
+    [self.tableView reloadData];
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
-    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -136,6 +140,21 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         colorSelectVc.fundingName = self.item.cardName;
         colorSelectVc.fundingColor = self.item.cardColor;
         [self.navigationController pushViewController:colorSelectVc animated:YES];
+    }
+    
+    if ([title isEqualToString:kTitle9]) {
+        if (self.item.remindId.length) {
+            SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+            remindEditeVc.item = self.remindItem;
+            __weak typeof(self) weakSelf = self;
+            remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item){
+                weakSelf.remindItem = item;
+                weakSelf.item.remindState = 1;
+                weakSelf.item.remindId = item.remindId;
+                [weakSelf.tableView reloadData];
+            };
+            [self.navigationController pushViewController:remindEditeVc animated:YES];
+        }
     }
 }
 
@@ -310,6 +329,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 });
             };
         }
+        SSJDispatch_main_async_safe(^(){
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        });
     }];
 }
 
@@ -319,6 +341,40 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (void)transferTextDidChange{
     [self setupTextFiledNum:_limitInput num:2];
+}
+
+- (void)remindSwitchChange:(id)sender{
+    if (self.item.remindId.length) {
+        self.remindItem.remindState = self.remindStateButton.isOn;
+    }else{
+        if (self.remindStateButton.isOn) {
+            SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+            SSJReminderItem *item = [[SSJReminderItem alloc]init];
+            item.remindCycle = 4;
+            item.remindType = SSJReminderTypeCreditCard;
+            if (self.item.cardName) {
+                item.remindName = [NSString stringWithFormat:@"%@还款日提醒",self.item.cardName];
+            }
+            if (self.item.cardMemo) {
+                item.remindName = self.item.cardMemo;
+            }
+            if ([NSDate date].day > self.item.cardRepaymentDay) {
+                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month + 1 day:self.item.cardRepaymentDay hour:8 minute:0 second:0];
+            }else{
+                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardRepaymentDay hour:8 minute:0 second:0];
+            }
+            item.remindState = 1;
+            remindEditeVc.item = item;
+            __weak typeof(self) weakSelf = self;
+            remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item){
+                weakSelf.remindItem = item;
+                weakSelf.item.remindState = 1;
+                weakSelf.item.remindId = item.remindId;
+                [weakSelf.tableView reloadData];
+            };
+            [self.navigationController pushViewController:remindEditeVc animated:YES];
+        }
+    }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -433,6 +489,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!_remindStateButton) {
         _remindStateButton = [[UISwitch alloc]init];
         _remindStateButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
+        [_remindStateButton addTarget:self action:@selector(remindSwitchChange:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _remindStateButton;
 }

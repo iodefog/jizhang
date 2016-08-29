@@ -348,7 +348,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 }else if (self.item.remindDate.day < baseStartDate.day){
                     self.nextRemindDate = [baseStartDate dateByAddingMonths:1];
                 }else{
-                    if ([baseDate isEarlierThan:baseStartDate]) {
+                    if ([baseStartDate isEarlierThan:baseDate]) {
                         //如果提醒过了
                         self.nextRemindDate = [baseStartDate dateByAddingMonths:1];
                     }else{

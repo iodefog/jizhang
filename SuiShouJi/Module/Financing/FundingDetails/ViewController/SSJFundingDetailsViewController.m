@@ -21,6 +21,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJFundingTransferEditeViewController.h"
 #import "SSJFundingDetailNoDataView.h"
+#import "SSJNewCreditCardViewController.h"
 
 #import "FMDB.h"
 
@@ -223,11 +224,17 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 }
 
 -(void)rightButtonClicked:(id)sender{
-    SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
-    self.item.fundingAmount = _totalIncome - _totalExpence;
-    newFundingVC.item = self.item;
-    [self.navigationController pushViewController:newFundingVC animated:YES];
-    [MobClick event:@"fund_edit"];
+    if ([self.item.fundingParent isEqualToString:@"3"]) {
+        SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
+        creditCardVc.cardId = self.item.fundingID;
+        [self.navigationController pushViewController:creditCardVc animated:YES];
+    }else{
+        SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
+        self.item.fundingAmount = _totalIncome - _totalExpence;
+        newFundingVC.item = self.item;
+        [self.navigationController pushViewController:newFundingVC animated:YES];
+        [MobClick event:@"fund_edit"];
+    }
 }
 
 -(void)reloadDataAfterSync{
