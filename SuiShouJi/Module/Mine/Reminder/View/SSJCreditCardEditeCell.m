@@ -20,6 +20,8 @@
 
 @property(nonatomic, strong) UILabel *detailLabel;
 
+@property(nonatomic, strong) UIView *colorView;
+
 @end
 
 @implementation SSJCreditCardEditeCell
@@ -32,6 +34,7 @@
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.cellDetailImage];
         [self.contentView addSubview:self.subTitleLabel];
+        [self.contentView addSubview:self.colorView];
     }
     return self;
 }
@@ -51,6 +54,7 @@
             self.detailLabel.hidden = YES;
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
+            self.colorView.hidden = YES;
         }
             break;
             
@@ -75,6 +79,7 @@
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
+            self.colorView.hidden = YES;
         }
             break;
             
@@ -98,6 +103,7 @@
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
+            self.colorView.hidden = YES;
         }
             break;
             
@@ -109,6 +115,29 @@
             self.titleLabel.top = 17;
             self.subTitleLabel.top = self.titleLabel.bottom + 10;
             self.subTitleLabel.left = self.titleLabel.left;
+            self.colorView.hidden = YES;
+        }
+            break;
+            
+        case SSJCreditCardCellColorSelect:{
+            self.cellImage.left = 10;
+            self.cellImage.centerY = self.contentView.height / 2;
+            self.accessoryView.centerY = self.cellImage.centerY;
+            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.centerY = self.contentView.height / 2;
+            if (self.contentView.width == self.width) {
+                self.colorView.right = self.contentView.width - 10;
+            }else{
+                self.colorView.right = self.contentView.width;
+            }
+            self.colorView.centerY = self.contentView.height / 2;
+
+            self.detailLabel.hidden = YES;
+            self.cellDetailImage.hidden = YES;
+            self.colorView.hidden = NO;
+
+            self.textInput.hidden = YES;
+            self.subTitleLabel.hidden = YES;
         }
             break;
             
@@ -165,6 +194,14 @@
     return _textInput;
 }
 
+- (UIView *)colorView{
+    if (!_colorView) {
+        _colorView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        _colorView.layer.cornerRadius = _colorView.width / 2;
+    }
+    return _colorView;
+}
+
 - (void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
     self.cellImage.image = [UIImage imageNamed:_cellImageName];
@@ -203,6 +240,11 @@
     _cellAtrributedDetail = cellAtrributedDetail;
     self.detailLabel.attributedText = _cellAtrributedDetail;
     [self.detailLabel sizeToFit];
+}
+
+- (void)setCellColor:(NSString *)cellColor{
+    _cellColor = cellColor;
+    self.colorView.backgroundColor = [UIColor ssj_colorWithHex:_cellColor];
 }
 
 /*

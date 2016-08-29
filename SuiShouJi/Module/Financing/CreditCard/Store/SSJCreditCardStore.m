@@ -81,12 +81,12 @@
         item.cardId = SSJUUID();
     }
     
-    NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2"];
+    NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2",userId];
 
     // 判断是新增还是删除
-    if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2"]) {
+    if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",item.cardId,userId]) {
         // 插入资金帐户表
-        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cprent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay) values (?,?,?,3,?,?,0,?,?,?,?,1)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder)]) {
+        if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay) values (?,?,?,3,?,?,0,?,?,?,?,1)",item.cardId,item.cardName,@"ft_creditcard",item.cardColor,editeDate,@(SSJSyncVersion()),item.cardMemo,userId,@(maxOrder)]) {
             return [db lastError];
         }
         
@@ -108,7 +108,7 @@
         }
         
         // 插入信用卡表
-        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement) values (?,?,?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay)]) {
+        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement) values (?,?,?,?,?,?,?,0,?,?)",item.cardId,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay)]) {
             return [db lastError];
         }
     }else{
@@ -118,7 +118,7 @@
         }
         
         // 修改账户余额表
-        if (![db executeUpdate:@"update bk_funs_acct ibalance = ibalance + ? where cfundid = ? and cuserid = ?",@(item.cardBalance),item.cardId,userId]) {
+        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ? and cuserid = ?",@(item.cardBalance),item.cardId,userId]) {
             return [db lastError];
         }
         
@@ -148,8 +148,6 @@
             }
         }
     }
-
-    
     return nil;
 }
 

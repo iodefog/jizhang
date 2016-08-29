@@ -22,7 +22,7 @@ static NSString *const kTitle5 = @"下次提醒时间";
 
 static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIdentifier";
 
-@interface SSJReminderEditeViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface SSJReminderEditeViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -138,6 +138,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.remindName;
+        newReminderCell.textInput.delegate = self;
+        newReminderCell.textInput.tag = 100;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
@@ -146,6 +148,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.remindMemo;
+        newReminderCell.textInput.delegate = self;
+        newReminderCell.textInput.tag = 101;
     }
     
     // 提醒周期
@@ -393,6 +397,15 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             break;
     }
     [self.tableView reloadData];
+}
+
+#pragma mark - UITextFieldDelegate
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if (textField.tag == 100) {
+        self.item.remindName = textField.text;
+    }else if (textField.tag == 101){
+        self.item.remindMemo = textField.text;
+    }
 }
 
 #pragma mark - Event
