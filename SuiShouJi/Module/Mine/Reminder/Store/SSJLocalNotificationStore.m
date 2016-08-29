@@ -123,12 +123,9 @@
         item.remindDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
         item.remindState = [resultSet stringForColumn:@"istate"];
         item.remindAtTheEndOfMonth = [resultSet stringForColumn:@"iisend"];
-        if (item.remindType == SSJReminderTypeCreditCard) {
-            item.remindFundid = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindId,userId];
-        }else if (item.remindType == SSJReminderTypeBorrowing){
-            item.remindFundid = [db stringForQuery:@"select cfundid from bk_loan where cremindid = ? and cuserid = ?",remindId,userId];
-        }else{
-            item.remindFundid = @"";
+        if (item.remindType == SSJReminderTypeBorrowing){
+            NSString *minmumDate = [db stringForQuery:@"select cborrowdate from bk_loan where cremindid = ? and cuserid = ?",item.remindId,userId];
+            item.minimumDate = [NSDate dateWithString:minmumDate formatString:@"yyyy-MM-dd HH:mm:ss"];
         }
         [resultSet close];
     }];
