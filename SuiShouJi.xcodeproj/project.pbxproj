@@ -1512,6 +1512,11 @@
 		7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */; };
 		7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */; };
 		7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */; };
+		7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19ED91D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19EDA1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19EDC1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
 		7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
@@ -5892,6 +5897,8 @@
 		7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionGroupNode.m; sourceTree = "<group>"; };
 		7DEF54641C76DCAB00A90153 /* SSJPercentCircleViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleViewItem.h; sourceTree = "<group>"; };
 		7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleViewItem.m; sourceTree = "<group>"; };
+		7DF19ED61D74418B00DD611C /* SSJNewOrEditCustomCategoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewOrEditCustomCategoryView.h; sourceTree = "<group>"; };
+		7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewOrEditCustomCategoryView.m; sourceTree = "<group>"; };
 		7DF8B9AB1CDC2B0000F461A6 /* SSJEditableCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJEditableCollectionView.h; sourceTree = "<group>"; };
 		7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJEditableCollectionView.m; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
@@ -7410,6 +7417,8 @@
 				9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */,
 				9C53A3BE1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.h */,
 				9C53A3BF1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m */,
+				7DF19ED61D74418B00DD611C /* SSJNewOrEditCustomCategoryView.h */,
+				7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -13815,6 +13824,7 @@
 				9C9A0C511D6D96DD002AF046 /* SSJLoanHelper.m in Sources */,
 				7DBA56631D6D32B700C02D79 /* SSJCircleChargeCell.m in Sources */,
 				7DBA56641D6D32B700C02D79 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
+				7DF19EDA1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				7DBA56651D6D32B700C02D79 /* SSJSegmentedControl.m in Sources */,
 				7DBA56661D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56671D6D32B700C02D79 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -14377,6 +14387,7 @@
 				9C2A68241D194CA70010F1DA /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				9C2A68251D194CA70010F1DA /* SSJChargeCicleModifyViewController.m in Sources */,
 				9C2A68261D194CA70010F1DA /* SSJCalendarCollectionViewCell.m in Sources */,
+				7DF19ED91D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9C2A68271D194CA70010F1DA /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				9C2A68281D194CA70010F1DA /* SSJUmengManager.m in Sources */,
 				9C2A68291D194CA70010F1DA /* SSJBudgetListCell.m in Sources */,
@@ -14665,6 +14676,7 @@
 				9C9A0C521D6D96DD002AF046 /* SSJLoanHelper.m in Sources */,
 				9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */,
 				9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
+				7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */,
 				9CECFBE21D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -15094,6 +15106,7 @@
 				9C9A0C531D6D96DE002AF046 /* SSJLoanHelper.m in Sources */,
 				9CECFFD71D6D41EB00DB2C8B /* SSJCircleChargeCell.m in Sources */,
 				9CECFFD81D6D41EB00DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
+				7DF19EDC1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFFD91D6D41EB00DB2C8B /* SSJSegmentedControl.m in Sources */,
 				9CECFFDA1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CECFFDB1D6D41EB00DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -15683,6 +15696,7 @@
 				7D41A6961D1415F30043FD81 /* SSJNetworkReachabilityManager.m in Sources */,
 				7DE4A7DB1D20C0BA00F05BF0 /* SSJThemeSetting.m in Sources */,
 				7D5F337D1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m in Sources */,
+				7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CD9BC031CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CD9BC431CFD2E470061803B /* SSJFundingTransferViewController.m in Sources */,
 				7D5F33341CEAE6C10086B67E /* SSJScrollTextView.m in Sources */,

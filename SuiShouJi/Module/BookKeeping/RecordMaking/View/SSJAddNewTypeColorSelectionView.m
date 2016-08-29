@@ -41,6 +41,9 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 
 - (void)layoutSubviews {
     _collectionView.frame = self.bounds;
+    
+    UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
+    layout.itemSize = CGSizeMake(ITEM_SIZE_WIDTH, ITEM_SIZE_WIDTH);
 }
 
 - (void)setColors:(NSArray *)colors {

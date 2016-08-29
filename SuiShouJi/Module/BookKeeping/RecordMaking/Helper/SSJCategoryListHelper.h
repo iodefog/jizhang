@@ -37,13 +37,15 @@
                              failure:(void (^)(NSError *error))failure;
 
 /**
- *  查询所有的未启用的记账类型
+ *  查询未启用的默认、自定义类别
  *
  *  @param incomeOrExpenture 收入还是支出(1为支出,0为收入)
+ *  @param custom            默认、自定义(0为默认,1为自定义)
  *  @param success           查询成功的回调
  *  @param failure           查询失败的回调
  */
 + (void)queryForUnusedCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
+                                                 custom:(int)custom
                                                 success:(void(^)(NSMutableArray<SSJRecordMakingCategoryItem *> *result))success
                                                 failure:(void (^)(NSError *error))failure;
 
