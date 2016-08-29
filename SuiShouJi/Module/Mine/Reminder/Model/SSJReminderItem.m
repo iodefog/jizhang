@@ -21,7 +21,7 @@
     item.remindDate = self.remindDate;
     item.remindState = self.remindState;
     item.remindAtTheEndOfMonth = self.remindAtTheEndOfMonth;
-    item.remindFundid = self.remindFundid;
+    item.minimumDate = self.minimumDate;
     return item;
 }
 
