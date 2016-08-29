@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJCreditCardItem.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJCreditCardStore : NSObject
 
 + (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)cardId;
 
++ (NSError *)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
+                             inDatabase:(FMDatabase *)db;
 @end

@@ -43,5 +43,4 @@
 // 提醒的状态
 @property(nonatomic) BOOL remindState;
 
-
 @end

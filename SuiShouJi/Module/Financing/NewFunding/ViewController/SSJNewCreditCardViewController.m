@@ -14,8 +14,8 @@
 #import "SSJCreditCardItem.h"
 #import "SSJCreditCardStore.h"
 #import "SSJBillingDaySelectView.h"
-#import "SSJDatabaseQueue.h"
 #import "SSJReminderItem.h"
+#import "SSJLocalNotificationStore.h"
 
 static NSString *const kTitle1 = @"输入账户名称";
 static NSString *const kTitle2 = @"账户类型";
@@ -237,8 +237,35 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 #pragma mark - Event
 - (void)saveButtonClicked:(id)sender{
     self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
+    SSJCreditCardEditeCell *nameCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    SSJCreditCardEditeCell *limitCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+    SSJCreditCardEditeCell *balanceCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+    SSJCreditCardEditeCell *memoCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+    self.item.cardName = nameCell.textInput.text;
+    self.item.cardLimit = [limitCell.textInput.text doubleValue];
+    self.item.cardBalance = [balanceCell.textInput.text doubleValue];
+    self.item.cardMemo = memoCell.textInput.text;
+    if (!self.item.cardName.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入信用卡名称"];
+    }else if (self.item.cardLimit == 0) {
+        [CDAutoHideMessageHUD showMessage:@"信用卡额度不能为0"];
+    }
+    if (!self.remindItem.remindId.length) {
+        self.item.remindId = self.remindItem.remindId;
+    }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
+        if ([SSJCreditCardStore saveCreditCardWithCardItem:self.item inDatabase:db]) {
+            SSJDispatch_main_async_safe(^(){
+                [CDAutoHideMessageHUD showMessage:@"信用卡保存失败"];
+                return;
+            });
+        };
+        if ([SSJLocalNotificationStore saveReminderWithReminderItem:self.remindItem inDatabase:db]) {
+            SSJDispatch_main_async_safe(^(){
+                [CDAutoHideMessageHUD showMessage:@"提醒保存失败"];
+                return;
+            });
+        };
     }];
 }
 
