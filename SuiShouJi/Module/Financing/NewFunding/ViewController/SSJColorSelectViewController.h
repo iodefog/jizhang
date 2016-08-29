@@ -8,7 +8,7 @@
 
 #import "SSJBaseViewController.h"
 
-@interface SSJColorSelectViewControllerViewController : SSJBaseViewController<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface SSJColorSelectViewController : SSJBaseViewController<UICollectionViewDataSource,UICollectionViewDelegate>
 
 //资金账户余额
 @property (nonatomic) double fundingAmount;

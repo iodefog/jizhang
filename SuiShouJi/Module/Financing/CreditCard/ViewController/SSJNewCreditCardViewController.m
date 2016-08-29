@@ -16,6 +16,7 @@
 #import "SSJBillingDaySelectView.h"
 #import "SSJReminderItem.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJColorSelectViewController.h"
 
 #define NUM @"+-.0123456789"
 
@@ -58,17 +59,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @end
 
-@implementation SSJNewCreditCardViewController
+@implementation SSJNewCreditCardViewController{
+    UITextField *_limitInput;
+    UITextField *_balaceInput;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
-    [self.view addSubview:self.tableView];
-    // Do any additional setup after loading the view.
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
     if (!self.cardId.length) {
         self.item = [[SSJCreditCardItem alloc]init];
         self.item.settleAtRepaymentDay = YES;
@@ -80,6 +78,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.navigationItem.rightBarButtonItem = rightItem;
         self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
     }
+    [self.view addSubview:self.tableView];
+    // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transferTextDidChange) name:UITextFieldTextDidChangeNotification object:nil];
     [self.tableView reloadData];
 }
 
@@ -118,6 +123,19 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle8]) {
         self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
         [self.repaymentDateSelectView show];
+    }
+    
+    if ([title isEqualToString:kTitle10]) {
+        SSJColorSelectViewController *colorSelectVc = [[SSJColorSelectViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        colorSelectVc.colorSelectedBlock = ^(NSString *selectColor){
+            weakSelf.item.cardColor = selectColor;
+            [weakSelf.tableView reloadData];
+        };
+        colorSelectVc.fundingAmount = self.item.cardBalance;
+        colorSelectVc.fundingName = self.item.cardName;
+        colorSelectVc.fundingColor = self.item.cardColor;
+        [self.navigationController pushViewController:colorSelectVc animated:YES];
     }
 }
 
@@ -173,6 +191,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.tag = 101;
         newReminderCell.textInput.delegate = self;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+        _limitInput = newReminderCell.textInput;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
@@ -183,6 +202,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         if (self.item.cardBalance != 0) {
             newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardBalance];
         }
+        _balaceInput = newReminderCell.textInput;
         newReminderCell.textInput.tag = 102;
         newReminderCell.textInput.delegate = self;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
@@ -260,20 +280,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 #pragma mark - Event
 - (void)saveButtonClicked:(id)sender{
     self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
-    SSJCreditCardEditeCell *nameCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    SSJCreditCardEditeCell *limitCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-    SSJCreditCardEditeCell *balanceCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
-    SSJCreditCardEditeCell *memoCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
-    if (![numberPre evaluateWithObject:balanceCell.textInput.text]) {
+    if (![numberPre evaluateWithObject:_balaceInput.text] && [_balaceInput.text doubleValue] != 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
     }
-    self.item.cardName = nameCell.textInput.text;
-    self.item.cardLimit = [limitCell.textInput.text doubleValue];
-    self.item.cardBalance = [balanceCell.textInput.text doubleValue];
-    self.item.cardMemo = memoCell.textInput.text;
     if (!self.item.cardName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入信用卡名称"];
     }else if (self.item.cardLimit == 0) {
@@ -305,11 +317,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
 }
 
+- (void)transferTextDidChange{
+    [self setupTextFiledNum:_limitInput num:2];
+}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     NSInteger existedLength = textField.text.length;
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
+    NSString *newStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
+
     if (textField.tag == 100 || textField.tag == 103) {
         if (string.length == 0) return YES;
         if (existedLength - selectedLength + replaceLength > 13) {
@@ -327,6 +345,15 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             return NO;
         }
     }
+    if (textField.tag == 100) {
+        self.item.cardName = newStr;
+    }else if (textField.tag == 101){
+        self.item.cardLimit = [newStr doubleValue];
+    }else if (textField.tag == 102){
+        self.item.cardBalance = [newStr doubleValue];
+    }else if (textField.tag == 103){
+        self.item.cardMemo = newStr;
+    }
     return YES;
 }
 
@@ -341,6 +368,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.cardMemo = textField.text;
     }
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
@@ -410,6 +443,39 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _billDateSettleMentButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
     }
     return _billDateSettleMentButton;
+}
+
+#pragma mark - Private
+/**
+ *   限制输入框小数点(输入框只改变时候调用valueChange)
+ *
+ *  @param TF  输入框
+ *  @param num 小数点后限制位数
+ */
+-(void)setupTextFiledNum:(UITextField *)TF num:(int)num
+{
+    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
+    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
+        TF.text = @"0.";
+    }else if (str.length == 2) {
+        if ([str floatValue] == 0) {
+            TF.text = @"0";
+        }else if(arr.count < 2){
+            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
+        }
+    }
+    
+    if (arr.count > 2) {
+        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
+    }
+    
+    if (arr.count == 2) {
+        NSString * lastStr = arr.lastObject;
+        if (lastStr.length > num) {
+            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

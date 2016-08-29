@@ -2835,9 +2835,9 @@
 		9C9A0C481D6D969D002AF046 /* SSJAddOrEditLoanLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */; };
 		9C9A0C491D6D969D002AF046 /* SSJAddOrEditLoanLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */; };
 		9C9A0C4A1D6D969E002AF046 /* SSJAddOrEditLoanLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA55321D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m */; };
-		9C9A0C4B1D6D96AB002AF046 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */; };
-		9C9A0C4C1D6D96AC002AF046 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */; };
-		9C9A0C4D1D6D96AC002AF046 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */; };
+		9C9A0C4B1D6D96AB002AF046 /* SSJColorSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */; };
+		9C9A0C4C1D6D96AC002AF046 /* SSJColorSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */; };
+		9C9A0C4D1D6D96AC002AF046 /* SSJColorSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */; };
 		9C9A0C4E1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */; };
 		9C9A0C4F1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */; };
 		9C9A0C501D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA553D1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m */; };
@@ -5014,8 +5014,8 @@
 		9CF594031D63FFBB00006594 /* SSJModifyFundingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */; };
 		9CF594041D63FFBB00006594 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F21D63FFBB00006594 /* SSJNewFundingTypeCell.m */; };
 		9CF594051D63FFBB00006594 /* SSJNewFundingTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F21D63FFBB00006594 /* SSJNewFundingTypeCell.m */; };
-		9CF594061D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */; };
-		9CF594071D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */; };
+		9CF594061D63FFBB00006594 /* SSJColorSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */; };
+		9CF594071D63FFBB00006594 /* SSJColorSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */; };
 		9CF594081D63FFBB00006594 /* SSJFundingTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F71D63FFBB00006594 /* SSJFundingTypeSelectViewController.m */; };
 		9CF594091D63FFBB00006594 /* SSJFundingTypeSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F71D63FFBB00006594 /* SSJFundingTypeSelectViewController.m */; };
 		9CF5940A1D63FFBB00006594 /* SSJModifyFundingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF593F91D63FFBB00006594 /* SSJModifyFundingViewController.m */; };
@@ -6477,8 +6477,8 @@
 		9CF593F01D63FFBB00006594 /* SSJModifyFundingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJModifyFundingTableViewCell.m; sourceTree = "<group>"; };
 		9CF593F11D63FFBB00006594 /* SSJNewFundingTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewFundingTypeCell.h; sourceTree = "<group>"; };
 		9CF593F21D63FFBB00006594 /* SSJNewFundingTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewFundingTypeCell.m; sourceTree = "<group>"; };
-		9CF593F41D63FFBB00006594 /* SSJColorSelectViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewControllerViewController.h; sourceTree = "<group>"; };
-		9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectViewControllerViewController.m; sourceTree = "<group>"; };
+		9CF593F41D63FFBB00006594 /* SSJColorSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectViewController.h; sourceTree = "<group>"; };
+		9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectViewController.m; sourceTree = "<group>"; };
 		9CF593F61D63FFBB00006594 /* SSJFundingTypeSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTypeSelectViewController.h; sourceTree = "<group>"; };
 		9CF593F71D63FFBB00006594 /* SSJFundingTypeSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeSelectViewController.m; sourceTree = "<group>"; };
 		9CF593F81D63FFBB00006594 /* SSJModifyFundingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJModifyFundingViewController.h; sourceTree = "<group>"; };
@@ -9407,8 +9407,8 @@
 		9CF593F31D63FFBB00006594 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9CF593F41D63FFBB00006594 /* SSJColorSelectViewControllerViewController.h */,
-				9CF593F51D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m */,
+				9CF593F41D63FFBB00006594 /* SSJColorSelectViewController.h */,
+				9CF593F51D63FFBB00006594 /* SSJColorSelectViewController.m */,
 				9CF593F61D63FFBB00006594 /* SSJFundingTypeSelectViewController.h */,
 				9CF593F71D63FFBB00006594 /* SSJFundingTypeSelectViewController.m */,
 				9CF593F81D63FFBB00006594 /* SSJModifyFundingViewController.h */,
@@ -13885,7 +13885,7 @@
 				7DBA56A21D6D32B700C02D79 /* SSJGuideContentView.m in Sources */,
 				7DBA56A31D6D32B700C02D79 /* SSJDebugUtil.m in Sources */,
 				9C9A0C231D6D95B1002AF046 /* SSJUserRemindSyncTable.m in Sources */,
-				9C9A0C4B1D6D96AB002AF046 /* SSJColorSelectViewControllerViewController.m in Sources */,
+				9C9A0C4B1D6D96AB002AF046 /* SSJColorSelectViewController.m in Sources */,
 				7DBA56A41D6D32B700C02D79 /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				7DBA56A51D6D32B700C02D79 /* SSJPasswordModifyCell.m in Sources */,
 				7DBA56A61D6D32B700C02D79 /* SSJListMenuCellItem.m in Sources */,
@@ -14188,7 +14188,7 @@
 				9C2A67881D194CA70010F1DA /* SSJReportFormsScaleAxisView.m in Sources */,
 				7D46328A1D2100E90040BABD /* UIImage+SSJTheme.m in Sources */,
 				9C2A67891D194CA70010F1DA /* SSJBudgetEditLabelCell.m in Sources */,
-				9CF594071D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m in Sources */,
+				9CF594071D63FFBB00006594 /* SSJColorSelectViewController.m in Sources */,
 				9C2A678A1D194CA70010F1DA /* SSJCalenderTableViewCell.m in Sources */,
 				9C2A678B1D194CA70010F1DA /* SSJBookKeepingButton.m in Sources */,
 				9C2A678C1D194CA70010F1DA /* SSJUserInfoItem.m in Sources */,
@@ -14735,7 +14735,7 @@
 				9CECFC1E1D6D41A700DB2C8B /* SSJGuideContentView.m in Sources */,
 				9CECFC1F1D6D41A700DB2C8B /* SSJDebugUtil.m in Sources */,
 				9C9A0C241D6D95B2002AF046 /* SSJUserRemindSyncTable.m in Sources */,
-				9C9A0C4C1D6D96AC002AF046 /* SSJColorSelectViewControllerViewController.m in Sources */,
+				9C9A0C4C1D6D96AC002AF046 /* SSJColorSelectViewController.m in Sources */,
 				9CECFC201D6D41A700DB2C8B /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				9CECFC211D6D41A700DB2C8B /* SSJPasswordModifyCell.m in Sources */,
 				9CECFC221D6D41A700DB2C8B /* SSJListMenuCellItem.m in Sources */,
@@ -15164,7 +15164,7 @@
 				9CEC00161D6D41EB00DB2C8B /* SSJGuideContentView.m in Sources */,
 				9CEC00171D6D41EB00DB2C8B /* SSJDebugUtil.m in Sources */,
 				9C9A0C251D6D95B3002AF046 /* SSJUserRemindSyncTable.m in Sources */,
-				9C9A0C4D1D6D96AC002AF046 /* SSJColorSelectViewControllerViewController.m in Sources */,
+				9C9A0C4D1D6D96AC002AF046 /* SSJColorSelectViewController.m in Sources */,
 				9CEC00181D6D41EB00DB2C8B /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				9CEC00191D6D41EB00DB2C8B /* SSJPasswordModifyCell.m in Sources */,
 				9CEC001A1D6D41EB00DB2C8B /* SSJListMenuCellItem.m in Sources */,
@@ -15425,7 +15425,7 @@
 				7D5F33391CEAE6C10086B67E /* SSJBudgetListViewController.m in Sources */,
 				7DBA55521D6BF53500C02D79 /* SSJLoanFundAccountSelectionCell.m in Sources */,
 				7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */,
-				9CF594061D63FFBB00006594 /* SSJColorSelectViewControllerViewController.m in Sources */,
+				9CF594061D63FFBB00006594 /* SSJColorSelectViewController.m in Sources */,
 				9CD9BC0B1CFD2DAA0061803B /* SSJMagicExportAnnouncementViewController.m in Sources */,
 				9C9D0B801D01898E003A9F4E /* SSJBillTypeSelectCell.m in Sources */,
 				BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */,

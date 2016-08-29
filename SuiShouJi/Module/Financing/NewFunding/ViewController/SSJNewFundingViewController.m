@@ -9,7 +9,7 @@
 #import "SSJNewFundingViewController.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJNewFundingTypeCell.h"
-#import "SSJColorSelectViewControllerViewController.h"
+#import "SSJColorSelectViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJFundingItem.h"
 #import "SSJDataSynchronizer.h"
@@ -71,7 +71,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 4) {
-        SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
+        SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
         colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
         colorSelectVC.fundingName = _nameTextField.text;
