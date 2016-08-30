@@ -35,6 +35,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 @property (nonatomic, strong) SSJNewOrEditCustomCategoryView *newOrEditCategoryView;
 
+@property (nonatomic, strong) UIBarButtonItem *managerItem;
+
+@property (nonatomic, strong) UIBarButtonItem *doneItem;
+
 @property (nonatomic, strong) UIButton *sureButton;
 
 @property (nonatomic, strong) UIButton *editButton;
@@ -59,16 +63,17 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [self loadData];
     
     [self ssj_showBackButtonWithTarget:self selector:@selector(goBackAction)];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(comfirmButtonClick:)];
-    self.navigationItem.rightBarButtonItem = rightItem;
     
     self.navigationItem.titleView = self.titleSegmentView;
     [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.sureButton];
+    [self.view addSubview:self.editButton];
+    [self.view addSubview:self.deleteButton];
     [self.scrollView addSubview:self.featuredCategoryCollectionView];
     [self.scrollView addSubview:self.customCategorySwitchConrol];
     [self.scrollView addSubview:self.customCategoryCollectionView];
     [self.scrollView addSubview:self.newOrEditCategoryView];
-    [self updateHidden];
+    [self updateSubviews];
     [self updateAppearance];
 }
 
@@ -100,56 +105,114 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (scrollView == _scrollView) {
         _titleSegmentView.selectedSegmentIndex = _scrollView.contentOffset.x / _scrollView.width;
         [self loadData];
+        [self updateSubviews];
         [self showOrHideKeyboard];
+        [self updateEditButtonEnable];
     }
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     [self loadData];
-    [self updateHidden];
+    [self updateSubviews];
     [self showOrHideKeyboard];
+    [self updateEditButtonEnable];
 }
 
 #pragma mark - Event
--(void)comfirmButtonClick:(id)sender{
-//    if (_titleSegmentView.selectedSegmentIndex == 0) {
-//        SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:_newCategorySelectedIndex];
-//        [SSJCategoryListHelper addNewCategoryWithidentifier:item.categoryID incomeOrExpenture:_incomeOrExpence success:^{
-//            [self.navigationController popViewControllerAnimated:YES];
-//            if (self.addNewCategoryAction) {
-//                self.addNewCategoryAction(item.categoryID);
-//            }
-//        } failure:^(NSError *error) {
-//            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-//        }];
-//        
-//    } else if (_titleSegmentView.selectedSegmentIndex == 1) {
-//        SSJRecordMakingCategoryItem *item = _newOrEditCategoryView.selectedItem;
-//        if (item.categoryTitle.length == 0) {
-//            [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
-//            return;
-//        } else if (item.categoryTitle.length > 4) {
-//            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
-//            return;
-//        }
-//        
-//        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:item.categoryTitle icon:item.categoryImage color:item.categoryColor success:^(NSString *categoryId){
-//            [self.navigationController popViewControllerAnimated:YES];
-//            if (self.addNewCategoryAction) {
-//                self.addNewCategoryAction(categoryId);
-//            }
-//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//        } failure:^(NSError *error) {
-//            [CDAutoHideMessageHUD showMessage:[error localizedDescription]];
-//        }];
-//    }
-}
-
 - (void)titleSegmentViewAciton {
     [self loadData];
+    [self updateSubviews];
     [self showOrHideKeyboard];
+    [self updateEditButtonEnable];
     [_scrollView setContentOffset:CGPointMake(_scrollView.width * _titleSegmentView.selectedSegmentIndex, 0) animated:YES];
+}
+
+- (void)managerItemAction {
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        _featuredCategoryCollectionView.editing = YES;
+    } else if (_titleSegmentView.selectedSegmentIndex == 1) {
+        _customCategoryCollectionView.editing = YES;
+    }
+}
+
+- (void)doneItemAction {
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        _featuredCategoryCollectionView.editing = NO;
+    } else if (_titleSegmentView.selectedSegmentIndex == 1) {
+        _customCategoryCollectionView.editing = NO;
+    }
+}
+
+- (void)sureButtonAction {
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        // 添加系统默认类别
+        for (SSJRecordMakingCategoryItem *item in _featuredCategoryCollectionView.selectedItems) {
+            [SSJCategoryListHelper updateCategoryWithID:item.categoryID state:1 incomeOrExpenture:_incomeOrExpence Success:^(BOOL result) {
+                [self.navigationController popViewControllerAnimated:YES];
+                if (self.addNewCategoryAction) {
+                    self.addNewCategoryAction(item.categoryID);
+                }
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }];
+        }
+    } else if (_titleSegmentView.selectedSegmentIndex == 1
+               && _customCategorySwitchConrol.selectedIndex == 0) {
+        // 添加自定义类别
+        for (SSJRecordMakingCategoryItem *item in _customCategoryCollectionView.selectedItems) {
+            [SSJCategoryListHelper updateCategoryWithID:item.categoryID state:1 incomeOrExpenture:_incomeOrExpence Success:^(BOOL result) {
+                [self.navigationController popViewControllerAnimated:YES];
+                if (self.addNewCategoryAction) {
+                    self.addNewCategoryAction(item.categoryID);
+                }
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }];
+        }
+        
+    } else if (_titleSegmentView.selectedSegmentIndex == 1
+               && _customCategorySwitchConrol.selectedIndex == 1) {
+        // 新建自定义类别
+        SSJRecordMakingCategoryItem *item = _newOrEditCategoryView.selectedItem;
+        if (item.categoryTitle.length == 0) {
+            [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
+            return;
+        } else if (item.categoryTitle.length > 4) {
+            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
+            return;
+        }
+        
+        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:item.categoryTitle icon:item.categoryImage color:item.categoryColor success:^(NSString *categoryId){
+            [self.navigationController popViewControllerAnimated:YES];
+            if (self.addNewCategoryAction) {
+                self.addNewCategoryAction(categoryId);
+            }
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    }
+}
+
+- (void)editButtonAction {
+    
+}
+
+- (void)deleteButtonAction {
+    NSArray *selectedItems = nil;
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        selectedItems = _featuredCategoryCollectionView.selectedItems;
+    } else if (_titleSegmentView.selectedSegmentIndex == 0 && _customCategorySwitchConrol.selectedIndex == 0) {
+        selectedItems = _customCategoryCollectionView.selectedItems;
+    }
+    
+    NSArray *deleteIDs = [selectedItems valueForKeyPath:@"categoryID"];
+    [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
+        
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+    }];
 }
 
 #pragma mark - private
@@ -206,15 +269,82 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     _customCategorySwitchConrol.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     
     _featuredCategoryCollectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    
+    [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
+    
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]}];
+    [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
+                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(2, 4)];
+    
+    NSMutableAttributedString *disableTitle = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+    [disableTitle setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
+                                  NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
+    
+    [_editButton setAttributedTitle:title forState:UIControlStateNormal];
+    [_editButton setAttributedTitle:disableTitle forState:UIControlStateDisabled];
+    [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    
+    [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
 }
 
-- (void)updateHidden {
-    if (_customCategorySwitchConrol.selectedIndex == 0) {
-        _customCategoryCollectionView.hidden = NO;
-        _newOrEditCategoryView.hidden = YES;
-    } else if (_customCategorySwitchConrol.selectedIndex == 1) {
-        _customCategoryCollectionView.hidden = YES;
-        _newOrEditCategoryView.hidden = NO;
+- (void)updateSubviews {
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        if (_featuredCategoryCollectionView.editing) {
+            _sureButton.hidden = YES;
+            _editButton.hidden = NO;
+            _deleteButton.hidden = NO;
+            [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
+        } else {
+            _sureButton.hidden = NO;
+            _editButton.hidden = YES;
+            _deleteButton.hidden = YES;
+            [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
+        }
+    } else {
+        if (_customCategorySwitchConrol.selectedIndex == 0) {
+            _customCategoryCollectionView.hidden = NO;
+            _newOrEditCategoryView.hidden = YES;
+            
+            if (_customCategoryCollectionView.editing) {
+                _sureButton.hidden = YES;
+                _editButton.hidden = NO;
+                _deleteButton.hidden = NO;
+                [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
+            } else {
+                _sureButton.hidden = NO;
+                _editButton.hidden = YES;
+                _deleteButton.hidden = YES;
+                [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
+            }
+        } else if (_customCategorySwitchConrol.selectedIndex == 1) {
+            _customCategoryCollectionView.hidden = YES;
+            _newOrEditCategoryView.hidden = NO;
+            _sureButton.hidden = NO;
+            _editButton.hidden = YES;
+            _deleteButton.hidden = YES;
+            [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        }
+    }
+}
+
+- (void)updateEditButtonEnable {
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        if (_featuredCategoryCollectionView.editing
+            && _featuredCategoryCollectionView.selectedItems.count > 1) {
+            self.editButton.enabled = NO;
+        } else {
+            self.editButton.enabled = YES;
+        }
+    } else if (_titleSegmentView.selectedSegmentIndex == 1
+               && _customCategorySwitchConrol.selectedIndex == 0) {
+        
+        if (_customCategoryCollectionView.editing
+            && _customCategoryCollectionView.selectedItems.count > 1) {
+            self.editButton.enabled = NO;
+        } else {
+            self.editButton.enabled = YES;
+        }
     }
 }
 
@@ -263,14 +393,30 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (SSJCategoryEditableCollectionView *)featuredCategoryCollectionView {
     if (!_featuredCategoryCollectionView) {
+        __weak typeof(self) wself = self;
         _featuredCategoryCollectionView = [[SSJCategoryEditableCollectionView alloc] initWithFrame:CGRectMake(0, 10, self.scrollView.width, self.scrollView.height - 10)];
+        _featuredCategoryCollectionView.editStateChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
+            [wself updateSubviews];
+            [wself updateEditButtonEnable];
+        };
+        _featuredCategoryCollectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
+            [wself updateEditButtonEnable];
+        };
     }
     return _featuredCategoryCollectionView;
 }
 
 - (SSJCategoryEditableCollectionView *)customCategoryCollectionView {
     if (!_customCategoryCollectionView) {
+        __weak typeof(self) wself = self;
         _customCategoryCollectionView = [[SSJCategoryEditableCollectionView alloc] initWithFrame:CGRectMake(self.scrollView.width, self.customCategorySwitchConrol.bottom + 10, self.scrollView.width, self.scrollView.height - self.customCategorySwitchConrol.bottom - 10)];
+        _customCategoryCollectionView.editStateChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
+            [wself updateSubviews];
+            [wself updateEditButtonEnable];
+        };
+        _customCategoryCollectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
+            [wself updateEditButtonEnable];
+        };
     }
     return _customCategoryCollectionView;
 }
@@ -293,14 +439,27 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     return _newOrEditCategoryView;
 }
 
+- (UIBarButtonItem *)managerItem {
+    if (!_managerItem) {
+        _managerItem = [[UIBarButtonItem alloc] initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(managerItemAction)];
+    }
+    return _managerItem;
+}
+
+- (UIBarButtonItem *)doneItem {
+    if (!_doneItem) {
+        _doneItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(doneItemAction)];
+    }
+    return _doneItem;
+}
+
 - (UIButton *)sureButton {
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
         _sureButton.titleLabel.font = [UIFont systemFontOfSize:20];
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_sureButton setTitle:@"" forState:UIControlStateDisabled];
-        [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
+        [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _sureButton;
@@ -308,17 +467,23 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (UIButton *)editButton {
     if (!_editButton) {
-//        NSMutableAttributedString *title = [nsmuta]
         _editButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _editButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
+        _editButton.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.6, 54);
         _editButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_editButton setTitle:@"确定" forState:UIControlStateNormal];
-//        [_editButton setAttributedTitle:<#(nullable NSAttributedString *)#> forState:UIControlStateNormal];
-        [_editButton setTitle:@"" forState:UIControlStateDisabled];
-        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
         [_editButton addTarget:self action:@selector(editButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _editButton;
+}
+
+- (UIButton *)deleteButton {
+    if (!_deleteButton) {
+        _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _deleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
+        _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+        [_deleteButton addTarget:self action:@selector(deleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _deleteButton;
 }
 
 @end

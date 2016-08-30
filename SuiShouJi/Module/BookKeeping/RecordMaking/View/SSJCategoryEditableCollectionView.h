@@ -16,7 +16,11 @@
 
 @property (nonatomic, strong, readonly) NSArray <SSJRecordMakingCategoryItem *>*selectedItems;
 
-@property (nonatomic) BOOL editable;
+@property (nonatomic) BOOL editing;
+
+@property (nonatomic, copy) void(^editStateChangeHandle)(SSJCategoryEditableCollectionView *view);
+
+@property (nonatomic, copy) void(^selectedItemsChangeHandle)(SSJCategoryEditableCollectionView *view);
 
 - (void)updateAppearance;
 

@@ -50,7 +50,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 
 - (void)setItems:(NSArray<SSJRecordMakingCategoryItem *> *)items {
     _items = items;
-    _editable = NO;
+    _editing = NO;
     _collectionView.allowsMultipleSelection = NO;
 
     [_cellItems removeAllObjects];
@@ -68,12 +68,15 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     [_collectionView reloadData];
 }
 
-- (void)setEditable:(BOOL)editable {
-    _editable = editable;
-    _collectionView.allowsMultipleSelection = _editable;
-//    _longPressGesture.enabled = !_editable;
+- (void)setEditing:(BOOL)editing {
+    _editing = editing;
+    _collectionView.allowsMultipleSelection = _editing;
     for (int i = 0; i < _cellItems.count; i ++) {
         [self deselectCellItemAtIndex:i];
+    }
+    
+    if (_editStateChangeHandle) {
+        _editStateChangeHandle(self);
     }
 }
 
@@ -101,23 +104,32 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     if (![_selectedItems containsObject:selectedItem]) {
         [_selectedItems addObject:selectedItem];
         [self selectCellItemAtIndex:indexPath.item];
+        
+        if (_selectedItemsChangeHandle) {
+            _selectedItemsChangeHandle(self);
+        }
     }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJRecordMakingCategoryItem *removedItem = [_items ssj_safeObjectAtIndex:indexPath.item];
     [_selectedItems removeObject:removedItem];
+    
     [self deselectCellItemAtIndex:indexPath.item];
+    
+    if (_selectedItemsChangeHandle) {
+        _selectedItemsChangeHandle(self);
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    return !_editable;
+    return !_editing;
 }
 
 #pragma mark - 
 - (void)beginEditingWhenLongPressBegin {
-    self.editable = YES;
+    self.editing = YES;
 }
 
 #pragma mark - Private
@@ -125,7 +137,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:index];
     SSJCategoryEditableCollectionViewCellItem *cellItem = [_cellItems ssj_safeObjectAtIndex:index];
     
-    if (_editable) {
+    if (_editing) {
         cellItem.imageTintColor = [UIColor ssj_colorWithHex:item.categoryColor];
         cellItem.imageBackgroundColor = [UIColor clearColor];
         cellItem.additionImageName = kAdditionalSelectedImage;
@@ -140,7 +152,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:index];
     SSJCategoryEditableCollectionViewCellItem *cellItem = [_cellItems ssj_safeObjectAtIndex:index];
     
-    if (_editable) {
+    if (_editing) {
         cellItem.imageTintColor = [UIColor ssj_colorWithHex:item.categoryColor];
         cellItem.imageBackgroundColor = [UIColor clearColor];
         cellItem.additionImageName = kAdditionalUnselectedImage;

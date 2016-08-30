@@ -25,16 +25,19 @@
                                           failure:(void (^)(NSError *error))failure;
 
 /**
- *  删除一个记账类型
+ *  更改记账类型的开启状态
  *
- *  @param categoryId 记账类型id
- *  @param success    删除成功的回调
- *  @param failure    删除失败的回调
+ *  @param categoryId           记账类型id
+ *  @param state                0:关闭 1:开启
+ *  @param incomeOrExpenture    0:收入 1:支出
+ *  @param success              删除成功的回调
+ *  @param failure              删除失败的回调
  */
-+ (void)deleteCategoryWithCategoryId:(NSString *)categoryId
-                   incomeOrExpenture:(int)incomeOrExpenture
-                             Success:(void(^)(BOOL result))success
-                             failure:(void (^)(NSError *error))failure;
++ (void)updateCategoryWithID:(NSString *)categoryId
+                       state:(int)state
+           incomeOrExpenture:(int)incomeOrExpenture
+                     Success:(void(^)(BOOL result))success
+                     failure:(void (^)(NSError *error))failure;
 
 /**
  *  查询未启用的默认、自定义类别
@@ -110,6 +113,17 @@
  *  @return 收支类型
  */
 + (SSJRecordMakingCategoryItem *)queryfirstCategoryItemWithIncomeOrExpence:(BOOL)incomeOrExpenture;
+
+/**
+ *  删除类别
+ *
+ *  @param categoryID   列别ID
+ *  @param success      查询成功的回调
+ *  @param failure      查询失败的回调
+ */
++ (void)deleteCategoryWithIDs:(NSArray *)categoryIDs
+                      success:(void(^)())success
+                      failure:(void(^)(NSError *error))failure;
 
 /**
  *  自定义支出类型颜色

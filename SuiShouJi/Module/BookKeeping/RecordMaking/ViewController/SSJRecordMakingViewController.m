@@ -743,8 +743,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     __weak typeof(self) wself = self;
     billTypeView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
     billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-        [SSJCategoryListHelper deleteCategoryWithCategoryId:item.ID incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex Success:NULL failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+        
+        [SSJCategoryListHelper updateCategoryWithID:item.ID state:0 incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex Success:NULL failure:^(NSError *error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
         
         for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
