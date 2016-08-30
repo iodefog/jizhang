@@ -315,8 +315,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
     if (!self.item.cardName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入信用卡名称"];
+        return;
     }else if (self.item.cardLimit == 0) {
         [CDAutoHideMessageHUD showMessage:@"信用卡额度不能为0"];
+        return;
     }
     if (!self.remindItem.remindId.length) {
         self.item.remindId = self.remindItem.remindId;
@@ -391,7 +393,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     NSInteger selectedLength = range.length;
     NSInteger replaceLength = string.length;
     NSString *newStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-
     if (textField.tag == 100 || textField.tag == 103) {
         if (string.length == 0) return YES;
         if (existedLength - selectedLength + replaceLength > 13) {
