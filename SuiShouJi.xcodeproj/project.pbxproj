@@ -1512,6 +1512,11 @@
 		7DEF54601C75F82A00A90153 /* SSJPercentCircleNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF545F1C75F82A00A90153 /* SSJPercentCircleNodeItem.m */; };
 		7DEF54631C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */; };
 		7DEF54661C76DCAB00A90153 /* SSJPercentCircleViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */; };
+		7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19ED91D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19EDA1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
+		7DF19EDC1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */; };
 		7DF8B9AD1CDC2B0000F461A6 /* SSJEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */; };
 		7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */; };
 		7DF8DED61C59BFE700CC5DFA /* guide_1-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DECD1C59BFE700CC5DFA /* guide_1-667@2x.png */; };
@@ -1525,6 +1530,41 @@
 		7DF8DEE11C59C47200CC5DFA /* guide_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEDE1C59C47200CC5DFA /* guide_1@2x.png */; };
 		7DF8DEE21C59C47200CC5DFA /* guide_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEDF1C59C47200CC5DFA /* guide_2@2x.png */; };
 		7DF8DEE31C59C47200CC5DFA /* guide_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DF8DEE01C59C47200CC5DFA /* guide_3@2x.png */; };
+		7DFD30441D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
+		7DFD30451D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
+		7DFD30461D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
+		7DFD30471D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
+		7DFD30481D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */; };
+		7DFD30521D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */; };
+		7DFD30531D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */; };
+		7DFD30541D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */; };
+		7DFD30551D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */; };
+		7DFD30561D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */; };
+		7DFD30591D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */; };
+		7DFD305A1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */; };
+		7DFD305B1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */; };
+		7DFD305C1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */; };
+		7DFD305D1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */; };
+		7DFD30621D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */; };
+		7DFD30631D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */; };
+		7DFD30641D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */; };
+		7DFD30651D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */; };
+		7DFD30661D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */; };
+		7DFD30671D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */; };
+		7DFD30681D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */; };
+		7DFD30691D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */; };
+		7DFD306A1D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */; };
+		7DFD306B1D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */; };
+		7DFD306C1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */; };
+		7DFD306D1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */; };
+		7DFD306E1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */; };
+		7DFD306F1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */; };
+		7DFD30701D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */; };
+		7DFD30711D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */; };
+		7DFD30721D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */; };
+		7DFD30731D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */; };
+		7DFD30741D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */; };
+		7DFD30751D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */; };
 		7DFFD5B31D6706B7000FDAA6 /* SSJLoanListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5B21D6706B7000FDAA6 /* SSJLoanListViewController.m */; };
 		7DFFD5B41D6706B7000FDAA6 /* SSJLoanListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5B21D6706B7000FDAA6 /* SSJLoanListViewController.m */; };
 		7DFFD5BE1D670BB7000FDAA6 /* SSJLoanListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFD5BD1D670BB7000FDAA6 /* SSJLoanListCell.m */; };
@@ -5907,6 +5947,8 @@
 		7DEF54621C76B46300A90153 /* SSJPercentCircleAdditionGroupNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleAdditionGroupNode.m; sourceTree = "<group>"; };
 		7DEF54641C76DCAB00A90153 /* SSJPercentCircleViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPercentCircleViewItem.h; sourceTree = "<group>"; };
 		7DEF54651C76DCAB00A90153 /* SSJPercentCircleViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPercentCircleViewItem.m; sourceTree = "<group>"; };
+		7DF19ED61D74418B00DD611C /* SSJNewOrEditCustomCategoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewOrEditCustomCategoryView.h; sourceTree = "<group>"; };
+		7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewOrEditCustomCategoryView.m; sourceTree = "<group>"; };
 		7DF8B9AB1CDC2B0000F461A6 /* SSJEditableCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJEditableCollectionView.h; sourceTree = "<group>"; };
 		7DF8B9AC1CDC2B0000F461A6 /* SSJEditableCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJEditableCollectionView.m; sourceTree = "<group>"; };
 		7DF8DECC1C59BFE700CC5DFA /* guide_1-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1-568@2x.png"; sourceTree = "<group>"; };
@@ -5921,6 +5963,16 @@
 		7DF8DEDE1C59C47200CC5DFA /* guide_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@2x.png"; sourceTree = "<group>"; };
 		7DF8DEDF1C59C47200CC5DFA /* guide_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_2@2x.png"; sourceTree = "<group>"; };
 		7DF8DEE01C59C47200CC5DFA /* guide_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_3@2x.png"; sourceTree = "<group>"; };
+		7DFD30421D75217300A0D7A0 /* SSJCategoryEditableCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryEditableCollectionView.h; sourceTree = "<group>"; };
+		7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryEditableCollectionView.m; sourceTree = "<group>"; };
+		7DFD30501D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryEditableCollectionViewCell.h; sourceTree = "<group>"; };
+		7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryEditableCollectionViewCell.m; sourceTree = "<group>"; };
+		7DFD30571D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryEditableCollectionViewCellItem.h; sourceTree = "<group>"; };
+		7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryEditableCollectionViewCellItem.m; sourceTree = "<group>"; };
+		7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_selected@2x.png"; sourceTree = "<group>"; };
+		7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_selected@3x.png"; sourceTree = "<group>"; };
+		7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_unselected@2x.png"; sourceTree = "<group>"; };
+		7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_unselected@3x.png"; sourceTree = "<group>"; };
 		7DFFD5B11D6706B7000FDAA6 /* SSJLoanListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanListViewController.h; sourceTree = "<group>"; };
 		7DFFD5B21D6706B7000FDAA6 /* SSJLoanListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoanListViewController.m; sourceTree = "<group>"; };
 		7DFFD5BC1D670BB7000FDAA6 /* SSJLoanListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoanListCell.h; sourceTree = "<group>"; };
@@ -7063,6 +7115,10 @@
 				7D3D0E721CED8EE200A8609B /* record_making_guide-568@2x.png */,
 				7D3D0E731CED8EE200A8609B /* record_making_guide-667@2x.png */,
 				7D3D0E741CED8EE200A8609B /* record_making_guide@2x.png */,
+				7DFD305E1D753B9800A0D7A0 /* record_making_selected@2x.png */,
+				7DFD305F1D753B9800A0D7A0 /* record_making_selected@3x.png */,
+				7DFD30601D753B9800A0D7A0 /* record_making_unselected@2x.png */,
+				7DFD30611D753B9800A0D7A0 /* record_making_unselected@3x.png */,
 				7D3D0E751CED8EE200A8609B /* record_making_guide@3x.png */,
 				7D3D0E661CED6B2700A8609B /* record_making_memo@2x.png */,
 				7D3D0E671CED6B2700A8609B /* record_making_memo@3x.png */,
@@ -7431,6 +7487,14 @@
 				9C2FC0451D3E3A9700A4C0C9 /* SSJMemberSelectView.m */,
 				9C53A3BE1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.h */,
 				9C53A3BF1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.m */,
+				7DF19ED61D74418B00DD611C /* SSJNewOrEditCustomCategoryView.h */,
+				7DF19ED71D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m */,
+				7DFD30421D75217300A0D7A0 /* SSJCategoryEditableCollectionView.h */,
+				7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */,
+				7DFD30501D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.h */,
+				7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */,
+				7DFD30571D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.h */,
+				7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -10388,6 +10452,7 @@
 				7DBA57501D6D32B700C02D79 /* add@2x.png in Resources */,
 				7DBA57511D6D32B700C02D79 /* bt_menpiao@2x.png in Resources */,
 				7DBA57521D6D32B700C02D79 /* home_none@2x.png in Resources */,
+				7DFD30691D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */,
 				7DBA57531D6D32B700C02D79 /* bt_dianqi@2x.png in Resources */,
 				7DBA57541D6D32B700C02D79 /* bt_others@2x.png in Resources */,
 				7DBA57551D6D32B700C02D79 /* budget_right@2x.png in Resources */,
@@ -10699,6 +10764,7 @@
 				7DBA58871D6D32B700C02D79 /* Assets.xcassets in Resources */,
 				7DBA58881D6D32B700C02D79 /* bt_sport@3x.png in Resources */,
 				7DBA58891D6D32B700C02D79 /* login_lock@3x.png in Resources */,
+				7DFD30641D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */,
 				7DBA588A1D6D32B700C02D79 /* ft_cash@3x.png in Resources */,
 				7DBA588B1D6D32B700C02D79 /* xuhuan_xuhuan@2x.png in Resources */,
 				7DBA588C1D6D32B700C02D79 /* home_back@3x.png in Resources */,
@@ -10735,6 +10801,7 @@
 				7DBA58AB1D6D32B700C02D79 /* bt_jiayong@2x.png in Resources */,
 				7DBA58AC1D6D32B700C02D79 /* bt_zujin@2x.png in Resources */,
 				7DBA58AD1D6D32B700C02D79 /* founds_transfer_none@2x.png in Resources */,
+				7DFD30731D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */,
 				7DBA58AE1D6D32B700C02D79 /* weibo_banner.png in Resources */,
 				7DBA58AF1D6D32B700C02D79 /* bt_meirong@3x.png in Resources */,
 				7DBA58B01D6D32B700C02D79 /* reportForms_filter@3x.png in Resources */,
@@ -10760,6 +10827,7 @@
 				7DBA58C41D6D32B700C02D79 /* home_none@3x.png in Resources */,
 				7DBA58C51D6D32B700C02D79 /* bt_interest@2x.png in Resources */,
 				7DBA58C61D6D32B700C02D79 /* bt_maicai@2x.png in Resources */,
+				7DFD306E1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */,
 				7DBA58C71D6D32B700C02D79 /* xuhuan_leibie@2x.png in Resources */,
 				7DBA58C81D6D32B700C02D79 /* more_tongbu@3x.png in Resources */,
 				7DBA58C91D6D32B700C02D79 /* home_tankuang@3x.png in Resources */,
@@ -11019,6 +11087,7 @@
 				7D5FD2871D5D6D500033F7A2 /* reportForms_category@2x.png in Resources */,
 				9C2A689E1D194CA70010F1DA /* bt_recharge@2x.png in Resources */,
 				9C2A689F1D194CA70010F1DA /* bt_tourism@3x.png in Resources */,
+				7DFD30681D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */,
 				9C2A68A01D194CA70010F1DA /* founds_xianshi@2x.png in Resources */,
 				9C2A68A11D194CA70010F1DA /* navigation_backOff@3x.png in Resources */,
 				7D5FD2881D5D6D520033F7A2 /* reportForms_category@3x.png in Resources */,
@@ -11073,6 +11142,7 @@
 				9C2A68D01D194CA70010F1DA /* bt_gift@3x.png in Resources */,
 				9C2A68D11D194CA70010F1DA /* more_tongbu_s@3x.png in Resources */,
 				9C2A68D21D194CA70010F1DA /* ft_zhankai@3x.png in Resources */,
+				7DFD30721D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */,
 				9C2A68D31D194CA70010F1DA /* no_network_alert@3x.png in Resources */,
 				9C2A68D41D194CA70010F1DA /* bt_naifen@2x.png in Resources */,
 				9C2A68D51D194CA70010F1DA /* more_daochu@2x.png in Resources */,
@@ -11362,6 +11432,7 @@
 				9C2A69DF1D194CA70010F1DA /* bt_car@2x.png in Resources */,
 				9C2A69E01D194CA70010F1DA /* bt_meirong@2x.png in Resources */,
 				9C2A69E11D194CA70010F1DA /* bt_huankuan@2x.png in Resources */,
+				7DFD306D1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */,
 				9C1AE26F1D27A0C600C1E616 /* noneDetailImage.png in Resources */,
 				9C2A69E21D194CA70010F1DA /* bt_pignzhangshouru@3x.png in Resources */,
 				9C2A69E31D194CA70010F1DA /* home_background@2x.png in Resources */,
@@ -11374,6 +11445,7 @@
 				9C2A69EA1D194CA70010F1DA /* bt_maicai@2x.png in Resources */,
 				9C2FC0681D3F2D6E00A4C0C9 /* border_add@2x.png in Resources */,
 				9C2A69EB1D194CA70010F1DA /* xuhuan_leibie@2x.png in Resources */,
+				7DFD30631D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */,
 				9C9DD66F1D4A14EA001FA3C5 /* more_guanli@2x.png in Resources */,
 				9C2A69EC1D194CA70010F1DA /* more_tongbu@3x.png in Resources */,
 				9C2A69ED1D194CA70010F1DA /* home_tankuang@3x.png in Resources */,
@@ -11574,6 +11646,7 @@
 				9CEC00B11D6D41EB00DB2C8B /* defualtFund.png in Resources */,
 				9CEC00B21D6D41EB00DB2C8B /* books_zhuangxiu@3x.png in Resources */,
 				9CEC00B31D6D41EB00DB2C8B /* help_tree_level_5@2x.png in Resources */,
+				7DFD30661D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */,
 				9CEC00B41D6D41EB00DB2C8B /* help_tree_level_4@2x.png in Resources */,
 				9CEC00B51D6D41EB00DB2C8B /* home_tankuang_close@2x.png in Resources */,
 				9CEC00B61D6D41EB00DB2C8B /* youyu_weibo_banner.png in Resources */,
@@ -11828,6 +11901,7 @@
 				9CEC01AF1D6D41EB00DB2C8B /* guide_1@3x.png in Resources */,
 				9CEC01B01D6D41EB00DB2C8B /* bt_zhuanchu@2x.png in Resources */,
 				9CEC01B11D6D41EB00DB2C8B /* default-568@2x.png in Resources */,
+				7DFD30701D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */,
 				9CEC01B21D6D41EB00DB2C8B /* reportForms_income@3x.png in Resources */,
 				9CEC01B31D6D41EB00DB2C8B /* more_haoping@3x.png in Resources */,
 				9CEC01B41D6D41EB00DB2C8B /* home_pen@2x.png in Resources */,
@@ -11862,6 +11936,7 @@
 				9CEC01D11D6D41EB00DB2C8B /* dian_sel@2x.png in Resources */,
 				9CEC01D21D6D41EB00DB2C8B /* bt_wages@3x.png in Resources */,
 				9CEC01D31D6D41EB00DB2C8B /* rain_sound.wav in Resources */,
+				7DFD30751D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */,
 				9CEC01D41D6D41EB00DB2C8B /* zhangben_mark@2x.png in Resources */,
 				9CEC01D51D6D41EB00DB2C8B /* bt_traffic@2x.png in Resources */,
 				9CEC01D61D6D41EB00DB2C8B /* icon.png in Resources */,
@@ -12060,6 +12135,7 @@
 				9CEC02971D6D41EB00DB2C8B /* founds_pop@3x.png in Resources */,
 				9CEC02981D6D41EB00DB2C8B /* rain_sound_on@3x.png in Resources */,
 				9CEC02991D6D41EB00DB2C8B /* defualtThumbImage.png in Resources */,
+				7DFD306B1D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */,
 				9CEC029A1D6D41EB00DB2C8B /* reportForms_category@2x.png in Resources */,
 				9CEC029B1D6D41EB00DB2C8B /* bt_taobao@3x.png in Resources */,
 				9CEC029C1D6D41EB00DB2C8B /* bt_house@3x.png in Resources */,
@@ -12178,6 +12254,7 @@
 				9CECFCB91D6D41A700DB2C8B /* defualtFund.png in Resources */,
 				9CECFCBA1D6D41A700DB2C8B /* books_zhuangxiu@3x.png in Resources */,
 				9CECFCBB1D6D41A700DB2C8B /* help_tree_level_5@2x.png in Resources */,
+				7DFD30651D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */,
 				9CECFCBC1D6D41A700DB2C8B /* help_tree_level_4@2x.png in Resources */,
 				9CECFCBD1D6D41A700DB2C8B /* home_tankuang_close@2x.png in Resources */,
 				9CECFCBE1D6D41A700DB2C8B /* youyu_weibo_banner.png in Resources */,
@@ -12432,6 +12509,7 @@
 				9CECFDB71D6D41A700DB2C8B /* guide_1@3x.png in Resources */,
 				9CECFDB81D6D41A700DB2C8B /* bt_zhuanchu@2x.png in Resources */,
 				9CECFDB91D6D41A700DB2C8B /* default-568@2x.png in Resources */,
+				7DFD306F1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */,
 				9CECFDBA1D6D41A700DB2C8B /* reportForms_income@3x.png in Resources */,
 				9CECFDBB1D6D41A700DB2C8B /* more_haoping@3x.png in Resources */,
 				9CECFDBC1D6D41A700DB2C8B /* home_pen@2x.png in Resources */,
@@ -12466,6 +12544,7 @@
 				9CECFDD91D6D41A700DB2C8B /* dian_sel@2x.png in Resources */,
 				9CECFDDA1D6D41A700DB2C8B /* bt_wages@3x.png in Resources */,
 				9CECFDDB1D6D41A700DB2C8B /* rain_sound.wav in Resources */,
+				7DFD30741D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */,
 				9CECFDDC1D6D41A700DB2C8B /* zhangben_mark@2x.png in Resources */,
 				9CECFDDD1D6D41A700DB2C8B /* bt_traffic@2x.png in Resources */,
 				9CECFDDE1D6D41A700DB2C8B /* icon.png in Resources */,
@@ -12664,6 +12743,7 @@
 				9CECFE9F1D6D41A700DB2C8B /* founds_pop@3x.png in Resources */,
 				9CECFEA01D6D41A700DB2C8B /* rain_sound_on@3x.png in Resources */,
 				9CECFEA11D6D41A700DB2C8B /* defualtThumbImage.png in Resources */,
+				7DFD306A1D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */,
 				9CECFEA21D6D41A700DB2C8B /* reportForms_category@2x.png in Resources */,
 				9CECFEA31D6D41A700DB2C8B /* bt_taobao@3x.png in Resources */,
 				9CECFEA41D6D41A700DB2C8B /* bt_house@3x.png in Resources */,
@@ -12782,6 +12862,7 @@
 				9CB0F7E91D2771850096E9B7 /* defualtFund.png in Resources */,
 				9C73CD8F1D13E5EB00BA1C49 /* books_zhuangxiu@3x.png in Resources */,
 				7DDDA7BE1CBE1BFD0029ADAC /* help_tree_level_5@2x.png in Resources */,
+				7DFD30621D753B9800A0D7A0 /* record_making_selected@2x.png in Resources */,
 				7DDDA7BC1CBE1BFD0029ADAC /* help_tree_level_4@2x.png in Resources */,
 				BDF510921C925BB500A49D74 /* home_tankuang_close@2x.png in Resources */,
 				9C2A6AA01D1957040010F1DA /* youyu_weibo_banner.png in Resources */,
@@ -13036,6 +13117,7 @@
 				7DF8DED71C59BFE700CC5DFA /* guide_1@3x.png in Resources */,
 				7DD7D6EC1C4C8E6A00ACE71A /* bt_zhuanchu@2x.png in Resources */,
 				7DE74BD81C9AE9C600D27E7D /* default-568@2x.png in Resources */,
+				7DFD306C1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */,
 				7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */,
 				9C4078231CE1B92E00A61956 /* more_haoping@3x.png in Resources */,
 				9C991E4D1CE0AA870031CD02 /* home_pen@2x.png in Resources */,
@@ -13070,6 +13152,7 @@
 				9C762FB81CE9B21200ED88BE /* dian_sel@2x.png in Resources */,
 				7DD7D6E31C4C8E6A00ACE71A /* bt_wages@3x.png in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
+				7DFD30711D753B9800A0D7A0 /* record_making_unselected@3x.png in Resources */,
 				9C9D0BBA1D0E91FD003A9F4E /* zhangben_mark@2x.png in Resources */,
 				7DD7D6DE1C4C8E6A00ACE71A /* bt_traffic@2x.png in Resources */,
 				BDA2EEFC1C8B16FB007DD45F /* icon.png in Resources */,
@@ -13268,6 +13351,7 @@
 				BDF069A71C5B4CCB001430BB /* founds_pop@3x.png in Resources */,
 				7D4A432D1CC87187002F0264 /* rain_sound_on@3x.png in Resources */,
 				9CB0F7EF1D2771850096E9B7 /* defualtThumbImage.png in Resources */,
+				7DFD30671D753B9800A0D7A0 /* record_making_selected@3x.png in Resources */,
 				7DC7D8221D4F24AF00462970 /* reportForms_category@2x.png in Resources */,
 				9C991E3C1CE0A79F0031CD02 /* bt_taobao@3x.png in Resources */,
 				7DD7D6AF1C4C8E6A00ACE71A /* bt_house@3x.png in Resources */,
@@ -13837,6 +13921,7 @@
 				7DBA565D1D6D32B700C02D79 /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
 				7DBA565E1D6D32B700C02D79 /* SSJFundingDetailHeader.m in Sources */,
 				7DBA565F1D6D32B700C02D79 /* SSJCalenderDetailViewController.m in Sources */,
+				7DFD305B1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				7DBA56601D6D32B700C02D79 /* SSJBudgetDetailViewController.m in Sources */,
 				7DBA56611D6D32B700C02D79 /* SSJThemeImageCollectionViewCell.m in Sources */,
 				9C5377251D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */,
@@ -13845,6 +13930,7 @@
 				9C9A0C511D6D96DD002AF046 /* SSJLoanHelper.m in Sources */,
 				7DBA56631D6D32B700C02D79 /* SSJCircleChargeCell.m in Sources */,
 				7DBA56641D6D32B700C02D79 /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
+				7DF19EDA1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				7DBA56651D6D32B700C02D79 /* SSJSegmentedControl.m in Sources */,
 				7DBA56661D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56671D6D32B700C02D79 /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -13857,6 +13943,7 @@
 				7DBA566E1D6D32B700C02D79 /* SSJCircleChargeSettingViewController.m in Sources */,
 				7DBA566F1D6D32B700C02D79 /* SSJFontAddition.m in Sources */,
 				7DBA56701D6D32B700C02D79 /* SSJMagicExportViewController.m in Sources */,
+				7DFD30461D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				7DBA56711D6D32B700C02D79 /* SSJAlertViewAdapter.m in Sources */,
 				9C9A0C921D73CDC7002AF046 /* SSJCreditCardItem.m in Sources */,
 				7DBA56721D6D32B700C02D79 /* SSJConstant.m in Sources */,
@@ -13919,6 +14006,7 @@
 				7DBA56A41D6D32B700C02D79 /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				7DBA56A51D6D32B700C02D79 /* SSJPasswordModifyCell.m in Sources */,
 				7DBA56A61D6D32B700C02D79 /* SSJListMenuCellItem.m in Sources */,
+				7DFD30541D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				7DBA56A71D6D32B700C02D79 /* SSJWeiXinLoginHelper.m in Sources */,
 				7DBA56A81D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56A91D6D32B700C02D79 /* SSJMagicExportCalendarViewController.m in Sources */,
@@ -14136,6 +14224,7 @@
 				9C2A67441D194CA70010F1DA /* SSJDataSynchronizeTask.m in Sources */,
 				9C2A67451D194CA70010F1DA /* SSJFundingTransferDetailCell.m in Sources */,
 				9C2A67461D194CA70010F1DA /* SCYMotionEncryptionCircleLayer.m in Sources */,
+				7DFD305A1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				9C2A67471D194CA70010F1DA /* SSJReportFormsUtil.m in Sources */,
 				9C2A67481D194CA70010F1DA /* SSJFundingDetailListHeaderView.m in Sources */,
 				9C2A67491D194CA70010F1DA /* SSJChargeReminderItem.m in Sources */,
@@ -14256,6 +14345,7 @@
 				9C2A67A41D194CA70010F1DA /* SSJBaseSyncTable.m in Sources */,
 				9C2A67A51D194CA70010F1DA /* SSJPercentCircleNodeItem.m in Sources */,
 				9C2A67A61D194CA70010F1DA /* SSJFundingListDayItem.m in Sources */,
+				7DFD30531D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9C2A67A71D194CA70010F1DA /* SSJChargeCircleModifyCell.m in Sources */,
 				9C2A67A81D194CA70010F1DA /* SSJSynchronizeTaskQueue.m in Sources */,
 				7D6B12B81D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */,
@@ -14410,6 +14500,7 @@
 				9C2A68241D194CA70010F1DA /* SSJBookkeepingTreeHelpViewController.m in Sources */,
 				9C2A68251D194CA70010F1DA /* SSJChargeCicleModifyViewController.m in Sources */,
 				9C2A68261D194CA70010F1DA /* SSJCalendarCollectionViewCell.m in Sources */,
+				7DF19ED91D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9C2A68271D194CA70010F1DA /* SSJLoadMoreCollectionViewCell.m in Sources */,
 				9C2A68281D194CA70010F1DA /* SSJUmengManager.m in Sources */,
 				9C2A68291D194CA70010F1DA /* SSJBudgetListCell.m in Sources */,
@@ -14425,6 +14516,7 @@
 				9C2A68301D194CA70010F1DA /* SSJBooksTypeStore.m in Sources */,
 				9C2A68311D194CA70010F1DA /* SSJBooksTypeSelectViewController.m in Sources */,
 				9C40F1A91D4F6015003FF1C6 /* SSJWeixinFooter.m in Sources */,
+				7DFD30451D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				9C2A68321D194CA70010F1DA /* SSJDatabaseVersion3.m in Sources */,
 				9C2A68331D194CA70010F1DA /* SSJWaveWaterPath.m in Sources */,
 				9C2A68341D194CA70010F1DA /* SSJNetworkReachabilityManager.m in Sources */,
@@ -14693,6 +14785,7 @@
 				9CECFBD91D6D41A700DB2C8B /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
 				9CECFBDA1D6D41A700DB2C8B /* SSJFundingDetailHeader.m in Sources */,
 				9CECFBDB1D6D41A700DB2C8B /* SSJCalenderDetailViewController.m in Sources */,
+				7DFD305C1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				9CECFBDC1D6D41A700DB2C8B /* SSJBudgetDetailViewController.m in Sources */,
 				9CECFBDD1D6D41A700DB2C8B /* SSJThemeImageCollectionViewCell.m in Sources */,
 				9C5377261D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */,
@@ -14701,6 +14794,7 @@
 				9C9A0C521D6D96DD002AF046 /* SSJLoanHelper.m in Sources */,
 				9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */,
 				9CECFBE01D6D41A700DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
+				7DF19EDB1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFBE11D6D41A700DB2C8B /* SSJSegmentedControl.m in Sources */,
 				9CECFBE21D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFBE31D6D41A700DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -14713,6 +14807,7 @@
 				9CECFBEA1D6D41A700DB2C8B /* SSJCircleChargeSettingViewController.m in Sources */,
 				9CECFBEB1D6D41A700DB2C8B /* SSJFontAddition.m in Sources */,
 				9CECFBEC1D6D41A700DB2C8B /* SSJMagicExportViewController.m in Sources */,
+				7DFD30471D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				9CECFBED1D6D41A700DB2C8B /* SSJAlertViewAdapter.m in Sources */,
 				9C9A0C931D73CDC7002AF046 /* SSJCreditCardItem.m in Sources */,
 				9CECFBEE1D6D41A700DB2C8B /* SSJConstant.m in Sources */,
@@ -14775,6 +14870,7 @@
 				9CECFC201D6D41A700DB2C8B /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				9CECFC211D6D41A700DB2C8B /* SSJPasswordModifyCell.m in Sources */,
 				9CECFC221D6D41A700DB2C8B /* SSJListMenuCellItem.m in Sources */,
+				7DFD30551D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9CECFC231D6D41A700DB2C8B /* SSJWeiXinLoginHelper.m in Sources */,
 				9CECFC241D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC251D6D41A700DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
@@ -15125,6 +15221,7 @@
 				9CECFFD11D6D41EB00DB2C8B /* SSJBookkeepingTreeHelpCellItem.m in Sources */,
 				9CECFFD21D6D41EB00DB2C8B /* SSJFundingDetailHeader.m in Sources */,
 				9CECFFD31D6D41EB00DB2C8B /* SSJCalenderDetailViewController.m in Sources */,
+				7DFD305D1D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				9CECFFD41D6D41EB00DB2C8B /* SSJBudgetDetailViewController.m in Sources */,
 				9CECFFD51D6D41EB00DB2C8B /* SSJThemeImageCollectionViewCell.m in Sources */,
 				9C5377271D752038002B230A /* SSJCreditCardListDetailItem.m in Sources */,
@@ -15133,6 +15230,7 @@
 				9C9A0C531D6D96DE002AF046 /* SSJLoanHelper.m in Sources */,
 				9CECFFD71D6D41EB00DB2C8B /* SSJCircleChargeCell.m in Sources */,
 				9CECFFD81D6D41EB00DB2C8B /* SSJUserChargePeriodConfigSyncTable.m in Sources */,
+				7DF19EDC1D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CECFFD91D6D41EB00DB2C8B /* SSJSegmentedControl.m in Sources */,
 				9CECFFDA1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CECFFDB1D6D41EB00DB2C8B /* SSJCustomCollectionViewFlowLayout.m in Sources */,
@@ -15145,6 +15243,7 @@
 				9CECFFE21D6D41EB00DB2C8B /* SSJCircleChargeSettingViewController.m in Sources */,
 				9CECFFE31D6D41EB00DB2C8B /* SSJFontAddition.m in Sources */,
 				9CECFFE41D6D41EB00DB2C8B /* SSJMagicExportViewController.m in Sources */,
+				7DFD30481D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				9CECFFE51D6D41EB00DB2C8B /* SSJAlertViewAdapter.m in Sources */,
 				9C9A0C941D73CDC8002AF046 /* SSJCreditCardItem.m in Sources */,
 				9CECFFE61D6D41EB00DB2C8B /* SSJConstant.m in Sources */,
@@ -15207,6 +15306,7 @@
 				9CEC00181D6D41EB00DB2C8B /* SSJBookKeepingRiminderCircleView.m in Sources */,
 				9CEC00191D6D41EB00DB2C8B /* SSJPasswordModifyCell.m in Sources */,
 				9CEC001A1D6D41EB00DB2C8B /* SSJListMenuCellItem.m in Sources */,
+				7DFD30561D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				9CEC001B1D6D41EB00DB2C8B /* SSJWeiXinLoginHelper.m in Sources */,
 				9CEC001C1D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC001D1D6D41EB00DB2C8B /* SSJMagicExportCalendarViewController.m in Sources */,
@@ -15389,6 +15489,7 @@
 				9CD9BC461CFD72140061803B /* SSJFundingTransferStore.m in Sources */,
 				7D5F33831CEAE6C10086B67E /* SSJRecordMakingBillTypeInputView.m in Sources */,
 				7DD3E5831CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m in Sources */,
+				7DFD30441D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
 				7D5F33851CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				7D5F334E1CEAE6C10086B67E /* SSJCalenderDetailCell.m in Sources */,
 				9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */,
@@ -15422,6 +15523,7 @@
 				9CD9BC061CFD2DAA0061803B /* SSJBookkeepingTreeView.m in Sources */,
 				7D6F93351D0812A9000CCDB3 /* SSJReportFormsCurveModel.m in Sources */,
 				7D5F338A1CEAE6C10086B67E /* SSJRecordMakingViewController.m in Sources */,
+				7DFD30521D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m in Sources */,
 				7DE69C3C1C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m in Sources */,
 				9C53772D1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */,
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
@@ -15712,6 +15814,7 @@
 				7D6B12B71D4B6C190036BF4E /* SSJReportFormsSwitchControl.m in Sources */,
 				7D5F334C1CEAE6C10086B67E /* SSJCalendarView.m in Sources */,
 				9CD9BC0F1CFD2DAA0061803B /* SSJMagicExportService.m in Sources */,
+				7DFD30591D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m in Sources */,
 				9CD9BC1E1CFD2DAA0061803B /* SSJPortraitUploadNetworkService.m in Sources */,
 				9CD9BC2D1CFD2DAA0061803B /* SSJAboutusViewController.m in Sources */,
 				9C7B9CC91D33BFF800A4F71F /* SSJFundingDetailNoDataView.m in Sources */,
@@ -15724,6 +15827,7 @@
 				7D41A6961D1415F30043FD81 /* SSJNetworkReachabilityManager.m in Sources */,
 				7DE4A7DB1D20C0BA00F05BF0 /* SSJThemeSetting.m in Sources */,
 				7D5F337D1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m in Sources */,
+				7DF19ED81D74418B00DD611C /* SSJNewOrEditCustomCategoryView.m in Sources */,
 				9CD9BC031CFD2DAA0061803B /* SSJBookkeepingTreeDescView.m in Sources */,
 				9CD9BC431CFD2E470061803B /* SSJFundingTransferViewController.m in Sources */,
 				7D5F33341CEAE6C10086B67E /* SSJScrollTextView.m in Sources */,

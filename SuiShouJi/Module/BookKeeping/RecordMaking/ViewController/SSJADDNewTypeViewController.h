@@ -10,8 +10,9 @@
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJBaseViewController.h"
 
-@interface SSJADDNewTypeViewController : SSJBaseViewController<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface SSJADDNewTypeViewController : SSJBaseViewController
 
+// 是否是支出
 @property (nonatomic) BOOL incomeOrExpence;
 
 /**

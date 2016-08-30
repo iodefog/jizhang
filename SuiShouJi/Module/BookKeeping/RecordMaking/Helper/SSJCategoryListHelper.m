@@ -42,10 +42,12 @@
     }];
 }
 
-+ (void)deleteCategoryWithCategoryId:(NSString *)categoryId
-                   incomeOrExpenture:(int)incomeOrExpenture
-                             Success:(void(^)(BOOL result))success
-                             failure:(void (^)(NSError *error))failure {
++ (void)updateCategoryWithID:(NSString *)categoryId
+                       state:(int)state
+           incomeOrExpenture:(int)incomeOrExpenture
+                     Success:(void(^)(BOOL result))success
+                     failure:(void (^)(NSError *error))failure {
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
         if (!result) {
@@ -63,7 +65,7 @@
             order++;
         }
         
-        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = 0, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
+        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
         if (deletesucess) {
             if (success){
                 SSJDispatch_main_async_safe(^{
@@ -82,10 +84,12 @@
 }
 
 + (void)queryForUnusedCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
+                                                 custom:(int)custom
                                                 success:(void(^)(NSMutableArray<SSJRecordMakingCategoryItem *> *result))success
                                                 failure:(void (^)(NSError *error))failure {
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.IORDER", @(incomeOrExpenture), SSJUSERID()];
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND A.ICUSTOM = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.IORDER", @(incomeOrExpenture), @(custom), SSJUSERID()];
         if (!rs) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -262,6 +266,31 @@
         }
     }];
     return item;
+}
+
++ (void)deleteCategoryWithIDs:(NSArray *)categoryIDs
+                      success:(void(^)())success
+                      failure:(void(^)(NSError *error))failure {
+    
+    NSMutableArray *tmpIDs = [NSMutableArray arrayWithCapacity:categoryIDs.count];
+    for (NSString *ID in categoryIDs) {
+        [tmpIDs addObject:[NSString stringWithFormat:@"'%@'", ID]];
+    }
+    NSString *billIDs = [tmpIDs componentsJoinedByString:@", "];
+    NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_bill set operatortype = 2 where cbillid in (%@) and cuserid = '%@'", billIDs, SSJUSERID()];
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        if ([db executeUpdate:sqlStr]) {
+            if (success) {
+                success();
+            }
+            return;
+        }
+        
+        if (failure) {
+            failure([db lastError]);
+        }
+    }];
 }
 
 + (NSArray *)payOutColors {
