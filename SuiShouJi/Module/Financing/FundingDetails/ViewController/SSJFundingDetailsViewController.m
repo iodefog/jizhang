@@ -21,6 +21,9 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJFundingTransferEditeViewController.h"
 #import "SSJFundingDetailNoDataView.h"
+#import "SSJNewCreditCardViewController.h"
+#import "SSJCreditCardStore.h"
+#import "SSJCreditCardDetailHeader.h"
 
 #import "FMDB.h"
 
@@ -36,6 +39,8 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
 @property(nonatomic, strong)  NSMutableArray <SSJFundingDetailListItem *>  *listItems;
 @property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
+@property(nonatomic, strong) SSJCreditCardItem *cardItem;
+@property(nonatomic, strong) SSJCreditCardDetailHeader *creditCardHeader;
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -61,7 +66,11 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
-    self.tableView.tableHeaderView = self.header;
+    if ([self.item.fundingParent isEqualToString:@"3"]) {
+        self.tableView.tableHeaderView = self.creditCardHeader;
+    }else{
+        self.tableView.tableHeaderView = self.header;
+    }
     [self.view addSubview:self.noDataHeader];
 }
 
@@ -73,22 +82,29 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     _header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
-    
-    [self getTotalIcomeAndExpence];
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
-    [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
-        weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-        [weakSelf.tableView reloadData];
-        [weakSelf.view ssj_hideLoadingIndicator];
-        if (data.count == 0) {
-            self.noDataHeader.hidden = NO;
-        }else{
-            self.noDataHeader.hidden = YES;
-        }
-    } failure:^(NSError *error) {
-        [weakSelf.view ssj_hideLoadingIndicator];
-    }];
+    if ([self.item.fundingParent isEqualToString:@"3"]) {
+        self.cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.item.fundingID];
+        self.creditCardHeader.item = self.cardItem;
+    }
+    if ([self.item.fundingParent isEqualToString:@"3"] && self.cardItem.settleAtRepaymentDay) {
+        
+    }else{
+        [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
+            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+            [weakSelf.tableView reloadData];
+            [weakSelf.view ssj_hideLoadingIndicator];
+            if (data.count == 0) {
+                self.noDataHeader.hidden = NO;
+            }else{
+                self.noDataHeader.hidden = YES;
+            }
+        } failure:^(NSError *error) {
+            [weakSelf.view ssj_hideLoadingIndicator];
+        }];
+    }
+    [self getTotalIcomeAndExpence];
 }
 
 #pragma mark - UITableViewDataSource
@@ -176,7 +192,11 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 #pragma mark - Getter
 -(SSJFundingDetailNoDataView *)noDataHeader{
     if (!_noDataHeader) {
-        _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 171                           , self.view.width, self.view.height - 171)];
+        if ([self.item.fundingParent isEqualToString:@"3"]) {
+            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 297                           , self.view.width, self.view.height - 297)];
+        }else{
+            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 171                           , self.view.width, self.view.height - 171)];
+        }
     }
     return _noDataHeader;
 }
@@ -190,6 +210,17 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
         [_header ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
     }
     return _header;
+}
+
+-(SSJCreditCardDetailHeader *)creditCardHeader{
+    if (!_creditCardHeader) {
+        _creditCardHeader = [[SSJCreditCardDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 233)];
+        _creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+        [_creditCardHeader ssj_setBorderColor:[UIColor whiteColor]];
+        [_creditCardHeader ssj_setBorderStyle:SSJBorderStyleTop];
+        [_creditCardHeader ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
+    }
+    return _creditCardHeader;
 }
 
 -(UIBarButtonItem *)rightButton{
@@ -211,23 +242,38 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
         weakSelf.item.fundingColor = [db stringForQuery:@"SELECT CCOLOR FROM BK_FUND_INFO WHERE CFUNDID = ?",self.item.fundingID];
         titleStr = [db stringForQuery:@"SELECT CACCTNAME FROM BK_FUND_INFO WHERE CFUNDID = ?",weakSelf.item.fundingID];
         dispatch_async(dispatch_get_main_queue(), ^(){
-            weakSelf.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",_totalIncome];
-            [weakSelf.header.totalIncomeLabel sizeToFit];
-            weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
-            [weakSelf.header.totalExpenceLabel sizeToFit];
-            weakSelf.title = titleStr;
-            [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:weakSelf.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-            weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+            if ([weakSelf.item.fundingParent isEqualToString:@"3"]) {
+                weakSelf.creditCardHeader.totalIncome = _totalIncome;
+                weakSelf.creditCardHeader.totalExpence = _totalExpence;
+                weakSelf.title = titleStr;
+                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:weakSelf.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+            }else{
+                weakSelf.header.totalIncomeLabel.text = [NSString stringWithFormat:@"%.2f",_totalIncome];
+                [weakSelf.header.totalIncomeLabel sizeToFit];
+                weakSelf.header.totalExpenceLabel.text = [NSString stringWithFormat:@"%.2f",_totalExpence];
+                [weakSelf.header.totalExpenceLabel sizeToFit];
+                weakSelf.title = titleStr;
+                [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:weakSelf.item.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+                weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+            }
+
         });
     }];
 }
 
 -(void)rightButtonClicked:(id)sender{
-    SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
-    self.item.fundingAmount = _totalIncome - _totalExpence;
-    newFundingVC.item = self.item;
-    [self.navigationController pushViewController:newFundingVC animated:YES];
-    [MobClick event:@"fund_edit"];
+    if ([self.item.fundingParent isEqualToString:@"3"]) {
+        SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
+        creditCardVc.cardId = self.item.fundingID;
+        [self.navigationController pushViewController:creditCardVc animated:YES];
+    }else{
+        SSJModifyFundingViewController *newFundingVC = [[SSJModifyFundingViewController alloc]init];
+        self.item.fundingAmount = _totalIncome - _totalExpence;
+        newFundingVC.item = self.item;
+        [self.navigationController pushViewController:newFundingVC animated:YES];
+        [MobClick event:@"fund_edit"];
+    }
 }
 
 -(void)reloadDataAfterSync{

@@ -6,10 +6,10 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJColorSelectViewControllerViewController.h"
+#import "SSJColorSelectViewController.h"
 #import "SSJColorSelectCollectionViewCell.h"
 
-@interface SSJColorSelectViewControllerViewController ()
+@interface SSJColorSelectViewController ()
 @property (nonatomic,strong) UICollectionView *collectionView;
 @property (nonatomic,strong) UIView *headerView;
 @property (nonatomic,strong) UILabel *nameLabel;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation SSJColorSelectViewControllerViewController{
+@implementation SSJColorSelectViewController{
     NSArray *_colorArray;
     NSString *_selectColor;
 }

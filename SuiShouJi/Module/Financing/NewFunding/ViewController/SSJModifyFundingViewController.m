@@ -8,7 +8,7 @@
 
 #import "SSJModifyFundingViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
-#import "SSJColorSelectViewControllerViewController.h"
+#import "SSJColorSelectViewController.h"
 #import "SSJModifyFundingTableViewCell.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJDatabaseQueue.h"
@@ -88,7 +88,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 4) {
-        SSJColorSelectViewControllerViewController *colorSelectVC = [[SSJColorSelectViewControllerViewController alloc]init];
+        SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
         colorSelectVC.fundingColor = _selectColor;
         colorSelectVC.fundingAmount = _amountValue;
         colorSelectVC.fundingName = self.item.fundingName;
