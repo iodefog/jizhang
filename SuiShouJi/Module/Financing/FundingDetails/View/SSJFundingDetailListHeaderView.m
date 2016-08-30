@@ -7,6 +7,9 @@
 //
 
 #import "SSJFundingDetailListHeaderView.h"
+#import "SSJFundingDetailListItem.h"
+#import "SSJCreditCardListDetailItem.h"
+
 @interface SSJFundingDetailListHeaderView()
 @property(nonatomic, strong) UILabel *dateLabel;
 @property(nonatomic, strong) UIButton *btn;
@@ -77,35 +80,67 @@
     return _expandImage;
 }
 
-- (void)setItem:(SSJFundingDetailListItem *)item{
+- (void)setItem:(SSJBaseItem *)item{
     _item = item;
-    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"yyyy-MM"];
-    NSDate *date = [formatter dateFromString:_item.date];
-    NSString *dateStr;
-    if ([_item.date hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]) {
-        dateStr = [NSString stringWithFormat:@"%ld月",date.month];
-    }else{
-        dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,date.month];
+    if ([_item isKindOfClass:[SSJFundingDetailListItem class]]) {
+        SSJFundingDetailListItem *fundingItem = (SSJFundingDetailListItem *)_item;
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"yyyy-MM"];
+        NSDate *date = [formatter dateFromString:fundingItem.date];
+        NSString *dateStr;
+        if ([fundingItem.date hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]) {
+            dateStr = [NSString stringWithFormat:@"%ld月",date.month];
+        }else{
+            dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,date.month];
+        }
+        self.dateLabel.text = dateStr;
+        [self.dateLabel sizeToFit];
+        if (fundingItem.income - fundingItem.expenture > 0) {
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
+            self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",fundingItem.income - fundingItem.expenture];
+        }else if (fundingItem.income - fundingItem.expenture < 0){
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
+            self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",fundingItem.income - fundingItem.expenture];
+        }else{
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.moneyLabel.text = @"0.00";
+        }
+        if (fundingItem.isExpand) {
+            self.expandImage.image = [UIImage imageNamed:@"ft_zhankai"];
+        }else{
+            self.expandImage.image = [UIImage imageNamed:@"ft_shouqi"];
+        }
+        [self.moneyLabel sizeToFit];
+    }else if ([_item isKindOfClass:[SSJCreditCardListDetailItem class]]){
+        SSJCreditCardListDetailItem *creditCardItem = (SSJCreditCardListDetailItem *)_item;
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"yyyy-MM"];
+        NSDate *date = [formatter dateFromString:creditCardItem.month];
+        NSString *dateStr;
+        if ([creditCardItem.month hasPrefix:[NSString stringWithFormat:@"%ld",[NSDate date].year]]) {
+            dateStr = [NSString stringWithFormat:@"%ld月",date.month];
+        }else{
+            dateStr = [NSString stringWithFormat:@"%ld年%ld月",date.year,date.month];
+        }
+        self.dateLabel.text = dateStr;
+        [self.dateLabel sizeToFit];
+        if (creditCardItem.income - creditCardItem.expenture > 0) {
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
+            self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",creditCardItem.income - creditCardItem.expenture];
+        }else if (creditCardItem.income - creditCardItem.expenture < 0){
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
+            self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",creditCardItem.income - creditCardItem.expenture];
+        }else{
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
+            self.moneyLabel.text = @"0.00";
+        }
+        if (creditCardItem.isExpand) {
+            self.expandImage.image = [UIImage imageNamed:@"ft_zhankai"];
+        }else{
+            self.expandImage.image = [UIImage imageNamed:@"ft_shouqi"];
+        }
+        [self.moneyLabel sizeToFit];
     }
-    self.dateLabel.text = dateStr;
-    [self.dateLabel sizeToFit];
-    if (_item.income - _item.expenture > 0) {
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
-        self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",_item.income - _item.expenture];
-    }else if (_item.income - _item.expenture < 0){
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
-        self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",_item.income - _item.expenture];
-    }else{
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
-        self.moneyLabel.text = @"0.00";
-    }
-    if (_item.isExpand) {
-        self.expandImage.image = [UIImage imageNamed:@"ft_zhankai"];
-    }else{
-        self.expandImage.image = [UIImage imageNamed:@"ft_shouqi"];
-    }
-    [self.moneyLabel sizeToFit];
 }
 
 - (void)sectionHeaderClicked:(id)sender{

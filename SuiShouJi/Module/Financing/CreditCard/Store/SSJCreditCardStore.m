@@ -15,7 +15,7 @@
     SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        FMResultSet *resultSet = [db executeQuery:@"select a.* , c.ccolor , c.cmemo , c.cacctname , d.ibalance from bk_user_credit a , bk_fund_info c , bk_funs_acct d where c.cfundid = ? and a.cfundid = c.cfundid and c.cuserid = ? and c.cfundid = d.cfundid",cardId,userId];
+        FMResultSet *resultSet = [db executeQuery:@"select c.* , d.ibalance from (select a.* , b.iquota , b.ibilldatesettlement , b.crepaymentdate , b.cbilldate , b.cremindid from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?) c , bk_funs_acct d where c.cfundid = d.cfundid",cardId,userId];
         if (!resultSet) {
             return;
         }
@@ -23,15 +23,16 @@
             item.cardId = cardId;
             item.cardName = [resultSet stringForColumn:@"cacctname"];
             item.cardLimit = [resultSet doubleForColumn:@"iquota"];
-            item.cardBalance = [resultSet doubleForColumn:@"ibalance"];
+            item.cardBalance = [resultSet doubleForColumn:@"d.ibalance"];
             item.settleAtRepaymentDay = [resultSet boolForColumn:@"ibilldatesettlement"];
             item.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
             item.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
             item.cardMemo = [resultSet stringForColumn:@"cmemo"];
             item.cardColor = [resultSet stringForColumn:@"ccolor"];
             item.remindId = [resultSet stringForColumn:@"cremindid"];
-            item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
         }
+        [resultSet close];
+        item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
     }];
     return item;
 }

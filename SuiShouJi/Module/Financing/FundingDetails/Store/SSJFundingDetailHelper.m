@@ -11,7 +11,6 @@
 #import "SSJBillingChargeCellItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJFundingListDayItem.h"
-#import "SSJCreditCardItem.h"
 #import "SSJCreditCardListDetailItem.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
@@ -129,7 +128,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbilldate <= '%@' order by cmonth desc , a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate , b.*  from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbilldate <= '%@' order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -199,6 +198,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 SSJCreditCardListDetailItem *listItem = [[SSJCreditCardListDetailItem alloc]init];
                 listItem.billingDay = cardItem.cardBillingDay;
                 listItem.repaymentDay = cardItem.cardRepaymentDay;
+                listItem.month = currentMonth;
                 if ([lastPeriod isEqualToString:@""]) {
                     listItem.isExpand = YES;
                 }else{

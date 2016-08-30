@@ -24,6 +24,8 @@
 #import "SSJNewCreditCardViewController.h"
 #import "SSJCreditCardStore.h"
 #import "SSJCreditCardDetailHeader.h"
+#import "SSJCreditCardListDetailItem.h"
+#import "SSJCreditCardListCell.h"
 
 #import "FMDB.h"
 
@@ -31,13 +33,13 @@ static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
 static NSString *const kFundingListDailySumCellID = @"kFundingListDailySumCellID";
 static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
-
+static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLineCellID";
 
 @interface SSJFundingDetailsViewController ()
 @property (nonatomic,strong) SSJFundingDetailHeader *header;
 @property (nonatomic, strong) NSArray *datas;
 @property (nonatomic,strong) UIBarButtonItem *rightButton;
-@property(nonatomic, strong)  NSMutableArray <SSJFundingDetailListItem *>  *listItems;
+@property(nonatomic, strong)  NSMutableArray *listItems;
 @property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
 @property(nonatomic, strong) SSJCreditCardItem *cardItem;
 @property(nonatomic, strong) SSJCreditCardDetailHeader *creditCardHeader;
@@ -65,6 +67,8 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
+    [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
+
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
     if ([self.item.fundingParent isEqualToString:@"3"]) {
         self.tableView.tableHeaderView = self.creditCardHeader;
@@ -89,7 +93,18 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
         self.creditCardHeader.item = self.cardItem;
     }
     if ([self.item.fundingParent isEqualToString:@"3"] && self.cardItem.settleAtRepaymentDay) {
-        
+        [SSJFundingDetailHelper queryDataWithCreditCardItem:self.cardItem success:^(NSMutableArray *data) {
+            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+            [weakSelf.tableView reloadData];
+            [weakSelf.view ssj_hideLoadingIndicator];
+            if (data.count == 0) {
+                self.noDataHeader.hidden = NO;
+            }else{
+                self.noDataHeader.hidden = YES;
+            }
+        } failure:^(NSError *error) {
+            [weakSelf.view ssj_hideLoadingIndicator];
+        }];
     }else{
         [SSJFundingDetailHelper queryDataWithFundTypeID:self.item.fundingID success:^(NSMutableArray *data) {
             weakSelf.listItems = [NSMutableArray arrayWithArray:data];
@@ -113,8 +128,8 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([self.listItems objectAtIndex:section].isExpand) {
-        return [[self.listItems objectAtIndex:section].chargeArray count] + 1;
+    if (((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand) {
+        return [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).chargeArray count] + 1;
     }else{
         return 0;
     }
@@ -123,19 +138,25 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseItem *item;
     if (indexPath.row >= 1) {
-        item = [[self.listItems objectAtIndex:indexPath.section].chargeArray ssj_safeObjectAtIndex:indexPath.row - 1];
+        item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row - 1];
     }
     if (indexPath.row == 0) {
-        SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListFirstLineCellID forIndexPath:indexPath];
-        cell.item = [self.listItems objectAtIndex:indexPath.section];
-        return cell;
+        if ([[self.listItems objectAtIndex:indexPath.section] isKindOfClass:[SSJCreditCardListDetailItem class]]) {
+            SSJCreditCardListCell *cell = [tableView dequeueReusableCellWithIdentifier:kCreditCardListFirstLineCellID forIndexPath:indexPath];
+            cell.item = [self.listItems objectAtIndex:indexPath.section];
+            return cell;
+        }else{
+            SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListFirstLineCellID forIndexPath:indexPath];
+            cell.item = [self.listItems objectAtIndex:indexPath.section];
+            return cell;
+        }
     }else if ([item isKindOfClass:[SSJFundingListDayItem class]]){
         SSJFundingDailySumCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListDailySumCellID forIndexPath:indexPath];
-        cell.item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         return cell;
     }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
-        cell.item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         return cell;
     }
     return [UITableViewCell new];
@@ -147,7 +168,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
     headerView.item = [self.listItems objectAtIndex:section];
     __weak typeof(self) weakSelf = self;
     headerView.SectionHeaderClickedBlock = ^(){
-        [weakSelf.listItems objectAtIndex:section].isExpand = ![weakSelf.listItems objectAtIndex:section].isExpand;
+        ((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand = !((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand;
         [weakSelf.tableView beginUpdates];
         [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
         [weakSelf.tableView endUpdates];
@@ -157,19 +178,23 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0) {
-        SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        SSJBaseItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
             return 90;
         }else{
             return 30;
         }
     }
+    SSJBaseItem *item = [self.listItems objectAtIndex:indexPath.section];
+    if ([item isKindOfClass:[SSJCreditCardListDetailItem class]]) {
+        return 65;
+    }
     return 35;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row > 0) {
-        SSJBaseItem *item = [[self.listItems objectAtIndex:indexPath.section].chargeArray objectAtIndex:indexPath.row - 1];
+        SSJBaseItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
         if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
             if ([((SSJBillingChargeCellItem*)item).billId integerValue] >= 1000 || ((SSJBillingChargeCellItem*)item).billId.length > 4) {
                 SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
@@ -225,7 +250,7 @@ static NSString *const kFundingListHeaderViewID = @"kFundingListHeaderViewID";
 
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"edit"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
+        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         _rightButton.tintColor = [UIColor whiteColor];
     }
     return _rightButton;

@@ -243,9 +243,17 @@
     [self.balanceLab sizeToFit];
     self.limitLab.text = [NSString stringWithFormat:@"%.2f",_item.cardLimit];
     [self.limitLab sizeToFit];
-    self.repaymentDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardRepaymentDay];
+    if (_item.cardRepaymentDay == 0) {
+        self.repaymentDayLab.text = @"未设置";
+    }else{
+        self.repaymentDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardRepaymentDay];
+    }
     [self.repaymentDayLab sizeToFit];
-    self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardBillingDay];
+    if (_item.cardBillingDay == 0) {
+        self.billingDayLab.text = @"未设置";
+    }else{
+        self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",_item.cardBillingDay];
+    }
     [self.billingDayLab sizeToFit];
 }
 

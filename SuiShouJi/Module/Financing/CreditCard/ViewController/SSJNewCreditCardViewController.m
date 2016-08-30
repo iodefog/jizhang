@@ -69,15 +69,23 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
     if (!self.cardId.length) {
+        self.title = @"添加资金帐户";
         self.item = [[SSJCreditCardItem alloc]init];
         self.item.settleAtRepaymentDay = YES;
         self.item.cardBillingDay = 1;
         self.item.cardRepaymentDay = 10;
         self.item.cardColor = @"#fc7a60";
     }else{
+        self.title = @"编辑资金帐户";
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
         self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
+        if (self.item.cardBillingDay == 0) {
+            self.item.cardBillingDay = 1;
+        }
+        if (self.item.cardRepaymentDay == 0) {
+            self.item.cardRepaymentDay = 10;
+        }
     }
     if (self.item.remindId.length) {
         self.remindItem = [SSJLocalNotificationStore queryReminderItemForID:self.item.remindId];
