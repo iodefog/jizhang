@@ -15,7 +15,7 @@
     SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        FMResultSet *resultSet = [db executeQuery:@"select a.* , c.ccolor , c.cmemo , c.cacctname , d.ibalance from bk_user_credit a , bk_fund_info c , bk_funs_acct d where a.cfundid = ? and a.cfundid = c.cfundid and a.cuserid = ? and a.cfundid = d.cfundid",cardId,userId];
+        FMResultSet *resultSet = [db executeQuery:@"select a.* , c.ccolor , c.cmemo , c.cacctname , d.ibalance from bk_user_credit a , bk_fund_info c , bk_funs_acct d where c.cfundid = ? and a.cfundid = c.cfundid and c.cuserid = ? and c.cfundid = d.cfundid",cardId,userId];
         if (!resultSet) {
             return;
         }

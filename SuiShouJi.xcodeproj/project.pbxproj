@@ -2581,6 +2581,21 @@
 		9C5348F41D2CE327004EF053 /* more_pifu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C5348F21D2CE327004EF053 /* more_pifu@3x.png */; };
 		9C5348F51D2CE32C004EF053 /* more_pifu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C5348F11D2CE327004EF053 /* more_pifu@2x.png */; };
 		9C5348F61D2CE32F004EF053 /* more_pifu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C5348F21D2CE327004EF053 /* more_pifu@3x.png */; };
+		9C5377231D75202E002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
+		9C5377241D752036002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
+		9C5377251D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
+		9C5377261D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
+		9C5377271D752038002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
+		9C53772D1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */; };
+		9C53772E1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */; };
+		9C53772F1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */; };
+		9C5377301D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */; };
+		9C5377311D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */; };
+		9C5377341D756B51002B230A /* SSJCreditCardListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377331D756B51002B230A /* SSJCreditCardListCell.m */; };
+		9C5377351D756B52002B230A /* SSJCreditCardListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377331D756B51002B230A /* SSJCreditCardListCell.m */; };
+		9C5377361D756B52002B230A /* SSJCreditCardListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377331D756B51002B230A /* SSJCreditCardListCell.m */; };
+		9C5377371D756B52002B230A /* SSJCreditCardListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377331D756B51002B230A /* SSJCreditCardListCell.m */; };
+		9C5377381D756B52002B230A /* SSJCreditCardListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377331D756B51002B230A /* SSJCreditCardListCell.m */; };
 		9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */; };
 		9C53A3BB1D420A05003BA2F0 /* SSJMemberManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C20A87E1D41E43A00F3D77F /* SSJMemberManagerViewController.m */; };
 		9C53A3BC1D420A09003BA2F0 /* SSJNewMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */; };
@@ -6070,6 +6085,12 @@
 		9C5348DF1D2CAEB1004EF053 /* back@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@3x.png"; sourceTree = "<group>"; };
 		9C5348F11D2CE327004EF053 /* more_pifu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_pifu@2x.png"; sourceTree = "<group>"; };
 		9C5348F21D2CE327004EF053 /* more_pifu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_pifu@3x.png"; sourceTree = "<group>"; };
+		9C5377211D75202E002B230A /* SSJCreditCardListDetailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardListDetailItem.h; sourceTree = "<group>"; };
+		9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardListDetailItem.m; sourceTree = "<group>"; };
+		9C53772B1D752BF3002B230A /* SSJCreditCardDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardDetailHeader.h; sourceTree = "<group>"; };
+		9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardDetailHeader.m; sourceTree = "<group>"; };
+		9C5377321D756B51002B230A /* SSJCreditCardListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardListCell.h; sourceTree = "<group>"; };
+		9C5377331D756B51002B230A /* SSJCreditCardListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardListCell.m; sourceTree = "<group>"; };
 		9C53A3B81D420A01003BA2F0 /* SSJNewMemberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewMemberViewController.h; sourceTree = "<group>"; };
 		9C53A3B91D420A01003BA2F0 /* SSJNewMemberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewMemberViewController.m; sourceTree = "<group>"; };
 		9C53A3BE1D45A9D8003BA2F0 /* SSJNewMemberHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewMemberHeaderView.h; sourceTree = "<group>"; };
@@ -8759,6 +8780,8 @@
 				9C94714C1CEB224C00D69079 /* SSJFundingDetailListItem.m */,
 				9C94714D1CEB224C00D69079 /* SSJFundingListDayItem.h */,
 				9C94714E1CEB224C00D69079 /* SSJFundingListDayItem.m */,
+				9C5377211D75202E002B230A /* SSJCreditCardListDetailItem.h */,
+				9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -8789,6 +8812,10 @@
 				9C94715E1CEB224C00D69079 /* SSJFundingDetailListHeaderView.m */,
 				9C7B9CC71D33BFF800A4F71F /* SSJFundingDetailNoDataView.h */,
 				9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */,
+				9C53772B1D752BF3002B230A /* SSJCreditCardDetailHeader.h */,
+				9C53772C1D752BF3002B230A /* SSJCreditCardDetailHeader.m */,
+				9C5377321D756B51002B230A /* SSJCreditCardListCell.h */,
+				9C5377331D756B51002B230A /* SSJCreditCardListCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -13614,6 +13641,7 @@
 				9C9A0C351D6D9633002AF046 /* SSJLoanListCell.m in Sources */,
 				7DBA55B41D6D32B700C02D79 /* SSJReportFormsViewController.m in Sources */,
 				7DBA55B51D6D32B700C02D79 /* SSJMineHomeViewController.m in Sources */,
+				9C53772F1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */,
 				9C9A0C261D6D95E9002AF046 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				7DBA55B61D6D32B700C02D79 /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				7DBA55B71D6D32B700C02D79 /* SSJUserInfoNetworkService.m in Sources */,
@@ -13811,6 +13839,8 @@
 				7DBA565F1D6D32B700C02D79 /* SSJCalenderDetailViewController.m in Sources */,
 				7DBA56601D6D32B700C02D79 /* SSJBudgetDetailViewController.m in Sources */,
 				7DBA56611D6D32B700C02D79 /* SSJThemeImageCollectionViewCell.m in Sources */,
+				9C5377251D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */,
+				9C5377361D756B52002B230A /* SSJCreditCardListCell.m in Sources */,
 				7DBA56621D6D32B700C02D79 /* SSJBaselineTextField.m in Sources */,
 				9C9A0C511D6D96DD002AF046 /* SSJLoanHelper.m in Sources */,
 				7DBA56631D6D32B700C02D79 /* SSJCircleChargeCell.m in Sources */,
@@ -14207,6 +14237,7 @@
 				9C2A67971D194CA70010F1DA /* SSJScrollViewAddition.m in Sources */,
 				9C2A67981D194CA70010F1DA /* SSJPersonalDetailItem.m in Sources */,
 				9C2A67991D194CA70010F1DA /* SSJStartUpgradeAlertView.m in Sources */,
+				9C5377351D756B52002B230A /* SSJCreditCardListCell.m in Sources */,
 				9C66F1241D20FF060094125D /* SSJThemeItem.m in Sources */,
 				9C2A679A1D194CA70010F1DA /* SSJBaseNetworkService.m in Sources */,
 				9C2A679B1D194CA70010F1DA /* SSJHomeTableView.m in Sources */,
@@ -14331,6 +14362,7 @@
 				9C9A0CA11D73D1B6002AF046 /* SSJNewCreditCardViewController.m in Sources */,
 				9C66F13E1D211FEB0094125D /* SSJThemeCollectionHeaderView.m in Sources */,
 				7DFFD5B41D6706B7000FDAA6 /* SSJLoanListViewController.m in Sources */,
+				9C53772E1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */,
 				9C2A68001D194CA70010F1DA /* SSJFundingTransferDetailItem.m in Sources */,
 				9C2A68011D194CA70010F1DA /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C2A68021D194CA70010F1DA /* SSJChargeCircleTimeSelectView.m in Sources */,
@@ -14349,6 +14381,7 @@
 				9C2A680F1D194CA70010F1DA /* TPKeyboardAvoidingScrollView.m in Sources */,
 				9C2A68101D194CA70010F1DA /* SSJBillTypeSelectViewController.m in Sources */,
 				9C2A68111D194CA70010F1DA /* SSJBookKeepingHomeTableViewCell.m in Sources */,
+				9C5377241D752036002B230A /* SSJCreditCardListDetailItem.m in Sources */,
 				9C2A68121D194CA70010F1DA /* SSJQQUserInfoItem.m in Sources */,
 				9C2A68131D194CA70010F1DA /* SSJRecordMakingBillTypeSelectionView.m in Sources */,
 				9C2A68141D194CA70010F1DA /* SSJReportFormsCurveDescriptionView.m in Sources */,
@@ -14464,6 +14497,7 @@
 				9C9A0C361D6D9633002AF046 /* SSJLoanListCell.m in Sources */,
 				9CECFB301D6D41A700DB2C8B /* SSJReportFormsViewController.m in Sources */,
 				9CECFB311D6D41A700DB2C8B /* SSJMineHomeViewController.m in Sources */,
+				9C5377301D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */,
 				9C9A0C271D6D95E9002AF046 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				9CECFB321D6D41A700DB2C8B /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9CECFB331D6D41A700DB2C8B /* SSJUserInfoNetworkService.m in Sources */,
@@ -14661,6 +14695,8 @@
 				9CECFBDB1D6D41A700DB2C8B /* SSJCalenderDetailViewController.m in Sources */,
 				9CECFBDC1D6D41A700DB2C8B /* SSJBudgetDetailViewController.m in Sources */,
 				9CECFBDD1D6D41A700DB2C8B /* SSJThemeImageCollectionViewCell.m in Sources */,
+				9C5377261D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */,
+				9C5377371D756B52002B230A /* SSJCreditCardListCell.m in Sources */,
 				9CECFBDE1D6D41A700DB2C8B /* SSJBaselineTextField.m in Sources */,
 				9C9A0C521D6D96DD002AF046 /* SSJLoanHelper.m in Sources */,
 				9CECFBDF1D6D41A700DB2C8B /* SSJCircleChargeCell.m in Sources */,
@@ -14893,6 +14929,7 @@
 				9C9A0C371D6D9634002AF046 /* SSJLoanListCell.m in Sources */,
 				9CECFF281D6D41EB00DB2C8B /* SSJReportFormsViewController.m in Sources */,
 				9CECFF291D6D41EB00DB2C8B /* SSJMineHomeViewController.m in Sources */,
+				9C5377311D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */,
 				9C9A0C281D6D95EA002AF046 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				9CECFF2A1D6D41EB00DB2C8B /* SSJAddNewTypeColorSelectionView.m in Sources */,
 				9CECFF2B1D6D41EB00DB2C8B /* SSJUserInfoNetworkService.m in Sources */,
@@ -15090,6 +15127,8 @@
 				9CECFFD31D6D41EB00DB2C8B /* SSJCalenderDetailViewController.m in Sources */,
 				9CECFFD41D6D41EB00DB2C8B /* SSJBudgetDetailViewController.m in Sources */,
 				9CECFFD51D6D41EB00DB2C8B /* SSJThemeImageCollectionViewCell.m in Sources */,
+				9C5377271D752038002B230A /* SSJCreditCardListDetailItem.m in Sources */,
+				9C5377381D756B52002B230A /* SSJCreditCardListCell.m in Sources */,
 				9CECFFD61D6D41EB00DB2C8B /* SSJBaselineTextField.m in Sources */,
 				9C9A0C531D6D96DE002AF046 /* SSJLoanHelper.m in Sources */,
 				9CECFFD71D6D41EB00DB2C8B /* SSJCircleChargeCell.m in Sources */,
@@ -15384,6 +15423,7 @@
 				7D6F93351D0812A9000CCDB3 /* SSJReportFormsCurveModel.m in Sources */,
 				7D5F338A1CEAE6C10086B67E /* SSJRecordMakingViewController.m in Sources */,
 				7DE69C3C1C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m in Sources */,
+				9C53772D1D752BF4002B230A /* SSJCreditCardDetailHeader.m in Sources */,
 				7D3955521C5F7D25004D807C /* SSJStartChecker.m in Sources */,
 				9CD9BC641CFEBCA40061803B /* SSJFundingTransferEdite.m in Sources */,
 				7D8C7E921D6EDE2400D72E2D /* SSJLoanDetailCell.m in Sources */,
@@ -15417,6 +15457,7 @@
 				9C66F11A1D20C19B0094125D /* SSJThemeHomeViewController.m in Sources */,
 				9CD9BBFF1CFD2DAA0061803B /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				7D5F33521CEAE6C10086B67E /* SSJChargeDetailMemoCell.m in Sources */,
+				9C5377341D756B51002B230A /* SSJCreditCardListCell.m in Sources */,
 				7DBA55331D6AFA9E00C02D79 /* SSJAddOrEditLoanLabelCell.m in Sources */,
 				7DDA489A1C8821F20010EB01 /* SSJDatePeriod.m in Sources */,
 				7D5F33821CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.m in Sources */,
@@ -15710,6 +15751,7 @@
 				9CD9BC2C1CFD2DAA0061803B /* SSJSyncSettingTableViewCell.m in Sources */,
 				9C9471891CEB224C00D69079 /* SSJFundingDetailsViewController.m in Sources */,
 				7D5F33791CEAE6C10086B67E /* SSJCustomKeyBoardButton.m in Sources */,
+				9C5377231D75202E002B230A /* SSJCreditCardListDetailItem.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 				7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */,
