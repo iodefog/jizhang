@@ -18,8 +18,12 @@
 
 @property (nonatomic, strong, readonly) SSJRecordMakingCategoryItem *selectedItem;
 
+@property (nonatomic, strong) NSArray *colors;
+
 @property (nonatomic, copy) void (^selectCategoryAction)(SSJNewOrEditCustomCategoryView *view);
 
 @property (nonatomic, copy) void (^selectColorAction)(SSJNewOrEditCustomCategoryView *view);
+
+- (void)updateAppearance;
 
 @end

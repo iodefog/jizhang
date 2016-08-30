@@ -41,7 +41,7 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 - (void)layoutSubviews {
     _textField.frame = CGRectMake(0, 0, self.width, 63);
     _collectionView.frame = CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height - 5);
-    
+    _colorSelectionView.bottom = self.height;
 }
 
 - (void)updateAppearance {
@@ -57,6 +57,13 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 - (void)setItems:(NSArray<SSJRecordMakingCategoryItem *> *)items {
     _items = items;
     [_collectionView reloadData];
+}
+
+- (void)setColors:(NSArray *)colors {
+    if (![_colors isEqualToArray:colors]) {
+        _colors = colors;
+        _colorSelectionView.colors = colors;
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -161,7 +168,6 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
     if (!_colorSelectionView) {
         _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithWidth:self.width];
         _colorSelectionView.displayRowCount = 2.5;
-        _colorSelectionView.leftBottom = CGPointMake(self.width, self.height);
         [_colorSelectionView ssj_setBorderWidth:1];
         [_colorSelectionView ssj_setBorderStyle:SSJBorderStyleTop];
         [_colorSelectionView addTarget:self action:@selector(colorSelectionViewAction) forControlEvents:UIControlEventValueChanged];
