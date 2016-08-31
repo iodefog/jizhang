@@ -12,12 +12,11 @@
 @interface SSJBooksTypeCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) SSJBooksTypeItem *item;
 
-typedef void (^longPressBlock)();
 
-@property(nonatomic,copy) longPressBlock longPressBlock;
+@property(nonatomic) BOOL selectToEdite;
 
 @property(nonatomic) BOOL isSelected;
 
-@property(nonatomic) BOOL isEditing;
+@property(nonatomic) BOOL editeModel;
 
 @end

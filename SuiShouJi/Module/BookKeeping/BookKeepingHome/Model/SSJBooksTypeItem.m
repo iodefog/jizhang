@@ -23,4 +23,25 @@
     }
     return mapping;
 }
+
+-(BOOL)isEqual:(id)object{
+    [super isEqual:object];
+    if (self == object) {
+        return YES;
+    }
+    
+    if (![object isKindOfClass:[SSJBooksTypeItem class]]) {
+        return NO;
+    }
+    
+    SSJBooksTypeItem *memberItem = (SSJBooksTypeItem *)object;
+    
+    if ([self.booksId isEqualToString:memberItem.booksId]) {
+        return YES;
+    }else{
+        return NO;
+    }
+    
+    return NO;
+}
 @end

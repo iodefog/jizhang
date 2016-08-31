@@ -441,7 +441,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)rightButtonCliked:(id)sender{
-    
+
 }
 
 #pragma mark - Getter

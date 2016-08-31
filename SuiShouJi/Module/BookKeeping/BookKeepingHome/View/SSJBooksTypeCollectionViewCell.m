@@ -9,11 +9,19 @@
 #import "SSJBooksTypeCollectionViewCell.h"
 
 @interface SSJBooksTypeCollectionViewCell()
+
 @property(nonatomic, strong) UILabel *titleLabel;
+
 @property(nonatomic, strong) UIView *seperatorLineView;
+
 @property(nonatomic, strong) UIImageView *lineImage;
+
 @property(nonatomic, strong) UIImageView *selectImageView;
+
 @property(nonatomic, strong) UIImageView *booksIcionImageView;
+
+@property(nonatomic, strong) UIButton *selectedButton;
+
 @end
 
 @implementation SSJBooksTypeCollectionViewCell
@@ -22,14 +30,13 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UILongPressGestureRecognizer * longPressGr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressToDo:)];
-        longPressGr.minimumPressDuration = 0.5f;
-        [self addGestureRecognizer:longPressGr];
         [self.contentView addSubview:self.booksIcionImageView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.seperatorLineView];
         [self.contentView addSubview:self.lineImage];
         [self.contentView addSubview:self.selectImageView];
+        [self.contentView addSubview:self.selectedButton];
+        self.clipsToBounds = NO;
         self.layer.cornerRadius = 4.f;
     }
     return self;
@@ -51,6 +58,15 @@
     self.lineImage.center = CGPointMake(12, self.height / 2);
     self.selectImageView.rightBottom = CGPointMake(self.width, self.height - 10);
     self.booksIcionImageView.rightBottom = CGPointMake(self.width , self.height);
+    if (self.item.booksId.length) {
+        self.booksIcionImageView.transform = CGAffineTransformMakeRotation( - M_PI_4);
+        self.booksIcionImageView.transform = CGAffineTransformTranslate(self.booksIcionImageView.transform, 0, -8);
+    }
+    if (self.item.booksId.length) {
+        self.selectedButton.center = CGPointMake(self.contentView.width , 0);
+    }else{
+        self.selectedButton.hidden = YES;
+    }
 }
 
 -(UILabel *)titleLabel{
@@ -89,10 +105,19 @@
 
 -(UIImageView *)booksIcionImageView{
     if (!_booksIcionImageView) {
-        _booksIcionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 34, 34)];
-        _booksIcionImageView.tintColor = [UIColor ssj_colorWithHex:@"#000000" alpha:0.1];
+        _booksIcionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
+        _booksIcionImageView.tintColor = [UIColor ssj_colorWithHex:@"#000000" alpha:0.15];
     }
     return _booksIcionImageView;
+}
+
+- (UIButton *)selectedButton{
+    if (!_selectedButton) {
+        _selectedButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [_selectedButton setImage:[UIImage imageNamed:@"book_xuanzhong"] forState:UIControlStateNormal];
+        [_selectedButton setImage:[UIImage imageNamed:@"book_sel"] forState:UIControlStateSelected];
+    }
+    return _selectedButton;
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{
@@ -104,16 +129,14 @@
     [self setNeedsLayout];
 }
 
--(void)longPressToDo:(id)sender{
-    if (!_isEditing) {
-        if (self.longPressBlock) {
-            self.longPressBlock();
-        }
-    }
+- (void)setSelectToEdite:(BOOL)selectToEdite{
+    _selectToEdite = selectToEdite;
+    self.selectedButton.selected = _selectToEdite;
 }
 
--(void)setIsEditing:(BOOL)isEditing{
-    _isEditing = isEditing;
+-(void)setEditeModel:(BOOL)editeModel{
+    _editeModel = editeModel;
+    self.selectedButton.hidden = !_editeModel;
 }
 
 -(void)setIsSelected:(BOOL)isSelected{

@@ -17,14 +17,25 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJDataSynchronizer.h"
 
 @interface SSJBooksTypeSelectViewController ()
+
 @property(nonatomic, strong) UICollectionView *collectionView;
+
 @property(nonatomic, strong) NSMutableArray *items;
-@property(nonatomic, strong) SSJBooksTypeEditeView *booksEditeView;
+
+@property(nonatomic, strong) UIButton *deleteButton;
+
+@property(nonatomic, strong) UIButton *editeButton;
+
+@property(nonatomic, strong) NSMutableArray *selectedBooks;
+
+@property(nonatomic, strong) UIButton *rightButton;
+
 @end
 
 @implementation SSJBooksTypeSelectViewController{
     NSString *_selectBooksId;
     NSIndexPath *_editingIndex;
+    BOOL _editeModel;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -37,8 +48,14 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.collectionView];
+    [self.view addSubview:self.editeButton];
+    [self.view addSubview:self.deleteButton];
+    self.selectedBooks = [NSMutableArray arrayWithCapacity:0];
     [self.collectionView registerClass:[SSJBooksTypeCollectionViewCell class] forCellWithReuseIdentifier:SSJBooksTypeCellIdentifier];
     [self.collectionView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightButton];
+    self.navigationItem.rightBarButtonItem = rightItem;
+    _editeModel = NO;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -49,25 +66,50 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     
 }
 
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.selectedBooks removeAllObjects];
+    _editeModel = NO;
+}
+
 -(void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    self.editeButton.size = CGSizeMake(self.view.width * 0.58, 55);
+    self.editeButton.leftBottom = CGPointMake(0, self.view.height);
+    self.deleteButton.size = CGSizeMake(self.view.width * 0.42, 55);
+    self.deleteButton.leftBottom = CGPointMake(self.editeButton.right, self.view.height);
 }
 
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (![item.booksName isEqualToString:@"添加账本"]) {
-        [MobClick event:@"change_account_book"];
-        SSJSelectBooksType(item.booksId);
+    if (_editeModel) {
+        if ([self.selectedBooks containsObject:item]) {
+            [self.selectedBooks removeObject:item];
+        }else{
+            [self.selectedBooks addObject:item];
+        }
+        if (self.selectedBooks.count > 1) {
+            self.editeButton.enabled = NO;
+        }else{
+            self.editeButton.enabled = YES;
+        }
         [self.collectionView reloadData];
-        [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
-        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
     }else{
-        [MobClick event:@"add_account_book"];
-        self.booksEditeView.item = item;
-        [self.booksEditeView show];
+        if (![item.booksName isEqualToString:@"添加账本"]) {
+            [MobClick event:@"change_account_book"];
+            SSJSelectBooksType(item.booksId);
+            [self.collectionView reloadData];
+            [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
+            [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+        }
     }
+
 }
 
 
@@ -83,21 +125,17 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
 //    __weak typeof(self) weakSelf = self;
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
+    cell.editeModel = _editeModel;
+    if ([self.selectedBooks containsObject:item]) {
+        cell.selectToEdite = YES;
+    }else{
+        cell.selectToEdite = NO;
+    }
     if ([item.booksId isEqualToString:booksid]) {
         cell.isSelected = YES;
     }else{
         cell.isSelected = NO;
     }
-    cell.isEditing = NO;
-    __weak typeof(self) weakSelf = self;
-    cell.longPressBlock = ^(){
-        if ([indexPath compare:_editingIndex] != NSOrderedSame || _editingIndex == nil) {
-            _editingIndex = indexPath;
-            [MobClick event:@"edit_account_book"];
-            weakSelf.booksEditeView.item = item;
-            [weakSelf.booksEditeView show];
-        }
-    };
     cell.item = item;
     return cell;
 }
@@ -120,6 +158,20 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     return UIEdgeInsetsMake(12, 18, 0, 12);
 }
 
+#pragma mark - Event
+- (void)rightButtonClicked:(id)sender{
+    _editeModel = !_editeModel;
+    self.rightButton.selected = !self.rightButton.isSelected;
+    if (self.rightButton.isSelected) {
+        [self.selectedBooks removeAllObjects];
+    }
+    [self.collectionView reloadData];
+}
+
+- (void)editeButtonClicked:(id)sender{
+    NSLog(@"1111");
+}
+
 #pragma mark - Getter
 -(UICollectionView *)collectionView{
     if (_collectionView==nil) {
@@ -138,32 +190,73 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     return _collectionView;
 }
 
--(SSJBooksTypeEditeView *)booksEditeView{
-    if (!_booksEditeView) {
-        _booksEditeView = [[SSJBooksTypeEditeView alloc]init];
-        __weak typeof(self) weakSelf = self;
-        _booksEditeView.comfirmButtonClickedBlock = ^(SSJBooksTypeItem *item){
-            item.cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            item.userId = SSJUSERID();
-            [SSJBooksTypeStore saveBooksTypeItem:item];
-            [weakSelf getDateFromDB];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        };
-        __block NSString *booksid = SSJGetCurrentBooksType();
-        _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
-            if ([item.booksId isEqualToString:booksid]) {
-                SSJSelectBooksType(SSJUSERID());
-            }
-            [weakSelf getDateFromDB];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        };
-        _booksEditeView.editeViewDismissBlock = ^(){
-            _editingIndex = nil;
-        };
+-(UIButton *)editeButton{
+    if (!_editeButton) {
+        _editeButton = [[UIButton alloc]init];
+        NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
+        [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
+        [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
+        [_editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
+        [_editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        [_editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateDisabled];
+        _editeButton.backgroundColor = [UIColor ssj_colorWithHex:@"#dddddd"];
+        [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _booksEditeView;
+    return _editeButton;
 }
 
+-(UIButton *)deleteButton{
+    if (!_deleteButton) {
+        _deleteButton = [[UIButton alloc]init];
+        [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+        [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+    }
+    return _deleteButton;
+}
+
+-(UIButton *)rightButton{
+    if (!_rightButton) {
+        _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+        [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
+        [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
+        _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
+        [_rightButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
+        [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _rightButton.selected = NO;
+    }
+    return _rightButton;
+}
+
+//-(SSJBooksTypeEditeView *)booksEditeView{
+//    if (!_booksEditeView) {
+//        _booksEditeView = [[SSJBooksTypeEditeView alloc]init];
+//        __weak typeof(self) weakSelf = self;
+//        _booksEditeView.comfirmButtonClickedBlock = ^(SSJBooksTypeItem *item){
+//            item.cwriteDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+//            item.userId = SSJUSERID();
+//            [SSJBooksTypeStore saveBooksTypeItem:item];
+//            [weakSelf getDateFromDB];
+//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//        };
+//        __block NSString *booksid = SSJGetCurrentBooksType();
+//        _booksEditeView.deleteButtonClickedBlock = ^(SSJBooksTypeItem *item){
+//            if ([item.booksId isEqualToString:booksid]) {
+//                SSJSelectBooksType(SSJUSERID());
+//            }
+//            [weakSelf getDateFromDB];
+//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//        };
+//        _booksEditeView.editeViewDismissBlock = ^(){
+//            _editingIndex = nil;
+//        };
+//    }
+//    return _booksEditeView;
+//}
+
+#pragma mark - Private
 -(void)getDateFromDB{
     __weak typeof(self) weakSelf = self;
     [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *result) {

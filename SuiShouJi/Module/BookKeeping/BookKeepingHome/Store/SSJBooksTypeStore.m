@@ -36,7 +36,7 @@
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
         item.booksColor = @"#CCCCCC";
-        item.booksIcoin = @"books_tianjia";
+        item.booksIcoin = @"book_tianjia";
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{
