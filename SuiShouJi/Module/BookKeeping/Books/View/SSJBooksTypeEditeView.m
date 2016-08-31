@@ -15,7 +15,7 @@
 @interface SSJBooksTypeEditeView()<YYKeyboardObserver,UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property(nonatomic, strong) UILabel *titleLabel;
-@property(nonatomic, strong) UIView *seperatorLine;
+@property(nonatomic, strong) UIView *sepeatorLine;
 @property(nonatomic, strong) UITextField *nameInput;
 @property(nonatomic, strong) UICollectionView *colorSelectView;
 @property(nonatomic, strong) UIButton *comfirmButton;

@@ -15,6 +15,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeEditeView.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJBooksEditeOrNewViewController.h"
 
 @interface SSJBooksTypeSelectViewController ()
 
@@ -70,6 +71,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [super viewWillDisappear:animated];
     [self.selectedBooks removeAllObjects];
     _editeModel = NO;
+    self.rightButton.selected = NO;
 }
 
 -(void)dealloc {
@@ -89,17 +91,22 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 {
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (_editeModel) {
-        if ([self.selectedBooks containsObject:item]) {
-            [self.selectedBooks removeObject:item];
+        if (![item.booksName isEqualToString:@"添加账本"]) {
+            if ([self.selectedBooks containsObject:item]) {
+                [self.selectedBooks removeObject:item];
+            }else{
+                [self.selectedBooks addObject:item];
+            }
+            if (self.selectedBooks.count > 1) {
+                self.editeButton.enabled = NO;
+            }else{
+                self.editeButton.enabled = YES;
+            }
+            [self.collectionView reloadData];
         }else{
-            [self.selectedBooks addObject:item];
+            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+            [self.navigationController pushViewController:booksEditeVc animated:YES];
         }
-        if (self.selectedBooks.count > 1) {
-            self.editeButton.enabled = NO;
-        }else{
-            self.editeButton.enabled = YES;
-        }
-        [self.collectionView reloadData];
     }else{
         if (![item.booksName isEqualToString:@"添加账本"]) {
             [MobClick event:@"change_account_book"];
@@ -107,6 +114,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             [self.collectionView reloadData];
             [self.mm_drawerController closeDrawerAnimated:YES completion:NULL];
             [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+        }else{
+            SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+            [self.navigationController pushViewController:booksEditeVc animated:YES];
         }
     }
 
@@ -196,9 +206,14 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
         [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
         [attributedTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
+        [attributedTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, attributedTitle.length)];
+        NSMutableAttributedString *attributedDisableTitle = [[NSMutableAttributedString alloc]initWithString:@"编辑 (单选)"];
+        [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 2)];
+        [attributedDisableTitle addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(3, 4)];
+        [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
         [_editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
-        [_editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-        [_editeButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateDisabled];
+        [_editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
+
         _editeButton.backgroundColor = [UIColor ssj_colorWithHex:@"#dddddd"];
         [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
