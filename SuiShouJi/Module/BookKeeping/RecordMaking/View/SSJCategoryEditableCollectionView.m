@@ -101,8 +101,19 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     
     _editing = editing;
     _collectionView.allowsMultipleSelection = _editing;
+    
+    for (NSIndexPath *path in [_collectionView indexPathsForSelectedItems]) {
+        [_collectionView deselectItemAtIndexPath:path animated:YES];
+    }
+    
     for (int i = 0; i < _cellItems.count; i ++) {
         [self deselectCellItemAtIndex:i];
+    }
+    
+    [self updateSelectedItems];
+    
+    if (_selectedItemsChangeHandle) {
+        _selectedItemsChangeHandle(self);
     }
     
     if (_editStateChangeHandle) {

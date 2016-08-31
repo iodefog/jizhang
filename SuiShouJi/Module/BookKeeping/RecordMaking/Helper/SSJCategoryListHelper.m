@@ -43,19 +43,27 @@
     }];
 }
 
++ (int)queryForBillTypeMaxOrderWithState:(int)state type:(int)type {
+    __block int maxOrder = 0;
+    NSString *userID = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ? and a.istate = ?", userID, @(type), @(state)];
+    }];
+    return maxOrder;
+}
+
 + (void)updateCategoryWithID:(NSString *)categoryId
                         name:(NSString *)name
                        color:(NSString *)color
                        image:(NSString *)image
+                       order:(int)order
                        state:(int)state
-           incomeOrExpenture:(int)incomeOrExpenture
                      Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ? and a.istate = ?", SSJUSERID(), @(incomeOrExpenture), @(state)];
         
-        if (![db executeUpdate:@"update bk_bill_type set cname = ?, ccoin = ?, ccolor = ? where id = ?", name, image, color]) {
+        if (![db executeUpdate:@"update bk_bill_type set cname = ?, ccoin = ?, ccolor = ? where id = ?", name, image, color, categoryId]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -64,7 +72,7 @@
             return;
         }
         
-        if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(maxOrder + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);

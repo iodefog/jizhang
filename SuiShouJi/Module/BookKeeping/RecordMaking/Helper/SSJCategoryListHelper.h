@@ -26,12 +26,21 @@
                                           failure:(void (^)(NSError *error))failure;
 
 /**
- *  更改记账类型的开启状态
+ *  查询收支类别对应开启、关闭状态下的最大序号
+ *
+ *  @param state    0:关闭 1:开启
+ *  @param type     0:收入 1:支出
+ */
++ (int)queryForBillTypeMaxOrderWithState:(int)state type:(int)type;
+
+/**
+ *  更改收支类型
  *
  *  @param categoryId           记账类型id
  *  @param name                 类别名称
  *  @param color                类别颜色
  *  @param image                类别图片
+ *  @param order                类别序号
  *  @param state                0:关闭 1:开启
  *  @param incomeOrExpenture    0:收入 1:支出
  *  @param success              删除成功的回调
@@ -41,8 +50,8 @@
                         name:(NSString *)name
                        color:(NSString *)color
                        image:(NSString *)image
+                       order:(int)order
                        state:(int)state
-           incomeOrExpenture:(int)incomeOrExpenture
                      Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure;
 

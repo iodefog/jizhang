@@ -8,6 +8,7 @@
 
 #import "SSJADDNewTypeViewController.h"
 #import "SSJCategoryCollectionViewCell.h"
+#import "SSJEditBillTypeViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
@@ -22,7 +23,7 @@
 
 static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
-@interface SSJADDNewTypeViewController () <UIScrollViewDelegate, UITextFieldDelegate, SCYSlidePagingHeaderViewDelegate>
+@interface SSJADDNewTypeViewController () <UIScrollViewDelegate, SCYSlidePagingHeaderViewDelegate>
 
 @property (nonatomic, strong) SSJSegmentedControl *titleSegmentView;
 
@@ -178,8 +179,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         if (name.length == 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
             return;
-        } else if (name.length > 4) {
-            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
+        } else if (name.length > 5) {
+            [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
             return;
         }
         
@@ -226,6 +227,26 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (void)editButtonAction {
     
+    SSJRecordMakingCategoryItem *selectedItem = nil;
+    
+    if (_titleSegmentView.selectedSegmentIndex == 0) {
+        selectedItem = [_featuredCategoryCollectionView.selectedItems firstObject];
+    } else if (_titleSegmentView.selectedSegmentIndex == 1
+               && _customCategorySwitchConrol.selectedIndex == 0) {
+        selectedItem = [_customCategoryCollectionView.selectedItems firstObject];
+    }
+    
+    SSJBillModel *model = [[SSJBillModel alloc] init];
+    model.ID = selectedItem.categoryID;
+    model.name = selectedItem.categoryTitle;
+    model.icon = selectedItem.categoryImage;
+    model.color = selectedItem.categoryColor;
+    model.state = 0;
+    model.type = _incomeOrExpence;
+    
+    SSJEditBillTypeViewController *editVC = [[SSJEditBillTypeViewController alloc] init];
+    editVC.model = model;
+    [self.navigationController pushViewController:editVC animated:YES];
 }
 
 - (void)deleteButtonAction {
@@ -358,21 +379,17 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 - (void)updateEditButtonEnable {
-    if (_titleSegmentView.selectedSegmentIndex == 0) {
-        if (_featuredCategoryCollectionView.editing
-            && _featuredCategoryCollectionView.selectedItems.count > 1) {
-            self.editButton.enabled = NO;
-        } else {
-            self.editButton.enabled = YES;
-        }
-    } else if (_titleSegmentView.selectedSegmentIndex == 1
-               && _customCategorySwitchConrol.selectedIndex == 0) {
-        if (_customCategoryCollectionView.editing
-            && _customCategoryCollectionView.selectedItems.count > 1) {
-            self.editButton.enabled = NO;
-        } else {
-            self.editButton.enabled = YES;
-        }
+    if (_titleSegmentView.selectedSegmentIndex == 0
+        && _featuredCategoryCollectionView.editing) {
+        self.editButton.enabled = _featuredCategoryCollectionView.selectedItems.count == 1;
+        return;
+    }
+    
+    if (_titleSegmentView.selectedSegmentIndex == 1
+        && _customCategorySwitchConrol.selectedIndex == 0
+        && _customCategoryCollectionView.editing) {
+        self.editButton.enabled = _customCategoryCollectionView.selectedItems.count == 1;
+        return;
     }
 }
 
@@ -385,12 +402,21 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 - (void)openCategoryWithID:(NSString *)ID name:(NSString *)name color:(NSString *)color image:(NSString *)image type:(int)type {
-    [SSJCategoryListHelper updateCategoryWithID:ID name:name color:color image:image state:1 incomeOrExpenture:type Success:^(NSString *categoryId) {
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:1 type:type] + 1;
+    [SSJCategoryListHelper updateCategoryWithID:ID
+                                           name:name
+                                          color:color
+                                          image:image
+                                          order:order
+                                          state:1
+                                        Success:^(NSString *categoryId) {
+                                            
         [self.navigationController popViewControllerAnimated:YES];
         if (self.addNewCategoryAction) {
             self.addNewCategoryAction(categoryId, type);
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                                            
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
@@ -448,7 +474,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _featuredCategoryCollectionView = [[SSJCategoryEditableCollectionView alloc] initWithFrame:CGRectMake(0, 10, self.scrollView.width, self.scrollView.height - 10)];
         _featuredCategoryCollectionView.editStateChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             [wself updateSubviews];
-            [wself updateEditButtonEnable];
         };
         _featuredCategoryCollectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             [wself updateEditButtonEnable];
@@ -463,7 +488,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _customCategoryCollectionView = [[SSJCategoryEditableCollectionView alloc] initWithFrame:CGRectMake(self.scrollView.width, self.customCategorySwitchConrol.bottom + 10, self.scrollView.width, self.scrollView.height - self.customCategorySwitchConrol.bottom - 10)];
         _customCategoryCollectionView.editStateChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             [wself updateSubviews];
-            [wself updateEditButtonEnable];
+//            [wself updateEditButtonEnable];
         };
         _customCategoryCollectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
             [wself updateEditButtonEnable];
