@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) NSString *selectedColor;
 
+@property (nonatomic) CGFloat displayColorRowCount;
+
 @property (nonatomic, copy) void (^selectImageAction)(SSJNewOrEditCustomCategoryView *view);
 
 @property (nonatomic, copy) void (^selectColorAction)(SSJNewOrEditCustomCategoryView *view);
