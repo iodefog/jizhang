@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class SSJRecordMakingCategoryItem;
+#import "SSJRecordMakingCategoryItem.h"
 
 @interface SSJCategoryEditableCollectionView : UIView
 
@@ -16,11 +15,21 @@
 
 @property (nonatomic, strong, readonly) NSArray <SSJRecordMakingCategoryItem *>*selectedItems;
 
+// default NO
 @property (nonatomic) BOOL editing;
+
+// default YES
+@property (nonatomic) BOOL editable;
+
+@property (nonatomic) CGSize itemSize;
+
+@property (nonatomic) UIEdgeInsets contentInset;
 
 @property (nonatomic, copy) void(^editStateChangeHandle)(SSJCategoryEditableCollectionView *view);
 
 @property (nonatomic, copy) void(^selectedItemsChangeHandle)(SSJCategoryEditableCollectionView *view);
+
+@property (nonatomic, copy) void(^didScrollHandle)(SSJCategoryEditableCollectionView *view, CGPoint velocity);
 
 - (void)updateAppearance;
 

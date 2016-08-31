@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJAddNewTypeColorSelectionView.h"
 
 @class SSJRecordMakingCategoryItem;
 
@@ -15,13 +14,15 @@
 
 @property (nonatomic, strong, readonly) UITextField *textField;
 
-@property (nonatomic, strong) NSArray <SSJRecordMakingCategoryItem *>*items;
+@property (nonatomic, strong) NSArray <NSString *>*images;
 
-@property (nonatomic, strong, readonly) SSJRecordMakingCategoryItem *selectedItem;
+@property (nonatomic, strong) NSArray <NSString *>*colors;
 
-@property (nonatomic, strong, readonly) SSJAddNewTypeColorSelectionView *colorSelectionView;
+@property (nonatomic, strong) NSString *selectedImage;
 
-@property (nonatomic, copy) void (^selectCategoryAction)(SSJNewOrEditCustomCategoryView *view);
+@property (nonatomic, strong) NSString *selectedColor;
+
+@property (nonatomic, copy) void (^selectImageAction)(SSJNewOrEditCustomCategoryView *view);
 
 @property (nonatomic, copy) void (^selectColorAction)(SSJNewOrEditCustomCategoryView *view);
 

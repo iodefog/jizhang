@@ -174,16 +174,15 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     } else if (_titleSegmentView.selectedSegmentIndex == 1
                && _customCategorySwitchConrol.selectedIndex == 1) {
         // 新建自定义类别
-        SSJRecordMakingCategoryItem *item = _newOrEditCategoryView.selectedItem;
-        if (item.categoryTitle.length == 0) {
+        if (_newOrEditCategoryView.textField.text.length == 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
             return;
-        } else if (item.categoryTitle.length > 4) {
+        } else if (_newOrEditCategoryView.textField.text.length > 4) {
             [CDAutoHideMessageHUD showMessage:@"类别名称不能超过4个字符"];
             return;
         }
         
-        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:item.categoryTitle icon:item.categoryImage color:item.categoryColor success:^(NSString *categoryId){
+        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:_newOrEditCategoryView.textField.text icon:_newOrEditCategoryView.selectedImage color:_newOrEditCategoryView.selectedColor success:^(NSString *categoryId){
             [self.navigationController popViewControllerAnimated:YES];
             if (self.addNewCategoryAction) {
                 self.addNewCategoryAction(categoryId);
@@ -243,12 +242,12 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             }];
             
         } else if (self.customCategorySwitchConrol.selectedIndex == 1
-                   && _newOrEditCategoryView.items.count == 0) {
+                   && _newOrEditCategoryView.images.count == 0) {
             // 查询自定义类别图标
-            [SSJCategoryListHelper queryCustomCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<SSJRecordMakingCategoryItem *> *items) {
+            [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<NSString *> *images) {
                 [self.view ssj_hideLoadingIndicator];
-                _newOrEditCategoryView.items = items;
-                _newOrEditCategoryView.colorSelectionView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
+                _newOrEditCategoryView.images = images;
+                _newOrEditCategoryView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
             } failure:^(NSError *error) {
                 [self.view ssj_hideLoadingIndicator];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
@@ -425,7 +424,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     if (!_newOrEditCategoryView) {
         __weak typeof(self) wself = self;
         _newOrEditCategoryView = [[SSJNewOrEditCustomCategoryView alloc] initWithFrame:CGRectMake(self.scrollView.width, self.customCategorySwitchConrol.bottom + 10, self.scrollView.width, self.scrollView.height - self.customCategorySwitchConrol.bottom - 10)];
-        _newOrEditCategoryView.selectCategoryAction = ^(SSJNewOrEditCustomCategoryView *view) {
+        _newOrEditCategoryView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view) {
             if (wself.incomeOrExpence) {
                 [MobClick event:@"add_user_bill_in_custom"];
             }else{
