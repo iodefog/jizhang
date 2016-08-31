@@ -27,11 +27,15 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
 - (SSJNewOrEditCustomCategoryView *)booksEditeView{
@@ -39,6 +43,16 @@
         _booksEditeView = [[SSJNewOrEditCustomCategoryView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
         _booksEditeView.colors = [self colorsArray];
         _booksEditeView.images = [self imageArray];
+        if (self.item.booksName.length) {
+            _booksEditeView.textField.text = self.item.booksName;
+        }
+        if (self.item.booksIcoin.length) {
+            _booksEditeView.selectedImage = self.item.booksIcoin;
+        }
+        if (self.item.booksColor.length) {
+            _booksEditeView.selectedColor = [self.item.booksColor lowercaseString];
+        }
+        _booksEditeView.displayColorRowCount = 3;
     }
     return _booksEditeView;
 }

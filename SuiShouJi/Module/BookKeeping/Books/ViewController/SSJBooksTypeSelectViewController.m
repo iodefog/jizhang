@@ -179,7 +179,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 }
 
 - (void)editeButtonClicked:(id)sender{
-    NSLog(@"1111");
+    SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
+    booksEditeVc.item = [self.selectedBooks firstObject];
+    [self.navigationController pushViewController:booksEditeVc animated:YES];
 }
 
 #pragma mark - Getter
