@@ -8,7 +8,6 @@
 
 #import "SSJNewOrEditCustomCategoryView.h"
 #import "SSJCategoryCollectionViewCell.h"
-#import "SSJAddNewTypeColorSelectionView.h"
 
 static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 
@@ -59,13 +58,6 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
     [_collectionView reloadData];
 }
 
-- (void)setColors:(NSArray *)colors {
-    if (![_colors isEqualToArray:colors]) {
-        _colors = colors;
-        _colorSelectionView.colors = colors;
-    }
-}
-
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return _items.count;
@@ -73,7 +65,7 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
-    cell.item = (SSJRecordMakingCategoryItem*)[_items ssj_safeObjectAtIndex:indexPath.row];
+    cell.item = (SSJRecordMakingCategoryItem *)[_items ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 

@@ -248,7 +248,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             [SSJCategoryListHelper queryCustomCategoryListWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<SSJRecordMakingCategoryItem *> *items) {
                 [self.view ssj_hideLoadingIndicator];
                 _newOrEditCategoryView.items = items;
-                _newOrEditCategoryView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
+                _newOrEditCategoryView.colorSelectionView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
             } failure:^(NSError *error) {
                 [self.view ssj_hideLoadingIndicator];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];

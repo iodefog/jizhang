@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJAddNewTypeColorSelectionView.h"
 
 @class SSJRecordMakingCategoryItem;
 
@@ -18,7 +19,7 @@
 
 @property (nonatomic, strong, readonly) SSJRecordMakingCategoryItem *selectedItem;
 
-@property (nonatomic, strong) NSArray *colors;
+@property (nonatomic, strong, readonly) SSJAddNewTypeColorSelectionView *colorSelectionView;
 
 @property (nonatomic, copy) void (^selectCategoryAction)(SSJNewOrEditCustomCategoryView *view);
 
