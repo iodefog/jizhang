@@ -55,6 +55,12 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 
 - (void)setItems:(NSArray<SSJRecordMakingCategoryItem *> *)items {
     _items = items;
+    for (SSJRecordMakingCategoryItem *item in _items) {
+        if (item.selected) {
+            _selectedItem = item;
+            break;
+        }
+    }
     [_collectionView reloadData];
 }
 
