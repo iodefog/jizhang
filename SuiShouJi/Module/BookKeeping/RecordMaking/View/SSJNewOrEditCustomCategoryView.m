@@ -57,19 +57,14 @@
 - (void)setImages:(NSArray *)images {
     if (![_images isEqualToArray:images]) {
         _images = images;
-        _selectedImage = [_images firstObject];
-        [self updateSelectedImage];
-        [self updateImageSelectionView];
+        self.selectedImage = [_images firstObject];
     }
 }
 
 - (void)setColors:(NSArray *)colors {
     if (![_colors isEqualToArray:colors]) {
         _colors = colors;
-        _selectedColor = [_colors firstObject];
-        _colorSelectionView.colors = _colors;
-        [self updateSelectedImage];
-        [self updateImageSelectionView];
+        self.selectedColor = [_colors firstObject];
     }
 }
 
@@ -78,6 +73,7 @@
         _selectedImage = selectedImage;
         [self updateSelectedImage];
         [self updateImageSelectionView];
+        [self updateColorSelectionView];
     }
 }
 
@@ -86,6 +82,7 @@
         _selectedColor = selectedColor;
         [self updateSelectedImage];
         [self updateImageSelectionView];
+        [self updateColorSelectionView];
     }
 }
 
@@ -126,6 +123,11 @@
     }
     _imageSelectionView.items = items;
     [_imageSelectionView updateAppearance];
+}
+
+- (void)updateColorSelectionView {
+    _colorSelectionView.colors = _colors;
+    _colorSelectionView.selectedIndex = [_colors indexOfObject:_selectedColor];
 }
 
 #pragma mark - Event

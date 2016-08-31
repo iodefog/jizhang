@@ -53,6 +53,13 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
     }
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+    if (_selectedIndex != selectedIndex) {
+        _selectedIndex = selectedIndex;
+        [_collectionView reloadData];
+    }
+}
+
 - (void)setDisplayRowCount:(CGFloat)displayRowCount {
     if (_displayRowCount != displayRowCount) {
         _displayRowCount = displayRowCount;
