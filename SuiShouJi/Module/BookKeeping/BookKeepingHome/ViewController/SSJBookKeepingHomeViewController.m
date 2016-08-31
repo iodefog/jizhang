@@ -52,6 +52,7 @@ BOOL kHomeNeedLoginPop;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
+@property(nonatomic, strong) UIButton *leftButton;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -93,7 +94,7 @@ BOOL kHomeNeedLoginPop;
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"home_books"] style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonClicked:)];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithCustomView:self.leftButton];
     self.navigationItem.leftBarButtonItem = leftButton;
     UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
     rightSpace.width = -15;
@@ -121,7 +122,8 @@ BOOL kHomeNeedLoginPop;
         }];
         NSString *booksid = SSJGetCurrentBooksType();
         SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+        [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     }
 }
 
@@ -577,6 +579,15 @@ BOOL kHomeNeedLoginPop;
 //    return _statusLabel;
 //}
 
+- (UIButton *)leftButton{
+    if (!_leftButton) {
+        _leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 32)];
+        [_leftButton addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    }
+    return _leftButton;
+}
+
 #pragma mark - Event
 -(void)rightBarButtonClicked{
     SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
@@ -770,7 +781,8 @@ BOOL kHomeNeedLoginPop;
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
 }
 
 - (void)reloadDataAfterInitDatabase {
@@ -780,7 +792,8 @@ BOOL kHomeNeedLoginPop;
     
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
 }
 
 - (void)reloadAfterBooksTypeChange{
@@ -790,7 +803,8 @@ BOOL kHomeNeedLoginPop;
     
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
 }
 
 - (void)reloadBudgetData {
