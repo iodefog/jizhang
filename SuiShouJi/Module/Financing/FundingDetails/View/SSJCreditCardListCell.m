@@ -91,16 +91,24 @@
     [self.periodLab sizeToFit];
     NSDate *date = [NSDate dateWithString:_item.month formatString:@"yyyy-MM"];
     NSDate *today = [NSDate date];
-    NSDate *billingDate = [NSDate dateWithYear:date.year month:date.month day:_item.billingDay];
-    NSDate *repaymentDate = [NSDate dateWithYear:date.year month:date.month day:_item.repaymentDay];
+    NSDate *billingDate = [NSDate date];
+    NSDate *repaymentDate = [NSDate date];
+    if (_item.billingDay < _item.repaymentDay) {
+        billingDate = [NSDate dateWithYear:date.year month:date.month day:_item.billingDay];
+        repaymentDate = [NSDate dateWithYear:date.year month:date.month day:_item.repaymentDay];
+    }else{
+        billingDate = [NSDate dateWithYear:date.year month:date.month day:_item.billingDay];
+        repaymentDate = [NSDate dateWithYear:date.year month:date.month + 1 day:_item.repaymentDay];
+    }
+
     NSInteger daysToBillingDate = [billingDate daysFrom:today];
     NSInteger daysToRepaymentDate = [repaymentDate daysFrom:today];
     NSInteger minmumDays = MIN(daysToBillingDate, daysToRepaymentDate);
-    if (minmumDays > 0) {
+    if (minmumDays + 1 > 0) {
         if (daysToBillingDate > daysToRepaymentDate) {
-            self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",minmumDays];
+            self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",minmumDays + 1];
         }else{
-            self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",minmumDays];
+            self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",minmumDays + 1];
         }
     }else{
         self.daysLab.text = @"";
