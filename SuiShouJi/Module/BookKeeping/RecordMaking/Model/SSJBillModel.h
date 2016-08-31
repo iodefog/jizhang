@@ -16,7 +16,7 @@
 
 @property (nonatomic, copy) NSString *userID;
 
-@property (nonatomic, copy) NSString *parentID;
+//@property (nonatomic, copy) NSString *parentID;
 
 //@property (nonatomic, copy) NSString *booksID;
 

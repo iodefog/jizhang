@@ -29,12 +29,18 @@
  *  更改记账类型的开启状态
  *
  *  @param categoryId           记账类型id
+ *  @param name                 类别名称
+ *  @param color                类别颜色
+ *  @param image                类别图片
  *  @param state                0:关闭 1:开启
  *  @param incomeOrExpenture    0:收入 1:支出
  *  @param success              删除成功的回调
  *  @param failure              删除失败的回调
  */
 + (void)updateCategoryWithID:(NSString *)categoryId
+                        name:(NSString *)name
+                       color:(NSString *)color
+                       image:(NSString *)image
                        state:(int)state
            incomeOrExpenture:(int)incomeOrExpenture
                      Success:(void(^)(NSString *categoryId))success
