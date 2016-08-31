@@ -36,6 +36,7 @@
         [self.contentView addSubview:self.lineImage];
         [self.contentView addSubview:self.selectImageView];
         [self.contentView addSubview:self.selectedButton];
+        self.clipsToBounds = NO;
         self.layer.cornerRadius = 4.f;
     }
     return self;
@@ -61,7 +62,11 @@
         self.booksIcionImageView.transform = CGAffineTransformMakeRotation( - M_PI_4);
         self.booksIcionImageView.transform = CGAffineTransformTranslate(self.booksIcionImageView.transform, 0, -8);
     }
-    self.selectedButton.rightTop = CGPointMake(self.contentView.width , 0);
+    if (self.item.booksId.length) {
+        self.selectedButton.center = CGPointMake(self.contentView.width , 0);
+    }else{
+        self.selectedButton.hidden = YES;
+    }
 }
 
 -(UILabel *)titleLabel{
@@ -111,7 +116,6 @@
         _selectedButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
         [_selectedButton setImage:[UIImage imageNamed:@"book_xuanzhong"] forState:UIControlStateNormal];
         [_selectedButton setImage:[UIImage imageNamed:@"book_sel"] forState:UIControlStateSelected];
-        [_selectedButton addTarget:self action:@selector(selectedButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _selectedButton;
 }
@@ -125,11 +129,9 @@
     [self setNeedsLayout];
 }
 
-- (void)selectedButtonClicked:(id)sender{
-    self.selectedButton.selected = !self.selectedButton.isSelected;
-    if (self.selectToEditeBlock) {
-        self.selectToEditeBlock(self.item,self.selectedButton.isSelected);
-    }
+- (void)setSelectToEdite:(BOOL)selectToEdite{
+    _selectToEdite = selectToEdite;
+    self.selectedButton.selected = _selectToEdite;
 }
 
 -(void)setEditeModel:(BOOL)editeModel{

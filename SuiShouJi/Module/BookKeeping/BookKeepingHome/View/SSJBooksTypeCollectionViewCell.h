@@ -12,9 +12,8 @@
 @interface SSJBooksTypeCollectionViewCell : UICollectionViewCell
 @property(nonatomic, strong) SSJBooksTypeItem *item;
 
-typedef void (^selectToEditeBlock)(SSJBooksTypeItem *item , BOOL isSelected);
 
-@property(nonatomic,copy) selectToEditeBlock selectToEditeBlock;
+@property(nonatomic) BOOL selectToEdite;
 
 @property(nonatomic) BOOL isSelected;
 
