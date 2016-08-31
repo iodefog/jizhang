@@ -37,7 +37,7 @@
 + (void)updateCategoryWithID:(NSString *)categoryId
                        state:(int)state
            incomeOrExpenture:(int)incomeOrExpenture
-                     Success:(void(^)(BOOL result))success
+                     Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure;
 
 /**

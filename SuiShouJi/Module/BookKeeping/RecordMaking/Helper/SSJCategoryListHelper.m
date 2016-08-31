@@ -46,19 +46,20 @@
 + (void)updateCategoryWithID:(NSString *)categoryId
                        state:(int)state
            incomeOrExpenture:(int)incomeOrExpenture
-                     Success:(void(^)(BOOL result))success
+                     Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ? and a.istate = ?", SSJUSERID(), @(incomeOrExpenture), @(state)];
         
-        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(maxOrder + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
-        if (deletesucess) {
+        if ([db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(maxOrder + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()]) {
+            
             if (success){
                 SSJDispatch_main_async_safe(^{
-                    success(deletesucess);
+                    success(categoryId);
                 });
             }
+            
         } else {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -66,7 +67,6 @@
                 });
             }
         }
-        
     }];
 }
 
