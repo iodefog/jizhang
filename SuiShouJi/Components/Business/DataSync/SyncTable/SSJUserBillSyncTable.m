@@ -39,13 +39,13 @@
         NSString *iversion = [resultSet stringForColumn:@"iversion"];
         NSString *operatortype = [resultSet stringForColumn:@"operatortype"];
         
-        [syncRecords addObject:@{cbillid : cbillid ?: @"",
-                                 cuserid : cuserid ?: @"",
-                                 istate : istate ?: @"",
-                                 iorder : iorder ?: @"",
-                                 cwritedate : cwritedate ?: @"",
-                                 iversion : iversion ?: @"",
-                                 operatortype : operatortype ?: @""}];
+        [syncRecords addObject:@{@"cbillid" : cbillid ?: @"",
+                                 @"cuserid" : cuserid ?: @"",
+                                 @"istate" : istate ?: @"",
+                                 @"iorder" : iorder ?: @"",
+                                 @"cwritedate" : cwritedate ?: @"",
+                                 @"iversion" : iversion ?: @"",
+                                 @"operatortype" : operatortype ?: @""}];
     }
     
     return syncRecords;
