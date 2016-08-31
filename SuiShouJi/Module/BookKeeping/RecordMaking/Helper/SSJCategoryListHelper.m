@@ -117,9 +117,10 @@
     }];
 }
 
-+ (void)queryCustomCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
-                                             success:(void(^)(NSArray<SSJRecordMakingCategoryItem *> *items))success
-                                             failure:(void (^)(NSError *error))failure {
++ (void)queryCustomCategoryImagesWithIncomeOrExpenture:(int)incomeOrExpenture
+                                               success:(void(^)(NSArray<NSString *> *images))success
+                                               failure:(void (^)(NSError *error))failure {
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:@"select ccoin from bk_bill_type where itype = ? and cparent = 'root'", @(incomeOrExpenture)];
         if (!result) {
@@ -133,10 +134,8 @@
         
         NSMutableArray *tempArray = [[NSMutableArray alloc] init];
         while ([result next]) {
-            SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
-            item.categoryImage = [result stringForColumn:@"ccoin"];
-            item.categoryTintColor = SSJ_CURRENT_THEME.secondaryColor;
-            [tempArray addObject:item];
+            NSString *image = [result stringForColumn:@"ccoin"];
+            [tempArray addObject:(image ?: @"")];
         }
         
         if (success) {

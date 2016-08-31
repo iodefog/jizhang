@@ -26,7 +26,6 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
         _displayRowCount = 2;
         [self addSubview:self.collectionView];
         self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        
     }
     return self;
 }
@@ -49,6 +48,7 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 - (void)setColors:(NSArray *)colors {
     if (![_colors isEqualToArray:colors]) {
         _colors = colors;
+        _selectedIndex = _colors.count > 0 ? 0 : -1;
         [_collectionView reloadData];
     }
 }

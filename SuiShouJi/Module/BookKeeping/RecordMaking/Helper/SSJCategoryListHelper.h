@@ -59,9 +59,9 @@
  *  @param success    查询成功的回调
  *  @param failure    查询失败的回调
  */
-+ (void)queryCustomCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
-                                             success:(void(^)(NSArray<SSJRecordMakingCategoryItem *> *items))success
-                                             failure:(void (^)(NSError *error))failure;
++ (void)queryCustomCategoryImagesWithIncomeOrExpenture:(int)incomeOrExpenture
+                                              success:(void(^)(NSArray<NSString *> *images))success
+                                              failure:(void (^)(NSError *error))failure;
 
 /**
  *  新增自定义收支类型

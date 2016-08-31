@@ -7,21 +7,20 @@
 //
 
 #import "SSJNewOrEditCustomCategoryView.h"
-#import "SSJCategoryCollectionViewCell.h"
+#import "SSJCategoryEditableCollectionView.h"
+#import "SSJAddNewTypeColorSelectionView.h"
 
-static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
-
-@interface SSJNewOrEditCustomCategoryView () <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface SSJNewOrEditCustomCategoryView ()
 
 @property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, strong) UIImageView *selectedTypeView;
 
-@property (nonatomic, strong) UICollectionView *collectionView;
-
-@property (nonatomic, strong) UICollectionViewFlowLayout *customCategoryLayout;
+@property (nonatomic, strong) SSJCategoryEditableCollectionView *imageSelectionView;
 
 @property (nonatomic, strong) SSJAddNewTypeColorSelectionView *colorSelectionView;
+
+@property (nonatomic, strong) NSMutableArray *cellItems;
 
 @end
 
@@ -30,7 +29,7 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.textField];
-        [self addSubview:self.collectionView];
+        [self addSubview:self.imageSelectionView];
         [self addSubview:self.colorSelectionView];
         [self updateAppearance];
     }
@@ -39,7 +38,7 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
 
 - (void)layoutSubviews {
     _textField.frame = CGRectMake(0, 0, self.width, 63);
-    _collectionView.frame = CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height - 5);
+    _imageSelectionView.frame = CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height - 5);
     _colorSelectionView.bottom = self.height;
 }
 
@@ -49,77 +48,77 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
     _textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入类别名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     [_textField ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
-    _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _colorSelectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     [_colorSelectionView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-}
-
-- (void)setItems:(NSArray<SSJRecordMakingCategoryItem *> *)items {
-    _items = items;
-    for (SSJRecordMakingCategoryItem *item in _items) {
-        if (item.selected) {
-            _selectedItem = item;
-            break;
-        }
-    }
-    [_collectionView reloadData];
-}
-
-#pragma mark - UICollectionViewDataSource
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return _items.count;
-}
-
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    SSJCategoryCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
-    cell.item = (SSJRecordMakingCategoryItem *)[_items ssj_safeObjectAtIndex:indexPath.row];
-    return cell;
-}
-
-#pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    for (int i = 0; i < _items.count; i ++) {
-        SSJRecordMakingCategoryItem *item = _items[i];
-        item.selected = i == indexPath.item;
-        if (indexPath.item == i) {
-            _selectedItem = item;
-        }
-    }
     
-    [self updateSelectedImage];
-    
-    if (_selectCategoryAction) {
-        _selectCategoryAction(self);
+    [self updateImageSelectionView];
+}
+
+- (void)setImages:(NSArray *)images {
+    if (![_images isEqualToArray:images]) {
+        _images = images;
+        _selectedImage = [_images firstObject];
+        [self updateSelectedImage];
+        [self updateImageSelectionView];
     }
 }
 
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView == _collectionView) {
-        if (scrollView.dragging && !scrollView.decelerating) {
-            CGPoint velocity = [scrollView.panGestureRecognizer velocityInView:scrollView];
-            if (velocity.y < 0) {
-                [_textField resignFirstResponder];
-            } else {
-                [_textField becomeFirstResponder];
-            }
-        }
+- (void)setColors:(NSArray *)colors {
+    if (![_colors isEqualToArray:colors]) {
+        _colors = colors;
+        _selectedColor = [_colors firstObject];
+        _colorSelectionView.colors = _colors;
+        [self updateSelectedImage];
+        [self updateImageSelectionView];
+    }
+}
+
+- (void)setSelectedImage:(NSString *)selectedImage {
+    if (![_selectedImage isEqualToString:selectedImage]) {
+        _selectedImage = selectedImage;
+        [self updateSelectedImage];
+        [self updateImageSelectionView];
+    }
+}
+
+- (void)setSelectedColor:(NSString *)selectedColor {
+    if (![_selectedColor isEqualToString:selectedColor]) {
+        _selectedColor = selectedColor;
+        [self updateSelectedImage];
+        [self updateImageSelectionView];
     }
 }
 
 #pragma mark - Private
 - (void)updateSelectedImage {
-    NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
-    _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:colorValue];
-    _selectedTypeView.image = [[UIImage imageNamed:_selectedItem.categoryImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:_selectedColor];
+    _selectedTypeView.image = [[UIImage imageNamed:_selectedImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [_selectedTypeView sizeToFit];
     _selectedTypeView.left = 30;
     _selectedTypeView.centerY = _textField.height * 0.5;
 }
 
+- (void)updateImageSelectionView {
+    NSMutableArray *items = [NSMutableArray arrayWithCapacity:_images.count];
+    for (NSString *image in _images) {
+        SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc] init];
+        item.categoryImage = image;
+        if (_selectedImage && [image isEqualToString:_selectedImage]) {
+            item.selected = YES;
+            item.categoryColor = _selectedColor;
+        } else {
+            item.selected = NO;
+            item.categoryColor = SSJ_CURRENT_THEME.secondaryColor;
+        }
+        [items addObject:item];
+    }
+    _imageSelectionView.items = items;
+    [_imageSelectionView updateAppearance];
+}
+
+#pragma mark - Event
 - (void)colorSelectionViewAction {
-    NSString *colorValue = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
-    _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:colorValue];
-    [_items makeObjectsPerformSelector:@selector(setCategoryColor:) withObject:colorValue];
+    self.selectedColor = [_colorSelectionView.colors ssj_safeObjectAtIndex:_colorSelectionView.selectedIndex];
     
     if (_selectColorAction) {
         _selectColorAction(self);
@@ -149,17 +148,28 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
     return _selectedTypeView;
 }
 
-- (UICollectionView *)collectionView {
-    if (!_collectionView) {
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height - 5) collectionViewLayout:self.customCategoryLayout];
-        _collectionView.dataSource = self;
-        _collectionView.delegate = self;
-        _collectionView.bounces = YES;
-        _collectionView.alwaysBounceVertical = YES;
-        [_collectionView registerClass:[SSJCategoryCollectionViewCell class] forCellWithReuseIdentifier:kCellId];
-        _collectionView.contentOffset = CGPointMake(0, 0);
+- (SSJCategoryEditableCollectionView *)imageSelectionView {
+    if (!_imageSelectionView) {
+        __weak typeof(self) wself = self;
+        _imageSelectionView = [[SSJCategoryEditableCollectionView alloc] init];
+        _imageSelectionView.editable = NO;
+        _imageSelectionView.itemSize = CGSizeMake((self.width - 20) * 0.2, 70);
+        _imageSelectionView.selectedItemsChangeHandle = ^(SSJCategoryEditableCollectionView *view) {
+            SSJRecordMakingCategoryItem *selectedItem = [view.selectedItems firstObject];
+            wself.selectedImage = selectedItem.categoryImage;
+            if (wself.selectImageAction) {
+                wself.selectImageAction(wself);
+            }
+        };
+        _imageSelectionView.didScrollHandle = ^(SSJCategoryEditableCollectionView *view, CGPoint velocity) {
+            if (velocity.y < 0) {
+                [wself.textField resignFirstResponder];
+            } else {
+                [wself.textField becomeFirstResponder];
+            }
+        };
     }
-    return _collectionView;
+    return _imageSelectionView;
 }
 
 - (SSJAddNewTypeColorSelectionView *)colorSelectionView {
@@ -171,18 +181,6 @@ static NSString *const kCellId = @"SSJCategoryCollectionViewCellId";
         [_colorSelectionView addTarget:self action:@selector(colorSelectionViewAction) forControlEvents:UIControlEventValueChanged];
     }
     return _colorSelectionView;
-}
-
-- (UICollectionViewFlowLayout *)customCategoryLayout {
-    if (!_customCategoryLayout) {
-        _customCategoryLayout = [[UICollectionViewFlowLayout alloc] init];
-        _customCategoryLayout.minimumInteritemSpacing = 0;
-        _customCategoryLayout.minimumLineSpacing = 0;
-        CGFloat width = (self.width - 16) * 0.2;
-        _customCategoryLayout.itemSize = CGSizeMake(floor(width), 60);
-        _customCategoryLayout.sectionInset = UIEdgeInsetsMake(10, 8, 0, 8);
-    }
-    return _customCategoryLayout;
 }
 
 @end
