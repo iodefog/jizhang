@@ -66,7 +66,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
     if ([item.title isEqualToString:@"添加"]) {
         SSJADDNewTypeViewController *newTypeVc = [[SSJADDNewTypeViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        newTypeVc.addNewCategoryAction = ^(NSString *categoryId){
+        newTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             weakSelf.selectedId = categoryId;
             [weakSelf getdataFromDb];
         };

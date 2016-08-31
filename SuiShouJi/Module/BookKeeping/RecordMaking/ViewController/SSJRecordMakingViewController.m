@@ -768,7 +768,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
-        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId){
+        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];

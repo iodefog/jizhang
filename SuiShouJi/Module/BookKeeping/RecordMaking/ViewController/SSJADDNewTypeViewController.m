@@ -152,7 +152,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             [SSJCategoryListHelper updateCategoryWithID:item.categoryID state:1 incomeOrExpenture:_incomeOrExpence Success:^(BOOL result) {
                 [self.navigationController popViewControllerAnimated:YES];
                 if (self.addNewCategoryAction) {
-                    self.addNewCategoryAction(item.categoryID);
+                    self.addNewCategoryAction(item.categoryID, _incomeOrExpence);
                 }
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -165,7 +165,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             [SSJCategoryListHelper updateCategoryWithID:item.categoryID state:1 incomeOrExpenture:_incomeOrExpence Success:^(BOOL result) {
                 [self.navigationController popViewControllerAnimated:YES];
                 if (self.addNewCategoryAction) {
-                    self.addNewCategoryAction(item.categoryID);
+                    self.addNewCategoryAction(item.categoryID, _incomeOrExpence);
                 }
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
