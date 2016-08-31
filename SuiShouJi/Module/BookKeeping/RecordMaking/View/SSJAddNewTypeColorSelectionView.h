@@ -21,4 +21,6 @@
 // default 2
 @property (nonatomic) CGFloat displayRowCount;
 
+@property (nonatomic) UIEdgeInsets contentInset;
+
 @end

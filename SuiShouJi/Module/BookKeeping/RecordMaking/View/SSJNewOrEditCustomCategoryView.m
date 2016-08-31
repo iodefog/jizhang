@@ -10,7 +10,7 @@
 #import "SSJCategoryEditableCollectionView.h"
 #import "SSJAddNewTypeColorSelectionView.h"
 
-@interface SSJNewOrEditCustomCategoryView ()
+@interface SSJNewOrEditCustomCategoryView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *textField;
 
@@ -89,6 +89,18 @@
     }
 }
 
+- (void)setDisplayColorRowCount:(CGFloat)displayColorRowCount {
+    _colorSelectionView.displayRowCount = displayColorRowCount;
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField == _textField) {
+        [_textField resignFirstResponder];
+    }
+    return YES;
+}
+
 #pragma mark - Private
 - (void)updateSelectedImage {
     _selectedTypeView.tintColor = [UIColor ssj_colorWithHex:_selectedColor];
@@ -130,6 +142,7 @@
     if (!_textField) {
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.width, 63)];
         _textField.font = [UIFont systemFontOfSize:15];
+        _textField.delegate = self;
         [_textField ssj_setBorderWidth:1];
         [_textField ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
         
@@ -176,6 +189,7 @@
     if (!_colorSelectionView) {
         _colorSelectionView = [[SSJAddNewTypeColorSelectionView alloc] initWithWidth:self.width];
         _colorSelectionView.displayRowCount = 2.5;
+        _colorSelectionView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
         [_colorSelectionView ssj_setBorderWidth:1];
         [_colorSelectionView ssj_setBorderStyle:SSJBorderStyleTop];
         [_colorSelectionView addTarget:self action:@selector(colorSelectionViewAction) forControlEvents:UIControlEventValueChanged];

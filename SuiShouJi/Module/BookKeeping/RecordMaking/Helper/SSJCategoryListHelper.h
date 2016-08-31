@@ -10,6 +10,7 @@
 
 @class SSJRecordMakingBillTypeSelectionCellItem;
 @class SSJRecordMakingCategoryItem;
+@class SSJBillModel;
 
 @interface SSJCategoryListHelper : NSObject
 
@@ -66,19 +67,6 @@
 /**
  *  新增自定义收支类型
  *
- *  @param identifier           收支类型id
- *  @param incomeOrExpenture    收入还是支出(1为支出,0为收入)
- *  @param success              查询成功的回调
- *  @param failure              查询失败的回调
- */
-+ (void)addNewCategoryWithidentifier:(NSString *)identifier
-                   incomeOrExpenture:(int)incomeOrExpenture
-                             success:(void(^)())success
-                             failure:(void (^)(NSError *error))failure;
-
-/**
- *  新增自定义收支类型
- *
  *  @param incomeOrExpenture 收入还是支出(1为支出,0为收入)
  *  @param name         类型名称
  *  @param icon         类型图标
@@ -124,6 +112,17 @@
 + (void)deleteCategoryWithIDs:(NSArray *)categoryIDs
                       success:(void(^)())success
                       failure:(void(^)(NSError *error))failure;
+
+/**
+ *  查询相同名称的收支类别
+ *
+ *  @param name         类别名称
+ *  @param success      查询成功的回调
+ *  @param failure      查询失败的回调
+ */
++ (void)querySameNameCategoryWithName:(NSString *)name
+                              success:(void(^)(SSJBillModel *model))success
+                              failure:(void(^)(NSError *))failure;
 
 /**
  *  自定义支出类型颜色
