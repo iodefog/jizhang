@@ -18,6 +18,7 @@
 #import "SSJCategoryEditableCollectionView.h"
 #import "SSJNewOrEditCustomCategoryView.h"
 #import "SSJCategoryListHelper.h"
+#import "SSJBillModel.h"
 
 static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
@@ -146,7 +147,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (void)sureButtonAction {
     if (_titleSegmentView.selectedSegmentIndex == 0) {
-        // 添加系统默认类别
+        // 开启系统默认类别
         for (SSJRecordMakingCategoryItem *item in _featuredCategoryCollectionView.selectedItems) {
             [SSJCategoryListHelper updateCategoryWithID:item.categoryID state:1 incomeOrExpenture:_incomeOrExpence Success:^(BOOL result) {
                 [self.navigationController popViewControllerAnimated:YES];
@@ -159,7 +160,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         }
     } else if (_titleSegmentView.selectedSegmentIndex == 1
                && _customCategorySwitchConrol.selectedIndex == 0) {
-        // 添加自定义类别
+        // 开启自定义类别
         for (SSJRecordMakingCategoryItem *item in _customCategoryCollectionView.selectedItems) {
             [SSJCategoryListHelper updateCategoryWithID:item.categoryID state:1 incomeOrExpenture:_incomeOrExpence Success:^(BOOL result) {
                 [self.navigationController popViewControllerAnimated:YES];
@@ -182,12 +183,47 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             return;
         }
         
-        [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:_newOrEditCategoryView.textField.text icon:_newOrEditCategoryView.selectedImage color:_newOrEditCategoryView.selectedColor success:^(NSString *categoryId){
-            [self.navigationController popViewControllerAnimated:YES];
-            if (self.addNewCategoryAction) {
-                self.addNewCategoryAction(categoryId);
+        SSJBillModel *newModel = [[SSJBillModel alloc] init];
+        newModel.ID = SSJUUID();
+        newModel.parentID = SSJUUID();
+        newModel.userID = SSJUSERID();
+        newModel.name = _newOrEditCategoryView.textField.text;
+        newModel.icon = _newOrEditCategoryView.selectedImage;
+        newModel.color = _newOrEditCategoryView.selectedColor;
+        newModel.state = 1;
+        newModel.type = _incomeOrExpence;
+        newModel.custom = 1;
+        
+        [SSJCategoryListHelper querySameNameCategoryWithName:newModel.name success:^(SSJBillModel *model) {
+            if (model) {
+                if (model.operatorType == 2) {
+                    if (model.custom) {
+                        
+                    } else {
+                        
+                    }
+                } else {
+                    [SSJCategoryListHelper updateCategoryWithID:model.ID state:1 incomeOrExpenture:model.type Success:^(BOOL result) {
+                        [CDAutoHideMessageHUD showMessage:@"您已经有相同名称的类别了"];
+                        [self.navigationController popViewControllerAnimated:YES];
+                        if (self.addNewCategoryAction) {
+                            self.addNewCategoryAction(model.ID, model.type);
+                        }
+                    } failure:^(NSError *error) {
+                        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+                    }];
+                }
+            } else {
+                [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:_incomeOrExpence name:_newOrEditCategoryView.textField.text icon:_newOrEditCategoryView.selectedImage color:_newOrEditCategoryView.selectedColor success:^(NSString *categoryId){
+                    [self.navigationController popViewControllerAnimated:YES];
+                    if (self.addNewCategoryAction) {
+                        self.addNewCategoryAction(categoryId, _incomeOrExpence);
+                    }
+                    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                } failure:^(NSError *error) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+                }];
             }
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
@@ -337,7 +373,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         }
     } else if (_titleSegmentView.selectedSegmentIndex == 1
                && _customCategorySwitchConrol.selectedIndex == 0) {
-        
         if (_customCategoryCollectionView.editing
             && _customCategoryCollectionView.selectedItems.count > 1) {
             self.editButton.enabled = NO;
@@ -359,7 +394,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (SSJSegmentedControl *)titleSegmentView {
     if (!_titleSegmentView) {
         _titleSegmentView = [[SSJSegmentedControl alloc] initWithItems:@[@"添加类别",@"自定义类别"]];
-        _titleSegmentView.size = CGSizeMake(204, 44);
         _titleSegmentView.size = CGSizeMake(202, 30);
         [_titleSegmentView addTarget:self action:@selector(titleSegmentViewAciton) forControlEvents: UIControlEventValueChanged];
     }

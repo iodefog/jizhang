@@ -153,6 +153,11 @@
 		7D5FD2881D5D6D520033F7A2 /* reportForms_category@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */; };
 		7D5FD2891D5D6D550033F7A2 /* reportForms_member@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */; };
 		7D5FD28A1D5D6D570033F7A2 /* reportForms_member@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8211D4F24AF00462970 /* reportForms_member@3x.png */; };
+		7D600C491D76C49C0023F385 /* SSJBillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D600C481D76C49C0023F385 /* SSJBillModel.m */; };
+		7D600C4A1D76C49C0023F385 /* SSJBillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D600C481D76C49C0023F385 /* SSJBillModel.m */; };
+		7D600C4B1D76C49C0023F385 /* SSJBillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D600C481D76C49C0023F385 /* SSJBillModel.m */; };
+		7D600C4C1D76C49C0023F385 /* SSJBillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D600C481D76C49C0023F385 /* SSJBillModel.m */; };
+		7D600C4D1D76C49C0023F385 /* SSJBillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D600C481D76C49C0023F385 /* SSJBillModel.m */; };
 		7D6AAB531C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */; };
 		7D6AAB631C312C500007C0A3 /* SSJUnlimitedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB621C312C500007C0A3 /* SSJUnlimitedScrollView.m */; };
 		7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AAB661C3130220007C0A3 /* SSJPageControl.m */; };
@@ -5538,6 +5543,8 @@
 		7D5F33241CEAE6C10086B67E /* SSJImaageBrowseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJImaageBrowseViewController.m; sourceTree = "<group>"; };
 		7D5F33251CEAE6C10086B67E /* SSJRecordMakingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingViewController.h; sourceTree = "<group>"; };
 		7D5F33261CEAE6C10086B67E /* SSJRecordMakingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingViewController.m; sourceTree = "<group>"; };
+		7D600C471D76C49C0023F385 /* SSJBillModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBillModel.h; sourceTree = "<group>"; };
+		7D600C481D76C49C0023F385 /* SSJBillModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBillModel.m; sourceTree = "<group>"; };
 		7D6AAB511C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReportFormsSwitchYearControl.h; sourceTree = "<group>"; };
 		7D6AAB521C30EC290007C0A3 /* SSJReportFormsSwitchYearControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSwitchYearControl.m; sourceTree = "<group>"; };
 		7D6AAB611C312C500007C0A3 /* SSJUnlimitedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUnlimitedScrollView.h; sourceTree = "<group>"; };
@@ -7446,6 +7453,8 @@
 				7D5F32F71CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.m */,
 				7D5F32F81CEAE6C10086B67E /* SSJRecordMakingCategoryItem.h */,
 				7D5F32F91CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m */,
+				7D600C471D76C49C0023F385 /* SSJBillModel.h */,
+				7D600C481D76C49C0023F385 /* SSJBillModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -13805,6 +13814,7 @@
 				7DBA55FB1D6D32B700C02D79 /* SSJMagicExportCalendarDateView.m in Sources */,
 				7DBA55FC1D6D32B700C02D79 /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				7DBA55FD1D6D32B700C02D79 /* SSJStringAddition.m in Sources */,
+				7D600C4B1D76C49C0023F385 /* SSJBillModel.m in Sources */,
 				7DBA55FE1D6D32B700C02D79 /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9A0BFA1D6D945A002AF046 /* SSJLocalNotificationStore.m in Sources */,
 				7DBA55FF1D6D32B700C02D79 /* SSJForgetPassowrdNetworkService.m in Sources */,
@@ -14333,6 +14343,7 @@
 				9C2A679C1D194CA70010F1DA /* SSJLoginViewController.m in Sources */,
 				9C2A679D1D194CA70010F1DA /* SSJBudgetEditPeriodSelectionView.m in Sources */,
 				7D9F5BCC1D6D9CA600362CFA /* SSJLoanDateSelectionView.m in Sources */,
+				7D600C4A1D76C49C0023F385 /* SSJBillModel.m in Sources */,
 				9C2A679E1D194CA70010F1DA /* SSJBillingChargeHeaderView.m in Sources */,
 				7DBA553F1D6AFFE900C02D79 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9C2A679F1D194CA70010F1DA /* SSJGuideView.m in Sources */,
@@ -14669,6 +14680,7 @@
 				9CECFB771D6D41A700DB2C8B /* SSJMagicExportCalendarDateView.m in Sources */,
 				9CECFB781D6D41A700DB2C8B /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				9CECFB791D6D41A700DB2C8B /* SSJStringAddition.m in Sources */,
+				7D600C4C1D76C49C0023F385 /* SSJBillModel.m in Sources */,
 				9CECFB7A1D6D41A700DB2C8B /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9A0C021D6D945A002AF046 /* SSJLocalNotificationStore.m in Sources */,
 				9CECFB7B1D6D41A700DB2C8B /* SSJForgetPassowrdNetworkService.m in Sources */,
@@ -15105,6 +15117,7 @@
 				9CECFF6F1D6D41EB00DB2C8B /* SSJMagicExportCalendarDateView.m in Sources */,
 				9CECFF701D6D41EB00DB2C8B /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				9CECFF711D6D41EB00DB2C8B /* SSJStringAddition.m in Sources */,
+				7D600C4D1D76C49C0023F385 /* SSJBillModel.m in Sources */,
 				9CECFF721D6D41EB00DB2C8B /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9A0C031D6D945B002AF046 /* SSJLocalNotificationStore.m in Sources */,
 				9CECFF731D6D41EB00DB2C8B /* SSJForgetPassowrdNetworkService.m in Sources */,
@@ -15710,6 +15723,7 @@
 				9C4C527C1CF692FB006A0CD6 /* SSJBooksTypeCollectionViewCell.m in Sources */,
 				7D07B68B1CF2A72C00B9C390 /* SSJJspatchAnalyze.m in Sources */,
 				7D5F33731CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
+				7D600C491D76C49C0023F385 /* SSJBillModel.m in Sources */,
 				9CD9BC211CFD2DAA0061803B /* SSJBookkeepingRiminderCell.m in Sources */,
 				7DD3E5781CFBF2D1005A1ACB /* SSJDatabaseVersion4.m in Sources */,
 				7DE681651E42FBE30023622E /* UIViewController+SSJMotionPassword.m in Sources */,

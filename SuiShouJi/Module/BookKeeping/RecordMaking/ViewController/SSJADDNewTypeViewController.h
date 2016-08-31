@@ -18,7 +18,7 @@
 /**
  *  选择新的记账类型回调
  */
-@property (nonatomic, copy) void (^addNewCategoryAction)(NSString *categoryId);
+@property (nonatomic, copy) void (^addNewCategoryAction)(NSString *categoryId, BOOL incomeOrExpence);
 
 
 @end

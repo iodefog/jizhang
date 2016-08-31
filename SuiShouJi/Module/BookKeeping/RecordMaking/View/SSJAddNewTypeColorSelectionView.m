@@ -60,6 +60,10 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
     }
 }
 
+- (void)setContentInset:(UIEdgeInsets)contentInset {
+    _collectionView.contentInset = contentInset;
+}
+
 #pragma mark - UICollectionViewDataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return _colors.count;

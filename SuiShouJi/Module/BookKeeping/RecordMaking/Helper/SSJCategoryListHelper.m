@@ -10,6 +10,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 #import "SSJRecordMakingCategoryItem.h"
+#import "SSJBillModel.h"
 
 @implementation SSJCategoryListHelper
 
@@ -49,23 +50,9 @@
                      failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
-        if (!result) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+        int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and b.itype = ? and a.istate = ?", SSJUSERID(), @(incomeOrExpenture), @(state)];
         
-        int order = 0;
-        while ([result next]) {
-            order = [result intForColumn:@"max(a.iorder)"];
-            order++;
-        }
-        
-        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
+        BOOL deletesucess = [db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(maxOrder + 1), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()];
         if (deletesucess) {
             if (success){
                 SSJDispatch_main_async_safe(^{
@@ -109,6 +96,9 @@
             [tempArray addObject:item];
         }
         
+        SSJRecordMakingCategoryItem *item = [tempArray firstObject];
+        item.selected = YES;
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempArray);
@@ -146,37 +136,6 @@
     }];
 }
 
-+ (void)addNewCategoryWithidentifier:(NSString *)identifier
-                   incomeOrExpenture:(int)incomeOrExpenture
-                             success:(void(^)())success
-                             failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        int order = 0;
-        if ([identifier isEqualToString:@"1042"]
-            || [identifier isEqualToString:@"2018"]) {
-            order = 1;
-        } else {
-            // 查询已添加类别最大序号
-            order = [db intForQuery:@"select max(iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
-            order ++;
-        }
-        
-        if ([db executeUpdate:@"UPDATE BK_USER_BILL SET ISTATE = 1, IORDER = ?, CWRITEDATE = ? , IVERSION = ? , OPERATORTYPE = 1 WHERE CBILLID = ? AND CUSERID = ?", @(order), [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), identifier, SSJUSERID()]) {
-            if (success) {
-                SSJDispatch_main_async_safe(^{
-                    success();
-                });
-            }
-        } else {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-        }
-    }];
-}
-
 + (void)addNewCustomCategoryWithIncomeOrExpenture:(int)incomeOrExpenture
                                              name:(NSString *)name
                                              icon:(NSString *)icon
@@ -185,15 +144,15 @@
                                           failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         // 检查当前用户有没有同名的收支类型
-        if ([db boolForQuery:@"select count(*) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.cname = ?", SSJUSERID(), name]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"已有相同名称了，换一个吧。"}];
-                    failure(error);
-                });
-            }
-            return;
-        }
+//        if ([db boolForQuery:@"select count(*) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.cname = ?", SSJUSERID(), name]) {
+//            if (failure) {
+//                SSJDispatch_main_async_safe(^{
+//                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"已有相同名称了，换一个吧。"}];
+//                    failure(error);
+//                });
+//            }
+//            return;
+//        }
         
         NSString *newCategoryId = SSJUUID();
         NSString *colorValue = [color hasPrefix:@"#"] ? color : [NSString stringWithFormat:@"#%@", color];
@@ -288,6 +247,43 @@
         
         if (failure) {
             failure([db lastError]);
+        }
+    }];
+}
+
++ (void)querySameNameCategoryWithName:(NSString *)name
+                              success:(void(^)(SSJBillModel *model))success
+                              failure:(void(^)(NSError *))failure {
+    
+    NSString *userID = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ?", userID, name];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        SSJBillModel *model = nil;
+        
+        while ([resultSet next]) {
+            model = [[SSJBillModel alloc] init];
+            model.ID = [resultSet stringForColumn:@"cbillid"];
+            model.state = [resultSet intForColumn:@"istate"];
+            model.operatorType = [resultSet intForColumn:@"operatortype"];
+            model.type = [resultSet intForColumn:@"itype"];
+            model.custom = [resultSet intForColumn:@"icustom"];
+        }
+        
+        [resultSet close];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(model);
+            });
         }
     }];
 }
