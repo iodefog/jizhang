@@ -31,6 +31,7 @@
             item.booksColor = [booksResult stringForColumn:@"cbookscolor"];
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
+            item.booksOrder = [booksResult intForColumn:@"iorder"];
             [booksList addObject:item];
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
@@ -48,10 +49,13 @@
 
 + (BOOL)saveBooksTypeItem:(SSJBooksTypeItem *)item {
     NSString * booksid = item.booksId;
-    if (!booksid || !booksid.length) {
+    if (!booksid.length) {
         item.booksId = SSJUUID();
-        item.booksIcoin = @"";
     }
+    if (!item.userId.length) {
+        item.userId = SSJUSERID();
+    }
+    item.cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
     if (![[typeInfo allKeys] containsObject:@"iversion"]) {
         [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
@@ -70,10 +74,12 @@
         if ([item.booksId isEqualToString:userid]) {
             booksOrder = 1;
         }
-        [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {
+            [typeInfo setObject:@(booksOrder) forKey:@"iorder"];
+            [typeInfo setObject:@(0) forKey:@"operatortype"];
             sql = [self inertSQLStatementWithTypeInfo:typeInfo];
         } else {
+            [typeInfo setObject:@(1) forKey:@"operatortype"];
             sql = [self updateSQLStatementWithTypeInfo:typeInfo];
         }
         success = [db executeUpdate:sql withParameterDictionary:typeInfo];

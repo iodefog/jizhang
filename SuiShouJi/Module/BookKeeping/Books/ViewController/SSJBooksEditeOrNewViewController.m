@@ -9,6 +9,8 @@
 #import "SSJBooksEditeOrNewViewController.h"
 #import "SSJNewOrEditCustomCategoryView.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJBooksTypeStore.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJBooksEditeOrNewViewController ()
 
@@ -32,7 +34,10 @@
         self.title = @"编辑账本";
     }else{
         self.title = @"添加账本";
+        self.item = [[SSJBooksTypeItem alloc]init];
     }
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightItem;
     // Do any additional setup after loading the view.
 }
 
@@ -56,6 +61,13 @@
         _booksEditeView = [[SSJNewOrEditCustomCategoryView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
         _booksEditeView.colors = [self colorsArray];
         _booksEditeView.images = [self imageArray];
+        __weak typeof(self) weakSelf = self;
+        _booksEditeView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view){
+            weakSelf.item.booksIcoin = view.selectedImage;
+        };
+        _booksEditeView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view){
+            weakSelf.item.booksColor = view.selectedColor;
+        };
         if (self.item.booksName.length) {
             _booksEditeView.textField.text = self.item.booksName;
         }
@@ -68,6 +80,20 @@
         _booksEditeView.displayColorRowCount = 3;
     }
     return _booksEditeView;
+}
+
+#pragma mark - Event
+- (void)rightButtonClicked:(id)sender{
+    self.item.booksName = self.booksEditeView.textField.text;
+    if (!self.item.booksName.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
+        return;
+    }
+    if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else{
+        [CDAutoHideMessageHUD showMessage:@"保存失败"];
+    }
 }
 
 #pragma mark - Private
