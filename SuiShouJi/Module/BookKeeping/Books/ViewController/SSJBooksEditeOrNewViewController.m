@@ -18,9 +18,21 @@
 
 @implementation SSJBooksEditeOrNewViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.booksEditeView];
+    if (self.item.booksId.length) {
+        self.title = @"编辑账本";
+    }else{
+        self.title = @"添加账本";
+    }
     // Do any additional setup after loading the view.
 }
 
@@ -38,9 +50,10 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
+#pragma mark - Getter
 - (SSJNewOrEditCustomCategoryView *)booksEditeView{
     if (!_booksEditeView) {
-        _booksEditeView = [[SSJNewOrEditCustomCategoryView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
+        _booksEditeView = [[SSJNewOrEditCustomCategoryView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
         _booksEditeView.colors = [self colorsArray];
         _booksEditeView.images = [self imageArray];
         if (self.item.booksName.length) {
@@ -57,6 +70,7 @@
     return _booksEditeView;
 }
 
+#pragma mark - Private
 - (NSArray *)colorsArray{
     return @[@"#fc7a60",@"#b1c23e",@"#25b4dd",@"#5ca0d9",@"#7fb04f",@"#ad82dd",@"#20cac0",@"#f5a237",@"#ff6363",@"#eb66a7",@"#ba2e8b",@"#6a7fe7",@"#d96421",@"#ba4747",@"#2aaf69"];
 }

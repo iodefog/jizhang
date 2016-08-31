@@ -72,6 +72,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [self.selectedBooks removeAllObjects];
     _editeModel = NO;
     self.rightButton.selected = NO;
+    self.editeButton.hidden = YES;
+    self.deleteButton.hidden = YES;
+    self.editeButton.enabled = NO;
 }
 
 -(void)dealloc {
@@ -172,6 +175,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 - (void)rightButtonClicked:(id)sender{
     _editeModel = !_editeModel;
     self.rightButton.selected = !self.rightButton.isSelected;
+    self.editeButton.hidden = !self.rightButton.isSelected;
+    self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
         [self.selectedBooks removeAllObjects];
     }
@@ -182,6 +187,24 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
     booksEditeVc.item = [self.selectedBooks firstObject];
     [self.navigationController pushViewController:booksEditeVc animated:YES];
+}
+
+- (void)deleteButtonClicked:(id)sender{
+    if (self.selectedBooks.count) {
+        __weak typeof(self) weakSelf = self;
+        SSJBooksTypeItem *defualtItem = [[SSJBooksTypeItem alloc]init];
+        defualtItem.booksId = SSJUSERID();
+        if ([self.selectedBooks containsObject:defualtItem]) {
+            [CDAutoHideMessageHUD showMessage:@"日常账本不能删除哦"];
+            return;
+        }
+        SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [weakSelf deleteBooks];
+        }];
+        SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"删除后关于该账本的流水数据将会被彻底清除哦." action:cancelAction , comfirmAction, nil];
+
+    }
 }
 
 #pragma mark - Getter
@@ -215,9 +238,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
         [_editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
         [_editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
-
+        _editeButton.enabled = NO;
         _editeButton.backgroundColor = [UIColor ssj_colorWithHex:@"#dddddd"];
         [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _editeButton.hidden = YES;
+
     }
     return _editeButton;
 }
@@ -229,6 +254,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
         _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+        [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _deleteButton.hidden = YES;
     }
     return _deleteButton;
 }
@@ -239,9 +266,10 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
         _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
-        [_rightButton setTitle:@"编辑" forState:UIControlStateNormal];
+        [_rightButton setTitle:@"管理" forState:UIControlStateNormal];
         [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
         [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
         _rightButton.selected = NO;
     }
     return _rightButton;
@@ -282,6 +310,13 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     } failure:^(NSError *error) {
         
     }];
+}
+
+- (void)deleteBooks{
+    for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
+        [SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL];
+    }
+    [self.collectionView reloadData];
 }
 
 -(void)updateAppearanceAfterThemeChanged{
