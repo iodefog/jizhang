@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJFundingDetailListItem.h"
 
 @interface SSJFundingDetailListHeaderView : UIView
 
-@property(nonatomic, strong) SSJFundingDetailListItem *item;
+@property(nonatomic, strong) SSJBaseItem *item;
 
 //点击按钮的回调
 typedef void (^SectionHeaderClickedBlock)();
