@@ -52,10 +52,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 @implementation SSJADDNewTypeViewController
 
 #pragma mark - Lifecycle
-//- (void)dealloc {
-//    
-//}
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"添加新类别";
@@ -186,7 +182,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         if (name.length == 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
             return;
-        } else if (name.length > 5) {
+        }
+        
+        if (name.length > 5) {
             [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
             return;
         }
@@ -202,7 +200,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                                                 name:model.name
                                                color:color
                                                image:image
-                                                type:_incomeOrExpence];
+                                                type:model.type];
                         }], nil];
                     } else {
                         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"系统已有过同名的类别，您是否要将该名称以两类进行分别统计？或恢复系统类别停止创建？" action:[SSJAlertViewAction actionWithTitle:@"分为两类别" handler:^(SSJAlertViewAction *action) {
@@ -212,16 +210,24 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                                                 name:model.name
                                                color:model.color
                                                image:model.icon
-                                                type:_incomeOrExpence];
+                                                type:model.type];
                         }], nil];
                     }
                 } else {
                     [CDAutoHideMessageHUD showMessage:@"您已经有相同名称的类别了"];
-                    [self openCategoryWithID:model.ID
-                                        name:model.name
-                                       color:model.color
-                                       image:model.icon
-                                        type:_incomeOrExpence];
+                    if (model.custom) {
+                        [self openCategoryWithID:model.ID
+                                            name:model.name
+                                           color:color
+                                           image:image
+                                            type:model.type];
+                    } else {
+                        [self openCategoryWithID:model.ID
+                                            name:model.name
+                                           color:model.color
+                                           image:model.icon
+                                            type:model.type];
+                    }
                 }
             } else {
                 [self addNewCategoryWithName:name image:image color:color];
@@ -258,6 +264,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     model.name = selectedItem.categoryTitle;
     model.icon = selectedItem.categoryImage;
     model.color = selectedItem.categoryColor;
+    model.order = selectedItem.order;
     model.state = 0;
     model.type = _incomeOrExpence;
     
