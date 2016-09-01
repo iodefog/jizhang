@@ -18,7 +18,7 @@
 
 @property(nonatomic, strong) UIImageView *selectImageView;
 
-@property(nonatomic, strong) UIImageView *booksIcionImageView;
+@property(nonatomic, strong) CALayer *booksIcionImage;
 
 @property(nonatomic, strong) UIButton *selectedButton;
 
@@ -30,12 +30,12 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self.contentView addSubview:self.booksIcionImageView];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.seperatorLineView];
         [self.contentView addSubview:self.lineImage];
         [self.contentView addSubview:self.selectImageView];
         [self.contentView addSubview:self.selectedButton];
+        [self.contentView.layer addSublayer:self.booksIcionImage];
         self.clipsToBounds = NO;
         self.layer.cornerRadius = 4.f;
     }
@@ -57,10 +57,16 @@
     self.lineImage.size = CGSizeMake(7, 56);
     self.lineImage.center = CGPointMake(12, self.height / 2);
     self.selectImageView.rightBottom = CGPointMake(self.width, self.height - 10);
-    self.booksIcionImageView.rightBottom = CGPointMake(self.width , self.height);
+    if (!self.item.booksId.length) {
+        self.booksIcionImage.position = CGPointMake(self.contentView.width - 16, self.contentView.height - 16);
+    }else{
+        self.booksIcionImage.position = CGPointMake(self.contentView.width - 21, self.contentView.height - 21);
+    }
     if (self.item.booksId.length) {
-        self.booksIcionImageView.transform = CGAffineTransformMakeRotation( - M_PI_4);
-        self.booksIcionImageView.transform = CGAffineTransformTranslate(self.booksIcionImageView.transform, 0, -8);
+        self.booksIcionImage.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
+    }else{
+        self.booksIcionImage.transform = CATransform3DIdentity;
+
     }
     if (self.item.booksId.length) {
         self.selectedButton.center = CGPointMake(self.contentView.width , 0);
@@ -103,12 +109,14 @@
     return _selectImageView;
 }
 
--(UIImageView *)booksIcionImageView{
-    if (!_booksIcionImageView) {
-        _booksIcionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
-        _booksIcionImageView.tintColor = [UIColor ssj_colorWithHex:@"#000000" alpha:0.15];
+-(CALayer *)booksIcionImage{
+    if (!_booksIcionImage) {
+        _booksIcionImage = [CALayer layer];
+        _booksIcionImage.size = CGSizeMake(32, 32);
+//        _booksIcionImage.backgroundColor = [UIColor blackColor].CGColor;
+        _booksIcionImage.position = CGPointMake(self.width / 2, self.height / 2);
     }
-    return _booksIcionImageView;
+    return _booksIcionImage;
 }
 
 - (UIButton *)selectedButton{
@@ -125,13 +133,14 @@
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
-    self.booksIcionImageView.image = [[UIImage imageNamed:_item.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.booksIcionImage.contents = (id)[[UIImage imageNamed:_item.booksIcoin] imageWithColor:[UIColor ssj_colorWithHex:@"#000000" alpha:0.15]].CGImage;
     [self setNeedsLayout];
 }
 
 - (void)setSelectToEdite:(BOOL)selectToEdite{
+    [self removeObserver:self forKeyPath:@"selectToEdite"];
     _selectToEdite = selectToEdite;
-    self.selectedButton.selected = _selectToEdite;
+    [self addObserver:self forKeyPath:@"selectToEdite" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 -(void)setEditeModel:(BOOL)editeModel{
@@ -142,6 +151,10 @@
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
     self.selectImageView.hidden = !_isSelected;
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
+    self.selectedButton.selected = _selectToEdite;
 }
 
 @end
