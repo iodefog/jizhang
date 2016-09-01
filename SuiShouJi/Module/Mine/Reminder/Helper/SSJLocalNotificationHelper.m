@@ -30,6 +30,8 @@
 {
     NSMutableArray *notificationsArr = [NSMutableArray array];
     
+    NSDictionary *remindDic = [item mj_keyValues];
+    
     NSDate * fireDate = item.remindDate;
     
     switch (item.remindCycle) {
@@ -43,7 +45,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.repeatInterval = NSCalendarUnitDay;
@@ -62,7 +64,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.repeatInterval = NSWeekCalendarUnit;
@@ -81,7 +83,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             if ([fireDate isEarlierThan:[NSDate date]]) {
@@ -105,7 +107,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
@@ -122,7 +124,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = [fireDate dateBySubtractingDays:i];
@@ -143,7 +145,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.fireDate = fireDate;
@@ -154,11 +156,11 @@
 
         
         // 如果是每月最后一天
-        case 4:{
+        case 5:{
             NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
             for (UILocalNotification *notification in localNotifications) {
                 NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                 if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
                     if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                         return;
@@ -173,7 +175,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             NSDate *lastDayOfTheMonth = [NSDate dateWithYear:fireDate.year month:fireDate.month day:fireDate.daysInMonth hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
@@ -183,14 +185,14 @@
         break;
         
         // 如果是每月
-        case 5:{
+        case 4:{
             // 如果是大于28号,则只要添加一次推送
             if (!item.remindAtTheEndOfMonth) {
                 if (fireDate.day > 28) {
                     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
                     for (UILocalNotification *notification in localNotifications) {
                         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
                             if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                                 return;
@@ -205,7 +207,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = fireDate;
@@ -219,7 +221,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.repeatInterval = NSCalendarUnitMonth;
@@ -231,7 +233,7 @@
                     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
                     for (UILocalNotification *notification in localNotifications) {
                         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
                             if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                                 return;
@@ -247,7 +249,7 @@
                         // 通知被触发时播放的声音
                         notification.soundName = @"pushsound.wav";
                         // 通知参数
-                        NSDictionary *userDict = @{@"remindItem":item,
+                        NSDictionary *userDict = @{@"remindItem":remindDic,
                                                    @"key":SSJReminderNotificationKey};
                         notification.userInfo = userDict;
                         notification.fireDate = [NSDate dateWithYear:fireDate.year month:fireDate.month day:fireDate.daysInMonth hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
@@ -261,7 +263,7 @@
                         // 通知被触发时播放的声音
                         notification.soundName = @"pushsound.wav";
                         // 通知参数
-                        NSDictionary *userDict = @{@"remindItem":item,
+                        NSDictionary *userDict = @{@"remindItem":remindDic,
                                                    @"key":SSJReminderNotificationKey};
                         notification.userInfo = userDict;
                         notification.fireDate = fireDate;
@@ -276,7 +278,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.repeatInterval = NSCalendarUnitMonth;
@@ -299,7 +301,7 @@
                 // 通知被触发时播放的声音
                 notification.soundName = @"pushsound.wav";
                 // 通知参数
-                NSDictionary *userDict = @{@"remindItem":item,
+                NSDictionary *userDict = @{@"remindItem":remindDic,
                                            @"key":SSJReminderNotificationKey};
                 notification.userInfo = userDict;
                 notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
@@ -318,7 +320,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             if ([fireDate isEarlierThan:[NSDate date]]) {
@@ -371,9 +373,9 @@
     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
     for (UILocalNotification *notification in localNotifications) {
         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+        NSDictionary *remindDict = [userinfo objectForKey:@"remindItem"];
         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-            if ([remindItem.remindId isEqualToString:item.remindId]) {
+            if ([remindDict[@"remindId"] isEqualToString:item.remindId]) {
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
             }
         }
