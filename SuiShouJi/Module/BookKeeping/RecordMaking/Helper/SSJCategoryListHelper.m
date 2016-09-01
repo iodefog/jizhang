@@ -95,7 +95,7 @@
                                                 failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND A.ICUSTOM = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID ORDER BY B.IORDER", @(incomeOrExpenture), @(custom), SSJUSERID()];
+        FMResultSet *rs = [db executeQuery:@"SELECT * FROM BK_BILL_TYPE A , BK_USER_BILL B WHERE A.ITYPE = ? AND A.ICUSTOM = ? AND B.ISTATE = 0 AND B.CUSERID = ? AND A.ID = B.CBILLID AND B.OPERATORTYPE <> 2 ORDER BY B.IORDER", @(incomeOrExpenture), @(custom), SSJUSERID()];
         if (!rs) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

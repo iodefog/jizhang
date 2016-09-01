@@ -55,6 +55,9 @@
         [self.view ssj_hideLoadingIndicator];
         _categoryEditView.images = images;
         _categoryEditView.colors = _model.type ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
+        _categoryEditView.textField.text = _model.name;
+        _categoryEditView.selectedImage = _model.icon;
+        _categoryEditView.selectedColor = _model.color;
     } failure:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
@@ -101,9 +104,6 @@
     if (!_categoryEditView) {
         __weak typeof(self) wself = self;
         _categoryEditView = [[SSJNewOrEditCustomCategoryView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
-        _categoryEditView.textField.text = _model.name;
-        _categoryEditView.selectedImage = _model.icon;
-        _categoryEditView.selectedColor = _model.color;
         _categoryEditView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view) {
             if (wself.model.type) {
                 [MobClick event:@"add_user_bill_in_custom"];
