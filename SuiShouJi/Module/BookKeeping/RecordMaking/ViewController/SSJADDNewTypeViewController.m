@@ -52,6 +52,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 @implementation SSJADDNewTypeViewController
 
 #pragma mark - Lifecycle
+//- (void)dealloc {
+//    
+//}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"添加新类别";
@@ -259,6 +263,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     
     SSJEditBillTypeViewController *editVC = [[SSJEditBillTypeViewController alloc] init];
     editVC.model = model;
+    editVC.editSuccessHandle = ^(SSJEditBillTypeViewController *controller) {
+        selectedItem.categoryTitle = controller.model.name;
+        selectedItem.categoryImage = controller.model.icon;
+        selectedItem.categoryColor = controller.model.color;
+    };
     [self.navigationController pushViewController:editVC animated:YES];
 }
 

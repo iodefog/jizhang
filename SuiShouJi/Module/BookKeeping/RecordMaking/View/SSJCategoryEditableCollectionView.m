@@ -32,6 +32,10 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 
 @implementation SSJCategoryEditableCollectionView
 
+- (void)dealloc {
+    [self removeObserver];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
@@ -60,7 +64,10 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 }
 
 - (void)setItems:(NSArray<SSJRecordMakingCategoryItem *> *)items {
+    [self removeObserver];
     _items = items;
+    [self addObserver];
+    
     _editing = NO;
     _collectionView.allowsMultipleSelection = NO;
 
@@ -143,6 +150,10 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     }
 }
 
+- (NSArray <SSJRecordMakingCategoryItem *>*)selectedItems {
+    return [_selectedItems copy];
+}
+
 - (void)deleteItems:(NSArray <SSJRecordMakingCategoryItem *>*)items {
     NSMutableArray *deleteIndexPaths = [NSMutableArray arrayWithCapacity:items.count];
     NSMutableArray *tmpItems = [_items mutableCopy];
@@ -208,9 +219,23 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     return !_editing && _editable;
 }
 
-#pragma mark - 
+#pragma mark - Event
 - (void)beginEditingWhenLongPressBegin {
     self.editing = YES;
+}
+
+#pragma mark - Observer
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
+    if (object) {
+        NSUInteger index = [_items indexOfObject:object];
+        for (NSIndexPath *path in [_collectionView indexPathsForSelectedItems]) {
+            if (path.item == index) {
+                [self selectCellItemAtIndex:index];
+                return;
+            }
+        }
+        [self deselectCellItemAtIndex:index];
+    }
 }
 
 #pragma mark - Private
@@ -251,6 +276,18 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
         SSJRecordMakingCategoryItem *selectedItem = [_items ssj_safeObjectAtIndex:selctedIndexPath.item];
         [_selectedItems addObject:selectedItem];
     }
+}
+
+- (void)addObserver {
+    [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryTitle" options:NSKeyValueObservingOptionNew context:NULL];
+    [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryImage" options:NSKeyValueObservingOptionNew context:NULL];
+    [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryColor" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+- (void)removeObserver {
+    [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryTitle" context:NULL];
+    [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryImage" context:NULL];
+    [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryColor" context:NULL];
 }
 
 #pragma mark - Getter

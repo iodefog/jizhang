@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) SSJBillModel *model;
 
-@end
+@property (nonatomic, copy) void (^editSuccessHandle)(SSJEditBillTypeViewController *controller);
+
+@end    
 
 NS_ASSUME_NONNULL_END

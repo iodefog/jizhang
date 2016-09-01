@@ -88,6 +88,9 @@
                                         Success:^(NSString *categoryId) {
                                             [self.navigationController popViewControllerAnimated:YES];
                                             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                                            if (_editSuccessHandle) {
+                                                _editSuccessHandle(self);
+                                            }
                                             
     }
                                         failure:^(NSError *error) {
