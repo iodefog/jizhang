@@ -33,4 +33,6 @@
 
 - (void)updateAppearance;
 
+- (void)deleteItems:(NSArray <SSJRecordMakingCategoryItem *>*)items;
+
 @end

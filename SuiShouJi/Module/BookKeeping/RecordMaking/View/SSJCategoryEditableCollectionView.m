@@ -143,6 +143,24 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     }
 }
 
+- (void)deleteItems:(NSArray <SSJRecordMakingCategoryItem *>*)items {
+    NSMutableArray *deleteIndexPaths = [NSMutableArray arrayWithCapacity:items.count];
+    NSMutableArray *tmpItems = [_items mutableCopy];
+    
+    for (SSJRecordMakingCategoryItem *item in items) {
+        NSUInteger index = [_items indexOfObject:item];
+        if (index != NSNotFound) {
+            [deleteIndexPaths addObject:[NSIndexPath indexPathForItem:index inSection:0]];
+            [tmpItems removeObjectAtIndex:index];
+            [_cellItems removeObjectAtIndex:index];
+        }
+    }
+    
+    _items = [tmpItems copy];
+    
+    [_collectionView deleteItemsAtIndexPaths:deleteIndexPaths];
+}
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return _cellItems.count;

@@ -263,21 +263,21 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 - (void)deleteButtonAction {
-    NSArray *selectedItems = nil;
+    SSJCategoryEditableCollectionView *deleteCollectionView = nil;
     if (_titleSegmentView.selectedSegmentIndex == 0) {
-        selectedItems = _featuredCategoryCollectionView.selectedItems;
-    } else if (_titleSegmentView.selectedSegmentIndex == 0 && _customCategorySwitchConrol.selectedIndex == 0) {
-        selectedItems = _customCategoryCollectionView.selectedItems;
+        deleteCollectionView = _featuredCategoryCollectionView;
+    } else if (_titleSegmentView.selectedSegmentIndex == 1 && _customCategorySwitchConrol.selectedIndex == 0) {
+        deleteCollectionView = _customCategoryCollectionView;
     }
     
-    if (selectedItems.count == 0) {
+    if (deleteCollectionView.selectedItems.count == 0) {
         [CDAutoHideMessageHUD showMessage:@"请选择要删除的类别"];
         return;
     }
     
-    NSArray *deleteIDs = [selectedItems valueForKeyPath:@"categoryID"];
+    NSArray *deleteIDs = [deleteCollectionView.selectedItems valueForKeyPath:@"categoryID"];
     [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
-        
+        [deleteCollectionView deleteItems:deleteCollectionView.selectedItems];
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];

@@ -259,13 +259,17 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if ([db executeUpdate:sqlStr]) {
             if (success) {
-                success();
+                SSJDispatchMainAsync(^{
+                    success();
+                });
             }
             return;
         }
         
         if (failure) {
-            failure([db lastError]);
+            SSJDispatchMainAsync(^{
+                failure([db lastError]);
+            });
         }
     }];
 }
