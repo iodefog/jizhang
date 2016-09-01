@@ -50,7 +50,7 @@
     self.cardNameLabel.left = self.cardImage.right + 10;
     self.cardMemoLabel.top = self.contentView.height / 2 + 3;
     self.cardMemoLabel.left = self.cardImage.right + 10;
-    self.cardBalanceLabel.centerY = self.contentView.height / 2;
+    self.cardBalanceLabel.centerY = self.cardNameLabel.centerY;
     self.cardBalanceLabel.right = self.contentView.width - 10;
 }
 

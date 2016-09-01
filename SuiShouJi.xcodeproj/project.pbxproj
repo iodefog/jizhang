@@ -1645,6 +1645,10 @@
 		9C24D0071D7829060095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
 		9C24D0081D7829060095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
 		9C24D0091D7829070095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
+		9C24D00C1D7838F80095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
+		9C24D00D1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
+		9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
+		9C24D00F1D7838FA0095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C262C7B1CBCDB4000368B48 /* home_calender@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */; };
 		9C29319C1CEEFFD300484F6E /* SSJPatchUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */; };
 		9C2A670A1D194CA70010F1DA /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
@@ -15054,6 +15058,7 @@
 				7DBA56B91D6D32B700C02D79 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7DBA56BA1D6D32B700C02D79 /* SSJBookkeepingTreeStore.m in Sources */,
 				7DBA56BB1D6D32B700C02D79 /* SSJFinancingHomeAddCell.m in Sources */,
+				9C24D00D1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7DBA56BC1D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56BD1D6D32B700C02D79 /* SSJChargeReminderTimeView.m in Sources */,
 				7DBA56BE1D6D32B700C02D79 /* SSJCanlenderChargeDetailCell.m in Sources */,
@@ -15398,6 +15403,7 @@
 				9C2A67BA1D194CA70010F1DA /* SSJUserBillSyncTable.m in Sources */,
 				9C2A67BB1D194CA70010F1DA /* SSJCircleChargeSettingViewController.m in Sources */,
 				9C2A67BC1D194CA70010F1DA /* SSJFontAddition.m in Sources */,
+				9C24D00C1D7838F80095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				9C2A67BD1D194CA70010F1DA /* SSJMagicExportViewController.m in Sources */,
 				9C2A67BE1D194CA70010F1DA /* SSJAlertViewAdapter.m in Sources */,
 				9C9A0C541D6D96FA002AF046 /* SSJReminderListCell.m in Sources */,
@@ -15926,6 +15932,7 @@
 				9CECFC351D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CECFC361D6D41A700DB2C8B /* SSJBookkeepingTreeStore.m in Sources */,
 				9CECFC371D6D41A700DB2C8B /* SSJFinancingHomeAddCell.m in Sources */,
+				9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				9CECFC381D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */,
 				9CECFC3A1D6D41A700DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */,
@@ -16317,6 +16324,7 @@
 				9CEC00041D6D41EB00DB2C8B /* SSJMineHomeTabelviewCell.m in Sources */,
 				9CEC00051D6D41EB00DB2C8B /* SSJNewMemberHeaderView.m in Sources */,
 				9C9A0C221D6D95A3002AF046 /* SSJFundingTypeSelectViewController.m in Sources */,
+				9C24D00F1D7838FA0095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7D8C7E881D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
 				9CEC00061D6D41EB00DB2C8B /* NSString+MoneyDisplayFormat.m in Sources */,
 				9CEC00081D6D41EB00DB2C8B /* SSJJspatchAnalyze.m in Sources */,
