@@ -156,11 +156,11 @@
 
         
         // 如果是每月最后一天
-        case 4:{
+        case 5:{
             NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
             for (UILocalNotification *notification in localNotifications) {
                 NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                 if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
                     if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                         return;
@@ -185,14 +185,14 @@
         break;
         
         // 如果是每月
-        case 5:{
+        case 4:{
             // 如果是大于28号,则只要添加一次推送
             if (!item.remindAtTheEndOfMonth) {
                 if (fireDate.day > 28) {
                     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
                     for (UILocalNotification *notification in localNotifications) {
                         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
                             if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                                 return;
@@ -233,7 +233,7 @@
                     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
                     for (UILocalNotification *notification in localNotifications) {
                         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+                        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
                             if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
                                 return;
@@ -373,9 +373,9 @@
     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
     for (UILocalNotification *notification in localNotifications) {
         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-        SSJReminderItem *remindItem = [userinfo objectForKey:@"remindItem"];
+        NSDictionary *remindDict = [userinfo objectForKey:@"remindItem"];
         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-            if ([remindItem.remindId isEqualToString:item.remindId]) {
+            if ([remindDict[@"remindId"] isEqualToString:item.remindId]) {
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
             }
         }
