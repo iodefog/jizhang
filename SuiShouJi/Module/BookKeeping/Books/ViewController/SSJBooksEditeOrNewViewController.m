@@ -35,6 +35,8 @@
     }else{
         self.title = @"添加账本";
         self.item = [[SSJBooksTypeItem alloc]init];
+        self.item.booksColor = @"#fc7a60";
+        self.item.booksIcoin = @"book_moren";
     }
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;

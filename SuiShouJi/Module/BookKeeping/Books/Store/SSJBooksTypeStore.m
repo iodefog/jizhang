@@ -123,6 +123,7 @@
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.booksName = [resultSet stringForColumn:@"cbooksname"];
             item.booksColor = [resultSet stringForColumn:@"cbookscolor"];
+            item.booksIcoin = [resultSet stringForColumn:@"cicoin"];
         }
     }];
     return item;
