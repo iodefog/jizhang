@@ -65,7 +65,17 @@
  *
  *  @return (UIImage *) 缩放后的图片
  */
--(UIImage *)ssj_scaleImageWithSize:(CGSize)Size;
+- (UIImage *)ssj_scaleImageWithSize:(CGSize)Size;
+
+
+/**
+ *  改变图片颜色
+ *
+ *  @param color 图片要改变的颜色
+ *
+ *  @return (UIImage *) 改变颜色后的图片
+ */
+- (UIImage *)imageWithColor:(UIColor *)color;
 
 @end
 
