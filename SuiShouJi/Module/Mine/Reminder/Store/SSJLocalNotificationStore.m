@@ -7,6 +7,7 @@
 //
 
 #import "SSJLocalNotificationStore.h"
+#import "SSJLocalNotificationHelper.h"
 
 @implementation SSJLocalNotificationStore
 
@@ -64,10 +65,13 @@
         if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = 1, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operatortype = 1, iversion = ? where cuserid = ? and cremindid = ?",item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],@(item.remindType),@(item.remindCycle),@(item.remindAtTheEndOfMonth),cwriteDate,@(SSJSyncVersion()),userId,item.remindId]) {
             return [db lastError];
         }
+        [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:item];
+        [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
     }else{
         if (![db executeUpdate:@"insert into bk_user_remind (cremindid,cremindname,cmemo,cstartdate,istate,itype,icycle,iisend,cwritedate,operatortype,iversion,cuserid) values (?,?,?,?,1,?,?,?,?,0,?,?)",item.remindId,item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],@(item.remindType),@(item.remindCycle),@(item.remindAtTheEndOfMonth),cwriteDate,@(SSJSyncVersion()),userId]) {
             return [db lastError];
         }
+        [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
     }
     
     return nil;

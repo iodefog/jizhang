@@ -32,12 +32,14 @@
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
+            item.selectToEdite = NO;
             [booksList addObject:item];
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
         item.booksColor = @"#CCCCCC";
         item.booksIcoin = @"book_tianjia";
+        item.selectToEdite = NO;
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -57,6 +59,8 @@
     }
     item.cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
+    [typeInfo removeObjectForKey:@"selectToEdite"];
+    [typeInfo removeObjectForKey:@"editeModel"];
     if (![[typeInfo allKeys] containsObject:@"iversion"]) {
         [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
     }
