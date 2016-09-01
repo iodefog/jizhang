@@ -8,6 +8,7 @@
 
 #import "SSJCreditCardStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJLocalNotificationStore.h"
 
 @implementation SSJCreditCardStore
 
@@ -150,6 +151,14 @@
         }
     }
     return nil;
+}
+
++ (void)deleteBooksTypeWithCardItem:(SSJCreditCardItem *)item
+                            Success:(void (^)(void))success
+                            failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+    }];
 }
 
 @end

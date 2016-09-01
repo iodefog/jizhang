@@ -441,7 +441,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)rightButtonCliked:(id)sender{
+    if ([SSJLocalNotificationStore deleteReminderWithItem:self.item error:NULL]) {
+        [CDAutoHideMessageHUD showMessage:@"删除成功"];
+        [self.navigationController popViewControllerAnimated:YES];
+    }else{
+        [CDAutoHideMessageHUD showMessage:@"删除失败"];
 
+    };
 }
 
 #pragma mark - Getter

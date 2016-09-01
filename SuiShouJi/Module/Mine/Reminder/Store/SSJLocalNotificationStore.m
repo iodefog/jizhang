@@ -136,4 +136,19 @@
     return item;
 }
 
++ (BOOL)deleteReminderWithItem:(SSJReminderItem *)remindItem error:(NSError **)error{
+    __block BOOL success = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSString *cwritedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        success = [db executeUpdate:@"update bk_user_remind set operatortype = 0 , cwritedate = ? , iversion = ? where cremindid = ? and cuserid = ?",cwritedate,@(SSJSyncVersion()),remindItem.remindId,userId];
+        if (!success) {
+            *error = [db lastError];
+        }else{
+            [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+        }
+    }];
+    return success;
+}
+
 @end

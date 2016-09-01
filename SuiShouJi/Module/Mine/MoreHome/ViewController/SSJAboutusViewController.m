@@ -79,7 +79,7 @@ static NSString *const kTitle3 = @"联系客服";
     
     //  联系客服
     if ([title isEqualToString:kTitle3]) {
-        NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"400-7676-108"];
+        NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"400-7676-298"];
         UIWebView * callWebview = [[UIWebView alloc] init];
         [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
         [self.view addSubview:callWebview];
@@ -100,7 +100,7 @@ static NSString *const kTitle3 = @"联系客服";
     }
     mineHomeCell.cellTitle = [self.titles ssj_safeObjectAtIndex:indexPath.row];
     if ([mineHomeCell.cellTitle isEqualToString:kTitle3]) {
-        mineHomeCell.cellDetail = @"400-7676-108";
+        mineHomeCell.cellDetail = @"400-7676-298";
         mineHomeCell.cellSubTitle = @"(工作日: 9: 00--18: 00)";
     }
     return mineHomeCell;
