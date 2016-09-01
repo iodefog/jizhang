@@ -26,7 +26,9 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 
 @property (nonatomic, strong) NSMutableArray <SSJCategoryEditableCollectionViewCellItem *>*cellItems;
 
-@property (nonatomic, strong) NSMutableArray <SSJRecordMakingCategoryItem *>*selectedItems;
+@property (nonatomic, strong) NSArray *observedKeyPath;
+
+@property (nonatomic, strong) SSJRecordMakingCategoryItem *selectedItemForNormalState;
 
 @end
 
@@ -44,7 +46,8 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
         _contentInset = UIEdgeInsetsMake(0, 10, 94, 10);
         
         _cellItems = [NSMutableArray array];
-        _selectedItems = [NSMutableArray array];
+        
+        _observedKeyPath = @[@"categoryTitle", @"categoryImage", @"categoryColor"];
         
         [self addSubview:self.collectionView];
         
@@ -74,6 +77,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     [_cellItems removeAllObjects];
     
     NSInteger selectedIndex = -1;
+    
     for (int i = 0; i < _items.count; i ++) {
         SSJRecordMakingCategoryItem *item = _items[i];
         SSJCategoryEditableCollectionViewCellItem *cellItem = [[SSJCategoryEditableCollectionViewCellItem alloc] init];
@@ -85,6 +89,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
             cellItem.imageBackgroundColor = [UIColor ssj_colorWithHex:item.categoryColor];
             cellItem.additionImageName = @"";
             selectedIndex = i;
+            _selectedItemForNormalState = item;
         } else {
             cellItem.imageTintColor = [UIColor ssj_colorWithHex:item.categoryColor];
             cellItem.imageBackgroundColor = [UIColor clearColor];
@@ -98,7 +103,6 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     if (selectedIndex >= 0) {
         [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
     }
-    [self updateSelectedItems];
 }
 
 - (void)setEditing:(BOOL)editing {
@@ -117,7 +121,11 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
         [self deselectCellItemAtIndex:i];
     }
     
-    [self updateSelectedItems];
+    if (!_editing) {
+        NSInteger selectedIndex = [_items indexOfObject:_selectedItemForNormalState];
+        [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        [self selectCellItemAtIndex:selectedIndex];
+    }
     
     if (_selectedItemsChangeHandle) {
         _selectedItemsChangeHandle(self);
@@ -151,12 +159,23 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 }
 
 - (NSArray <SSJRecordMakingCategoryItem *>*)selectedItems {
-    return [_selectedItems copy];
+    NSArray *selectedIndexPaths = [_collectionView indexPathsForSelectedItems];
+    NSMutableArray *tmpItems = [NSMutableArray arrayWithCapacity:selectedIndexPaths.count];
+    
+    for (NSIndexPath *path in selectedIndexPaths) {
+        SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:path.item];
+        if (item) {
+            [tmpItems addObject:item];
+        }
+    }
+    return [tmpItems copy];
 }
 
 - (void)deleteItems:(NSArray <SSJRecordMakingCategoryItem *>*)items {
     NSMutableArray *deleteIndexPaths = [NSMutableArray arrayWithCapacity:items.count];
     NSMutableArray *tmpItems = [_items mutableCopy];
+    
+    BOOL selectedItemsChanged = NO;
     
     for (SSJRecordMakingCategoryItem *item in items) {
         NSUInteger index = [_items indexOfObject:item];
@@ -164,12 +183,32 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
             [deleteIndexPaths addObject:[NSIndexPath indexPathForItem:index inSection:0]];
             [tmpItems removeObjectAtIndex:index];
             [_cellItems removeObjectAtIndex:index];
+            
+            for (NSString *keyPath in _observedKeyPath) {
+                [item removeObserver:self forKeyPath:keyPath context:NULL];
+            }
+            
+            if ([[_collectionView indexPathsForSelectedItems] containsObject:[NSIndexPath indexPathForItem:index inSection:0]]) {
+                selectedItemsChanged = YES;
+            }
         }
     }
     
     _items = [tmpItems copy];
     
+    if ([items containsObject:_selectedItemForNormalState]) {
+        _selectedItemForNormalState = [_items firstObject];
+    }
+    
     [_collectionView deleteItemsAtIndexPaths:deleteIndexPaths];
+    
+    if (!_editing && [_collectionView indexPathsForSelectedItems].count == 0) {
+        [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+    }
+    
+    if (selectedItemsChanged && _selectedItemsChangeHandle) {
+        _selectedItemsChangeHandle(self);
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -185,16 +224,18 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [self updateSelectedItems];
     [self selectCellItemAtIndex:indexPath.item];
     
     if (_selectedItemsChangeHandle) {
         _selectedItemsChangeHandle(self);
     }
+    
+    if (!_editing) {
+        _selectedItemForNormalState = [_items ssj_safeObjectAtIndex:indexPath.item];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [self updateSelectedItems];
     [self deselectCellItemAtIndex:indexPath.item];
     
     if (_selectedItemsChangeHandle) {
@@ -241,8 +282,12 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 #pragma mark - Private
 - (void)selectCellItemAtIndex:(NSUInteger)index {
     SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:index];
-    SSJCategoryEditableCollectionViewCellItem *cellItem = [_cellItems ssj_safeObjectAtIndex:index];
+    item.selected = YES;
     
+    SSJCategoryEditableCollectionViewCellItem *cellItem = [_cellItems ssj_safeObjectAtIndex:index];
+    cellItem.imageName = item.categoryImage;
+    cellItem.title = item.categoryTitle;
+    cellItem.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     if (_editing) {
         cellItem.imageTintColor = [UIColor ssj_colorWithHex:item.categoryColor];
         cellItem.imageBackgroundColor = [UIColor clearColor];
@@ -256,8 +301,12 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 
 - (void)deselectCellItemAtIndex:(NSUInteger)index {
     SSJRecordMakingCategoryItem *item = [_items ssj_safeObjectAtIndex:index];
-    SSJCategoryEditableCollectionViewCellItem *cellItem = [_cellItems ssj_safeObjectAtIndex:index];
+    item.selected = NO;
     
+    SSJCategoryEditableCollectionViewCellItem *cellItem = [_cellItems ssj_safeObjectAtIndex:index];
+    cellItem.imageName = item.categoryImage;
+    cellItem.title = item.categoryTitle;
+    cellItem.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     if (_editing) {
         cellItem.imageTintColor = [UIColor ssj_colorWithHex:item.categoryColor];
         cellItem.imageBackgroundColor = [UIColor clearColor];
@@ -269,25 +318,16 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     }
 }
 
-- (void)updateSelectedItems {
-    [_selectedItems removeAllObjects];
-    NSArray *selctedIndexPaths = [_collectionView indexPathsForSelectedItems];
-    for (NSIndexPath *selctedIndexPath in selctedIndexPaths) {
-        SSJRecordMakingCategoryItem *selectedItem = [_items ssj_safeObjectAtIndex:selctedIndexPath.item];
-        [_selectedItems addObject:selectedItem];
+- (void)addObserver {
+    for (NSString *keyPath in _observedKeyPath) {
+        [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
     }
 }
 
-- (void)addObserver {
-    [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryTitle" options:NSKeyValueObservingOptionNew context:NULL];
-    [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryImage" options:NSKeyValueObservingOptionNew context:NULL];
-    [_items addObserver:self toObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryColor" options:NSKeyValueObservingOptionNew context:NULL];
-}
-
 - (void)removeObserver {
-    [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryTitle" context:NULL];
-    [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryImage" context:NULL];
-    [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:@"categoryColor" context:NULL];
+    for (NSString *keyPath in _observedKeyPath) {
+        [_items removeObserver:self fromObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, _items.count)] forKeyPath:keyPath context:NULL];
+    }
 }
 
 #pragma mark - Getter
