@@ -24,6 +24,7 @@
     return mapping;
 }
 
+
 -(BOOL)isEqual:(id)object{
     [super isEqual:object];
     if (self == object) {

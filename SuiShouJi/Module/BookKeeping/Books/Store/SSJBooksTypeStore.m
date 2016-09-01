@@ -59,6 +59,8 @@
     }
     item.cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
+    [typeInfo removeObjectForKey:@"selectToEdite"];
+    [typeInfo removeObjectForKey:@"editeModel"];
     if (![[typeInfo allKeys] containsObject:@"iversion"]) {
         [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
     }
