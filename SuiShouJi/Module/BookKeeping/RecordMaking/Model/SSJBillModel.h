@@ -10,15 +10,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJBillModel : NSObject
+@interface SSJBillModel : NSObject <NSCopying>
 
 @property (nonatomic, copy) NSString *ID;
 
 @property (nonatomic, copy) NSString *userID;
-
-//@property (nonatomic, copy) NSString *parentID;
-
-//@property (nonatomic, copy) NSString *booksID;
 
 @property (nonatomic, copy) NSString *name;
 

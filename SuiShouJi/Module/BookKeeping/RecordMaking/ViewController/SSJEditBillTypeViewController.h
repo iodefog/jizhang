@@ -8,6 +8,16 @@
 
 #import "SSJBaseViewController.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+@class SSJBillModel;
+
 @interface SSJEditBillTypeViewController : SSJBaseViewController
 
-@end
+@property (nonatomic, copy) SSJBillModel *model;
+
+@property (nonatomic, copy) void (^editSuccessHandle)(SSJEditBillTypeViewController *controller);
+
+@end    
+
+NS_ASSUME_NONNULL_END

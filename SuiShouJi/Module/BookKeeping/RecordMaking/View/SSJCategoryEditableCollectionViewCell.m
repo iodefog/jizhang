@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIImageView *additionView;
 
+@property (nonatomic, strong) NSArray *observedKeyPaths;
+
 @end
 
 @implementation SSJCategoryEditableCollectionViewCell
@@ -30,8 +32,7 @@
         [self.contentView addSubview:self.titleLab];
         [self.contentView addSubview:self.additionView];
         
-//        self.layer.borderColor = [UIColor redColor].CGColor;
-//        self.layer.borderWidth = 1;
+        _observedKeyPaths = @[@"imageName", @"imageTintColor", @"imageBackgroundColor", @"title", @"titleColor", @"additionImageName"];
     }
     return self;
 }
@@ -71,15 +72,15 @@
 }
 
 - (void)addObserver {
-    [_item addObserver:self forKeyPath:@"imageTintColor" options:NSKeyValueObservingOptionNew context:NULL];
-    [_item addObserver:self forKeyPath:@"imageBackgroundColor" options:NSKeyValueObservingOptionNew context:NULL];
-    [_item addObserver:self forKeyPath:@"additionImageName" options:NSKeyValueObservingOptionNew context:NULL];
+    for (NSString *keyPath in _observedKeyPaths) {
+        [_item addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionNew context:NULL];
+    }
 }
 
 - (void)removeObserver {
-    [_item removeObserver:self forKeyPath:@"imageTintColor"];
-    [_item removeObserver:self forKeyPath:@"imageBackgroundColor"];
-    [_item removeObserver:self forKeyPath:@"additionImageName"];
+    for (NSString *keyPath in _observedKeyPaths) {
+        [_item removeObserver:self forKeyPath:keyPath];
+    }
 }
 
 #pragma mark - Getter

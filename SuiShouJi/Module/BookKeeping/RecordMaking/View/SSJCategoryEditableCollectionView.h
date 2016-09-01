@@ -13,8 +13,6 @@
 
 @property (nonatomic, strong) NSArray <SSJRecordMakingCategoryItem *>*items;
 
-@property (nonatomic, strong, readonly) NSArray <SSJRecordMakingCategoryItem *>*selectedItems;
-
 // default NO
 @property (nonatomic) BOOL editing;
 
@@ -32,5 +30,9 @@
 @property (nonatomic, copy) void(^didScrollHandle)(SSJCategoryEditableCollectionView *view, CGPoint velocity);
 
 - (void)updateAppearance;
+
+- (NSArray <SSJRecordMakingCategoryItem *>*)selectedItems;
+
+- (void)deleteItems:(NSArray <SSJRecordMakingCategoryItem *>*)items;
 
 @end

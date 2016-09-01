@@ -7,31 +7,130 @@
 //
 
 #import "SSJEditBillTypeViewController.h"
+#import "SSJNewOrEditCustomCategoryView.h"
+#import "SSJRecordMakingCategoryItem.h"
+#import "SSJCategoryListHelper.h"
+#import "SSJBillModel.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJEditBillTypeViewController ()
+
+@property (nonatomic, strong) SSJNewOrEditCustomCategoryView *categoryEditView;
+
+@property (nonatomic, strong) UIButton *sureButton;
 
 @end
 
 @implementation SSJEditBillTypeViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.title = @"编辑类别";
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [self.view addSubview:self.categoryEditView];
+    [self.view addSubview:self.sureButton];
+    [self updateAppearance];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self loadData];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
-*/
+
+- (void)loadData {
+    // 查询自定义类别图标
+    [self.view ssj_showLoadingIndicator];
+    [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_model.type success:^(NSArray<NSString *> *images) {
+        [self.view ssj_hideLoadingIndicator];
+        _categoryEditView.images = images;
+        _categoryEditView.colors = _model.type ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
+        _categoryEditView.textField.text = _model.name;
+        _categoryEditView.selectedImage = _model.icon;
+        _categoryEditView.selectedColor = _model.color;
+    } failure:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+    }];
+}
+
+- (void)sureButtonAction {
+    if (_categoryEditView.textField.text.length == 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
+        return;
+    }
+    if (_categoryEditView.textField.text.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
+        return;
+    }
+    
+    _model.name = _categoryEditView.textField.text;
+    _model.color = _categoryEditView.selectedColor;
+    _model.icon = _categoryEditView.selectedImage;
+    
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:_model.state type:_model.type];
+    [SSJCategoryListHelper updateCategoryWithID:_model.ID
+                                           name:_model.name
+                                          color:_model.color
+                                          image:_model.icon
+                                          order:order
+                                          state:_model.state
+                                        Success:^(NSString *categoryId) {
+                                            [self.navigationController popViewControllerAnimated:YES];
+                                            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                                            if (_editSuccessHandle) {
+                                                _editSuccessHandle(self);
+                                            }
+                                            
+    }
+                                        failure:^(NSError *error) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+}
+
+- (void)updateAppearance {
+    [_categoryEditView updateAppearance];
+    [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
+}
+
+- (SSJNewOrEditCustomCategoryView *)categoryEditView {
+    if (!_categoryEditView) {
+        __weak typeof(self) wself = self;
+        _categoryEditView = [[SSJNewOrEditCustomCategoryView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM + 10, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 10)];
+        _categoryEditView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view) {
+            if (wself.model.type) {
+                [MobClick event:@"add_user_bill_in_custom"];
+            }else{
+                [MobClick event:@"add_user_bill_out_custom"];
+            }
+        };
+        _categoryEditView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view) {
+            [MobClick event:@"add_user_bill_color"];
+        };
+    }
+    return _categoryEditView;
+}
+
+- (UIButton *)sureButton {
+    if (!_sureButton) {
+        _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _sureButton.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
+        _sureButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
+        [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _sureButton;
+}
 
 @end

@@ -744,12 +744,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     billTypeView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
     billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         
+        int type = !wself.titleSegment.selectedSegmentIndex;
+        int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type] + 1;
+        
         [SSJCategoryListHelper updateCategoryWithID:item.ID
                                                name:item.title
                                               color:item.colorValue
                                               image:item.imageName
-                                              state:0
-                                  incomeOrExpenture:!wself.titleSegment.selectedSegmentIndex
+                                              order:order state:0
                                             Success:NULL
                                             failure:^(NSError *error) {
                                                 
