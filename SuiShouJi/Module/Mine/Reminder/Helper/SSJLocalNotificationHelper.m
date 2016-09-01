@@ -30,6 +30,8 @@
 {
     NSMutableArray *notificationsArr = [NSMutableArray array];
     
+    NSDictionary *remindDic = [item mj_keyValues];
+    
     NSDate * fireDate = item.remindDate;
     
     switch (item.remindCycle) {
@@ -43,7 +45,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.repeatInterval = NSCalendarUnitDay;
@@ -62,7 +64,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.repeatInterval = NSWeekCalendarUnit;
@@ -81,7 +83,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             if ([fireDate isEarlierThan:[NSDate date]]) {
@@ -105,7 +107,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
@@ -122,7 +124,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = [fireDate dateBySubtractingDays:i];
@@ -143,7 +145,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             notification.fireDate = fireDate;
@@ -173,7 +175,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             NSDate *lastDayOfTheMonth = [NSDate dateWithYear:fireDate.year month:fireDate.month day:fireDate.daysInMonth hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
@@ -205,7 +207,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.fireDate = fireDate;
@@ -219,7 +221,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.repeatInterval = NSCalendarUnitMonth;
@@ -247,7 +249,7 @@
                         // 通知被触发时播放的声音
                         notification.soundName = @"pushsound.wav";
                         // 通知参数
-                        NSDictionary *userDict = @{@"remindItem":item,
+                        NSDictionary *userDict = @{@"remindItem":remindDic,
                                                    @"key":SSJReminderNotificationKey};
                         notification.userInfo = userDict;
                         notification.fireDate = [NSDate dateWithYear:fireDate.year month:fireDate.month day:fireDate.daysInMonth hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
@@ -261,7 +263,7 @@
                         // 通知被触发时播放的声音
                         notification.soundName = @"pushsound.wav";
                         // 通知参数
-                        NSDictionary *userDict = @{@"remindItem":item,
+                        NSDictionary *userDict = @{@"remindItem":remindDic,
                                                    @"key":SSJReminderNotificationKey};
                         notification.userInfo = userDict;
                         notification.fireDate = fireDate;
@@ -276,7 +278,7 @@
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
                     // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":item,
+                    NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
                     notification.repeatInterval = NSCalendarUnitMonth;
@@ -299,7 +301,7 @@
                 // 通知被触发时播放的声音
                 notification.soundName = @"pushsound.wav";
                 // 通知参数
-                NSDictionary *userDict = @{@"remindItem":item,
+                NSDictionary *userDict = @{@"remindItem":remindDic,
                                            @"key":SSJReminderNotificationKey};
                 notification.userInfo = userDict;
                 notification.fireDate = [firstDayOfTheWeek dateByAddingDays:i];
@@ -318,7 +320,7 @@
             // 通知被触发时播放的声音
             notification.soundName = @"pushsound.wav";
             // 通知参数
-            NSDictionary *userDict = @{@"remindItem":item,
+            NSDictionary *userDict = @{@"remindItem":remindDic,
                                        @"key":SSJReminderNotificationKey};
             notification.userInfo = userDict;
             if ([fireDate isEarlierThan:[NSDate date]]) {
