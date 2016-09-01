@@ -31,5 +31,7 @@
 
 @property(nonatomic) NSInteger operatorType;
 
+@property(nonatomic) BOOL selectToEdite;
+
 + (NSDictionary *)propertyMapping;
 @end

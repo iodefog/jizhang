@@ -63,12 +63,6 @@
         self.booksIcionImage.position = CGPointMake(self.contentView.width - 21, self.contentView.height - 21);
     }
     if (self.item.booksId.length) {
-        self.booksIcionImage.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
-    }else{
-        self.booksIcionImage.transform = CATransform3DIdentity;
-
-    }
-    if (self.item.booksId.length) {
         self.selectedButton.center = CGPointMake(self.contentView.width , 0);
     }else{
         self.selectedButton.hidden = YES;
@@ -115,6 +109,7 @@
         _booksIcionImage.size = CGSizeMake(32, 32);
 //        _booksIcionImage.backgroundColor = [UIColor blackColor].CGColor;
         _booksIcionImage.position = CGPointMake(self.width / 2, self.height / 2);
+        _booksIcionImage.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
     }
     return _booksIcionImage;
 }
@@ -138,9 +133,8 @@
 }
 
 - (void)setSelectToEdite:(BOOL)selectToEdite{
-    [self removeObserver:self forKeyPath:@"selectToEdite"];
     _selectToEdite = selectToEdite;
-    [self addObserver:self forKeyPath:@"selectToEdite" options:NSKeyValueObservingOptionNew context:NULL];
+    self.selectedButton.selected = _selectToEdite;
 }
 
 -(void)setEditeModel:(BOOL)editeModel{
@@ -151,10 +145,6 @@
 -(void)setIsSelected:(BOOL)isSelected{
     _isSelected = isSelected;
     self.selectImageView.hidden = !_isSelected;
-}
-
-- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
-    self.selectedButton.selected = _selectToEdite;
 }
 
 @end
