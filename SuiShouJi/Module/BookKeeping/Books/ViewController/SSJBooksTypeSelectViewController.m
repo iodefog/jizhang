@@ -93,15 +93,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     SSJBooksTypeItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    SSJBooksTypeCollectionViewCell *cell = (SSJBooksTypeCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (_editeModel) {
         if (![item.booksName isEqualToString:@"添加账本"]) {
             if ([self.selectedBooks containsObject:item]) {
                 [self.selectedBooks removeObject:item];
-                cell.selectToEdite = NO;
             }else{
                 [self.selectedBooks addObject:item];
-                cell.selectToEdite = YES;
             }
             if (self.selectedBooks.count > 1) {
                 self.editeButton.enabled = NO;
@@ -142,7 +139,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 //    __weak typeof(self) weakSelf = self;
     SSJBooksTypeCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJBooksTypeCellIdentifier forIndexPath:indexPath];
     cell.editeModel = _editeModel;
-    cell.selectToEdite = NO;
+    if ([self.selectedBooks containsObject:item]) {
+        cell.selectToEdite = YES;
+    }else{
+        cell.selectToEdite = NO;
+    }
     if ([item.booksId isEqualToString:booksid]) {
         cell.isSelected = YES;
     }else{
