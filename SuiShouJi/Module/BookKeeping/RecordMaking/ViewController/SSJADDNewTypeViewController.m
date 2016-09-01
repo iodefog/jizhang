@@ -259,21 +259,46 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     
     SSJRecordMakingCategoryItem *selectedItem = [selectedItems firstObject];
     
-    SSJBillModel *model = [[SSJBillModel alloc] init];
-    model.ID = selectedItem.categoryID;
-    model.name = selectedItem.categoryTitle;
-    model.icon = selectedItem.categoryImage;
-    model.color = selectedItem.categoryColor;
-    model.order = selectedItem.order;
-    model.state = 0;
-    model.type = _incomeOrExpence;
+    SSJBillModel *editModel = [[SSJBillModel alloc] init];
+    editModel.ID = selectedItem.categoryID;
+    editModel.name = selectedItem.categoryTitle;
+    editModel.icon = selectedItem.categoryImage;
+    editModel.color = selectedItem.categoryColor;
+    editModel.order = selectedItem.order;
+    editModel.state = 0;
+    editModel.custom = 1;
+    editModel.type = _incomeOrExpence;
+    
+    __weak typeof(self) wself = self;
     
     SSJEditBillTypeViewController *editVC = [[SSJEditBillTypeViewController alloc] init];
-    editVC.model = model;
-    editVC.editSuccessHandle = ^(SSJEditBillTypeViewController *controller) {
-        selectedItem.categoryTitle = controller.model.name;
-        selectedItem.categoryImage = controller.model.icon;
-        selectedItem.categoryColor = controller.model.color;
+    editVC.model = editModel;
+    editVC.addNewCategoryAction = _addNewCategoryAction;
+    editVC.editSuccessHandle = ^(SSJEditBillTypeViewController *controller, SSJBillModel *model) {
+        if ([model.ID isEqualToString:editModel.ID]) {
+            selectedItem.categoryTitle = model.name;
+            selectedItem.categoryImage = model.icon;
+            selectedItem.categoryColor = model.color;
+        } else {
+            wself.titleSegmentView.selectedSegmentIndex = model.custom;
+            [wself.scrollView setContentOffset:CGPointMake(wself.scrollView.width * wself.titleSegmentView.selectedSegmentIndex, 0) animated:NO];
+            [wself updateButtons];
+            
+            SSJCategoryEditableCollectionView *collectionView = nil;
+            if (model.custom) {
+                collectionView = wself.customCategoryCollectionView;
+            } else {
+                collectionView = wself.featuredCategoryCollectionView;
+            }
+            
+            for (int i = 0; i < collectionView.items.count; i ++) {
+                SSJRecordMakingCategoryItem *item = collectionView.items[i];
+                if ([item.categoryID isEqualToString:model.ID]) {
+                    collectionView.selectedIndexs = @[@(i)];
+                    break;
+                }
+            }
+        }
     };
     [self.navigationController pushViewController:editVC animated:YES];
 }

@@ -117,9 +117,6 @@
             [tempArray addObject:item];
         }
         
-        SSJRecordMakingCategoryItem *item = [tempArray firstObject];
-        item.selected = YES;
-        
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempArray);
@@ -286,7 +283,7 @@
         SSJBillModel *model = nil;
         
         // 可能有多个未删除的同名类别，根据writedate取最新的类别
-        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype <> 2 order by ub.cwritedate desc"];
+        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype <> 2 order by ub.cwritedate desc", userID, name];
         
         while ([resultSet next]) {
             model = [[SSJBillModel alloc] init];

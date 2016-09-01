@@ -96,7 +96,10 @@
                                                             if (model.state) {
                                                                 [self goBackToRecordMakingControllerWithModel:model];
                                                             } else {
-                                                                
+                                                                [self.navigationController popViewControllerAnimated:YES];
+                                                                if (_editSuccessHandle) {
+                                                                    _editSuccessHandle(self, model);
+                                                                }
                                                             }
                                                         } else {
                                                             [self updateCategory];
@@ -132,7 +135,7 @@
                                             [self.navigationController popViewControllerAnimated:YES];
                                             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                                             if (_editSuccessHandle) {
-                                                _editSuccessHandle(self);
+                                                _editSuccessHandle(self, _model);
                                             }
                                         }
                                         failure:^(NSError *error) {
