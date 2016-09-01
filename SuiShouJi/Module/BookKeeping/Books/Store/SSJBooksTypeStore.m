@@ -32,12 +32,14 @@
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
+            item.selectToEdite = NO;
             [booksList addObject:item];
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
         item.booksColor = @"#CCCCCC";
         item.booksIcoin = @"book_tianjia";
+        item.selectToEdite = NO;
         [booksList addObject:item];
         if (success) {
             SSJDispatch_main_async_safe(^{

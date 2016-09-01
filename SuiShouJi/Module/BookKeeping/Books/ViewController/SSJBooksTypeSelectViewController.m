@@ -97,15 +97,16 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         if (![item.booksName isEqualToString:@"添加账本"]) {
             if ([self.selectedBooks containsObject:item]) {
                 [self.selectedBooks removeObject:item];
+                item.selectToEdite = NO;
             }else{
                 [self.selectedBooks addObject:item];
+                item.selectToEdite = YES;
             }
             if (self.selectedBooks.count > 1) {
                 self.editeButton.enabled = NO;
             }else{
                 self.editeButton.enabled = YES;
             }
-            [self.collectionView reloadData];
         }else{
             SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
             [self.navigationController pushViewController:booksEditeVc animated:YES];
@@ -180,7 +181,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     if (self.rightButton.isSelected) {
         [self.selectedBooks removeAllObjects];
     }
-    [self.collectionView reloadData];
+    for (SSJBooksTypeItem *item in self.items) {
+        item.editeModel = self.rightButton.isSelected;
+    }
 }
 
 - (void)editeButtonClicked:(id)sender{
@@ -316,7 +319,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
         [SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL];
     }
-    [self.collectionView reloadData];
+    [self getDateFromDB];
 }
 
 -(void)updateAppearanceAfterThemeChanged{

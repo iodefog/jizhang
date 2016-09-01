@@ -69,6 +69,10 @@
     }
 }
 
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSString*, id> *)change context:(nullable void *)context {
+    [self updateAppearance];
+}
+
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc]init];
@@ -109,7 +113,6 @@
         _booksIcionImage.size = CGSizeMake(32, 32);
 //        _booksIcionImage.backgroundColor = [UIColor blackColor].CGColor;
         _booksIcionImage.position = CGPointMake(self.width / 2, self.height / 2);
-        _booksIcionImage.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
     }
     return _booksIcionImage;
 }
@@ -124,22 +127,45 @@
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{
+    [self removeOberver];
     _item = item;
+    [self addObesever];
+    [self updateAppearance];
+}
+
+- (void)removeOberver{
+    [_item removeObserver:self forKeyPath:@"selectToEdite"];
+    [_item removeObserver:self forKeyPath:@"booksColor"];
+    [_item removeObserver:self forKeyPath:@"booksName"];
+    [_item removeObserver:self forKeyPath:@"booksIcoin"];
+    [_item removeObserver:self forKeyPath:@"editeModel"];
+}
+
+- (void)addObesever{
+    [_item addObserver:self forKeyPath:@"selectToEdite" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"booksColor" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"booksName" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"booksIcoin" options:NSKeyValueObservingOptionNew context:NULL];
+    [_item addObserver:self forKeyPath:@"editeModel" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+- (void)updateAppearance{
     self.backgroundColor = [UIColor ssj_colorWithHex:_item.booksColor];
     self.titleLabel.text = _item.booksName;
     [self.titleLabel sizeToFit];
     self.booksIcionImage.contents = (id)[[UIImage imageNamed:_item.booksIcoin] imageWithColor:[UIColor ssj_colorWithHex:@"#000000" alpha:0.15]].CGImage;
+    if (self.item.booksId.length) {
+        self.booksIcionImage.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
+    }else{
+        self.booksIcionImage.transform = CATransform3DIdentity;
+    }
+    self.selectedButton.hidden = !_item.editeModel;
+    self.selectedButton.selected = _item.selectToEdite;
     [self setNeedsLayout];
-}
-
-- (void)setSelectToEdite:(BOOL)selectToEdite{
-    _selectToEdite = selectToEdite;
-    self.selectedButton.selected = _selectToEdite;
 }
 
 -(void)setEditeModel:(BOOL)editeModel{
     _editeModel = editeModel;
-    self.selectedButton.hidden = !_editeModel;
 }
 
 -(void)setIsSelected:(BOOL)isSelected{
