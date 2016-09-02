@@ -33,6 +33,7 @@
             item.cardMemo = [resultSet stringForColumn:@"cmemo"];
             item.cardColor = [resultSet stringForColumn:@"ccolor"];
             item.remindId = [resultSet stringForColumn:@"cremindid"];
+            item.cardOder = [resultSet intForColumn:@"iorder"];
         }
         [resultSet close];
         item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];

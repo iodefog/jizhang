@@ -9,6 +9,8 @@
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCreditCardStore.h"
+#import "SSJCreditCardItem.h"
 
 @implementation SSJFinancingHomeHelper
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
@@ -47,12 +49,7 @@
                 item.fundingOrder = i + 1;
             }
         }
-        SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
-        item.fundingName = @"添加资金账户";
-        item.fundingColor = @"cccccc";
-        item.fundingIcon = @"add";
-        item.isAddOrNot = YES;
-        [fundingList addObject:item];
+        [fundingResult close];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(fundingList);

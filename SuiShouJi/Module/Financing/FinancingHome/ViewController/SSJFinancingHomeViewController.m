@@ -27,6 +27,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJDataSynchronizer.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJLoanListViewController.h"
+#import "SSJCreditCardItem.h"
+#import "SSJCreditCardStore.h"
+
 #import "FMDB.h"
 
 @interface SSJFinancingHomeViewController ()
@@ -101,30 +104,36 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
-    if ([item.fundingParent isEqualToString:@"10"]
-        || [item.fundingParent isEqualToString:@"11"]) {
-        // 借贷
-        SSJLoanListViewController *loanListVC = [[SSJLoanListViewController alloc] init];
-        loanListVC.item = item;
-        [self.navigationController pushViewController:loanListVC animated:YES];
-    } else {
-        if ([item.fundingName isEqualToString:@"添加资金账户"]) {
-            SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
-            //        __weak typeof(self) weakSelf = self;
-            //        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-            //            weakSelf.newlyAddFundId = newFundingItem.fundingID;
-            //        };
-            [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
-        }else{
-            SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
-            fundingDetailVC.item = item;
-            [self.navigationController pushViewController:fundingDetailVC animated:YES];
+    if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)item;
+        if ([financingItem.fundingParent isEqualToString:@"10"]
+            || [financingItem.fundingParent isEqualToString:@"11"]) {
+            // 借贷
+            SSJLoanListViewController *loanListVC = [[SSJLoanListViewController alloc] init];
+            loanListVC.item = financingItem;
+            [self.navigationController pushViewController:loanListVC animated:YES];
+        } else {
+            if ([financingItem.fundingName isEqualToString:@"添加资金账户"]) {
+                SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+                //        __weak typeof(self) weakSelf = self;
+                //        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                //            weakSelf.newlyAddFundId = newFundingItem.fundingID;
+                //        };
+                [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
+            }else{
+                SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
+                fundingDetailVC.item = financingItem;
+                [self.navigationController pushViewController:fundingDetailVC animated:YES];
+            }
         }
+    }else if([item isKindOfClass:[SSJCreditCardItem class]]){
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+        SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
+        fundingDetailVC.item = cardItem;
+        [self.navigationController pushViewController:fundingDetailVC animated:YES];
     }
-    
-    
 }
 
 -(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -147,34 +156,25 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
-        __weak typeof(self) weakSelf = self;
-        SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
-        cell.item = item;
-        cell.editeModel = _editeModel;
-        cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
-            NSIndexPath *deleteIndex = [self.collectionView indexPathForCell:cell];
-            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
-            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        };
-        return cell;
-    }else{
-        SSJFinancingHomeAddCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingAddCellIdentifier forIndexPath:indexPath];
-        return cell;
-    }
+    
+    SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    __weak typeof(self) weakSelf = self;
+    SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
+    cell.item = item;
+    cell.editeModel = _editeModel;
+    cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
+        NSIndexPath *deleteIndex = [self.collectionView indexPathForCell:cell];
+        [weakSelf.items removeObjectAtIndex:deleteIndex.item];
+        [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    };
+    return cell;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (![item.fundingName isEqualToString:@"添加资金账户"]) {
         return CGSizeMake(self.view.width - 20, 85);
-    }else{
-        return CGSizeMake(self.view.width - 20, 50);
-    }
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -292,14 +292,15 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }];
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
-        if (weakSelf.newlyAddFundId) {
-            [weakSelf.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 2 inSection:0]]];
-            [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-            weakSelf.newlyAddFundId = nil;
-
-        }else{
-            [weakSelf.collectionView reloadData];
+        for (int i = 0; i < weakSelf.items.count; i ++) {
+            SSJFinancingHomeitem *fundItem = [weakSelf.items objectAtIndex:i];
+            if ([fundItem.fundingParent isEqualToString:@"3"]) {
+                SSJCreditCardItem *cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:fundItem.fundingID];
+                [weakSelf.items removeObject:fundItem];
+                [weakSelf.items insertObject:cardItem atIndex:cardItem.cardOder - 1];
+            }
         }
+        [weakSelf.collectionView reloadData];
         [weakSelf.collectionView ssj_hideLoadingIndicator];
         
     } failure:^(NSError *error) {

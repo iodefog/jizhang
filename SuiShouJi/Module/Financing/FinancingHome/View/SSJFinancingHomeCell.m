@@ -8,6 +8,8 @@
 
 #import "SSJFinancingHomeCell.h"
 #import "SSJFinancingHomeHelper.h"
+#import "SSJFinancingHomeitem.h"
+#import "SSJCreditCardItem.h"
 
 @interface SSJFinancingHomeCell()
 @property(nonatomic, strong) UILabel *fundingNameLabel;
@@ -40,15 +42,19 @@
     self.fundingImage.centerY = self.contentView.height / 2;
     self.deleteButton.size = CGSizeMake(50, 50);
     self.deleteButton.center = CGPointMake(self.width - 10, 5);
-    if (!_item.fundingMemo.length) {
-        self.fundingNameLabel.left = self.fundingImage.right + 10;
-        self.fundingNameLabel.centerY = self.contentView.height / 2;
-    }else{
-        self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
-        self.fundingNameLabel.left = self.fundingImage.right + 10;
-        self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
-        self.fundingMemoLabel.left = self.fundingImage.right + 10;
+    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
+        if (!item.fundingMemo.length) {
+            self.fundingNameLabel.left = self.fundingImage.right + 10;
+            self.fundingNameLabel.centerY = self.contentView.height / 2;
+        }else{
+            self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
+            self.fundingNameLabel.left = self.fundingImage.right + 10;
+            self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
+            self.fundingMemoLabel.left = self.fundingImage.right + 10;
+        }
     }
+
     self.fundingBalanceLabel.centerY = self.contentView.height / 2;
     self.fundingBalanceLabel.right = self.contentView.width - 10;
 }
@@ -107,22 +113,31 @@
     return _fundingImage;
 }
 
--(void)setItem:(SSJFinancingHomeitem *)item{
+-(void)setItem:(SSJBaseItem *)item{
     _item = item;
-    self.backgroundColor = [UIColor ssj_colorWithHex:_item.fundingColor];
-    self.fundingNameLabel.text = _item.fundingName;
-    [self.fundingNameLabel sizeToFit];
-    if (item.isAddOrNot == NO) {
+    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
+        self.backgroundColor = [UIColor ssj_colorWithHex:item.fundingColor];
+        self.fundingNameLabel.text = item.fundingName;
+        [self.fundingNameLabel sizeToFit];
         self.fundingBalanceLabel.hidden = NO;
-        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",_item.fundingAmount];
+        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.fundingAmount];
         [self.fundingBalanceLabel sizeToFit];
-    }else{
-        self.fundingBalanceLabel.hidden = YES;
+        self.fundingMemoLabel.text = item.fundingMemo;
+        [self.fundingMemoLabel sizeToFit];
+        self.fundingImage.image = [[UIImage imageNamed:item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [self setNeedsLayout];
+    }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
+        SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
+        self.backgroundColor = [UIColor ssj_colorWithHex:item.cardColor];
+        self.fundingNameLabel.text = item.cardName;
+        [self.fundingNameLabel sizeToFit];
+        self.fundingBalanceLabel.hidden = NO;
+        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
+        [self.fundingBalanceLabel sizeToFit];
+        self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
-    self.fundingMemoLabel.text = _item.fundingMemo;
-    [self.fundingMemoLabel sizeToFit];
-    self.fundingImage.image = [[UIImage imageNamed:_item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self setNeedsLayout];
+
 }
 
 -(void)setEditeModel:(BOOL)editeModel{
@@ -132,7 +147,10 @@
 
 -(void)deleteButtonClicked:(id)sender{
     [MobClick event:@"fund_delete"];
-    [SSJFinancingHomeHelper deleteFundingWithFundingItem:self.item];
+    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
+        [SSJFinancingHomeHelper deleteFundingWithFundingItem:item];
+    }
     if (self.deleteButtonClickBlock) {
         self.deleteButtonClickBlock(self);
     }
