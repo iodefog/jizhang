@@ -117,8 +117,31 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        [resultSet next];
-        SSJLoanModel *model = [SSJLoanModel modelWithResultSet:resultSet];
+        SSJLoanModel *model = [[SSJLoanModel alloc] init];
+        while ([resultSet next]) {
+            model.ID = [resultSet stringForColumn:@"loanid"];
+            model.userID = [resultSet stringForColumn:@"cuserid"];
+            model.lender = [resultSet stringForColumn:@"lender"];
+            model.jMoney = [resultSet doubleForColumn:@"jmoney"];
+            model.fundID = [resultSet stringForColumn:@"cthefundid"];
+            model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
+            model.chargeID = [resultSet stringForColumn:@"cthecharge"];
+            model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
+            model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
+            model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
+            model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
+            model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
+            model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
+            model.rate = [resultSet doubleForColumn:@"rate"];
+            model.memo = [resultSet stringForColumn:@"memo"];
+            model.remindID = [resultSet stringForColumn:@"cremindid"];
+            model.interest = [resultSet boolForColumn:@"interest"];
+            model.closeOut = [resultSet boolForColumn:@"iend"];
+            model.type = [resultSet intForColumn:@"itype"];
+            model.operatorType = [resultSet intForColumn:@"operatorType"];
+            model.version = [resultSet longLongIntForColumn:@"iversion"];
+            model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        }
         [resultSet close];
         
         if (success) {
