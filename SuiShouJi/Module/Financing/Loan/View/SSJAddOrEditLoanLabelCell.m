@@ -48,11 +48,13 @@
     self.textLabel.left = 48;
     self.textLabel.centerY = self.contentView.height * 0.5;
     
+    CGFloat rightGap = self.customAccessoryType == UITableViewCellAccessoryDisclosureIndicator ? 0 : 10;
+    
     if (_switchControl.hidden) {
         [_subtitleLabel sizeToFit];
-        _subtitleLabel.rightTop = CGPointMake(self.contentView.width, (self.contentView.height - _subtitleLabel.height) * 0.5);
+        _subtitleLabel.rightTop = CGPointMake(self.contentView.width - rightGap, (self.contentView.height - _subtitleLabel.height) * 0.5);
     } else {
-        _switchControl.rightTop = CGPointMake(self.contentView.width, (self.contentView.height - _switchControl.height) * 0.5);
+        _switchControl.rightTop = CGPointMake(self.contentView.width - rightGap, (self.contentView.height - _switchControl.height) * 0.5);
         
         [_subtitleLabel sizeToFit];
         _subtitleLabel.rightTop = CGPointMake(_switchControl.left - 16, (self.contentView.height - _subtitleLabel.height) * 0.5);
