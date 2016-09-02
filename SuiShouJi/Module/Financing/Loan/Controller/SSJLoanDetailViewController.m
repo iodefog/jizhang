@@ -51,8 +51,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.revertBtn];
     [self.view addSubview:self.deleteBtn];
-    [self.view addSubview:self.stampView];
     [self.view addSubview:self.closeOutBtn];
+    [self.tableView addSubview:self.stampView];
     
     [self updateAppearance];
 }
@@ -121,7 +121,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         NSString *closeOutDateStr = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
         int overlapDays = (int)[_loanModel.endDate daysFrom:_loanModel.repaymentDate];
-        NSString *overlapDaysStr = [NSString stringWithFormat:@"%d天", MIN(overlapDays, 0)];
+        NSString *overlapDaysStr = [NSString stringWithFormat:@"%d天", MAX(overlapDays, 0)];
         
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
@@ -358,7 +358,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (UIImageView *)stampView {
     if (!_stampView) {
-        _stampView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+        _stampView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loan_stamp"]];
+        _stampView.size = CGSizeMake(134, 134);
         _stampView.center = CGPointMake(self.tableView.width * 0.5, self.tableView.height * 0.32);
         _stampView.hidden = YES;
     }

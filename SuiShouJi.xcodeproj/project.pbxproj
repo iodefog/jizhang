@@ -40,6 +40,8 @@
 		7D2E7FB51C520EA500A2601C /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
 		7D333D941D79676200677A5A /* loan_stamp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D333D921D79676200677A5A /* loan_stamp@2x.png */; };
 		7D333D951D79676200677A5A /* loan_stamp@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D333D931D79676200677A5A /* loan_stamp@3x.png */; };
+		7D333DA01D7988CA00677A5A /* ft_shebao@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D333D9E1D7988CA00677A5A /* ft_shebao@2x.png */; };
+		7D333DA11D7988CA00677A5A /* ft_shebao@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D333D9F1D7988CA00677A5A /* ft_shebao@3x.png */; };
 		7D36AC311D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */; };
 		7D36AC321D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */; };
 		7D36AC471D461704006526B3 /* SSJMemberSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC461D461704006526B3 /* SSJMemberSyncTable.m */; };
@@ -5810,6 +5812,8 @@
 		7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserTableManager.m; sourceTree = "<group>"; };
 		7D333D921D79676200677A5A /* loan_stamp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_stamp@2x.png"; sourceTree = "<group>"; };
 		7D333D931D79676200677A5A /* loan_stamp@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_stamp@3x.png"; sourceTree = "<group>"; };
+		7D333D9E1D7988CA00677A5A /* ft_shebao@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shebao@2x.png"; sourceTree = "<group>"; };
+		7D333D9F1D7988CA00677A5A /* ft_shebao@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_shebao@3x.png"; sourceTree = "<group>"; };
 		7D36AC2F1D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditAccountDaySelectionView.h; sourceTree = "<group>"; };
 		7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditAccountDaySelectionView.m; sourceTree = "<group>"; };
 		7D36AC451D461704006526B3 /* SSJMemberSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSyncTable.h; sourceTree = "<group>"; };
@@ -8749,6 +8753,8 @@
 				9C2BCFBC1CBF793500D8D8D3 /* ft_zhankai@2x.png */,
 				9C2BCFBD1CBF793500D8D8D3 /* ft_zhankai@3x.png */,
 				BDA3FDD91C58CAC400FB57B1 /* ft_cash@2x.png */,
+				7D333D9E1D7988CA00677A5A /* ft_shebao@2x.png */,
+				7D333D9F1D7988CA00677A5A /* ft_shebao@3x.png */,
 				BDA3FDDA1C58CAC400FB57B1 /* ft_cash@3x.png */,
 				BDA3FDDD1C58CAC400FB57B1 /* ft_chuxuka@2x.png */,
 				BDA3FDDE1C58CAC400FB57B1 /* ft_chuxuka@3x.png */,
@@ -14218,6 +14224,7 @@
 				9C5378791D767A73002B230A /* book_shopping@2x.png in Resources */,
 				9CB0F7EB1D2771850096E9B7 /* defualtImage.png in Resources */,
 				7DD7D68D1C4C8E6A00ACE71A /* bt_bouns@3x.png in Resources */,
+				7D333DA01D7988CA00677A5A /* ft_shebao@2x.png in Resources */,
 				9C3305E81D10361300DC4D15 /* xuhuan_riqi@3x.png in Resources */,
 				7DEDBC321CE9A49200BDF5CA /* motion_background@2x.png in Resources */,
 				9C991E321CE0A79F0031CD02 /* bt_riyong@2x.png in Resources */,
@@ -14293,6 +14300,7 @@
 				7D6BEA831CC886AE00D4046B /* reportForms_right_diable@3x.png in Resources */,
 				BDA3FDF11C58CAC400FB57B1 /* ft_chuxuka@2x.png in Resources */,
 				9C9D0BBC1D0E91FD003A9F4E /* zhangben_bian@2x.png in Resources */,
+				7D333DA11D7988CA00677A5A /* ft_shebao@3x.png in Resources */,
 				9C991E2D1CE0A79F0031CD02 /* bt_qianbao@3x.png in Resources */,
 				BDA3FDED1C58CAC400FB57B1 /* ft_cash@2x.png in Resources */,
 				7DDDA7F11CBE51070029ADAC /* tip_already_water@2x.png in Resources */,

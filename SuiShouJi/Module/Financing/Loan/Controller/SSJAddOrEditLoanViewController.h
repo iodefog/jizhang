@@ -11,9 +11,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+//typedef NS_ENUM(NSInteger, SSJAddOrEditLoanViewControllerEntry) {
+//    SSJAddOrEditLoanViewControllerEntryLoanList,        // 借贷列表
+//    SSJAddOrEditLoanViewControllerEntryFundTypeList     // 资金类型列表
+//};
+
 @interface SSJAddOrEditLoanViewController : SSJBaseViewController
 
 @property (nonatomic, copy) SSJLoanModel *loanModel;
+
+@property (nonatomic) BOOL enterFromFundTypeList;
 
 @end
 

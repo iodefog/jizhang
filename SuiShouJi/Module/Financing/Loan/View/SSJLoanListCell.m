@@ -30,6 +30,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
         _stamp = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loan_stamp"]];
+        _stamp.alpha = 0.4;
         [self.contentView addSubview:_stamp];
         
         _icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];

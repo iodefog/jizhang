@@ -13,6 +13,7 @@
 #import "SSJNewFundingViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJNewCreditCardViewController.h"
+#import "SSJAddOrEditLoanViewController.h"
 #import "FMDB.h"
 
 @interface SSJFundingTypeSelectViewController ()
@@ -61,7 +62,25 @@
     SSJFundingItem *item = [_items objectAtIndex:indexPath.section];
     if ([item.fundingID isEqualToString:@"10"]) {
         
+        SSJLoanModel *model = [[SSJLoanModel alloc] init];
+        model.fundID = [NSString stringWithFormat:@"%@-5", SSJUSERID()];
+        model.type = SSJLoanTypeLend;
+        
+        SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
+        addLoanController.loanModel = model;
+        addLoanController.enterFromFundTypeList = YES;
+        [self.navigationController pushViewController:addLoanController animated:YES];
+        
     }else if ([item.fundingID isEqualToString:@"11"]){
+        
+        SSJLoanModel *model = [[SSJLoanModel alloc] init];
+        model.fundID = [NSString stringWithFormat:@"%@-6", SSJUSERID()];
+        model.type = SSJLoanTypeBorrow;
+        
+        SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
+        addLoanController.loanModel = model;
+        addLoanController.enterFromFundTypeList = YES;
+        [self.navigationController pushViewController:addLoanController animated:YES];
         
     }else if ([item.fundingID isEqualToString:@"3"]){
         SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];

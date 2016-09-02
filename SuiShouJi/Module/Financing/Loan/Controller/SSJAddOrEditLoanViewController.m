@@ -10,6 +10,7 @@
 #import "SSJNewFundingViewController.h"
 #import "SSJReminderEditeViewController.h"
 #import "SSJLoanListViewController.h"
+#import "SSJLoanListViewController.h"
 #import "SSJAddOrEditLoanLabelCell.h"
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
@@ -483,7 +484,31 @@ const int kMemoMaxLength = 13;
         [SSJLoanHelper saveLoanModel:_loanModel remindModel:_reminderItem success:^{
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
-            [self.navigationController popViewControllerAnimated:YES];
+            
+            if (_enterFromFundTypeList) {
+                UIViewController *homeController = [self.navigationController.viewControllers firstObject];
+                
+                SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+                item.fundingID = _loanModel.fundID;
+                switch (_loanModel.type) {
+                    case SSJLoanTypeLend:
+                        item.fundingParent = @"10";
+                        item.fundingName = @"借出款";
+                        break;
+                        
+                    case SSJLoanTypeBorrow:
+                        item.fundingParent = @"11";
+                        item.fundingName = @"欠款";
+                        break;
+                }
+                SSJLoanListViewController *loanListController = [[SSJLoanListViewController alloc] init];
+                loanListController.item = item;
+                
+                [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
+            } else {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
