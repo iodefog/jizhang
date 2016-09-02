@@ -86,7 +86,7 @@ static NSUInteger kInterestTag = 1002;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@""];
+        cell.imageView.image = [UIImage imageNamed:@"loan_money"];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借出金额";
@@ -109,7 +109,7 @@ static NSUInteger kInterestTag = 1002;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@""];
+        cell.imageView.image = [UIImage imageNamed:@"loan_yield"];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"利息收入";
@@ -132,7 +132,7 @@ static NSUInteger kInterestTag = 1002;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@""];
+        cell.imageView.image = [UIImage imageNamed:@"loan_account"];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"转入账户";
@@ -155,7 +155,7 @@ static NSUInteger kInterestTag = 1002;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@""];
+        cell.imageView.image = [UIImage imageNamed:@"loan_expires"];
         cell.textLabel.text = @"结清日";
         cell.additionalIcon.image = nil;
         cell.subtitleLabel.text = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
