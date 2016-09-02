@@ -52,8 +52,12 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteBtn addTarget:self action:@selector(deleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        [_deleteBtn setImage:[UIImage imageNamed:@"bt_delete"] forState:UIControlStateNormal];
+        [_deleteBtn setImage:[UIImage imageNamed:@"record_making_remove"] forState:UIControlStateNormal];
         [self.contentView addSubview:_deleteBtn];
+        
+//        _deleteBtn.layer.borderColor = [UIColor orangeColor].CGColor;
+//        self.contentView.layer.borderColor = [UIColor orangeColor].CGColor;
+//        self.contentView.layer.borderWidth = _deleteBtn.layer.borderWidth = 1;
     }
     return self;
 }
@@ -62,8 +66,10 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     _imageView.center = CGPointMake(self.contentView.width * 0.5, 36);
     _label.bottom = self.contentView.height;
     _label.centerX = self.contentView.width * 0.5;
-    _deleteBtn.size = CGSizeMake(22, 22);
-    _deleteBtn.center = CGPointMake(_imageView.right - 2, _imageView.top + 2);
+    _deleteBtn.size = CGSizeMake(32, 32);
+    _deleteBtn.centerY = self.contentView.height * 0.5;
+    _deleteBtn.right = self.contentView.width;
+    _deleteBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 14, 0, 0);
 }
 
 - (void)setItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
@@ -98,13 +104,13 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     
     if (_item.editable) {
         _imageView.transform = CGAffineTransformMakeScale(1, 1);
-        _imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"C4C4C4"].CGColor;
+        _imageView.layer.borderColor = [UIColor clearColor].CGColor;
         _label.textColor = _item.selected ? [UIColor ssj_colorWithHex:_item.colorValue] : _normalTextColor;
         
-        self.contentView.transform = CGAffineTransformMakeRotation(-M_PI_4 * 0.06);
-        [UIView animateWithDuration:0.12 delay:0 options:(UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction) animations:^{
-            self.contentView.transform = CGAffineTransformMakeRotation(+M_PI_4 * 0.06);
-        } completion:NULL];
+//        self.contentView.transform = CGAffineTransformMakeRotation(-M_PI_4 * 0.06);
+//        [UIView animateWithDuration:0.12 delay:0 options:(UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse | UIViewAnimationOptionAllowUserInteraction) animations:^{
+//            self.contentView.transform = CGAffineTransformMakeRotation(+M_PI_4 * 0.06);
+//        } completion:NULL];
         
     } else if (_item.selected) {
         [self animateSelectState:YES];

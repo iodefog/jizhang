@@ -249,6 +249,8 @@
 		7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
 		7D99D4621C355130006EB113 /* SSJReportFormsSurplusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */; };
 		7D99D4651C357703006EB113 /* SSJSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D4641C357703006EB113 /* SSJSegmentedControl.m */; };
+		7D9B4AED1D7917A1000F8557 /* record_making_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4AEB1D7917A1000F8557 /* record_making_remove@2x.png */; };
+		7D9B4AEE1D7917A1000F8557 /* record_making_remove@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4AEC1D7917A1000F8557 /* record_making_remove@3x.png */; };
 		7D9E4A4E1D0EC32300EE254D /* reportForms_nodata@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E4A4C1D0EC32300EE254D /* reportForms_nodata@2x.png */; };
 		7D9E4A4F1D0EC32300EE254D /* reportForms_nodata@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */; };
 		7D9E4A531D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */; };
@@ -5919,8 +5921,8 @@
 		7D5F32F91CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingCategoryItem.m; sourceTree = "<group>"; };
 		7D5F32FB1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAddNewTypeColorSelectionView.h; sourceTree = "<group>"; };
 		7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAddNewTypeColorSelectionView.m; sourceTree = "<group>"; };
-		7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryCollectionViewCell.h; sourceTree = "<group>"; };
-		7D5F33001CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryCollectionViewCell.m; sourceTree = "<group>"; };
+		7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCategoryCollectionViewCell.h; path = View/SSJCategoryCollectionViewCell.h; sourceTree = "<group>"; };
+		7D5F33001CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCategoryCollectionViewCell.m; path = View/SSJCategoryCollectionViewCell.m; sourceTree = "<group>"; };
 		7D5F33031CEAE6C10086B67E /* SSJCustomKeyBoardButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJCustomKeyBoardButton.h; path = ../../../Module/BookKeeping/RecordMaking/View/SSJCustomKeyBoardButton.h; sourceTree = "<group>"; };
 		7D5F33041CEAE6C10086B67E /* SSJCustomKeyBoardButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJCustomKeyBoardButton.m; path = ../../../Module/BookKeeping/RecordMaking/View/SSJCustomKeyBoardButton.m; sourceTree = "<group>"; };
 		7D5F33051CEAE6C10086B67E /* SSJCustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomTextView.h; sourceTree = "<group>"; };
@@ -5933,8 +5935,8 @@
 		7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTypeTableViewCell.m; sourceTree = "<group>"; };
 		7D5F330D1CEAE6C10086B67E /* SSJMemoMakingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemoMakingView.h; sourceTree = "<group>"; };
 		7D5F330E1CEAE6C10086B67E /* SSJMemoMakingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMemoMakingView.m; sourceTree = "<group>"; };
-		7D5F330F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewCategoryCollectionView.h; sourceTree = "<group>"; };
-		7D5F33101CEAE6C10086B67E /* SSJNewCategoryCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewCategoryCollectionView.m; sourceTree = "<group>"; };
+		7D5F330F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJNewCategoryCollectionView.h; path = View/SSJNewCategoryCollectionView.h; sourceTree = "<group>"; };
+		7D5F33101CEAE6C10086B67E /* SSJNewCategoryCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJNewCategoryCollectionView.m; path = View/SSJNewCategoryCollectionView.m; sourceTree = "<group>"; };
 		7D5F33141CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingBillTypeInputAccessoryView.h; sourceTree = "<group>"; };
 		7D5F33151CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingBillTypeInputAccessoryView.m; sourceTree = "<group>"; };
 		7D5F33161CEAE6C10086B67E /* SSJRecordMakingBillTypeInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingBillTypeInputView.h; sourceTree = "<group>"; };
@@ -6047,6 +6049,8 @@
 		7D99D4611C355130006EB113 /* SSJReportFormsSurplusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReportFormsSurplusView.m; sourceTree = "<group>"; };
 		7D99D4631C357703006EB113 /* SSJSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSegmentedControl.h; sourceTree = "<group>"; };
 		7D99D4641C357703006EB113 /* SSJSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSegmentedControl.m; sourceTree = "<group>"; };
+		7D9B4AEB1D7917A1000F8557 /* record_making_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_remove@2x.png"; sourceTree = "<group>"; };
+		7D9B4AEC1D7917A1000F8557 /* record_making_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record_making_remove@3x.png"; sourceTree = "<group>"; };
 		7D9E4A4C1D0EC32300EE254D /* reportForms_nodata@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_nodata@2x.png"; sourceTree = "<group>"; };
 		7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_nodata@3x.png"; sourceTree = "<group>"; };
 		7D9E4A511D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportBookTypeSelectionCell.h; sourceTree = "<group>"; };
@@ -7621,6 +7625,8 @@
 				7D3D0E751CED8EE200A8609B /* record_making_guide@3x.png */,
 				7D3D0E661CED6B2700A8609B /* record_making_memo@2x.png */,
 				7D3D0E671CED6B2700A8609B /* record_making_memo@3x.png */,
+				7D9B4AEB1D7917A1000F8557 /* record_making_remove@2x.png */,
+				7D9B4AEC1D7917A1000F8557 /* record_making_remove@3x.png */,
 			);
 			path = recordMaking;
 			sourceTree = "<group>";
@@ -7907,6 +7913,7 @@
 		7D5F32ED1CEAE6C10086B67E /* RecordMaking */ = {
 			isa = PBXGroup;
 			children = (
+				7D9B4AEA1D7916DA000F8557 /* Deprecated */,
 				9C56E12A1D1A86340057895D /* Store */,
 				7D5F32EE1CEAE6C10086B67E /* Helper */,
 				7D5F32F31CEAE6C10086B67E /* Model */,
@@ -7949,8 +7956,6 @@
 			children = (
 				7D5F32FB1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.h */,
 				7D5F32FC1CEAE6C10086B67E /* SSJAddNewTypeColorSelectionView.m */,
-				7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */,
-				7D5F33001CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m */,
 				7D5F33051CEAE6C10086B67E /* SSJCustomTextView.h */,
 				7D5F33061CEAE6C10086B67E /* SSJCustomTextView.m */,
 				7D5F33071CEAE6C10086B67E /* SSJDateSelectedView.h */,
@@ -7961,8 +7966,6 @@
 				7D5F330C1CEAE6C10086B67E /* SSJFundingTypeTableViewCell.m */,
 				7D5F330D1CEAE6C10086B67E /* SSJMemoMakingView.h */,
 				7D5F330E1CEAE6C10086B67E /* SSJMemoMakingView.m */,
-				7D5F330F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.h */,
-				7D5F33101CEAE6C10086B67E /* SSJNewCategoryCollectionView.m */,
 				7D5F33141CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.h */,
 				7D5F33151CEAE6C10086B67E /* SSJRecordMakingBillTypeInputAccessoryView.m */,
 				7D5F33161CEAE6C10086B67E /* SSJRecordMakingBillTypeInputView.h */,
@@ -8281,6 +8284,17 @@
 				7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		7D9B4AEA1D7916DA000F8557 /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				7D5F330F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.h */,
+				7D5F33101CEAE6C10086B67E /* SSJNewCategoryCollectionView.m */,
+				7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */,
+				7D5F33001CEAE6C10086B67E /* SSJCategoryCollectionViewCell.m */,
+			);
+			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		7DA6EDCF1D2B5CAE0097F06C /* Model */ = {
@@ -14044,6 +14058,7 @@
 				7DD7D69F1C4C8E6A00ACE71A /* bt_entertainment@3x.png in Resources */,
 				7DD7D6C31C4C8E6A00ACE71A /* bt_pet@3x.png in Resources */,
 				7DD7D6EE1C4C8E6A00ACE71A /* bt_zhuanru@2x.png in Resources */,
+				7D9B4AED1D7917A1000F8557 /* record_making_remove@2x.png in Resources */,
 				9C991DEF1CE0A79F0031CD02 /* bt_baozhuang@3x.png in Resources */,
 				7DD7D6D51C4C8E6A00ACE71A /* bt_shouzhai@3x.png in Resources */,
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
@@ -14103,6 +14118,7 @@
 				7DFD306C1D753B9800A0D7A0 /* record_making_unselected@2x.png in Resources */,
 				7DD7D7361C4CA8BD00ACE71A /* reportForms_income@3x.png in Resources */,
 				9C5378671D767A73002B230A /* book_movie@2x.png in Resources */,
+				7D9B4AEE1D7917A1000F8557 /* record_making_remove@3x.png in Resources */,
 				9C4078231CE1B92E00A61956 /* more_haoping@3x.png in Resources */,
 				9C991E4D1CE0AA870031CD02 /* home_pen@2x.png in Resources */,
 				9C991E401CE0A79F0031CD02 /* bt_wenju@3x.png in Resources */,

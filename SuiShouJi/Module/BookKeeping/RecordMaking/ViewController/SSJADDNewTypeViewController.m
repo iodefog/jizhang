@@ -7,7 +7,6 @@
 //
 
 #import "SSJADDNewTypeViewController.h"
-#import "SSJCategoryCollectionViewCell.h"
 #import "SSJEditBillTypeViewController.h"
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJDatabaseQueue.h"
