@@ -47,6 +47,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 @property (nonatomic, strong) UIButton *deleteButton;
 
+@property (nonatomic, copy) NSString *selectedID;
+
 @end
 
 @implementation SSJADDNewTypeViewController
@@ -282,22 +284,16 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         } else {
             wself.titleSegmentView.selectedSegmentIndex = model.custom;
             [wself.scrollView setContentOffset:CGPointMake(wself.scrollView.width * wself.titleSegmentView.selectedSegmentIndex, 0) animated:NO];
-            [wself updateButtons];
             
-            SSJCategoryEditableCollectionView *collectionView = nil;
-            if (model.custom) {
-                collectionView = wself.customCategoryCollectionView;
-            } else {
-                collectionView = wself.featuredCategoryCollectionView;
-            }
+            wself.selectedID = model.ID;
+            wself.incomeOrExpence = model.type;
             
-            for (int i = 0; i < collectionView.items.count; i ++) {
-                SSJRecordMakingCategoryItem *item = collectionView.items[i];
-                if ([item.categoryID isEqualToString:model.ID]) {
-                    collectionView.selectedIndexs = @[@(i)];
-                    break;
-                }
-            }
+            wself.featuredCategoryCollectionView.items = nil;
+            wself.customCategoryCollectionView.items = nil;
+            wself.newOrEditCategoryView.textField.text = nil;
+            wself.newOrEditCategoryView.images = nil;
+            wself.newOrEditCategoryView.colors = nil;
+            [wself loadData];
         }
     };
     [self.navigationController pushViewController:editVC animated:YES];
@@ -332,6 +328,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         
         [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence custom:0 success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
             _featuredCategoryCollectionView.items = result;
+            [self updateButtons];
+            [self updateSelectedIndexForCollectionView:_featuredCategoryCollectionView];
             [self.view ssj_hideLoadingIndicator];
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
@@ -345,6 +343,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             
             [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence custom:1 success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
                 _customCategoryCollectionView.items = result;
+                [self updateButtons];
+                [self updateSelectedIndexForCollectionView:_customCategoryCollectionView];
                 [self.view ssj_hideLoadingIndicator];
             } failure:^(NSError *error) {
                 [self.view ssj_hideLoadingIndicator];
@@ -362,6 +362,16 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                 [self.view ssj_hideLoadingIndicator];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
             }];
+        }
+    }
+}
+
+- (void)updateSelectedIndexForCollectionView:(SSJCategoryEditableCollectionView *)view {
+    for (int i = 0; i < view.items.count; i ++) {
+        SSJRecordMakingCategoryItem *item = view.items[i];
+        if ([item.categoryID isEqualToString:_selectedID]) {
+            view.selectedIndexs = @[@(i)];
+            break;
         }
     }
 }
