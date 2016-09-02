@@ -21,7 +21,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                              success:(void (^)(NSArray <SSJLoanModel *>*list))success
                              failure:(void (^)(NSError *error))failure {
     
-    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select * from bk_loan where cuserid = '%@' and cthefundid = '%@' and operatortype <> 2", SSJUSERID(), fundID] mutableCopy];
+    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select l.*, fi.cicoin from bk_loan as l, bk_fund_info as fi where l.cthefundid = fi.cfundid and l.cuserid = '%@' and l.cthefundid = '%@' and l.operatortype <> 2", SSJUSERID(), fundID] mutableCopy];
     switch (state) {
         case 0:
         case 1:
@@ -70,9 +70,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             NSDate *nowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
             
             // 排序顺序：1.到期未结算 2.未到期已结算 3.其他
-            if (!model.closeOut && [model.repaymentDate compare:nowDate] != NSOrderedDescending) {
+            if (!model.closeOut && [model.repaymentDate compare:nowDate] != NSOrderedAscending) {
                 [list1 addObject:model];
-            } else if (model.closeOut && [nowDate compare:model.repaymentDate] == NSOrderedDescending) {
+            } else if (model.closeOut && [model.repaymentDate compare:nowDate] == NSOrderedAscending) {
                 [list2 addObject:model];
             } else {
                 [list3 addObject:model];

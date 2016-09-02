@@ -38,6 +38,8 @@
 		7D2BF36A1D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2BF3691D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m */; };
 		7D2BF36B1D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2BF3691D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m */; };
 		7D2E7FB51C520EA500A2601C /* SSJUserTableManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */; };
+		7D333D941D79676200677A5A /* loan_stamp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D333D921D79676200677A5A /* loan_stamp@2x.png */; };
+		7D333D951D79676200677A5A /* loan_stamp@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D333D931D79676200677A5A /* loan_stamp@3x.png */; };
 		7D36AC311D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */; };
 		7D36AC321D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */; };
 		7D36AC471D461704006526B3 /* SSJMemberSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D36AC461D461704006526B3 /* SSJMemberSyncTable.m */; };
@@ -269,6 +271,10 @@
 		7D9B4B111D794DCA000F8557 /* loan_remind@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4AFF1D794DCA000F8557 /* loan_remind@3x.png */; };
 		7D9B4B121D794DCA000F8557 /* loan_yield@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4B001D794DCA000F8557 /* loan_yield@2x.png */; };
 		7D9B4B131D794DCA000F8557 /* loan_yield@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4B011D794DCA000F8557 /* loan_yield@3x.png */; };
+		7D9B4B161D795E55000F8557 /* loan_clock@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4B141D795E55000F8557 /* loan_clock@2x.png */; };
+		7D9B4B171D795E55000F8557 /* loan_clock@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4B151D795E55000F8557 /* loan_clock@3x.png */; };
+		7D9B4B1A1D795FE9000F8557 /* loan_expectedInterest@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4B181D795FE9000F8557 /* loan_expectedInterest@2x.png */; };
+		7D9B4B1B1D795FE9000F8557 /* loan_expectedInterest@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9B4B191D795FE9000F8557 /* loan_expectedInterest@3x.png */; };
 		7D9E4A4E1D0EC32300EE254D /* reportForms_nodata@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E4A4C1D0EC32300EE254D /* reportForms_nodata@2x.png */; };
 		7D9E4A4F1D0EC32300EE254D /* reportForms_nodata@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */; };
 		7D9E4A531D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */; };
@@ -5786,6 +5792,8 @@
 		7D2BF3691D59CCE7008A93FF /* SSJMagicExportSuccessAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMagicExportSuccessAlertView.m; sourceTree = "<group>"; };
 		7D2E7FB31C520EA500A2601C /* SSJUserTableManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserTableManager.h; sourceTree = "<group>"; };
 		7D2E7FB41C520EA500A2601C /* SSJUserTableManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJUserTableManager.m; sourceTree = "<group>"; };
+		7D333D921D79676200677A5A /* loan_stamp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_stamp@2x.png"; sourceTree = "<group>"; };
+		7D333D931D79676200677A5A /* loan_stamp@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_stamp@3x.png"; sourceTree = "<group>"; };
 		7D36AC2F1D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetEditAccountDaySelectionView.h; sourceTree = "<group>"; };
 		7D36AC301D409A9C006526B3 /* SSJBudgetEditAccountDaySelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetEditAccountDaySelectionView.m; sourceTree = "<group>"; };
 		7D36AC451D461704006526B3 /* SSJMemberSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberSyncTable.h; sourceTree = "<group>"; };
@@ -6087,6 +6095,10 @@
 		7D9B4AFF1D794DCA000F8557 /* loan_remind@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_remind@3x.png"; sourceTree = "<group>"; };
 		7D9B4B001D794DCA000F8557 /* loan_yield@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_yield@2x.png"; sourceTree = "<group>"; };
 		7D9B4B011D794DCA000F8557 /* loan_yield@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_yield@3x.png"; sourceTree = "<group>"; };
+		7D9B4B141D795E55000F8557 /* loan_clock@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_clock@2x.png"; sourceTree = "<group>"; };
+		7D9B4B151D795E55000F8557 /* loan_clock@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_clock@3x.png"; sourceTree = "<group>"; };
+		7D9B4B181D795FE9000F8557 /* loan_expectedInterest@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_expectedInterest@2x.png"; sourceTree = "<group>"; };
+		7D9B4B191D795FE9000F8557 /* loan_expectedInterest@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_expectedInterest@3x.png"; sourceTree = "<group>"; };
 		7D9E4A4C1D0EC32300EE254D /* reportForms_nodata@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_nodata@2x.png"; sourceTree = "<group>"; };
 		7D9E4A4D1D0EC32300EE254D /* reportForms_nodata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_nodata@3x.png"; sourceTree = "<group>"; };
 		7D9E4A511D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMagicExportBookTypeSelectionCell.h; sourceTree = "<group>"; };
@@ -8340,7 +8352,13 @@
 				7D9B4AF11D794DCA000F8557 /* loan_account@3x.png */,
 				7D9B4AF21D794DCA000F8557 /* loan_calendar@2x.png */,
 				7D9B4AF31D794DCA000F8557 /* loan_calendar@3x.png */,
+				7D9B4B141D795E55000F8557 /* loan_clock@2x.png */,
+				7D9B4B151D795E55000F8557 /* loan_clock@3x.png */,
 				7D9B4AF41D794DCA000F8557 /* loan_expires@2x.png */,
+				7D9B4B181D795FE9000F8557 /* loan_expectedInterest@2x.png */,
+				7D9B4B191D795FE9000F8557 /* loan_expectedInterest@3x.png */,
+				7D333D921D79676200677A5A /* loan_stamp@2x.png */,
+				7D333D931D79676200677A5A /* loan_stamp@3x.png */,
 				7D9B4AF51D794DCA000F8557 /* loan_expires@3x.png */,
 				7D9B4AF61D794DCA000F8557 /* loan_interest@2x.png */,
 				7D9B4AF71D794DCA000F8557 /* loan_interest@3x.png */,
@@ -13973,6 +13991,7 @@
 				9C53788A1D767A73002B230A /* book_xiebao@3x.png in Resources */,
 				BDF5109A1C925E5200A49D74 /* home_remind@2x.png in Resources */,
 				9C5378581D767A73002B230A /* book_jiaoyu@3x.png in Resources */,
+				7D9B4B161D795E55000F8557 /* loan_clock@2x.png in Resources */,
 				7DF8DED51C59BFE700CC5DFA /* guide_1-568@2x.png in Resources */,
 				7DD7D6B51C4C8E6A00ACE71A /* bt_jianzhi@3x.png in Resources */,
 				9C5378781D767A73002B230A /* book_shengyi@3x.png in Resources */,
@@ -14213,6 +14232,7 @@
 				9C991E3A1CE0A79F0031CD02 /* bt_shui@3x.png in Resources */,
 				9C40781F1CE1B92E00A61956 /* more_daochu@3x.png in Resources */,
 				9C5348F31D2CE327004EF053 /* more_pifu@2x.png in Resources */,
+				7D9B4B1A1D795FE9000F8557 /* loan_expectedInterest@2x.png in Resources */,
 				7D9B4B121D794DCA000F8557 /* loan_yield@2x.png in Resources */,
 				7DD7D7351C4CA8BD00ACE71A /* reportForms_income@2x.png in Resources */,
 				BD976FC01C4F57F200B0E26D /* circle@3x.png in Resources */,
@@ -14320,6 +14340,7 @@
 				BDA3FDFB1C58CAC400FB57B1 /* ft_shiwuka@2x.png in Resources */,
 				9C5378831D767A73002B230A /* book_tianjia@2x.png in Resources */,
 				7DDDA7BB1CBE1BFD0029ADAC /* help_tree_level_3@3x.png in Resources */,
+				7D9B4B171D795E55000F8557 /* loan_clock@3x.png in Resources */,
 				BDF510881C925BB500A49D74 /* home_background@3x.png in Resources */,
 				9C991E151CE0A79F0031CD02 /* bt_jipiao@3x.png in Resources */,
 				7DDDA8111CBF75390029ADAC /* help@2x.png in Resources */,
@@ -14370,6 +14391,7 @@
 				7DD7D6B11C4C8E6A00ACE71A /* bt_interest@3x.png in Resources */,
 				9C991E3D1CE0A79F0031CD02 /* bt_wanju@2x.png in Resources */,
 				7D4A432A1CC87187002F0264 /* rain_sound_off@2x.png in Resources */,
+				7D9B4B1B1D795FE9000F8557 /* loan_expectedInterest@3x.png in Resources */,
 				9C762FB61CE9B21200ED88BE /* dian_nor@2x.png in Resources */,
 				9C5378991D767A73002B230A /* book_zufang@2x.png in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
@@ -14423,6 +14445,7 @@
 				9C40780A1CE1B84000A61956 /* more_qiandao@2x.png in Resources */,
 				9C991DF71CE0A79F0031CD02 /* bt_chi@3x.png in Resources */,
 				9C991DF11CE0A79F0031CD02 /* bt_caizhi@3x.png in Resources */,
+				7D333D951D79676200677A5A /* loan_stamp@3x.png in Resources */,
 				9C5378661D767A73002B230A /* book_moren@3x.png in Resources */,
 				9C991E0B1CE0A79F0031CD02 /* bt_hezi@3x.png in Resources */,
 				9CEB85BF1CC5D8FC00AE8F8D /* mark_jilu@2x.png in Resources */,
@@ -14534,6 +14557,7 @@
 				9C6E30B51CEC067D00394BB9 /* canleder_jia@2x.png in Resources */,
 				BDA3FDF21C58CAC400FB57B1 /* ft_chuxuka@3x.png in Resources */,
 				7DDDA7C01CBE1BFD0029ADAC /* help_tree_level_6@2x.png in Resources */,
+				7D333D941D79676200677A5A /* loan_stamp@2x.png in Resources */,
 				7D9B4B0B1D794DCA000F8557 /* loan_memo@3x.png in Resources */,
 				7DD7D6FF1C4C8E6A00ACE71A /* founds_zhuanru@3x.png in Resources */,
 				BDF510B31C92E7B200A49D74 /* calender_star@3x.png in Resources */,
