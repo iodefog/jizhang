@@ -28,9 +28,7 @@
     UITextField *_nameTextField;
     UITextField *_amountTextField;
     UITextField *_memoTextField;
-    NSString *_selectParent;
-    NSString *_selectColor;
-    NSString *_selectIcoin;
+
 
 }
 
@@ -44,9 +42,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _selectParent = @"1";
-    _selectColor = @"#fe8a65";
-    _selectIcoin = @"ft_cash";
     [self.view addSubview:self.tableview];
     self.navigationItem.rightBarButtonItem = self.rightButton;
 }
@@ -81,16 +76,17 @@
             [weakSelf.tableview reloadData];
         };
         [self.navigationController pushViewController:colorSelectVC animated:YES];
-    }else if (indexPath.section == 3) {
-        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        __weak typeof(self) weakSelf = self;
-            fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent , NSString *selectIcon){
-            _selectParent = selectParent;
-            _selectIcoin = selectIcon;
-            [weakSelf.tableview reloadData];
-        };
-        [self.navigationController pushViewController:fundingTypeVC animated:YES];
     }
+//        else if (indexPath.section == 3) {
+//        SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+//        __weak typeof(self) weakSelf = self;
+//            fundingTypeVC.typeSelectedBlock = ^(NSString *selectParent , NSString *selectIcon){
+//            _selectParent = selectParent;
+//            _selectIcoin = selectIcon;
+//            [weakSelf.tableview reloadData];
+//        };
+//        [self.navigationController pushViewController:fundingTypeVC animated:YES];
+//    }
 }
 
 
@@ -135,11 +131,11 @@
         case 3:{
             NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
             NewFundingCell.cellText.text = @"账户类型";
-            NewFundingCell.typeLabel.text = [self getParentFundingNameWithParentfundingID:_selectParent];
-            NewFundingCell.typeImage.image = [UIImage imageNamed:_selectIcoin];
+            NewFundingCell.typeLabel.text = [self getParentFundingNameWithParentfundingID:self.selectParent];
+            NewFundingCell.typeImage.image = [UIImage imageNamed:self.selectIcoin];
             [NewFundingCell.typeLabel sizeToFit];
             NewFundingCell.cellText.enabled = NO;
-            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//            NewFundingCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
             break;
         case 4:{

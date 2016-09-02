@@ -15,4 +15,10 @@ typedef void (^finishBlock)(SSJFundingItem *newFundingItem);
 
 @property(nonatomic,copy) finishBlock finishBlock;
 
+@property(nonatomic,copy) NSString *selectParent;
+
+@property(nonatomic,copy) NSString *selectColor;
+
+@property(nonatomic,copy) NSString *selectIcoin;
+
 @end

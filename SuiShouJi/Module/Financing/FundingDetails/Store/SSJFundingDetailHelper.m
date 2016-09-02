@@ -51,10 +51,11 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
+            item.money = [resultSet stringForColumn:@"IMONEY"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
-                item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+                item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
-                item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+                item.money = [NSString stringWithFormat:@"+%.2f",[item.money doubleValue]];
             }
             if ([item.typeName isEqualToString:@"转入"]) {
                 item.transferSource = [db stringForQuery:@"select b.cacctname from bk_user_charge as a, bk_fund_info as b where substr(a.cwritedate,1,19) = ? and a.ifunsid = b.cfundid and b.cfundid <> ? and a.ibillid = '4' limit 1",[item.editeDate substringWithRange:NSMakeRange(0, 19)],userid,item.fundId];
@@ -65,7 +66,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             if ([month isEqualToString:lastDate]) {
                 SSJFundingDetailListItem *listItem = [result lastObject];
                 if (item.incomeOrExpence) {
-                    listItem.expenture = listItem.expenture - [item.money doubleValue];
+                    listItem.expenture = listItem.expenture + [item.money doubleValue];
                 }else{
                     listItem.income = listItem.income + [item.money doubleValue]; 
                 }

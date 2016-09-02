@@ -68,6 +68,8 @@
         [self.navigationController pushViewController:newCreditCardVc animated:YES];
     }else{
         SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
+        normalFundingVc.selectParent = item.fundingID;
+        normalFundingVc.selectIcoin = item.fundingIcon;
         [self.navigationController pushViewController:normalFundingVc animated:YES];
     }
 }

@@ -346,7 +346,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)rightButtonClicked:(id)sender{
-    
+    __weak typeof(self) weakSelf = self;
+    [SSJCreditCardStore deleteCreditCardWithCardItem:self.item Success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showMessage:@"删除失败"];
+    }];
 }
 
 - (void)transferTextDidChange{

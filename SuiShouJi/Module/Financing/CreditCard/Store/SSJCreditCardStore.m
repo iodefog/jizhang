@@ -156,7 +156,7 @@
     return nil;
 }
 
-+ (void)deleteBooksTypeWithCardItem:(SSJCreditCardItem *)item
++ (void)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
                             Success:(void (^)(void))success
                             failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {

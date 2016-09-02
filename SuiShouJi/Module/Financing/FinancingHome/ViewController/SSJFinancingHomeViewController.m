@@ -60,11 +60,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier];
     [self.collectionView registerClass:[SSJFinancingHomeAddCell class] forCellWithReuseIdentifier:SSJFinancingAddCellIdentifier];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"border_add"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightButton;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self getDateFromDateBase];
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
         SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] ssj_safeObjectAtIndex:0];
@@ -115,18 +118,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             loanListVC.item = financingItem;
             [self.navigationController pushViewController:loanListVC animated:YES];
         } else {
-            if ([financingItem.fundingName isEqualToString:@"添加资金账户"]) {
-                SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
-                //        __weak typeof(self) weakSelf = self;
-                //        newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
-                //            weakSelf.newlyAddFundId = newFundingItem.fundingID;
-                //        };
-                [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
-            }else{
-                SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
+            SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
                 fundingDetailVC.item = financingItem;
-                [self.navigationController pushViewController:fundingDetailVC animated:YES];
-            }
+            [self.navigationController pushViewController:fundingDetailVC animated:YES];
         }
     }else if([item isKindOfClass:[SSJCreditCardItem class]]){
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
@@ -276,6 +270,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }
 }
 
+- (void)rightButtonClicked:(id)sender{
+    SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+    [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
+}
+
 #pragma mark - Private
 -(void)getDateFromDateBase{
     __weak typeof(self) weakSelf = self;
@@ -331,6 +330,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.headerView updateAfterThemeChange];
     self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.headerView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.collectionView reloadData];
 }
 

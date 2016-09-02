@@ -16,4 +16,8 @@
 
 + (NSError *)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
                              inDatabase:(FMDatabase *)db;
+
++ (void)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
+                             Success:(void (^)(void))success
+                             failure:(void (^)(NSError *error))failure;
 @end

@@ -1643,10 +1643,6 @@
 		9C24CFF91D7822230095D150 /* ft_jiechukuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C24CFE51D7822110095D150 /* ft_jiechukuan@3x.png */; };
 		9C24CFFA1D7822230095D150 /* ft_qiankuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C24CFE61D7822110095D150 /* ft_qiankuan@2x.png */; };
 		9C24CFFB1D7822230095D150 /* ft_qiankuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C24CFE71D7822110095D150 /* ft_qiankuan@3x.png */; };
-		9C24CFFF1D7829020095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
-		9C24D0071D7829060095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
-		9C24D0081D7829060095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
-		9C24D0091D7829070095D150 /* SSJCreditCardCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */; };
 		9C24D00C1D7838F80095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C24D00D1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
@@ -6442,8 +6438,6 @@
 		9C24CFE51D7822110095D150 /* ft_jiechukuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_jiechukuan@3x.png"; sourceTree = "<group>"; };
 		9C24CFE61D7822110095D150 /* ft_qiankuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_qiankuan@2x.png"; sourceTree = "<group>"; };
 		9C24CFE71D7822110095D150 /* ft_qiankuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_qiankuan@3x.png"; sourceTree = "<group>"; };
-		9C24CFFD1D7829020095D150 /* SSJCreditCardCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardCollectionCell.h; sourceTree = "<group>"; };
-		9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardCollectionCell.m; sourceTree = "<group>"; };
 		9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home_calender@3x.png"; path = "SuiShouJi/Resource/Image/homeImage/home_calender@3x.png"; sourceTree = SOURCE_ROOT; };
 		9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPatchUpdateService.h; sourceTree = "<group>"; };
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
@@ -9584,8 +9578,6 @@
 			children = (
 				9C9A0C951D73CE07002AF046 /* SSJBillingDaySelectView.h */,
 				9C9A0C961D73CE07002AF046 /* SSJBillingDaySelectView.m */,
-				9C24CFFD1D7829020095D150 /* SSJCreditCardCollectionCell.h */,
-				9C24CFFE1D7829020095D150 /* SSJCreditCardCollectionCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -14954,7 +14946,6 @@
 				7DBA56551D6D32B700C02D79 /* SSJPercentCircleNodeItem.m in Sources */,
 				7DBA56561D6D32B700C02D79 /* SSJFundingListDayItem.m in Sources */,
 				7DBA56571D6D32B700C02D79 /* SSJChargeCircleModifyCell.m in Sources */,
-				9C24D0081D7829060095D150 /* SSJCreditCardCollectionCell.m in Sources */,
 				9C9A0C621D6D9780002AF046 /* SSJCreditCardEditeCell.m in Sources */,
 				7DBA56581D6D32B700C02D79 /* SSJSynchronizeTaskQueue.m in Sources */,
 				7DBA56591D6D32B700C02D79 /* SCYSlidePagingHeaderView.m in Sources */,
@@ -15427,7 +15418,6 @@
 				9C2A67C01D194CA70010F1DA /* SSJDailySumChargeTable.m in Sources */,
 				9C2A67C11D194CA70010F1DA /* SSJBudgetConst.m in Sources */,
 				9C2A67C21D194CA70010F1DA /* UIViewController+SSJPageFlow.m in Sources */,
-				9C24D0071D7829060095D150 /* SSJCreditCardCollectionCell.m in Sources */,
 				9C2A67C31D194CA70010F1DA /* SSJBookkeepingReminderViewController.m in Sources */,
 				9C2A67C41D194CA70010F1DA /* SSJBaseViewController.m in Sources */,
 				9C2A67C51D194CA70010F1DA /* SSJButtonAddition.m in Sources */,
@@ -15828,7 +15818,6 @@
 				9CECFBD11D6D41A700DB2C8B /* SSJPercentCircleNodeItem.m in Sources */,
 				9CECFBD21D6D41A700DB2C8B /* SSJFundingListDayItem.m in Sources */,
 				9CECFBD31D6D41A700DB2C8B /* SSJChargeCircleModifyCell.m in Sources */,
-				9C24D0091D7829070095D150 /* SSJCreditCardCollectionCell.m in Sources */,
 				9C9A0C631D6D9780002AF046 /* SSJCreditCardEditeCell.m in Sources */,
 				9CECFBD41D6D41A700DB2C8B /* SSJSynchronizeTaskQueue.m in Sources */,
 				9CECFBD51D6D41A700DB2C8B /* SCYSlidePagingHeaderView.m in Sources */,
@@ -16589,7 +16578,6 @@
 				9CF594391D66D21300006594 /* SSJReminderListCell.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				7D36AC561D46FDAE006526B3 /* SSJDatabaseVersion6.m in Sources */,
-				9C24CFFF1D7829020095D150 /* SSJCreditCardCollectionCell.m in Sources */,
 				7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */,
 				9C9DD6601D4768F5001FA3C5 /* SSJClearUserDataService.m in Sources */,
 				7D5F33701CEAE6C10086B67E /* SSJCategoryListHelper.m in Sources */,
@@ -17499,7 +17487,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
+				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
