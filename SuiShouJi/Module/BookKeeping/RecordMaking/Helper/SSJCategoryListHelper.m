@@ -61,6 +61,7 @@
                      Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure {
     
+    NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
         if (![db executeUpdate:@"update bk_bill_type set cname = ?, ccoin = ?, ccolor = ? where id = ?", name, image, color, categoryId]) {
@@ -72,7 +73,7 @@
             return;
         }
         
-        if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate =?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ?", @(state), @(order), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), categoryId, userID]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -112,11 +113,9 @@
             item.categoryImage = [rs stringForColumn:@"CCOIN"];
             item.categoryColor = [rs stringForColumn:@"CCOLOR"];
             item.categoryID = [rs stringForColumn:@"ID"];
+            item.order = [rs intForColumn:@"IORDER"];
             [tempArray addObject:item];
         }
-        
-        SSJRecordMakingCategoryItem *item = [tempArray firstObject];
-        item.selected = YES;
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -280,7 +279,71 @@
     
     NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ?", userID, name];
+        
+        SSJBillModel *model = nil;
+        
+        // 可能有多个未删除的同名类别，根据writedate取最新的类别
+        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype <> 2 order by ub.cwritedate desc", userID, name];
+        
+        while ([resultSet next]) {
+            model = [[SSJBillModel alloc] init];
+            model.ID = [resultSet stringForColumn:@"cbillid"];
+            model.name = [resultSet stringForColumn:@"cname"];
+            model.icon = [resultSet stringForColumn:@"ccoin"];
+            model.color = [resultSet stringForColumn:@"ccolor"];
+            model.state = [resultSet intForColumn:@"istate"];
+            model.operatorType = [resultSet intForColumn:@"operatortype"];
+            model.type = [resultSet intForColumn:@"itype"];
+            model.custom = [resultSet intForColumn:@"icustom"];
+            break;
+        }
+        
+        [resultSet close];
+        
+        if (model) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success(model);
+                });
+            }
+            return ;
+        }
+        
+        // 可能有多个已经删除的同名类别，根据writedate取最新的类别
+        resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.operatortype == 2 order by ub.cwritedate desc", userID, name];
+        
+        while ([resultSet next]) {
+            model = [[SSJBillModel alloc] init];
+            model.ID = [resultSet stringForColumn:@"cbillid"];
+            model.name = [resultSet stringForColumn:@"cname"];
+            model.icon = [resultSet stringForColumn:@"ccoin"];
+            model.color = [resultSet stringForColumn:@"ccolor"];
+            model.state = [resultSet intForColumn:@"istate"];
+            model.operatorType = [resultSet intForColumn:@"operatortype"];
+            model.type = [resultSet intForColumn:@"itype"];
+            model.custom = [resultSet intForColumn:@"icustom"];
+            break;
+        }
+        
+        [resultSet close];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(model);
+            });
+        }
+    }];
+}
+
++ (void)queryAnotherCategoryWithSameName:(NSString *)name
+                     exceptForCategoryID:(NSString *)categoryID
+                                 success:(void(^)(SSJBillModel *model))success
+                                 failure:(void(^)(NSError *))failure {
+    
+    NSString *userID = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        // 可能有多个已经删除的同名类别，根据writedate取最新的类别
+        FMResultSet *resultSet = [db executeQuery:@"select ub.cbillid, ub.istate, ub.operatortype, bt.cname, bt.ccoin, bt.ccolor, bt.itype, bt.icustom from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id and ub.cuserid = ? and bt.cname = ? and ub.cbillid <> ? and ub.operatortype <> 2 order by ub.cwritedate desc", userID, name, categoryID];
         if (!resultSet) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -302,6 +365,7 @@
             model.operatorType = [resultSet intForColumn:@"operatortype"];
             model.type = [resultSet intForColumn:@"itype"];
             model.custom = [resultSet intForColumn:@"icustom"];
+            break;
         }
         
         [resultSet close];

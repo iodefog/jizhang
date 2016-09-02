@@ -782,6 +782,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
+            wself.titleSegment.selectedSegmentIndex = incomeOrExpence ? 0 : 1;
+            [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];
     };

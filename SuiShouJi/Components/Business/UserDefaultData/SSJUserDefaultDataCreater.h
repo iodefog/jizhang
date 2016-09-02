@@ -38,7 +38,7 @@
  *
  *  @return (NSError *)
  */
-+ (NSError *)createDefaultFundAccountsForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
++ (NSError *)createDefaultFundAccountsIfNeededForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 /**
  *  同步创建当前用户默认的资金帐户

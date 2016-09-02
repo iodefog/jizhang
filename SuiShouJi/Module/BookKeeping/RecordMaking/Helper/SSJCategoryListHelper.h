@@ -139,6 +139,11 @@
                               success:(void(^)(SSJBillModel *model))success
                               failure:(void(^)(NSError *))failure;
 
++ (void)queryAnotherCategoryWithSameName:(NSString *)name
+                     exceptForCategoryID:(NSString *)categoryID
+                                 success:(void(^)(SSJBillModel *model))success
+                                 failure:(void(^)(NSError *))failure;
+
 /**
  *  自定义支出类型颜色
  */

@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) NSArray <SSJRecordMakingCategoryItem *>*items;
 
+@property (nonatomic, strong) NSArray *selectedIndexs;
+
 // default NO
 @property (nonatomic) BOOL editing;
 

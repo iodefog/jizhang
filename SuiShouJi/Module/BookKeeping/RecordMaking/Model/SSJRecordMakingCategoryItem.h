@@ -13,6 +13,7 @@
 @property (nonatomic,strong) NSString *categoryImage;
 @property (nonatomic,strong) NSString *categoryColor;
 @property (nonatomic,strong) NSString *categoryID;
+@property (nonatomic) int order;
 
 @property (nonatomic,strong) NSString *categoryTintColor;
 
