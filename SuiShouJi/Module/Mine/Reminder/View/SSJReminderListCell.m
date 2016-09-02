@@ -13,6 +13,8 @@
 
 @property(nonatomic, strong) UILabel *titleLabel;
 
+@property(nonatomic, strong) UILabel *memoLabel;
+
 @property(nonatomic, strong) UISwitch *switchButton;
 
 @end
@@ -22,6 +24,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLabel];
+        [self.contentView addSubview:self.memoLabel];
         self.accessoryView = self.switchButton;
     }
     return self;
@@ -30,7 +33,13 @@
 -(void)layoutSubviews{
     [super layoutSubviews];
     self.titleLabel.left = 10;
-    self.titleLabel.centerY = self.height / 2;
+    if (!((SSJReminderItem *)self.cellItem).remindMemo.length) {
+        self.titleLabel.centerY = self.height / 2;
+    }else{
+        self.titleLabel.top = 15;
+        self.memoLabel.left = 10;
+        self.memoLabel.top = self.titleLabel.bottom + 10;
+    }
 }
 
 -(UILabel *)titleLabel{
@@ -40,6 +49,15 @@
         _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _titleLabel;
+}
+
+-(UILabel *)memoLabel{
+    if (!_memoLabel) {
+        _memoLabel = [[UILabel alloc]initWithFrame:CGRectZero];
+        _memoLabel.font = [UIFont systemFontOfSize:13];
+        _memoLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _memoLabel;
 }
 
 - (UISwitch *)switchButton{
@@ -58,6 +76,8 @@
     SSJReminderItem *item = (SSJReminderItem *)cellItem;
     self.titleLabel.text = item.remindName;
     [self.titleLabel sizeToFit];
+    self.memoLabel.text = item.remindMemo;
+    [self.memoLabel sizeToFit];
     self.switchButton.on = item.remindState;
 }
 

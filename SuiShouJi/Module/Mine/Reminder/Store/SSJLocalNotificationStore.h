@@ -60,4 +60,14 @@
  */
 + (SSJReminderItem *)queryReminderItemForID:(NSString *)remindId;
 
+/**
+ *  删除某个提醒
+ *
+ *  @param remindId 提醒的id
+ *  @param error
+ *
+ *  @return 是否删除成功
+ */
++ (BOOL)deleteReminderWithItem:(SSJReminderItem *)remindItem error:(NSError **)error;
+
 @end

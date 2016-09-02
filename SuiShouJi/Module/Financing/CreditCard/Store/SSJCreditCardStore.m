@@ -8,6 +8,9 @@
 
 #import "SSJCreditCardStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJLocalNotificationStore.h"
+#import "SSJLocalNotificationHelper.h"
+#import "SSJReminderItem.h"
 
 @implementation SSJCreditCardStore
 
@@ -150,6 +153,36 @@
         }
     }
     return nil;
+}
+
++ (void)deleteBooksTypeWithCardItem:(SSJCreditCardItem *)item
+                            Success:(void (^)(void))success
+                            failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cfundid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
+            SSJDispatch_main_async_safe(^{
+                if (failure) {
+                    failure([db lastError]);
+                }
+                return;
+            });
+        }
+        if (item.remindId.length) {
+            if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,item.remindId]) {
+                SSJDispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([db lastError]);
+                    }
+                    return;
+                });
+            }
+            SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+            remindItem.remindId = item.remindId;
+            [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+        }
+    }];
 }
 
 @end
