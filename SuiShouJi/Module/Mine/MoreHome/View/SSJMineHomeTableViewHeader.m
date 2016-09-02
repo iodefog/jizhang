@@ -154,8 +154,10 @@
         }
         if (item.realName == nil || [item.realName isEqualToString:@""]) {
             //手机号登陆
-            NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            self.nicknameLabel.text = phoneNum;
+            if (item.cmobileno.length == 11) {
+                NSString *phoneNum = [item.cmobileno stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                self.nicknameLabel.text = phoneNum;
+            }
         }else{
             //三方登录
             self.nicknameLabel.text = item.realName;

@@ -188,7 +188,10 @@
         self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.fundingNameLabel.text = item.cardName;
         [self.fundingNameLabel sizeToFit];
-        self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.cardMemo];
+        if (item.cardMemo.length) {
+            self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.cardMemo];
+
+        }
         [self.cardMemoLabel sizeToFit];
         NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardBillingDay];
         if ([billDate isEarlierThan:[NSDate date]]) {

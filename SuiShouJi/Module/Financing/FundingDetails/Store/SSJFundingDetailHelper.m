@@ -66,7 +66,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             if ([month isEqualToString:lastDate]) {
                 SSJFundingDetailListItem *listItem = [result lastObject];
                 if (item.incomeOrExpence) {
-                    listItem.expenture = listItem.expenture + [item.money doubleValue];
+                    listItem.expenture = listItem.expenture - [item.money doubleValue];
                 }else{
                     listItem.income = listItem.income + [item.money doubleValue]; 
                 }

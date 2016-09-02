@@ -38,6 +38,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) NSArray *titles;
 
+@property(nonatomic, strong) NSArray *images;
+
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
 
 @property(nonatomic, strong) SSJCreditCardItem *item;
@@ -68,6 +70,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
+    self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"",@""],@[@"loan_clock",@"card_yanse"]];
+
     if (!self.cardId.length) {
         self.title = @"添加资金帐户";
         self.item = [[SSJCreditCardItem alloc]init];
@@ -185,8 +189,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell = [[SSJCreditCardEditeCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJCreditCardEditeCellIdentifier];
     }
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
-    
+    NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
     // 信用卡名称
+    newReminderCell.cellImageName = image;
     if ([title isEqualToString:kTitle1]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];

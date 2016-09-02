@@ -107,7 +107,7 @@
             }
         }else if(item.cardBalance < 0){
             // 如果余额小于0,在流水里插入一条平帐支出
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f", - item.cardBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
                 return [db lastError];
             }
         }
@@ -122,23 +122,25 @@
             return [db lastError];
         }
         
-        // 修改账户余额表
-        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ? and cuserid = ?",@(item.cardBalance),item.cardId,userId]) {
-            return [db lastError];
-        }
+        double originalBalance = [db doubleForQuery:@"select ibalance from bk_funs_acct where cfundid = ? and cuserid = ?",item.cardId,userId];
         
-        double differenceBalance = [db doubleForQuery:@"select ibalance from bk_funs_acct where cfundid = ? and cuserid = ?",item.cardId,userId] - item.cardBalance;
+        double differenceBalance = originalBalance - item.cardBalance;
         
         if (differenceBalance > 0) {
             // 如果余额大于0,在流水里插入一条平帐收入
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"1",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",differenceBalance],@"1",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
                 return [db lastError];
             }
         }else if(differenceBalance < 0){
             // 如果余额小于0,在流水里插入一条平帐支出
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f", - differenceBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
                 return [db lastError];
             }
+        }
+        
+        // 修改账户余额表
+        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ? and cuserid = ?",@(item.cardBalance),item.cardId,userId]) {
+            return [db lastError];
         }
         
         // 查询在信用卡表中有没有数据,如果没有则插入一条(对老的信用卡账户)
@@ -182,7 +184,14 @@
             SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
             remindItem.remindId = item.remindId;
             [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+
         }
+        SSJDispatch_main_async_safe(^{
+            if (success) {
+                success();
+            }
+            return;
+        });
     }];
 }
 

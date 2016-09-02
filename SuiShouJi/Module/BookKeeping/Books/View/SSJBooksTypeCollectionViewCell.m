@@ -46,10 +46,12 @@
     [super layoutSubviews];
     self.seperatorLineView.size = CGSizeMake(2, self.height);
     self.seperatorLineView.leftTop = CGPointMake(22, 0);
-    if (self.titleLabel.text.length >= 4) {
-        self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * 4;
-    }else{
-        self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * self.titleLabel.text.length;
+    if (self.titleLabel.text.length) {
+        if (self.titleLabel.text.length >= 4) {
+            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * 4;
+        }else{
+            self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * self.titleLabel.text.length;
+        }
     }
     self.titleLabel.width = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].width;
     self.titleLabel.centerX = self.width - (self.width - 24) / 2;

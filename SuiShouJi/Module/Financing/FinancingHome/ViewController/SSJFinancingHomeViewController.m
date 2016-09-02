@@ -295,6 +295,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             SSJFinancingHomeitem *fundItem = [weakSelf.items objectAtIndex:i];
             if ([fundItem.fundingParent isEqualToString:@"3"]) {
                 SSJCreditCardItem *cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:fundItem.fundingID];
+                cardItem.cardOder = fundItem.fundingOrder;
                 [weakSelf.items removeObject:fundItem];
                 [weakSelf.items insertObject:cardItem atIndex:cardItem.cardOder - 1];
             }
