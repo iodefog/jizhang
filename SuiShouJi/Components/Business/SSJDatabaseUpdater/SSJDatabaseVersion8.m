@@ -43,7 +43,7 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype) values (?, ?, ?, ?, ?, ?)", @"10", @"借出款", @"ft_jiechukuan", @"root", @"-1", @"0"]) {
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?, ?)", @"10", @"借出款", @"ft_jiechukuan", @"root", @"-1", @"0", @"应收钱款"]) {
         return [db lastError];
     }
     
@@ -51,6 +51,9 @@
         return [db lastError];
     }
     
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?)", @"12", @"社保", @"ft_shebao", @"root", @"-1", @"0", @"医保"]) {
+        return [db lastError];
+    }
     
     FMResultSet *result = [db executeQuery:@"select cuserid from bk_user"];
     if (!result) {
