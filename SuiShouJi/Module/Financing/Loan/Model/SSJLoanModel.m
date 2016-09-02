@@ -16,6 +16,7 @@
     model.ID = [resultSet stringForColumn:@"loanid"];
     model.userID = [resultSet stringForColumn:@"cuserid"];
     model.lender = [resultSet stringForColumn:@"lender"];
+    model.image = [resultSet stringForColumn:@"cicoin"];
     model.jMoney = [resultSet doubleForColumn:@"jmoney"];
     model.fundID = [resultSet stringForColumn:@"cthefundid"];
     model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];

@@ -13,7 +13,7 @@
 
 + (instancetype)itemWithLoanModel:(SSJLoanModel *)model {
     SSJLoanListCellItem *item = [[SSJLoanListCellItem alloc] init];
-    item.icon = @"";
+    item.icon = model.image;
     item.memo = model.memo;
     item.showStamp = model.closeOut;
     

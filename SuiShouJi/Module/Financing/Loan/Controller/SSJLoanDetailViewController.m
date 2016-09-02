@@ -125,25 +125,25 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款人" subtitle:_loanModel.lender],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借出金额" subtitle:borrowMoneyStr]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"利息收入" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借出账户" subtitle:accountName]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"结清日" subtitle:closeOutDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"超出还款日" subtitle:overlapDaysStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:_loanModel.memo]]];
+                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"借款人" subtitle:_loanModel.lender],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"借出金额" subtitle:borrowMoneyStr]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息收入" subtitle:interestStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:@"超出还款日" subtitle:overlapDaysStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]]];
                 break;
                 
             case SSJLoanTypeBorrow:
-                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠谁钱款" subtitle:_loanModel.lender],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款金额" subtitle:borrowMoneyStr]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"利息收入" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入账户" subtitle:accountName]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"结算日" subtitle:closeOutDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"超出还款日" subtitle:overlapDaysStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:_loanModel.memo]]];
+                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"欠谁钱款" subtitle:_loanModel.lender],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"欠款金额" subtitle:borrowMoneyStr]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息收入" subtitle:interestStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结算日" subtitle:closeOutDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:@"超出还款日" subtitle:overlapDaysStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]]];
                 break;
         }
     } else {
@@ -187,29 +187,29 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款人" subtitle:_loanModel.lender],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借出金额" subtitle:borrowMoneyStr]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"已产生利息" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"预期利息" subtitle:expectedInterestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借出账户" subtitle:accountName]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"借款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"还款日" subtitle:repaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:_loanModel.memo]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"到期日提醒" subtitle:remindDateStr]]];
+                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"借款人" subtitle:_loanModel.lender],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"借出金额" subtitle:borrowMoneyStr]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"已产生利息" subtitle:interestStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr]]];
                 break;
                 
             case SSJLoanTypeBorrow:
-                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠谁钱款" subtitle:_loanModel.lender],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款金额" subtitle:borrowMoneyStr]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"已产生利息" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"预期利息" subtitle:expectedInterestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"借入账户" subtitle:accountName]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"欠款日" subtitle:borrowDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"还款日" subtitle:repaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:_loanModel.memo]],
-                               @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"到期日提醒" subtitle:remindDateStr]]];
+                _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"欠谁钱款" subtitle:_loanModel.lender],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"欠款金额" subtitle:borrowMoneyStr]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"已产生利息" subtitle:interestStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expectedInterest" title:@"预期利息" subtitle:expectedInterestStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]],
+                               @[[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr]]];
                 break;
         }
     }

@@ -32,6 +32,7 @@
     [_amountValueLab sizeToFit];
     
     self.amountTitleLab.left = 19;
+    self.amountValueLab.width = MIN(self.amountValueLab.width, self.width - self.amountTitleLab.right - 19 - 10);
     self.amountValueLab.right = self.width - 19;
     self.amountTitleLab.centerY = self.amountValueLab.centerY = self.height * 0.5;
 }
@@ -53,8 +54,7 @@
 }
 
 - (void)updateAppearance {
-    CGFloat alpha = [SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
-    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:alpha];
+    self.backgroundColor = [SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID] ? SSJ_DEFAULT_BACKGROUND_COLOR : [UIColor clearColor];
     _amountTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _amountValueLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }

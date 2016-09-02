@@ -25,6 +25,9 @@ typedef NS_ENUM(NSInteger, SSJLoanType) {
 // 借款人／欠款人
 @property (nonatomic, copy) NSString *lender;
 
+// 借贷图标
+@property (nonatomic, copy) NSString *image;
+
 // 借入／借出金额
 @property (nonatomic) double jMoney;
 

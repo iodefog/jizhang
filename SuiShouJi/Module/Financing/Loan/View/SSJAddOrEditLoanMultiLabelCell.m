@@ -23,7 +23,7 @@
         self.textLabel.font = [UIFont systemFontOfSize:18];
         
         _subtitleLabel = [[UILabel alloc] init];
-        _subtitleLabel.font = [UIFont systemFontOfSize:18];
+        _subtitleLabel.font = [UIFont systemFontOfSize:14];
         [self.contentView addSubview:_subtitleLabel];
         
         _textField = [[UITextField alloc] init];
@@ -56,7 +56,7 @@
     self.imageView.leftTop = CGPointMake(16, top);
     self.textLabel.leftTop = CGPointMake(48, top);
     self.subtitleLabel.leftTop = CGPointMake(48, self.textLabel.bottom + top);
-    _textField.frame = CGRectMake(self.textLabel.right + 10, 0, self.contentView.width - self.textLabel.right - 38, self.subtitleLabel.top);
+    _textField.frame = CGRectMake(self.textLabel.right + 10, 0, self.contentView.width - self.textLabel.right - 10 - 10, self.subtitleLabel.top);
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
