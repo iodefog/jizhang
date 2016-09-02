@@ -37,6 +37,9 @@
 // 信用卡颜色
 @property(nonatomic, strong) NSString *cardColor;
 
+// 信用卡顺序
+@property(nonatomic) NSInteger cardOder;
+
 // 提醒id
 @property(nonatomic, strong) NSString *remindId;
 
