@@ -65,7 +65,7 @@
         self.booksIcionImage.position = CGPointMake(self.contentView.width - 21, self.contentView.height - 21);
     }
     if (self.item.booksId.length) {
-        self.selectedButton.center = CGPointMake(self.contentView.width , 0);
+        self.selectedButton.rightTop = CGPointMake(self.contentView.width , 0);
     }else{
         self.selectedButton.hidden = YES;
     }
@@ -121,11 +121,16 @@
 
 - (UIButton *)selectedButton{
     if (!_selectedButton) {
-        _selectedButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        _selectedButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 18, 18)];
+        [_selectedButton addTarget:self action:@selector(selectButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_selectedButton setImage:[UIImage imageNamed:@"book_xuanzhong"] forState:UIControlStateNormal];
         [_selectedButton setImage:[UIImage imageNamed:@"book_sel"] forState:UIControlStateSelected];
     }
     return _selectedButton;
+}
+
+- (void)selectButtonClicked:(id)sender{
+    self.item.selectToEdite = !self.item.selectToEdite;
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{

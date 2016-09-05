@@ -34,6 +34,34 @@
     
     NSDate * fireDate = item.remindDate;
     
+    if (!item.remindContent.length) {
+        switch (item.remindType) {
+            case SSJReminderTypeNormal:{
+                if (item.remindMemo.length) {
+                    item.remindContent = [NSString stringWithFormat:@"%@(%@)",item.remindName,item.remindMemo];
+                }else{
+                    item.remindContent = [NSString stringWithFormat:@"%@",item.remindName];
+                }
+                break;
+            }
+                
+            case SSJReminderTypeBorrowing:
+                
+                break;
+                
+            case SSJReminderTypeCreditCard:
+                
+                break;
+                
+            case SSJReminderTypeCharge:
+                
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
     switch (item.remindCycle) {
         // 如果是每天
         case 0:{
