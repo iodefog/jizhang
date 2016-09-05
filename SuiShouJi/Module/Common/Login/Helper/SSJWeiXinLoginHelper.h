@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "WXApi.h"
+#import "SSJThirdPartLoginItem.h"
 
 @interface SSJWeiXinLoginHelper : NSObject<WXApiDelegate>
 
 //微信登陆成功的回调
-typedef void (^weiXinLoginSuccessBlock)(NSString *nickName , NSString *iconUrl , NSString *openId);
+typedef void (^weiXinLoginSuccessBlock)(SSJThirdPartLoginItem *item);
 
 //微信登录的方法
 -(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock;

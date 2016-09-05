@@ -30,6 +30,7 @@
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJStartUpgradeAlertView.h"
+#import "SSJThirdPartLoginItem.h"
 #import "SSJLoginHelper.h"
 #import "SSJStartChecker.h"
 
@@ -287,20 +288,20 @@
 -(void)qqLoginButtonClicked:(id)sender{
     [MobClick event:@"login_qq"];
     __weak typeof(self) weakSelf = self;
-    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+    [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [weakSelf.loginService loadLoginModelWithLoginType:SSJLoginTypeQQ openID:openId realName:nickName icon:iconUrl];
+        [weakSelf.loginService loadLoginModelWithLoginItem:item];
     }];
 }
 
 -(void)weixinLoginButtonClicked:(id)sender{
     [MobClick event:@"login_weichat"];
     __weak typeof(self) weakSelf = self;
-    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(NSString *nickName, NSString *iconUrl, NSString *openId) {
+    [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
         [SSJThirdPartyLoginManger shareInstance].qqLogin = nil;
         [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
-        [weakSelf.loginService loadLoginModelWithLoginType:SSJLoginTypeWeiXin openID:openId realName:nickName icon:iconUrl];
+        [weakSelf.loginService loadLoginModelWithLoginItem:item];
     }];
 }
 

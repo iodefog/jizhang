@@ -56,11 +56,15 @@
 -(void)getUserInfoResponse:(APIResponse *)response
 {
     NSLog(@"respons:%@",response.jsonResponse);
-    NSString *icon = [response.jsonResponse objectForKey:@"figureurl_qq_2"] ? : @"";
-    NSString *realName = [response.jsonResponse objectForKey:@"nickname"] ? : @"";
-    NSString *openId = [self.tencentOAuth openId];
+    SSJThirdPartLoginItem *item = [[SSJThirdPartLoginItem alloc]init];
+    item.portraitURL = [response.jsonResponse objectForKey:@"figureurl_qq_2"] ? : @"";
+    item.nickName = [response.jsonResponse objectForKey:@"nickname"] ? : @"";
+    item.userGender = [response.jsonResponse objectForKey:@"gender"] ? : @"";
+    item.unionId = @"";
+    item.openID = [self.tencentOAuth openId];
+    item.loginType = SSJLoginTypeQQ;
     if (self.sucessBlock) {
-        self.sucessBlock(realName,icon,openId);
+        self.sucessBlock(item);
     }
 }
 
