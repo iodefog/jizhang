@@ -563,25 +563,19 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
     
-    NSString *rollOutFundID = nil;
-    NSString *rollInFundID = nil;
-    NSString *rollOutChargeID = nil;
-    NSString *rollInChargeID = nil;
+    NSString *billID = nil;
+    NSString *targetBillID = nil;
     
     switch (model.type) {
         case SSJLoanTypeLend:
-            rollOutFundID = model.fundID;
-            rollInFundID = model.targetFundID;
-            rollOutChargeID = model.chargeID;
-            rollInChargeID = model.targetChargeID;
+            billID = @"3";
+            targetBillID = @"4";
             
             break;
             
         case SSJLoanTypeBorrow:
-            rollOutFundID = model.targetFundID;
-            rollInFundID = model.fundID;
-            rollOutChargeID = model.targetChargeID;
-            rollInChargeID = model.chargeID;
+            billID = @"4";
+            targetBillID = @"3";
             
             break;
     }
@@ -590,13 +584,13 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *borrowDateStr = [model.borrowDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *repaymentDateStr = [model.repaymentDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
-    // 转出流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollOutChargeID, model.userID, @(model.jMoney), @4, rollOutFundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    // 所属账户转账流水
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.chargeID, model.userID, @(model.jMoney), billID, model.fundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
-    // 转入流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", rollInChargeID, model.userID, @(model.jMoney), @3, rollInFundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    // 目标账户转账流水
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.targetChargeID, model.userID, @(model.jMoney), targetBillID, model.targetFundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     

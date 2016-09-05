@@ -71,9 +71,6 @@ static NSString *const kSegmentTitleIncome = @"收入";
 //  圆环图表数据源
 @property (nonatomic, strong) NSMutableArray *circleItems;
 
-//  选中的时间周期
-@property (nonatomic, strong) SSJDatePeriod *selectedPeriod;
-
 //  自定义时间周期
 @property (nonatomic, strong) SSJDatePeriod *customPeriod;
 
@@ -116,7 +113,10 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [self.tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     
     [self updateIncomeAndPaymentLabels];
-    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self reloadDatas];
 }
 
@@ -130,6 +130,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     if ([viewController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *naviController = (UINavigationController *)viewController;
         if (naviController.topViewController == self) {
+            _periods = nil;
             [self reloadDatas];
         }
     }
@@ -179,6 +180,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
+    _periods = nil;
     [self reloadDatas];
     [self updateIncomeAndPaymentLabels];
     
@@ -245,8 +247,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 }
 
 - (void)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView didSelectedScaleAxisAtIndex:(NSUInteger)index {
-    _selectedPeriod = [_periods ssj_safeObjectAtIndex:index];
-    [self reloadDatasInPeriod:_selectedPeriod];
+    [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:index]];
     [self updateSurplusViewTitle];
     
     [MobClick event:@"form_date_picked"];
@@ -255,11 +256,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 #pragma mark - Event
 // 切换分类和成员
 - (void)typeAndMemberControlAction {
-    if (_customPeriod) {
-        [self reloadDatasInPeriod:_customPeriod];
-    } else {
-        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
-    }
+    [self reloadDatas];
     
     switch (_typeAndMemberControl.option) {
         case SSJReportFormsMemberAndCategorySwitchControlOptionCategory:
@@ -405,6 +402,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (void)reloadDatas {
     if (_customPeriod) {
         [self reloadDatasInPeriod:_customPeriod];
+    } else if (_periods.count) {
+        [self reloadDatasInPeriod:[_periods ssj_safeObjectAtIndex:_dateAxisView.selectedIndex]];
     } else {
         [self reloadAllDatas];
     }
