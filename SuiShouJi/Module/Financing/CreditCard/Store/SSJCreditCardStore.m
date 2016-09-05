@@ -190,6 +190,14 @@
                 return;
             });
         }
+        if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cfundid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardId]) {
+            SSJDispatch_main_async_safe(^{
+                if (failure) {
+                    failure([db lastError]);
+                }
+                return;
+            });
+        }
         if (item.remindId.length) {
             if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,item.remindId]) {
                 SSJDispatch_main_async_safe(^{
@@ -199,9 +207,9 @@
                     return;
                 });
             }
-            SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
-            remindItem.remindId = item.remindId;
-            [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+//            SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+//            remindItem.remindId = item.remindId;
+//            [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
 
         }
         SSJDispatch_main_async_safe(^{

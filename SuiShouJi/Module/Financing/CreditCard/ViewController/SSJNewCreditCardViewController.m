@@ -18,6 +18,7 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJColorSelectViewController.h"
 #import "SSJReminderEditeViewController.h"
+#import "SSJDataSynchronizer.h"
 
 #define NUM @"+-.0123456789"
 
@@ -345,6 +346,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             };
         }
         SSJDispatch_main_async_safe(^(){
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         });
     }];
@@ -354,6 +356,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     __weak typeof(self) weakSelf = self;
     [SSJCreditCardStore deleteCreditCardWithCardItem:self.item Success:^{
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:@"删除失败"];
     }];

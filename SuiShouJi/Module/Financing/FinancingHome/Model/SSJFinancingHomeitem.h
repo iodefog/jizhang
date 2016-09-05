@@ -29,9 +29,6 @@
 //账户余额
 @property (nonatomic) double fundingAmount;
 
-//是否是添加按钮
-@property (nonatomic) BOOL isAddOrNot;
-
 //账户备注
 @property(nonatomic,strong) NSString *fundingMemo;
 

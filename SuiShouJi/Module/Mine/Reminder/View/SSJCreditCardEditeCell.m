@@ -75,7 +75,7 @@
             }
             self.cellDetailImage.right = self.detailLabel.left - 10;
             self.cellDetailImage.centerY = self.contentView.height /  2;
-
+            self.titleLabel.hidden = NO;
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
@@ -100,6 +100,7 @@
             }
             self.cellDetailImage.right = self.detailLabel.left - 10;
             self.cellDetailImage.centerY = self.contentView.height /  2;
+            self.titleLabel.hidden = NO;
             self.cellDetailImage.hidden = NO;
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
@@ -115,6 +116,10 @@
             self.titleLabel.top = 17;
             self.subTitleLabel.top = self.titleLabel.bottom + 10;
             self.subTitleLabel.left = self.titleLabel.left;
+            self.titleLabel.hidden = NO;
+            self.cellDetailImage.hidden = NO;
+            self.textInput.hidden = YES;
+            self.subTitleLabel.hidden = NO;
             self.colorView.hidden = YES;
         }
             break;
@@ -131,7 +136,7 @@
                 self.colorView.right = self.contentView.width;
             }
             self.colorView.centerY = self.contentView.height / 2;
-
+            self.titleLabel.hidden = NO;
             self.detailLabel.hidden = YES;
             self.cellDetailImage.hidden = YES;
             self.colorView.hidden = NO;
