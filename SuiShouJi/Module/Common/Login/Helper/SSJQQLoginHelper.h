@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <TencentOpenAPI/TencentOAuth.h>
+#import "SSJThirdPartLoginItem.h"
 
 @interface SSJQQLoginHelper : NSObject<TencentSessionDelegate>
 //QQ登陆成功的回调
-typedef void (^qqLoginSuccessBlock)(NSString *nickName , NSString *iconUrl , NSString *openId);
+typedef void (^qqLoginSuccessBlock)(SSJThirdPartLoginItem *item);
 
 //QQ登录的方法
 -(void)qqLoginWithSucessBlock:(qqLoginSuccessBlock)sucessBlock;

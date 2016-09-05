@@ -80,10 +80,15 @@
                 {
                     NSLog(@"%@",[dict objectForKey:@"errmsg"]);
                 }else{
-                    NSString *iconUrl = [dict objectForKey:@"headimgurl"] ? : @"";
-                    NSString *nickName = [dict objectForKey:@"nickname"] ? : @"";
+                    SSJThirdPartLoginItem *item = [[SSJThirdPartLoginItem alloc]init];
+                    item.portraitURL = [dict objectForKey:@"headimgurl"] ? : @"";
+                    item.nickName = [dict objectForKey:@"nickname"] ? : @"";
+                    item.unionId = [dict objectForKey:@"unionid"] ? : @"";
+                    item.userGender = [NSString stringWithFormat:@"%@",[dict objectForKey:@"sex"] ? : @""];
+                    item.loginType = SSJLoginTypeWeiXin;
+                    item.openID = openId;
                     if (self.sucessBlock) {
-                        self.sucessBlock(nickName,iconUrl,openId);
+                        self.sucessBlock(item);
                     }
                 }
             }

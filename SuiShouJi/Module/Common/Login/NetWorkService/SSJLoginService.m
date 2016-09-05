@@ -80,10 +80,10 @@
     [self request:SSJURLWithAPI(@"/user/login.go") params:dict];
 }
 
-- (void)loadLoginModelWithLoginType:(SSJLoginType)loginType openID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon{
-    self.loginType = loginType;
+- (void)loadLoginModelWithLoginItem:(SSJThirdPartLoginItem *)item{
+    self.loginType = item.loginType;
     self.showLodingIndicator = YES;
-    self.openId = openID;
+    self.openId = item.openID;
     NSString *strAcctID=@"130313003";
     NSString *strSignType=@"1";
     NSString *strKey=@"iwannapie?!";
@@ -93,7 +93,7 @@
     }else if (self.loginType == SSJLoginTypeWeiXin){
         type = @"wechat";
     }
-    NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&auth_token=%@&key=%@",strSignType,strAcctID,openID,strKey];
+    NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&auth_token=%@&key=%@",strSignType,strAcctID,item.openID,strKey];
     NSString *strmd5Sign=[[strSign ssj_md5HexDigest]uppercaseString];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     //imei
@@ -108,13 +108,16 @@
     [dict setObject:strSignType forKey:@"signType"];
     [dict setObject:strmd5Sign forKey:@"signMsg"];
     [dict setObject:SSJUSERID() forKey:@"cuserid"];
-    [dict setObject:openID forKey:@"auth_token"];
-    [dict setObject:icon forKey:@"cicon"];
+    [dict setObject:item.openID forKey:@"auth_token"];
+    [dict setObject:item.portraitURL forKey:@"cicon"];
     [dict setObject:type forKey:@"type"];
-    [dict setObject:[realName ssj_emojiFilter] forKey:@"crealname"];
+    [dict setObject:[item.nickName ssj_emojiFilter] forKey:@"crealname"];
     [dict setObject:imei forKey:@"cimei"];
     [dict setObject:phoneModel forKey:@"cmodel"];
     [dict setObject:phoneVersion forKey:@"cphoneos"];
+    [dict setObject:item.userGender forKey:@"cgender"];
+    [dict setObject:item.unionId forKey:@"cunionid"];
+
     [self request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict];
 }
 

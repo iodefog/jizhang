@@ -9,6 +9,7 @@
 #import "SSJBaseNetworkService.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJUserItem.h"
+#import "SSJThirdPartLoginItem.h"
 
 @interface SSJLoginService : SSJBaseNetworkService
 
@@ -53,7 +54,5 @@
  *  @param realName 用户名
  *  @param icon 用户名
  */
-- (void)loadLoginModelWithLoginType:(SSJLoginType)loginType openID:(NSString*)openID realName:(NSString*)realName icon:(NSString*)icon;
-
-
+- (void)loadLoginModelWithLoginItem:(SSJThirdPartLoginItem *)item;
 @end
