@@ -699,6 +699,16 @@ const int kMemoMaxLength = 13;
         tmpRemindItem.remindDate = [NSDate dateWithYear:_loanModel.repaymentDate.year month:_loanModel.repaymentDate.month day:_loanModel.repaymentDate.day hour:20 minute:0 second:0];
         tmpRemindItem.minimumDate = _loanModel.borrowDate;
         tmpRemindItem.remindState = YES;
+        tmpRemindItem.borrowtarget = _loanModel.lender;
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                tmpRemindItem.borrowtOrLend = @"1";
+                break;
+                
+            case SSJLoanTypeBorrow:
+                tmpRemindItem.borrowtOrLend = @"0";
+                break;
+        }
     }
     
     __weak typeof(self) wself = self;
