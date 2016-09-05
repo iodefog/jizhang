@@ -60,12 +60,12 @@
         BOOL exist = [db boolForQuery:@"select count(*) from bk_user_bill where cbillid = ? and cuserid = ?", recordInfo[@"cbillid"], recordInfo[@"cuserid"]];
         
         if (exist) {
-            if (![db executeUpdate:@"update bk_user_bill set istate = :istate, iorder = :iorder, cwritedate = :cwritedate, iversion = :iversion, operatortype = :operatortype where cbillid = :cbillid and cuserid = :cuserid and cwritedate < :cwritedate" withParameterDictionary:recordInfo]) {
+            if (![db executeUpdate:@"update bk_user_bill set istate = ?, iorder = ?, cwritedate = ?, iversion = ?, operatortype = ? where cbillid = ? and cuserid = ? and cwritedate < ?", recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"], recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cwritedate"]]) {
                 *error = [db lastError];
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype) values (:cbillid, :cuserid, :istate, :iorder, :cwritedate, :iversion, :operatortype)" withParameterDictionary:recordInfo]) {
+            if (![db executeUpdate:@"insert into bk_user_bill (cbillid, cuserid, istate, iorder, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?)", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"istate"], recordInfo[@"iorder"], recordInfo[@"cwritedate"], recordInfo[@"iversion"], recordInfo[@"operatortype"]]) {
                 *error = [db lastError];
                 return NO;
             }
