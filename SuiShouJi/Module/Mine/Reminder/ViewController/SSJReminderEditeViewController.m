@@ -38,6 +38,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) UIView *saveFooterView;
 
+@property(nonatomic, strong) NSArray *images;
+
 @end
 
 @implementation SSJReminderEditeViewController
@@ -61,6 +63,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJCreditCardEditeCell class] forCellReuseIdentifier:SSJCreditCardEditeCellIdentifier];
     self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5]];
+    self.images = @[@[@"loan_remind",@"loan_memo"],@[@"card_zhouqi",@"loan_clock",@"loan_calendar"]];
     if (self.item.remindId.length) {
         self.title = @"提醒详情";
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonCliked:)];
@@ -133,6 +136,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell = [[SSJCreditCardEditeCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJCreditCardEditeCellIdentifier];
     }
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
+    newReminderCell.cellImageName = image;
     
     if ([title isEqualToString:kTitle1]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
