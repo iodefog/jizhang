@@ -8,19 +8,23 @@
 
 #import "SSJMagicExportService.h"
 
+@interface SSJMagicExportService ()
+
+@property (nonatomic, copy) NSString *email;
+
+@end
+
 @implementation SSJMagicExportService
 
 - (void)exportWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate emailAddress:(NSString *)email {
+    _email = email;
     NSString *beginDateStr = [beginDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-    [super request:SSJURLWithAPI(@"/user/sendChargeEmail.go") params:@{@"cuserId":SSJUSERID(),
-                                                                       @"beginDate":beginDateStr,
-                                                                       @"endDate":endDateStr,
-                                                                       @"email":email}];
+    
+    [super request:SSJURLWithAPI(@"/user/sendChargeEmail.go") params:@{@"cuserId":SSJUSERID() ?: @"",
+                                                                       @"beginDate":beginDateStr ?: @"",
+                                                                       @"endDate":endDateStr ?: @"",
+                                                                       @"email":email ?: @""}];
 }
-
-//- (void)requestDidFinish:(NSDictionary *)rootElement {
-//    [super requestDidFinish:rootElement];
-//}
 
 @end

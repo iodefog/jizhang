@@ -10,6 +10,8 @@
 
 @interface SSJMagicExportService : SSJBaseNetworkService
 
+@property (nonatomic, copy, readonly) NSString *email;
+
 - (void)exportWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate emailAddress:(NSString *)email;
 
 @end
