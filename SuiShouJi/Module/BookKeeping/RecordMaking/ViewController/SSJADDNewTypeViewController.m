@@ -376,6 +376,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             // 查询自定义类别图标
             [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<NSString *> *images) {
                 [self.view ssj_hideLoadingIndicator];
+                [self updateButtons];
                 _newOrEditCategoryView.images = images;
                 _newOrEditCategoryView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
             } failure:^(NSError *error) {
@@ -429,36 +430,50 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (void)updateButtons {
     if (_titleSegmentView.selectedSegmentIndex == 0) {
-        if (_featuredCategoryCollectionView.editing) {
+        if (_featuredCategoryCollectionView.items.count == 0) {
             _sureButton.hidden = YES;
             _editButton.hidden = YES;
-            _deleteButton.hidden = NO;
-            _deleteButton.left = 0;
-            _deleteButton.width = self.view.width;
-            [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
-        } else {
-            _sureButton.hidden = NO;
-            _editButton.hidden = YES;
             _deleteButton.hidden = YES;
-            [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
-        }
-    } else {
-        if (_customCategorySwitchConrol.selectedIndex == 0) {
-            _customCategoryCollectionView.hidden = NO;
-            _newOrEditCategoryView.hidden = YES;
-            
-            if (_customCategoryCollectionView.editing) {
+            [self.navigationItem setRightBarButtonItem:nil animated:YES];
+        } else {
+            if (_featuredCategoryCollectionView.editing) {
                 _sureButton.hidden = YES;
-                _editButton.hidden = NO;
+                _editButton.hidden = YES;
                 _deleteButton.hidden = NO;
-                _deleteButton.left = _editButton.right;
-                _deleteButton.width = self.view.width - _editButton.right;
+                _deleteButton.left = 0;
+                _deleteButton.width = self.view.width;
                 [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
             } else {
                 _sureButton.hidden = NO;
                 _editButton.hidden = YES;
                 _deleteButton.hidden = YES;
                 [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
+            }
+        }
+    } else {
+        if (_customCategorySwitchConrol.selectedIndex == 0) {
+            _customCategoryCollectionView.hidden = NO;
+            _newOrEditCategoryView.hidden = YES;
+            
+            if (_customCategoryCollectionView.items.count == 0) {
+                _sureButton.hidden = YES;
+                _editButton.hidden = YES;
+                _deleteButton.hidden = YES;
+                [self.navigationItem setRightBarButtonItem:nil animated:YES];
+            } else {
+                if (_customCategoryCollectionView.editing) {
+                    _sureButton.hidden = YES;
+                    _editButton.hidden = NO;
+                    _deleteButton.hidden = NO;
+                    _deleteButton.left = _editButton.right;
+                    _deleteButton.width = self.view.width - _editButton.right;
+                    [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
+                } else {
+                    _sureButton.hidden = NO;
+                    _editButton.hidden = YES;
+                    _deleteButton.hidden = YES;
+                    [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
+                }
             }
         } else if (_customCategorySwitchConrol.selectedIndex == 1) {
             _customCategoryCollectionView.hidden = YES;
@@ -542,7 +557,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _customCategorySwitchConrol = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(self.scrollView.width, 0, self.scrollView.width, 40)];
         _customCategorySwitchConrol.customDelegate = self;
         _customCategorySwitchConrol.buttonClickAnimated = NO;
-        _customCategorySwitchConrol.titles = @[@"已建类别", @"新建类别"];
+        _customCategorySwitchConrol.titles = @[@"已建未启用", @"新建类别"];
         [_customCategorySwitchConrol setTabSize:CGSizeMake(self.view.width / _customCategorySwitchConrol.titles.count, 3)];
         [_customCategorySwitchConrol ssj_setBorderWidth:1];
         [_customCategorySwitchConrol ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
@@ -557,6 +572,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;
+        _scrollView.showsHorizontalScrollIndicator = NO;
     }
     return _scrollView;
 }
@@ -604,6 +620,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         _newOrEditCategoryView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view) {
             [MobClick event:@"add_user_bill_color"];
         };
+        _newOrEditCategoryView.hidden = YES;
     }
     return _newOrEditCategoryView;
 }
