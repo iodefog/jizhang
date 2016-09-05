@@ -250,13 +250,4 @@
     }
 }
 
-- (double)getSumForTheMonth:(NSInteger)month withBillday:(NSInteger)billingDay{
-    __block double sumForTheMonth;
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSString *userId = SSJUSERID();
-        sumForTheMonth = [db doubleForQuery:@"select sum(sumamount) from bk_dailysum_charge where cbilldate < ? and cbilldate > ? and cuserid = ?",[NSString stringWithFormat:@"%04ld-%02ld-%02ld",[NSDate date].year,month,billingDay + 1],[NSString stringWithFormat:@"%04ld-%02ld-%02ld",[NSDate date].year,month - 1,billingDay],userId];
-    }];
-    return sumForTheMonth;
-}
-
 @end
