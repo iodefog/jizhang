@@ -91,6 +91,10 @@
         [CDAutoHideMessageHUD showMessage:@"请输入账本名称"];
         return;
     }
+    if (self.item.booksName.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"账本名称不能超过5个字"];
+        return;
+    }
     if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
         [self.navigationController popViewControllerAnimated:YES];
     }else{
