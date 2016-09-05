@@ -22,6 +22,13 @@
 
 @implementation SSJStartNetworkService
 
+- (instancetype)initWithDelegate:(id<SSJBaseNetworkServiceDelegate>)delegate {
+    if (self = [super initWithDelegate:delegate]) {
+        _isInReview = YES;
+    }
+    return self;
+}
+
 - (void)request {
     [super request:@"/trade/start.go" params:nil];
 }

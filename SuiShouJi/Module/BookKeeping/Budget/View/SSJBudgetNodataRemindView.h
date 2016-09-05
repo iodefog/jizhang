@@ -10,6 +10,10 @@
 
 @interface SSJBudgetNodataRemindView : UIView
 
+@property (nonatomic, copy) NSString *image;
+
 @property (nonatomic, copy) NSString *title;
+
+- (void)updateAppearance;
 
 @end
