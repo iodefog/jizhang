@@ -20,4 +20,6 @@
 + (void)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
                              Success:(void (^)(void))success
                              failure:(void (^)(NSError *error))failure;
+
++ (float)queryCreditCardBalanceForTheMonth:(NSInteger)month billingDay:(NSInteger)billingDay WithCardId:(NSString *)cardId;
 @end

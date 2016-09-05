@@ -158,6 +158,24 @@
     return nil;
 }
 
++ (float)queryCreditCardBalanceForTheMonth:(NSInteger)month billingDay:(NSInteger)billingDay WithCardId:(NSString *)cardId{
+    __block float cardBalance;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        if (month > 12) {
+            SSJDispatch_main_async_safe(^{
+                [CDAutoHideMessageHUD showMessage:@"月份不能大于12"];
+            });
+            return;
+        }
+        NSString *firstBillingDay = [[NSDate dateWithYear:[NSDate date].year month:month - 1 day:billingDay] formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *secondBillingDay = [[NSDate dateWithYear:[NSDate date].year month:month day:billingDay + 1] formattedDateWithFormat:@"yyyy-MM-dd"];
+        double cardExpense = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b where a.ibillid =  b.id and a.cuserid = ? and a.operatortype <> 2 and b.itype = 1 and a.cbilldate between ? and ? and a.ifunsid = ?",userId,firstBillingDay,secondBillingDay,cardId];
+        cardBalance = cardExpense;
+    }];
+    return cardBalance;
+}
+
 + (void)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
                             Success:(void (^)(void))success
                             failure:(void (^)(NSError *error))failure {
