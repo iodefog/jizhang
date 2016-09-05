@@ -157,10 +157,16 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     cell.item = item;
     cell.editeModel = _editeModel;
     cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
-        NSIndexPath *deleteIndex = [self.collectionView indexPathForCell:cell];
-        [weakSelf.items removeObjectAtIndex:deleteIndex.item];
-        [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
+        [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
+//            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
+//            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
+            [weakSelf getDateFromDateBase];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            
+        }];
+
     };
     return cell;
 }
@@ -179,19 +185,11 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
     [MobClick event:@"fund_sort"];
-    if (indexPath.row != self.items.count - 1) {
-        return YES;
-    }else{
-        return NO;
-    }
+    return YES;
 }
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
-    if (toIndexPath.row != self.items.count - 1) {
-        return YES;
-    }else{
-        return NO;
-    }
+    return YES;
 }
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{

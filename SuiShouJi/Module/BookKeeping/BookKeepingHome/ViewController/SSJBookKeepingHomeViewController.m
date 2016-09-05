@@ -36,6 +36,7 @@
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJBookKeepingHomeNoDataHeader.h"
 #import "UIViewController+SSJMotionPassword.h"
+#import "SSJBookKeepingHomeBooksButton.h"
 
 BOOL kHomeNeedLoginPop;
 
@@ -52,7 +53,7 @@ BOOL kHomeNeedLoginPop;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
-@property(nonatomic, strong) UIButton *leftButton;
+@property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -122,7 +123,7 @@ BOOL kHomeNeedLoginPop;
         }];
         NSString *booksid = SSJGetCurrentBooksType();
         SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-        [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        self.leftButton.item = currentBooksItem;
         self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     }
 }
@@ -579,11 +580,10 @@ BOOL kHomeNeedLoginPop;
 //    return _statusLabel;
 //}
 
-- (UIButton *)leftButton{
+- (SSJBookKeepingHomeBooksButton *)leftButton{
     if (!_leftButton) {
-        _leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 32)];
-        [_leftButton addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        _leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _leftButton = [[SSJBookKeepingHomeBooksButton alloc]initWithFrame:CGRectMake(0, 0, 30, 32)];
+        [_leftButton.button addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _leftButton;
 }
@@ -781,8 +781,7 @@ BOOL kHomeNeedLoginPop;
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    self.leftButton.item = currentBooksItem;
 }
 
 - (void)reloadDataAfterInitDatabase {
@@ -792,8 +791,7 @@ BOOL kHomeNeedLoginPop;
     
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    self.leftButton.item = currentBooksItem;
 }
 
 - (void)reloadAfterBooksTypeChange{
@@ -803,8 +801,7 @@ BOOL kHomeNeedLoginPop;
     
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    [self.leftButton setImage:[[UIImage imageNamed:currentBooksItem.booksIcoin] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+    self.leftButton.item = currentBooksItem;
 }
 
 - (void)reloadBudgetData {
