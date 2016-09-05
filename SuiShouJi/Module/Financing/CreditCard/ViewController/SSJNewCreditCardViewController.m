@@ -329,6 +329,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!self.remindItem.remindId.length) {
         self.item.remindId = self.remindItem.remindId;
     }
+    if (!self.item.remindId.length) {
+        if (self.item.cardName) {
+            self.remindItem.remindName = [NSString stringWithFormat:@"%@还款日提醒",self.item.cardName];
+        }
+        if (self.item.cardMemo) {
+            self.remindItem.remindMemo = self.item.cardMemo;
+        }
+    }
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if ([SSJCreditCardStore saveCreditCardWithCardItem:self.item inDatabase:db]) {
@@ -379,7 +387,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 item.remindName = [NSString stringWithFormat:@"%@还款日提醒",self.item.cardName];
             }
             if (self.item.cardMemo) {
-                item.remindName = self.item.cardMemo;
+                item.remindMemo = self.item.cardMemo;
             }
             if ([NSDate date].day > self.item.cardRepaymentDay) {
                 item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month + 1 day:self.item.cardRepaymentDay hour:8 minute:0 second:0];
@@ -482,8 +490,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(SSJBillingDaySelectView *)repaymentDateSelectView{
     if (!_repaymentDateSelectView) {
         _repaymentDateSelectView = [[SSJBillingDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500) Type:SSJDateSelectViewTypeFullMonth];
+
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
+            if (selectedDay != weakSelf.remindItem.remindDate.day && !weakSelf.item.remindId.length) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@""  action:[SSJAlertViewAction actionWithTitle:@"" handler:NULL],[SSJAlertViewAction actionWithTitle:@"确定合并" handler:^(SSJAlertViewAction *action) {
+                    weakSelf.remindItem.remindDate = [NSDate dateWithYear:weakSelf.remindItem.remindDate.year month:weakSelf.remindItem.remindDate.month day:selectedDay];
+                }]];
+            }
             weakSelf.item.cardRepaymentDay = selectedDay;
             [weakSelf.tableView reloadData];
         };
