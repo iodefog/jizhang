@@ -329,6 +329,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     } else {
         [_addOrDeleteCustomPeriodBtn setImage:[UIImage ssj_themeImageWithName:@"reportForms_edit"] forState:UIControlStateNormal];
     }
+    
+    [_noDataRemindView updateAppearance];
 }
 
 #pragma mark - Private
@@ -690,6 +692,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
         _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.image = @"budget_no_data";
         _noDataRemindView.title = @"报表空空如也";
     }
     return _noDataRemindView;

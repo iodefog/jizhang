@@ -12,6 +12,7 @@
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJLoanListSectionHeaderAmountView.h"
 #import "SSJLoanListCell.h"
+#import "SSJBudgetNodataRemindView.h"
 #import "SSJLoanHelper.h"
 
 static NSString *const kLoanListCellId = @"kLoanListCellId";
@@ -24,7 +25,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) UIImageView *noDataRemindView;
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @property (nonatomic, strong) SSJLoanListSectionHeaderAmountView *amountView;
 
@@ -187,6 +188,12 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         self.list = list;
         [self.tableView reloadData];
         [self updateAmount];
+        
+        if (self.list.count == 0) {
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        } else {
+            [self.view ssj_hideWatermark:YES];
+        }
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -228,6 +235,15 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         _tableView.rowHeight = 90;
     }
     return _tableView;
+}
+
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.image = @"loan_noDataRemind";
+        _noDataRemindView.title = @"暂无数据";
+    }
+    return _noDataRemindView;
 }
 
 - (SSJLoanListSectionHeaderAmountView *)amountView {

@@ -8,6 +8,8 @@
 
 #import "SSJBudgetNodataRemindView.h"
 
+static const CGFloat kVerticalGap = 10;
+
 @interface SSJBudgetNodataRemindView ()
 
 @property (nonatomic, strong) UILabel *titleLab;
@@ -23,7 +25,7 @@
         
         self.backgroundColor = [UIColor clearColor];
         
-        _imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"budget_no_data"]];
+        _imageView = [[UIImageView alloc] init];
         [self addSubview:_imageView];
         
         _titleLab = [[UILabel alloc] init];
@@ -35,21 +37,38 @@
 }
 
 - (void)layoutSubviews {
-    CGFloat spaceY = 10;
-    CGFloat y = (self.height - _imageView.height - _titleLab.height - spaceY) * 0.5;
+    CGFloat y = (self.height - _imageView.height - _titleLab.height - kVerticalGap) * 0.5;
     
     _imageView.top = y;
-    _titleLab.top = _imageView.bottom + spaceY;
+    _titleLab.top = _imageView.bottom + kVerticalGap;
     _imageView.centerX = _titleLab.centerX = self.width * 0.5;
+}
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    [_imageView sizeToFit];
+    [_titleLab sizeToFit];
+    
+    return CGSizeMake(MAX(_imageView.width, _titleLab.width), _imageView.height + _titleLab.height + kVerticalGap);
+}
+
+- (void)setImage:(NSString *)image {
+    if (![_image isEqualToString:image]) {
+        _image = image;
+        _imageView.image = [UIImage imageNamed:_image];
+        [self sizeToFit];
+    }
 }
 
 - (void)setTitle:(NSString *)title {
     if (![_title isEqualToString:title]) {
         _title = title;
         _titleLab.text = title;
-        [_titleLab sizeToFit];
-        [self setNeedsLayout];
+        [self sizeToFit];
     }
+}
+
+- (void)updateAppearance {
+    _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end
