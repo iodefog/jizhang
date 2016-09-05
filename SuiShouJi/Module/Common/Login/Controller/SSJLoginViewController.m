@@ -82,9 +82,8 @@
     [scrollView addSubview:self.forgetButton];
     [scrollView addSubview:self.registerButton];
     // 只有9188、有鱼并且没有审核的情况下，显示第三方登录
-    if (([SSJDefaultSource() isEqualToString:@"11501"]
-         || [SSJDefaultSource() isEqualToString:@"11502"])
-        && ![SSJStartChecker sharedInstance].isInReview) {
+    if ([SSJDefaultSource() isEqualToString:@"11501"]
+         || [SSJDefaultSource() isEqualToString:@"11502"]) {
         [scrollView addSubview:self.thirdPartyLoginLabel];
         [scrollView addSubview:self.leftSeperatorLine];
         [scrollView addSubview:self.rightSeperatorLine];

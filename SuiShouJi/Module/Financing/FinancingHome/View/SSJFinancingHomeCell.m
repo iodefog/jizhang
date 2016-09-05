@@ -193,34 +193,37 @@
 
         }
         [self.cardMemoLabel sizeToFit];
-        NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardBillingDay];
-        if ([billDate isEarlierThan:[NSDate date]]) {
-            billDate = [billDate dateByAddingMonths:1];
+        if (item.cardBillingDay != 0 && item.cardRepaymentDay != 0) {
+            NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardBillingDay];
+            if ([billDate isEarlierThan:[NSDate date]]) {
+                billDate = [billDate dateByAddingMonths:1];
+            }
+            NSDate *repaymentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardRepaymentDay];
+            if ([repaymentDate isEarlierThan:[NSDate date]]) {
+                repaymentDate = [repaymentDate dateByAddingMonths:1];
+            }
+            NSInteger daysFromBill = [billDate daysFrom:[NSDate date]];
+            NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
+            NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
+            if (mostRecentDay == daysFromBill) {
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay];
+            }else{
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay];
+            }
+            [self.cardBillingDayLabel sizeToFit];
+            if ([repaymentDate isEarlierThan:billDate]) {
+                repaymentDate = [repaymentDate dateByAddingMonths:1];
+            }
+            if ([[NSDate date] isEarlierThan:billDate]) {
+                float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:[NSDate date].month billingDay:item.cardBillingDay WithCardId:item.cardId];
+                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单%.2f",[NSDate date].month,sumAmount];
+            }else{
+                self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
+            }
+            [self.fundingMemoLabel sizeToFit];
         }
-        NSDate *repaymentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardRepaymentDay];
-        if ([repaymentDate isEarlierThan:[NSDate date]]) {
-            repaymentDate = [repaymentDate dateByAddingMonths:1];
-        }
-        NSInteger daysFromBill = [billDate daysFrom:[NSDate date]];
-        NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
-        NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
-        if (mostRecentDay == daysFromBill) {
-            self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay];
-        }else{
-            self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay];
-        }
-        [self.cardBillingDayLabel sizeToFit];
-        if ([repaymentDate isEarlierThan:billDate]) {
-            repaymentDate = [repaymentDate dateByAddingMonths:1];
-        }
-        if ([[NSDate date] isEarlierThan:billDate]) {
-            float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:[NSDate date].month billingDay:item.cardBillingDay WithCardId:item.cardId];
-            self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单%.2f",[NSDate date].month,sumAmount];
-        }else{
-            self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
-        }
-        [self.fundingMemoLabel sizeToFit];
     }
+
     [self setNeedsLayout];
 }
 
