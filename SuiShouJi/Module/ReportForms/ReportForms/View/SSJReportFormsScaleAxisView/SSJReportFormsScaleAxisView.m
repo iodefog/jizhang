@@ -54,7 +54,7 @@ static NSString *const kCellId = @"SSJReportFormsScaleAxisCell";
 
 - (void)reloadData {
     [_collectionView reloadData];
-    [_collectionView setContentOffset:CGPointMake(kItemWidth * (_selectedIndex + 0.5) - _collectionView.width * 0.5 + kHorizontalContentInset, 0) animated:NO];
+    self.selectedIndex = 0;
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
