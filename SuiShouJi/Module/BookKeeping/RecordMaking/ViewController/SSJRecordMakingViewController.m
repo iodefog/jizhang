@@ -114,11 +114,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.scrollView addSubview:self.paymentTypeView];
     [self.scrollView addSubview:self.incomeTypeView];
     
-        
     if (self.item.ID.length && self.item.incomeOrExpence == 0) {
         _lastSelectedIndex = 1;
         [self.scrollView setContentOffset:CGPointMake(self.scrollView.width, 0)];
     }
+    
+    [self updateNavigationRightItem];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -331,8 +332,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [super textFieldDidBeginEditing:textField];
     _currentInput = textField;
-    [_paymentTypeView endEditing];
-    [_incomeTypeView endEditing];
+    _paymentTypeView.editing = NO;
+    _incomeTypeView.editing = NO;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -395,9 +396,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         if (_lastSelectedIndex != currentSelectedIndex) {
             _lastSelectedIndex = currentSelectedIndex;
             _titleSegment.selectedSegmentIndex = currentSelectedIndex;
-            [_paymentTypeView endEditing];
-            [_incomeTypeView endEditing];
+            _paymentTypeView.editing = NO;
+            _incomeTypeView.editing = NO;
             [self updateBillTypeSelectionViewAndInputView];
+            [self updateNavigationRightItem];
         }
     }
 }
@@ -422,8 +424,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 #pragma mark - Event
 - (void)goBackAction {
     [super goBackAction];
-    [_paymentTypeView endEditing];
-    [_incomeTypeView endEditing];
+    _paymentTypeView.editing = NO;
+    _incomeTypeView.editing = NO;
     [self.view endEditing:YES];
 }
 
@@ -434,10 +436,11 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         [MobClick event:@"addRecord_type_in"];
     }
     
-    [_paymentTypeView endEditing];
-    [_incomeTypeView endEditing];
+    _paymentTypeView.editing = NO;
+    _incomeTypeView.editing = NO;
     [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
     [self updateBillTypeSelectionViewAndInputView];
+    [self updateNavigationRightItem];
 }
 
 - (void)selectFundAccountAction {
@@ -501,8 +504,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 //}
 
 - (void)endEditingAction {
-    [_paymentTypeView endEditing];
-    [_incomeTypeView endEditing];
+    _paymentTypeView.editing = NO;
+    _incomeTypeView.editing = NO;
 //    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
@@ -518,19 +521,21 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 - (void)managerItemAction {
-    
+    if (_titleSegment.selectedSegmentIndex == 0) {
+        _paymentTypeView.editing = YES;
+    } else if (_titleSegment.selectedSegmentIndex == 1) {
+        _incomeTypeView.editing = YES;
+    }
+    [self updateNavigationRightItem];
 }
 
 - (void)doneItemAction {
-    
-}
-
-- (void)updateNavigationRightItem {
     if (_titleSegment.selectedSegmentIndex == 0) {
-//        _paymentTypeView.isEditing
+        _paymentTypeView.editing = NO;
     } else if (_titleSegment.selectedSegmentIndex == 1) {
-        
+        _incomeTypeView.editing = NO;
     }
+    [self updateNavigationRightItem];
 }
 
 #pragma mark - private
@@ -818,7 +823,8 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
             wself.item.billId = categoryId;
             wself.titleSegment.selectedSegmentIndex = incomeOrExpence ? 0 : 1;
-            [_scrollView setContentOffset:CGPointMake(self.titleSegment.selectedSegmentIndex * _scrollView.width, 0) animated:YES];
+            [wself.scrollView setContentOffset:CGPointMake(wself.titleSegment.selectedSegmentIndex * wself.scrollView.width, 0) animated:YES];
+            [wself updateNavigationRightItem];
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];
     };
@@ -826,7 +832,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         if (isDragUp) {
             [wself.billTypeInputView.moneyInput resignFirstResponder];
         } else {
-            if (!selectionView.isEditing) {
+            if (!selectionView.editing) {
                 [wself.billTypeInputView.moneyInput becomeFirstResponder];
             }
         }
@@ -890,6 +896,16 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.accessoryView.accountBtn setTitle:self.item.fundName forState:UIControlStateNormal];
     self.accessoryView.accountBtn.selected = YES;
     self.FundingTypeSelectView.selectFundID = self.item.fundId;
+}
+
+- (void)updateNavigationRightItem {
+    if (_titleSegment.selectedSegmentIndex == 0) {
+        UIBarButtonItem *currentItem = _paymentTypeView.editing ? self.doneItem : self.managerItem;
+        [self.navigationItem setRightBarButtonItem:currentItem animated:YES];
+    } else if (_titleSegment.selectedSegmentIndex == 1) {
+        UIBarButtonItem *currentItem = _incomeTypeView.editing ? self.doneItem : self.managerItem;
+        [self.navigationItem setRightBarButtonItem:currentItem animated:YES];
+    }
 }
 
 //-(void)closeButtonClicked:(id)sender{

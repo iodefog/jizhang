@@ -91,7 +91,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
 }
 
-#pragma mark - SSJEditCollectionViewDelegate
+#pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath {
     return indexPath.item != _internalItems.count - 1;
 }
@@ -179,12 +179,13 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     _collectionView.contentInset = contentInsets;
 }
 
-- (void)endEditing {
-    [_collectionView endEditing];
-}
-
-- (BOOL)isEditing {
-    return _collectionView.editing;
+- (void)setEditing:(BOOL)editing {
+    _editing = editing;
+    if (_editing) {
+        [_collectionView beginEditing];
+    } else {
+        [_collectionView endEditing];
+    }
 }
 
 #pragma mark - Getter

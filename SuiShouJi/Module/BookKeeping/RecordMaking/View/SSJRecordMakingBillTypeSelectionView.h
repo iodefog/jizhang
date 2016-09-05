@@ -28,8 +28,6 @@
 
 @property (nonatomic) UIEdgeInsets contentInsets;
 
-@property (nonatomic) BOOL isEditing;
-
-- (void)endEditing;
+@property (nonatomic) BOOL editing;
 
 @end
