@@ -45,16 +45,21 @@
                 break;
             }
                 
-            case SSJReminderTypeBorrowing:
-                
+            case SSJReminderTypeBorrowing:{
+                if (!item.borrowtOrLend) {
+                    item.remindContent = [NSString stringWithFormat:@"还债啦，您有一笔欠%@的钱款，赶紧去结清吧！",item.borrowtarget];
+                }else{
+                    item.remindContent = [NSString stringWithFormat:@"追债啦，您有一笔被%@借走的钱款，赶紧去结清吧！",item.borrowtarget];
+                }
                 break;
+            }
                 
             case SSJReminderTypeCreditCard:
-                
+                item.remindContent = [NSString stringWithFormat:@"%@该还款啦，小主快去还账单吧！",item.remindName];
                 break;
                 
             case SSJReminderTypeCharge:
-                
+                item.remindContent = @"精打细算，有吃有穿，小主快来记账啦～";
                 break;
                 
             default:
