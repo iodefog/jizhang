@@ -68,6 +68,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
+@property (nonatomic, strong) UIBarButtonItem *managerItem;
+
+@property (nonatomic, strong) UIBarButtonItem *doneItem;
+
 @property (nonatomic) NSInteger lastSelectedIndex;
 
 
@@ -109,6 +113,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.view addSubview:self.accessoryView];
     [self.scrollView addSubview:self.paymentTypeView];
     [self.scrollView addSubview:self.incomeTypeView];
+    
         
     if (self.item.ID.length && self.item.incomeOrExpence == 0) {
         _lastSelectedIndex = 1;
@@ -308,6 +313,20 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     return _accessoryView;
 }
 
+- (UIBarButtonItem *)managerItem {
+    if (!_managerItem) {
+        _managerItem = [[UIBarButtonItem alloc] initWithTitle:@"管理" style:UIBarButtonItemStylePlain target:self action:@selector(managerItemAction)];
+    }
+    return _managerItem;
+}
+
+- (UIBarButtonItem *)doneItem {
+    if (!_doneItem) {
+        _doneItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(doneItemAction)];
+    }
+    return _doneItem;
+}
+
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [super textFieldDidBeginEditing:textField];
@@ -495,6 +514,22 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         } completion:^(BOOL finished) {
             [_billTypeInputView.moneyInput becomeFirstResponder];
         }];
+    }
+}
+
+- (void)managerItemAction {
+    
+}
+
+- (void)doneItemAction {
+    
+}
+
+- (void)updateNavigationRightItem {
+    if (_titleSegment.selectedSegmentIndex == 0) {
+//        _paymentTypeView.isEditing
+    } else if (_titleSegment.selectedSegmentIndex == 1) {
+        
     }
 }
 
