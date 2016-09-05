@@ -103,7 +103,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     
     for (NSNumber *index in _selectedIndexs) {
         if ([_collectionView numberOfItemsInSection:0] > [index integerValue]) {
-            [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:[index integerValue] inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+            [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:[index integerValue] inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
         }
     }
 }
@@ -144,7 +144,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     
     if (!_editing) {
         NSInteger selectedIndex = [_items indexOfObject:_selectedItemForNormalState];
-        [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
         [self selectCellItemAtIndex:selectedIndex];
     }
     
@@ -235,7 +235,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     [_collectionView deleteItemsAtIndexPaths:deleteIndexPaths];
     
     if (!_editing && [_collectionView indexPathsForSelectedItems].count == 0 && [_collectionView numberOfItemsInSection:0] > 0) {
-        [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+        [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredVertically];
     }
     
     [self updateSelectedIndexs];

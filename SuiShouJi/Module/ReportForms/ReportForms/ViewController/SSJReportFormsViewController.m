@@ -366,7 +366,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     NSString *endDateStr = [_customPeriod.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *title = [NSString stringWithFormat:@"%@－－%@", startDateStr, endDateStr];
     [_customPeriodBtn setTitle:title forState:UIControlStateNormal];
-    CGSize textSize = [title sizeWithAttributes:@{NSFontAttributeName:_customPeriodBtn.font}];
+    CGSize textSize = [title sizeWithAttributes:@{NSFontAttributeName:_customPeriodBtn.titleLabel.font}];
     _customPeriodBtn.width = textSize.width + 28;
     _customPeriodBtn.centerX = self.view.width * 0.5;
 }
