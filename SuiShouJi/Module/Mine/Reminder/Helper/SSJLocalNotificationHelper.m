@@ -36,9 +36,14 @@
     
     if (!item.remindContent.length) {
         switch (item.remindType) {
-            case SSJReminderTypeNormal:
-                
+            case SSJReminderTypeNormal:{
+                if (item.remindMemo.length) {
+                    item.remindContent = [NSString stringWithFormat:@"%@(%@)",item.remindName,item.remindMemo];
+                }else{
+                    item.remindContent = [NSString stringWithFormat:@"%@",item.remindName];
+                }
                 break;
+            }
                 
             case SSJReminderTypeBorrowing:
                 
