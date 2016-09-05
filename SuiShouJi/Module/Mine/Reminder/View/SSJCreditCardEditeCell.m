@@ -148,7 +148,7 @@
 
 - (UIImageView *)cellImage{
     if (!_cellImage) {
-        _cellImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        _cellImage = [[UIImageView alloc]init];
     }
     return _cellImage;
 }
@@ -205,6 +205,7 @@
 - (void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
     self.cellImage.image = [UIImage imageNamed:_cellImageName];
+    [self.cellDetailImage sizeToFit];
 }
 
 - (void)setCellDetailImageName:(NSString *)cellDetailImageName{

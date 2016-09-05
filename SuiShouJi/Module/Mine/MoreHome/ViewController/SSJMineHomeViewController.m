@@ -312,11 +312,6 @@ static BOOL kNeedBannerDisplay = YES;
     
     mineHomeCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];
     
-    if ([mineHomeCell.cellTitle isEqualToString:kTitle1]) {
-        mineHomeCell.cellDetail = self.circleChargeState;
-    }else{
-        mineHomeCell.cellDetail = @"";
-    }
     if ([mineHomeCell.cellTitle isEqualToString:kTitle5]) {
         mineHomeCell.cellSubTitle = @"反馈交流QQ群:552563622";
         mineHomeCell.hasMassage = _hasUreadMassage;
