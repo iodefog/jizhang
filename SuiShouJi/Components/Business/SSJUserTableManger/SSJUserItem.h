@@ -74,6 +74,9 @@
 // 是否提示过用户设置手势密码
 @property(nonatomic, strong) NSString *remindSettingMotionPWD;
 
+// 用户导出数据的邮箱地址
+@property(nonatomic, copy) NSString *email;
+
 + (NSDictionary *)propertyMapping;
 
 @end

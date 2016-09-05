@@ -75,6 +75,8 @@
 // 公告
 @property (nonatomic, strong) UILabel *announcementLab;
 
+@property (nonatomic, strong) SSJUserItem *userItem;
+
 @end
 
 @implementation SSJMagicExportViewController
@@ -84,12 +86,14 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.navigationItem.title = @"数据导出";
         self.hidesBottomBarWhenPushed = YES;
+        _userItem = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self setUpView];
     
     // 现隐藏视图，等数据加载出来在显示
@@ -142,7 +146,10 @@
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     [super serverDidFinished:service];
-    if ([service.returnCode isEqualToString:@"1"]) {
+    if (service == _service && [_service.returnCode isEqualToString:@"1"]) {
+        
+        _userItem.email = _service.email;
+        [SSJUserTableManager saveUserItem:_userItem];
         
         __weak typeof(self) wself = self;
         [SSJMagicExportSuccessAlertView show:^{
@@ -485,7 +492,7 @@
         _emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _emailTextField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _emailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入邮箱地址" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        
+        _emailTextField.text = _userItem.email;
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, _emailTextField.height)];
         _emailTextField.leftView = leftView;
         _emailTextField.leftViewMode = UITextFieldViewModeAlways;

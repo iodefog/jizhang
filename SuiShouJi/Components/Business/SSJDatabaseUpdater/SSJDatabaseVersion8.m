@@ -31,6 +31,11 @@
         return error;
     }
     
+    error = [self updateUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -107,6 +112,14 @@
 
 + (NSError *)createUserRemindTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"create table if not exists BK_USER_REMIND (CREMINDID TEXT NOT NULL, CUSERID TEXT, CREMINDNAME TEXT, CMEMO TEXT, CCLOCK TEXT, CSTARTDATE TEXT, ISTATE INTEGER, ITYPE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, PRIMARY KEY(CREMINDID))"]) {
+        return [db lastError];
+    }
+    
+    return nil;
+}
+
++ (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table BK_USER add CEMAIL text"]) {
         return [db lastError];
     }
     
