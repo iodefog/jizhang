@@ -196,26 +196,35 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
 
 - (void)deleteItems:(NSArray <SSJRecordMakingCategoryItem *>*)items {
     NSMutableArray *deleteIndexPaths = [NSMutableArray arrayWithCapacity:items.count];
-    NSMutableArray *tmpItems = [_items mutableCopy];
+    NSMutableArray *deleteCellItems = [NSMutableArray arrayWithCapacity:items.count];
     
     BOOL selectedItemsChanged = NO;
     
     for (SSJRecordMakingCategoryItem *item in items) {
         NSUInteger index = [_items indexOfObject:item];
-        if (index != NSNotFound) {
-            [deleteIndexPaths addObject:[NSIndexPath indexPathForItem:index inSection:0]];
-            [tmpItems removeObjectAtIndex:index];
-            [_cellItems removeObjectAtIndex:index];
-            
-            for (NSString *keyPath in _observedKeyPath) {
-                [item removeObserver:self forKeyPath:keyPath context:NULL];
-            }
-            
-            if ([[_collectionView indexPathsForSelectedItems] containsObject:[NSIndexPath indexPathForItem:index inSection:0]]) {
-                selectedItemsChanged = YES;
-            }
+        if (index == NSNotFound) {
+            SSJPRINT(@"警告：删除的item不存在");
+            continue;
+        }
+        
+        [deleteIndexPaths addObject:[NSIndexPath indexPathForItem:index inSection:0]];
+        SSJCategoryEditableCollectionViewCellItem *deleteCellItem = [_cellItems ssj_safeObjectAtIndex:index];
+        if (deleteCellItem) {
+            [deleteCellItems addObject:deleteCellItem];
+        }
+        
+        for (NSString *keyPath in _observedKeyPath) {
+            [item removeObserver:self forKeyPath:keyPath context:NULL];
+        }
+        
+        if ([[_collectionView indexPathsForSelectedItems] containsObject:[NSIndexPath indexPathForItem:index inSection:0]]) {
+            selectedItemsChanged = YES;
         }
     }
+    
+    NSMutableArray *tmpItems = [_items mutableCopy];
+    [tmpItems removeObjectsInArray:items];
+    [_cellItems removeObjectsInArray:deleteCellItems];
     
     _items = [tmpItems copy];
     
@@ -225,7 +234,7 @@ static NSString *const kAdditionalUnselectedImage = @"record_making_unselected";
     
     [_collectionView deleteItemsAtIndexPaths:deleteIndexPaths];
     
-    if (!_editing && [_collectionView indexPathsForSelectedItems].count == 0) {
+    if (!_editing && [_collectionView indexPathsForSelectedItems].count == 0 && [_collectionView numberOfItemsInSection:0] > 0) {
         [_collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
     }
     

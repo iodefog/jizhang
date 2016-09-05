@@ -17,6 +17,7 @@
 #import "SCYSlidePagingHeaderView.h"
 #import "SSJCategoryEditableCollectionView.h"
 #import "SSJNewOrEditCustomCategoryView.h"
+#import "SSJBudgetNodataRemindView.h"
 #import "SSJCategoryListHelper.h"
 #import "SSJBillModel.h"
 
@@ -45,6 +46,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 @property (nonatomic, strong) UIButton *editButton;
 
 @property (nonatomic, strong) UIButton *deleteButton;
+
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @property (nonatomic, copy) NSString *selectedID;
 
@@ -314,6 +317,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     NSArray *deleteIDs = [deleteCollectionView.selectedItems valueForKeyPath:@"categoryID"];
     [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
         [deleteCollectionView deleteItems:deleteCollectionView.selectedItems];
+        if (deleteCollectionView.items.count == 0) {
+            [deleteCollectionView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        } else {
+            [deleteCollectionView ssj_hideWatermark:YES];
+        }
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];
@@ -330,6 +338,12 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             [self updateButtons];
             [self updateSelectedIndexForCollectionView:_featuredCategoryCollectionView];
             [self.view ssj_hideLoadingIndicator];
+            
+            if (_featuredCategoryCollectionView.items.count == 0) {
+                [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            } else {
+                [_featuredCategoryCollectionView ssj_hideWatermark:YES];
+            }
         } failure:^(NSError *error) {
             [self.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
@@ -345,6 +359,13 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                 [self updateButtons];
                 [self updateSelectedIndexForCollectionView:_customCategoryCollectionView];
                 [self.view ssj_hideLoadingIndicator];
+                
+                if (_customCategoryCollectionView.items.count == 0) {
+                    [_customCategoryCollectionView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+                } else {
+                    [_customCategoryCollectionView ssj_hideWatermark:YES];
+                }
+                
             } failure:^(NSError *error) {
                 [self.view ssj_hideLoadingIndicator];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
@@ -509,7 +530,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 #pragma mark - Getter
 - (SSJSegmentedControl *)titleSegmentView {
     if (!_titleSegmentView) {
-        _titleSegmentView = [[SSJSegmentedControl alloc] initWithItems:@[@"添加类别",@"自定义类别"]];
+        _titleSegmentView = [[SSJSegmentedControl alloc] initWithItems:@[@"精选类别",@"自定义类别"]];
         _titleSegmentView.size = CGSizeMake(202, 30);
         [_titleSegmentView addTarget:self action:@selector(titleSegmentViewAciton) forControlEvents: UIControlEventValueChanged];
     }
@@ -632,6 +653,15 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [_deleteButton addTarget:self action:@selector(deleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deleteButton;
+}
+
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.image = @"budget_no_data";
+        _noDataRemindView.title = @"暂无类别";
+    }
+    return _noDataRemindView;
 }
 
 @end
