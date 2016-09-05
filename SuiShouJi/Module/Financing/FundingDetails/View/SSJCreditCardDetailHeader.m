@@ -144,7 +144,7 @@
         _repaymentDayTitleLab = [[UILabel alloc]init];
         _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         _repaymentDayTitleLab.font = [UIFont systemFontOfSize:11];
-        _repaymentDayTitleLab.text = @"账单日";
+        _repaymentDayTitleLab.text = @"还款日";
         [_repaymentDayTitleLab sizeToFit];
     }
     return _repaymentDayTitleLab;
@@ -164,7 +164,7 @@
         _billingDayTitleLab = [[UILabel alloc]init];
         _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         _billingDayTitleLab.font = [UIFont systemFontOfSize:11];
-        _billingDayTitleLab.text = @"还款日";
+        _billingDayTitleLab.text = @"账单日";
         [_billingDayTitleLab sizeToFit];
     }
     return _billingDayTitleLab;

@@ -214,7 +214,7 @@
             repaymentDate = [repaymentDate dateByAddingMonths:1];
         }
         if ([[NSDate date] isEarlierThan:billDate]) {
-            float sumAmount = [self getSumForTheMonth:[NSDate date].month withBillday:item.cardBillingDay];
+            float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:[NSDate date].month billingDay:item.cardBillingDay WithCardId:item.cardId];
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单%.2f",[NSDate date].month,sumAmount];
         }else{
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
