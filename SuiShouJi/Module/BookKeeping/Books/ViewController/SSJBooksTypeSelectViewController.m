@@ -265,14 +265,13 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 -(UIButton *)rightButton{
     if (!_rightButton) {
-        _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
+        _rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 30)];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateNormal];
         [_rightButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor] forState:UIControlStateSelected];
         _rightButton.contentHorizontalAlignment = NSTextAlignmentRight;
         [_rightButton setTitle:@"管理" forState:UIControlStateNormal];
         [_rightButton setTitle:@"完成" forState:UIControlStateSelected];
-        [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        
+        [_rightButton addTarget:self action:@selector(rightButtonClicked:) forControlEvents:UIControlEventTouchUpInside];    
         _rightButton.selected = NO;
     }
     return _rightButton;

@@ -256,7 +256,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle6]) {
         newReminderCell.type = SSJCreditCardCellTypeSubTitle;
         newReminderCell.cellTitle = title;
-        newReminderCell.cellSubTitle = @"账户详情类别以账单日结算,流水在记账与报表仍以月末结算";
+        newReminderCell.cellSubTitle = @"开启后资金账户详情列表以账单日结算";
         self.billDateSettleMentButton.on = self.item.settleAtRepaymentDay;
         newReminderCell.accessoryView = self.billDateSettleMentButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
@@ -353,7 +353,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)rightButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
     [SSJCreditCardStore deleteCreditCardWithCardItem:self.item Success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:@"删除失败"];
     }];

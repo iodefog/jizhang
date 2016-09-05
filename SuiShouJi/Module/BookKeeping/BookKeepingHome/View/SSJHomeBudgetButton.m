@@ -43,8 +43,8 @@
     self.button.centerX = self.width / 2;
     self.button.centerY = self.height / 2;
     self.seperatorLine.size = CGSizeMake(1, self.height - self.button.bottom);
-    self.seperatorLine.centerX = self.width / 2;
     self.seperatorLine.top = self.button.bottom;
+    self.seperatorLine.centerX = self.button.centerX;
 }
 
 -(UIButton *)button{
@@ -83,6 +83,7 @@
         }
     }
     [self sizeToFit];
+    [self setNeedsLayout];
 }
 
 -(void)setCurrentBalance:(double)currentBalance{
@@ -102,6 +103,7 @@
         self.button.layer.borderColor = [UIColor ssj_colorWithHex:@"59ae65"].CGColor;
     }
     [self sizeToFit];
+    [self setNeedsLayout];
 }
 
 -(void)setCurrentMonth:(long)currentMonth{

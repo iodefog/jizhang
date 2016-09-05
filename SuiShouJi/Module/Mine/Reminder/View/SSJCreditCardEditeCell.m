@@ -205,7 +205,7 @@
 - (void)setCellImageName:(NSString *)cellImageName{
     _cellImageName = cellImageName;
     self.cellImage.image = [UIImage imageNamed:_cellImageName];
-    [self.cellDetailImage sizeToFit];
+    [self.cellImage sizeToFit];
 }
 
 - (void)setCellDetailImageName:(NSString *)cellDetailImageName{

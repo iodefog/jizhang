@@ -1607,6 +1607,7 @@
 		9C1723931D5327F700BB13DE /* SSJCalenderDetailHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723911D5327F600BB13DE /* SSJCalenderDetailHeader.m */; };
 		9C17FF1C1CE96ED90016EE4C /* SSJCustomKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */; };
 		9C1833D21CBE56CC00C5B54B /* home_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C1833D11CBE56CC00C5B54B /* home_add@2x.png */; };
+		9C1A9CAB1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9C1AE2611D27A0B600C1E616 /* noneThumbImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C1AE2601D27A0B600C1E616 /* noneThumbImage.png */; };
 		9C1AE2621D27A0B600C1E616 /* noneThumbImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C1AE2601D27A0B600C1E616 /* noneThumbImage.png */; };
 		9C1AE26B1D27A0C100C1E616 /* noneImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C1AE26A1D27A0C100C1E616 /* noneImage.png */; };
@@ -6500,6 +6501,8 @@
 		9C17FF1A1CE96ED90016EE4C /* SSJCustomKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCustomKeyboard.h; sourceTree = "<group>"; };
 		9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		9C1833D11CBE56CC00C5B54B /* home_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_add@2x.png"; sourceTree = "<group>"; };
+		9C1A9CA91D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeBooksButton.h; sourceTree = "<group>"; };
+		9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeBooksButton.m; sourceTree = "<group>"; };
 		9C1AE2601D27A0B600C1E616 /* noneThumbImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = noneThumbImage.png; path = ../noneThumbImage.png; sourceTree = "<group>"; };
 		9C1AE26A1D27A0C100C1E616 /* noneImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = noneImage.png; path = ../noneImage.png; sourceTree = "<group>"; };
 		9C1AE26D1D27A0C600C1E616 /* noneDetailImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = noneDetailImage.png; path = ../noneDetailImage.png; sourceTree = "<group>"; };
@@ -7827,6 +7830,8 @@
 				7D5F325D1CEAE6C10086B67E /* SSJScrollTextView.m */,
 				9C2ABB8B1CF7E969002FC79E /* SSJGradientMaskView.h */,
 				9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */,
+				9C1A9CA91D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.h */,
+				9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -16686,6 +16691,7 @@
 				7DFFD5BE1D670BB7000FDAA6 /* SSJLoanListCell.m in Sources */,
 				7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */,
 				9CE7D7921D2F4FF80013E97B /* SSJBannerNetworkService.m in Sources */,
+				9C1A9CAB1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9C66F1201D20D8910094125D /* SSJThemeItem.m in Sources */,
 				9CD9BC541CFEAAAE0061803B /* SSJTransferDetailHeader.m in Sources */,
 				9CD9BC051CFD2DAA0061803B /* SSJBookkeepingTreeRuleDescView.m in Sources */,
