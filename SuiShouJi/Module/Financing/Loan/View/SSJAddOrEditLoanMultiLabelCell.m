@@ -49,13 +49,13 @@
     
     [self.imageView sizeToFit];
     [self.textLabel sizeToFit];
-    [self.subtitleLabel sizeToFit];
     
     CGFloat top = (self.contentView.height - self.textLabel.height - self.subtitleLabel.height) * 0.33;
     
     self.imageView.leftTop = CGPointMake(16, top);
     self.textLabel.leftTop = CGPointMake(48, top);
-    self.subtitleLabel.leftTop = CGPointMake(48, self.textLabel.bottom + top);
+//    self.subtitleLabel.leftTop = CGPointMake(48, self.textLabel.bottom + top);
+    self.subtitleLabel.frame = CGRectMake(48, self.textLabel.bottom + top, self.contentView.width - 60, 14);
     _textField.frame = CGRectMake(self.textLabel.right + 10, 0, self.contentView.width - self.textLabel.right - 10 - 10, self.subtitleLabel.top);
 }
 

@@ -340,37 +340,37 @@ const int kMemoMaxLength = 13;
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    if (textField.tag == kLenderTag) {
-        if (textField.text.length > kLenderMaxLength) {
-            switch (_loanModel.type) {
-                case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
-                    break;
-            }
-            return NO;
-        }
-        
-        return YES;
-        
-    } else if (textField.tag == kMemoTag) {
-        if (textField.text.length > kMemoMaxLength) {
-            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
-            return NO;
-        }
-    } else if (textField.tag == kRateTag) {
-        if ([textField.text doubleValue] < 0) {
-            [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
-            return NO;
-        }
-    }
-    
-    return YES;
-}
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+//    if (textField.tag == kLenderTag) {
+//        if (textField.text.length > kLenderMaxLength) {
+//            switch (_loanModel.type) {
+//                case SSJLoanTypeLend:
+//                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
+//                    break;
+//                    
+//                case SSJLoanTypeBorrow:
+//                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
+//                    break;
+//            }
+//            return NO;
+//        }
+//        
+//        return YES;
+//        
+//    } else if (textField.tag == kMemoTag) {
+//        if (textField.text.length > kMemoMaxLength) {
+//            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
+//            return NO;
+//        }
+//    } else if (textField.tag == kRateTag) {
+//        if ([textField.text doubleValue] < 0) {
+//            [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
+//            return NO;
+//        }
+//    }
+//    
+//    return YES;
+//}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.tag == kMoneyTag) {
@@ -464,6 +464,7 @@ const int kMemoMaxLength = 13;
         _loanModel.memo = @"";
     } else if (textField.tag == kRateTag) {
         _loanModel.rate = 0;
+        [self updateInterest];
     }
     
     return YES;
@@ -590,7 +591,7 @@ const int kMemoMaxLength = 13;
 - (float)caculateInterest {
     if (_loanModel.borrowDate && _loanModel.repaymentDate) {
         NSUInteger interval = [_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1;
-        return interval * (_loanModel.rate / 365);
+        return _loanModel.jMoney * _loanModel.rate * interval / 365;
     }
     
     return 0;
@@ -613,6 +614,7 @@ const int kMemoMaxLength = 13;
             
             if (_loanModel.lender.length > kLenderMaxLength) {
                 [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
+                return NO;
             }
             
             if (_loanModel.jMoney <= 0) {
@@ -644,6 +646,7 @@ const int kMemoMaxLength = 13;
             
             if (_loanModel.lender.length > kLenderMaxLength) {
                 [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
+                return NO;
             }
             
             if (_loanModel.jMoney <= 0) {

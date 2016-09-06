@@ -110,7 +110,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         double interest = 0;
         if ([_loanModel.endDate compare:_loanModel.borrowDate] != NSOrderedAscending) {
-            interest = ([_loanModel.endDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate / 365;
+            interest = ([_loanModel.endDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate * _loanModel.jMoney / 365;
         }
         NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
         
@@ -162,7 +162,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
         }
         
-        double expectedInterest = ([_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate / 365;
+        double expectedInterest = ([_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate * _loanModel.jMoney / 365;
         NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", expectedInterest];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];

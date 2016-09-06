@@ -369,8 +369,15 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *endDateStr = [model.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
+        double closeOutMoney = model.jMoney;
+        NSInteger daysFromBorrow = [model.endDate daysFrom:model.borrowDate];
+        if (daysFromBorrow >= 0) {
+            double interest = (daysFromBorrow + 1) * model.rate / 365 * model.jMoney;
+            closeOutMoney += interest;
+        }
+        
         // 插入所属结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(closeOutMoney), endBillID, model.fundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -383,7 +390,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 插入目标结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(model.jMoney), endTargetBillID, model.endTargetFundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(closeOutMoney), endTargetBillID, model.endTargetFundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {

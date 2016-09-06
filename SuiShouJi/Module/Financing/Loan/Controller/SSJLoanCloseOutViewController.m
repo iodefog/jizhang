@@ -188,40 +188,40 @@ static NSUInteger kInterestTag = 1002;
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    if (textField.tag == kMoneyTag) {
-        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-        if ([money doubleValue] <= 0) {
-            switch (_loanModel.type) {
-                case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0元"];
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0元"];
-                    break;
-            }
-            return NO;
-        }
-        
-    } else if (textField.tag == kInterestTag) {
-        NSString *interest = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-        if ([interest doubleValue] < 0) {
-            switch (_loanModel.type) {
-                case SSJLoanTypeLend:
-                    [CDAutoHideMessageHUD showMessage:@"利息收入不能小于0元"];
-                    break;
-                    
-                case SSJLoanTypeBorrow:
-                    [CDAutoHideMessageHUD showMessage:@"利息支出不能小于0元"];
-                    break;
-            }
-            return NO;
-        }
-    }
-    
-    return YES;
-}
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+//    if (textField.tag == kMoneyTag) {
+//        NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+//        if ([money doubleValue] <= 0) {
+//            switch (_loanModel.type) {
+//                case SSJLoanTypeLend:
+//                    [CDAutoHideMessageHUD showMessage:@"借出金额必须大于0元"];
+//                    break;
+//                    
+//                case SSJLoanTypeBorrow:
+//                    [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0元"];
+//                    break;
+//            }
+//            return NO;
+//        }
+//        
+//    } else if (textField.tag == kInterestTag) {
+//        NSString *interest = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+//        if ([interest doubleValue] < 0) {
+//            switch (_loanModel.type) {
+//                case SSJLoanTypeLend:
+//                    [CDAutoHideMessageHUD showMessage:@"利息收入不能小于0元"];
+//                    break;
+//                    
+//                case SSJLoanTypeBorrow:
+//                    [CDAutoHideMessageHUD showMessage:@"利息支出不能小于0元"];
+//                    break;
+//            }
+//            return NO;
+//        }
+//    }
+//    
+//    return YES;
+//}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.tag == kMoneyTag || textField.tag == kInterestTag) {
@@ -244,6 +244,7 @@ static NSUInteger kInterestTag = 1002;
     
     if (textField.tag == kMoneyTag) {
         _loanModel.jMoney = money;
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     } else if (textField.tag == kInterestTag) {
         [self recaculateRateWithInterest:money];
     }
@@ -254,6 +255,7 @@ static NSUInteger kInterestTag = 1002;
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == kMoneyTag) {
         _loanModel.jMoney = 0;
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     } else if (textField.tag == kInterestTag) {
         _loanModel.rate = 0;
     }
@@ -297,16 +299,18 @@ static NSUInteger kInterestTag = 1002;
 - (double)caculateInterest {
     NSInteger daysFromBorrow = [_loanModel.endDate daysFrom:_loanModel.borrowDate];
     if (daysFromBorrow >= 0) {
-        return (daysFromBorrow + 1) * _loanModel.rate / 365;
+        return (daysFromBorrow + 1) * _loanModel.rate / 365 * _loanModel.jMoney;
     } else {
         return 0;
     }
 }
 
 - (void)recaculateRateWithInterest:(double)interest {
-    NSInteger daysFromBorrow = [_loanModel.endDate daysFrom:_loanModel.borrowDate];
-    if (daysFromBorrow >= 0) {
-        _loanModel.rate = interest / (daysFromBorrow + 1) * 365;
+    if (_loanModel.jMoney > 0) {
+        NSInteger daysFromBorrow = [_loanModel.endDate daysFrom:_loanModel.borrowDate];
+        if (daysFromBorrow >= 0) {
+            _loanModel.rate = interest * 365 / (daysFromBorrow + 1) / _loanModel.jMoney;
+        }
     }
 }
 
@@ -338,6 +342,20 @@ static NSUInteger kInterestTag = 1002;
                 
             case SSJLoanTypeBorrow:
                 [CDAutoHideMessageHUD showMessage:@"欠款金额必须大于0元"];
+                break;
+        }
+        
+        return;
+    }
+    
+    if (_loanModel.rate < 0) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [CDAutoHideMessageHUD showMessage:@"利息收入不能小于0元"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [CDAutoHideMessageHUD showMessage:@"利息支出不能小于0元"];
                 break;
         }
         
