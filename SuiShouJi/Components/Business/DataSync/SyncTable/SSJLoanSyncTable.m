@@ -21,6 +21,7 @@
              @"jmoney",
              @"cthefundid",
              @"ctargetfundid",
+             @"cetarget",
              @"cthecharge",
              @"ctargetcharge",
              @"cethecharge",
