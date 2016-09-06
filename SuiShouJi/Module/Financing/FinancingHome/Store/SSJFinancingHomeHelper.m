@@ -98,8 +98,17 @@
 + (void)SaveFundingOderWithItems:(NSArray <SSJFinancingHomeitem *> *)items error:(NSError **)error{
     [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         for (int i = 0; i < items.count; i++) {
-            SSJFinancingHomeitem *item = [items ssj_safeObjectAtIndex:i];
-            NSString *sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",item.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+            NSString *sql;
+            SSJBaseItem *item = [items ssj_safeObjectAtIndex:i];
+            if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+                SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)item;
+                fundingItem.fundingOrder = i + 1;
+                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",fundingItem.fundingOrder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID];
+            }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                cardItem.cardOder = i + 1;
+                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",cardItem.cardOder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),cardItem.cardId];
+            }
             [db executeUpdate:sql];
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
