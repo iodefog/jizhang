@@ -69,14 +69,20 @@
             }else{
                 self.detailLabel.right = self.contentView.width;
             }
+            if (self.contentView.width == self.width) {
+                if (self.detailLabel.width > self.contentView.width - 10 - self.titleLabel.right) {
+                    self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
+                    self.detailLabel.adjustsFontSizeToFitWidth = YES;
+                }
+            }else{
+                if (self.detailLabel.width > self.contentView.width - self.titleLabel.right) {
+                    self.detailLabel.width = self.contentView.width - self.titleLabel.right;
+                    self.detailLabel.adjustsFontSizeToFitWidth = YES;
+                }
+            }
             self.detailLabel.centerY = self.contentView.height /  2;
             if (!self.cellAtrributedDetail.length) {
                 self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-            }
-            if (self.contentView.width == self.width) {
-                self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
-            }else{
-                self.detailLabel.width = self.contentView.width - self.titleLabel.right;
             }
             self.cellDetailImage.right = self.detailLabel.left - 10;
             self.cellDetailImage.centerY = self.contentView.height /  2;
@@ -98,6 +104,17 @@
                 self.detailLabel.right = self.contentView.width - 10;
             }else{
                 self.detailLabel.right = self.contentView.width;
+            }
+            if (self.contentView.width == self.width) {
+                if (self.detailLabel.width > self.contentView.width - 10 - self.titleLabel.right) {
+                    self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
+                    self.detailLabel.adjustsFontSizeToFitWidth = YES;
+                }
+            }else{
+                if (self.detailLabel.width > self.contentView.width - self.titleLabel.right) {
+                    self.detailLabel.width = self.contentView.width - self.titleLabel.right;
+                    self.detailLabel.adjustsFontSizeToFitWidth = YES;
+                }
             }
             self.detailLabel.centerY = self.contentView.height /  2;
             if (!self.cellAtrributedDetail.length) {
@@ -175,7 +192,7 @@
 - (UILabel *)detailLabel{
     if (!_detailLabel) {
         _detailLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _detailLabel.adjustsFontSizeToFitWidth = YES;
+//        _detailLabel.adjustsFontSizeToFitWidth = YES;
         _detailLabel.font = [UIFont systemFontOfSize:18];
     }
     return _detailLabel;
