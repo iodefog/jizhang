@@ -43,6 +43,8 @@
 // 资金帐户操作类型
 @property (nonatomic) NSInteger fundOperatorType;
 
+// 资金账户的父类
+@property (nonatomic,strong) NSString *fundParent;
 
 //记账编辑时间
 @property (nonatomic,strong) NSString *editeDate;
