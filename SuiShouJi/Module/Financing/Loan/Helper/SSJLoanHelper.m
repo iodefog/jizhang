@@ -10,6 +10,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
+#import "SSJFundAccountTable.h"
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
 NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
@@ -201,6 +202,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
+        // 更新资金账户的余额
+        if (![SSJFundAccountTable updateBalanceForUserId:loanModel.userID inDatabase:db]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         // 存储提醒记录
         if (remindModel) {
             NSError *error = [SSJLocalNotificationStore saveReminderWithReminderItem:remindModel inDatabase:db];
@@ -230,7 +242,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
+        // 将借贷记录的operatortype改为2
         if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
+            *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
@@ -260,6 +274,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         // 将要删除的转帐流水operatortype改为2
         NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where ichargeid in (%@)", @2, @(SSJSyncVersion()), writeDate, chargeIDs];
         if (![db executeUpdate:sqlStr]) {
+            *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
@@ -268,7 +283,19 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
+        // 将提醒的operatortype改为2
         if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ?", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
+            *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([db lastError]);
@@ -382,7 +409,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 修改目标转帐流水
-        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, ifunsid = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", @(model.jMoney), model.targetFundID, @(SSJSyncVersion()), @1, writeDate, model.targetChargeID]) {
+        if (![db executeUpdate:@"update bk_user_charge set imoney = ?, iversion = ?, operatortype = ?, cwritedate = ? where ichargeid = ?", @(model.jMoney), @(SSJSyncVersion()), @1, writeDate, model.targetChargeID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -403,6 +430,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                 });
             }
             
+            return;
+        }
+        
+        // 更新资金账户的余额
+        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
             return;
         }
         
@@ -473,7 +511,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         // 把结清借贷产生的转帐流水状态改为删除
         if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where ichargeid = ? or ichargeid = ?", @2, @(SSJSyncVersion()), writedate, model.endChargeID, model.endTargetChargeID]) {
-            
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -496,6 +533,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         // 开启提醒
         if (![db executeUpdate:@"update bk_user_remind set istate = ?, operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @1, @1, @(SSJSyncVersion()), writedate, model.remindID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 更新资金账户的余额
+        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
