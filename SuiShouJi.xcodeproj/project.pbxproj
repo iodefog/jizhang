@@ -1310,6 +1310,10 @@
 		7DC517311CA93D3F00D23CF0 /* SSJWaveWaterPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC517291CA93D3F00D23CF0 /* SSJWaveWaterPath.m */; };
 		7DC517331CA93D3F00D23CF0 /* SSJWaveWaterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172D1CA93D3F00D23CF0 /* SSJWaveWaterView.m */; };
 		7DC517341CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC5172F1CA93D3F00D23CF0 /* SSJWaveWaterViewItem.m */; };
+		7DC6EF831D7EC1EB00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
+		7DC6EF841D7EC1EC00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
+		7DC6EF851D7EC1EC00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
+		7DC6EF861D7EC1ED00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		7DC7D8221D4F24AF00462970 /* reportForms_category@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D81E1D4F24AF00462970 /* reportForms_category@2x.png */; };
 		7DC7D8231D4F24AF00462970 /* reportForms_category@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */; };
 		7DC7D8241D4F24AF00462970 /* reportForms_member@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */; };
@@ -15242,6 +15246,7 @@
 				7D8C7E861D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
 				7DBA56921D6D32B700C02D79 /* NSString+MoneyDisplayFormat.m in Sources */,
 				9CC2C4F61D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */,
+				7DC6EF841D7EC1EC00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				7DBA56941D6D32B700C02D79 /* SSJJspatchAnalyze.m in Sources */,
 				7DBA56951D6D32B700C02D79 /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
 				7DBA56961D6D32B700C02D79 /* SSJBookkeepingRiminderCell.m in Sources */,
@@ -15404,6 +15409,7 @@
 				9C1723931D5327F700BB13DE /* SSJCalenderDetailHeader.m in Sources */,
 				9CC2C4EE1D7EBF760024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9C41219B1D7EC9B600F29428 /* SSJReminderCircleSelectView.m in Sources */,
+				7DC6EF831D7EC1EB00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9C2A670D1D194CA70010F1DA /* SSJBookKeepingHomeNodateFooter.m in Sources */,
 				7D22E2951D89519B00474B11 /* SSJLoginViewController+SSJCategory.m in Sources */,
 				9C2A670E1D194CA70010F1DA /* SSJUserUtil.m in Sources */,
@@ -16118,6 +16124,7 @@
 				7D8C7E871D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
 				9CECFC0E1D6D41A700DB2C8B /* NSString+MoneyDisplayFormat.m in Sources */,
 				9CC2C4F71D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */,
+				7DC6EF851D7EC1EC00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9CECFC101D6D41A700DB2C8B /* SSJJspatchAnalyze.m in Sources */,
 				9CECFC111D6D41A700DB2C8B /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
 				9CECFC121D6D41A700DB2C8B /* SSJBookkeepingRiminderCell.m in Sources */,
@@ -16560,6 +16567,7 @@
 				9C24D00F1D7838FA0095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7D8C7E881D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
 				9CC2C4F81D7EBF780024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */,
+				7DC6EF861D7EC1ED00A809D8 /* SSJBookKeepingHomeBooksButton.m in Sources */,
 				9CEC00061D6D41EB00DB2C8B /* NSString+MoneyDisplayFormat.m in Sources */,
 				9CEC00081D6D41EB00DB2C8B /* SSJJspatchAnalyze.m in Sources */,
 				9CEC00091D6D41EB00DB2C8B /* SSJRecordMakingBillTypeSelectionCellItem.m in Sources */,
@@ -17326,7 +17334,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "21c6d3ba-9c4c-4c2d-a7e2-5a92130f8c4e";
+				PROVISIONING_PROFILE = "2145a73c-1a18-4c19-b9bb-d5eba8390a26";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -17673,7 +17681,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "8e478407-1b9e-4ba0-a890-d2739172842f";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
