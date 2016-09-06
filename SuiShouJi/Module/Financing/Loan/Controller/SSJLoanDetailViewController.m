@@ -115,6 +115,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
+        NSString *endAccountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.endTargetFundID];
         
         NSString *borrowDateStr = [_loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
@@ -128,7 +129,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"借款人" subtitle:_loanModel.lender],
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"借出金额" subtitle:borrowMoneyStr]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息收入" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName]],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"结清账户" subtitle:endAccountName]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:@"超出还款日" subtitle:overlapDaysStr],
@@ -139,7 +141,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 _cellItems = @[@[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"欠谁钱款" subtitle:_loanModel.lender],
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"欠款金额" subtitle:borrowMoneyStr]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息收入" subtitle:interestStr],
-                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName]],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"结清账户" subtitle:endAccountName]],
                                @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结算日" subtitle:closeOutDateStr],
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:@"超出还款日" subtitle:overlapDaysStr],
@@ -277,6 +280,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 }
 
 - (void)closeOutBtnAction {
+    _loanModel.endTargetFundID = _loanModel.targetFundID;
     SSJLoanCloseOutViewController *closeOutVC = [[SSJLoanCloseOutViewController alloc] init];
     closeOutVC.loanModel = _loanModel;
     [self.navigationController pushViewController:closeOutVC animated:YES];

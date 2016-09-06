@@ -95,7 +95,7 @@
 }
 
 + (NSError *)createLoanTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists BK_LOAN (LOANID text not null, CUSERID text, LENDER text, JMONEY numeric, CTHEFUNDID text, CTARGETFUNDID text, CTHECHARGE text, CTARGETCHARGE text, CETHECHARGE text, CETARGETCHARGE text, CBORROWDATE text, CREPAYMENTDATE text, CENDDATE text, RATE numeric, MEMO text, INTEREST integer, CREMINDID text, CWRITEDATE text, IVERSION integer, OPERATORTYPE integer, IEND integer, ITYPE integer, primary key(LOANID))"]) {
+    if (![db executeUpdate:@"create table if not exists BK_LOAN (LOANID text not null, CUSERID text, LENDER text, JMONEY numeric, CTHEFUNDID text, CTARGETFUNDID text, CETARGET text, CTHECHARGE text, CTARGETCHARGE text, CETHECHARGE text, CETARGETCHARGE text, CBORROWDATE text, CREPAYMENTDATE text, CENDDATE text, RATE numeric, MEMO text, INTEREST integer, CREMINDID text, CWRITEDATE text, IVERSION integer, OPERATORTYPE integer, IEND integer, ITYPE integer, primary key(LOANID))"]) {
         return [db lastError];
     }
     

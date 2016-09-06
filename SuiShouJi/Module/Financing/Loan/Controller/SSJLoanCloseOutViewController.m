@@ -280,7 +280,7 @@ static NSUInteger kInterestTag = 1002;
         self.fundingSelectionView.items = items;
         for (int i = 0; i < items.count; i ++) {
             SSJLoanFundAccountSelectionViewItem *item = items[i];
-            if ([item.ID isEqualToString:_loanModel.targetFundID]) {
+            if ([item.ID isEqualToString:_loanModel.endTargetFundID]) {
                 self.fundingSelectionView.selectedIndex = i;
                 break;
             }
@@ -344,7 +344,7 @@ static NSUInteger kInterestTag = 1002;
         return;
     }
     
-    if (!_loanModel.targetFundID.length) {
+    if (!_loanModel.endTargetFundID.length) {
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
@@ -431,13 +431,13 @@ static NSUInteger kInterestTag = 1002;
         _fundingSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
             if (index < view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
-                weakSelf.loanModel.targetFundID = item.ID;
+                weakSelf.loanModel.endTargetFundID = item.ID;
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
                 SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc] init];
                 newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem) {
-                    weakSelf.loanModel.targetFundID = newFundingItem.fundingID;
+                    weakSelf.loanModel.endTargetFundID = newFundingItem.fundingID;
                     [weakSelf loadData];
                 };
                 [weakSelf.navigationController pushViewController:newFundingVC animated:YES];
