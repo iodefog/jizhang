@@ -213,8 +213,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.items removeObjectAtIndex:fromIndexPath.row];
     [self.items insertObject:currentItem atIndex:toIndexPath.row];
     for (int i = 0; i < self.items.count; i ++) {
-        SSJFinancingHomeitem *tempItem = [self.items ssj_safeObjectAtIndex:i];
-        tempItem.fundingOrder = i + 1;
+        SSJBaseItem *tempItem = [self.items ssj_safeObjectAtIndex:i];
+        if ([tempItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)tempItem;
+            fundingItem.fundingOrder = i + 1;
+        }else if ([tempItem isKindOfClass:[SSJCreditCardItem class]]){
+            SSJCreditCardItem *cardItem = (SSJCreditCardItem *)tempItem;
+            cardItem.cardOder = i + 1;
+        }
     }
 }
 
