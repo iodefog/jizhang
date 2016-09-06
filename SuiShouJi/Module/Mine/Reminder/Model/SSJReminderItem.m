@@ -22,6 +22,8 @@
     item.remindState = self.remindState;
     item.remindAtTheEndOfMonth = self.remindAtTheEndOfMonth;
     item.minimumDate = self.minimumDate;
+    item.borrowtarget = self.borrowtarget;
+    item.borrowtOrLend = self.borrowtOrLend;
     return item;
 }
 

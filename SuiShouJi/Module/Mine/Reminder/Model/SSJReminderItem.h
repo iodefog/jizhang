@@ -18,16 +18,16 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 };
 
 // 提醒id
-@property(nonatomic, strong) NSString *remindId;
+@property(nonatomic, copy) NSString *remindId;
 
 // 提醒名称
-@property(nonatomic, strong) NSString *remindName;
+@property(nonatomic, copy) NSString *remindName;
 
 // 提醒备注
-@property(nonatomic, strong) NSString *remindMemo;
+@property(nonatomic, copy) NSString *remindMemo;
 
 // 提醒内容
-@property(nonatomic, strong) NSString *remindContent;
+@property(nonatomic, copy) NSString *remindContent;
 
 // 提醒周期(0为每天,1为工作日,2为每周末,3为每周,4为每月,5为每月最后一天,6为每年,7为仅一次)
 @property(nonatomic) NSInteger remindCycle;
@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 @property(nonatomic) SSJReminderType remindType;
 
 // 提醒时间
-@property(nonatomic, strong) NSDate *remindDate;
+@property(nonatomic, copy) NSDate *remindDate;
 
 // 提醒开关(0为关闭,1为开启)
 @property(nonatomic) BOOL remindState;
@@ -45,12 +45,12 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 @property(nonatomic) BOOL remindAtTheEndOfMonth;
 
 // 最小的时间,对于借贷来说最小时间不能早于借贷的日期
-@property(nonatomic, strong) NSDate *minimumDate;
+@property(nonatomic, copy) NSDate *minimumDate;
 
 // 借贷的对象
-@property(nonatomic, strong) NSString *borrowtarget;
+@property(nonatomic, copy) NSString *borrowtarget;
 
 // 借入还是借出,0是借入,1是借出
-@property(nonatomic, strong) NSString *borrowtOrLend;
+@property(nonatomic, copy) NSString *borrowtOrLend;
 
 @end
