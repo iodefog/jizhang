@@ -21,8 +21,10 @@
         return NO;
     }
     
+    NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+    
     //  从截止到今天有效的记账流水中，查询各个资金帐户的总收入、总支出
-    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and a.cbilldate <= ? group by A.IFUNSID, B.ITYPE", userId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]];
+    __block FMResultSet *result = [db executeQuery:@"select A.IFUNSID, sum(A.IMONEY), B.ITYPE from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and (A.CBILLDATE <= ? or length(A.LOANID) > 0) group by A.IFUNSID, B.ITYPE", userId, today, today];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;
@@ -50,6 +52,8 @@
     }
     
     [result close];
+    
+//    [db executeQuery:@"select "]
     
     __block BOOL success = YES;
     
