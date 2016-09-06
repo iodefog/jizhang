@@ -48,4 +48,7 @@
 
 //转出账户的操作类型
 @property(nonatomic) NSInteger transferOutFundOperatorType;
+
+//是否可编辑
+@property(nonatomic) BOOL editable;
 @end

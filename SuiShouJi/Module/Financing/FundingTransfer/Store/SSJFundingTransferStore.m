@@ -15,7 +15,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableDictionary *tempdic = [[NSMutableDictionary alloc]init];
-        FMResultSet * transferResult = [db executeQuery:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.cacctname , b.cfundid , b.cicoin , b.operatortype as fundoperatortype from bk_user_charge as a, bk_fund_info as b where a.ibillid in (3,4) and a.operatortype != 2 and a.cuserid = ? and a.ifunsid = b.cfundid order by cmonth desc , cwritedate desc , ibillid asc",userid];
+        FMResultSet * transferResult = [db executeQuery:@"select substr(a.cbilldate,0,7) as cmonth , a.* , b.cacctname , b.cfundid , b.cicoin , b.operatortype as fundoperatortype , b.cparent from bk_user_charge as a, bk_fund_info as b where a.ibillid in (3,4) and a.operatortype != 2 and a.cuserid = ? and a.ifunsid = b.cfundid order by cmonth desc , cwritedate desc , ibillid asc",userid];
         if (!transferResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -41,6 +41,7 @@
             item.billDate = [transferResult stringForColumn:@"CBILLDATE"];
             item.fundName = [transferResult stringForColumn:@"CACCTNAME"];
             item.fundOperatorType = [transferResult intForColumn:@"fundoperatortype"];
+            item.fundParent = [transferResult stringForColumn:@"cparent"];
             NSString *month = [transferResult stringForColumn:@"cmonth"];
             SSJFundingTransferDetailItem *detailItem = [[SSJFundingTransferDetailItem alloc]init];
             if (tempArr.count == 1) {
@@ -111,7 +112,13 @@
     item.transferOutChargeId = transferOutItem.ID;
     item.transferInFundOperatorType = transferInItem.fundOperatorType;
     item.transferOutFundOperatorType = transferOutItem.fundOperatorType;
-
+    item.editable = YES;
+    if ([transferInItem.fundParent isEqualToString:@"11"] || [transferOutItem.fundParent isEqualToString:@"11"]) {
+        item.editable = NO;
+    }
+    if ([transferInItem.fundParent isEqualToString:@"10"] || [transferOutItem.fundParent isEqualToString:@"10"]) {
+        item.editable = NO;
+    }
     return item;
 }
 

@@ -476,6 +476,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         __weak typeof(self) weakSelf = self;
         _circleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){
             weakSelf.item.remindCycle = chargeCircleType;
+            if (chargeCircleType == 4) {
+                weakSelf.item.remindAtTheEndOfMonth = YES;
+            }
             [weakSelf initdata];
         };
     }
