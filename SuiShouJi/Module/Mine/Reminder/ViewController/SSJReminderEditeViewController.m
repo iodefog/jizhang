@@ -413,6 +413,15 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField.tag == 100) {
+        self.item.remindName = textField.text;
+    }else if (textField.tag == 101){
+        self.item.remindMemo = textField.text;
+    }
+    return YES;
+}
+
 #pragma mark - Event
 - (void)saveButtonClicked:(id)sender{
     SSJCreditCardEditeCell *nameCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];

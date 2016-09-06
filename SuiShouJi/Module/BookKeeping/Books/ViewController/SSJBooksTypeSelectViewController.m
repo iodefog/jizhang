@@ -102,7 +102,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
                 [self.selectedBooks addObject:item];
                 item.selectToEdite = YES;
             }
-            if (self.selectedBooks.count > 1) {
+            if (self.selectedBooks.count > 1  || !self.selectedBooks.count) {
                 self.editeButton.enabled = NO;
             }else{
                 self.editeButton.enabled = YES;
@@ -150,6 +150,21 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     }else{
         cell.isSelected = NO;
     }
+    __weak typeof(self) weakSelf = self;
+    cell.selectButtonClickedBlock = ^(SSJBooksTypeItem *item){
+        if ([weakSelf.selectedBooks containsObject:item]) {
+            [weakSelf.selectedBooks removeObject:item];
+            item.selectToEdite = NO;
+        }else{
+            [weakSelf.selectedBooks addObject:item];
+            item.selectToEdite = YES;
+        }
+        if (self.selectedBooks.count > 1  || !self.selectedBooks.count) {
+            self.editeButton.enabled = NO;
+        }else{
+            self.editeButton.enabled = YES;
+        }
+    };
     cell.item = item;
     return cell;
 }

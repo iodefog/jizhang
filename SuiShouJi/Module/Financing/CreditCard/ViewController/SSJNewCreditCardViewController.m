@@ -339,14 +339,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        if ([SSJCreditCardStore saveCreditCardWithCardItem:self.item inDatabase:db]) {
+        if ([SSJCreditCardStore saveCreditCardWithCardItem:weakSelf.item inDatabase:db]) {
             SSJDispatch_main_async_safe(^(){
                 [CDAutoHideMessageHUD showMessage:@"信用卡保存失败"];
                 return;
             });
         };
         if (weakSelf.item.remindId.length) {
-            if ([SSJLocalNotificationStore saveReminderWithReminderItem:self.remindItem inDatabase:db]) {
+            if ([SSJLocalNotificationStore saveReminderWithReminderItem:weakSelf.remindItem inDatabase:db]) {
                 SSJDispatch_main_async_safe(^(){
                     [CDAutoHideMessageHUD showMessage:@"提醒保存失败"];
                     return;
