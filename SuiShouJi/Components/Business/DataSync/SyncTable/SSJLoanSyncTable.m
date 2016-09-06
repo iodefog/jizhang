@@ -26,6 +26,7 @@
              @"ctargetcharge",
              @"cethecharge",
              @"cetargetcharge",
+             @"cinterestid",
              @"cborrowdate",
              @"crepaymentdate",
              @"cenddate",
