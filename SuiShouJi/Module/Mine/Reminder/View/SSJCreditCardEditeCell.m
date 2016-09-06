@@ -73,6 +73,11 @@
             if (!self.cellAtrributedDetail.length) {
                 self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
             }
+            if (self.contentView.width == self.width) {
+                self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
+            }else{
+                self.detailLabel.width = self.contentView.width - self.titleLabel.right;
+            }
             self.cellDetailImage.right = self.detailLabel.left - 10;
             self.cellDetailImage.centerY = self.contentView.height /  2;
             self.titleLabel.hidden = NO;
@@ -170,6 +175,7 @@
 - (UILabel *)detailLabel{
     if (!_detailLabel) {
         _detailLabel = [[UILabel alloc]initWithFrame:CGRectZero];
+        _detailLabel.adjustsFontSizeToFitWidth = YES;
         _detailLabel.font = [UIFont systemFontOfSize:18];
     }
     return _detailLabel;
