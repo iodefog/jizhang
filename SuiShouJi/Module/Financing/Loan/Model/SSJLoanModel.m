@@ -20,6 +20,7 @@
     model.jMoney = [resultSet doubleForColumn:@"jmoney"];
     model.fundID = [resultSet stringForColumn:@"cthefundid"];
     model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
+    model.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
     model.chargeID = [resultSet stringForColumn:@"cthecharge"];
     model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
     model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
@@ -50,6 +51,7 @@
     model.targetFundID = _targetFundID;
     model.chargeID = _chargeID;
     model.targetChargeID = _targetChargeID;
+    model.endTargetFundID = _endTargetFundID;
     model.endChargeID = _endChargeID;
     model.endTargetChargeID = _endTargetChargeID;
     model.borrowDate = _borrowDate;
@@ -97,6 +99,7 @@
                                                         @"jMoney":@(_jMoney),
                                                         @"fundID":(_fundID ?:[NSNull null]),
                                                         @"targetFundID":(_targetFundID ?: [NSNull null]),
+                                                        @"endTargetFundID":(_endTargetFundID ?: [NSNull null]),
                                                         @"chargeID":(_chargeID ?: [NSNull null]),
                                                         @"targetChargeID":(_targetChargeID ?: [NSNull null]),
                                                         @"endChargeID":(_endChargeID ?: [NSNull null]),
