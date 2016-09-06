@@ -1314,6 +1314,8 @@
 		7DC7D8231D4F24AF00462970 /* reportForms_category@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */; };
 		7DC7D8241D4F24AF00462970 /* reportForms_member@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */; };
 		7DC7D8251D4F24AF00462970 /* reportForms_member@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7D8211D4F24AF00462970 /* reportForms_member@3x.png */; };
+		7DCC66441D7E6B470031DD2B /* loan_closeOut@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DCC66421D7E6B470031DD2B /* loan_closeOut@2x.png */; };
+		7DCC66451D7E6B470031DD2B /* loan_closeOut@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DCC66431D7E6B470031DD2B /* loan_closeOut@3x.png */; };
 		7DD3E5781CFBF2D1005A1ACB /* SSJDatabaseVersion4.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */; };
 		7DD3E5831CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD3E5821CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.m */; };
 		7DD46A6C1D61C2DB00F4D60F /* SSJDatabaseVersion7.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD46A6B1D61C2DB00F4D60F /* SSJDatabaseVersion7.m */; };
@@ -6199,6 +6201,8 @@
 		7DC7D81F1D4F24AF00462970 /* reportForms_category@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_category@3x.png"; sourceTree = "<group>"; };
 		7DC7D8201D4F24AF00462970 /* reportForms_member@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_member@2x.png"; sourceTree = "<group>"; };
 		7DC7D8211D4F24AF00462970 /* reportForms_member@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reportForms_member@3x.png"; sourceTree = "<group>"; };
+		7DCC66421D7E6B470031DD2B /* loan_closeOut@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_closeOut@2x.png"; sourceTree = "<group>"; };
+		7DCC66431D7E6B470031DD2B /* loan_closeOut@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loan_closeOut@3x.png"; sourceTree = "<group>"; };
 		7DD3E5761CFBF2D1005A1ACB /* SSJDatabaseVersion4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatabaseVersion4.h; sourceTree = "<group>"; };
 		7DD3E5771CFBF2D1005A1ACB /* SSJDatabaseVersion4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatabaseVersion4.m; sourceTree = "<group>"; };
 		7DD3E5811CFD6BDD005A1ACB /* SSJBooksTypeSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeSyncTable.h; sourceTree = "<group>"; };
@@ -8392,6 +8396,8 @@
 		7D9B4AEF1D794DCA000F8557 /* LoanAndCard */ = {
 			isa = PBXGroup;
 			children = (
+				7DCC66421D7E6B470031DD2B /* loan_closeOut@2x.png */,
+				7DCC66431D7E6B470031DD2B /* loan_closeOut@3x.png */,
 				7D333DB31D7D111000677A5A /* loan_noDataRemind@2x.png */,
 				7D333DB41D7D111000677A5A /* loan_noDataRemind@3x.png */,
 				7D9B4AF01D794DCA000F8557 /* loan_account@2x.png */,
@@ -14097,6 +14103,7 @@
 				9C991E1C1CE0A79F0031CD02 /* bt_luobo@2x.png in Resources */,
 				9C4078291CE1B92E00A61956 /* more_zhouqi@3x.png in Resources */,
 				7DD7D6A91C4C8E6A00ACE71A /* bt_gift@3x.png in Resources */,
+				7DCC66441D7E6B470031DD2B /* loan_closeOut@2x.png in Resources */,
 				9C3277771CE4AC7E00109C4C /* more_tongbu_s@3x.png in Resources */,
 				9C24CFEB1D7822110095D150 /* ft_qiankuan@3x.png in Resources */,
 				9C2BCFC11CBF793500D8D8D3 /* ft_zhankai@3x.png in Resources */,
@@ -14406,6 +14413,7 @@
 				7DDDA7F41CBE51070029ADAC /* water_success_alert@2x.png in Resources */,
 				BDA3FDFD1C58CAC400FB57B1 /* ft_wangluochongzhi@2x.png in Resources */,
 				7DD7D6C11C4C8E6A00ACE71A /* bt_others@3x.png in Resources */,
+				7DCC66451D7E6B470031DD2B /* loan_closeOut@3x.png in Resources */,
 				9C5378601D767A73002B230A /* book_licai@3x.png in Resources */,
 				BDF5108B1C925BB500A49D74 /* home_edit@2x.png in Resources */,
 				9C991DF61CE0A79F0031CD02 /* bt_chi@2x.png in Resources */,
