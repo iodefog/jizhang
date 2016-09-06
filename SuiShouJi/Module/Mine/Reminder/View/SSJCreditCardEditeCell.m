@@ -65,11 +65,6 @@
             self.titleLabel.left = self.cellImage.right + 10;
             self.titleLabel.centerY = self.contentView.height / 2;
             if (self.contentView.width == self.width) {
-                self.detailLabel.right = self.contentView.width - 10;
-            }else{
-                self.detailLabel.right = self.contentView.width;
-            }
-            if (self.contentView.width == self.width) {
                 if (self.detailLabel.width > self.contentView.width - 10 - self.titleLabel.right) {
                     self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
                     self.detailLabel.adjustsFontSizeToFitWidth = YES;
@@ -79,6 +74,11 @@
                     self.detailLabel.width = self.contentView.width - self.titleLabel.right;
                     self.detailLabel.adjustsFontSizeToFitWidth = YES;
                 }
+            }
+            if (self.contentView.width == self.width) {
+                self.detailLabel.right = self.contentView.width - 10;
+            }else{
+                self.detailLabel.right = self.contentView.width;
             }
             self.detailLabel.centerY = self.contentView.height /  2;
             if (!self.cellAtrributedDetail.length) {
@@ -101,11 +101,6 @@
             self.titleLabel.left = self.cellImage.right + 10;
             self.titleLabel.centerY = self.contentView.height / 2;
             if (self.contentView.width == self.width) {
-                self.detailLabel.right = self.contentView.width - 10;
-            }else{
-                self.detailLabel.right = self.contentView.width;
-            }
-            if (self.contentView.width == self.width) {
                 if (self.detailLabel.width > self.contentView.width - 10 - self.titleLabel.right) {
                     self.detailLabel.width = self.contentView.width - 10 - self.titleLabel.right;
                     self.detailLabel.adjustsFontSizeToFitWidth = YES;
@@ -115,6 +110,11 @@
                     self.detailLabel.width = self.contentView.width - self.titleLabel.right;
                     self.detailLabel.adjustsFontSizeToFitWidth = YES;
                 }
+            }
+            if (self.contentView.width == self.width) {
+                self.detailLabel.right = self.contentView.width - 10;
+            }else{
+                self.detailLabel.right = self.contentView.width;
             }
             self.detailLabel.centerY = self.contentView.height /  2;
             if (!self.cellAtrributedDetail.length) {

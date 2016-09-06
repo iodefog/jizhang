@@ -108,9 +108,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             [weakSelf.tableView reloadData];
             [weakSelf.view ssj_hideLoadingIndicator];
             if (data.count == 0) {
-                self.noDataHeader.hidden = NO;
+                weakSelf.noDataHeader.hidden = NO;
             }else{
-                self.noDataHeader.hidden = YES;
+                weakSelf.noDataHeader.hidden = YES;
             }
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
@@ -123,9 +123,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 [weakSelf.tableView reloadData];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
-                    self.noDataHeader.hidden = NO;
+                    weakSelf.noDataHeader.hidden = NO;
                 }else{
-                    self.noDataHeader.hidden = YES;
+                    weakSelf.noDataHeader.hidden = YES;
                 }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
@@ -137,9 +137,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 [weakSelf.tableView reloadData];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
-                    self.noDataHeader.hidden = NO;
+                    weakSelf.noDataHeader.hidden = NO;
                 }else{
-                    self.noDataHeader.hidden = YES;
+                    weakSelf.noDataHeader.hidden = YES;
                 }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
@@ -196,7 +196,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     headerView.item = [self.listItems objectAtIndex:section];
     __weak typeof(self) weakSelf = self;
     headerView.SectionHeaderClickedBlock = ^(){
-        ((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand = !((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand;
+        ((SSJFundingDetailListItem *)[weakSelf.listItems objectAtIndex:section]).isExpand = !((SSJFundingDetailListItem *)[weakSelf.listItems objectAtIndex:section]).isExpand;
         [weakSelf.tableView beginUpdates];
         [weakSelf.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
         [weakSelf.tableView endUpdates];
@@ -368,9 +368,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             [weakSelf.tableView reloadData];
             [weakSelf.view ssj_hideLoadingIndicator];
             if (data.count == 0) {
-                self.noDataHeader.hidden = NO;
+                weakSelf.noDataHeader.hidden = NO;
             }else{
-                self.noDataHeader.hidden = YES;
+                weakSelf.noDataHeader.hidden = YES;
             }
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
@@ -383,9 +383,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 [weakSelf.tableView reloadData];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
-                    self.noDataHeader.hidden = NO;
+                    weakSelf.noDataHeader.hidden = NO;
                 }else{
-                    self.noDataHeader.hidden = YES;
+                    weakSelf.noDataHeader.hidden = YES;
                 }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];
@@ -397,9 +397,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 [weakSelf.tableView reloadData];
                 [weakSelf.view ssj_hideLoadingIndicator];
                 if (data.count == 0) {
-                    self.noDataHeader.hidden = NO;
+                    weakSelf.noDataHeader.hidden = NO;
                 }else{
-                    self.noDataHeader.hidden = YES;
+                    weakSelf.noDataHeader.hidden = YES;
                 }
             } failure:^(NSError *error) {
                 [weakSelf.view ssj_hideLoadingIndicator];

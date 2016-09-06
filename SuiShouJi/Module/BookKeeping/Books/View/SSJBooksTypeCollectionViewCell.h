@@ -10,8 +10,12 @@
 #import "SSJBooksTypeItem.h"
 
 @interface SSJBooksTypeCollectionViewCell : UICollectionViewCell
+
 @property(nonatomic, strong) SSJBooksTypeItem *item;
 
+typedef void (^selectButtonClickedBlock)(SSJBooksTypeItem *item);
+
+@property(nonatomic,copy) selectButtonClickedBlock selectButtonClickedBlock;
 
 @property(nonatomic) BOOL selectToEdite;
 

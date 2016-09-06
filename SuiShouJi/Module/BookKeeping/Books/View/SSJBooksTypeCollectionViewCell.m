@@ -130,7 +130,10 @@
 }
 
 - (void)selectButtonClicked:(id)sender{
-    self.item.selectToEdite = !self.item.selectToEdite;
+//    self.item.selectToEdite = !self.item.selectToEdite;
+    if (self.selectButtonClickedBlock) {
+        self.selectButtonClickedBlock(self.item);
+    }
 }
 
 -(void)setItem:(SSJBooksTypeItem *)item{
