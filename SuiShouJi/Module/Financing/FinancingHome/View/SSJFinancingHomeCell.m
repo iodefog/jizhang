@@ -206,9 +206,9 @@
             NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
             if (mostRecentDay == daysFromBill) {
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
             }else{
-                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay];
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
             }
             [self.cardBillingDayLabel sizeToFit];
             if ([repaymentDate isEarlierThan:billDate]) {
