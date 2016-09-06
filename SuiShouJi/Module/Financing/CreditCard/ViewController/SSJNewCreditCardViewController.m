@@ -390,9 +390,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 item.remindMemo = self.item.cardMemo;
             }
             if ([NSDate date].day > self.item.cardRepaymentDay) {
-                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month + 1 day:self.item.cardRepaymentDay hour:8 minute:0 second:0];
+                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month + 1 day:self.item.cardRepaymentDay hour:12 minute:0 second:0];
             }else{
-                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardRepaymentDay hour:8 minute:0 second:0];
+                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardRepaymentDay hour:12 minute:0 second:0];
             }
             item.remindState = 1;
             remindEditeVc.item = item;
