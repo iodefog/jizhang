@@ -11,12 +11,15 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJReminderListCell.h"
 #import "SSJReminderEditeViewController.h"
-
+#import "SSJBudgetNodataRemindView.h"
 
 static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifier";
 
 @interface SSJReminderViewController ()
+
 @property(nonatomic, strong) NSArray *items;
+
+@property(nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 @end
 
 @implementation SSJReminderViewController
@@ -42,11 +45,19 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
+    [self.view ssj_showLoadingIndicator];
     [SSJLocalNotificationStore queryForreminderListWithSuccess:^(NSArray<SSJReminderItem *> *result) {
+        if (!result.count) {
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+        }else{
+            [self.view ssj_hideWatermark:YES];
+        }
         weakSelf.items = [NSArray arrayWithArray:result];
+        [self.view ssj_hideLoadingIndicator];
         [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
-        
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -103,6 +114,17 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
     [self.navigationController pushViewController:remindEditeVc animated:YES];
 }
+
+#pragma mark - Getter
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.image = @"budget_no_data";
+        _noDataRemindView.title = @"报表空空如也";
+    }
+    return _noDataRemindView;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
