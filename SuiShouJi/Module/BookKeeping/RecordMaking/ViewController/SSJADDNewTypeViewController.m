@@ -322,6 +322,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         } else {
             [deleteCollectionView ssj_hideWatermark:YES];
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];
