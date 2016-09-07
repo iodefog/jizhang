@@ -228,6 +228,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             }
         }
         
+        //
+        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1 where cfundid = ?", loanModel.fundID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         if (success) {
             SSJDispatchMainAsync(^{
                 success();
@@ -270,6 +281,10 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         if (model.endTargetChargeID.length) {
             [chargeIDs appendFormat:@", '%@'", model.endTargetChargeID];
+        }
+        
+        if (model.interestChargeID.length) {
+            [chargeIDs appendFormat:@", '%@'", model.interestChargeID];
         }
         
         // 将要删除的转帐流水operatortype改为2
@@ -350,34 +365,39 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         NSString *endChargeID = SSJUUID();
         NSString *endTargetChargeID = SSJUUID();
+        NSString *interestChargeID = SSJUUID();
         
         NSString *endBillID = nil;
         NSString *endTargetBillID = nil;
+        NSString *interestBillID = nil;
         
         switch (model.type) {
             case SSJLoanTypeLend:
                 endBillID = @"4";
                 endTargetBillID = @"3";
+                interestBillID = @"2025";
                 break;
                 
             case SSJLoanTypeBorrow:
                 endBillID = @"3";
                 endTargetBillID = @"4";
+                interestBillID = @"1030";
                 break;
         }
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *endDateStr = [model.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        double closeOutMoney = model.jMoney;
+        // 计算利息，利息只保留2位小数
+        double interest = 0;
         NSInteger daysFromBorrow = [model.endDate daysFrom:model.borrowDate];
         if (daysFromBorrow >= 0) {
-            double interest = (daysFromBorrow + 1) * model.rate / 365 * model.jMoney;
-            closeOutMoney += interest;
+            interest = (daysFromBorrow + 1) * model.rate / 365 * model.jMoney;
+            interest = [[NSString stringWithFormat:@"%.2f", interest] doubleValue];
         }
         
         // 插入所属结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(closeOutMoney), endBillID, model.fundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, endDateStr, booksID, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -385,12 +405,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                     failure([db lastError]);
                 });
             }
-            
+
             return;
         }
         
         // 插入目标结清流水
-        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(closeOutMoney), endTargetBillID, model.endTargetFundID, endDateStr, booksID, @(SSJSyncVersion()), @(0), writeDate]) {
+        if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endTargetChargeID, model.userID, @(model.jMoney), endTargetBillID, model.endTargetFundID, endDateStr, booksID, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
             
             *rollback = YES;
             if (failure) {
@@ -400,6 +420,21 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             }
             
             return;
+        }
+        
+        // 利息大于0就插入一条利息流水
+        if (interest > 0) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", interestChargeID, model.userID, @(interest), interestBillID, model.endTargetFundID, endDateStr, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
+                
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                
+                return;
+            }
         }
         
         // 创建借贷记录产生的转帐流水的writedate不能和结清借贷产生的转帐流水的writedate一样，否则匹配转帐时会错乱
@@ -518,8 +553,26 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         NSString *writedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
+        // 拼接要删除的转帐流水id
+        NSMutableString *chargeIDs = [NSMutableString string];
+        
+        if (model.endChargeID.length) {
+            [chargeIDs appendFormat:@", '%@'", model.endChargeID];
+        }
+        
+        if (model.endTargetChargeID.length) {
+            [chargeIDs appendFormat:@", '%@'", model.endTargetChargeID];
+        }
+        
+        if (model.interestChargeID.length) {
+            [chargeIDs appendFormat:@", '%@'", model.interestChargeID];
+        }
+        
+        // 将要删除的转帐流水operatortype改为2
+        NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where ichargeid in (%@)", @2, @(SSJSyncVersion()), writedate, chargeIDs];
+        
         // 把结清借贷产生的转帐流水状态改为删除
-        if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where ichargeid = ? or ichargeid = ?", @2, @(SSJSyncVersion()), writedate, model.endChargeID, model.endTargetChargeID]) {
+        if (![db executeUpdate:sqlStr]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -642,12 +695,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *repaymentDateStr = [model.repaymentDate formattedDateWithFormat:@"yyyy-MM-dd"];
     
     // 所属账户转账流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.chargeID, model.userID, @(model.jMoney), billID, model.fundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.chargeID, model.userID, @(model.jMoney), billID, model.fundID, borrowDateStr, booksID, model.ID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
     // 目标账户转账流水
-    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.targetChargeID, model.userID, @(model.jMoney), targetBillID, model.targetFundID, borrowDateStr, booksID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", model.targetChargeID, model.userID, @(model.jMoney), targetBillID, model.targetFundID, borrowDateStr, booksID, model.ID, @(SSJSyncVersion()), @(model.operatorType), writeDate]) {
         return NO;
     }
     
