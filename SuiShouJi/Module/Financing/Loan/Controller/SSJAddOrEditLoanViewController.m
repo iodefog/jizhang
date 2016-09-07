@@ -60,7 +60,7 @@ const int kMemoMaxLength = 13;
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
     }
     return self;
 }
@@ -386,8 +386,8 @@ const int kMemoMaxLength = 13;
     
     if (textField.tag == kLenderTag) {
         
-        _loanModel.lender = newStr;
-        [self updateRemindName];
+//        _loanModel.lender = newStr;
+//        [self updateRemindName];
         
         return YES;
         
@@ -415,14 +415,14 @@ const int kMemoMaxLength = 13;
             shouldChange =  NO;
         }
         
-        _loanModel.jMoney = [[newStr stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
-        [self updateRemindName];
+//        _loanModel.jMoney = [[newStr stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
+//        [self updateRemindName];
         
         return shouldChange;
         
     } else if (textField.tag == kMemoTag) {
         
-        _loanModel.memo = newStr;
+//        _loanModel.memo = newStr;
         
         return YES;
         
@@ -445,8 +445,8 @@ const int kMemoMaxLength = 13;
             shouldChange =  NO;
         }
         
-        _loanModel.rate = [newStr doubleValue] * 0.01;
-        [self updateInterest];
+//        _loanModel.rate = [newStr doubleValue] * 0.01;
+//        [self updateInterest];
         
         return shouldChange;
         
@@ -458,8 +458,10 @@ const int kMemoMaxLength = 13;
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == kLenderTag) {
         _loanModel.lender = @"";
+        [self updateRemindName];
     } else if (textField.tag == kMoneyTag) {
         _loanModel.jMoney = 0;
+        [self updateRemindName];
     } else if (textField.tag == kMemoTag) {
         _loanModel.memo = @"";
     } else if (textField.tag == kRateTag) {
@@ -471,6 +473,24 @@ const int kMemoMaxLength = 13;
 }
 
 #pragma mark - Event
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+        if (textField.tag == kLenderTag) {
+            _loanModel.lender = textField.text;
+            [self updateRemindName];
+        } else if (textField.tag == kMoneyTag) {
+            _loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
+            [self updateRemindName];
+        } else if (textField.tag == kMemoTag) {
+            _loanModel.memo = textField.text;
+        } else if (textField.tag == kRateTag) {
+            _loanModel.rate = [textField.text doubleValue] * 0.01;
+            [self updateInterest];
+        }
+    }
+}
+
 - (void)deleteButtonClicked {
     __weak typeof(self) wself = self;
     [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"确认要删除此项目么？" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {

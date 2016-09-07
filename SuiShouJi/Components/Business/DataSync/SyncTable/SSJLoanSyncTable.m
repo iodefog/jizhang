@@ -36,7 +36,7 @@
              @"interest",
              @"iend",
              @"itype",
-             @"operatorType",
+             @"operatortype",
              @"iversion",
              @"cwritedate"];
 }
