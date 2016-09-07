@@ -239,7 +239,8 @@
             return;
         };
         if (item.remindId.length) {
-            if (![SSJLocalNotificationStore saveReminderWithReminderItem:remindItem inDatabase:db]) {
+            terror = [SSJLocalNotificationStore saveReminderWithReminderItem:remindItem inDatabase:db];
+            if (terror) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{

@@ -142,10 +142,8 @@
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSString *cwritedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        success = [db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cremindid = ? and cuserid = ?",cwritedate,@(SSJSyncVersion()),remindItem.remindId,userId];
-        if (!success) {
-            *error = [db lastError];
-        }else{
+        success = [db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cremindid = ? and cuserid = ?",cwritedate,@(SSJSyncVersion()),remindItem.remindId,userId] && [db executeUpdate:@"update bk_loan set cremindid = '' , cwritedate = ? , iversion = ? where cremindid = ? and cuserid = ?",cwritedate,@(SSJSyncVersion()),remindItem.remindId,userId] && [db executeUpdate:@"update bk_user_credit set cremindid = '' , cwritedate = ? , iversion = ? where cremindid = ? and cuserid = ?",cwritedate,@(SSJSyncVersion()),remindItem.remindId,userId];
+        if (success) {
             [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
         }
     }];
