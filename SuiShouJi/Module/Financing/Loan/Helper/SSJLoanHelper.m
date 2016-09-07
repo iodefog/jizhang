@@ -131,6 +131,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
             model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
             model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
+            model.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
             model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
             model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
             model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -465,7 +466,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 修改当前借贷记录的结清状态
-        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cetarget = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, model.endTargetFundID, endDateStr, endChargeID, endTargetChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
+        if (![db executeUpdate:@"update bk_loan set iend = ?, jmoney = ?, rate = ?, ctargetfundid = ?, cetarget = ?, cenddate = ?, cethecharge = ?, cetargetcharge = ?, cinterestid = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @1, @(model.jMoney), @(model.rate), model.targetFundID, model.endTargetFundID, endDateStr, endChargeID, endTargetChargeID, interestChargeID, @(SSJSyncVersion()), @1, writeDate, model.ID]) {
             
             *rollback = YES;
             if (failure) {
