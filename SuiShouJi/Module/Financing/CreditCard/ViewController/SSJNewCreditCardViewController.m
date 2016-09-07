@@ -495,8 +495,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _repaymentDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
             if (selectedDay != weakSelf.remindItem.remindDate.day && weakSelf.item.remindId.length) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"还款日已改，是否需要更改提醒时间"  action:[SSJAlertViewAction actionWithTitle:@"暂不更改" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即更改" handler:^(SSJAlertViewAction *action) {
-                    weakSelf.remindItem.remindDate = [NSDate dateWithYear:weakSelf.remindItem.remindDate.year month:weakSelf.remindItem.remindDate.month day:selectedDay];
-                }]];
+                    weakSelf.remindItem.remindDate = [NSDate dateWithYear:weakSelf.remindItem.remindDate.year month:weakSelf.remindItem.remindDate.month day:selectedDay hour:weakSelf.remindItem.remindDate.hour minute:weakSelf.remindItem.remindDate.minute second:weakSelf.remindItem.remindDate.second];
+                }],nil];
             }
             weakSelf.item.cardRepaymentDay = selectedDay;
             [weakSelf.tableView reloadData];

@@ -82,11 +82,9 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
     }];
     NSArray *items = [self.datas objectForKey:[arr ssj_safeObjectAtIndex:indexPath.section]];
     SSJFundingTransferDetailItem *item = [items ssj_safeObjectAtIndex:indexPath.row];
-    if (item.editable) {
-        SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-        transferEditeVc.item = item;
-        [self.navigationController pushViewController:transferEditeVc animated:YES];
-    }
+    SSJFundingTransferEditeViewController *transferEditeVc = [[SSJFundingTransferEditeViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+    transferEditeVc.item = item;
+    [self.navigationController pushViewController:transferEditeVc animated:YES];
 }
 
 
