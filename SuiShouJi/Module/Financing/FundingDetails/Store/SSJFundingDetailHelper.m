@@ -169,10 +169,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             NSString *currentPeriod;
             NSString *currentMonth;
             if (billDate.day > cardItem.cardBillingDay) {
-                currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",billDate.month,cardItem.cardBillingDay,billDate.month + 1,cardItem.cardBillingDay];
+                currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",billDate.month,cardItem.cardBillingDay + 1,billDate.month + 1,cardItem.cardBillingDay];
                 currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month + 1 day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
             }else{
-                currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",billDate.month - 1,cardItem.cardBillingDay,billDate.month,cardItem.cardBillingDay];
+                currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",billDate.month - 1,cardItem.cardBillingDay + 1,billDate.month,cardItem.cardBillingDay];
                 currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
             }
             if ([currentPeriod isEqualToString:lastPeriod]) {
@@ -230,7 +230,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 [result addObject:listItem];
             }
         }
-        
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result);

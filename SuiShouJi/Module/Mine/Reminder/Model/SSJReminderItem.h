@@ -51,6 +51,6 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 @property(nonatomic, copy) NSString *borrowtarget;
 
 // 借入还是借出,0是借入,1是借出
-@property(nonatomic, copy) NSString *borrowtOrLend;
+@property(nonatomic) BOOL borrowtOrLend;
 
 @end

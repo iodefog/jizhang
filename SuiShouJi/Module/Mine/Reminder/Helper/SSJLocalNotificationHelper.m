@@ -34,6 +34,8 @@
     
     NSDate * fireDate = item.remindDate;
     
+    NSLog(@"-----%@",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
+    
     if (!item.remindContent.length) {
         switch (item.remindType) {
             case SSJReminderTypeNormal:{
@@ -376,8 +378,8 @@
     for (UILocalNotification *notification in notificationsArr) {
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
-//    NSArray *localNotifications = [[NSArray alloc]init];
-//    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    NSArray *localNotifications = [[NSArray alloc]init];
+    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
 }
 
 + (void)cancelLocalNotificationWithKey:(nullable NSString *)key{
