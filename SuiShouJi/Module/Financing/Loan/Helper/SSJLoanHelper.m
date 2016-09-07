@@ -557,7 +557,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         NSMutableString *chargeIDs = [NSMutableString string];
         
         if (model.endChargeID.length) {
-            [chargeIDs appendFormat:@", '%@'", model.endChargeID];
+            [chargeIDs appendFormat:@"'%@'", model.endChargeID];
         }
         
         if (model.endTargetChargeID.length) {

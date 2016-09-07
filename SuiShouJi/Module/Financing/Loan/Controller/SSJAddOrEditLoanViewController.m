@@ -795,7 +795,9 @@ const int kMemoMaxLength = 13;
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            if ([weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
+            if (weakSelf.reminderItem.remindState
+                && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
+                
                 weakSelf.loanModel.repaymentDate = view.selectedDate;
                 [weakSelf.tableView reloadData];
                 
