@@ -46,6 +46,7 @@ NSString *const SSJCurrentBooksTypeKey = @"currentBooksTypeKey";
 
 NSString *const SSJLastLoggedUserItemKey = @"SSJLastLoggedUserItemKey";
 
+NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
@@ -58,8 +59,6 @@ NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotificatio
 NSString *const SSJShowSyncLoadingNotification = @"SSJShowSyncLoadingNotification";
 
 NSString *const SSJHideSyncLoadingNotification = @"SSJHideSyncLoadingNotification";
-
-NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
 NSString *const SSJInitDatabaseDidBeginNotification = @"SSJInitDatabaseDidBeginNotification";
 

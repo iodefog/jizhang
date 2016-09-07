@@ -331,8 +331,13 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 
 - (void)deleteBooks{
     for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
-        [SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL];
+        if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL]) {
+            if ([booksItem.booksId isEqualToString:SSJCurrentThemeID()]) {
+                [SSJThemeSetting switchToThemeID:SSJDefaultThemeID];
+            }
+        };
     }
+    self.rightButton.selected = NO;
     [self getDateFromDB];
 }
 

@@ -43,8 +43,7 @@
 #import <YWFeedbackFMWK/YWFeedbackKit.h>
 #import "UIViewController+SSJMotionPassword.h"
 
-
-static NSString *const kTitle1 = @"记账提醒";
+static NSString *const kTitle1 = @"提醒";
 static NSString *const kTitle2 = @"主题皮肤";
 static NSString *const kTitle3 = @"周期记账";
 static NSString *const kTitle4 = @"数据文件导出";

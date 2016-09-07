@@ -22,11 +22,11 @@
 
 #define NUM @"+-.0123456789"
 
-static NSString *const kTitle1 = @"输入账户名称";
+static NSString *const kTitle1 = @"账户名称";
 static NSString *const kTitle2 = @"账户类型";
-static NSString *const kTitle3 = @"输入信用额度";
-static NSString *const kTitle4 = @"当前信用卡余额/欠款";
-static NSString *const kTitle5 = @"备注说明(选填)";
+static NSString *const kTitle3 = @"信用额度";
+static NSString *const kTitle4 = @"余额/欠款";
+static NSString *const kTitle5 = @"备注";
 static NSString *const kTitle6 = @"以账单日结算";
 static NSString *const kTitle7 = @"账单日";
 static NSString *const kTitle8 = @"还款日";
@@ -196,6 +196,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     newReminderCell.cellImageName = image;
     if ([title isEqualToString:kTitle1]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
+        newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.cardName;
         newReminderCell.textInput.delegate = self;
@@ -217,6 +218,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 信用卡额度
     if ([title isEqualToString:kTitle3]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
+        newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
         if (self.item.cardLimit != 0) {
@@ -232,6 +234,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 信用卡余额
     if ([title isEqualToString:kTitle4]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
+        newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         if (self.item.cardBalance != 0) {
             newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardBalance];
@@ -246,6 +249,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 信用卡备注
     if ([title isEqualToString:kTitle5]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
+        newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
