@@ -439,7 +439,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!self.item.remindId.length) {
         self.item.remindId = SSJUUID();
     }
-    if (self.item.remindType == SSJReminderTypeNormal || self.item.remindType == SSJReminderTypeCharge) {
+    if (self.needToSave == YES) {
         __weak typeof(self) weakSelf = self;
         [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:self.item Success:^{
             [weakSelf.navigationController popViewControllerAnimated:YES];

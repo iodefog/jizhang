@@ -158,6 +158,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle9]) {
         if (self.item.remindId.length) {
             SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+            remindEditeVc.needToSave = NO;
             remindEditeVc.item = self.remindItem;
             __weak typeof(self) weakSelf = self;
             remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item){
@@ -395,6 +396,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }else{
         if (self.remindStateButton.isOn) {
             SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+            remindEditeVc.needToSave = NO;
             SSJReminderItem *item = [[SSJReminderItem alloc]init];
             item.remindCycle = 4;
             item.remindType = SSJReminderTypeCreditCard;

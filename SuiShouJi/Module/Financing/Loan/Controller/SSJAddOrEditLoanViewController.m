@@ -643,6 +643,7 @@ const int kMemoMaxLength = 13;
     
     __weak typeof(self) wself = self;
     SSJReminderEditeViewController *reminderVC = [[SSJReminderEditeViewController alloc] init];
+    reminderVC.needToSave = NO;
     reminderVC.item = tmpRemindItem;
     reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
         wself.reminderItem = item;
