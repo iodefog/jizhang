@@ -222,10 +222,13 @@
             }
             if ([billDate isEarlierThan:[NSDate date]] && [[NSDate date] isEarlierThan:repaymentDate]) {
                 float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:billDate.month billingDay:item.cardBillingDay WithCardId:item.cardId];
-                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单%.2f",billDate.month,sumAmount];
+                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单金额%.2f",billDate.month,sumAmount];
             }else{
                 self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
             }
+            [self.fundingMemoLabel sizeToFit];
+        }else{
+            self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
             [self.fundingMemoLabel sizeToFit];
         }
     }

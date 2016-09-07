@@ -53,7 +53,14 @@
             self.titleLabel.height = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].height * self.titleLabel.text.length;
         }
     }
-    self.titleLabel.width = [[self.titleLabel.text substringWithRange:NSMakeRange(0, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].width;
+    float maxWitdh = 0;
+    for (int i = 0; i < self.titleLabel.text.length; i ++) {
+        float textWidth = [[self.titleLabel.text substringWithRange:NSMakeRange(i, 1)] sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]}].width;
+        if (textWidth > maxWitdh) {
+            maxWitdh = textWidth;
+        }
+    }
+    self.titleLabel.width = maxWitdh;
     self.titleLabel.centerX = self.width - (self.width - 24) / 2;
     self.titleLabel.centerY = self.height / 2;
     self.lineImage.size = CGSizeMake(7, 56);
@@ -80,6 +87,7 @@
         _titleLabel = [[UILabel alloc]init];
         _titleLabel.textColor = [UIColor whiteColor];
         _titleLabel.font = [UIFont systemFontOfSize:18];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.numberOfLines = 0;
     }
     return _titleLabel;
