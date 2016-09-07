@@ -559,6 +559,7 @@ const int kMemoMaxLength = 13;
                 [CDAutoHideMessageHUD showMessage:@"请选择借款日"];
                 return NO;
             }
+            
             break;
             
         case SSJLoanTypeBorrow:
@@ -591,6 +592,7 @@ const int kMemoMaxLength = 13;
                 [CDAutoHideMessageHUD showMessage:@"请选择还款日"];
                 return NO;
             }
+            
             break;
     }
     
@@ -599,8 +601,8 @@ const int kMemoMaxLength = 13;
         return NO;
     }
     
-    if (_loanModel.rate < 0) {
-        [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
+    if (_loanModel.interest && _loanModel.rate <= 0) {
+        [CDAutoHideMessageHUD showMessage:@"收益率必须大于0"];
         return NO;
     }
     
