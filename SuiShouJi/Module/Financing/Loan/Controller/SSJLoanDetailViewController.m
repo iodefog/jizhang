@@ -12,6 +12,7 @@
 #import "SSJLoanDetailCell.h"
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
@@ -238,6 +239,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     [SSJLoanHelper deleteLoanModel:_loanModel success:^{
         self.deleteBtn.enabled = YES;
         [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         self.deleteBtn.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -294,6 +296,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self organiseCellItems];
         [self updateSubViewHidden];
         [self.tableView reloadData];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         self.revertBtn.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];

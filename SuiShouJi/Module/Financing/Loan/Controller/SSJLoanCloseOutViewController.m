@@ -14,6 +14,7 @@
 #import "SSJLoanFundAccountSelectionView.h"
 #import "SSJLoanDateSelectionView.h"
 #import "SSJLoanHelper.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kAddOrEditLoanLabelCellId = @"kAddOrEditLoanLabelCellId";
 static NSString *const kAddOrEditLoanTextFieldCellId = @"kAddOrEditLoanTextFieldCellId";
@@ -397,6 +398,7 @@ static NSUInteger kInterestTag = 1002;
     [SSJLoanHelper closeOutLoanModel:_loanModel success:^{
         self.sureButton.enabled = YES;
         [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         self.sureButton.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];

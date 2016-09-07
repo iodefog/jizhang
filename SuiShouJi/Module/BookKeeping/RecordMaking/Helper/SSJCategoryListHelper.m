@@ -161,16 +161,6 @@
                                           success:(void(^)(NSString *categoryId))success
                                           failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        // 检查当前用户有没有同名的收支类型
-//        if ([db boolForQuery:@"select count(*) from bk_user_bill as a, bk_bill_type as b where a.cbillid = b.id and a.cuserid = ? and a.operatortype <> 2 and b.cname = ?", SSJUSERID(), name]) {
-//            if (failure) {
-//                SSJDispatch_main_async_safe(^{
-//                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"已有相同名称了，换一个吧。"}];
-//                    failure(error);
-//                });
-//            }
-//            return;
-//        }
         
         NSString *newCategoryId = SSJUUID();
         NSString *colorValue = [color hasPrefix:@"#"] ? color : [NSString stringWithFormat:@"#%@", color];
@@ -253,7 +243,8 @@
         [tmpIDs addObject:[NSString stringWithFormat:@"'%@'", ID]];
     }
     NSString *billIDs = [tmpIDs componentsJoinedByString:@", "];
-    NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_bill set operatortype = 2 where cbillid in (%@) and cuserid = '%@'", billIDs, SSJUSERID()];
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_bill set operatortype = 2, iversion = %@, cwritedate = '%@' where cbillid in (%@) and cuserid = '%@'", @(SSJSyncVersion()), writeDate, billIDs, SSJUSERID()];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         if ([db executeUpdate:sqlStr]) {

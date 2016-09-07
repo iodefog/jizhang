@@ -19,6 +19,7 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kAddOrEditLoanLabelCellId = @"SSJAddOrEditLoanLabelCell";
 static NSString *const kAddOrEditLoanTextFieldCellId = @"SSJAddOrEditLoanTextFieldCell";
@@ -434,6 +435,8 @@ const int kMemoMaxLength = 13;
                 [self.navigationController popViewControllerAnimated:YES];
             }
             
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            
         } failure:^(NSError * _Nonnull error) {
             _sureButton.enabled = YES;
             [_sureButton ssj_hideLoadingIndicator];
@@ -671,6 +674,7 @@ const int kMemoMaxLength = 13;
         if ([listVC isKindOfClass:[SSJLoanListViewController class]]) {
             [self.navigationController popToViewController:listVC animated:YES];
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -795,7 +799,9 @@ const int kMemoMaxLength = 13;
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            if ([weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
+            if (weakSelf.reminderItem.remindState
+                && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
+                
                 weakSelf.loanModel.repaymentDate = view.selectedDate;
                 [weakSelf.tableView reloadData];
                 
