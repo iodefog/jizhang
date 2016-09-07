@@ -58,6 +58,10 @@ const int kMemoMaxLength = 13;
 @implementation SSJAddOrEditLoanViewController
 
 #pragma mark - Lifecycle
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
@@ -340,118 +344,12 @@ const int kMemoMaxLength = 13;
 }
 
 #pragma mark - UITextFieldDelegate
-//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-//    if (textField.tag == kLenderTag) {
-//        if (textField.text.length > kLenderMaxLength) {
-//            switch (_loanModel.type) {
-//                case SSJLoanTypeLend:
-//                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"借款人不能超过%d个字", kLenderMaxLength]];
-//                    break;
-//                    
-//                case SSJLoanTypeBorrow:
-//                    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"欠款人不能超过%d个字", kLenderMaxLength]];
-//                    break;
-//            }
-//            return NO;
-//        }
-//        
-//        return YES;
-//        
-//    } else if (textField.tag == kMemoTag) {
-//        if (textField.text.length > kMemoMaxLength) {
-//            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"备注不能超过%d个字", kMemoMaxLength]];
-//            return NO;
-//        }
-//    } else if (textField.tag == kRateTag) {
-//        if ([textField.text doubleValue] < 0) {
-//            [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
-//            return NO;
-//        }
-//    }
-//    
-//    return YES;
-//}
-
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.tag == kMoneyTag) {
         NSString *money = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
         textField.text = [NSString stringWithFormat:@"¥%.2f", [money doubleValue]];
     } else if (textField.tag == kRateTag) {
         textField.text = [NSString stringWithFormat:@"%.1f", [textField.text doubleValue]];
-    }
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    NSString *newStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if (textField.tag == kLenderTag) {
-        
-//        _loanModel.lender = newStr;
-//        [self updateRemindName];
-        
-        return YES;
-        
-    } else if (textField.tag == kMoneyTag) {
-        
-        BOOL shouldChange = YES;
-        
-        if (newStr.length) {
-            newStr = [newStr stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-            if (newStr.length) {
-                newStr = [NSString stringWithFormat:@"¥%@", newStr];
-            }
-            
-            NSArray *components = [newStr componentsSeparatedByString:@"."];
-            if (components.count >= 2) {
-                NSString *integer = [components objectAtIndex:0];
-                NSString *digit = [components objectAtIndex:1];
-                if (digit.length > 2) {
-                    digit = [digit substringToIndex:2];
-                }
-                newStr = [NSString stringWithFormat:@"%@.%@", integer, digit];
-            }
-            textField.text = newStr;
-            
-            shouldChange =  NO;
-        }
-        
-//        _loanModel.jMoney = [[newStr stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
-//        [self updateRemindName];
-        
-        return shouldChange;
-        
-    } else if (textField.tag == kMemoTag) {
-        
-//        _loanModel.memo = newStr;
-        
-        return YES;
-        
-    } else if (textField.tag == kRateTag) {
-        
-        BOOL shouldChange = YES;
-        
-        if (newStr.length) {
-            NSArray *components = [newStr componentsSeparatedByString:@"."];
-            if (components.count >= 2) {
-                NSString *integer = [components objectAtIndex:0];
-                NSString *digit = [components objectAtIndex:1];
-                if (digit.length > 1) {
-                    digit = [digit substringToIndex:1];
-                }
-                newStr = [NSString stringWithFormat:@"%@.%@", integer, digit];
-            }
-            textField.text = newStr;
-            
-            shouldChange =  NO;
-        }
-        
-//        _loanModel.rate = [newStr doubleValue] * 0.01;
-//        [self updateInterest];
-        
-        return shouldChange;
-        
-    } else {
-        return YES;
     }
 }
 
@@ -480,11 +378,17 @@ const int kMemoMaxLength = 13;
             _loanModel.lender = textField.text;
             [self updateRemindName];
         } else if (textField.tag == kMoneyTag) {
+            NSString *tmpMoneyStr = [textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
+            if (tmpMoneyStr.length) {
+                tmpMoneyStr = [NSString stringWithFormat:@"¥%@", tmpMoneyStr];
+            }
+            textField.text = [self reserveDecimal:tmpMoneyStr digits:2];
             _loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
             [self updateRemindName];
         } else if (textField.tag == kMemoTag) {
             _loanModel.memo = textField.text;
         } else if (textField.tag == kRateTag) {
+            textField.text = [self reserveDecimal:textField.text digits:1];
             _loanModel.rate = [textField.text doubleValue] * 0.01;
             [self updateInterest];
         }
@@ -771,6 +675,20 @@ const int kMemoMaxLength = 13;
         self.navigationItem.rightBarButtonItem.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
+}
+
+- (NSString *)reserveDecimal:(NSString *)decimal digits:(int)digits {
+    NSArray *components = [decimal componentsSeparatedByString:@"."];
+    if (components.count >= 2) {
+        NSString *integer = [components objectAtIndex:0];
+        NSString *digit = [components objectAtIndex:1];
+        if (digit.length > digits) {
+            digit = [digit substringToIndex:digits];
+        }
+        return [NSString stringWithFormat:@"%@.%@", integer, digit];
+    }
+    
+    return decimal;
 }
 
 #pragma mark - Getter
