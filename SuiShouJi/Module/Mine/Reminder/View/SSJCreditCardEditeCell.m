@@ -46,11 +46,13 @@
             self.cellImage.left = 10;
             self.cellImage.centerY = self.contentView.height / 2;
             self.accessoryView.centerY = self.cellImage.centerY;
-            self.textInput.size = CGSizeMake(self.contentView.width - self.cellImage.right - 10, self.contentView.height);
-            self.textInput.left = self.cellImage.right + 10;
+            self.titleLabel.left = self.cellImage.right + 10;
+            self.titleLabel.centerY = self.contentView.height / 2;
+            self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 20, self.contentView.height);
+            self.textInput.left = self.titleLabel.right + 10;
             self.textInput.centerY = self.contentView.height / 2;
             self.textInput.hidden = NO;
-            self.titleLabel.hidden = YES;
+            self.titleLabel.hidden = NO;
             self.detailLabel.hidden = YES;
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
@@ -217,6 +219,7 @@
 - (UITextField *)textInput{
     if (!_textInput) {
         _textInput = [[UITextField alloc]init];
+        _textInput.textAlignment = NSTextAlignmentRight;
         _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _textInput;
