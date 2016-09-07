@@ -42,12 +42,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (!_selectColor.length) {
+        _selectColor = @"#fc7a60";
+    }
     [self.view addSubview:self.tableview];
     self.navigationItem.rightBarButtonItem = self.rightButton;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+
 }
 
 #pragma mark - UITableViewDelegate
