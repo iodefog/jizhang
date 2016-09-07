@@ -230,7 +230,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 [result addObject:listItem];
             }
         }
-        
         SSJDispatchMainAsync(^{
             if (success) {
                 success(result);
