@@ -275,7 +275,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:2]] == NSOrderedSame) {
         SSJAddOrEditLoanMultiLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanMultiLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [UIImage imageNamed:@"loan_yield"];
-        cell.textLabel.text = @"年收益率";
+        cell.textLabel.text = @"年化收益率";
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.0" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         if (_loanModel.rate) {
             cell.textField.text = [NSString stringWithFormat:@"%.1f", _loanModel.rate * 100];
@@ -522,7 +522,7 @@ const int kMemoMaxLength = 13;
 
 - (void)updateInterest {
     NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
-    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预期利息为%@元", interestStr]];
+    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息预期利息为%@元", interestStr]];
     [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
     _interestLab.attributedText = richText;
 }
