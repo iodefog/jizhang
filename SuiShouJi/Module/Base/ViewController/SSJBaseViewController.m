@@ -78,6 +78,7 @@
     }
     
     [self updateNavigationAppearance];
+    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -132,6 +133,7 @@
 - (void)updateAppearanceAfterThemeChanged {
     [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
     [self updateNavigationAppearance];
+    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
 }
 
 #pragma mark - Notification

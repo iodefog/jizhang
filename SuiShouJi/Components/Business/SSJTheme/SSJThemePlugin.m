@@ -14,15 +14,12 @@
 + (void)load {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeDidChangeNotification) name:SSJThemeDidChangeNotification object:nil];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
-    
     [SSJCustomKeyboard sharedInstance].titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [SSJCustomKeyboard sharedInstance].separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     [SSJCustomKeyboard sharedInstance].backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
 }
 
 + (void)themeDidChangeNotification {
-    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
     [SSJCustomKeyboard sharedInstance].titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [SSJCustomKeyboard sharedInstance].separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     [SSJCustomKeyboard sharedInstance].backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
