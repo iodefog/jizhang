@@ -228,6 +228,17 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             }
         }
         
+        //
+        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1 where cfundid = ?", loanModel.fundID]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         if (success) {
             SSJDispatchMainAsync(^{
                 success();
