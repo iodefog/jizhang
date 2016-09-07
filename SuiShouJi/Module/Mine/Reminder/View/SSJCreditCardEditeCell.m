@@ -137,7 +137,7 @@
             self.cellImage.top = 10;
             self.accessoryView.centerY = self.cellImage.centerY;
             self.titleLabel.left = self.cellImage.right + 10;
-            self.titleLabel.top = 17;
+            self.titleLabel.centerY = self.cellImage.centerY;
             self.subTitleLabel.top = self.titleLabel.bottom + 10;
             self.subTitleLabel.left = self.titleLabel.left;
             self.titleLabel.hidden = NO;
