@@ -10,7 +10,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
-#import "SSJReminderItem.h"
+#import "SSJLocalNotificationStore.h"
 
 @implementation SSJCreditCardStore
 
@@ -221,4 +221,34 @@
     }];
 }
 
++ (void)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
+                        remindItem:(SSJReminderItem *)remindItem
+                                Success:(void (^)(void))success
+                                failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        if (![self saveCreditCardWithCardItem:item inDatabase:db]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        };
+        if (item.remindId.length) {
+            if (![SSJLocalNotificationStore saveReminderWithReminderItem:remindItem inDatabase:db]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            };
+        }
+        if (success) {
+            success();
+        }
+    }];
+}
 @end
