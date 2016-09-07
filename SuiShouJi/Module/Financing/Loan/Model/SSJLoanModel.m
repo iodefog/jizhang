@@ -25,6 +25,7 @@
     model.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
     model.endChargeID = [resultSet stringForColumn:@"cethecharge"];
     model.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
+    model.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
     model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
     model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
     model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
@@ -54,6 +55,7 @@
     model.endTargetFundID = _endTargetFundID;
     model.endChargeID = _endChargeID;
     model.endTargetChargeID = _endTargetChargeID;
+    model.interestChargeID = _interestChargeID;
     model.borrowDate = _borrowDate;
     model.repaymentDate = _repaymentDate;
     model.endDate = _endDate;
@@ -104,6 +106,7 @@
                                                         @"targetChargeID":(_targetChargeID ?: [NSNull null]),
                                                         @"endChargeID":(_endChargeID ?: [NSNull null]),
                                                         @"endTargetChargeID":(_endTargetChargeID ?: [NSNull null]),
+                                                        @"interestChargeID":(_interestChargeID ?: [NSNull null]),
                                                         @"borrowDate":(_borrowDate ?: [NSNull null]),
                                                         @"repaymentDate":(_repaymentDate ?: [NSNull null]),
                                                         @"enddate":(_endDate ?: [NSNull null]),
