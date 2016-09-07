@@ -70,21 +70,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     if ([self isKindOfClass:[SSJBookKeepingHomeViewController class]] || [self isKindOfClass:[SSJBooksTypeSelectViewController class]]) {
         self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
     }else{
         self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
     }
     
-    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
-
-    
-    SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
-    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
-                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
+    [self updateNavigationAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -138,7 +131,7 @@
 
 - (void)updateAppearanceAfterThemeChanged {
     [_backgroundView ssj_setCompatibleThemeImageWithName:@"background"];
-    [[UIApplication sharedApplication] setStatusBarStyle:SSJ_CURRENT_THEME.statusBarStyle];
+    [self updateNavigationAppearance];
 }
 
 #pragma mark - Notification
@@ -276,6 +269,15 @@
     }
     
     return @"";
+}
+
+- (void)updateNavigationAppearance {
+    SSJThemeModel *themeModel = _appliesTheme ? [SSJThemeSetting currentThemeModel] : [SSJThemeSetting defaultThemeModel];
+    self.navigationController.navigationBar.tintColor = [UIColor ssj_colorWithHex:themeModel.naviBarTintColor];
+    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:themeModel.naviBarBackgroundColor alpha:themeModel.backgroundAlpha] size:CGSizeZero] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:21],
+                                                                    NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.naviBarTitleColor]};
 }
 
 @end

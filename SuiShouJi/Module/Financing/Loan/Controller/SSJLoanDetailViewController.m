@@ -118,8 +118,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         NSString *closeOutDateStr = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
         
-        int overlapDays = (int)[_loanModel.endDate daysFrom:_loanModel.repaymentDate];
-        NSString *overlapDaysStr = [NSString stringWithFormat:@"%d天", MAX(overlapDays, 0)];
+        NSString *daysFromRepaymentTitle = nil;
+        NSString *daysFromRepaymentDateStr = nil;
+        
+        if ([_loanModel.endDate compare:_loanModel.repaymentDate] == NSOrderedAscending) {
+            daysFromRepaymentTitle = @"早于还款日";
+            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.repaymentDate daysFrom:_loanModel.endDate]];
+        } else {
+            daysFromRepaymentTitle = @"超出还款日";
+            daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.endDate daysFrom:_loanModel.repaymentDate]];
+        }
         
         NSArray *section1 = nil;
         NSArray *section2 = nil;
@@ -129,7 +137,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             case SSJLoanTypeLend:
                 section1 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_person" title:@"借款人" subtitle:_loanModel.lender],
                              [SSJLoanDetailCellItem itemWithImage:@"loan_money" title:@"借出金额" subtitle:borrowMoneyStr]];
-                
                 
                 if (_loanModel.interest) {
                     section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_yield" title:@"利息收入" subtitle:interestStr],
@@ -142,7 +149,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 
                 section3 = [@[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr],
                               [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
-                              [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:@"超出还款日" subtitle:overlapDaysStr],
+                              [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
                               [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]] mutableCopy];
                 break;
                 
@@ -161,7 +168,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                 
                 section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr],
                              [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:@"超出还款日" subtitle:overlapDaysStr],
+                             [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr],
                              [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo]];
                 break;
         }
