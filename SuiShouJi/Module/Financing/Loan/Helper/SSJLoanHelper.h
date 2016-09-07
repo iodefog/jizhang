@@ -101,6 +101,27 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSString *)queryForFundNameWithID:(NSString *)ID;
 
+/**
+ *  到今天为止产生的利息
+ *
+ *  @param model 借贷模型
+ */
++ (double)currentInterestWithLoanModel:(SSJLoanModel *)model;
+
+/**
+ *  预期利息
+ *
+ *  @param model 借贷模型
+ */
++ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model;
+
+/**
+ *  结清利息
+ *
+ *  @param model 借贷模型
+ */
++ (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model;
+
 @end
 
 NS_ASSUME_NONNULL_END

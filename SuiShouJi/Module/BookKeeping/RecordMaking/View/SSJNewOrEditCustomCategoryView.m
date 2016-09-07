@@ -73,7 +73,7 @@
         _selectedImage = selectedImage;
         [self updateSelectedImage];
         [self updateImageSelectionView];
-        [self updateColorSelectionView];
+//        [self updateColorSelectionView];
     }
 }
 
@@ -113,15 +113,14 @@
         SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc] init];
         item.categoryImage = image;
         if (_selectedImage && [image isEqualToString:_selectedImage]) {
-            item.selected = YES;
             item.categoryColor = _selectedColor;
         } else {
-            item.selected = NO;
             item.categoryColor = SSJ_CURRENT_THEME.secondaryColor;
         }
         [items addObject:item];
     }
     _imageSelectionView.items = items;
+    _imageSelectionView.selectedIndexs = @[@([_images indexOfObject:_selectedImage])];
     [_imageSelectionView updateAppearance];
 }
 

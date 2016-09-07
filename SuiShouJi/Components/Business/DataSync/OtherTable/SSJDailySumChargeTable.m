@@ -50,9 +50,9 @@
     while ([result next]) {
         NSString *billDate = [result stringForColumnIndex:0];
         NSString *booksId = [result stringForColumnIndex:3];
-        NSString *chargeId = [result stringForColumnIndex:4];
+//        NSString *chargeId = [result stringForColumnIndex:4];
         if (billDate.length == 0 || booksId.length == 0) {
-            SSJPRINT(@"错误：流水billdate或booksid为空，流水id：%@", chargeId);
+//            SSJPRINT(@"错误：流水billdate或booksid为空，流水id：%@；booksid：%@", chargeId, booksId);
             continue;
         }
         

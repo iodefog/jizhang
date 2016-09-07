@@ -371,6 +371,11 @@ const int kMemoMaxLength = 13;
     return YES;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
 #pragma mark - Event
 - (void)textDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;
@@ -515,17 +520,8 @@ const int kMemoMaxLength = 13;
     }];
 }
 
-- (float)caculateInterest {
-    if (_loanModel.borrowDate && _loanModel.repaymentDate) {
-        NSUInteger interval = [_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1;
-        return _loanModel.jMoney * _loanModel.rate * interval / 365;
-    }
-    
-    return 0;
-}
-
 - (void)updateInterest {
-    NSString *interestStr = [NSString stringWithFormat:@"%.2f", [self caculateInterest]];
+    NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
     NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预期利息为%@元", interestStr]];
     [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
     _interestLab.attributedText = richText;
@@ -563,6 +559,7 @@ const int kMemoMaxLength = 13;
                 [CDAutoHideMessageHUD showMessage:@"请选择借款日"];
                 return NO;
             }
+            
             break;
             
         case SSJLoanTypeBorrow:
@@ -595,6 +592,7 @@ const int kMemoMaxLength = 13;
                 [CDAutoHideMessageHUD showMessage:@"请选择还款日"];
                 return NO;
             }
+            
             break;
     }
     
@@ -603,8 +601,8 @@ const int kMemoMaxLength = 13;
         return NO;
     }
     
-    if (_loanModel.rate < 0) {
-        [CDAutoHideMessageHUD showMessage:@"收益率不能小于0"];
+    if (_loanModel.interest && _loanModel.rate <= 0) {
+        [CDAutoHideMessageHUD showMessage:@"收益率必须大于0"];
         return NO;
     }
     
@@ -800,12 +798,12 @@ const int kMemoMaxLength = 13;
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
+            
+            weakSelf.loanModel.repaymentDate = view.selectedDate;
+            [weakSelf.tableView reloadData];
+            
             if (weakSelf.reminderItem.remindState
                 && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
-                
-                weakSelf.loanModel.repaymentDate = view.selectedDate;
-                [weakSelf.tableView reloadData];
-                
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil
                                                     message:@"还款日已改，是否需要更改提醒"
                                                      action:[SSJAlertViewAction actionWithTitle:@"暂不更改" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即更改" handler:^(SSJAlertViewAction *action) {

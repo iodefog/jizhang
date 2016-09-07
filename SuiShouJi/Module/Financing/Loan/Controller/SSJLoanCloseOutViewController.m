@@ -122,7 +122,7 @@ static NSUInteger kInterestTag = 1002;
         }
         
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", [self caculateInterest]];
+        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper closeOutInterestWithLoanModel:_loanModel]];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
@@ -295,15 +295,6 @@ static NSUInteger kInterestTag = 1002;
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-}
-
-- (double)caculateInterest {
-    NSInteger daysFromBorrow = [_loanModel.endDate daysFrom:_loanModel.borrowDate];
-    if (daysFromBorrow >= 0) {
-        return (daysFromBorrow + 1) * _loanModel.rate / 365 * _loanModel.jMoney;
-    } else {
-        return 0;
-    }
 }
 
 - (void)recaculateRateWithInterest:(double)interest {
