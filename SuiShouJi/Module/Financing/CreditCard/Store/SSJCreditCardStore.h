@@ -26,6 +26,6 @@
 
 + (void)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
                         remindItem:(SSJReminderItem *)remindItem
-                           Success:(void (^)(void))success
-                           failure:(void (^)(NSError *error))failure;
+                           Success:(void (^)(NSInteger operatortype))success
+                           failure:(void (^)(NSError *error))failure ;
 @end
