@@ -315,7 +315,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)collectionViewEndEditing{
     [self.collectionView endEditing];
     _editeModel = NO;
-    self.navigationItem.rightBarButtonItem = nil;
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    self.navigationItem.rightBarButtonItem = rightButton;
     [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
     [self.collectionView reloadData];
 }

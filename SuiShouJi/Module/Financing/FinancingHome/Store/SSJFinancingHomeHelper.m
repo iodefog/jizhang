@@ -117,7 +117,11 @@
 
 + (void)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        [db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+        if ([item.fundingParent isEqualToString:@"10"] || [item.fundingParent isEqualToString:@"11"]) {
+            [db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+        }else{
+            [db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+        }
     }];
 }
 @end

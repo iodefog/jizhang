@@ -18,7 +18,7 @@ static NSString *const kTitle3 = @"转入账户";
 static NSString *const kTitle4 = @"备注";
 static NSString *const kTitle5 = @"时间";
 
-static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
+static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentifier";
 
 
 @interface SSJFundingTransferEditeViewController ()
@@ -47,7 +47,9 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
     }else{
         self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
     }
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+    if (self.item.editable) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
+    }
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
     // Do any additional setup after loading the view.
 }
@@ -66,7 +68,10 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    return self.modifyButtonView;
+    if (self.item.editable) {
+        return self.modifyButtonView;
+    }
+    return nil;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -167,6 +172,11 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
             tansferItem.transferMemo = weakSelf.chargeItem.chargeMemo;
             tansferItem.transferInChargeId = weakSelf.chargeItem.ID;
             tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
+            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            if ([transferInParent isEqualToString:@"10"] || [transferOutParent isEqualToString:@"11"]) {
+                tansferItem.editable = NO;
+            }
         }else{
             tansferItem.transferDate = weakSelf.chargeItem.billDate;
             tansferItem.transferOutId = weakSelf.chargeItem.fundId;
@@ -180,6 +190,11 @@ static NSString * SSJTransferEditeCellIdentifier = @"transferEditeCell";
             tansferItem.transferMemo = weakSelf.chargeItem.chargeMemo;
             tansferItem.transferOutChargeId = weakSelf.chargeItem.ID;
             tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
+            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
+            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
+            if ([transferInParent isEqualToString:@"10"] || [transferOutParent isEqualToString:@"11"]) {
+                tansferItem.editable = NO;
+            }
         }
         self.item = tansferItem;
         SSJDispatchMainSync(^(){
