@@ -109,11 +109,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         NSString *borrowMoneyStr = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
         
-        double interest = 0;
-        if ([_loanModel.endDate compare:_loanModel.borrowDate] != NSOrderedAscending) {
-            interest = ([_loanModel.endDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate * _loanModel.jMoney / 365;
-        }
-        NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
+        NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper closeOutInterestWithLoanModel:_loanModel]];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
         NSString *endAccountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.endTargetFundID];
@@ -154,17 +150,9 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         NSString *borrowMoneyStr = [NSString stringWithFormat:@"¥%.2f", _loanModel.jMoney];
         
-        NSDate *today = [NSDate date];
-        today = [NSDate dateWithYear:today.year month:today.month day:today.day];
+        NSString *interestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper currentInterestWithLoanModel:_loanModel]];
         
-        NSString *interestStr = @"¥0.00";
-        if ([today compare:_loanModel.borrowDate] != NSOrderedAscending) {
-            double interest = ([today daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate / 365;
-            interestStr = [NSString stringWithFormat:@"¥%.2f", interest];
-        }
-        
-        double expectedInterest = ([_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1) * _loanModel.rate * _loanModel.jMoney / 365;
-        NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", expectedInterest];
+        NSString *expectedInterestStr = [NSString stringWithFormat:@"¥%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
         
         NSString *accountName = [SSJLoanHelper queryForFundNameWithID:_loanModel.targetFundID];
         
@@ -173,6 +161,10 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         
         NSString *daysFromRepaymentTitle = nil;
         NSString *daysFromRepaymentDateStr = nil;
+        
+        NSDate *today = [NSDate date];
+        today = [NSDate dateWithYear:today.year month:today.month day:today.day];
+        
         if ([today compare:_loanModel.repaymentDate] == NSOrderedAscending) {
             daysFromRepaymentTitle = @"距还款日";
             daysFromRepaymentDateStr = [NSString stringWithFormat:@"%d天", (int)[_loanModel.repaymentDate daysFrom:today]];

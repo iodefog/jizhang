@@ -371,6 +371,11 @@ const int kMemoMaxLength = 13;
     return YES;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
 #pragma mark - Event
 - (void)textDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;
@@ -515,17 +520,8 @@ const int kMemoMaxLength = 13;
     }];
 }
 
-- (float)caculateInterest {
-    if (_loanModel.borrowDate && _loanModel.repaymentDate) {
-        NSUInteger interval = [_loanModel.repaymentDate daysFrom:_loanModel.borrowDate] + 1;
-        return _loanModel.jMoney * _loanModel.rate * interval / 365;
-    }
-    
-    return 0;
-}
-
 - (void)updateInterest {
-    NSString *interestStr = [NSString stringWithFormat:@"%.2f", [self caculateInterest]];
+    NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
     NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预期利息为%@元", interestStr]];
     [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
     _interestLab.attributedText = richText;

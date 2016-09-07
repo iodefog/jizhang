@@ -86,7 +86,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderEditeViewController *reminderEditeVc = [[SSJReminderEditeViewController alloc]init];
-    remindEditeVc.needToSave = YES;
+    reminderEditeVc.needToSave = YES;
     reminderEditeVc.item = item;
     [self.navigationController pushViewController:reminderEditeVc animated:YES];
 }

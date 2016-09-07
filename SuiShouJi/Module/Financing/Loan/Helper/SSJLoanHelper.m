@@ -672,6 +672,35 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return fundName;
 }
 
++ (double)currentInterestWithLoanModel:(SSJLoanModel *)model {
+    NSDate *today = [NSDate date];
+    today = [NSDate dateWithYear:today.year month:today.month day:today.day];
+    return [self interestUntilDate:today withLoanModel:model];
+}
+
++ (double)expectedInterestWithLoanModel:(SSJLoanModel *)model {
+    return [self interestUntilDate:model.repaymentDate withLoanModel:model];
+}
+
++ (double)closeOutInterestWithLoanModel:(SSJLoanModel *)model {
+    return [self interestUntilDate:model.endDate withLoanModel:model];
+}
+
++ (double)interestUntilDate:(NSDate *)date withLoanModel:(SSJLoanModel *)model {
+    if (!date || !model.borrowDate) {
+        SSJPRINT(@">>> 警告：借贷利息日期为空");
+        return 0;
+    }
+    
+    NSInteger daysInterval = [date daysFrom:model.borrowDate];
+    if (daysInterval < 0) {
+        SSJPRINT(@">>> 警告：借贷利息截止日期早于起始日期");
+        return 0;
+    }
+    
+    return daysInterval * model.rate * model.jMoney / 365;
+}
+
 + (BOOL)saveLoanModel:(SSJLoanModel *)model booksID:(NSString *)booksID inDatabase:(FMDatabase *)db {
     
     NSString *billID = nil;
