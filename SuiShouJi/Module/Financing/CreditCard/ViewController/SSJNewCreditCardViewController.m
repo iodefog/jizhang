@@ -363,10 +363,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 //            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 //        });
 //    }];
-    [SSJCreditCardStore saveCreditCardWithCardItem:weakSelf.item remindItem:weakSelf.remindItem Success:^{
-        if (!weakSelf.item.cardId) {
+    [SSJCreditCardStore saveCreditCardWithCardItem:weakSelf.item remindItem:weakSelf.remindItem Success:^(NSInteger operatortype){
+        if (!operatortype) {
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-            
         }else{
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }

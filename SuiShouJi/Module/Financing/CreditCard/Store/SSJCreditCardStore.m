@@ -223,10 +223,13 @@
 
 + (void)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
                         remindItem:(SSJReminderItem *)remindItem
-                                Success:(void (^)(void))success
+                                Success:(void (^)(NSInteger operatortype))success
                                 failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        if (![self saveCreditCardWithCardItem:item inDatabase:db]) {
+        NSError *terror;
+        NSInteger operatortype = item.cardId.length ? 1 : 0;
+        terror = [self saveCreditCardWithCardItem:item inDatabase:db];
+        if (terror) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -247,7 +250,9 @@
             };
         }
         if (success) {
-            success();
+            SSJDispatchMainAsync(^{
+                success(operatortype);
+            });
         }
     }];
 }
