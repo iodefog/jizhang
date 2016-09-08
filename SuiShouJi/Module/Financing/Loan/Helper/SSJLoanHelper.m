@@ -217,7 +217,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         // 存储提醒记录
         if (remindModel) {
-            
+            remindModel.fundId = loanModel.ID;
             NSError *error = [SSJLocalNotificationStore saveReminderWithReminderItem:remindModel inDatabase:db];
             if (error) {
                 *rollback = YES;
