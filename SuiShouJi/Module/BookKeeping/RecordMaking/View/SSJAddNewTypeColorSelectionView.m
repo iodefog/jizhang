@@ -9,7 +9,9 @@
 #import "SSJAddNewTypeColorSelectionView.h"
 #import "SSJColorSelectCollectionViewCell.h"
 
-#define ITEM_SIZE_WIDTH (self.width - 80) / 6
+//#define ITEM_SIZE_WIDTH (self.width - 80) / 5
+#define ITEM_SIZE_WIDTH 40
+#define ITEM_SPACE (self.width - 40 * 5) / 6
 
 static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 
@@ -35,14 +37,16 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(self.width, 30 + ITEM_SIZE_WIDTH * _displayRowCount);
+    return CGSizeMake(self.width, 30 + ITEM_SIZE_WIDTH * _displayRowCount + ITEM_SPACE * (_displayRowCount + 1));
 }
 
 - (void)layoutSubviews {
     _collectionView.frame = self.bounds;
     
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
-    layout.itemSize = CGSizeMake(ITEM_SIZE_WIDTH, ITEM_SIZE_WIDTH);
+    layout.minimumInteritemSpacing = ITEM_SPACE;
+    layout.minimumLineSpacing = ITEM_SPACE;
+    layout.sectionInset = UIEdgeInsetsMake(ITEM_SPACE, ITEM_SPACE, ITEM_SPACE, ITEM_SPACE);
 }
 
 - (void)setColors:(NSArray *)colors {
@@ -106,10 +110,10 @@ static NSString *const kCellId = @"SSJColorSelectCollectionViewCell";
 - (UICollectionViewFlowLayout *)flowLayout {
     UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    flowLayout.minimumInteritemSpacing = 10;
-    flowLayout.minimumLineSpacing = 10;
+    flowLayout.minimumInteritemSpacing = ITEM_SPACE;
+    flowLayout.minimumLineSpacing = ITEM_SPACE;
     flowLayout.itemSize = CGSizeMake(ITEM_SIZE_WIDTH, ITEM_SIZE_WIDTH);
-    flowLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    flowLayout.sectionInset = UIEdgeInsetsMake(ITEM_SPACE, ITEM_SPACE, ITEM_SPACE, ITEM_SPACE);
     return flowLayout;
 }
 
