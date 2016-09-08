@@ -50,20 +50,21 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     SSJRecordMakingBillTypeSelectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     cell.item = _internalItems[indexPath.row];
     __weak typeof(self) wself = self;
-    cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
-        __strong typeof(wself) sself = wself;
-        [sself.internalItems removeObject:cell.item];
-        NSIndexPath *deleteIndexPath = [sself.collectionView indexPathForCell:cell];
-        [sself.collectionView deleteItemsAtIndexPaths:@[deleteIndexPath]];
-       
-        if (cell.item.selected && sself.internalItems.count > 1) {
-            SSJRecordMakingBillTypeSelectionCellItem *item = [sself.internalItems firstObject];
-            item.selected = YES;
+    cell.shouldDeleteAction = ^BOOL(SSJRecordMakingBillTypeSelectionCell *cell) {
+        if (wself.shouldDeleteAction) {
+            return wself.shouldDeleteAction(wself, cell.item);
         }
-        if (sself.deleteAction) {
-            sself.deleteAction(sself, cell.item);
+        return YES;
+    };
+    
+    cell.deleteAction = ^(SSJRecordMakingBillTypeSelectionCell *cell) {
+        if ([wself deleteItem:cell.item]) {
+            if (wself.deleteAction) {
+                wself.deleteAction(wself, cell.item);
+            }
         }
     };
+    
     return cell;
 }
 
@@ -160,6 +161,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
 }
 
+#pragma mark - Public
 - (void)setItems:(NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *)items {
     [_internalItems removeAllObjects];
     if (items) {
@@ -186,6 +188,22 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     } else {
         [_collectionView endEditing];
     }
+}
+
+- (BOOL)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
+    NSUInteger index = [_internalItems indexOfObject:item];
+    if (index != NSNotFound) {
+        [_internalItems removeObjectAtIndex:index];
+        [_collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+        
+        if (item.selected && _internalItems.count > 1) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = [_internalItems firstObject];
+            item.selected = YES;
+        }
+        return YES;
+    }
+    
+    return NO;
 }
 
 #pragma mark - Getter

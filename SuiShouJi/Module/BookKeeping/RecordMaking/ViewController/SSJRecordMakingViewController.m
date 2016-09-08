@@ -7,10 +7,6 @@
 //
 
 #import "SSJRecordMakingViewController.h"
-#import "SSJCustomKeyboard.h"
-#import "SSJCalendarView.h"
-#import "SSJDateSelectedView.h"
-#import "SSJFundingTypeSelectView.h"
 #import "SSJADDNewTypeViewController.h"
 #import "SSJSegmentedControl.h"
 #import "SSJSmallCalendarView.h"
@@ -24,6 +20,11 @@
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 
+#import "SSJCustomKeyboard.h"
+#import "SSJCalendarView.h"
+#import "SSJDateSelectedView.h"
+#import "SSJFundingTypeSelectView.h"
+#import "SSJRecordMakingMoveCategoryAlertView.h"
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
@@ -35,6 +36,8 @@
 static const NSTimeInterval kAnimationDuration = 0.25;
 
 static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
+
+static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, YYKeyboardObserver>
 
@@ -782,8 +785,19 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 - (void)initBillTypeView:(SSJRecordMakingBillTypeSelectionView *)billTypeView {
     __weak typeof(self) wself = self;
     billTypeView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
-    billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
+    billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:kIsAlertViewShowedKey]) {
+//            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
+            [SSJRecordMakingMoveCategoryAlertView showWithSureHandle:^{
+                [selectionView deleteItem:item];
+            }];
+            return NO;
+        }
         
+        return YES;
+    };
+    
+    billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         int type = !wself.titleSegment.selectedSegmentIndex;
         int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type] + 1;
         
@@ -795,10 +809,10 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                                             Success:NULL
                                             failure:^(NSError *error) {
                                                 
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"
-                                                message:[error localizedDescription]
-                                                 action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-        }];
+                                                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"
+                                                                                    message:[error localizedDescription]
+                                                                                     action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+                                            }];
         
         for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
             if (item.selected) {
@@ -809,6 +823,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
         }
     };
+    
     billTypeView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         [wself.billTypeInputView.moneyInput becomeFirstResponder];
         [UIView animateWithDuration:kAnimationDuration animations:^{
@@ -817,6 +832,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         }];
         wself.item.billId = item.ID;
     };
+    
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
         addNewTypeVc.incomeOrExpence = !wself.titleSegment.selectedSegmentIndex;
@@ -828,6 +844,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
         };
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];
     };
+    
     billTypeView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {
         if (isDragUp) {
             [wself.billTypeInputView.moneyInput resignFirstResponder];
@@ -837,11 +854,13 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
         }
     };
+    
     billTypeView.beginEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         UIBarButtonItem *endEditingItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:wself action:@selector(endEditingAction)];
         [wself.navigationItem setRightBarButtonItem:endEditingItem animated:YES];
         [wself.currentInput resignFirstResponder];
     };
+    
     billTypeView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         [wself.currentInput becomeFirstResponder];
         [wself.navigationItem setRightBarButtonItem:nil animated:YES];

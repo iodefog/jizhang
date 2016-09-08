@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) NSArray<SSJRecordMakingBillTypeSelectionCellItem *> *items;
 
+@property (nonatomic, copy) BOOL (^shouldDeleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
+
 @property (nonatomic, copy) void (^deleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
 
 @property (nonatomic, copy) void (^selectAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
@@ -29,5 +31,7 @@
 @property (nonatomic) UIEdgeInsets contentInsets;
 
 @property (nonatomic) BOOL editing;
+
+- (BOOL)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item;
 
 @end

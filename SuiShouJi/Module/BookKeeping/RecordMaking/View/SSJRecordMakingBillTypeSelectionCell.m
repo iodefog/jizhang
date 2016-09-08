@@ -87,7 +87,12 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 }
 
 - (void)deleteButtonAction {
-    if (_deleteAction) {
+    BOOL shouldDelete = YES;
+    if (_shouldDeleteAction) {
+        shouldDelete = _shouldDeleteAction(self);
+    }
+    
+    if (shouldDelete && _deleteAction) {
         _deleteAction(self);
     }
 }
