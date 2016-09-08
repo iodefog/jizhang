@@ -334,6 +334,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL]) {
             if ([booksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
                 SSJSelectBooksType(SSJUSERID());
+                [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
             }
         };
     }

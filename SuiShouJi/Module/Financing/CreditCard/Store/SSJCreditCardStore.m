@@ -228,6 +228,9 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSError *terror;
         NSInteger operatortype = item.cardId.length ? 1 : 0;
+        if (!item.cardId.length) {
+            item.cardId = SSJUUID();
+        }
         terror = [self saveCreditCardWithCardItem:item inDatabase:db];
         if (terror) {
             *rollback = YES;
@@ -239,6 +242,7 @@
             return;
         };
         if (item.remindId.length) {
+            remindItem.fundId = item.cardId;
             terror = [SSJLocalNotificationStore saveReminderWithReminderItem:remindItem inDatabase:db];
             if (terror) {
                 *rollback = YES;

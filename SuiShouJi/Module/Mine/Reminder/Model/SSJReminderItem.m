@@ -25,6 +25,7 @@
     item.borrowtarget = self.borrowtarget;
     item.borrowtOrLend = self.borrowtOrLend;
     item.userId = self.userId;
+    item.fundId = self.fundId;
     return item;
 }
 
