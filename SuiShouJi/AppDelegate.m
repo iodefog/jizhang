@@ -22,8 +22,11 @@
 #import "SSJFinancingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "MMDrawerController.h"
-#import "SSJGradientMaskView.h"
+#import "SSJFundingDetailsViewController.h"
+#import "SSJLoanDetailViewController.h"
 
+#import "SSJGradientMaskView.h"
+#import "SSJCreditCardItem.h"
 
 #import "SSJLocalNotificationHelper.h"
 #import <TencentOpenAPI/TencentOAuth.h>
@@ -73,7 +76,7 @@ NSDate *SCYEnterBackgroundTime() {
 //    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
 //    [JPEngine evaluateScript:script];
 #endif
-        
+    
     [self analyzeJspatch];
     
     [SSJUmengManager umengTrack];
@@ -138,6 +141,32 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    if ([notification.userInfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:notification.alertBody action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL],nil];
+        }else{
+            UIViewController *currentVc = SSJVisibalController();
+            NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
+            SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
+            if (remindItem.remindType == SSJReminderTypeCreditCard) {
+                SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc]init];
+                if (!remindItem.fundId.length) {
+                    remindItem.fundId = @"";
+                }
+                cardItem.cardId = remindItem.fundId;
+                SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
+                creditCardVc.item = cardItem;
+                [currentVc.navigationController pushViewController:creditCardVc animated:YES];
+            }else if(remindItem.remindType == SSJReminderTypeBorrowing){
+                SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
+                if (!remindItem.fundId.length) {
+                    remindItem.fundId = @"";
+                }
+                loanVc.loanID = remindItem.fundId;
+                [currentVc.navigationController pushViewController:loanVc animated:YES];
+            }
+        }
+    }
     //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
     [SSJRegularManager performRegularTaskWithLocalNotification:notification];
 }
@@ -316,4 +345,5 @@ NSDate *SCYEnterBackgroundTime() {
     [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
 }
 
+#pragma mark - 获取当前推送
 @end

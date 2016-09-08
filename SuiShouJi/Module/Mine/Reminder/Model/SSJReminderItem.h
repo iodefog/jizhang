@@ -56,4 +56,7 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 // 借贷的对象
 @property(nonatomic, copy) NSString *userId;
 
+// 提醒所对应的资金账户id
+@property(nonatomic, copy) NSString *fundId;
+
 @end
