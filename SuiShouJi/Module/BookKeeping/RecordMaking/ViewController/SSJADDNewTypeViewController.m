@@ -413,20 +413,19 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
     
-    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]}];
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(2, 4)];
-    
-    NSMutableAttributedString *disableTitle = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    [disableTitle setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                                  NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
-    
+                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
     [_editButton setAttributedTitle:title forState:UIControlStateNormal];
-    [_editButton setAttributedTitle:disableTitle forState:UIControlStateDisabled];
-    [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
     
-    [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-    [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+        [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    } else {
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
+        [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
+    }
 }
 
 - (void)updateButtons {
