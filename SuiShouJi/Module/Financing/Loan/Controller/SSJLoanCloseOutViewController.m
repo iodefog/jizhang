@@ -136,11 +136,11 @@ static NSUInteger kInterestTag = 1002;
         cell.imageView.image = [UIImage imageNamed:@"loan_account"];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                cell.textLabel.text = @"转入账户";
+                cell.textLabel.text = @"结清转入账户";
                 break;
                 
             case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"转出账户";
+                cell.textLabel.text = @"结清转出账户";
                 break;
         }
         

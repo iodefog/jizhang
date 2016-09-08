@@ -60,21 +60,32 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    _stamp.rightTop = CGPointMake(self.contentView.width - 105, 7);
-    _icon.leftTop = CGPointMake(22, 15);
-    
     CGFloat maxWidth = (self.contentView.width - 64 - 20 - 10) * 0.5;
     
-    [_titleLab sizeToFit];
-    _titleLab.width = MIN(maxWidth, _titleLab.width);
-    _titleLab.leftTop = CGPointMake(64, 22);
+    _stamp.rightTop = CGPointMake(self.contentView.width - 105, 7);
+    
+    if (_memoLab.text.length) {
+        _icon.leftTop = CGPointMake(22, 15);
+        
+        [_titleLab sizeToFit];
+        _titleLab.width = MIN(maxWidth, _titleLab.width);
+        _titleLab.leftTop = CGPointMake(64, 22);
+        
+        [_memoLab sizeToFit];
+        _memoLab.leftTop = CGPointMake(64, 56);
+    } else {
+        _icon.left = 22;
+        _icon.centerY = self.contentView.height * 0.5;
+        
+        [_titleLab sizeToFit];
+        _titleLab.width = MIN(maxWidth, _titleLab.width);
+        _titleLab.left = 64;
+        _titleLab.centerY = self.contentView.height * 0.5;
+    }
     
     [_moneyLab sizeToFit];
     _moneyLab.width = MIN(maxWidth, _moneyLab.width);
     _moneyLab.rightTop = CGPointMake(self.contentView.width - 18, 20);
-    
-    [_memoLab sizeToFit];
-    _memoLab.leftTop = CGPointMake(64, 56);
     
     [_dateLab sizeToFit];
     _dateLab.rightTop = CGPointMake(self.contentView.width - 18, 56);

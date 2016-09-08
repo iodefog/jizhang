@@ -47,7 +47,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 @property (nonatomic, strong) UIButton *deleteButton;
 
-@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noFeaturedCategoryRemindView;
+
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noCustomCategoryRemindView;
 
 @property (nonatomic, copy) NSString *selectedID;
 
@@ -303,10 +305,13 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 - (void)deleteButtonAction {
     SSJCategoryEditableCollectionView *deleteCollectionView = nil;
+    SSJBudgetNodataRemindView *remindView = nil;
     if (_titleSegmentView.selectedSegmentIndex == 0) {
         deleteCollectionView = _featuredCategoryCollectionView;
+        remindView = self.noFeaturedCategoryRemindView;
     } else if (_titleSegmentView.selectedSegmentIndex == 1 && _customCategorySwitchConrol.selectedIndex == 0) {
         deleteCollectionView = _customCategoryCollectionView;
+        remindView = self.noCustomCategoryRemindView;
     }
     
     if (deleteCollectionView.selectedItems.count == 0) {
@@ -318,7 +323,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
         [deleteCollectionView deleteItems:deleteCollectionView.selectedItems];
         if (deleteCollectionView.items.count == 0) {
-            [deleteCollectionView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+            [deleteCollectionView ssj_showWatermarkWithCustomView:remindView animated:YES target:nil action:nil];
         } else {
             [deleteCollectionView ssj_hideWatermark:YES];
         }
@@ -341,7 +346,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             [self.view ssj_hideLoadingIndicator];
             
             if (_featuredCategoryCollectionView.items.count == 0) {
-                [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+                [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:self.noFeaturedCategoryRemindView animated:YES target:nil action:nil];
             } else {
                 [_featuredCategoryCollectionView ssj_hideWatermark:YES];
             }
@@ -362,7 +367,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                 [self.view ssj_hideLoadingIndicator];
                 
                 if (_customCategoryCollectionView.items.count == 0) {
-                    [_customCategoryCollectionView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
+                    [_customCategoryCollectionView ssj_showWatermarkWithCustomView:self.noCustomCategoryRemindView animated:YES target:nil action:nil];
                 } else {
                     [_customCategoryCollectionView ssj_hideWatermark:YES];
                 }
@@ -413,20 +418,19 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
     
-    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]}];
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(2, 4)];
-    
-    NSMutableAttributedString *disableTitle = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    [disableTitle setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                                  NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
-    
+                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
     [_editButton setAttributedTitle:title forState:UIControlStateNormal];
-    [_editButton setAttributedTitle:disableTitle forState:UIControlStateDisabled];
-    [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
     
-    [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-    [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+        [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+    } else {
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
+        [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
+    }
 }
 
 - (void)updateButtons {
@@ -673,13 +677,22 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     return _deleteButton;
 }
 
-- (SSJBudgetNodataRemindView *)noDataRemindView {
-    if (!_noDataRemindView) {
-        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
-        _noDataRemindView.image = @"budget_no_data";
-        _noDataRemindView.title = @"暂无类别";
+- (SSJBudgetNodataRemindView *)noFeaturedCategoryRemindView {
+    if (!_noFeaturedCategoryRemindView) {
+        _noFeaturedCategoryRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noFeaturedCategoryRemindView.image = @"budget_no_data";
+        _noFeaturedCategoryRemindView.title = @"暂无未启用的精选类别哦";
     }
-    return _noDataRemindView;
+    return _noFeaturedCategoryRemindView;
+}
+
+- (SSJBudgetNodataRemindView *)noCustomCategoryRemindView {
+    if (!_noCustomCategoryRemindView) {
+        _noCustomCategoryRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noCustomCategoryRemindView.image = @"budget_no_data";
+        _noCustomCategoryRemindView.title = @"暂无未启用的自定义类别哦";
+    }
+    return _noCustomCategoryRemindView;
 }
 
 @end

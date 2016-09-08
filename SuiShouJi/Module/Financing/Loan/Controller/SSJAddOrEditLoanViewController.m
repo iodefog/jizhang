@@ -54,6 +54,8 @@ const int kMemoMaxLength = 13;
 
 @property (nonatomic, strong) UILabel *interestLab;
 
+@property (nonatomic) BOOL edited;
+
 @end
 
 @implementation SSJAddOrEditLoanViewController
@@ -73,7 +75,9 @@ const int kMemoMaxLength = 13;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (_loanModel.ID.length) {
+    _edited = _loanModel.ID.length;
+    
+    if (_edited) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
         self.navigationItem.rightBarButtonItem = rightItem;
         
@@ -275,7 +279,7 @@ const int kMemoMaxLength = 13;
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:2]] == NSOrderedSame) {
         SSJAddOrEditLoanMultiLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanMultiLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [UIImage imageNamed:@"loan_yield"];
-        cell.textLabel.text = @"年收益率";
+        cell.textLabel.text = @"年化收益率";
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.0" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         if (_loanModel.rate) {
             cell.textField.text = [NSString stringWithFormat:@"%.1f", _loanModel.rate * 100];
@@ -440,6 +444,10 @@ const int kMemoMaxLength = 13;
                 [self.navigationController popViewControllerAnimated:YES];
             }
             
+            if (!_edited && _loanModel.remindID.length) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }
+            
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             
         } failure:^(NSError * _Nonnull error) {
@@ -522,7 +530,7 @@ const int kMemoMaxLength = 13;
 
 - (void)updateInterest {
     NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
-    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预期利息为%@元", interestStr]];
+    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息预期利息为%@元", interestStr]];
     [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
     _interestLab.attributedText = richText;
 }
@@ -799,9 +807,6 @@ const int kMemoMaxLength = 13;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
             
-            weakSelf.loanModel.repaymentDate = view.selectedDate;
-            [weakSelf.tableView reloadData];
-            
             if (weakSelf.reminderItem.remindState
                 && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil
@@ -810,6 +815,9 @@ const int kMemoMaxLength = 13;
                     [weakSelf enterReminderVC];
                 }], nil];
             }
+            
+            weakSelf.loanModel.repaymentDate = view.selectedDate;
+            [weakSelf.tableView reloadData];
         };
         _repaymentDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {

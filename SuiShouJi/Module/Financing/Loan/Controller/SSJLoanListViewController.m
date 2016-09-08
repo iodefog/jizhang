@@ -241,7 +241,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     if (!_noDataRemindView) {
         _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
         _noDataRemindView.image = @"loan_noDataRemind";
-        _noDataRemindView.title = @"暂无数据";
+        _noDataRemindView.title = @"暂无记录哦";
     }
     return _noDataRemindView;
 }

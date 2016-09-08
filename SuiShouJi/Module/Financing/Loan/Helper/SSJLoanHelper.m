@@ -390,12 +390,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         NSString *endDateStr = [model.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
         // 计算利息，利息只保留2位小数
-        double interest = 0;
-        NSInteger daysFromBorrow = [model.endDate daysFrom:model.borrowDate];
-        if (daysFromBorrow >= 0) {
-            interest = (daysFromBorrow + 1) * model.rate / 365 * model.jMoney;
-            interest = [[NSString stringWithFormat:@"%.2f", interest] doubleValue];
-        }
+        double interest = [[NSString stringWithFormat:@"%.2f", [self closeOutInterestWithLoanModel:model]] doubleValue];
         
         // 插入所属结清流水
         if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, endDateStr, booksID, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {

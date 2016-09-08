@@ -10,11 +10,16 @@
 
 @implementation SSJLoanDetailCellItem
 
-+ (instancetype)itemWithImage:(NSString *)image title:(NSString *)title subtitle:(NSString *)subtitle {
++ (instancetype)itemWithImage:(NSString *)image
+                        title:(NSString *)title
+                     subtitle:(NSString *)subtitle
+                     closeOut:(BOOL)closeOut {
+    
     SSJLoanDetailCellItem *item = [[SSJLoanDetailCellItem alloc] init];
     item.image = image;
     item.title = title;
     item.subtitle = subtitle;
+    item.closeOut = closeOut;
     return item;
 }
 
