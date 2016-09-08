@@ -150,10 +150,17 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName closeOut:_loanModel.closeOut]];
                 }
                 
-                section3 = [@[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
-                              [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr closeOut:_loanModel.closeOut],
-                              [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
-                              [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]] mutableCopy];
+                if (_loanModel.memo.length) {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                } else {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut]];
+                }
+                
                 break;
                 
             case SSJLoanTypeBorrow:
@@ -169,10 +176,17 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                                  [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结清账户" subtitle:endAccountName closeOut:_loanModel.closeOut]];
                 }
                 
-                section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                if (_loanModel.memo.length) {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                } else {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结清日" subtitle:closeOutDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut]];
+                }
+                
                 break;
         }
         
@@ -231,10 +245,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                     section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借出账户" subtitle:accountName closeOut:_loanModel.closeOut]];
                 }
                 
-                section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                if (_loanModel.memo.length) {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                } else {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"借款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut]];
+                }
                 
                 section4 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr closeOut:_loanModel.closeOut]];
                 
@@ -252,10 +272,17 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
                     section2 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"借入账户" subtitle:accountName closeOut:_loanModel.closeOut]];
                 }
                 
-                section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
-                             [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                if (_loanModel.memo.length) {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_memo" title:@"备注" subtitle:_loanModel.memo closeOut:_loanModel.closeOut]];
+                } else {
+                    section3 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"欠款日" subtitle:borrowDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"还款日" subtitle:repaymentDateStr closeOut:_loanModel.closeOut],
+                                 [SSJLoanDetailCellItem itemWithImage:@"loan_clock" title:daysFromRepaymentTitle subtitle:daysFromRepaymentDateStr closeOut:_loanModel.closeOut]];
+                }
+                
                 section4 = @[[SSJLoanDetailCellItem itemWithImage:@"loan_remind" title:@"到期日提醒" subtitle:remindDateStr closeOut:_loanModel.closeOut]];
                 
                 break;
