@@ -31,6 +31,8 @@
 #import <ZipZap/ZipZap.h>
 
 #import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLocalNotificationStore.h"
+#import "SSJLocalNotificationHelper.h"
 
 //
 static const NSTimeInterval kTimeoutInterval = 30;
@@ -184,6 +186,15 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                         if (!success) {
                             *rollback = YES;
                         }
+                    }];
+                    
+                    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
+                    [SSJLocalNotificationStore queryForreminderListWithSuccess:^(NSArray<SSJReminderItem *> *result) {
+                        for (SSJReminderItem *item in result) {
+                            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+                        }
+                    } failure:^(NSError *error) {
+                        SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
                     }];
                     
                     if (success) {
