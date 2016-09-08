@@ -407,7 +407,7 @@ const int kMemoMaxLength = 13;
 
 - (void)deleteButtonClicked {
     __weak typeof(self) wself = self;
-    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"确认要删除此项目么？" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"删除该项目后相关的账户流水数据(含转账、利息）将被彻底删除哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
         [wself deleteLoanModel];
     }], nil];
 }

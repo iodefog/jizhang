@@ -10,6 +10,6 @@
 
 @interface SSJRecordMakingMoveCategoryAlertView : UIView
 
-+ (void)show;
++ (void)showWithSureHandle:(void(^)())handle;
 
 @end
