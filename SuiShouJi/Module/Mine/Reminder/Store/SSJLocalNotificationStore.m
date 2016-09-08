@@ -42,6 +42,14 @@
             }
             [tempArr addObject:item];
         }
+        [resultSet close];
+        for (SSJReminderItem *item in tempArr) {
+            if (item.remindType == SSJReminderTypeBorrowing) {
+                item.fundId = [db stringForQuery:@"select loanid from bk_loan where cremindid = ?",item.remindId];
+                item.borrowtarget = [db stringForQuery:@"select lender from bk_loan where cremindid = ?",item.remindId];
+                item.borrowtOrLend = ![db intForQuery:@"select itype from bk_loan where cremindid = ?",item.remindId];
+            }
+        }
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(tempArr);
