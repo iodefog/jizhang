@@ -342,6 +342,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self organiseCellItems];
         [self updateSubViewHidden];
         [self.tableView reloadData];
+        [CDAutoHideMessageHUD showMessage:@"恢复项目成功"];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         self.revertBtn.enabled = YES;
