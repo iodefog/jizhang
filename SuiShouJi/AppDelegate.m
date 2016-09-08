@@ -151,7 +151,7 @@ NSDate *SCYEnterBackgroundTime() {
             if (remindItem.remindType == SSJReminderTypeCreditCard) {
                 SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc]init];
                 if (!remindItem.fundId.length) {
-                    remindItem.fundId = @"";
+                    remindItem.fundId = [self getCreditCardIdForRemindId:remindItem.remindId];
                 }
                 cardItem.cardId = remindItem.fundId;
                 SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
@@ -160,7 +160,7 @@ NSDate *SCYEnterBackgroundTime() {
             }else if(remindItem.remindType == SSJReminderTypeBorrowing){
                 SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
                 if (!remindItem.fundId.length) {
-                    remindItem.fundId = @"";
+                    remindItem.fundId = [self getLoanIdForRemindId:remindItem.remindId];
                 }
                 loanVc.loanID = remindItem.fundId;
                 [currentVc.navigationController pushViewController:loanVc animated:YES];
@@ -345,5 +345,21 @@ NSDate *SCYEnterBackgroundTime() {
     [WXApi handleOpenURL:url delegate:[SSJThirdPartyLoginManger shareInstance].weixinLogin];
 }
 
-#pragma mark - 获取当前推送
+#pragma mark - 获取当前推送的账户id
+- (NSString *)getCreditCardIdForRemindId:(NSString *)remindID{
+    __block NSString *cardId;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        cardId = [db stringForQuery:@"select cfundid from bk_user_credit where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+    }];
+    return cardId;
+}
+
+- (NSString *)getLoanIdForRemindId:(NSString *)remindID{
+    __block NSString *loanId;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        loanId = [db stringForQuery:@"select loanid from bk_loan where cremindid = ? and cuserid = ?",remindID,SSJUSERID()];
+    }];
+    return loanId;
+}
+
 @end
