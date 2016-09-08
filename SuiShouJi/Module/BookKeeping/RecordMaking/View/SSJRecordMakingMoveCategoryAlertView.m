@@ -44,21 +44,21 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _lab1 = [[UILabel alloc] init];
         _lab1.text = @"点击";
         _lab1.font = [UIFont systemFontOfSize:18];
-        _lab1.textColor = [UIColor blueColor];
+        _lab1.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         [_lab1 sizeToFit];
         [self addSubview:_lab1];
         
         _lab2 = [[UILabel alloc] init];
         _lab2.text = @"键，爱类别将被移动";
         _lab2.font = [UIFont systemFontOfSize:18];
-        _lab2.textColor = [UIColor blueColor];
+        _lab2.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         [_lab2 sizeToFit];
         [self addSubview:_lab2];
         
         _lab3 = [[UILabel alloc] init];
         _lab3.text = @"到添加类别页的底部哦！";
         _lab3.font = [UIFont systemFontOfSize:18];
-        _lab3.textColor = [UIColor blueColor];
+        _lab3.textColor = [UIColor ssj_colorWithHex:@"#393939"];
         [_lab3 sizeToFit];
         [self addSubview:_lab3];
         
@@ -68,7 +68,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureBtn.titleLabel.font = [UIFont systemFontOfSize:20];
         [_sureBtn setTitle:@"知道了" forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         [_sureBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
         [_sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#e8e8e8"]];
         [_sureBtn ssj_setBorderStyle:SSJBorderStyleTop];
@@ -79,12 +79,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)layoutSubviews {
-    CGFloat left = (self.width - _lab1.width - _lab2.width - _arrow.width) * 0.5;
+    CGFloat gap = 8;
+    CGFloat left = (self.width - _lab1.width - _lab2.width - _arrow.width - gap * 2) * 0.5;
     _lab1.leftTop = CGPointMake(left, 40);
-    _arrow.left = left;
+    _arrow.left = _lab1.right + gap;
     _arrow.centerY = _lab1.centerY;
-    _lab2.leftTop = CGPointMake(_arrow.right, 40);
-    _lab3.leftTop = CGPointMake(left, _lab1.bottom + 3);
+    _lab2.leftTop = CGPointMake(_arrow.right + gap, 40);
+    _lab3.leftTop = CGPointMake(left, _lab1.bottom + 5);
     _sureBtn.frame = CGRectMake(0, 120, self.width, self.height - 120);
     [_sureBtn ssj_relayoutBorder];
 }
