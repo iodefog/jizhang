@@ -54,6 +54,8 @@ const int kMemoMaxLength = 13;
 
 @property (nonatomic, strong) UILabel *interestLab;
 
+@property (nonatomic) BOOL edited;
+
 @end
 
 @implementation SSJAddOrEditLoanViewController
@@ -73,7 +75,9 @@ const int kMemoMaxLength = 13;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (_loanModel.ID.length) {
+    _edited = _loanModel.ID.length;
+    
+    if (_edited) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
         self.navigationItem.rightBarButtonItem = rightItem;
         
@@ -438,6 +442,10 @@ const int kMemoMaxLength = 13;
                 [self.navigationController setViewControllers:@[homeController, loanListController] animated:YES];
             } else {
                 [self.navigationController popViewControllerAnimated:YES];
+            }
+            
+            if (!_edited && _loanModel.remindID.length) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
             }
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
