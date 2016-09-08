@@ -280,6 +280,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
         _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noDataRemindView.image = @"budget_no_data";
     }
     return _noDataRemindView;
 }
