@@ -23,7 +23,8 @@
              @"cuserid",
              @"cwritedate",
              @"iversion",
-             @"operatortype"];
+             @"operatortype",
+             @"ibilldatesettlement"];
 }
 
 + (NSArray *)primaryKeys {
