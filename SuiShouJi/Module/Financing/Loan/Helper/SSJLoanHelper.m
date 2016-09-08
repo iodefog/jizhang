@@ -420,7 +420,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         // 利息大于0就插入一条利息流水
         if (interest > 0) {
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", interestChargeID, model.userID, @(interest), interestBillID, model.endTargetFundID, endDateStr, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, loanid, cbooksid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", interestChargeID, model.userID, @(interest), interestBillID, model.endTargetFundID, endDateStr, model.ID, @0, @(SSJSyncVersion()), @(0), writeDate]) {
                 
                 *rollback = YES;
                 if (failure) {
