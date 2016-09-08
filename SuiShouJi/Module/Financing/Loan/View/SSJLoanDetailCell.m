@@ -55,6 +55,7 @@
     self.imageView.image = [UIImage imageNamed:item.image];
     self.textLabel.text = item.title;
     self.rightLabel.text = item.subtitle;
+    [self updateAppearance];
     
     [self setNeedsLayout];
 }
@@ -65,7 +66,12 @@
 }
 
 - (void)updateAppearance {
-    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    SSJLoanDetailCellItem *item = (SSJLoanDetailCellItem *)self.cellItem;
+    if (item.closeOut) {
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    } else {
+        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    }
     _rightLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
