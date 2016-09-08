@@ -13,9 +13,10 @@
 #import "SSJChargeReminderTimeView.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJReminderDateSelectView.h"
+#import "SSJReminderCircleSelectView.h"
 
-static NSString *const kTitle1 = @"请输入提醒名称";
-static NSString *const kTitle2 = @"备注（选填）";
+static NSString *const kTitle1 = @"提醒名称";
+static NSString *const kTitle2 = @"备注";
 static NSString *const kTitle3 = @"提醒周期";
 static NSString *const kTitle4 = @"提醒闹钟";
 static NSString *const kTitle5 = @"下次提醒时间";
@@ -32,7 +33,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property(nonatomic, strong) SSJChargeReminderTimeView *reminderTimeView;
 
-@property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
+@property(nonatomic, strong) SSJReminderCircleSelectView *circleSelectView;
 
 @property(nonatomic, strong) SSJReminderDateSelectView *dateSelectView;
 
@@ -42,7 +43,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @end
 
-@implementation SSJReminderEditeViewController
+@implementation SSJReminderEditeViewController{
+    UITextField *_nameInput;
+    UITextField *_memoInput;
+}
+
 
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -141,8 +146,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     if ([title isEqualToString:kTitle1]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.cellTitle = title;
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入提醒名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.item.remindName;
+        _nameInput = newReminderCell.textInput;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 100;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -150,8 +157,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     if ([title isEqualToString:kTitle2]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
+        newReminderCell.cellTitle = title;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注（选填）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        _memoInput = newReminderCell.textInput;
         newReminderCell.textInput.text = self.item.remindMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 101;
@@ -424,10 +433,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 #pragma mark - Event
 - (void)saveButtonClicked:(id)sender{
-    SSJCreditCardEditeCell *nameCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    SSJCreditCardEditeCell *memoCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    self.item.remindName = nameCell.textInput.text;
-    self.item.remindMemo = memoCell.textInput.text;
+    self.item.remindName = _nameInput.text;
+    self.item.remindMemo = _memoInput.text;
     if ([self.item.remindDate isEarlierThan:self.item.minimumDate] && self.item.remindType == SSJReminderTypeBorrowing) {
         [CDAutoHideMessageHUD showMessage:@"提醒日期不能晚于借贷的借款日期"];
         return;
@@ -478,9 +485,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return _tableView;
 }
 
--(SSJChargeCircleSelectView *)circleSelectView{
+-(SSJReminderCircleSelectView *)circleSelectView{
     if (!_circleSelectView) {
-        _circleSelectView = [[SSJChargeCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
+        _circleSelectView = [[SSJReminderCircleSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _circleSelectView.title = @"提醒周期";
         __weak typeof(self) weakSelf = self;
         _circleSelectView.chargeCircleSelectBlock = ^(NSInteger chargeCircleType){

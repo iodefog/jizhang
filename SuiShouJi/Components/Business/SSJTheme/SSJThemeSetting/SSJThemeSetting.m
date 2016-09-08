@@ -129,7 +129,7 @@
     
     UIViewController *recordHomeController = [tabBarVC.viewControllers ssj_safeObjectAtIndex:0];
     recordHomeController.tabBarItem.image = [UIImage ssj_themeImageWithName:@"tab_accounte_nor" renderingMode:UIImageRenderingModeAlwaysOriginal];
-    recordHomeController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@"tab_accounte_sel" renderingMode:UIImageRenderingModeAlwaysOriginal];
+    recordHomeController.tabBarItem.selectedImage = [UIImage ssj_themeImageWithName:@" " renderingMode:UIImageRenderingModeAlwaysOriginal];
     [recordHomeController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarTitleColor]} forState:UIControlStateNormal];
     [recordHomeController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:themeModel.tabBarSelectedTitleColor]} forState:UIControlStateSelected];
     

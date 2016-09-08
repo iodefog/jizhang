@@ -15,6 +15,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJLoginViewController.h"
 #import "SSJLoginViewController+SSJCategory.h"
+#import "SSJLocalNotificationHelper.h"
 
 @implementation SSJDataClearHelper
 
@@ -58,15 +59,18 @@
     
     NSString *originalUserid = SSJUSERID();
     NSString *newUserId = SSJUUID();
-    SSJUserItem *userItem = [SSJUserTableManager queryUserItemForID:originalUserid];
-    userItem.userId = newUserId;
-    userItem.defaultMemberState = 0;
-    userItem.defaultFundAcctState = 0;
-    userItem.defaultBooksTypeState = 0;
-    userItem.currentBooksId = @"";
+    SSJUserItem *originalUserItem = [SSJUserTableManager queryUserItemForID:originalUserid];
+    originalUserItem.registerState = @"1";
+    SSJUserItem *newuserItem = originalUserItem;
+    newuserItem.userId = newUserId;
+    newuserItem.defaultMemberState = @"0";
+    newuserItem.defaultFundAcctState = @"0";
+    newuserItem.defaultBooksTypeState = @"0";
+    newuserItem.currentBooksId = @"";
     SSJClearUserDataService *service = [[SSJClearUserDataService alloc]initWithDelegate:nil];
     [service clearUserDataWithOriginalUserid:originalUserid newUserid:newUserId Success:^{
-        if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:userItem]) {
+        if (SSJSetUserId(newUserId) && [SSJUserTableManager saveUserItem:newuserItem] && [SSJUserTableManager saveUserItem:originalUserItem]) {
+            [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:originalUserid];
             [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (success) {

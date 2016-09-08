@@ -157,16 +157,21 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     cell.item = item;
     cell.editeModel = _editeModel;
     cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
-        SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
-        [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
-//            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
-//            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-            [weakSelf getDateFromDateBase];
+        if ([cell.item isKindOfClass:[SSJCreditCardItem class]]) {
+            SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
+            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
+                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
+                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
+                [weakSelf getDateFromDateBase];
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError *error) {
+                
+            }];
+        }else{
+            [self.items removeObject:cell.item];
+            [weakSelf.collectionView reloadData];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        } failure:^(NSError *error) {
-            
-        }];
-
+        }
     };
     return cell;
 }

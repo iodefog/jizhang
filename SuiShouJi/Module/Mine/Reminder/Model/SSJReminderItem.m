@@ -24,6 +24,7 @@
     item.minimumDate = self.minimumDate;
     item.borrowtarget = self.borrowtarget;
     item.borrowtOrLend = self.borrowtOrLend;
+    item.userId = self.userId;
     return item;
 }
 

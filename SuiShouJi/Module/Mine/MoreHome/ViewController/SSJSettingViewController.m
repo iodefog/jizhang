@@ -23,6 +23,7 @@
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJLocalNotificationHelper.h"
 
 static NSString *const kTitle1 = @"自动同步设置";
 static NSString *const kTitle2 = @"数据重新拉取";

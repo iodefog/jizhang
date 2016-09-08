@@ -247,6 +247,9 @@
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
         [SSJFinancingHomeHelper deleteFundingWithFundingItem:item];
+        if (self.deleteButtonClickBlock) {
+            self.deleteButtonClickBlock(self);
+        };
     }else{
         __weak typeof(self) weakSelf = self;
         [SSJCreditCardStore deleteCreditCardWithCardItem:(SSJCreditCardItem *)self.item Success:^{

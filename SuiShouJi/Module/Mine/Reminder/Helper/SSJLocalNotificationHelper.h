@@ -32,4 +32,11 @@
  *  @param item 通知的item
  */
 + (void)cancelLocalNotificationWithremindItem:(SSJReminderItem * __nonnull)item;
+
+/**
+ *  取消某个用户所有的通知
+ *
+ *  @param userId 用户id
+ */
++ (void)cancelLocalNotificationWithUserId:(NSString * __nonnull)userId;
 @end

@@ -298,6 +298,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 还款日提醒
     if ([title isEqualToString:kTitle9]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
+        newReminderCell.cellDetail = [self.remindItem.remindDate formattedDateWithStyle:@"yyyy-MM-dd"];
         newReminderCell.cellTitle = title;
         self.remindStateButton.on = self.item.remindState;
         newReminderCell.accessoryView = self.remindStateButton;

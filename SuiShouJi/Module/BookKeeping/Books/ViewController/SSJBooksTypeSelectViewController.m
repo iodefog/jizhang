@@ -257,7 +257,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         [_editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
         [_editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
         _editeButton.enabled = NO;
-        _editeButton.backgroundColor = [UIColor ssj_colorWithHex:@"#dddddd"];
+        _editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];                                                                                                                                                                                                                                                                                                                                                                                       
         [_editeButton addTarget:self action:@selector(editeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _editeButton.hidden = YES;
 
@@ -269,9 +269,9 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     if (!_deleteButton) {
         _deleteButton = [[UIButton alloc]init];
         [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
-        [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#f6f6f6"];
+        _deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.2];
         [_deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _deleteButton.hidden = YES;
     }
@@ -332,8 +332,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 - (void)deleteBooks{
     for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
         if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL]) {
-            if ([booksItem.booksId isEqualToString:SSJCurrentThemeID()]) {
-                [SSJThemeSetting switchToThemeID:SSJDefaultThemeID];
+            if ([booksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
+                SSJSelectBooksType(SSJUSERID());
             }
         };
     }

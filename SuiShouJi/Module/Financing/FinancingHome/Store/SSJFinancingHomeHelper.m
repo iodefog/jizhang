@@ -115,13 +115,23 @@
     }];
 }
 
-+ (void)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
++ (BOOL)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
+    __block BOOL success = YES;
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         if ([item.fundingParent isEqualToString:@"10"] || [item.fundingParent isEqualToString:@"11"]) {
-            [db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+            if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID]) {
+                success = NO;
+                return;
+            };
         }else{
-            [db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID];
+            if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID]) {
+                NSLog(@"%@",[db lastError].description);
+                success = NO;
+                return;
+            };
         }
+        success = YES;
     }];
+    return success;
 }
 @end

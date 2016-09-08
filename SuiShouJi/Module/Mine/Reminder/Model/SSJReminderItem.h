@@ -53,4 +53,7 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 // 借入还是借出,0是借入,1是借出
 @property(nonatomic) BOOL borrowtOrLend;
 
+// 借贷的对象
+@property(nonatomic, copy) NSString *userId;
+
 @end

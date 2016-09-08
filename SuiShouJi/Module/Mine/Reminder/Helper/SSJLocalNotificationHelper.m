@@ -36,6 +36,10 @@
     
     NSLog(@"-----%@",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
     
+    if (!item.userId.length) {
+        item.userId = SSJUSERID();
+    }
+    
     if (!item.remindContent.length) {
         switch (item.remindType) {
             case SSJReminderTypeNormal:{
@@ -413,6 +417,21 @@
             if ([remindDict[@"remindId"] isEqualToString:item.remindId]) {
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
             }
+        }
+    }
+}
+
++ (void)cancelLocalNotificationWithUserId:(NSString *)userId{
+    if (!userId.length) {
+        [CDAutoHideMessageHUD showMessage:@"用户id不能为空"];
+        return;
+    }
+    NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
+    for (UILocalNotification *notification in localNotifications) {
+        NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
+        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
+        if ([remindItem.userId isEqualToString:userId]) {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
         }
     }
 }

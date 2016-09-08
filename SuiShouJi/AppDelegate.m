@@ -73,6 +73,7 @@ NSDate *SCYEnterBackgroundTime() {
 //    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
 //    [JPEngine evaluateScript:script];
 #endif
+        
     [self analyzeJspatch];
     
     [SSJUmengManager umengTrack];
