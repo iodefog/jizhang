@@ -32,6 +32,20 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeNone categories:nil]];
     }
     
+    // 获取所有本地通知数组
+    for (UILocalNotification *notification in [UIApplication sharedApplication].scheduledLocalNotifications) {
+        NSDictionary *userInfo = notification.userInfo;
+        if (userInfo) {
+            // 根据设置通知参数时指定的key来获取通知参数
+            NSString *info = userInfo[SSJRegularManagerNotificationIdKey];
+            
+            // 如果找到需要取消的通知，则取消
+            if (([info isEqualToString: SSJRegularManagerNotificationIdValue])) {
+                [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            }
+        }
+    }
+    
     UILocalNotification *notification = [[UILocalNotification alloc] init];
     NSDate *date = [NSDate date];
     notification.fireDate = [NSDate dateWithYear:[date year] month:[date month] day:[date day]];

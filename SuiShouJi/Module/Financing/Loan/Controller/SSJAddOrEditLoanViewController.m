@@ -799,9 +799,6 @@ const int kMemoMaxLength = 13;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
             
-            weakSelf.loanModel.repaymentDate = view.selectedDate;
-            [weakSelf.tableView reloadData];
-            
             if (weakSelf.reminderItem.remindState
                 && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil
@@ -810,6 +807,9 @@ const int kMemoMaxLength = 13;
                     [weakSelf enterReminderVC];
                 }], nil];
             }
+            
+            weakSelf.loanModel.repaymentDate = view.selectedDate;
+            [weakSelf.tableView reloadData];
         };
         _repaymentDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {
