@@ -377,21 +377,18 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             case SSJLoanTypeLend:
                 endBillID = @"4";
                 endTargetBillID = @"3";
-                interestBillID = @"2025";
+                interestBillID = @"5";
                 break;
                 
             case SSJLoanTypeBorrow:
                 endBillID = @"3";
                 endTargetBillID = @"4";
-                interestBillID = @"1030";
+                interestBillID = @"6";
                 break;
         }
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *endDateStr = [model.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
-        
-        // 计算利息，利息只保留2位小数
-        double interest = [[NSString stringWithFormat:@"%.2f", [self closeOutInterestWithLoanModel:model]] doubleValue];
         
         // 插入所属结清流水
         if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, imoney, ibillid, ifunsid, cbilldate, cbooksid, loanid, iversion, operatortype, cwritedate) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", endChargeID, model.userID, @(model.jMoney), endBillID, model.fundID, endDateStr, booksID, model.ID, @(SSJSyncVersion()), @(0), writeDate]) {
@@ -418,6 +415,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             
             return;
         }
+        
+        // 计算利息，利息只保留2位小数
+        double interest = [[NSString stringWithFormat:@"%.2f", [self closeOutInterestWithLoanModel:model]] doubleValue];
         
         // 利息大于0就插入一条利息流水
         if (interest > 0) {
