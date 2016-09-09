@@ -629,10 +629,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         
         if (weakSelf.titleSegment.selectedSegmentIndex == 0) {
             weakSelf.paymentTypeView.items = result;
-//            [weakSelf.paymentTypeView scrollToSelectedItem];
         } else if (weakSelf.titleSegment.selectedSegmentIndex == 1) {
             weakSelf.incomeTypeView.items = result;
-//            [weakSelf.paymentTypeView scrollToSelectedItem];
         }
         
         [UIView animateWithDuration:kAnimationDuration animations:^{
@@ -813,7 +811,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 wself.billTypeInputView.billTypeName = item.title;
             }
         }
-//        [selectionView scrollToSelectedItem];
     };
     
     billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
@@ -835,7 +832,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
         }];
         wself.item.billId = item.ID;
-//        [selectionView scrollToSelectedItem];
     };
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
