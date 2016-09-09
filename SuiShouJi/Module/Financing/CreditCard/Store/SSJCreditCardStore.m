@@ -124,7 +124,7 @@
         
         double originalBalance = [db doubleForQuery:@"select ibalance from bk_funs_acct where cfundid = ? and cuserid = ?",item.cardId,userId];
         
-        double differenceBalance = originalBalance - item.cardBalance;
+        double differenceBalance = item.cardBalance - originalBalance;
         
         if (differenceBalance > 0) {
             // 如果余额大于0,在流水里插入一条平帐收入

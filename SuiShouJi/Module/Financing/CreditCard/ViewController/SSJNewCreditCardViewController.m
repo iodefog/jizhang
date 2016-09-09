@@ -298,7 +298,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 还款日提醒
     if ([title isEqualToString:kTitle9]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
-        newReminderCell.cellDetail = [self.remindItem.remindDate formattedDateWithStyle:@"yyyy-MM-dd"];
+        newReminderCell.cellDetail = [self.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
         newReminderCell.cellTitle = title;
         self.remindStateButton.on = self.item.remindState;
         newReminderCell.accessoryView = self.remindStateButton;
@@ -332,12 +332,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [CDAutoHideMessageHUD showMessage:@"信用卡额度不能为0"];
         return;
     }
+    if (self.item.cardMemo.length > 13) {
+        [CDAutoHideMessageHUD showMessage:@"信用卡备注不能超过13个字"];
+        return;
+    }
     if (!self.remindItem.remindId.length) {
         self.item.remindId = self.remindItem.remindId;
     }
     if (!self.item.remindId.length) {
         if (self.item.cardName) {
-            self.remindItem.remindName = [NSString stringWithFormat:@"%@还款日提醒",self.item.cardName];
+            self.remindItem.remindName = [NSString stringWithFormat:@"%@还款日",self.item.cardName];
         }
         if (self.item.cardMemo) {
             self.remindItem.remindMemo = self.item.cardMemo;
