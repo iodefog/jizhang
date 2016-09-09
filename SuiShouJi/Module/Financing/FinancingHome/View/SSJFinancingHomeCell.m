@@ -50,10 +50,10 @@
     self.deleteButton.size = CGSizeMake(50, 50);
     self.deleteButton.center = CGPointMake(self.width - 10, 5);
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
+        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_item;
         self.fundingBalanceLabel.centerY = self.contentView.height / 2;
         self.fundingBalanceLabel.right = self.contentView.width - 10;
-        if (!item.fundingMemo.length) {
+        if (!fundItem.fundingMemo.length) {
             self.fundingNameLabel.left = self.fundingImage.right + 10;
             self.fundingNameLabel.centerY = self.contentView.height / 2;
         }else{
@@ -63,11 +63,16 @@
             self.fundingMemoLabel.left = self.fundingImage.right + 10;
         }
     }else{
+        SSJCreditCardItem *carditem = (SSJCreditCardItem *)_item;
         self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
         self.fundingNameLabel.left = self.fundingImage.right + 10;
         self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
         self.fundingMemoLabel.left = self.fundingImage.right + 10;
-        self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
+        if (carditem.cardRepaymentDay == 0 && carditem.cardBillingDay == 0) {
+            self.fundingBalanceLabel.centerY = self.height / 2;
+        }else{
+            self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
+        }
         self.fundingBalanceLabel.right = self.contentView.width - 10;
         self.cardMemoLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.right - 10;
         self.cardMemoLabel.left = self.fundingNameLabel.right + 10;

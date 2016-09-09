@@ -23,7 +23,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJDatabaseQueue.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJFinancingHomeHeader.h"
-#import "SSJFinancingHomeAddCell.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJLoanListViewController.h"
@@ -59,8 +58,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.view addSubview:self.hiddenButton];
     [self.view addSubview:self.collectionView];
     [self.collectionView registerClass:[SSJFinancingHomeCell class] forCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier];
-    [self.collectionView registerClass:[SSJFinancingHomeAddCell class] forCellWithReuseIdentifier:SSJFinancingAddCellIdentifier];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
 }
 
@@ -322,7 +320,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(void)collectionViewEndEditing{
     [self.collectionView endEditing];
     _editeModel = NO;
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
     [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
     [self.collectionView reloadData];
@@ -344,6 +342,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     self.collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.headerView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    [self.headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.headerView ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
     [self.collectionView reloadData];
 }
 
