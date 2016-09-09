@@ -17,6 +17,8 @@
 
 @property(nonatomic, strong) UISwitch *switchButton;
 
+@property(nonatomic, strong) UIImageView *cellImageView;
+
 @end
 
 @implementation SSJReminderListCell
@@ -25,6 +27,7 @@
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.memoLabel];
+        [self.contentView addSubview:self.cellImageView];
         self.accessoryView = self.switchButton;
     }
     return self;
@@ -32,14 +35,17 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.titleLabel.left = 10;
+    self.cellImageView.left = 10;
+    self.cellImageView.centerY = self.height / 2;
+    self.titleLabel.left = self.cellImageView.right + 10;
     if (!((SSJReminderItem *)self.cellItem).remindMemo.length) {
         self.titleLabel.centerY = self.height / 2;
     }else{
         self.titleLabel.top = 15;
-        self.memoLabel.left = 10;
+        self.memoLabel.left = self.titleLabel.left;
         self.memoLabel.top = self.titleLabel.bottom + 10;
     }
+
 }
 
 -(UILabel *)titleLabel{
@@ -68,6 +74,14 @@
     return _switchButton;
 }
 
+- (UIImageView *)cellImageView{
+    if (!_cellImageView) {
+        _cellImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _cellImageView;
+}
+
 - (void)setCellItem:(SSJBaseItem *)cellItem{
     [super setCellItem:cellItem];
     if (![cellItem isKindOfClass:[SSJReminderItem class]]) {
@@ -79,6 +93,21 @@
     self.memoLabel.text = item.remindMemo;
     [self.memoLabel sizeToFit];
     self.switchButton.on = item.remindState;
+    if (item.remindType == SSJReminderTypeCreditCard) {
+        self.cellImageView.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }else if(item.remindType == SSJReminderTypeBorrowing){
+        if (item.borrowtOrLend == 0) {
+            self.cellImageView.image = [[UIImage imageNamed:@"ft_jiechukuan"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        }else{
+            self.cellImageView.image = [[UIImage imageNamed:@"ft_yingshouqian"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        }
+    }else{
+        self.cellImageView.image = [[UIImage imageNamed:@"loan_remind"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }
+}
+
+- (void)updateCellAppearanceAfterThemeChanged{
+    [super updateCellAppearanceAfterThemeChanged];
 }
 
 /*

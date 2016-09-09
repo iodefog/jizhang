@@ -39,7 +39,7 @@
     return self;
 }
 
--(CGSize)sizeThatFits:(CGSize)size{
+- (CGSize)sizeThatFits:(CGSize)size{
     return CGSizeMake([UIApplication sharedApplication].keyWindow.width, self.dateSelect.height + 90);
 }
 
@@ -68,7 +68,7 @@
     } timeInterval:0.25 fininshed:NULL];
 }
 
--(void)layoutSubviews{
+- (void)layoutSubviews{
     [super layoutSubviews];
     self.dateSelect.bottom = self.height;
     self.topView.size = CGSizeMake(self.width, 50);
@@ -83,7 +83,7 @@
 }
 
 
--(UIView *)topView{
+- (UIView *)topView{
     if (!_topView) {
         _topView = [[UIView alloc]init];
         _topView.backgroundColor = [UIColor whiteColor];
@@ -109,17 +109,18 @@
     return _topView;
 }
 
--(UIDatePicker *)dateSelect{
+- (UIDatePicker *)dateSelect{
     if (!_dateSelect) {
-        _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 380)];
+        _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 260)];
         _dateSelect.datePickerMode = UIDatePickerModeDate;
+        [_dateSelect addTarget:self action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
         _dateSelect.minimumDate = [NSDate date];
         _dateSelect.backgroundColor = [UIColor whiteColor];
     }
     return _dateSelect;
 }
 
--(SSJReminderWeekDaySelectView *)weekView{
+- (SSJReminderWeekDaySelectView *)weekView{
     if (!_weekView) {
         _weekView = [[SSJReminderWeekDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.width, 40)];
         _weekView.backgroundColor = [UIColor whiteColor];
@@ -127,21 +128,25 @@
     return _weekView;
 }
 
--(void)comfirmButtonClicked:(id)sender{
+- (void)comfirmButtonClicked:(id)sender{
     if (self.dateSetBlock) {
         self.dateSetBlock([self.dateSelect date]);
     }
     [self dismiss];
 }
 
--(void)closeButtonClicked:(id)sender{
+- (void)closeButtonClicked:(id)sender{
     [self dismiss];
 }
 
--(void)setCurrentDate:(NSDate *)currentDate{
+- (void)setCurrentDate:(NSDate *)currentDate{
     _currentDate = currentDate;
     self.dateSelect.date = _currentDate;
     self.weekView.currentDate = _currentDate;
+}
+
+- (void)datePickerValueChanged:(id)sender{
+    self.weekView.currentDate = self.dateSelect.date;
 }
 
 
