@@ -231,7 +231,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         //
-        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1 where cfundid = ?", loanModel.fundID]) {
+        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, iversion = ?, operatortype = 1, cwritedate = ? where cfundid = ?", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], loanModel.fundID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
