@@ -40,6 +40,11 @@
         item.userId = SSJUSERID();
     }
     
+    if ([fireDate isEarlierThan:[NSDate date]]) {
+        NSLog(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
+        return;
+    }
+    
     if (!item.remindContent.length) {
         switch (item.remindType) {
             case SSJReminderTypeNormal:{
