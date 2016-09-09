@@ -19,4 +19,6 @@
 
 @property (nonatomic) CGFloat titleSize;
 
+- (void)updateAppearance;
+
 @end

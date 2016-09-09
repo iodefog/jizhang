@@ -27,6 +27,7 @@ static CGSize kButtonSize = {36, 30};
         [self addSubview:self.titleLabel];
         [self addSubview:self.preButton];
         [self addSubview:self.nextButton];
+        [self updateAppearance];
     }
     return self;
 }
@@ -71,6 +72,12 @@ static CGSize kButtonSize = {36, 30};
     [self sizeToFit];
 }
 
+- (void)updateAppearance {
+    _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor];
+    _preButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+    _nextButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+}
+
 #pragma mark - Event
 - (void)preButtonAction {
     _selectedIndex = MAX(0, _selectedIndex - 1);
@@ -102,7 +109,6 @@ static CGSize kButtonSize = {36, 30};
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = [UIFont systemFontOfSize:21];
-        _titleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor];
     }
     return _titleLabel;
 }
@@ -112,7 +118,6 @@ static CGSize kButtonSize = {36, 30};
         _preButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_preButton setImage:[[UIImage imageNamed:@"budget_left"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_preButton setImage:[UIImage imageNamed:@"budget_left_disable"] forState:UIControlStateDisabled];
-        _preButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
         [_preButton addTarget:self action:@selector(preButtonAction) forControlEvents:UIControlEventTouchUpInside];
         _preButton.size = kButtonSize;
     }
@@ -124,7 +129,6 @@ static CGSize kButtonSize = {36, 30};
         _nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_nextButton setImage:[[UIImage imageNamed:@"budget_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_nextButton setImage:[UIImage imageNamed:@"budget_right_diable"] forState:UIControlStateDisabled];
-        _nextButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
         [_nextButton addTarget:self action:@selector(nextButtonAction) forControlEvents:UIControlEventTouchUpInside];
         _nextButton.size = kButtonSize;
     }

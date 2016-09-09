@@ -85,6 +85,14 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     [self loadAllData];
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self.titleView updateAppearance];
+    [self.headerView updateAppearance];
+    [self.middleView updateAppearance];
+    self.bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+}
+
 #pragma mark - SSJReportFormsPercentCircleDataSource
 - (NSUInteger)numberOfComponentsInPercentCircle:(SSJPercentCircleView *)circle {
     return self.circleItems.count;
@@ -265,6 +273,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     if (!_bottomView) {
         _bottomView = [[SSJBudgetDetailBottomView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 340)];
         _bottomView.circleView.dataSource = self;
+        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 //        [_bottomView.button addTarget:self action:@selector(editButtonAction)];
     }
     return _bottomView;
