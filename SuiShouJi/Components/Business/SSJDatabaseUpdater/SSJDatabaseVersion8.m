@@ -41,6 +41,11 @@
         return error;
     }
     
+    error = [self updateBillTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -134,6 +139,18 @@
     if (![db executeUpdate:@"alter table BK_USER_CHARGE add LOANID text"]) {
         return [db lastError];
     }
+    return nil;
+}
+
++ (NSError *)updateBillTypeTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('5', '借贷利息收入', 0, 'bt_interest', '#408637', 2, 0)"]) {
+        return [db lastError];
+    }
+    
+    if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('6', '借贷利息支出', 1, 'bt_interest', '#408637', 2, 0)"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
