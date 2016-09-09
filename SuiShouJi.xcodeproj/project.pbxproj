@@ -6481,8 +6481,8 @@
 		7DF8DEDE1C59C47200CC5DFA /* guide_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_1@2x.png"; sourceTree = "<group>"; };
 		7DF8DEDF1C59C47200CC5DFA /* guide_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_2@2x.png"; sourceTree = "<group>"; };
 		7DF8DEE01C59C47200CC5DFA /* guide_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "guide_3@2x.png"; sourceTree = "<group>"; };
-		7DFCEDF91D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJRecordMakingMoveCategoryAlertView.h; sourceTree = "<group>"; };
-		7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJRecordMakingMoveCategoryAlertView.m; sourceTree = "<group>"; };
+		7DFCEDF91D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJRecordMakingMoveCategoryAlertView.h; path = View/SSJRecordMakingMoveCategoryAlertView.h; sourceTree = "<group>"; };
+		7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJRecordMakingMoveCategoryAlertView.m; path = View/SSJRecordMakingMoveCategoryAlertView.m; sourceTree = "<group>"; };
 		7DFD30421D75217300A0D7A0 /* SSJCategoryEditableCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryEditableCollectionView.h; sourceTree = "<group>"; };
 		7DFD30431D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCategoryEditableCollectionView.m; sourceTree = "<group>"; };
 		7DFD30501D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCategoryEditableCollectionViewCell.h; sourceTree = "<group>"; };
@@ -8099,8 +8099,6 @@
 				7DFD30511D75268D00A0D7A0 /* SSJCategoryEditableCollectionViewCell.m */,
 				7DFD30571D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.h */,
 				7DFD30581D75288D00A0D7A0 /* SSJCategoryEditableCollectionViewCellItem.m */,
-				7DFCEDF91D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.h */,
-				7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8398,6 +8396,8 @@
 		7D9B4AEA1D7916DA000F8557 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				7DFCEDF91D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.h */,
+				7DFCEDFA1D817532006F254A /* SSJRecordMakingMoveCategoryAlertView.m */,
 				7D5F330F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.h */,
 				7D5F33101CEAE6C10086B67E /* SSJNewCategoryCollectionView.m */,
 				7D5F32FF1CEAE6C10086B67E /* SSJCategoryCollectionViewCell.h */,
@@ -8420,11 +8420,11 @@
 				7D9B4B141D795E55000F8557 /* loan_clock@2x.png */,
 				7D9B4B151D795E55000F8557 /* loan_clock@3x.png */,
 				7D9B4AF41D794DCA000F8557 /* loan_expires@2x.png */,
+				7D9B4AF51D794DCA000F8557 /* loan_expires@3x.png */,
 				7D9B4B181D795FE9000F8557 /* loan_expectedInterest@2x.png */,
 				7D9B4B191D795FE9000F8557 /* loan_expectedInterest@3x.png */,
 				7D333D921D79676200677A5A /* loan_stamp@2x.png */,
 				7D333D931D79676200677A5A /* loan_stamp@3x.png */,
-				7D9B4AF51D794DCA000F8557 /* loan_expires@3x.png */,
 				7D9B4AF61D794DCA000F8557 /* loan_interest@2x.png */,
 				7D9B4AF71D794DCA000F8557 /* loan_interest@3x.png */,
 				7D9B4AF81D794DCA000F8557 /* loan_memo@2x.png */,
@@ -17673,7 +17673,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "bb3aff95-d6bd-4a53-a80c-d95b80fce60a";
+				PROVISIONING_PROFILE = "8e478407-1b9e-4ba0-a890-d2739172842f";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -17718,7 +17718,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "2a11126f-7a78-4e75-a9fd-d4a7a244a3a2";
+				PROVISIONING_PROFILE = "cc299689-cec6-4ad4-ad85-2270ff299d21";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;

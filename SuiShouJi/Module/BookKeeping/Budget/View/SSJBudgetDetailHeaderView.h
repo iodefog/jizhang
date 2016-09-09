@@ -16,4 +16,6 @@
 
 - (void)setBudgetModel:(SSJBudgetModel *)model;
 
+- (void)updateAppearance;
+
 @end

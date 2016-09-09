@@ -62,13 +62,14 @@ static const CGFloat kBottomViewHeight2 = 235;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self addSubview:self.topView];
-        [self addSubview:self.bottomView];
         
         self.formatter = [[NSDateFormatter alloc] init];
         self.formatter.dateFormat = @"yyyy-MM-dd";
         
+        [self addSubview:self.topView];
+        [self addSubview:self.bottomView];
         self.backgroundColor = [UIColor clearColor];
+        [self updateAppearance];
     }
     return self;
 }
@@ -171,7 +172,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     
     self.waveView.percent = (model.payMoney / model.budgetMoney);
     self.waveView.money = model.budgetMoney - model.payMoney;
-    self.topView.backgroundColor = self.waveView.percent <= 1 ? [UIColor ssj_colorWithHex:@"0fceb6"] : [UIColor ssj_colorWithHex:@"ff654c"];
     
     self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
     [self.payMoneyLab sizeToFit];
@@ -202,6 +202,22 @@ static const CGFloat kBottomViewHeight2 = 235;
         self.bottomLab.attributedText = text;
         [self.bottomLab sizeToFit];
     }
+    
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _bottomLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+ 
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.topView.backgroundColor = self.waveView.percent <= 1 ? [UIColor ssj_colorWithHex:@"0fceb6"] : [UIColor ssj_colorWithHex:@"ff654c"];
+    } else {
+        self.topView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.4];
+    }
 }
 
 - (UIView *)topView {
@@ -219,7 +235,6 @@ static const CGFloat kBottomViewHeight2 = 235;
 - (UIView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[UIView alloc] init];
-        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [_bottomView addSubview:self.waveView];
         [_bottomView addSubview:self.payMoneyLab];
         [_bottomView addSubview:self.bottomLab];
@@ -309,7 +324,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_payMoneyLab) {
         _payMoneyLab = [[UILabel alloc] init];
         _payMoneyLab.backgroundColor = [UIColor clearColor];
-        _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _payMoneyLab.font = [UIFont systemFontOfSize:20];
         _payMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
@@ -320,7 +334,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_historyPaymentLab) {
         _historyPaymentLab = [[UILabel alloc] init];
         _historyPaymentLab.backgroundColor = [UIColor clearColor];
-        _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _historyPaymentLab.font = [UIFont systemFontOfSize:13];
         _historyPaymentLab.adjustsFontSizeToFitWidth = YES;
     }
@@ -332,7 +345,6 @@ static const CGFloat kBottomViewHeight2 = 235;
         _estimateMoneyLab = [[UILabel alloc] init];
         _estimateMoneyLab.backgroundColor = [UIColor clearColor];
         _estimateMoneyLab.textAlignment = NSTextAlignmentRight;
-        _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _estimateMoneyLab.font = [UIFont systemFontOfSize:13];
         _estimateMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
@@ -343,7 +355,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_bottomLab) {
         _bottomLab = [[UILabel alloc] init];
         _bottomLab.backgroundColor = [UIColor clearColor];
-        _bottomLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bottomLab.font = [UIFont systemFontOfSize:13];
     }
     return _bottomLab;
