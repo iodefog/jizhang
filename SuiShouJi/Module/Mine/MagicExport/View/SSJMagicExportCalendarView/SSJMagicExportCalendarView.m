@@ -48,6 +48,7 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         [self addSubview:self.tableView];
         
         self.backgroundColor = [UIColor clearColor];
+        [self updateAppearance];
     }
     return self;
 }
@@ -263,6 +264,16 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
     return YES;
 }
 
+- (void)updateAppearance {
+    [_weekView updateAppearance];
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    if (![[SSJThemeSetting currentThemeModel].ID isEqualToString:@"0"]) {
+        _tableView.backgroundColor = [UIColor clearColor];
+    } else {
+        _tableView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    }
+}
+
 #pragma mark - Getter
 - (SSJMagicExportCalendarWeekView *)weekView {
     if (!_weekView) {
@@ -278,20 +289,10 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
         _tableView.delegate = self;
         _tableView.rowHeight = 60;
         _tableView.sectionHeaderHeight = 45;
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         [_tableView registerClass:[SSJMagicExportCalendarViewCell class] forCellReuseIdentifier:kCalendarCellId];
         [_tableView registerClass:[SSJMagicExportCalendarHeaderView class] forHeaderFooterViewReuseIdentifier:kCalendarHeaderId];
-        
-        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-            [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        }
-        
-        if (![[SSJThemeSetting currentThemeModel].ID isEqualToString:@"0"]) {
-            _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
-        } else {
-            _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:1];
-        }
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableView;
 }

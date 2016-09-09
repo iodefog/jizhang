@@ -10,4 +10,6 @@
 
 @interface SSJMagicExportCalendarWeekView : UIView
 
+- (void)updateAppearance;
+
 @end

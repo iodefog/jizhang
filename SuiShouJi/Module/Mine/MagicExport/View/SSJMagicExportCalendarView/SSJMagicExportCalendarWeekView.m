@@ -33,6 +33,7 @@
             [self addSubview:lab];
         }
     }
+    
     return self;
 }
 
@@ -41,6 +42,13 @@
     for (int i = 0; i < _labelArr.count; i ++) {
         UILabel *lab = _labelArr[i];
         lab.frame = CGRectMake(width * i, 0, width, self.height);
+    }
+}
+
+- (void)updateAppearance {
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    for (UILabel *lab in _labelArr) {
+        lab.textColor = ([lab.text isEqualToString:@"日"] || [lab.text isEqualToString:@"六"]) ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
 }
 

@@ -58,6 +58,11 @@
     }
 }
 
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    
+}
+
 - (void)setDateItems:(NSArray<SSJMagicExportCalendarDateViewItem *> *)dateItems {
     _dateItems = dateItems;
     for (int i = 0; i < _dateItems.count; i ++) {

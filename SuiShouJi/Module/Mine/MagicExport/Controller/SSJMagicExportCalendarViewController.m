@@ -43,6 +43,7 @@
             _billDates = result;
             [self.view addSubview:self.dateSwitchControl];
             [self.view addSubview:self.calendarView];
+            [self updateAppearance];
             
             [self.calendarView reload];
             [self.calendarView scrollToDate:_beginDate];
@@ -56,6 +57,11 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     self.calendarView.height = self.view.height - self.dateSwitchControl.bottom;
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
 }
 
 #pragma mark - SSJMagicExportCalendarViewDelegate
@@ -125,12 +131,19 @@
     }
 }
 
+#pragma mark - Private
+- (void)updateAppearance {
+    _dateSwitchControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _calendarView.highlightColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    [_calendarView reload];
+    [_calendarView updateAppearance];
+}
+
 #pragma mark - Getter
 - (SSJMagicExportCalendarSwitchStartAndEndDateControl *)dateSwitchControl {
     if (!_dateSwitchControl) {
         __weak typeof(self) wself = self;
         _dateSwitchControl = [[SSJMagicExportCalendarSwitchStartAndEndDateControl alloc] initWithFrame:CGRectMake(0, 10 + SSJ_NAVIBAR_BOTTOM, self.view.width, 68)];
-        _dateSwitchControl.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _dateSwitchControl.beginDate = _beginDate;
         _dateSwitchControl.endDate = _endDate;
         _dateSwitchControl.clickBeginDateAction = ^{
@@ -158,7 +171,6 @@
         _calendarView.delegate = self;
         _calendarView.selectedDates = selectedDates;
         _calendarView.selectedDateColor = [UIColor whiteColor];
-        _calendarView.highlightColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _calendarView;
 }

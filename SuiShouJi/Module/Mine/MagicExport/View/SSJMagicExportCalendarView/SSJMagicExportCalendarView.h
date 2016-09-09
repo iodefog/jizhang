@@ -94,6 +94,8 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
 // 选中的日期背景颜色、为选中的星号颜色、选中后日期下的标注字体颜色（即方法calendarView:descriptionForSelectedDate:返回的文字的颜色）
 @property (nonatomic, strong) UIColor *highlightColor;
 
+@property (nonatomic, strong) UIColor *section;
+
 // 选中的日期
 @property (nullable, nonatomic, strong) NSArray<NSDate *> *selectedDates;
 
@@ -123,6 +125,8 @@ extern NSString *const SSJMagicExportCalendarViewEndDateKey;
  *  @param date 显示在可视范围内的日期
  */
 - (void)scrollToDate:(NSDate *)date;
+
+- (void)updateAppearance;
 
 @end
 
