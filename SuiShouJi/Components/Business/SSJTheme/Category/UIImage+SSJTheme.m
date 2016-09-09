@@ -60,6 +60,7 @@
         [[self memoCache] setObject:image forKey:imagePath];
     } else {
         SSJPRINT(@"imge在指定路径下不存在 %@", imagePath);
+        image = [UIImage imageNamed:name];
     }
     
     return image;

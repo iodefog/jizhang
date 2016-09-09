@@ -33,6 +33,8 @@
 #import "YYKeyboardManager.h"
 #import "SSJRecordMakingStore.h"
 
+#define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
+
 static const NSTimeInterval kAnimationDuration = 0.25;
 
 static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
@@ -87,6 +89,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     BOOL _needToDismiss;
 }
 #pragma mark - Lifecycle
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"记一笔";
@@ -125,6 +131,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self updateNavigationRightItem];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self getCategoryList];
+}
+
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if (![self showGuideViewIfNeeded]) {
@@ -135,15 +146,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [self.billTypeInputView.moneyInput becomeFirstResponder];
         }
     }
-}
-
--(void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self getCategoryList];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -218,6 +220,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (SSJRecordMakingBillTypeInputView *)billTypeInputView {
     if (!_billTypeInputView) {
         _billTypeInputView = [[SSJRecordMakingBillTypeInputView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 91)];
+        _billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
         _billTypeInputView.moneyInput.delegate = self;
         if (_item.money) {
             _billTypeInputView.moneyInput.text = [NSString stringWithFormat:@"%.2f", [_item.money doubleValue]];
@@ -633,12 +636,12 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             weakSelf.incomeTypeView.items = result;
         }
         
-        [UIView animateWithDuration:kAnimationDuration animations:^{
-            weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
-        }];
-        weakSelf.billTypeInputView.billTypeName = selectedItem.title;
-        
-
+        if (selectedItem) {
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                weakSelf.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:selectedItem.colorValue];
+            }];
+            weakSelf.billTypeInputView.billTypeName = selectedItem.title;
+        }
         
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError *error) {
@@ -724,33 +727,45 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 -(void)makeArecord{
     __weak typeof(self) weakSelf = self;
+    if (!_item.billId.length) {
+        [_billTypeInputView.moneyInput becomeFirstResponder];
+        [CDAutoHideMessageHUD showMessage:@"请添加并选择一个类别"];
+        return;
+    }
+    
     if ([_billTypeInputView.moneyInput.text doubleValue] == 0) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"金额不能为0"];
         return;
     }
+    
     if ([_billTypeInputView.moneyInput.text doubleValue] < 0) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"金额不能小于0"];
         return;
     }
+    
     if (self.item.fundOperatorType == 2) {
         [_billTypeInputView.moneyInput becomeFirstResponder];
         [CDAutoHideMessageHUD showMessage:@"请先添加资金账户"];
         return;
     }
+    
     self.item.incomeOrExpence = !_titleSegment.selectedSegmentIndex;
     self.item.money = _billTypeInputView.moneyInput.text;
     self.item.chargeMemo = _accessoryView.memoView.text;
+    
     if (self.item.chargeMemo && self.item.ID.length) {
         [MobClick event:@"addRecord_memo"];
     }
+    
     if (_selectedImage != nil) {
         NSString *imageName = SSJUUID();
         if (SSJSaveImage(_selectedImage, imageName) && SSJSaveThumbImage(_selectedImage, imageName)) {
             weakSelf.item.chargeImage = imageName;
         }
     }
+    
     [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
         if (weakSelf.addNewChargeBlock) {
             weakSelf.addNewChargeBlock(@[editeItem]);
@@ -797,7 +812,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                                               order:order state:0
                                             Success:NULL
                                             failure:^(NSError *error) {
-                                                
                                                 [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"
                                                                                     message:[error localizedDescription]
                                                                                      action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -806,10 +820,19 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
             if (item.selected) {
                 [UIView animateWithDuration:kAnimationDuration animations:^{
+                    wself.billTypeInputView.billTypeName = item.title;
                     wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
                 }];
-                wself.billTypeInputView.billTypeName = item.title;
+                wself.item.billId = item.ID;
             }
+        }
+        
+        if (selectionView.items.count == 0) {
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                wself.billTypeInputView.billTypeName = nil;
+                wself.billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
+            }];
+            wself.item.billId = nil;
         }
     };
     
