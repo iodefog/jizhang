@@ -443,7 +443,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (UIImageView *)stampView {
     if (!_stampView) {
-        _stampView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loan_stamp"]];
+        _stampView = [[UIImageView alloc] initWithImage:[UIImage ssj_themeImageWithName:@"loan_stamp"]];
         _stampView.size = CGSizeMake(134, 134);
         _stampView.center = CGPointMake(self.tableView.width * 0.5, self.tableView.height * 0.32);
         _stampView.hidden = YES;

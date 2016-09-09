@@ -144,7 +144,7 @@ const int kMemoMaxLength = 13;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_person"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_person"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"被谁借款";
@@ -166,7 +166,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_money"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借出金额";
@@ -189,7 +189,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:0]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_account"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_account"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借出账户";
@@ -212,7 +212,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_calendar"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_calendar"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
                 cell.textLabel.text = @"借款日";
@@ -234,7 +234,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_expires"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_expires"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"还款日";
         
         cell.additionalIcon.image = nil;
@@ -248,7 +248,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:1]] == NSOrderedSame) {
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_memo"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"备注";
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = _loanModel.memo;
@@ -263,7 +263,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_interest"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_interest"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"计息";
         cell.additionalIcon.image = nil;
         cell.subtitleLabel.text = nil;
@@ -278,7 +278,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:2]] == NSOrderedSame) {
         SSJAddOrEditLoanMultiLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanMultiLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_yield"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"年化收益率";
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.0" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         if (_loanModel.rate) {
@@ -296,7 +296,7 @@ const int kMemoMaxLength = 13;
         
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [UIImage imageNamed:@"loan_remind"];
+        cell.imageView.image = [[UIImage imageNamed:@"loan_remind"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = @"到期日提醒";
         cell.subtitleLabel.text = [_reminderItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
         cell.additionalIcon.image = nil;

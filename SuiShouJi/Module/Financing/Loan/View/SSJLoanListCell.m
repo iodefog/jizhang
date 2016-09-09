@@ -29,8 +29,9 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        _stamp = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loan_stamp"]];
-        _stamp.alpha = 0.4;
+        _stamp = [[UIImageView alloc] initWithImage:[UIImage ssj_themeImageWithName:@"loan_stamp"]];
+        _stamp.size = CGSizeMake(72, 72);
+//        _stamp.alpha = 0.4;
         [self.contentView addSubview:_stamp];
         
         _icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
