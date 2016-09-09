@@ -802,38 +802,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     billTypeView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
     
     billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-        int type = !wself.titleSegment.selectedSegmentIndex;
-        int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type] + 1;
-        
-        [SSJCategoryListHelper updateCategoryWithID:item.ID
-                                               name:item.title
-                                              color:item.colorValue
-                                              image:item.imageName
-                                              order:order state:0
-                                            Success:NULL
-                                            failure:^(NSError *error) {
-                                                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"
-                                                                                    message:[error localizedDescription]
-                                                                                     action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-                                            }];
-        
-        for (SSJRecordMakingBillTypeSelectionCellItem *item in selectionView.items) {
-            if (item.selected) {
-                [UIView animateWithDuration:kAnimationDuration animations:^{
-                    wself.billTypeInputView.billTypeName = item.title;
-                    wself.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
-                }];
-                wself.item.billId = item.ID;
-            }
-        }
-        
-        if (selectionView.items.count == 0) {
-            [UIView animateWithDuration:kAnimationDuration animations:^{
-                wself.billTypeInputView.billTypeName = nil;
-                wself.billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
-            }];
-            wself.item.billId = nil;
-        }
+        [wself deleteItem:item ofItems:selectionView.items];
     };
     
     billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
@@ -841,6 +810,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
             [SSJRecordMakingMoveCategoryAlertView showWithSureHandle:^{
                 [selectionView deleteItem:item];
+                [wself deleteItem:item ofItems:selectionView.items];
             }];
             return NO;
         }
@@ -948,6 +918,41 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     } else if (_titleSegment.selectedSegmentIndex == 1) {
         UIBarButtonItem *currentItem = _incomeTypeView.editing ? self.doneItem : self.managerItem;
         [self.navigationItem setRightBarButtonItem:currentItem animated:YES];
+    }
+}
+
+- (void)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item ofItems:(NSArray *)items {
+    int type = !self.titleSegment.selectedSegmentIndex;
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:type] + 1;
+    
+    [SSJCategoryListHelper updateCategoryWithID:item.ID
+                                           name:item.title
+                                          color:item.colorValue
+                                          image:item.imageName
+                                          order:order state:0
+                                        Success:NULL
+                                        failure:^(NSError *error) {
+                                            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"
+                                                                                message:[error localizedDescription]
+                                                                                 action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+                                        }];
+    
+    for (SSJRecordMakingBillTypeSelectionCellItem *item in items) {
+        if (item.selected) {
+            [UIView animateWithDuration:kAnimationDuration animations:^{
+                self.billTypeInputView.billTypeName = item.title;
+                self.billTypeInputView.fillColor = [UIColor ssj_colorWithHex:item.colorValue];
+            }];
+            self.item.billId = item.ID;
+        }
+    }
+    
+    if (items.count == 0) {
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            self.billTypeInputView.billTypeName = nil;
+            self.billTypeInputView.fillColor = INPUT_DEFAULT_COLOR;
+        }];
+        self.item.billId = nil;
     }
 }
 
