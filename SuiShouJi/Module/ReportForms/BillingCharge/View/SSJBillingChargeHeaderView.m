@@ -20,6 +20,7 @@
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
         self.textLabel.font = [UIFont systemFontOfSize:15];
         [self.contentView addSubview:self.sumLabel];
+        self.backgroundView = [[UIView alloc] init];
     }
     return self;
 }
