@@ -24,7 +24,6 @@
 #import "SSJCalendarView.h"
 #import "SSJDateSelectedView.h"
 #import "SSJFundingTypeSelectView.h"
-#import "SSJRecordMakingMoveCategoryAlertView.h"
 #import "SSJRecordMakingBillTypeInputView.h"
 #import "SSJRecordMakingBillTypeSelectionView.h"
 #import "SSJRecordMakingBillTypeInputAccessoryView.h"
@@ -808,10 +807,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         if (![[NSUserDefaults standardUserDefaults] boolForKey:kIsAlertViewShowedKey]) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
-            [SSJRecordMakingMoveCategoryAlertView showWithSureHandle:^{
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"该类别将被移动到添加类别页哦。" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction * _Nonnull action) {
                 [selectionView deleteItem:item];
                 [wself deleteItem:item ofItems:selectionView.items];
-            }];
+            }], nil];
+            
             return NO;
         }
         
