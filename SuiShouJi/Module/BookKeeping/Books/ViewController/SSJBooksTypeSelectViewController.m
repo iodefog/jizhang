@@ -357,6 +357,10 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     [attributedDisableTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, attributedTitle.length)];
     [self.editeButton setAttributedTitle:attributedTitle forState:UIControlStateNormal];
     [self.editeButton setAttributedTitle:attributedDisableTitle forState:UIControlStateDisabled];
+    self.editeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    self.deleteButton.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.2];
+    [self.deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+
 }
 
 - (void)didReceiveMemoryWarning {

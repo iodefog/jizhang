@@ -24,8 +24,8 @@
     if (self = [super initWithFrame:frame]) {
         self.contentHeight = height;
         
-        self.normalLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
-        self.highlightLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        self.normalLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        self.highlightLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self ssj_setBorderWidth:2.0];
