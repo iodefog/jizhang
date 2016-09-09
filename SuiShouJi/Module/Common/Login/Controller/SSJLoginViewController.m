@@ -433,6 +433,8 @@
         _tfPhoneNum.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPhoneNum.placeholder = @"请输入手机号";
         [_tfPhoneNum setValue:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forKeyPath:@"_placeholderLabel.textColor"];
+        _tfPhoneNum.normalLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _tfPhoneNum.highlightLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         _tfPhoneNum.font = [UIFont systemFontOfSize:16];
         _tfPhoneNum.delegate = self;
         _tfPhoneNum.keyboardType = UIKeyboardTypeNumberPad;
@@ -455,6 +457,8 @@
         _tfPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         _tfPassword.placeholder = @"请输入密码";
         [_tfPassword setValue:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor] forKeyPath:@"_placeholderLabel.textColor"];
+        _tfPassword.normalLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
+        _tfPassword.highlightLineColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         _tfPassword.font = [UIFont systemFontOfSize:16];
         _tfPassword.secureTextEntry = YES;
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
@@ -548,7 +552,7 @@
 -(UIView *)leftSeperatorLine{
     if (!_leftSeperatorLine) {
         _leftSeperatorLine = [[UIView alloc]init];
-        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        _leftSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
     }
     return _leftSeperatorLine;
 }
@@ -556,7 +560,7 @@
 -(UIView *)rightSeperatorLine{
     if (!_rightSeperatorLine) {
         _rightSeperatorLine = [[UIView alloc]init];
-        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        _rightSeperatorLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
     }
     return _rightSeperatorLine;
 }
@@ -566,7 +570,7 @@
         _thirdPartyLoginLabel = [[UILabel alloc]init];
         _thirdPartyLoginLabel.text = @"使用第三方登录";
         [_thirdPartyLoginLabel sizeToFit];
-        _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginMainColor];
+        _thirdPartyLoginLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.loginSecondaryColor];
         _thirdPartyLoginLabel.font = [UIFont systemFontOfSize:15];
         _thirdPartyLoginLabel.textAlignment = NSTextAlignmentCenter;
     }
