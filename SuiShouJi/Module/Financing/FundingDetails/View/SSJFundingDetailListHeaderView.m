@@ -125,10 +125,10 @@
         self.dateLabel.text = dateStr;
         [self.dateLabel sizeToFit];
         if (creditCardItem.income - creditCardItem.expenture > 0) {
-            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"ea3a3a"];
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
             self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",creditCardItem.income - creditCardItem.expenture];
         }else if (creditCardItem.income - creditCardItem.expenture < 0){
-            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"00d0b6"];
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
             self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",creditCardItem.income - creditCardItem.expenture];
         }else{
             self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
