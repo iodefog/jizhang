@@ -52,7 +52,7 @@
     
     SSJLoanDetailCellItem *item = (SSJLoanDetailCellItem *)cellItem;
     
-    self.imageView.image = [UIImage imageNamed:item.image];
+    self.imageView.image = [[UIImage imageNamed:item.image] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.textLabel.text = item.title;
     self.rightLabel.text = item.subtitle;
     [self updateAppearance];
@@ -73,6 +73,7 @@
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     _rightLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end
