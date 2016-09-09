@@ -7,6 +7,7 @@
 //
 
 #import "SSJReminderDateSelectView.h"
+#import "SSJReminderWeekDaySelectView.h"
 
 @interface SSJReminderDateSelectView()
 
@@ -20,6 +21,8 @@
 
 @property (nonatomic,strong) UIButton *comfirmButton;
 
+@property(nonatomic, strong) SSJReminderWeekDaySelectView *weekView;
+
 @end
 
 @implementation SSJReminderDateSelectView
@@ -30,13 +33,14 @@
     if (self) {
         [self addSubview:self.dateSelect];
         [self addSubview:self.topView];
+        [self addSubview:self.weekView];
         [self sizeToFit];
     }
     return self;
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, self.dateSelect.height + 50);
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, self.dateSelect.height + 90);
 }
 
 - (void)show {
@@ -68,12 +72,14 @@
     [super layoutSubviews];
     self.dateSelect.bottom = self.height;
     self.topView.size = CGSizeMake(self.width, 50);
-    self.topView.leftTop = CGPointMake(0, self.dateSelect.top);
+    self.topView.leftTop = CGPointMake(0, 0);
     self.titleLabel.center = CGPointMake(self.topView.width / 2, self.topView.height / 2);
     self.closeButton.centerY = self.topView.height / 2;
     self.closeButton.left = 10;
     self.comfirmButton.centerY = self.topView.height / 2;
     self.comfirmButton.right = self.width - 10;
+    self.weekView.top = self.topView.bottom;
+    self.weekView.centerX = self.width / 2;
 }
 
 
@@ -105,12 +111,20 @@
 
 -(UIDatePicker *)dateSelect{
     if (!_dateSelect) {
-        _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 300)];
+        _dateSelect = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, self.width, 380)];
         _dateSelect.datePickerMode = UIDatePickerModeDate;
         _dateSelect.minimumDate = [NSDate date];
         _dateSelect.backgroundColor = [UIColor whiteColor];
     }
     return _dateSelect;
+}
+
+-(SSJReminderWeekDaySelectView *)weekView{
+    if (!_weekView) {
+        _weekView = [[SSJReminderWeekDaySelectView alloc]initWithFrame:CGRectMake(0, 0, self.width, 40)];
+        _weekView.backgroundColor = [UIColor whiteColor];
+    }
+    return _weekView;
 }
 
 -(void)comfirmButtonClicked:(id)sender{
@@ -127,6 +141,7 @@
 -(void)setCurrentDate:(NSDate *)currentDate{
     _currentDate = currentDate;
     self.dateSelect.date = _currentDate;
+    self.weekView.currentDate = _currentDate;
 }
 
 

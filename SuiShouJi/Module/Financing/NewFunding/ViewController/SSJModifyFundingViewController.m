@@ -39,7 +39,7 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {\
-        self.statisticsTitle = @"编辑资金账户";
+        self.title = @"编辑资金账户";
 //        self.hideKeyboradWhenTouch = YES;
     }
     return self;
@@ -47,7 +47,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.item.fundingName;
     _cellTitleArray = @[@"账户名称",@"账户余额",@"备注",@"账户类型",@"选择颜色"];
     _selectColor = self.item.fundingColor;
     _selectParent = self.item.fundingParent;
@@ -224,12 +223,13 @@
 
 -(TPKeyboardAvoidingTableView *)tableView{
     if (!_tableView) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = [UIColor clearColor];
-
-        _tableView.delegate = self;
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.delegate = self;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.tableFooterView = [[UIView alloc] init];
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableView;
 }

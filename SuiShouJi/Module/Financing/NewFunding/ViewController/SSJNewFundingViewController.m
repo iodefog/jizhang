@@ -184,11 +184,13 @@
 #pragma mark - Getter
 -(TPKeyboardAvoidingTableView *)tableview{
     if (!_tableview) {
-        _tableview = [[TPKeyboardAvoidingTableView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
-        _tableview.backgroundColor = [UIColor clearColor];
-        _tableview.delegate = self;
+        _tableview = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableview.dataSource = self;
-        _tableview.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableview.delegate = self;
+        _tableview.backgroundColor = [UIColor clearColor];
+        _tableview.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableview.tableFooterView = [[UIView alloc] init];
+        [_tableview setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableview;
 }
