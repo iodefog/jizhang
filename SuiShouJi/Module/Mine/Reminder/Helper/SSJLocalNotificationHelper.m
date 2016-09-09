@@ -57,6 +57,9 @@
             }
                 
             case SSJReminderTypeBorrowing:{
+                if (item.borrowtarget.length) {
+                    item.borrowtarget = @"";
+                }
                 if (!item.borrowtOrLend) {
                     item.remindContent = [NSString stringWithFormat:@"还债啦，您有一笔欠%@的钱款，赶紧去结清吧！",item.borrowtarget];
                 }else{
