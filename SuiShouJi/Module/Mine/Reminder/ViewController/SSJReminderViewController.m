@@ -37,7 +37,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView registerClass:[SSJReminderListCell class] forCellReuseIdentifier:SSJReminderListCellIdentifier];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
     // Do any additional setup after loading the view.
 }

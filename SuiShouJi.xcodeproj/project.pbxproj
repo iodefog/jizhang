@@ -609,7 +609,6 @@
 		7DBA56B81D6D32B700C02D79 /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		7DBA56B91D6D32B700C02D79 /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		7DBA56BA1D6D32B700C02D79 /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
-		7DBA56BB1D6D32B700C02D79 /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */; };
 		7DBA56BC1D6D32B700C02D79 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		7DBA56BD1D6D32B700C02D79 /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		7DBA56BE1D6D32B700C02D79 /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
@@ -1915,7 +1914,6 @@
 		9C2A67F81D194CA70010F1DA /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		9C2A67F91D194CA70010F1DA /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		9C2A67FA1D194CA70010F1DA /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
-		9C2A67FB1D194CA70010F1DA /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */; };
 		9C2A67FD1D194CA70010F1DA /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		9C2A67FE1D194CA70010F1DA /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
 		9C2A67FF1D194CA70010F1DA /* SSJRecordMakingCategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32F91CEAE6C10086B67E /* SSJRecordMakingCategoryItem.m */; };
@@ -3174,6 +3172,16 @@
 		9C66F1361D211FE60094125D /* SSJThemeCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */; };
 		9C66F13E1D211FEB0094125D /* SSJThemeCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */; };
 		9C66F1411D214E330094125D /* SSJThemeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C66F1401D214E330094125D /* SSJThemeDetailViewController.m */; };
+		9C6D65D81D8251A10081A7CE /* founds_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */; };
+		9C6D65D91D8251A10081A7CE /* founds_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */; };
+		9C6D65E11D8251EB0081A7CE /* founds_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */; };
+		9C6D65E21D8251EB0081A7CE /* founds_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */; };
+		9C6D65E31D8251EB0081A7CE /* founds_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */; };
+		9C6D65E41D8251EB0081A7CE /* founds_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */; };
+		9C6D65E51D8251EC0081A7CE /* founds_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */; };
+		9C6D65E61D8251EC0081A7CE /* founds_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */; };
+		9C6D65E71D8251EC0081A7CE /* founds_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */; };
+		9C6D65E81D8251EC0081A7CE /* founds_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */; };
 		9C6E30AC1CEC067500394BB9 /* canleder_jia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E30AB1CEC067500394BB9 /* canleder_jia@3x.png */; };
 		9C6E30B51CEC067D00394BB9 /* canleder_jia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E30B41CEC067D00394BB9 /* canleder_jia@2x.png */; };
 		9C6E30B91CEC3AAF00394BB9 /* minus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C6E30B71CEC3AAF00394BB9 /* minus@2x.png */; };
@@ -3195,7 +3203,6 @@
 		9C9081651CEEB3D600FF5450 /* zhouqi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C9081631CEEB3D600FF5450 /* zhouqi@3x.png */; };
 		9C9471761CEB224C00D69079 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */; };
 		9C9471771CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471371CEB224C00D69079 /* SSJFinancingHomeHelper.m */; };
-		9C9471781CEB224C00D69079 /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */; };
 		9C9471791CEB224C00D69079 /* SSJFinancingHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */; };
 		9C94717A1CEB224C00D69079 /* SSJFinancingHomeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713E1CEB224C00D69079 /* SSJFinancingHomeHeader.m */; };
 		9C94717B1CEB224C00D69079 /* SSJFinancingHomePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471401CEB224C00D69079 /* SSJFinancingHomePopView.m */; };
@@ -3623,7 +3630,6 @@
 		9CEC002C1D6D41EB00DB2C8B /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		9CEC002D1D6D41EB00DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		9CEC002E1D6D41EB00DB2C8B /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
-		9CEC002F1D6D41EB00DB2C8B /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */; };
 		9CEC00301D6D41EB00DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CEC00311D6D41EB00DB2C8B /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		9CEC00321D6D41EB00DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
@@ -4602,7 +4608,6 @@
 		9CECFC341D6D41A700DB2C8B /* SSJBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433881C1A8DA50051E7AB /* SSJBaseCollectionViewController.m */; };
 		9CECFC351D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F32A01CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m */; };
 		9CECFC361D6D41A700DB2C8B /* SSJBookkeepingTreeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB6A1CFD2DAA0061803B /* SSJBookkeepingTreeStore.m */; };
-		9CECFC371D6D41A700DB2C8B /* SSJFinancingHomeAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */; };
 		9CECFC381D6D41A700DB2C8B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BBC21CFD2DAA0061803B /* SSJChargeReminderTimeView.m */; };
 		9CECFC3A1D6D41A700DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1723861D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m */; };
@@ -6787,6 +6792,8 @@
 		9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeCollectionHeaderView.m; sourceTree = "<group>"; };
 		9C66F13F1D214E330094125D /* SSJThemeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeDetailViewController.h; sourceTree = "<group>"; };
 		9C66F1401D214E330094125D /* SSJThemeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeDetailViewController.m; sourceTree = "<group>"; };
+		9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_jia@3x.png"; sourceTree = "<group>"; };
+		9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "founds_jia@2x.png"; sourceTree = "<group>"; };
 		9C6E30AB1CEC067500394BB9 /* canleder_jia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "canleder_jia@3x.png"; sourceTree = "<group>"; };
 		9C6E30B41CEC067D00394BB9 /* canleder_jia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "canleder_jia@2x.png"; sourceTree = "<group>"; };
 		9C6E30B71CEC3AAF00394BB9 /* minus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "minus@2x.png"; sourceTree = "<group>"; };
@@ -6807,8 +6814,6 @@
 		9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeitem.m; sourceTree = "<group>"; };
 		9C9471361CEB224C00D69079 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
 		9C9471371CEB224C00D69079 /* SSJFinancingHomeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeHelper.m; sourceTree = "<group>"; };
-		9C9471391CEB224C00D69079 /* SSJFinancingHomeAddCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeAddCell.h; sourceTree = "<group>"; };
-		9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeAddCell.m; sourceTree = "<group>"; };
 		9C94713B1CEB224C00D69079 /* SSJFinancingHomeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeCell.h; sourceTree = "<group>"; };
 		9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeCell.m; sourceTree = "<group>"; };
 		9C94713D1CEB224C00D69079 /* SSJFinancingHomeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHeader.h; sourceTree = "<group>"; };
@@ -8545,6 +8550,8 @@
 				9C564F0F1CEDBBE5009F7A30 /* founds_yindao-667@2x.png */,
 				9C564F101CEDBBE5009F7A30 /* founds_yindao@2x.png */,
 				9C564F0B1CEDBBDD009F7A30 /* founds_yindao-568@2x.png */,
+				9C6D65D61D8251A10081A7CE /* founds_jia@3x.png */,
+				9C6D65D71D8251A10081A7CE /* founds_jia@2x.png */,
 				9C564F0C1CEDBBDD009F7A30 /* founds_yindao@3x.png */,
 				9C991D8B1CE074670031CD02 /* zhuanzhang@3x.png */,
 				9C991D891CE0742D0031CD02 /* zhuanzhang@2x.png */,
@@ -9608,8 +9615,6 @@
 		9C9471381CEB224C00D69079 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				9C9471391CEB224C00D69079 /* SSJFinancingHomeAddCell.h */,
-				9C94713A1CEB224C00D69079 /* SSJFinancingHomeAddCell.m */,
 				9C94713B1CEB224C00D69079 /* SSJFinancingHomeCell.h */,
 				9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */,
 				9C94713D1CEB224C00D69079 /* SSJFinancingHomeHeader.h */,
@@ -11274,12 +11279,14 @@
 				7DBA57641D6D32B700C02D79 /* home_remind@3x.png in Resources */,
 				7DBA57651D6D32B700C02D79 /* motion_circle_correct@3x.png in Resources */,
 				7DBA57661D6D32B700C02D79 /* bt_jiayong@3x.png in Resources */,
+				9C6D65E41D8251EB0081A7CE /* founds_jia@2x.png in Resources */,
 				7DBA57671D6D32B700C02D79 /* bt_xie@2x.png in Resources */,
 				9C53790A1D767AA1002B230A /* book_jiechu@3x.png in Resources */,
 				9C5378FE1D767AA1002B230A /* book_family@3x.png in Resources */,
 				7DBA57681D6D32B700C02D79 /* bt_youfei@3x.png in Resources */,
 				7DBA57691D6D32B700C02D79 /* chengyuan_guanli@3x.png in Resources */,
 				7DBA576A1D6D32B700C02D79 /* bt_recharge@2x.png in Resources */,
+				9C6D65E31D8251EB0081A7CE /* founds_jia@3x.png in Resources */,
 				7DBA576B1D6D32B700C02D79 /* bt_tourism@3x.png in Resources */,
 				7DBA576C1D6D32B700C02D79 /* back@3x.png in Resources */,
 				7DBA576D1D6D32B700C02D79 /* founds_xianshi@2x.png in Resources */,
@@ -11928,6 +11935,7 @@
 				9CB0F7F61D277AC00096E9B7 /* defualtThumbImage.png in Resources */,
 				7D5FD2891D5D6D550033F7A2 /* reportForms_member@2x.png in Resources */,
 				9C5378BA1D767AA0002B230A /* book_jucan@3x.png in Resources */,
+				9C6D65E11D8251EB0081A7CE /* founds_jia@3x.png in Resources */,
 				9C2A687A1D194CA70010F1DA /* reportForms_left@3x.png in Resources */,
 				9C2A687B1D194CA70010F1DA /* reportForms_nodata@2x.png in Resources */,
 				9C2A687C1D194CA70010F1DA /* solid_circle@2x.png in Resources */,
@@ -12069,6 +12077,7 @@
 				9C2A68EB1D194CA70010F1DA /* help_tree_level_2@2x.png in Resources */,
 				9C2A68EC1D194CA70010F1DA /* bt_deficit@3x.png in Resources */,
 				9C65C9FF1D4AF7DA0058D0A4 /* xunhuan_chengyuan@2x.png in Resources */,
+				9C6D65E21D8251EB0081A7CE /* founds_jia@2x.png in Resources */,
 				9C2A68ED1D194CA70010F1DA /* bt_baoxiao@2x.png in Resources */,
 				9CBD5C8A1D1A678B00A28F7A /* youyu_icon.png in Resources */,
 				9C2A68EE1D194CA70010F1DA /* help_tree_level_3@2x.png in Resources */,
@@ -12785,6 +12794,7 @@
 				9CEC014E1D6D41EB00DB2C8B /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9CEC014F1D6D41EB00DB2C8B /* close@2x.png in Resources */,
 				9CEC01501D6D41EB00DB2C8B /* motion_circle_default@3x.png in Resources */,
+				9C6D65E81D8251EC0081A7CE /* founds_jia@2x.png in Resources */,
 				9C5379DC1D767AA2002B230A /* book_tianjia@3x.png in Resources */,
 				9CEC01511D6D41EB00DB2C8B /* bt_delete@2x.png in Resources */,
 				9CEC01521D6D41EB00DB2C8B /* more_weixin@2x.png in Resources */,
@@ -13164,6 +13174,7 @@
 				9CEC029C1D6D41EB00DB2C8B /* bt_house@3x.png in Resources */,
 				9CEC029D1D6D41EB00DB2C8B /* bt_youxi@2x.png in Resources */,
 				9CEC029E1D6D41EB00DB2C8B /* bt_menpiao@3x.png in Resources */,
+				9C6D65E71D8251EC0081A7CE /* founds_jia@3x.png in Resources */,
 				9CEC029F1D6D41EB00DB2C8B /* xuhuan_zhangben@2x.png in Resources */,
 				9CEC02A01D6D41EB00DB2C8B /* budget_no_data@2x.png in Resources */,
 				9CEC02A11D6D41EB00DB2C8B /* budget_right_disable@2x.png in Resources */,
@@ -13475,6 +13486,7 @@
 				9CECFD561D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9CECFD571D6D41A700DB2C8B /* close@2x.png in Resources */,
 				9CECFD581D6D41A700DB2C8B /* motion_circle_default@3x.png in Resources */,
+				9C6D65E61D8251EC0081A7CE /* founds_jia@2x.png in Resources */,
 				9C5379881D767AA1002B230A /* book_tianjia@3x.png in Resources */,
 				9CECFD591D6D41A700DB2C8B /* bt_delete@2x.png in Resources */,
 				9CECFD5A1D6D41A700DB2C8B /* more_weixin@2x.png in Resources */,
@@ -13854,6 +13866,7 @@
 				9CECFEA41D6D41A700DB2C8B /* bt_house@3x.png in Resources */,
 				9CECFEA51D6D41A700DB2C8B /* bt_youxi@2x.png in Resources */,
 				9CECFEA61D6D41A700DB2C8B /* bt_menpiao@3x.png in Resources */,
+				9C6D65E51D8251EC0081A7CE /* founds_jia@3x.png in Resources */,
 				9CECFEA71D6D41A700DB2C8B /* xuhuan_zhangben@2x.png in Resources */,
 				9CECFEA81D6D41A700DB2C8B /* budget_no_data@2x.png in Resources */,
 				9CECFEA91D6D41A700DB2C8B /* budget_right_disable@2x.png in Resources */,
@@ -14175,6 +14188,7 @@
 				7DD7D6F41C4C8E6A00ACE71A /* close@2x.png in Resources */,
 				9C5378841D767A73002B230A /* book_tianjia@3x.png in Resources */,
 				7DE69C5A1C8EDF34001D31C1 /* motion_circle_default@3x.png in Resources */,
+				9C6D65D91D8251A10081A7CE /* founds_jia@2x.png in Resources */,
 				BD37D2D41C5231D60050BDAA /* bt_delete@2x.png in Resources */,
 				9C4078101CE1B84000A61956 /* more_weixin@2x.png in Resources */,
 				7DAD4A601C4F552F004B7FF0 /* reportForms_right@3x.png in Resources */,
@@ -14376,6 +14390,7 @@
 				9C991DFB1CE0A79F0031CD02 /* bt_chong@3x.png in Resources */,
 				7DD7D6AD1C4C8E6A00ACE71A /* bt_hongbao@3x.png in Resources */,
 				9C9DD66E1D4A14EA001FA3C5 /* more_guanli@2x.png in Resources */,
+				9C6D65D81D8251A10081A7CE /* founds_jia@3x.png in Resources */,
 				BDCE42491C9F8C6C00682B27 /* zhouqi_none@3x.png in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				7DD7D6D91C4C8E6A00ACE71A /* bt_sport@3x.png in Resources */,
@@ -15273,7 +15288,6 @@
 				7DBA56B81D6D32B700C02D79 /* SSJBaseCollectionViewController.m in Sources */,
 				7DBA56B91D6D32B700C02D79 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				7DBA56BA1D6D32B700C02D79 /* SSJBookkeepingTreeStore.m in Sources */,
-				7DBA56BB1D6D32B700C02D79 /* SSJFinancingHomeAddCell.m in Sources */,
 				9C24D00D1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				7DBA56BC1D6D32B700C02D79 /* (null) in Sources */,
 				7DBA56BD1D6D32B700C02D79 /* SSJChargeReminderTimeView.m in Sources */,
@@ -15696,7 +15710,6 @@
 				9C47E6F41D224BF8005F338A /* SSJThemeService.m in Sources */,
 				9C2A67F91D194CA70010F1DA /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9C2A67FA1D194CA70010F1DA /* SSJBookkeepingTreeStore.m in Sources */,
-				9C2A67FB1D194CA70010F1DA /* SSJFinancingHomeAddCell.m in Sources */,
 				9C2A67FD1D194CA70010F1DA /* SSJChargeReminderTimeView.m in Sources */,
 				9C2A67FE1D194CA70010F1DA /* SSJRegularManager.m in Sources */,
 				9C2A67FF1D194CA70010F1DA /* SSJRecordMakingCategoryItem.m in Sources */,
@@ -16151,7 +16164,6 @@
 				9CECFC341D6D41A700DB2C8B /* SSJBaseCollectionViewController.m in Sources */,
 				9CECFC351D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CECFC361D6D41A700DB2C8B /* SSJBookkeepingTreeStore.m in Sources */,
-				9CECFC371D6D41A700DB2C8B /* SSJFinancingHomeAddCell.m in Sources */,
 				9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				9CECFC381D6D41A700DB2C8B /* (null) in Sources */,
 				9CECFC391D6D41A700DB2C8B /* SSJChargeReminderTimeView.m in Sources */,
@@ -16595,7 +16607,6 @@
 				9CEC002C1D6D41EB00DB2C8B /* SSJBaseCollectionViewController.m in Sources */,
 				9CEC002D1D6D41EB00DB2C8B /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CEC002E1D6D41EB00DB2C8B /* SSJBookkeepingTreeStore.m in Sources */,
-				9CEC002F1D6D41EB00DB2C8B /* SSJFinancingHomeAddCell.m in Sources */,
 				9CEC00301D6D41EB00DB2C8B /* (null) in Sources */,
 				9CEC00311D6D41EB00DB2C8B /* SSJChargeReminderTimeView.m in Sources */,
 				9CEC00321D6D41EB00DB2C8B /* SSJCanlenderChargeDetailCell.m in Sources */,
@@ -17023,7 +17034,6 @@
 				BD0433981C1A8DA50051E7AB /* SSJBaseCollectionViewController.m in Sources */,
 				7D5F33501CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9CD9BC021CFD2DAA0061803B /* SSJBookkeepingTreeStore.m in Sources */,
-				9C9471781CEB224C00D69079 /* SSJFinancingHomeAddCell.m in Sources */,
 				9CF594221D654AC900006594 /* SSJReminderItem.m in Sources */,
 				9CD9BC231CFD2DAA0061803B /* SSJChargeReminderTimeView.m in Sources */,
 				9C1723871D52D3D100BB13DE /* SSJCanlenderChargeDetailCell.m in Sources */,
