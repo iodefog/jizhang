@@ -785,17 +785,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)initBillTypeView:(SSJRecordMakingBillTypeSelectionView *)billTypeView {
     __weak typeof(self) wself = self;
     billTypeView.contentInsets = UIEdgeInsetsMake(0, 0, [SSJCustomKeyboard sharedInstance].height + self.accessoryView.height, 0);
-    billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:kIsAlertViewShowedKey]) {
-//            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
-            [SSJRecordMakingMoveCategoryAlertView showWithSureHandle:^{
-                [selectionView deleteItem:item];
-            }];
-            return NO;
-        }
-        
-        return YES;
-    };
     
     billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         int type = !wself.titleSegment.selectedSegmentIndex;
@@ -822,6 +811,18 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 wself.billTypeInputView.billTypeName = item.title;
             }
         }
+    };
+    
+    billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:kIsAlertViewShowedKey]) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
+            [SSJRecordMakingMoveCategoryAlertView showWithSureHandle:^{
+                [selectionView deleteItem:item];
+            }];
+            return NO;
+        }
+        
+        return YES;
     };
     
     billTypeView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {

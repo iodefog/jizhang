@@ -209,7 +209,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                                                 type:model.type];
                         }], nil];
                     } else {
-                        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"系统已有过同名的类别，您是否要将该名称以两类进行分别统计？或恢复系统类别停止创建？" action:[SSJAlertViewAction actionWithTitle:@"分为两类别" handler:^(SSJAlertViewAction *action) {
+                        [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"系统已有过同名的类别，是否要将该名称以两类进行分别统计？" action:[SSJAlertViewAction actionWithTitle:@"分为两类别" handler:^(SSJAlertViewAction *action) {
                             [self addNewCategoryWithName:name image:image color:color];
                         }], [SSJAlertViewAction actionWithTitle:@"恢复系统类别" handler:^(SSJAlertViewAction *action) {
                             [self openCategoryWithID:model.ID
@@ -220,7 +220,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                         }], nil];
                     }
                 } else {
-                    [CDAutoHideMessageHUD showMessage:@"您已经有相同名称的类别了"];
+                    [CDAutoHideMessageHUD showMessage:@"已有同名称类别，不支持新建哦"];
                     if (model.custom) {
                         [self openCategoryWithID:model.ID
                                             name:model.name
