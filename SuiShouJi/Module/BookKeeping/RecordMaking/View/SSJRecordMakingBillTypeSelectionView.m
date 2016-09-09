@@ -86,6 +86,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         item.selected = [item.ID isEqualToString:selectedItem.ID];
     }
     [_collectionView reloadData];
+    [self scrollToSelectedItem];
     
     if (_selectAction) {
         _selectAction(self, selectedItem);
@@ -169,6 +170,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
     [_internalItems addObject:[SSJRecordMakingBillTypeSelectionCellItem itemWithTitle:@"添加" imageName:@"add" colorValue:@"" ID:@"" order:0]];
     [_collectionView reloadData];
+    [self scrollToSelectedItem];
 }
 
 - (NSArray *)items {
@@ -187,6 +189,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         [_collectionView beginEditing];
     } else {
         [_collectionView endEditing];
+        [self scrollToSelectedItem];
     }
 }
 
@@ -204,6 +207,15 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     }
     
     return NO;
+}
+
+- (void)scrollToSelectedItem {
+    for (int idx = 0; idx < _internalItems.count; idx ++) {
+        SSJRecordMakingBillTypeSelectionCellItem *item = _internalItems[idx];
+        if (item.selected) {
+            [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:idx inSection:0] atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+        }
+    }
 }
 
 #pragma mark - Getter

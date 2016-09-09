@@ -34,4 +34,6 @@
 
 - (BOOL)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item;
 
+- (void)scrollToSelectedItem;
+
 @end
