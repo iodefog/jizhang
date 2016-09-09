@@ -40,6 +40,11 @@
         item.userId = SSJUSERID();
     }
     
+    if ([fireDate isEarlierThan:[NSDate date]]) {
+        NSLog(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
+        return;
+    }
+    
     if (!item.remindContent.length) {
         switch (item.remindType) {
             case SSJReminderTypeNormal:{
@@ -52,6 +57,9 @@
             }
                 
             case SSJReminderTypeBorrowing:{
+                if (item.borrowtarget.length) {
+                    item.borrowtarget = @"";
+                }
                 if (!item.borrowtOrLend) {
                     item.remindContent = [NSString stringWithFormat:@"还债啦，您有一笔欠%@的钱款，赶紧去结清吧！",item.borrowtarget];
                 }else{

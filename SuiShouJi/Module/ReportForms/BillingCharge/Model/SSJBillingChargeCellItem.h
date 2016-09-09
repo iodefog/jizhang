@@ -77,10 +77,10 @@
 @property (nonatomic) BOOL isOnOrNot;
 
 //记账的下标
-@property(nonatomic) int chargeIndex;
+@property(nonatomic) NSInteger chargeIndex;
 
 //操作类型
-@property(nonatomic) int operatorType;
+@property(nonatomic) NSInteger operatorType;
 
 @property(nonatomic, strong) NSString *transferSource;
 
@@ -93,5 +93,7 @@
 //删除的成员
 @property(nonatomic, strong) NSArray *deletedMembers;
 
+//流水对应的借贷id
+@property(nonatomic, strong) NSString *loanId;
 
 @end

@@ -28,6 +28,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJLoanListViewController.h"
 #import "SSJCreditCardItem.h"
 #import "SSJCreditCardStore.h"
+#import "SSJLoanHelper.h"
 
 #import "FMDB.h"
 
@@ -166,7 +167,15 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                 
             }];
         }else{
-            [self.items removeObject:cell.item];
+            SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
+            [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+                for (SSJLoanModel *model in list) {
+                    
+                }
+            } failure:^(NSError * _Nonnull error) {
+                
+            }];
+            [self.items removeObject:deleteItem];
             [weakSelf.collectionView reloadData];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         }
