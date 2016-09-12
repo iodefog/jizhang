@@ -34,7 +34,7 @@
             item.remindType = [resultSet intForColumn:@"itype"];
             NSString *dateStr = [resultSet stringForColumn:@"cstartdate"];
             item.remindDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
-            item.remindState = [resultSet stringForColumn:@"istate"];
+            item.remindState = [resultSet boolForColumn:@"istate"];
             item.remindAtTheEndOfMonth = [resultSet stringForColumn:@"iisend"];
             if (item.remindType == SSJReminderTypeBorrowing){
                 NSString *minmumDate = [db stringForQuery:@"select cborrowdate from bk_loan where cremindid = ? and cuserid = ?",item.remindId,userId];
@@ -72,7 +72,7 @@
     
     // 判断是编辑还是新增
     if ([db intForQuery:@"select count(1) from bk_user_remind where cuserid = ? and cremindid = ?",userId,item.remindId]) {
-        if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = 1, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operatortype = 1, iversion = ? where cuserid = ? and cremindid = ?",item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"],@(item.remindType),@(item.remindCycle),@(item.remindAtTheEndOfMonth),cwriteDate,@(SSJSyncVersion()),userId,item.remindId]) {
+        if (![db executeUpdate:@"update bk_user_remind set cremindname = ?, cmemo = ?, cstartdate  = ?, istate = ?, itype = ?, icycle = ?, iisend = ? , cwritedate = ?, operatortype = 1, iversion = ? where cuserid = ? and cremindid = ?",item.remindName,item.remindMemo,[item.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"], @(item.remindState),@(item.remindType),@(item.remindCycle),@(item.remindAtTheEndOfMonth),cwriteDate,@(SSJSyncVersion()),userId,item.remindId]) {
             return [db lastError];
         }
         [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
@@ -134,7 +134,7 @@
         item.remindType = [resultSet intForColumn:@"itype"];
         NSString *dateStr = [resultSet stringForColumn:@"cstartdate"];
         item.remindDate = [NSDate dateWithString:dateStr formatString:@"yyyy-MM-dd HH:mm:ss"];
-        item.remindState = [resultSet stringForColumn:@"istate"];
+        item.remindState = [resultSet boolForColumn:@"istate"];
         item.remindAtTheEndOfMonth = [resultSet stringForColumn:@"iisend"];
         if (item.remindType == SSJReminderTypeBorrowing){
             NSString *minmumDate = [db stringForQuery:@"select cborrowdate from bk_loan where cremindid = ? and cuserid = ?",item.remindId,userId];
