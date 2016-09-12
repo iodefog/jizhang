@@ -31,6 +31,11 @@
         return error;
     }
     
+    error = [self insertDefaultRemindWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     error = [self updateUserTableWithDatabase:db];
     if (error) {
         return error;
@@ -124,8 +129,33 @@
 }
 
 + (NSError *)createUserRemindTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists BK_USER_REMIND (CREMINDID TEXT NOT NULL, CUSERID TEXT, CREMINDNAME TEXT, CMEMO TEXT, CCLOCK TEXT, CSTARTDATE TEXT, ISTATE INTEGER, ITYPE INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, PRIMARY KEY(CREMINDID))"]) {
+    if (![db executeUpdate:@"create table if not exists BK_USER_REMIND (CREMINDID TEXT NOT NULL, CUSERID TEXT, CREMINDNAME TEXT, CMEMO TEXT, CSTARTDATE TEXT, ISTATE INTEGER, ITYPE INTEGER, ICYCLE INTEGER, IISEND INTEGER, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, PRIMARY KEY(CREMINDID))"]) {
         return [db lastError];
+    }
+    
+    return nil;
+}
+
++ (NSError *)insertDefaultRemindWithDatabase:(FMDatabase *)db {
+    BOOL open = NO;
+    NSString *time = nil;
+    FMResultSet *result = [db executeQuery:@"select * from BK_CHARGE_REMIND"];
+    while ([result next]) {
+        open = [result boolForColumn:@"ISONORNOT"];
+        time = [result stringForColumn:@"TIME"];
+    }
+    [result close];
+    
+    NSDate *remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day hour:18 minute:0 second:0];
+    NSString *remindDateStr = [remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    result = [db executeQuery:@"select CUSERID from BK_USER"];
+    while ([result next]) {
+        NSString *userID = [result stringForColumn:@"CUSERID"];
+        if (![db executeUpdate:@"insert into BK_USER_REMIND (CREMINDID, CUSERID, CREMINDNAME, CMEMO, CSTARTDATE, ISTATE, ITYPE, ICYCLE, IISEND, CWRITEDATE, IVERSION, OPERATORTYPE) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userID, @"记账提醒", @"", remindDateStr, @1, @1, @0, @0, writeDateStr, @(SSJSyncVersion()), @0]) {
+            return [db lastError];
+        }
     }
     
     return nil;

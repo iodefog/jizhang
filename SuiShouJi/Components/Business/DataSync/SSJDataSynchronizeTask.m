@@ -144,15 +144,8 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 
                 SSJPRINT(@">>> SSJ Wanings:同步失败-----code:%ld desc:%@", (long)code, desc);
                 
-                // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
-                if (code == -5555) {
-                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                        [SSJLoginViewController reloginIfNeeded];
-                    }], nil];
-                } else {
-                    if (failure) {
-                        failure(tError);
-                    }
+                if (failure) {
+                    failure(tError);
                 }
                 
                 return;
@@ -173,8 +166,30 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                     return;
                 }
                 
+                //  解析json数据
+                NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
+                if (tError) {
+                    SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
+                    if (failure) {
+                        failure(tError);
+                    }
+                    return;
+                }
+                
+                //    SSJPRINT(@">>> sync response data:%@", tableInfo);
+                
+                NSInteger errorCode = [tableInfo[@"code"] integerValue];
+                if (errorCode != 1) {
+                    tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
+                    SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
+                    if (failure) {
+                        failure(tError);
+                    }
+                    return;
+                }
+                
                 //  合并数据
-                if ([self mergeJsonData:jsonData error:&tError]) {
+                if ([self mergeData:tableInfo error:&tError]) {
                     
                     //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
                     [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
@@ -329,23 +344,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 }
 
 //  合并json数据
-- (BOOL)mergeJsonData:(NSData *)jsonData error:(NSError **)error {
-    
-    //  解析json数据
-    NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:error];
-    if (*error) {
-        SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", *error);
-        return NO;
-    }
-    
-    //    SSJPRINT(@">>> sync response data:%@", tableInfo);
-    
-    NSInteger errorCode = [tableInfo[@"code"] integerValue];
-    if (errorCode != 1) {
-        *error = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
-        SSJPRINT(@">>> SSJ warning:server response an error:%@", *error);
-        return NO;
-    }
+- (BOOL)mergeData:(NSDictionary *)tableInfo error:(NSError **)error {
     
     NSString *versinStr = tableInfo[@"syncversion"];
     

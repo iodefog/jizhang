@@ -12,6 +12,7 @@
 #import "SSJImageSynchronizeTask.h"
 #import "SSJSynchronizeTaskQueue.h"
 #import "SSJNetworkReachabilityManager.h"
+#import "SSJLoginViewController+SSJCategory.h"
 
 @interface SSJSynchronizeBlock : NSObject
 
@@ -206,15 +207,23 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     //  数据同步失败
     if (self.dataSyncQueue == queue) {
         SSJDispatchMainAsync(^{
+            // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
+            if (error.code == -5555) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    [SSJLoginViewController reloginIfNeeded];
+                }], nil];
+            } else {
+#ifdef DEBUG
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+#endif
+            }
+            
             void (^failure)() = [self.dataFailureBlocks block];
             if (failure) {
                 failure(SSJDataSynchronizeTypeData, error);
             }
             [self.dataFailureBlocks removeBlock];
             [self.dataSuccessBlocks removeBlock];
-#ifdef DEBUG
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-#endif
         });
         return;
     }
