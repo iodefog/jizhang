@@ -10,4 +10,6 @@
 
 @interface SSJInterestDetailViewController : SSJNewBaseTableViewController
 
+@property(nonatomic, strong) NSString *loanId;
+
 @end

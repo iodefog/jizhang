@@ -52,6 +52,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
+            item.loanId = [resultSet stringForColumn:@"loanid"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[item.money doubleValue]];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
@@ -155,6 +156,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.chargeThumbImage = [resultSet stringForColumn:@"thumburl"];
             item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
+            item.loanId = [resultSet stringForColumn:@"loanid"];
             if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
                 item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
@@ -237,6 +239,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         });
     }];
 }
+
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
     switch (weekday) {

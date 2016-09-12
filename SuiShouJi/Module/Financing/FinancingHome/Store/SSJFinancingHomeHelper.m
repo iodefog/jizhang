@@ -134,4 +134,17 @@
     }];
     return success;
 }
+
++ (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId{
+    __block SSJFinancingHomeitem *fundItem = [[SSJFinancingHomeitem alloc]init];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
+        FMResultSet *result = [db executeQuery:@"select a.* , b.ibalance from bk_fund_info  a , bk_funs_acct b where a.cparent != 'root' and a.cfundid = b.cfundid and a.operatortype <> 2 and a.cuserid = ? and a.cfundid = ?",userid,fundingId];
+        while ([result next]) {
+            fundItem = [self fundingItemWithResultSet:result inDatabase:db];
+        }
+    }];
+    return fundItem;
+}
+
 @end

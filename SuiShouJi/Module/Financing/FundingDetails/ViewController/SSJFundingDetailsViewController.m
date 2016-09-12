@@ -26,6 +26,7 @@
 #import "SSJCreditCardDetailHeader.h"
 #import "SSJCreditCardListDetailItem.h"
 #import "SSJCreditCardListCell.h"
+#import "SSJInterestDetailViewController.h"
 
 #import "FMDB.h"
 
@@ -233,6 +234,11 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 SSJFundingTransferEditeViewController *transferVc = [[SSJFundingTransferEditeViewController alloc] init];
                 transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                 [self.navigationController pushViewController:transferVc animated:YES];
+            }
+            if ([((SSJBillingChargeCellItem*)item).billId integerValue] == 6) {
+                SSJInterestDetailViewController *interestVc = [[SSJInterestDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                interestVc.loanId = ((SSJBillingChargeCellItem*)item).loanId;
+                [self.navigationController pushViewController:interestVc animated:YES];
             }
         }
     }
