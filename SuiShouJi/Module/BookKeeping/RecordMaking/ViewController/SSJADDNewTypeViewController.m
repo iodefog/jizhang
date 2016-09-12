@@ -43,9 +43,11 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 @property (nonatomic, strong) UIButton *sureButton;
 
+@property (nonatomic, strong) UIButton *featureDeleteButton;
+
 @property (nonatomic, strong) UIButton *editButton;
 
-@property (nonatomic, strong) UIButton *deleteButton;
+@property (nonatomic, strong) UIButton *customDeleteButton;
 
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noFeaturedCategoryRemindView;
 
@@ -74,7 +76,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.sureButton];
     [self.view addSubview:self.editButton];
-    [self.view addSubview:self.deleteButton];
+    [self.view addSubview:self.featureDeleteButton];
+    [self.view addSubview:self.customDeleteButton];
     [self.scrollView addSubview:self.featuredCategoryCollectionView];
     [self.scrollView addSubview:self.customCategorySwitchConrol];
     [self.scrollView addSubview:self.customCategoryCollectionView];
@@ -303,29 +306,39 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     [self.navigationController pushViewController:editVC animated:YES];
 }
 
-- (void)deleteButtonAction {
-    SSJCategoryEditableCollectionView *deleteCollectionView = nil;
-    SSJBudgetNodataRemindView *remindView = nil;
-    if (_titleSegmentView.selectedSegmentIndex == 0) {
-        deleteCollectionView = _featuredCategoryCollectionView;
-        remindView = self.noFeaturedCategoryRemindView;
-    } else if (_titleSegmentView.selectedSegmentIndex == 1 && _customCategorySwitchConrol.selectedIndex == 0) {
-        deleteCollectionView = _customCategoryCollectionView;
-        remindView = self.noCustomCategoryRemindView;
-    }
-    
-    if (deleteCollectionView.selectedItems.count == 0) {
+- (void)featureDeleteButtonAction {
+    if (_featuredCategoryCollectionView.selectedItems.count == 0) {
         [CDAutoHideMessageHUD showMessage:@"请选择要删除的类别"];
         return;
     }
     
-    NSArray *deleteIDs = [deleteCollectionView.selectedItems valueForKeyPath:@"categoryID"];
+    NSArray *deleteIDs = [_featuredCategoryCollectionView.selectedItems valueForKeyPath:@"categoryID"];
     [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
-        [deleteCollectionView deleteItems:deleteCollectionView.selectedItems];
-        if (deleteCollectionView.items.count == 0) {
-            [deleteCollectionView ssj_showWatermarkWithCustomView:remindView animated:YES target:nil action:nil];
+        [_featuredCategoryCollectionView deleteItems:_featuredCategoryCollectionView.selectedItems];
+        if (_featuredCategoryCollectionView.items.count == 0) {
+            [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:_noFeaturedCategoryRemindView animated:YES target:nil action:nil];
         } else {
-            [deleteCollectionView ssj_hideWatermark:YES];
+            [_featuredCategoryCollectionView ssj_hideWatermark:YES];
+        }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+    }];
+}
+
+- (void)customDeleteButtonAction {
+    if (_customCategoryCollectionView.selectedItems.count == 0) {
+        [CDAutoHideMessageHUD showMessage:@"请选择要删除的类别"];
+        return;
+    }
+    
+    NSArray *deleteIDs = [_customCategoryCollectionView.selectedItems valueForKeyPath:@"categoryID"];
+    [SSJCategoryListHelper deleteCategoryWithIDs:deleteIDs success:^{
+        [_customCategoryCollectionView deleteItems:_customCategoryCollectionView.selectedItems];
+        if (_customCategoryCollectionView.items.count == 0) {
+            [_customCategoryCollectionView ssj_showWatermarkWithCustomView:_noCustomCategoryRemindView animated:YES target:nil action:nil];
+        } else {
+            [_customCategoryCollectionView ssj_hideWatermark:YES];
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
@@ -418,18 +431,31 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.8] forState:UIControlStateNormal];
     
-    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
-    [_editButton setAttributedTitle:title forState:UIControlStateNormal];
-    [_deleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-    
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
-        [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:0.8] forState:UIControlStateNormal];
+        [_featureDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_featureDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#dddddd" alpha:0.8] forState:UIControlStateNormal];
+        
+        [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#f6f6f6"] forState:UIControlStateNormal];
+        
+        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#a7a7a7"]}];
+        [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
+                               NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#a7a7a7"]} range:NSMakeRange(2, 4)];
+        [_editButton setAttributedTitle:title forState:UIControlStateNormal];
+        [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#dddddd" alpha:0.8] forState:UIControlStateNormal];
+        
     } else {
+        [_featureDeleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        [_featureDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor alpha:0.8] forState:UIControlStateNormal];
+        
+        [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+        [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
+        
+        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
+                               NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
+        [_editButton setAttributedTitle:title forState:UIControlStateNormal];
         [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
-        [_deleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
     }
 }
 
@@ -438,20 +464,21 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         if (_featuredCategoryCollectionView.items.count == 0) {
             _sureButton.hidden = YES;
             _editButton.hidden = YES;
-            _deleteButton.hidden = YES;
+            _customDeleteButton.hidden = YES;
+            _featureDeleteButton.hidden = YES;
             [self.navigationItem setRightBarButtonItem:nil animated:YES];
         } else {
             if (_featuredCategoryCollectionView.editing) {
                 _sureButton.hidden = YES;
                 _editButton.hidden = YES;
-                _deleteButton.hidden = NO;
-                _deleteButton.left = 0;
-                _deleteButton.width = self.view.width;
+                _customDeleteButton.hidden = YES;
+                _featureDeleteButton.hidden = NO;
                 [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
             } else {
                 _sureButton.hidden = NO;
                 _editButton.hidden = YES;
-                _deleteButton.hidden = YES;
+                _customDeleteButton.hidden = YES;
+                _featureDeleteButton.hidden = YES;
                 [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
             }
         }
@@ -463,20 +490,21 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             if (_customCategoryCollectionView.items.count == 0) {
                 _sureButton.hidden = YES;
                 _editButton.hidden = YES;
-                _deleteButton.hidden = YES;
+                _customDeleteButton.hidden = YES;
+                _featureDeleteButton.hidden = YES;
                 [self.navigationItem setRightBarButtonItem:nil animated:YES];
             } else {
                 if (_customCategoryCollectionView.editing) {
                     _sureButton.hidden = YES;
                     _editButton.hidden = NO;
-                    _deleteButton.hidden = NO;
-                    _deleteButton.left = _editButton.right;
-                    _deleteButton.width = self.view.width - _editButton.right;
+                    _customDeleteButton.hidden = NO;
+                    _featureDeleteButton.hidden = YES;
                     [self.navigationItem setRightBarButtonItem:self.doneItem animated:YES];
                 } else {
                     _sureButton.hidden = NO;
                     _editButton.hidden = YES;
-                    _deleteButton.hidden = YES;
+                    _customDeleteButton.hidden = YES;
+                    _featureDeleteButton.hidden = YES;
                     [self.navigationItem setRightBarButtonItem:self.managerItem animated:YES];
                 }
             }
@@ -485,7 +513,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
             _newOrEditCategoryView.hidden = NO;
             _sureButton.hidden = NO;
             _editButton.hidden = YES;
-            _deleteButton.hidden = YES;
+            _customDeleteButton.hidden = YES;
+            _featureDeleteButton.hidden = YES;
             [self.navigationItem setRightBarButtonItem:nil animated:YES];
         }
     }
@@ -666,15 +695,26 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     return _editButton;
 }
 
-- (UIButton *)deleteButton {
-    if (!_deleteButton) {
-        _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _deleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
-        _deleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
-        [_deleteButton setTitle:@"删除" forState:UIControlStateNormal];
-        [_deleteButton addTarget:self action:@selector(deleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
+- (UIButton *)featureDeleteButton {
+    if (!_featureDeleteButton) {
+        _featureDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _featureDeleteButton.frame = CGRectMake(0, self.view.height - 54, self.view.width, 54);
+        _featureDeleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_featureDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
+        [_featureDeleteButton addTarget:self action:@selector(featureDeleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _deleteButton;
+    return _featureDeleteButton;
+}
+
+- (UIButton *)customDeleteButton {
+    if (!_customDeleteButton) {
+        _customDeleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _customDeleteButton.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 54);
+        _customDeleteButton.titleLabel.font = [UIFont systemFontOfSize:20];
+        [_customDeleteButton setTitle:@"删除" forState:UIControlStateNormal];
+        [_customDeleteButton addTarget:self action:@selector(customDeleteButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _customDeleteButton;
 }
 
 - (SSJBudgetNodataRemindView *)noFeaturedCategoryRemindView {
