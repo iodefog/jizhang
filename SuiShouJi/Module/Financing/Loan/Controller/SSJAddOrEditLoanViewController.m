@@ -93,11 +93,11 @@ const int kMemoMaxLength = 13;
     } else {
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                self.title = @"新建借出款";
+                self.title = @"添加借出款";
                 break;
                 
             case SSJLoanTypeBorrow:
-                self.title = @"新建欠款";
+                self.title = @"添加欠款";
                 break;
         }
     }
@@ -530,7 +530,7 @@ const int kMemoMaxLength = 13;
 
 - (void)updateInterest {
     NSString *interestStr = [NSString stringWithFormat:@"%.2f", [SSJLoanHelper expectedInterestWithLoanModel:_loanModel]];
-    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息预期利息为%@元", interestStr]];
+    NSMutableAttributedString *richText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"T+1计息，预期利息为%@元", interestStr]];
     [richText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]} range:[richText.string rangeOfString:interestStr]];
     _interestLab.attributedText = richText;
 }
@@ -806,16 +806,9 @@ const int kMemoMaxLength = 13;
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            
-            if (weakSelf.reminderItem.remindState
-                && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:nil
-                                                    message:@"还款日已改，是否需要更改提醒"
-                                                     action:[SSJAlertViewAction actionWithTitle:@"暂不更改" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即更改" handler:^(SSJAlertViewAction *action) {
-                    [weakSelf enterReminderVC];
-                }], nil];
+            if (weakSelf.reminderItem) {
+                weakSelf.reminderItem.remindDate = view.selectedDate;
             }
-            
             weakSelf.loanModel.repaymentDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };

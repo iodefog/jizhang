@@ -52,6 +52,12 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     [self reloadData];
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self.tableView reloadData];
+    self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return [self.datas count];
@@ -75,6 +81,12 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     NSDictionary *sectionInfo = [self.datas ssj_safeObjectAtIndex:(NSUInteger)section];
     SSJBillingChargeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kBillingChargeHeaderViewID];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        headerView.backgroundView.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    } else {
+        headerView.backgroundView.backgroundColor = [UIColor clearColor];
+    }
+    
     headerView.textLabel.text = sectionInfo[SSJBillingChargeDateKey];
     headerView.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
@@ -141,9 +153,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        if (![[SSJThemeSetting currentThemeModel].ID isEqualToString:@"0"]) {
-            _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.1];
-        }
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.rowHeight = 90;
         _tableView.sectionHeaderHeight = 40;

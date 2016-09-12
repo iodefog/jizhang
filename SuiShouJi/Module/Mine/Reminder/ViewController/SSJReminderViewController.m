@@ -103,9 +103,11 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderListCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJReminderListCellIdentifier forIndexPath:indexPath];
-    if (!cell) {
-        cell = [[SSJReminderListCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJReminderListCellIdentifier];
-    }
+    cell.switchAction = ^(SSJReminderListCell *cell) {
+        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:(SSJReminderItem *)cell.cellItem Success:NULL failure:^(NSError *error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    };
     [cell setCellItem:item];
     return cell;
 }

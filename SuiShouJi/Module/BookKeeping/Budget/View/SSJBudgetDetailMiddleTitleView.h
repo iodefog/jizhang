@@ -14,4 +14,6 @@
 
 - (void)setPeriod:(NSString *)period;
 
+- (void)updateAppearance;
+
 @end

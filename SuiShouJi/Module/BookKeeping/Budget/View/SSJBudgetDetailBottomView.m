@@ -22,7 +22,6 @@
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.circleView];
 //        [self addSubview:self.button];
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return self;
 }

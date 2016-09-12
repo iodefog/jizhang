@@ -10,4 +10,6 @@
 
 @interface SSJReminderListCell : SSJBaseTableViewCell
 
+@property (nonatomic, copy) void (^switchAction)(SSJReminderListCell *cell);
+
 @end
