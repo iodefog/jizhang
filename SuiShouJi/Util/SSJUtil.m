@@ -129,6 +129,10 @@ UIViewController* SSJFindTopModelViewController(UIViewController* vc){
         vc = SSJFindTopModelViewController([navController visibleViewController]);
     }
     
+    if ([vc isKindOfClass:[UIAlertController class]]) {
+        vc = vc.presentingViewController;
+    }
+    
     return vc;
 }
 
