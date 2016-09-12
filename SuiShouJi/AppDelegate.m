@@ -91,6 +91,13 @@ NSDate *SCYEnterBackgroundTime() {
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         //  开启定时同步
         [[SSJDataSynchronizer shareInstance] startTimingSync];
+        
+        UILocalNotification *notifcation = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey];
+        if (notifcation) {
+            SSJDispatchMainAsync(^{
+                [self pushToControllerWithNotification:notifcation];
+            });
+        }
     }];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -98,12 +105,6 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window makeKeyAndVisible];
     
     [self setRootViewController];
-    
-    UILocalNotification *notifcation = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey];
-    
-    if (notifcation) {
-        [self pushToControllerWithNotification:notifcation];
-    }
     
     [SSJThemeSetting updateTabbarAppearance];
     [SSJNetworkReachabilityManager startMonitoring];
@@ -114,7 +115,6 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
-    
     
     [SSJRegularManager registerRegularTaskNotification];
     [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:SSJUSERID()];

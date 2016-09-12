@@ -74,7 +74,7 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?)", @"12", @"社保", @"ft_shebao", @"root", @"-1", @"0", @"医保"]) {
+    if (![db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cicoin, cparent, cwritedate, operatortype, cmemo) values (?, ?, ?, ?, ?, ?, ?)", @"12", @"社保", @"ft_shebao", @"root", @"-1", @"0", @"医保"]) {
         return [db lastError];
     }
     
@@ -121,7 +121,7 @@
 }
 
 + (NSError *)createUserCreditTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists BK_USER_CREDIT (CFUNDID TEXT NOT NULL, IQUOTA NUMERIC, CBILLDATE TEXT, CREPAYMENTDATE TEXT, CUSERID TEXT, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, CREMINDID TEXT, IDELAYDATE INTEGER, IISEND INTEGER, PRIMARY KEY(CFUNDID))"]) {
+    if (![db executeUpdate:@"create table if not exists BK_USER_CREDIT (CFUNDID TEXT NOT NULL, IQUOTA NUMERIC, CBILLDATE TEXT, CREPAYMENTDATE TEXT, CUSERID TEXT, CWRITEDATE TEXT, IVERSION INTEGER, OPERATORTYPE INTEGER, CREMINDID TEXT, IBILLDATESETTLEMENT INTEGER, PRIMARY KEY(CFUNDID))"]) {
         return [db lastError];
     }
     
@@ -139,7 +139,7 @@
 + (NSError *)insertDefaultRemindWithDatabase:(FMDatabase *)db {
     BOOL open = NO;
     NSString *time = nil;
-    FMResultSet *result = [db executeQuery:@"select * from BK_CHARGE_REMIND"];
+    FMResultSet *result = [db executeQuery:@"select * from BK_CHARGE_REMINDER"];
     while ([result next]) {
         open = [result boolForColumn:@"ISONORNOT"];
         time = [result stringForColumn:@"TIME"];
