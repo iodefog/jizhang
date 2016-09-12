@@ -93,11 +93,11 @@ const int kMemoMaxLength = 13;
     } else {
         switch (_loanModel.type) {
             case SSJLoanTypeLend:
-                self.title = @"新建借出款";
+                self.title = @"添加借出款";
                 break;
                 
             case SSJLoanTypeBorrow:
-                self.title = @"新建欠款";
+                self.title = @"添加欠款";
                 break;
         }
     }
