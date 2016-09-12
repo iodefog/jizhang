@@ -518,6 +518,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _dateSelectView = [[SSJReminderDateSelectView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 500)];
         __weak typeof(self) weakSelf = self;
         _dateSelectView.dateSetBlock = ^(NSDate *date){
+            if (date.day > 28) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"每月不一定都有30号哦，是否将无30号的月份提醒设置跳过？或自动将无30号的月份的提醒设置在每月最后一天？" action:[SSJAlertViewAction actionWithTitle:@"部分月份设在最后一天" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    weakSelf.item.remindAtTheEndOfMonth = 1;
+                }],[SSJAlertViewAction actionWithTitle:@"自动跳过" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    weakSelf.item.remindAtTheEndOfMonth = 0;
+                }],nil];
+            }
             weakSelf.item.remindDate = [NSDate dateWithYear:date.year month:date.month day:date.day hour:weakSelf.item.remindDate.hour minute:weakSelf.item.remindDate.minute second:weakSelf.item.remindDate.second];
             [weakSelf initdata];
         };

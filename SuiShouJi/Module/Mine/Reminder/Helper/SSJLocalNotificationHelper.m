@@ -236,10 +236,14 @@
             // 如果是大于28号,则只要添加一次推送
             if (!item.remindAtTheEndOfMonth) {
                 if (fireDate.day > 28) {
+                    
+                    // 如果提醒日期大于本月最后一天则跳过
                     if (fireDate.day > [NSDate date].daysInMonth) {
                         return;
                     }
+                    
                     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
+                    // 查询本月有没有添加过提醒,如果添加过,则跳过
                     for (UILocalNotification *notification in localNotifications) {
                         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
                         SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
