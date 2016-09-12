@@ -38,7 +38,7 @@
 
 - (void)layoutSubviews {
     _textField.frame = CGRectMake(0, 0, self.width, 63);
-    _imageSelectionView.frame = CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height - 5);
+    _imageSelectionView.frame = CGRectMake(0, _textField.bottom, self.width, self.height - _textField.bottom - self.colorSelectionView.height);
     _colorSelectionView.bottom = self.height;
 }
 

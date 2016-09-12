@@ -90,20 +90,26 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - Private
 - (void)updateAppearance {
-    CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     [_closeOutBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     
-    [_revertBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-    [_revertBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        [_revertBtn setTitleColor:[UIColor ssj_colorWithHex:@"#373737"] forState:UIControlStateNormal];
+        [_revertBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#CCCCCC"] forState:UIControlStateNormal];
+        
+        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:@"#E54747"] forState:UIControlStateNormal];
+        [_deleteBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF"] forState:UIControlStateNormal];
+    } else {
+        [_revertBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+        [_revertBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
+        
+        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+        [_deleteBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
+    }
     
-    [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
-    [_deleteBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
-    
-//    [_revertBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-//    
-//    [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_revertBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 }
 
 - (void)organiseCellItems {
@@ -421,8 +427,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [_revertBtn setTitle:@"恢复项目" forState:UIControlStateNormal];
         [_revertBtn addTarget:self action:@selector(revertBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _revertBtn.hidden = YES;
-//        [_revertBtn ssj_setBorderWidth:1];
-//        [_revertBtn ssj_setBorderStyle:SSJBorderStyleRight];
+        [_revertBtn ssj_setBorderWidth:1];
+        [_revertBtn ssj_setBorderStyle:SSJBorderStyleTop];
     }
     return _revertBtn;
 }
@@ -435,8 +441,8 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [_deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
         [_deleteBtn addTarget:self action:@selector(deleteBtnAction) forControlEvents:UIControlEventTouchUpInside];
         _deleteBtn.hidden = YES;
-//        [_deleteBtn ssj_setBorderWidth:1];
-//        [_deleteBtn ssj_setBorderStyle:SSJBorderStyleLeft];
+        [_deleteBtn ssj_setBorderWidth:1];
+        [_deleteBtn ssj_setBorderStyle:SSJBorderStyleTop];
     }
     return _deleteBtn;
 }
