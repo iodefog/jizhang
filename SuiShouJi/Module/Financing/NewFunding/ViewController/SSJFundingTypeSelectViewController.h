@@ -7,11 +7,12 @@
 //
 
 #import "SSJNewBaseTableViewController.h"
+#import "SSJBaseItem.h"
 
 @interface SSJFundingTypeSelectViewController : SSJNewBaseTableViewController
 
-typedef void (^typeSelectedBlock)(NSString *selectParent , NSString *selectIcoin);
+typedef void (^addNewFundingBlock)(SSJBaseItem *item);
 
-@property(nonatomic,copy) typeSelectedBlock typeSelectedBlock;
+@property(nonatomic,copy) addNewFundingBlock addNewFundingBlock;
 
 @end

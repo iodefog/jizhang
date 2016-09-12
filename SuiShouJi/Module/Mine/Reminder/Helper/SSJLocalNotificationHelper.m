@@ -40,7 +40,7 @@
         item.userId = SSJUSERID();
     }
     
-    if ([fireDate isEarlierThan:[NSDate date]]) {
+    if ([fireDate isEarlierThan:[NSDate date]] && item.remindCycle == 7) {
         NSLog(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
         return;
     }
@@ -236,12 +236,15 @@
             // 如果是大于28号,则只要添加一次推送
             if (!item.remindAtTheEndOfMonth) {
                 if (fireDate.day > 28) {
+                    if (fireDate.day > [NSDate date].daysInMonth) {
+                        return;
+                    }
                     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
                     for (UILocalNotification *notification in localNotifications) {
                         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
                         SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
                         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-                            if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
+                            if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == [NSDate date].month) {
                                 return;
                             }
                         }
@@ -253,11 +256,18 @@
                     notification.alertBody = item.remindContent;
                     // 通知被触发时播放的声音
                     notification.soundName = @"pushsound.wav";
+                    
+                    NSDate *newRemindDate = [NSDate dateWithYear:fireDate.year month:[NSDate date].month day:fireDate.day hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
+                    
+                    item.remindDate = newRemindDate;
+                    
+                    remindDic = [item mj_keyValues];
+                    
                     // 通知参数
                     NSDictionary *userDict = @{@"remindItem":remindDic,
                                                @"key":SSJReminderNotificationKey};
                     notification.userInfo = userDict;
-                    notification.fireDate = fireDate;
+                    notification.fireDate = item.remindDate;
                     [notificationsArr addObject:notification];
                 }else{
                     UILocalNotification *notification = [[UILocalNotification alloc] init];
@@ -276,62 +286,20 @@
                     [notificationsArr addObject:notification];
                 }
             }else{
-                if (fireDate.day > 28) {
-                    NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
-                    for (UILocalNotification *notification in localNotifications) {
-                        NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-                        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
-                        if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-                            if ([remindItem.remindId isEqualToString:item.remindId] && item.remindDate.month == fireDate.month) {
-                                return;
-                            }
-                        }
-                    }
-                    if (fireDate.day > fireDate.daysInMonth) {
-                        UILocalNotification *notification = [[UILocalNotification alloc] init];
-                        // 时区
-                        notification.timeZone = [NSTimeZone defaultTimeZone];
-                        // 通知内容
-                        notification.alertBody = item.remindContent;
-                        // 通知被触发时播放的声音
-                        notification.soundName = @"pushsound.wav";
-                        // 通知参数
-                        NSDictionary *userDict = @{@"remindItem":remindDic,
-                                                   @"key":SSJReminderNotificationKey};
-                        notification.userInfo = userDict;
-                        notification.fireDate = [NSDate dateWithYear:fireDate.year month:fireDate.month day:fireDate.daysInMonth hour:fireDate.hour minute:fireDate.minute second:fireDate.second];
-                        [notificationsArr addObject:notification];
-                    }else{
-                        UILocalNotification *notification = [[UILocalNotification alloc] init];
-                        // 时区
-                        notification.timeZone = [NSTimeZone defaultTimeZone];
-                        // 通知内容
-                        notification.alertBody = item.remindContent;
-                        // 通知被触发时播放的声音
-                        notification.soundName = @"pushsound.wav";
-                        // 通知参数
-                        NSDictionary *userDict = @{@"remindItem":remindDic,
-                                                   @"key":SSJReminderNotificationKey};
-                        notification.userInfo = userDict;
-                        notification.fireDate = fireDate;
-                        [notificationsArr addObject:notification];
-                    }
-                }else{
-                    UILocalNotification *notification = [[UILocalNotification alloc] init];
-                    // 时区
-                    notification.timeZone = [NSTimeZone defaultTimeZone];
-                    // 通知内容
-                    notification.alertBody = item.remindContent;
-                    // 通知被触发时播放的声音
-                    notification.soundName = @"pushsound.wav";
-                    // 通知参数
-                    NSDictionary *userDict = @{@"remindItem":remindDic,
-                                               @"key":SSJReminderNotificationKey};
-                    notification.userInfo = userDict;
-                    notification.repeatInterval = NSCalendarUnitMonth;
-                    notification.fireDate = fireDate;
-                    [notificationsArr addObject:notification];
-                }
+                UILocalNotification *notification = [[UILocalNotification alloc] init];
+                // 时区
+                notification.timeZone = [NSTimeZone defaultTimeZone];
+                // 通知内容
+                notification.alertBody = item.remindContent;
+                // 通知被触发时播放的声音
+                notification.soundName = @"pushsound.wav";
+                // 通知参数
+                NSDictionary *userDict = @{@"remindItem":remindDic,
+                                            @"key":SSJReminderNotificationKey};
+                notification.userInfo = userDict;
+                notification.repeatInterval = NSCalendarUnitMonth;
+                notification.fireDate = fireDate;
+                [notificationsArr addObject:notification];
             }
         }
         break;

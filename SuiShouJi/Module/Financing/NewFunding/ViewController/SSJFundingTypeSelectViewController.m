@@ -87,6 +87,12 @@
         [self.navigationController pushViewController:newCreditCardVc animated:YES];
     }else{
         SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        normalFundingVc.finishBlock = ^(SSJFundingItem *item){
+            if (weakSelf.addNewFundingBlock) {
+                weakSelf.addNewFundingBlock(item);
+            }
+        };
         normalFundingVc.selectParent = item.fundingID;
         normalFundingVc.selectIcoin = item.fundingIcon;
         [self.navigationController pushViewController:normalFundingVc animated:YES];
