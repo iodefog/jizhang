@@ -31,7 +31,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-        _titleArray = @[@"每天",@"每个工作日",@"每个周末(六、日)",@"每周",@"每月",@"每月最后一天",@"每年",@"仅一次"];
+        _titleArray = @[@"每天",@"仅一次",@"每个工作日",@"每个周末(六、日)",@"每周",@"每月",@"每月最后一天",@"每年"];
         _selectCircleType = 0;
         [self addSubview:self.pickerView];
         [self addSubview:self.topView];
@@ -166,17 +166,38 @@
 -(void)setSelectCircleType:(NSInteger)selectCircleType{
     _selectCircleType = selectCircleType;
     _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType)];
-    [self.pickerView selectRow:_selectCircleType inComponent:0 animated:NO];
-}
-
--(void)setIncomeOrExpenture:(BOOL)incomeOrExpenture{
-    _incomeOrExpenture = incomeOrExpenture;
-    if (!_incomeOrExpenture) {
-        self.titleLabel.text = @"周期支出";
-    }else{
-        self.titleLabel.text = @"周期收入";
+    switch (_selectCircleType) {
+        case 0:
+            [self.pickerView selectRow:1 inComponent:0 animated:NO];
+            break;
+            
+        case 1:
+            [self.pickerView selectRow:3 inComponent:0 animated:NO];
+            break;
+            
+        case 2:
+            [self.pickerView selectRow:4 inComponent:0 animated:NO];
+            break;
+            
+        case 3:
+            [self.pickerView selectRow:5 inComponent:0 animated:NO];
+            break;
+            
+        case 4:
+            [self.pickerView selectRow:6 inComponent:0 animated:NO];
+            break;
+            
+        case 5:
+            [self.pickerView selectRow:7 inComponent:0 animated:NO];
+            break;
+            
+        case 6:
+            [self.pickerView selectRow:2 inComponent:0 animated:NO];
+            break;
+            
+        default:
+            break;
     }
-    [self.titleLabel sizeToFit];
 }
 
 -(void)comfirmButtonClicked:(id)sender{

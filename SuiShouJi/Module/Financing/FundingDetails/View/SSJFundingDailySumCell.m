@@ -100,7 +100,7 @@
     double sumMoney = _item.income - _item.expenture;
     if (sumMoney > 0) {
         self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
-        self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",sumMoney];
+        self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",sumMoney];
     }else{
         self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
         self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",sumMoney];
