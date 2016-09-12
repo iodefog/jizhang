@@ -11,10 +11,14 @@
 
 @implementation SSJLocalNotificationStore
 
-+ (void)queryForreminderListWithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
++ (void)queryForreminderListForUserId:(NSString *)userId
+                          WithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
                                failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *userId = SSJUSERID();
+        if (!userId.length) {
+            NSLog(@"userid不能为空");
+            return;
+        }
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
         FMResultSet * resultSet = [db executeQuery:@"select * from bk_user_remind where cuserid = ? and operatortype <> 2",userId];
         if (!resultSet) {

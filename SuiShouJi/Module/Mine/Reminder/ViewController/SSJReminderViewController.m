@@ -46,7 +46,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
-    [SSJLocalNotificationStore queryForreminderListWithSuccess:^(NSArray<SSJReminderItem *> *result) {
+    [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
         if (!result.count) {
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         }else{

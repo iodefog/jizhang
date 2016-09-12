@@ -45,11 +45,13 @@
 /**
  *  异步保存提醒
  *
+ *  @param userId    用户id
  *  @param success 保存成功的回调
  *  @param failure 保存失败的回调
  */
-+ (void)queryForreminderListWithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
-                               failure:(void (^)(NSError *error))failure;
++ (void)queryForreminderListForUserId:(NSString *)userId
+                          WithSuccess:(void(^)(NSArray<SSJReminderItem *> *result))success
+                              failure:(void (^)(NSError *error))failure;
 
 /**
  *  获取某个提醒的详情
