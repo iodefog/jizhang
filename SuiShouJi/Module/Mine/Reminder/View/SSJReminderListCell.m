@@ -37,6 +37,7 @@
     [super layoutSubviews];
     self.cellImageView.left = 10;
     self.cellImageView.centerY = self.height / 2;
+    self.titleLabel.width = self.contentView.width - 30;
     self.titleLabel.left = self.cellImageView.right + 10;
     if (!((SSJReminderItem *)self.cellItem).remindMemo.length) {
         self.titleLabel.centerY = self.height / 2;

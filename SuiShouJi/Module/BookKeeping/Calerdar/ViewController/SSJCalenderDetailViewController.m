@@ -214,7 +214,7 @@
 -(void)getDataFromDb{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]inDatabase:^(FMDatabase *db){
-        FMResultSet *chargeResult = [db executeQuery:@"SELECT A.* , B.* , c.cacctname FROM BK_USER_CHARGE AS A , BK_BILL_TYPE AS B , bk_fund_info as c WHERE A.ICHARGEID = ? AND A.CUSERID = ?  AND A.IBILLID = B.ID and a.ifunsid = c.cfundid",self.item.ID,SSJUSERID()];
+        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.* , c.cacctname , d.cbooksname from bk_user_charge a , bk_bill_type b , bk_fund_info c , bk_books_type d where a.ichargeid = ? and a.cuserid = ?  and a.ibillid = b.id and a.ifunsid = c.cfundid and a.cbooksid = d.cbooksid",self.item.ID,SSJUSERID()];
         while ([chargeResult next]) {
             weakSelf.item.money = [chargeResult stringForColumn:@"IMONEY"];
             weakSelf.item.billId = [chargeResult stringForColumn:@"IBILLID"];
@@ -226,7 +226,7 @@
             weakSelf.item.incomeOrExpence = [chargeResult boolForColumn:@"ITYPE"];
             weakSelf.item.fundName = [chargeResult stringForColumn:@"cacctname"];
             weakSelf.item.booksId = [chargeResult stringForColumn:@"cbooksid"];
-            weakSelf.item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",weakSelf.item.booksId];
+            weakSelf.item.booksName = [chargeResult stringForColumn:@"cbooksname"];
         }
         [chargeResult close];
         FMResultSet *memberResult = [db executeQuery:@"select a.* , b.* from bk_member_charge as a , bk_member as b where a.ichargeid = ? and a.cmemberid = b.cmemberid and b.cuserid = ?",weakSelf.item.ID,SSJUSERID()];

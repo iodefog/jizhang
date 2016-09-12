@@ -244,6 +244,7 @@
     }else{
         self.balanceTitleLab.text = @"当前欠款";
     }
+    [self.balanceTitleLab sizeToFit];
     [self.balanceLab sizeToFit];
     self.limitLab.text = [NSString stringWithFormat:@"%.2f",_item.cardLimit];
     [self.limitLab sizeToFit];

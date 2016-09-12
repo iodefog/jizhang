@@ -137,7 +137,42 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    _selectCircleType = row - 1;
+    switch (row) {
+        case 0:
+            _selectCircleType = 0;
+            break;
+            
+        case 1:
+            _selectCircleType = 7;
+            break;
+            
+        case 2:
+            _selectCircleType = 1;
+            break;
+            
+        case 3:
+            _selectCircleType = 2;
+            break;
+            
+        case 4:
+            _selectCircleType = 3;
+            break;
+            
+        case 5:
+            _selectCircleType = 4;
+            break;
+            
+        case 6:
+            _selectCircleType = 5;
+            break;
+            
+        case 7:
+            _selectCircleType = 6;
+            break;
+            
+        default:
+            break;
+    }
     _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType + 1)];
 }
 
@@ -168,31 +203,35 @@
     _selectedPeriod = [_titleArray ssj_safeObjectAtIndex:(_selectCircleType)];
     switch (_selectCircleType) {
         case 0:
-            [self.pickerView selectRow:1 inComponent:0 animated:NO];
+            [self.pickerView selectRow:0 inComponent:0 animated:NO];
             break;
             
         case 1:
-            [self.pickerView selectRow:3 inComponent:0 animated:NO];
+            [self.pickerView selectRow:2 inComponent:0 animated:NO];
             break;
             
         case 2:
-            [self.pickerView selectRow:4 inComponent:0 animated:NO];
+            [self.pickerView selectRow:3 inComponent:0 animated:NO];
             break;
             
         case 3:
-            [self.pickerView selectRow:5 inComponent:0 animated:NO];
+            [self.pickerView selectRow:4 inComponent:0 animated:NO];
             break;
             
         case 4:
-            [self.pickerView selectRow:6 inComponent:0 animated:NO];
+            [self.pickerView selectRow:5 inComponent:0 animated:NO];
             break;
             
         case 5:
-            [self.pickerView selectRow:7 inComponent:0 animated:NO];
+            [self.pickerView selectRow:6 inComponent:0 animated:NO];
             break;
             
         case 6:
-            [self.pickerView selectRow:2 inComponent:0 animated:NO];
+            [self.pickerView selectRow:7 inComponent:0 animated:NO];
+            break;
+            
+        case 7:
+            [self.pickerView selectRow:1 inComponent:0 animated:NO];
             break;
             
         default:
@@ -202,7 +241,7 @@
 
 -(void)comfirmButtonClicked:(id)sender{
     if (self.chargeCircleSelectBlock) {
-        self.chargeCircleSelectBlock(_selectCircleType + 1);
+        self.chargeCircleSelectBlock(_selectCircleType);
     }
     [self dismissIfNeeded];
 }
