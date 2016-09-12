@@ -143,7 +143,6 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     [_headerSegmentView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
-    _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:alpha];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     [_amountView updateAppearance];
@@ -229,6 +228,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
+        _tableView.backgroundColor = [UIColor clearColor];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJLoanListCell class] forCellReuseIdentifier:kLoanListCellId];

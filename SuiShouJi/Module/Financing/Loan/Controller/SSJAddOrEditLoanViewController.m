@@ -365,6 +365,7 @@ const int kMemoMaxLength = 13;
     } else if (textField.tag == kMoneyTag) {
         _loanModel.jMoney = 0;
         [self updateRemindName];
+        [self updateInterest];
     } else if (textField.tag == kMemoTag) {
         _loanModel.memo = @"";
     } else if (textField.tag == kRateTag) {
@@ -395,6 +396,7 @@ const int kMemoMaxLength = 13;
             textField.text = [self reserveDecimal:tmpMoneyStr digits:2];
             _loanModel.jMoney = [[textField.text stringByReplacingOccurrencesOfString:@"¥" withString:@""] doubleValue];
             [self updateRemindName];
+            [self updateInterest];
         } else if (textField.tag == kMemoTag) {
             _loanModel.memo = textField.text;
         } else if (textField.tag == kRateTag) {
@@ -477,9 +479,6 @@ const int kMemoMaxLength = 13;
 - (void)updateAppearance {
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5] forState:UIControlStateDisabled];
-    
-    CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
-    _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:alpha];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
@@ -709,6 +708,7 @@ const int kMemoMaxLength = 13;
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
+        _tableView.backgroundColor = [UIColor clearColor];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditLoanLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditLoanTextFieldCellId];

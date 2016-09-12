@@ -124,7 +124,7 @@ static NSUInteger kClostOutDateTag = 1004;
             accountCell.subtitleLabel.text = selectedFundItem.title;
             accountCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
             accountCell.switchControl.hidden = YES;
-            accountCell.selectionStyle = UITableViewCellSelectionStyleGray;
+            accountCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
             
         } else if (tag == kClostOutDateTag) {
             SSJAddOrEditLoanLabelCell *dateCell = (SSJAddOrEditLoanLabelCell *)cell;
@@ -132,6 +132,7 @@ static NSUInteger kClostOutDateTag = 1004;
             dateCell.subtitleLabel.text = [_loanModel.endDate formattedDateWithFormat:@"yyyy.MM.dd"];
             dateCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
             dateCell.switchControl.hidden = YES;
+            dateCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         }
         return cell;
     }
@@ -236,9 +237,6 @@ static NSUInteger kClostOutDateTag = 1004;
 - (void)updateAppearance {
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [_sureButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5] forState:UIControlStateDisabled];
-    
-    CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
-    _tableView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:alpha];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
@@ -421,6 +419,7 @@ static NSUInteger kClostOutDateTag = 1004;
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
+        _tableView.backgroundColor = [UIColor clearColor];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditLoanLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditLoanTextFieldCellId];
