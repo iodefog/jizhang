@@ -29,4 +29,6 @@
 + (void)SaveFundingOderWithItems:(NSArray <SSJFinancingHomeitem *> *)items error:(NSError **)error;
 
 + (BOOL)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item;
+
++ (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId;
 @end
