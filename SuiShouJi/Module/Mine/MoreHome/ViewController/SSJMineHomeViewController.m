@@ -183,6 +183,12 @@ static BOOL kNeedBannerDisplay = YES;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
+    // 如果是广告
+    if ([title isEqualToString:self.adItem.adTitle]) {
+        SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:self.adItem.url]];
+        [self.navigationController pushViewController:webVc animated:YES];
+    }
+    
     //  给个好评
     if ([title isEqualToString:kTitle6]) {
         NSString *appstoreUrlStr = [SSJSettingForSource() objectForKey:@"AppStoreUrl"];
@@ -332,7 +338,7 @@ static BOOL kNeedBannerDisplay = YES;
         self.adItem = self.bannerService.item.listAdItem;
         [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
         [_titleArr insertObject:self.adItem.adTitle atIndex:0];
-        [self.images insertObject:@[[UIImage imageNamed:@"add"]] atIndex:0];
+        [self.images insertObject:@[[UIImage imageNamed:@"jinrong"]] atIndex:0];
         [self.tableView reloadData];
     }
 }
