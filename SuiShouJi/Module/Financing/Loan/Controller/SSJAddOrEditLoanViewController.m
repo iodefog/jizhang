@@ -806,16 +806,9 @@ const int kMemoMaxLength = 13;
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectionView = [[SSJLoanDateSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         _repaymentDateSelectionView.selectDateAction = ^(SSJLoanDateSelectionView *view) {
-            
-            if (weakSelf.reminderItem.remindState
-                && [weakSelf.loanModel.repaymentDate compare:view.selectedDate] != NSOrderedSame) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:nil
-                                                    message:@"还款日已改，是否需要更改提醒"
-                                                     action:[SSJAlertViewAction actionWithTitle:@"暂不更改" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即更改" handler:^(SSJAlertViewAction *action) {
-                    [weakSelf enterReminderVC];
-                }], nil];
+            if (weakSelf.reminderItem) {
+                weakSelf.reminderItem.remindDate = view.selectedDate;
             }
-            
             weakSelf.loanModel.repaymentDate = view.selectedDate;
             [weakSelf.tableView reloadData];
         };
