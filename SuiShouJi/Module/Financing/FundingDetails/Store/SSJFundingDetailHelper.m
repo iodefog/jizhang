@@ -170,7 +170,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             NSDate *billDate = [NSDate dateWithString:item.billDate formatString:@"yyyy-MM-dd"];
             NSString *currentPeriod;
             NSString *currentMonth;
-            if (billDate.day > cardItem.cardBillingDay) {
+            if (billDate.day >= cardItem.cardBillingDay) {
                 currentPeriod = [NSString stringWithFormat:@"%ld.%ld-%ld.%ld",billDate.month,cardItem.cardBillingDay + 1,billDate.month + 1,cardItem.cardBillingDay];
                 currentMonth = [[NSDate dateWithYear:billDate.year month:billDate.month + 1 day:billDate.day] formattedDateWithFormat:@"yyyy-MM"];
             }else{
@@ -202,7 +202,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 listItem.billingDay = cardItem.cardBillingDay;
                 listItem.repaymentDay = cardItem.cardRepaymentDay;
                 listItem.month = currentMonth;
-                if ([lastPeriod isEqualToString:@""]) {
+                if (result.count < 2) {
                     listItem.isExpand = YES;
                 }else{
                     listItem.isExpand = NO;

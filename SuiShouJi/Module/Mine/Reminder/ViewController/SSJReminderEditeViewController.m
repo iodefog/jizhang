@@ -112,12 +112,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         [self.dateSelectView show];
     }
     if ([title isEqualToString:kTitle3]) {
-        if (self.item.remindType == SSJReminderTypeCreditCard || self.item.remindType == SSJReminderTypeBorrowing ) {
-
-        }else{
+//        if (self.item.remindType == SSJReminderTypeCreditCard || self.item.remindType == SSJReminderTypeBorrowing ) {
+//
+//        }else{
             self.circleSelectView.selectCircleType = self.item.remindCycle;
             [self.circleSelectView show];
-        }
+//        }
 
     }
 }
@@ -214,11 +214,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             default:
                 break;
         }
-        if (self.item.remindType == SSJReminderTypeCreditCard || self.item.remindType == SSJReminderTypeBorrowing ) {
-            newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
-        }else{
+//        if (self.item.remindType == SSJReminderTypeCreditCard || self.item.remindType == SSJReminderTypeBorrowing ) {
+//            newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
+//        }else{
             newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
+//        }
     }
     
     // 提醒闹钟
