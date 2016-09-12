@@ -7,6 +7,7 @@
 //
 
 #import "SSJBannerHeaderView.h"
+#import "SSJAdItem.h"
 #import "SSJBannerItem.h"
 
 @interface SSJBannerHeaderView()

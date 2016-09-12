@@ -10,6 +10,7 @@
 #import "SCYWinCowryHomeBannerView.h"
 
 @interface SSJBannerHeaderView : UIView
+
 @property(nonatomic, strong) NSArray *items;
 
 //  点击关闭按钮的回调

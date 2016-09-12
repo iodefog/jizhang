@@ -7,19 +7,18 @@
 //
 
 #import "SSJBannerNetworkService.h"
-#import "SSJBannerItem.h"
 
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
     self.showLodingIndicator = NO;
-    [self request:@"http://jz.9188.com/app/banner.json" params:nil];
+    [self request:@"http://jz.9188.com/app/new_banners.json" params:nil];
 }
 
 - (void)requestDidFinish:(id)rootElement{
     [super requestDidFinish:rootElement];
-    NSArray *result = [NSArray arrayWithArray:rootElement];
-    self.items = [SSJBannerItem mj_objectArrayWithKeyValuesArray:result];
+    NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
+    self.item = [SSJAdItem mj_objectWithKeyValues:result];
 }
 
 
