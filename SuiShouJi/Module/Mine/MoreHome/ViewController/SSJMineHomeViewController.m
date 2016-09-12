@@ -74,7 +74,7 @@ static BOOL kNeedBannerDisplay = YES;
 @end
 
 @implementation SSJMineHomeViewController{
-    NSArray *_titleArr;
+    NSMutableArray *_titleArr;
     SSJUserInfoItem *_userItem;
     BOOL _hasUreadMassage;
 }
@@ -108,11 +108,11 @@ static BOOL kNeedBannerDisplay = YES;
     if ([SSJStartChecker sharedInstance].isInReview) {
         self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
         self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]] mutableCopy];
-        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7];
+        _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7] mutableCopy];
     } else {
         self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
         self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
-        _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7];
+        _titleArr = [@[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7] mutableCopy];
     }
 
     __weak typeof(self) weakSelf = self;
@@ -331,6 +331,7 @@ static BOOL kNeedBannerDisplay = YES;
     if (self.bannerService.item.listAdItem.hidden) {
         self.adItem = self.bannerService.item.listAdItem;
         [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
+        [_titleArr insertObject:self.adItem.adTitle atIndex:0];
         [self.images insertObject:@[[UIImage imageNamed:@"add"]] atIndex:0];
         [self.tableView reloadData];
     }
