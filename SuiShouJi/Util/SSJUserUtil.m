@@ -9,6 +9,7 @@
 #import "SSJUserUtil.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJUserTableManager.h"
+#import "SSJLocalNotificationHelper.h"
 
 static NSString *const kAppIdKey = @"kAppIdKey";
 
@@ -53,6 +54,7 @@ void SSJClearLoginInfo() {
     SSJSaveAccessToken(nil);
     SSJSaveUserLogined(NO);
     SSJSetUserId(nil);
+    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:SSJUSERID()];
 }
 
 static NSString *const kSSJUserIdKey = @"kSSJUserIdKey";
