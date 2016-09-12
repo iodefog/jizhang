@@ -198,7 +198,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 [weakSelf updateFundingType];
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
                     [weakSelf.FundingTypeSelectView reloadDate];
                     weakSelf.item.fundId = fundingItem.fundingID;
                     weakSelf.item.fundName = fundingItem.fundingName;

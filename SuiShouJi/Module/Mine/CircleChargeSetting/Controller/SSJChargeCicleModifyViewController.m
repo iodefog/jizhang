@@ -412,7 +412,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 [weakSelf.fundSelectView dismiss];
             }else{
                 SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem){
+                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
                     weakSelf.item.fundId = newFundingItem.fundingID;
                     weakSelf.item.fundName = newFundingItem.fundingName;
                     weakSelf.item.fundImage = newFundingItem.fundingIcon;

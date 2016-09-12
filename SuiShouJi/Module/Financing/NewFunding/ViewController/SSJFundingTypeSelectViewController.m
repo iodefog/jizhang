@@ -84,11 +84,17 @@
         
     }else if ([item.fundingID isEqualToString:@"3"]){
         SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
+        __weak typeof(self) weakSelf = self;
+        newCreditCardVc.addNewCardBlock = ^(SSJBaseItem *item){
+            if (weakSelf.addNewFundingBlock) {
+                weakSelf.addNewFundingBlock(item);
+            }
+        };
         [self.navigationController pushViewController:newCreditCardVc animated:YES];
     }else{
         SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc]init];
         __weak typeof(self) weakSelf = self;
-        normalFundingVc.finishBlock = ^(SSJFundingItem *item){
+        normalFundingVc.addNewFundBlock = ^(SSJFundingItem *item){
             if (weakSelf.addNewFundingBlock) {
                 weakSelf.addNewFundingBlock(item);
             }

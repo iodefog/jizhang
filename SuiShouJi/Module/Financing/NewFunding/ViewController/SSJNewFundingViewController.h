@@ -11,9 +11,9 @@
 
 @interface SSJNewFundingViewController : SSJBaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
-typedef void (^finishBlock)(SSJFundingItem *newFundingItem);
+typedef void (^addNewFundBlock)(SSJFundingItem *newFundingItem);
 
-@property(nonatomic,copy) finishBlock finishBlock;
+@property(nonatomic,copy) addNewFundBlock addNewFundBlock;
 
 @property(nonatomic,copy) NSString *selectParent;
 

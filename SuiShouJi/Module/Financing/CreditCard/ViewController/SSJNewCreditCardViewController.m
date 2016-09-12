@@ -379,6 +379,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         }else{
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
+        if (weakSelf.addNewCardBlock) {
+            weakSelf.addNewCardBlock(weakSelf.item);
+        }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];

@@ -464,7 +464,7 @@ static NSUInteger kClostOutDateTag = 1004;
                 return YES;
             } else if (index == view.items.count - 1) {
                 SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc] init];
-                newFundingVC.finishBlock = ^(SSJFundingItem *newFundingItem) {
+                newFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem) {
                     weakSelf.loanModel.endTargetFundID = newFundingItem.fundingID;
                     [weakSelf loadData];
                 };

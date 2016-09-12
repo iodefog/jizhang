@@ -262,8 +262,8 @@
         item.fundingBalance = fundAmount;
         item.fundingMemo = fundMemo;
         item.fundingParent = _selectParent;
-        if (self.finishBlock) {
-            self.finishBlock(item);
+        if (self.addNewFundBlock) {
+            self.addNewFundBlock(item);
         }
     }
     

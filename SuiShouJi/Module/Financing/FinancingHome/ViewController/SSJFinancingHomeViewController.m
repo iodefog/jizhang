@@ -288,6 +288,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 - (void)rightButtonClicked:(id)sender{
     SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+    __weak typeof(self) weakSelf = self;
+    fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseItem *item){
+        if ([item isKindOfClass:[SSJFundingItem class]]) {
+            weakSelf.newlyAddFundId = ((SSJFundingItem *)item).fundingID;
+        }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+            weakSelf.newlyAddFundId = ((SSJCreditCardItem *)item).cardId;
+        }
+    };
     [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
 }
 
@@ -318,7 +326,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                 }
             }
         }
-        [weakSelf.collectionView reloadData];
+        if (weakSelf.newlyAddFundId) {
+            [weakSelf.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 1 inSection:0]]];
+            [weakSelf.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+            weakSelf.newlyAddFundId = nil;
+        }else{
+            [weakSelf.collectionView reloadData];
+        }
         [weakSelf.collectionView ssj_hideLoadingIndicator];
         
     } failure:^(NSError *error) {
