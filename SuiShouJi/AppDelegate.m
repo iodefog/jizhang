@@ -40,6 +40,8 @@
 #import "JPEngine.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJUmengManager.h"
+#import "SSJLocalNotificationHelper.h"
+#import "SSJLocalNotificationStore.h"
 
 //  进入后台超过的时限后进入锁屏
 static const NSTimeInterval kLockScreenDelay = 60;
@@ -115,6 +117,14 @@ NSDate *SCYEnterBackgroundTime() {
     
     
     [SSJRegularManager registerRegularTaskNotification];
+    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:SSJUSERID()];
+    [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+        for (SSJReminderItem *item in result) {
+            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+        }
+    } failure:^(NSError *error) {
+        SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+    }];
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
