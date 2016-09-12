@@ -19,7 +19,7 @@ static NSString *const kTitle1 = @"提醒名称";
 static NSString *const kTitle2 = @"备注";
 static NSString *const kTitle3 = @"提醒周期";
 static NSString *const kTitle4 = @"提醒闹钟";
-static NSString *const kTitle5 = @"下次提醒时间";
+static NSString *const kTitle5 = @"下次提醒";
 
 static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIdentifier";
 

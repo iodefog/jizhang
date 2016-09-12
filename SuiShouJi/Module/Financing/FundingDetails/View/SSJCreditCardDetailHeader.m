@@ -104,7 +104,6 @@
         _balanceTitleLab = [[UILabel alloc]init];
         _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         _balanceTitleLab.font = [UIFont systemFontOfSize:11];
-        _balanceTitleLab.text = @"当前欠款";
         [_balanceTitleLab sizeToFit];
     }
     return _balanceTitleLab;
@@ -240,6 +239,11 @@
     _item = item;
     self.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:_item.cardColor];
     self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.cardBalance];
+    if (_item.cardBalance > 0) {
+        self.balanceTitleLab.text = @"当前余额";
+    }else{
+        self.balanceTitleLab.text = @"当前欠款";
+    }
     [self.balanceLab sizeToFit];
     self.limitLab.text = [NSString stringWithFormat:@"%.2f",_item.cardLimit];
     [self.limitLab sizeToFit];
