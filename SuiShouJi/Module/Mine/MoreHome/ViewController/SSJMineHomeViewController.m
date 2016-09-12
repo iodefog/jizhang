@@ -36,6 +36,7 @@
 #import "SSJBannerNetworkService.h"
 #import "SSJBannerHeaderView.h"
 #import "SSJReminderViewController.h"
+#import "SSJListAdItem.h"
 
 #import "UIImageView+WebCache.h"
 #import "SSJDataSynchronizer.h"
@@ -61,15 +62,15 @@ static BOOL kNeedBannerDisplay = YES;
 @property (nonatomic,strong) UIView *loggedFooterView;
 @property (nonatomic,strong) SSJUserInfoNetworkService *userInfoService;
 @property (nonatomic,strong) SSJUserInfoItem *item;
-@property (nonatomic, strong) NSArray *titles;
-@property (nonatomic, strong) NSArray *images;
+@property (nonatomic, strong) NSMutableArray *titles;
+@property (nonatomic, strong) NSMutableArray *images;
 @property (nonatomic,strong) NSString *circleChargeState;
 @property(nonatomic, strong) UIView *rightbuttonView;
 @property(nonatomic, strong) UITableView *tableView;
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
 @property(nonatomic, strong) SSJBannerHeaderView *bannerHeader;
 @property (nonatomic, strong) YWFeedbackKit *feedbackKit;
-
+@property(nonatomic, strong) SSJListAdItem *adItem;
 @end
 
 @implementation SSJMineHomeViewController{
@@ -105,12 +106,12 @@ static BOOL kNeedBannerDisplay = YES;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
     //  根据审核状态显示响应的内容，“给个好评”在审核期间不能被看到，否则可能会被拒绝-
     if ([SSJStartChecker sharedInstance].isInReview) {
-        self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]];
-        self.titles = @[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]];
+        self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_zhouqi"], [UIImage imageNamed:@"more_pifu"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
+        self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4],@[kTitle5 , kTitle7]] mutableCopy];
         _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle7];
     } else {
-        self.images = @[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]];
-        self.titles = @[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]];
+        self.images = [@[@[[UIImage imageNamed:@"more_tixing"], [UIImage imageNamed:@"more_pifu"], [UIImage imageNamed:@"more_zhouqi"]],@[[UIImage imageNamed:@"more_daochu"]], @[[UIImage imageNamed:@"more_fankui"], [UIImage imageNamed:@"more_haoping"], [UIImage imageNamed:@"more_shezhi"]]] mutableCopy];
+        self.titles = [@[@[kTitle1 , kTitle2 , kTitle3], @[kTitle4], @[kTitle5 , kTitle6 , kTitle7]]mutableCopy];
         _titleArr = @[kTitle1 , kTitle2 , kTitle3 , kTitle4 , kTitle5 , kTitle6 , kTitle7];
     }
 
@@ -323,8 +324,14 @@ static BOOL kNeedBannerDisplay = YES;
 
 #pragma mark - SSJBaseNetworkService
 -(void)serverDidFinished:(SSJBaseNetworkService *)service{
-    if (self.bannerService.items) {
-        self.bannerHeader.items = self.bannerService.items;
+    if (self.bannerService.item.bannerItems.count) {
+        self.bannerHeader.items = self.bannerService.item.bannerItems;
+        [self.tableView reloadData];
+    }
+    if (self.bannerService.item.listAdItem.hidden) {
+        self.adItem = self.bannerService.item.listAdItem;
+        [self.titles insertObject:@[self.adItem.adTitle] atIndex:0];
+        [self.images insertObject:@[[UIImage imageNamed:@"add"]] atIndex:0];
         [self.tableView reloadData];
     }
 }
@@ -525,7 +532,6 @@ static BOOL kNeedBannerDisplay = YES;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Getter
 //-(SSJMineHomeTableViewHeader *)header{
 //    if (!_header) {
 //        _header = [SSJMineHomeTableViewHeader MineHomeHeader];

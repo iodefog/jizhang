@@ -2,7 +2,7 @@
 //  SSJBannerItem.h
 //  SuiShouJi
 //
-//  Created by ricky on 16/7/8.
+//  Created by ricky on 16/9/12.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 

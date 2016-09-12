@@ -7,10 +7,11 @@
 //
 
 #import "SSJBaseNetworkService.h"
+#import "SSJAdItem.h"
 
 @interface SSJBannerNetworkService : SSJBaseNetworkService
 
-@property(nonatomic, strong) NSArray *items;
+@property(nonatomic, strong) SSJAdItem *item;
 
 - (void)requestBannersList;
 

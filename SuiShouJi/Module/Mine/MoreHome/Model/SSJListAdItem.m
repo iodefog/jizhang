@@ -1,20 +1,20 @@
 //
-//  SSJBannerItem.m
+//  SSJListAdItem.m
 //  SuiShouJi
 //
 //  Created by ricky on 16/9/12.
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBannerItem.h"
+#import "SSJListAdItem.h"
 
-@implementation SSJBannerItem
+@implementation SSJListAdItem
 
 + (NSDictionary *)replacedKeyFromPropertyName{
     return @{
-             @"bannerImageUrl" : @"image",
-             @"bannerName" : @"title",
-             @"bannerUrl" : @"url"
+             @"adTitle" : @"title",
+             @"hidden" : @"hide",
+             @"url" : @"tourl"
              };
 }
 
