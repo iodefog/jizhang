@@ -189,7 +189,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                     }];
                     
                     [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
-                    [SSJLocalNotificationStore queryForreminderListWithSuccess:^(NSArray<SSJReminderItem *> *result) {
+                    [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
                         for (SSJReminderItem *item in result) {
                             [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
                         }
