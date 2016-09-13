@@ -33,9 +33,7 @@
     NSDictionary *remindDic = [item mj_keyValues];
     
     NSDate * fireDate = item.remindDate;
-    
-    NSLog(@"-----%@",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
-    
+        
     if (!item.userId.length) {
         item.userId = SSJUSERID();
     }
