@@ -200,7 +200,7 @@
         if (item.cardBillingDay != 0 && item.cardRepaymentDay != 0) {
             NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardBillingDay];
             NSDate *repaymentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardRepaymentDay];
-            if ([repaymentDate isEarlierThan:[NSDate date]] && [billDate isEarlierThan:[NSDate date]]) {
+            if ([repaymentDate isEarlierThanOrEqualTo:[NSDate date]] && [billDate isEarlierThanOrEqualTo:[NSDate date]]) {
                 repaymentDate = [repaymentDate dateByAddingMonths:1];
                 billDate = [billDate dateByAddingMonths:1];
             }
@@ -209,15 +209,15 @@
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
             if (mostRecentDay == daysFromBill) {
                 if (daysFromBill < 0 ) {
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment + 1];
                 }else{
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
                 }
             }else if (mostRecentDay == daysFromRepayment){
                 if (daysFromRepayment < 0 ) {
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill + 1];
                 }else{
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
                 }
             }
             [self.cardBillingDayLabel sizeToFit];
