@@ -51,6 +51,11 @@
         return error;
     }
     
+    error = [self updateBooksTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     // 先前版本有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
@@ -183,6 +188,57 @@
     if (![db executeUpdate:@"insert into BK_BILL_TYPE (ID, CNAME, ITYPE, CCOIN, CCOLOR, ISTATE, ICUSTOM) values ('6', '借贷利息支出', 1, 'bt_interest', '#408637', 2, 0)"]) {
         return [db lastError];
     }
+    
+    return nil;
+}
+
++ (NSError *)updateBooksTypeTableWithDatabase:(FMDatabase *)db {
+    FMResultSet *result = [db executeQuery:@"select cuserid from bk_user"];
+    if (!result) {
+        return [db lastError];
+    }
+    
+    while ([result next]) {
+        NSString *userID = [result stringForColumn:@"cuserid"];
+        NSString *booksID1 = userID;
+        NSString *booksID2 = [NSString stringWithFormat:@"%@-1", userID];
+        NSString *booksID3 = [NSString stringWithFormat:@"%@-2", userID];
+        NSString *booksID4 = [NSString stringWithFormat:@"%@-3", userID];
+        NSString *booksID5 = [NSString stringWithFormat:@"%@-4", userID];
+        
+        if (![db executeUpdate:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid = ? and cuserid = ?", booksID1, userID]) {
+            [result close];
+            return [db lastError];
+        }
+        
+        if (![db executeUpdate:@"update bk_books_type set cicoin = 'bk_shengyi' where cbooksid = ? and cuserid = ?", booksID2, userID]) {
+            [result close];
+            return [db lastError];
+        }
+        
+        if (![db executeUpdate:@"update bk_books_type set cicoin = 'bk_jiehun' where cbooksid = ? and cuserid = ?", booksID3, userID]) {
+            [result close];
+            return [db lastError];
+        }
+        
+        if (![db executeUpdate:@"update bk_books_type set cicoin = 'bk_zhuangxiu' where cbooksid = ? and cuserid = ?", booksID4, userID]) {
+            [result close];
+            return [db lastError];
+        }
+        
+        if (![db executeUpdate:@"update bk_books_type set cicoin = 'bk_lvxing' where cbooksid = ? and cuserid = ?", booksID5, userID]) {
+            [result close];
+            return [db lastError];
+        }
+        
+        
+        NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@'", booksID1, booksID2, booksID3, booksID4, booksID5, userID];
+        if (![db executeUpdate:sqlStr]) {
+            [result close];
+            return [db lastError];
+        }
+    }
+    [result close];
     
     return nil;
 }
