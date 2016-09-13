@@ -66,6 +66,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 @implementation SSJNewCreditCardViewController{
     UITextField *_limitInput;
     UITextField *_balaceInput;
+    UITextField *_nameInput;
+    UITextField *_memoInput;
 }
 
 - (void)viewDidLoad {
@@ -201,6 +203,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.text = self.item.cardName;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 100;
+        _nameInput = newReminderCell.textInput;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -251,6 +254,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明（选填）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        _memoInput = newReminderCell.textInput;
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 103;

@@ -98,8 +98,8 @@
     if (item.remindType == SSJReminderTypeCreditCard) {
         self.cellImageView.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }else if(item.remindType == SSJReminderTypeBorrowing){
-        if (item.borrowtOrLend == 0) {
-            self.cellImageView.image = [[UIImage imageNamed:@"ft_jiechukuan"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        if (!item.borrowtOrLend) {
+            self.cellImageView.image = [[UIImage imageNamed:@"ft_qiankuan"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }else{
             self.cellImageView.image = [[UIImage imageNamed:@"ft_yingshouqian"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }

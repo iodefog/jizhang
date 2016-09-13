@@ -128,7 +128,7 @@
             self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
             self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",creditCardItem.income - creditCardItem.expenture];
         }else if (creditCardItem.income - creditCardItem.expenture < 0){
-            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
             self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",creditCardItem.income - creditCardItem.expenture];
         }else{
             self.moneyLabel.textColor = [UIColor ssj_colorWithHex:@"393939"];
