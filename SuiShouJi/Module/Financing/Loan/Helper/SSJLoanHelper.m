@@ -738,7 +738,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     [modelInfo setObject:writeDate forKey:@"writeDate"];
     [modelInfo setObject:@(SSJSyncVersion()) forKey:@"version"];
     
-    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cthecharge, ctargetcharge, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (:ID, :userID, :lender, :jMoney, :fundID, :targetFundID, :chargeID, :targetChargeID, :borrowDate, :repaymentDate, :rate, :memo, :remindID, :interest, :closeOut, :type, :writeDate, :operatorType, :version)" withParameterDictionary:modelInfo]) {
+    if (![db executeUpdate:@"replace into bk_loan (loanid, cuserid, lender, jmoney, cthefundid, ctargetfundid, cthecharge, ctargetcharge, cborrowdate, crepaymentdate, rate, memo, cremindid, interest, iend, itype, cwritedate, operatortype, iversion) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", modelInfo[@"ID"], modelInfo[@"userID"],modelInfo[@"lender"], modelInfo[@"jMoney"], modelInfo[@"fundID"], modelInfo[@"targetFundID"], modelInfo[@"chargeID"], modelInfo[@"targetChargeID"], modelInfo[@"borrowDate"], modelInfo[@"repaymentDate"], modelInfo[@"rate"], modelInfo[@"memo"], modelInfo[@"remindID"], modelInfo[@"interest"], modelInfo[@"closeOut"], modelInfo[@"type"], modelInfo[@"writeDate"], modelInfo[@"operatorType"], modelInfo[@"version"]]) {
         return NO;
     }
     
