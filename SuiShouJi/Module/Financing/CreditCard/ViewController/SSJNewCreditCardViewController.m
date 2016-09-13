@@ -134,12 +134,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    
+    //账单日
     if ([title isEqualToString:kTitle7]) {
+        [MobClick event:@"credit_bill_date"];
         self.billingDateSelectView.currentDate = self.item.cardBillingDay;
         [self.billingDateSelectView show];
     }
     
+    //还款日
     if ([title isEqualToString:kTitle8]) {
+        [MobClick event:@"credit_payment_date"];
         self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
         [self.repaymentDateSelectView show];
     }
@@ -325,6 +330,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
+    self.item.cardName = _nameInput.text;
+    self.item.cardMemo = _memoInput.text;
     if (![numberPre evaluateWithObject:_balaceInput.text] && [_balaceInput.text doubleValue] != 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
@@ -411,6 +418,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.remindItem.remindState = self.remindStateButton.isOn;
     }else{
         if (self.remindStateButton.isOn) {
+            [MobClick event:@"credit_remind"];
             SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
             remindEditeVc.needToSave = NO;
             SSJReminderItem *item = [[SSJReminderItem alloc]init];

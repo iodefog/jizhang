@@ -100,7 +100,6 @@
         billingDate = [NSDate dateWithYear:date.year month:date.month day:_item.billingDay];
         repaymentDate = [NSDate dateWithYear:date.year month:date.month + 1 day:_item.repaymentDay];
     }
-
     NSInteger daysToBillingDate = [billingDate daysFrom:today];
     NSInteger daysToRepaymentDate = [repaymentDate daysFrom:today];
     NSInteger minmumDays = MIN(daysToBillingDate, daysToRepaymentDate);
@@ -113,10 +112,10 @@
             self.daysLab.text = @"";
         }
     }else{
-        if (daysToBillingDate > daysToRepaymentDate) {
-            self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",minmumDays + 1];
+        if (daysToBillingDate > 0) {
+            self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",daysToBillingDate];
         }else{
-            self.daysLab.text = [NSString stringWithFormat:@"距账单日:%ld天",minmumDays + 1];
+            self.daysLab.text = [NSString stringWithFormat:@"距还款日:%ld天",daysToRepaymentDate];
         }
     }
     [self.daysLab sizeToFit];

@@ -78,13 +78,15 @@
 - (UIImage *)imageWithColor:(UIColor *)color;
 
 /**
- *  高斯模糊图片
+ *  对图片做高斯模糊
  *
- *  @param blur 模糊度
+ *  @param radius 模糊半径，为0时不模糊,值越大越脱离原来外形(越看不出原来形状)
+ *  @param iterations 模糊程度，为0时不模糊,值越大越模糊
+ *  @param tintColor 模糊蒙版颜色,一般设为白色
  *
- *  @return (UIImage *) 模糊的图片
+ *  @return (UIImage *) 高斯模糊后的图片
  */
-- (UIImage *)blurryImagewithBlurLevel:(CGFloat)blur;
+- (UIImage *)blurredImageWithRadius:(CGFloat)radius iterations:(NSUInteger)iterations tintColor:(UIColor *)tintColor;
 
 @end
 

@@ -17,6 +17,7 @@
 #import "SSJBooksTypeSelectViewController.h"
 #import "SSJLoginViewController+SSJCategory.h"
 #import "SSJReportFormsViewController.h"
+#import "SSJRecordMakingViewController.h"
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -56,7 +57,11 @@
     
     if (_appliesTheme) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
-        _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+        if ([self isKindOfClass:[SSJReportFormsViewController class]] || [self isKindOfClass:[SSJRecordMakingViewController class]]) {
+            _backgroundView = [[UIImageView alloc] initWithImage:[[UIImage ssj_compatibleThemeImageNamed:@"background"] blurredImageWithRadius:2.f iterations:20 tintColor:[UIColor clearColor]]];
+        }else{
+            _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
+        }
         _backgroundView.frame = self.view.bounds;
         [self.view addSubview:_backgroundView];
     }
