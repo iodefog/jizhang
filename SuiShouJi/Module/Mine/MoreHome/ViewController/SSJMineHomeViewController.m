@@ -19,7 +19,7 @@
 #import "SSJUserInfoNetworkService.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJUserInfoItem.h"
-#import "SSJBookkeepingReminderViewController.h"
+//#import "SSJBookkeepingReminderViewController.h"
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJThemeHomeViewController.h"
 #import "SSJMotionPasswordViewController.h"

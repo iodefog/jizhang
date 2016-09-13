@@ -6,7 +6,7 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJNewBaseTableViewController.h"
+#import "SSJBaseViewController.h"
 
 @interface SSJCalendarViewController : SSJBaseViewController<UITableViewDelegate,UITableViewDataSource>
 

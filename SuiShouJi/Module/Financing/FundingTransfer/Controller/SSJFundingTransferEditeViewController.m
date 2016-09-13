@@ -67,11 +67,15 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
     return 10;
 }
 
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return [[UIView alloc] init];
+}
+
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     if (self.item.editable) {
         return self.modifyButtonView;
     }
-    return nil;
+    return [[UIView alloc] init];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
