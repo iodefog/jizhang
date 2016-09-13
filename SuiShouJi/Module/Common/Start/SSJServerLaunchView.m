@@ -40,6 +40,7 @@
 - (void)downloadImgWithUrl:(NSString *)imgUrl timeout:(NSTimeInterval)timeout completion:(void (^)())completion {
 #ifdef DEBUG
     [CDAutoHideMessageHUD showMessage:@"开始下载服务端下发启动页"];
+    NSLog(@"开始下载服务端下发启动页");
 #endif
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
     manager.imageDownloader.downloadTimeout = timeout;
@@ -48,6 +49,7 @@
     [manager downloadImageWithURL:url options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (!image || error) {
 #ifdef DEBUG
+            NSLog(@">>>>下载服务端下发启动页失败");
             [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载服务端下发启动页失败，error:%@", [error localizedDescription]]];
 #endif
             _isCompleted = YES;
@@ -57,6 +59,7 @@
             return;
         }
 #ifdef DEBUG
+        NSLog(@">>>>下载服务端下发启动页成功");
         [CDAutoHideMessageHUD showMessage:@"下载服务端下发启动页成功"];
 #endif
         SSJDispatchMainSync(^{
