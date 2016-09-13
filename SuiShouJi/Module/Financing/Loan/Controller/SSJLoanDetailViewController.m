@@ -306,6 +306,25 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         [self organiseCellItems];
         [self updateSubViewHidden];
         [self.tableView reloadData];
+        
+        switch (self.loanModel.type) {
+            case SSJLoanTypeLend:
+                if (self.loanModel.closeOut) {
+                    [MobClick event:@"loan_end_detail"];
+                } else {
+                    [MobClick event:@"loan_detail"];
+                }
+                break;
+                
+            case SSJLoanTypeBorrow:
+                if (self.loanModel.closeOut) {
+                    [MobClick event:@"owed_end_detail"];
+                } else {
+                    [MobClick event:@"owed_detail"];
+                }
+                break;
+        }
+        
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:nil], nil];
@@ -357,6 +376,16 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     SSJAddOrEditLoanViewController *editLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
     editLoanVC.loanModel = _loanModel;
     [self.navigationController pushViewController:editLoanVC animated:YES];
+    
+    switch (_loanModel.type) {
+        case SSJLoanTypeLend:
+            [MobClick event:@"edit_loan"];
+            break;
+            
+        case SSJLoanTypeBorrow:
+            [MobClick event:@"edit_owed"];
+            break;
+    }
 }
 
 - (void)closeOutBtnAction {

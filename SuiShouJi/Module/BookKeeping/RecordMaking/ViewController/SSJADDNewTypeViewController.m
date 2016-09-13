@@ -145,8 +145,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 - (void)managerItemAction {
     if (_titleSegmentView.selectedSegmentIndex == 0) {
         _featuredCategoryCollectionView.editing = YES;
+        [MobClick event:@"build_in_type_manage"];
     } else if (_titleSegmentView.selectedSegmentIndex == 1) {
         _customCategoryCollectionView.editing = YES;
+        [MobClick event:@"custom_type_manage"];
     }
 }
 
@@ -254,6 +256,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     } else if (_titleSegmentView.selectedSegmentIndex == 1
                && _customCategorySwitchConrol.selectedIndex == 0) {
         selectedItems = _customCategoryCollectionView.selectedItems;
+        [MobClick event:@"custom_type_edit"];
     }
     
     if (selectedItems.count == 0) {
@@ -324,6 +327,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];
+    
+    [MobClick event:@"build_in_type_deletec"];
 }
 
 - (void)customDeleteButtonAction {
@@ -344,6 +349,8 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
     }];
+    
+    [MobClick event:@"custom_type_delete"];
 }
 
 #pragma mark - private

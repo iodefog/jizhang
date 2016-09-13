@@ -407,6 +407,16 @@ static NSUInteger kClostOutDateTag = 1004;
         self.sureButton.enabled = YES;
         [self.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [MobClick event:@"end_loan"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [MobClick event:@"end_owed"];
+                break;
+        }
     } failure:^(NSError * _Nonnull error) {
         self.sureButton.enabled = YES;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];

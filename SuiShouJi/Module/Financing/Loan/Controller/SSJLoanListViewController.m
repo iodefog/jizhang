@@ -118,6 +118,26 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 #pragma mark - SCYSlidePagingHeaderViewDelegate
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     [self reloadDataAccordingToHeaderViewIndex];
+    
+    if (index == 0) {
+        if ([_item.fundingID isEqualToString:@"10"]) {
+            [MobClick event:@"loan_tab_no_end"];
+        } else if ([_item.fundingID isEqualToString:@"11"]) {
+            [MobClick event:@"owed_tab_no_end"];
+        }
+    } else if (index == 1) {
+        if ([_item.fundingID isEqualToString:@"10"]) {
+            [MobClick event:@"loan_tab_end"];
+        } else if ([_item.fundingID isEqualToString:@"11"]) {
+            [MobClick event:@"owed_tab_end"];
+        }
+    } else if (index == 2) {
+        if ([_item.fundingID isEqualToString:@"10"]) {
+            [MobClick event:@"loan_tab_all"];
+        } else if ([_item.fundingID isEqualToString:@"11"]) {
+            [MobClick event:@"owed_tab_all"];
+        }
+    }
 }
 
 #pragma mark - Event
@@ -126,8 +146,10 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     model.fundID = _item.fundingID;
     if ([_item.fundingParent isEqualToString:@"10"]) {
         model.type = SSJLoanTypeLend;
+        [MobClick event:@"add_loan"];
     } else if ([_item.fundingParent isEqualToString:@"11"]) {
         model.type = SSJLoanTypeBorrow;
+        [MobClick event:@"add_owed"];
     }
     
     SSJAddOrEditLoanViewController *addLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
@@ -142,7 +164,6 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
     _headerSegmentView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [_headerSegmentView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
-    CGFloat alpha = [[SSJThemeSetting currentThemeModel].ID isEqualToString:SSJDefaultThemeID] ? 0 : 0.1;
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     
     [_amountView updateAppearance];

@@ -465,6 +465,18 @@ const int kMemoMaxLength = 13;
     [_tableView beginUpdates];
     [_tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
     [_tableView endUpdates];
+    
+    if (switchCtrl.on) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [MobClick event:@"loan_interest"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [MobClick event:@"owed_interest"];
+                break;
+        }
+    }
 }
 
 - (void)remindSwitchAction:(UISwitch *)switchCtrl {
@@ -472,6 +484,18 @@ const int kMemoMaxLength = 13;
         _reminderItem.remindState = switchCtrl.on;
     } else {
         [self enterReminderVC];
+    }
+    
+    if (switchCtrl.on) {
+        switch (_loanModel.type) {
+            case SSJLoanTypeLend:
+                [MobClick event:@"loan_remind"];
+                break;
+                
+            case SSJLoanTypeBorrow:
+                [MobClick event:@"owed_remind"];
+                break;
+        }
     }
 }
 
@@ -780,6 +804,16 @@ const int kMemoMaxLength = 13;
             }
             
             [wself.tableView reloadData];
+            
+            switch (wself.loanModel.type) {
+                case SSJLoanTypeLend:
+                    [MobClick event:@"loan_change_borrow_date"];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [MobClick event:@"owed_change_borrow_date"];
+                    break;
+            }
         };
         _borrowDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:wself.loanModel.repaymentDate] == NSOrderedDescending) {
@@ -811,6 +845,16 @@ const int kMemoMaxLength = 13;
             }
             weakSelf.loanModel.repaymentDate = view.selectedDate;
             [weakSelf.tableView reloadData];
+            
+            switch (weakSelf.loanModel.type) {
+                case SSJLoanTypeLend:
+                    [MobClick event:@"loan_change_pay_date"];
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    [MobClick event:@"owed_change_pay_date"];
+                    break;
+            }
         };
         _repaymentDateSelectionView.shouldSelectDateAction = ^BOOL(SSJLoanDateSelectionView *view, NSDate *date) {
             if ([date compare:weakSelf.loanModel.borrowDate] == NSOrderedAscending) {

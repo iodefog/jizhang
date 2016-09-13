@@ -532,6 +532,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _incomeTypeView.editing = YES;
     }
     [self updateNavigationRightItem];
+    
+    [MobClick event:@"addRecord_manage"];
 }
 
 - (void)doneItemAction {
@@ -803,6 +805,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.deleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         [wself deleteItem:item ofItems:selectionView.items];
+        [MobClick event:@"bill_type_delete"];
     };
     
     billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
