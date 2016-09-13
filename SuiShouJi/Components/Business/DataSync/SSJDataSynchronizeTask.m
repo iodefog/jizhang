@@ -189,37 +189,58 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 }
                 
                 //  合并数据
-                if ([self mergeData:tableInfo error:&tError]) {
-                    
-                    //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
-                    [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
-                    [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
-                    
-                    // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
-                    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-                        BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", self.userId], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
-                        if (!success) {
-                            *rollback = YES;
-                        }
-                    }];
-                    
-                    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
-                    [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-                        for (SSJReminderItem *item in result) {
-                            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-                        }
-                    } failure:^(NSError *error) {
-                        SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-                    }];
-                    
-                    if (success) {
-                        SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
-                        success();
-                    }
-                } else {
+                if (![self mergeData:tableInfo error:&tError]) {
+                    tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[tError localizedDescription]}];
+                    SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
                     if (failure) {
                         failure(tError);
                     }
+                    return;
+                }
+                
+                //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
+                [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
+                [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
+                
+                // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
+                [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+                    BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", self.userId], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
+                    if (!success) {
+                        *rollback = YES;
+                    }
+                }];
+                
+                // 根据用户的提醒表中的记录注册本地通知
+                [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:self.userId];
+                [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+                    for (SSJReminderItem *item in result) {
+                        [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+                    }
+                } failure:^(NSError *error) {
+                    SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+                }];
+                
+                // 因为老版本没有同步账本图标，老版本同步过来的数据图表为空，所以这里把图标加上
+                [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+                    NSString *booksID1 = self.userId;
+                    NSString *booksID2 = [NSString stringWithFormat:@"%@-1", self.userId];
+                    NSString *booksID3 = [NSString stringWithFormat:@"%@-2", self.userId];
+                    NSString *booksID4 = [NSString stringWithFormat:@"%@-3", self.userId];
+                    NSString *booksID5 = [NSString stringWithFormat:@"%@-4", self.userId];
+                    
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_moren' where cbooksid = ? and cuserid = ?", booksID1, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_shengyi' where cbooksid = ? and cuserid = ?", booksID2, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_jiehun' where cbooksid = ? and cuserid = ?", booksID3, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_zhuangxiu' where cbooksid = ? and cuserid = ?", booksID4, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_lvxing' where cbooksid = ? and cuserid = ?", booksID5, self.userId];
+                    
+                    NSString *sqlStr = [NSString stringWithFormat:@"update set bk_books_type set cicoin = 'book_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@'", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
+                    [db executeUpdate:sqlStr];
+                }];
+                
+                if (success) {
+                    SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
+                    success();
                 }
                 return;
             }
