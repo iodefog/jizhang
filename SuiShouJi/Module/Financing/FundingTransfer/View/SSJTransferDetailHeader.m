@@ -16,10 +16,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.dateLabel];
         [self ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
+        if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+            self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+        } else {
+            self.backgroundColor = [UIColor clearColor];
+        }
     }
     return self;
 }
