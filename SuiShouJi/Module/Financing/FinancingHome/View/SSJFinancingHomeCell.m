@@ -195,7 +195,6 @@
         [self.fundingNameLabel sizeToFit];
         if (item.cardMemo.length) {
             self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.cardMemo];
-
         }
         [self.cardMemoLabel sizeToFit];
         if (item.cardBillingDay != 0 && item.cardRepaymentDay != 0) {
@@ -225,7 +224,11 @@
             if ([repaymentDate isEarlierThan:billDate]) {
                 repaymentDate = [repaymentDate dateByAddingMonths:1];
             }
-            if ([billDate isEarlierThan:[NSDate date]] && [[NSDate date] isEarlierThan:repaymentDate]) {
+            if ([[NSDate date] isEarlierThan:repaymentDate] && [[NSDate date] isEarlierThan:billDate]) {
+                repaymentDate = [repaymentDate dateBySubtractingMonths:1];
+                billDate = [billDate dateBySubtractingMonths:1];
+            }
+            if ([billDate isEarlierThanOrEqualTo:[NSDate date]] && [[NSDate date] isEarlierThanOrEqualTo:repaymentDate]) {
                 float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:billDate.month billingDay:item.cardBillingDay WithCardId:item.cardId];
                 self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单金额%.2f",billDate.month,sumAmount];
             }else{
