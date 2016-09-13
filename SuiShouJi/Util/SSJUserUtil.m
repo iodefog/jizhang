@@ -50,11 +50,11 @@ SSJLoginType SSJUserLoginType(){
 }
 
 void SSJClearLoginInfo() {
+    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:SSJUSERID()];
     SSJSaveAppId(nil);
     SSJSaveAccessToken(nil);
     SSJSaveUserLogined(NO);
     SSJSetUserId(nil);
-    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:SSJUSERID()];
 }
 
 static NSString *const kSSJUserIdKey = @"kSSJUserIdKey";

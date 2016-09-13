@@ -214,22 +214,24 @@
             self.announcementLab.hidden = NO;
             self.scrollView.hidden = NO;
             [self updateBeginAndEndButton];
+            [self.view ssj_hideWatermark:YES];
             
-            if (self.noDataRemindView.superview) {
-                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                    [self.noDataRemindView removeFromSuperview];
-                } completion:NULL];
-            }
+//            if (self.noDataRemindView.superview) {
+//                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//                    [self.noDataRemindView removeFromSuperview];
+//                } completion:NULL];
+//            }
         } else {
             self.announcementLab.hidden = YES;
             self.scrollView.hidden = YES;
             [self.view ssj_hideLoadingIndicator];
+            [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
             
-            if (!self.noDataRemindView.superview) {
-                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                    [self.view addSubview:self.noDataRemindView];
-                } completion:NULL];
-            }
+//            if (!self.noDataRemindView.superview) {
+//                [UIView transitionWithView:self.view duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//                    [self.view addSubview:self.noDataRemindView];
+//                } completion:NULL];
+//            }
         }
         
     } failure:^(NSError *error) {
@@ -517,14 +519,14 @@
 
 - (UIView *)noDataRemindView {
     if (!_noDataRemindView) {
-        _noDataRemindView = [[UIView alloc] initWithFrame:self.view.bounds];
+        _noDataRemindView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 146, 230)];
         
         UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"calendar_norecord"]];
         imgView.centerX = _noDataRemindView.width * 0.5;
-        imgView.top = 40;
+        imgView.top = 10;
         [_noDataRemindView addSubview:imgView];
         
-        UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, imgView.bottom + 10, self.view.width, 16)];
+        UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, imgView.bottom + 10, _noDataRemindView.width, 16)];
         lab.backgroundColor = [UIColor clearColor];
         lab.font = [UIFont systemFontOfSize:15];
         lab.text = @"您还未有记账数据哦";

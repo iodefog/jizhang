@@ -122,7 +122,6 @@ static NSString * SSJTransferDetailHeaderIdentifier = @"transferDetailHeader";
         NSComparisonResult result = [obj1 compare:obj2];
         return result==NSOrderedAscending;
     }];
-    header.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     header.currentMonth = [arr ssj_safeObjectAtIndex:section];
     return header;
 }
