@@ -26,7 +26,7 @@ static const NSTimeInterval kLoadStartAPITimeout = 1;
 static const NSTimeInterval kLoadCheckInAPITimeout = 60;
 
 // 加载服务器下发启动页超时时间
-static const NSTimeInterval kLoadStartImgTimeout = 60;
+static const NSTimeInterval kLoadStartImgTimeout = 1;
 
 // 加载记账树图片超时时间
 static const NSTimeInterval kLoadTreeImgTimeout = 60;
@@ -87,10 +87,9 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     __weak typeof(self) wself = self;
     [[SSJStartChecker sharedInstance] checkWithTimeoutInterval:kLoadStartAPITimeout success:^(BOOL isInReview, SSJAppUpdateType type) {
         NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
-        [wself.launchView downloadImgWithUrl:SSJImageURLWithAPI(startImgUrl) timeout:kLoadStartImgTimeout completion:NULL];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [wself.launchView downloadImgWithUrl:SSJImageURLWithAPI(startImgUrl) timeout:kLoadStartImgTimeout completion:^{
             [wself showGuideViewIfNeeded];
-        });
+        }];
     } failure:^(NSString *message) {
         [wself showGuideViewIfNeeded];
     }];

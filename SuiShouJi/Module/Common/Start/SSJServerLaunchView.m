@@ -40,44 +40,55 @@
 - (void)downloadImgWithUrl:(NSString *)imgUrl timeout:(NSTimeInterval)timeout completion:(void (^)())completion {
 #ifdef DEBUG
     [CDAutoHideMessageHUD showMessage:@"开始下载服务端下发启动页"];
-    NSLog(@"开始下载服务端下发启动页");
 #endif
     SDWebImageManager *manager = [[SDWebImageManager alloc] init];
-    manager.imageDownloader.downloadTimeout = timeout;
+//    manager.imageDownloader.downloadTimeout = timeout;
     
     NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
     [manager downloadImageWithURL:url options:SDWebImageContinueInBackground progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (!image || error) {
 #ifdef DEBUG
-            NSLog(@">>>>下载服务端下发启动页失败");
             [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载服务端下发启动页失败，error:%@", [error localizedDescription]]];
 #endif
+            if (!_isCompleted) {
+                _isCompleted = YES;
+                if (completion) {
+                    completion();
+                }
+            }
+            
+            return;
+        }
+#ifdef DEBUG
+        [CDAutoHideMessageHUD showMessage:@"下载服务端下发启动页成功"];
+#endif
+        SSJDispatchMainSync(^{
+            if (!_isCompleted) {
+                _isCompleted = YES;
+                [UIView transitionWithView:self duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                    if (!_serverView) {
+                        _serverView = [[UIImageView alloc] initWithImage:image];
+                        [self addSubview:_serverView];
+                    }
+                } completion:^(BOOL finished) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        if (completion) {
+                            completion();
+                        }
+                    });
+                }];
+            }
+        });
+    }];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (!_isCompleted) {
             _isCompleted = YES;
             if (completion) {
                 completion();
             }
-            return;
         }
-#ifdef DEBUG
-        NSLog(@">>>>下载服务端下发启动页成功");
-        [CDAutoHideMessageHUD showMessage:@"下载服务端下发启动页成功"];
-#endif
-        SSJDispatchMainSync(^{
-            [UIView transitionWithView:self duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                if (!_serverView) {
-                    _serverView = [[UIImageView alloc] initWithImage:image];
-                    [self addSubview:_defaultView];
-                }
-            } completion:^(BOOL finished) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    _isCompleted = YES;
-                    if (completion) {
-                        completion();
-                    }
-                });
-            }];
-        });
-    }];
+    });
 }
 
 @end
