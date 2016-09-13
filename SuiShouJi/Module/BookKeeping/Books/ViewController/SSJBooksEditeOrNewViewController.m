@@ -108,7 +108,7 @@
 }
 
 - (NSArray *)imageArray{
-    return @[@"book_moren",@"book_zhuangxiu",@"book_jiehun",@"book_shengyi",@"book_lvxing",@"book_qiche",@"book_renqing",@"book_jucan",@"book_zufang",@"book_tuandui",@"book_class",@"book_house",@"book_chuchai",@"book_yifu",@"book_family",@"book_shopping",@"book_shenghuo",@"book_movie",@"book_hufu",@"book_qiankuan",@"book_jiechu",@"book_sport",@"book_licai",@"book_pet",@"book_school",@"book_taobao",@"book_jiaoyu",@"book_yule",@"book_baoxiao",@"book_meirong",@"book_yiliao",@"book_canyin",@"book_shucai",@"book_jiaju",@"book_yinger",@"book_yingye",@"book_shui",@"book_fuwu",@"book_xiebao",@"book_weixiu"];
+    return @[@"bk_moren",@"bk_zhuangxiu",@"bk_jiehun",@"bk_shengyi",@"bk_lvxing",@"bk_qiche",@"bk_renqing",@"bk_jucan",@"bk_zufang",@"bk_tuandui",@"bk_class",@"bk_house",@"bk_chuchai",@"bk_yifu",@"bk_family",@"bk_shopping",@"bk_shenghuo",@"bk_movie",@"bk_hufu",@"bk_qiankuan",@"bk_jiechu",@"bk_sport",@"bk_licai",@"bk_pet",@"bk_school",@"bk_taobao",@"bk_jiaoyu",@"bk_yule",@"bk_baoxiao",@"bk_meirong",@"bk_yiliao",@"bk_canyin",@"bk_shucai",@"bk_jiaju",@"bk_yinger",@"bk_yingye",@"bk_shui",@"bk_fuwu",@"bk_xiebao",@"bk_weixiu"];
 }
 
 - (void)didReceiveMemoryWarning {
