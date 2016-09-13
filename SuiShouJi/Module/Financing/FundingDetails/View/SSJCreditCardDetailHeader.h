@@ -17,6 +17,8 @@
 
 @property(nonatomic) double totalExpence;
 
+@property(nonatomic) double cardBalance;
+
 @property(nonatomic, strong) UIView *backGroundView;
 
 @end

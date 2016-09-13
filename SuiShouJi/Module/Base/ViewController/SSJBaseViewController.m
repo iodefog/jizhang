@@ -16,6 +16,7 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
 #import "SSJLoginViewController+SSJCategory.h"
+#import "SSJReportFormsViewController.h"
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -55,7 +56,6 @@
     
     if (_appliesTheme) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
-        
         _backgroundView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleThemeImageNamed:@"background"]];
         _backgroundView.frame = self.view.bounds;
         [self.view addSubview:_backgroundView];

@@ -340,6 +340,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 //                }else
                 weakSelf.creditCardHeader.totalIncome = _totalIncome;
                 weakSelf.creditCardHeader.totalExpence = _totalExpence;
+                weakSelf.creditCardHeader.cardBalance = _totalIncome - _totalExpence;
                 weakSelf.title = titleStr;
                 [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
                 weakSelf.header.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];

@@ -77,5 +77,14 @@
  */
 - (UIImage *)imageWithColor:(UIColor *)color;
 
+/**
+ *  高斯模糊图片
+ *
+ *  @param blur 模糊度
+ *
+ *  @return (UIImage *) 模糊的图片
+ */
+- (UIImage *)blurryImagewithBlurLevel:(CGFloat)blur;
+
 @end
 

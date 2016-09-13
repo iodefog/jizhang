@@ -274,6 +274,12 @@
     [self.expenceLab sizeToFit];
 }
 
+- (void)setCardBalance:(double)cardBalance{
+    _cardBalance = cardBalance;
+    self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_cardBalance];
+    [self.balanceLab sizeToFit];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
