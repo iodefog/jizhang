@@ -541,6 +541,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _incomeTypeView.editing = NO;
     }
     [self updateNavigationRightItem];
+    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
 }
 
 #pragma mark - private
