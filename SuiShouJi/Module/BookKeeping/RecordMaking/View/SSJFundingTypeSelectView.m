@@ -152,9 +152,10 @@
         [_titleLabel sizeToFit];
         [_titleView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 23, 23)];
-        [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_titleView addSubview:_closeButton];
+        _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return _titleView;
 }

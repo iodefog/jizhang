@@ -34,6 +34,7 @@ extern BOOL kHomeNeedLoginPop;
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJStartUpgradeAlertView.h"
 #import "SSJUserTableManager.h"
+#import "SSJLocalNotificationHelper.h"
 
 @interface SSJPersonalDetailViewController ()
 @property (nonatomic, strong) NSArray *titles;
@@ -249,7 +250,13 @@ extern BOOL kHomeNeedLoginPop;
         SSJUserItem *currentUser = [SSJUserTableManager queryUserItemForID:SSJUSERID()];
         NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:currentUser];
         [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        
+        NSString *userID = SSJUSERID();
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
+            // 同步后会注册提醒通知，所以同步成功后要取消注册的通知
+            [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:userID];
+        } failure:NULL];
+        
         SSJClearLoginInfo();
         [SSJUserTableManager reloadUserIdWithError:nil];
         [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithSuccess:NULL failure:NULL];
