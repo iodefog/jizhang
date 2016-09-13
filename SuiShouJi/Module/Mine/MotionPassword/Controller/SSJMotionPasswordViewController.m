@@ -390,6 +390,7 @@ static const int kVerifyFailureTimesLimit = 5;
         [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
             if (success) {
                 SSJDispatchMainSync(^{
+                    [self.navigationController setNavigationBarHidden:NO];
                     if (self.finishHandle) {
                         self.finishHandle(self);
                     } else {
