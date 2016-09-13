@@ -116,7 +116,7 @@
     UILabel *label = [[UILabel alloc]init];
     label.text = [_dateArr objectAtIndex:row];
     label.font = [UIFont systemFontOfSize:18];
-    label.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    label.textColor = [UIColor ssj_colorWithHex:@"#393939"];
     [label sizeToFit];
     return label;
 }
