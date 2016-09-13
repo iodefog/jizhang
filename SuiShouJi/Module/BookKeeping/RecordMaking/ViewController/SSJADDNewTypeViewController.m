@@ -438,10 +438,6 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
         [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#f6f6f6"] forState:UIControlStateNormal];
         
-        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#a7a7a7"]}];
-        [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                               NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"#a7a7a7"]} range:NSMakeRange(2, 4)];
-        [_editButton setAttributedTitle:title forState:UIControlStateNormal];
         [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#dddddd" alpha:0.8] forState:UIControlStateNormal];
         
     } else {
@@ -451,12 +447,10 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
         [_customDeleteButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.3] forState:UIControlStateNormal];
         
-        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
-                               NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]} range:NSMakeRange(2, 4)];
-        [_editButton setAttributedTitle:title forState:UIControlStateNormal];
         [_editButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor] forState:UIControlStateNormal];
     }
+    
+    [self updateEditButtonTitleColor];
 }
 
 - (void)updateButtons {
@@ -521,18 +515,20 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 }
 
 - (void)updateEditButtonEnable {
-//    if (_titleSegmentView.selectedSegmentIndex == 0
-//        && _featuredCategoryCollectionView.editing) {
-//        self.editButton.enabled = _featuredCategoryCollectionView.selectedItems.count == 1;
-//        return;
-//    }
-//    
-//    if (_titleSegmentView.selectedSegmentIndex == 1
-//        && _customCategorySwitchConrol.selectedIndex == 0
-//        && _customCategoryCollectionView.editing) {
-//        self.editButton.enabled = _customCategoryCollectionView.selectedItems.count == 1;
-//        return;
-//    }
+    if (_titleSegmentView.selectedSegmentIndex == 1
+        && _customCategorySwitchConrol.selectedIndex == 0
+        && _customCategoryCollectionView.editing) {
+        [self updateEditButtonTitleColor];
+        return;
+    }
+}
+
+- (void)updateEditButtonTitleColor {
+    NSString *titleColor = _customCategoryCollectionView.selectedItems.count == 1 ? SSJ_CURRENT_THEME.mainColor : SSJ_CURRENT_THEME.secondaryColor;
+    NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:@"编辑（单选）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:titleColor]}];
+    [title setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16],
+                           NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:titleColor]} range:NSMakeRange(2, 4)];
+    [_editButton setAttributedTitle:title forState:UIControlStateNormal];
 }
 
 - (void)showOrHideKeyboard {
