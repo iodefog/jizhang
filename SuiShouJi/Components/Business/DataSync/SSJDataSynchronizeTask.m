@@ -228,13 +228,13 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                     NSString *booksID4 = [NSString stringWithFormat:@"%@-3", self.userId];
                     NSString *booksID5 = [NSString stringWithFormat:@"%@-4", self.userId];
                     
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_moren' where cbooksid = ? and cuserid = ?", booksID1, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_shengyi' where cbooksid = ? and cuserid = ?", booksID2, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_jiehun' where cbooksid = ? and cuserid = ?", booksID3, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_zhuangxiu' where cbooksid = ? and cuserid = ?", booksID4, self.userId];
-                    [db executeUpdate:@"update bk_books_type set cicoin = 'book_lvxing' where cbooksid = ? and cuserid = ?", booksID5, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID1, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_shengyi' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID2, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_jiehun' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID3, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_zhuangxiu' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID4, self.userId];
+                    [db executeUpdate:@"update bk_books_type set cicoin = 'bk_lvxing' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID5, self.userId];
                     
-                    NSString *sqlStr = [NSString stringWithFormat:@"update set bk_books_type set cicoin = 'book_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@'", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
+                    NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@' and (length(cicoin) == 0 or cicoin is null)", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
                     [db executeUpdate:sqlStr];
                 }];
                 

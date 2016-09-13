@@ -580,7 +580,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         // 修改借贷记录的结清状态，并且清空结清转帐流水ID
-        if (![db executeUpdate:@"update bk_loan set iend = ?, cethecharge = ?, cetargetcharge = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @0, @"", @"", @(SSJSyncVersion()), @1, writedate, model.ID]) {
+        if (![db executeUpdate:@"update bk_loan set iend = ?, cethecharge = ?, cetargetcharge = ?, cinterestid = ?, iversion = ?, operatortype = ?, cwritedate = ? where loanid = ?", @0, @"", @"", @"", @(SSJSyncVersion()), @1, writedate, model.ID]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
