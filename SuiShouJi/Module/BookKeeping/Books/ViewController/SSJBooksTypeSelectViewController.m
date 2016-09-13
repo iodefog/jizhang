@@ -195,6 +195,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
         [self.selectedBooks removeAllObjects];
+    }else{
+        [MobClick event:@"accountbook_manage"];
     }
     for (SSJBooksTypeItem *item in self.items) {
         item.editeModel = self.rightButton.isSelected;
@@ -202,6 +204,8 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 }
 
 - (void)editeButtonClicked:(id)sender{
+    [MobClick event:@"accountbook_edit"];
+
     SSJBooksEditeOrNewViewController *booksEditeVc = [[SSJBooksEditeOrNewViewController alloc]init];
     booksEditeVc.item = [self.selectedBooks firstObject];
     [self.navigationController pushViewController:booksEditeVc animated:YES];
@@ -217,6 +221,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             return;
         }
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [MobClick event:@"accountbook_delete"];
             [weakSelf deleteBooks];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];

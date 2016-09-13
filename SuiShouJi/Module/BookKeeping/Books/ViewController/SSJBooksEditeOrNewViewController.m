@@ -65,9 +65,11 @@
         _booksEditeView.images = [self imageArray];
         __weak typeof(self) weakSelf = self;
         _booksEditeView.selectImageAction = ^(SSJNewOrEditCustomCategoryView *view){
+            [MobClick event:@"accountbook_icon_pick"];
             weakSelf.item.booksIcoin = view.selectedImage;
         };
         _booksEditeView.selectColorAction = ^(SSJNewOrEditCustomCategoryView *view){
+            [MobClick event:@"accountbook_color_pick"];
             weakSelf.item.booksColor = view.selectedColor;
         };
         if (self.item.booksName.length) {

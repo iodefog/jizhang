@@ -209,15 +209,15 @@
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
             if (mostRecentDay == daysFromBill) {
                 if (daysFromBill < 0 ) {
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment + 1];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment];
                 }else{
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay];
                 }
             }else if (mostRecentDay == daysFromRepayment){
                 if (daysFromRepayment < 0 ) {
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill + 1];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill];
                 }else{
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
+                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay];
                 }
             }
             [self.cardBillingDayLabel sizeToFit];

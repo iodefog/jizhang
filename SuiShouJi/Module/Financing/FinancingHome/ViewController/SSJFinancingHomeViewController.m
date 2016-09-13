@@ -262,9 +262,10 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 -(UIButton *)hiddenButton{
     if (!_hiddenButton) {
         _hiddenButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-        [_hiddenButton setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
-        [_hiddenButton setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [_hiddenButton setImage:[[UIImage imageNamed:@"founds_yincang"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [_hiddenButton setImage:[[UIImage imageNamed:@"founds_xianshi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateSelected];
         [_hiddenButton addTarget:self action:@selector(hiddenButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _hiddenButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _hiddenButton;
 }
@@ -367,6 +368,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.headerView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.headerView ssj_setBorderStyle:SSJBorderStyleBottom | SSJBorderStyleTop];
+    self.hiddenButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.collectionView reloadData];
 }
 
