@@ -104,7 +104,7 @@
 
 -(void)updateCellAppearanceAfterThemeChanged{
     [super updateCellAppearanceAfterThemeChanged];
-    self.backgroundColor = [UIColor clearColor];
+//    self.backgroundColor = [UIColor clearColor];
     self.checkMark.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 /*
