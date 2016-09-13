@@ -153,6 +153,7 @@ static NSUInteger kClostOutDateTag = 1004;
         [self.fundingSelectionView show];
     } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
         [self.view endEditing:YES];
+        self.endDateSelectionView.selectedDate = self.loanModel.endDate;
         [self.endDateSelectionView show];
     }
 }
