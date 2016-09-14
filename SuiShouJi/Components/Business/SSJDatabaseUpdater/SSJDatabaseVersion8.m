@@ -151,7 +151,7 @@
     }
     [result close];
     
-    NSDate *remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day hour:18 minute:0 second:0];
+    NSDate *remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day hour:20 minute:0 second:0];
     NSString *remindDateStr = [remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     

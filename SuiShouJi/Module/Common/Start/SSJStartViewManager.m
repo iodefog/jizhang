@@ -87,7 +87,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     __weak typeof(self) wself = self;
     [[SSJStartChecker sharedInstance] checkWithTimeoutInterval:kLoadStartAPITimeout success:^(BOOL isInReview, SSJAppUpdateType type) {
         NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
-        [wself.launchView downloadImgWithUrl:SSJImageURLWithAPI(startImgUrl) timeout:kLoadStartImgTimeout completion:^{
+        [wself.launchView downloadImgWithUrl:startImgUrl timeout:kLoadStartImgTimeout completion:^{
             [wself showGuideViewIfNeeded];
         }];
     } failure:^(NSString *message) {
