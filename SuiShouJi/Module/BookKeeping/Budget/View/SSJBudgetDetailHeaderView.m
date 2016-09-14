@@ -12,7 +12,9 @@
 
 static const CGFloat kTopViewHeight = 110;
 
-static const CGFloat kBottomViewHeight = 265;
+static const CGFloat kBottomViewHeight1 = 265;
+
+static const CGFloat kBottomViewHeight2 = 235;
 
 @interface SSJBudgetDetailHeaderView ()
 
@@ -73,7 +75,7 @@ static const CGFloat kBottomViewHeight = 265;
 
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat width = CGRectGetWidth([UIScreen mainScreen].bounds);
-    CGFloat height = self.isHistory ? kBottomViewHeight : kTopViewHeight + kBottomViewHeight;
+    CGFloat height = self.isHistory ? kBottomViewHeight2 : kTopViewHeight + kBottomViewHeight1;
     return CGSizeMake(width, height);
 }
 
@@ -84,7 +86,7 @@ static const CGFloat kBottomViewHeight = 265;
     self.waveView.centerX = self.width * 0.5;
     
     if (self.isHistory) {
-        self.bottomView.frame = CGRectMake(0, 0, self.width, kBottomViewHeight);
+        self.bottomView.frame = CGRectMake(0, 0, self.width, kBottomViewHeight2);
         self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
         
 //        self.payMoneyLab.width = MIN(self.payMoneyLab.width, (self.width - 80) * 0.5);
@@ -96,7 +98,7 @@ static const CGFloat kBottomViewHeight = 265;
         self.historyPaymentLab.left = 10;
     } else {
         self.topView.frame = CGRectMake(0, 0, self.width, kTopViewHeight);
-        self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, kBottomViewHeight);
+        self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, kBottomViewHeight1);
         
         CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
         
@@ -180,7 +182,7 @@ static const CGFloat kBottomViewHeight = 265;
     self.historyPaymentLab.attributedText = paymentStr;
     [self.historyPaymentLab sizeToFit];
     
-    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算：%.2f", budgetType, model.payMoney]];
+    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算：%.2f", budgetType, model.budgetMoney]];
     [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
                                 NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(4, budgetStr.length - 4)];
     self.estimateMoneyLab.attributedText = budgetStr;

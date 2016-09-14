@@ -31,6 +31,11 @@ static NSString *const kGreenColorValue = @"0fceb6";
 
 @implementation SSJBudgetWaveWaterView
 
+- (void)dealloc {
+    [_growingView stopWave];
+    [_fullView stopWave];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     return [self initWithRadius:0];
 }
