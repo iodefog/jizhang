@@ -204,6 +204,7 @@
         }
         
         int maxOrder = [db intForQuery:@"select max(a.iorder) from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.istate = 1 and a.operatortype <> 2 and a.cbillid = b.id and b.itype = ?", SSJUSERID(), @(incomeOrExpenture)];
+        
         if ([db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, cwritedate, iversion, operatortype, iorder) values (?, ?, 1, ?, ?, 0, ?)", SSJUSERID(), newCategoryId, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), @(maxOrder + 1)]) {
             if (success) {
                 SSJDispatch_main_async_safe(^{
