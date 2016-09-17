@@ -15,6 +15,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
+#import "SSJLoginViewController+SSJCategory.h"
 
 @interface SSJBaseViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -182,30 +183,8 @@
         || codeint == 9007
         || codeint == 9009) {
         
-        SSJClearLoginInfo();
-        [SSJUserTableManager reloadUserIdWithError:nil];
-        
-        if (service.showLoginControllerIfTokenInvalid
-            && ![SSJVisibalController() isKindOfClass:[SSJLoginViewController class]]) {
-            
-            if (service.showMessageIfErrorOccured) {
-                [CDAutoHideMessageHUD showMessage:message];
-            }
-            
-            __weak typeof(self) weakSelf = self;
-            SSJLoginViewController *loginVC = [[SSJLoginViewController alloc] initWithNibName:nil bundle:nil];
-            loginVC.finishHandle = ^(UIViewController *controller) {
-                controller.backController = weakSelf;
-                [controller ssj_backOffAction];
-            };
-            loginVC.cancelHandle = ^(UIViewController *controller) {
-                controller.backController = [weakSelf ssj_previousViewController];
-                [controller ssj_backOffAction];
-            };
-            
-            [loginVC ssj_showBackButtonWithTarget:loginVC selector:@selector(backOffAction)];
-            UINavigationController *naviVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
-            [self presentViewController:naviVC animated:YES completion:NULL];
+        if ([SSJLoginViewController reloginIfNeeded] && service.showMessageIfErrorOccured) {
+            [CDAutoHideMessageHUD showMessage:message];
         }
         
     } else {

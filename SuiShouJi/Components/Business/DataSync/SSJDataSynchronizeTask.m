@@ -27,6 +27,8 @@
 
 #import <ZipZap/ZipZap.h>
 
+#import "SSJLoginViewController+SSJCategory.h"
+
 //
 static const NSTimeInterval kTimeoutInterval = 30;
 
@@ -133,10 +135,18 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 tError = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:desc}];
                 
                 SSJPRINT(@">>> SSJ Wanings:同步失败-----code:%ld desc:%@", (long)code, desc);
-                //                SSJPRINT(@">>> SSJ sync response data:%@", responseObject);
-                if (failure) {
-                    failure(tError);
+                
+                // -5555是用户格式化后原userid被注销了，需要用户重新登陆获取新的userid
+                if (code == -5555) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"数据已格式化成功，请重新登录！" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                        [SSJLoginViewController reloginIfNeeded];
+                    }], nil];
+                } else {
+                    if (failure) {
+                        failure(tError);
+                    }
                 }
+                
                 return;
             }
             
