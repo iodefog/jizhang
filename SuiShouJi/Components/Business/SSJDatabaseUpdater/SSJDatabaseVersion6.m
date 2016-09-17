@@ -66,7 +66,7 @@
 }
 
 + (NSError *)updateChargePeriodTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"alter table bk_charge_period_config add CMEMBERIDS text default '0'"]) {
+    if (![db executeUpdate:@"alter table bk_charge_period_config add CMEMBERIDS text"]) {
         return [db lastError];
     }
     return nil;

@@ -123,7 +123,7 @@
             self.navigationItem.rightBarButtonItem = nil;
         }else{
             [self.tableView ssj_hideWatermark:YES];
-            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
+            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"tianjia"] style:UIBarButtonItemStylePlain target:self action:@selector(addButtonClicked)];
             self.navigationItem.rightBarButtonItem = rightItem;
         }
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
