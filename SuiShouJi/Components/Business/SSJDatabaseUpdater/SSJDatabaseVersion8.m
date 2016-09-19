@@ -56,9 +56,22 @@
         return error;
     }
     
+    error = [self updateSyncTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     // 先前版本有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
+    return nil;
+}
+
++ (NSError *)updateSyncTableWithDatabase:(FMDatabase *)db {
+    NSString *userId = SSJUSERID();
+    if ([db executeUpdate:@"delete from bk_sync where cuserid = ?",userId]) {
+        return [db lastError];
+    }
     return nil;
 }
 
