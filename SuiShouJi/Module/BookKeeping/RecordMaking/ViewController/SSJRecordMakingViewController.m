@@ -591,8 +591,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             }
         }else{
             if (![db stringForQuery:@"select lastselectfundid from bk_user where cuserid = ?",userId].length) {
-                weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
-                weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
+                weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
             }else{
                 if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = (select lastselectfundid from bk_user where cuserid = ?)",userId] == 2) {
                     weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];

@@ -30,14 +30,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.layer.cornerRadius = 8.f;
-        [self.contentView addSubview:self.deleteButton];
-        [self.contentView addSubview:self.fundingImage];
-        [self.contentView addSubview:self.fundingBalanceLabel];
-        [self.contentView addSubview:self.fundingNameLabel];
-        [self.contentView addSubview:self.fundingMemoLabel];
-        [self.contentView addSubview:self.cardMemoLabel];
-        [self.contentView addSubview:self.cardBillingDayLabel];
+        [self.contentView addSubview:self.backView];
+        [self.backView addSubview:self.deleteButton];
+        [self.backView addSubview:self.fundingImage];
+        [self.backView addSubview:self.fundingBalanceLabel];
+        [self.backView addSubview:self.fundingNameLabel];
+        [self.backView addSubview:self.fundingMemoLabel];
+        [self.backView addSubview:self.cardMemoLabel];
+        [self.backView addSubview:self.cardBillingDayLabel];
     }
     return self;
 }
@@ -45,39 +45,42 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    self.backView.size = CGSizeMake(self.width, self.height - 10);
+    self.backView.centerX = self.contentView.width / 2;
+    self.backView.top = 5;
     self.fundingImage.left = 10;
-    self.fundingImage.centerY = self.contentView.height / 2;
-    self.deleteButton.size = CGSizeMake(50, 50);
-    self.deleteButton.center = CGPointMake(self.width - 10, 5);
+    self.fundingImage.centerY = self.backView.height / 2;
+    self.deleteButton.size = CGSizeMake(30, 30);
+    self.deleteButton.rightTop = CGPointMake(self.contentView.width, -5);
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_item;
-        self.fundingBalanceLabel.centerY = self.contentView.height / 2;
-        self.fundingBalanceLabel.right = self.contentView.width - 10;
+        self.fundingBalanceLabel.centerY = self.backView.height / 2;
+        self.fundingBalanceLabel.right = self.backView.width - 10;
         if (!fundItem.fundingMemo.length) {
             self.fundingNameLabel.left = self.fundingImage.right + 10;
-            self.fundingNameLabel.centerY = self.contentView.height / 2;
+            self.fundingNameLabel.centerY = self.backView.height / 2;
         }else{
-            self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
+            self.fundingNameLabel.bottom = self.backView.height / 2 - 3;
             self.fundingNameLabel.left = self.fundingImage.right + 10;
-            self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
+            self.fundingMemoLabel.top = self.backView.height / 2 + 3;
             self.fundingMemoLabel.left = self.fundingImage.right + 10;
         }
     }else{
         SSJCreditCardItem *carditem = (SSJCreditCardItem *)_item;
-        self.fundingNameLabel.bottom = self.contentView.height / 2 - 3;
+        self.fundingNameLabel.bottom = self.backView.height / 2 - 3;
         self.fundingNameLabel.left = self.fundingImage.right + 10;
-        self.fundingMemoLabel.top = self.contentView.height / 2 + 3;
+        self.fundingMemoLabel.top = self.backView.height / 2 + 3;
         self.fundingMemoLabel.left = self.fundingImage.right + 10;
         if (carditem.cardRepaymentDay == 0 && carditem.cardBillingDay == 0) {
-            self.fundingBalanceLabel.centerY = self.height / 2;
+            self.fundingBalanceLabel.centerY = self.backView.height / 2;
         }else{
             self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
         }
-        self.fundingBalanceLabel.right = self.contentView.width - 10;
+        self.fundingBalanceLabel.right = self.backView.width - 10;
         self.cardMemoLabel.width = self.fundingBalanceLabel.left - self.fundingNameLabel.right - 10;
         self.cardMemoLabel.left = self.fundingNameLabel.right + 10;
         self.cardMemoLabel.centerY = self.fundingNameLabel.centerY;
-        self.cardBillingDayLabel.right = self.contentView.width - 10;
+        self.cardBillingDayLabel.right = self.backView.width - 10;
         self.cardBillingDayLabel.centerY = self.fundingMemoLabel.centerY;
     }
 }
@@ -85,12 +88,11 @@
 -(UIView *)backView{
     if (!_backView) {
         _backView = [[UIView alloc]init];
-        _backView.backgroundColor = [UIColor whiteColor];
-        _backView.layer.borderWidth = 1;
-        _backView.layer.cornerRadius = 2;
+        _backView.layer.cornerRadius = 8.f;
     }
     return _backView;
 }
+
 
 -(UILabel *)fundingNameLabel{
     if (!_fundingNameLabel) {
@@ -168,7 +170,7 @@
     _item = item;
     if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
-        self.backgroundColor = [UIColor ssj_colorWithHex:item.fundingColor];
+        self.backView.backgroundColor = [UIColor ssj_colorWithHex:item.fundingColor];
         self.fundingNameLabel.text = item.fundingName;
         [self.fundingNameLabel sizeToFit];
         self.fundingBalanceLabel.hidden = NO;
@@ -186,7 +188,7 @@
         [self setNeedsLayout];
     }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
         SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
-        self.backgroundColor = [UIColor ssj_colorWithHex:item.cardColor];
+        self.backView.backgroundColor = [UIColor ssj_colorWithHex:item.cardColor];
         self.fundingBalanceLabel.hidden = NO;
         self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
         [self.fundingBalanceLabel sizeToFit];
@@ -207,19 +209,26 @@
             NSInteger daysFromBill = [billDate daysFrom:[NSDate date]];
             NSInteger daysFromRepayment = [repaymentDate daysFrom:[NSDate date]];
             NSInteger mostRecentDay = MIN(daysFromBill, daysFromRepayment);
-            if (mostRecentDay == daysFromBill) {
-                if (daysFromBill > 0 ) {
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
-                }else{
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment + 1];
-                }
-            }else if (mostRecentDay == daysFromRepayment){
-                if (daysFromRepayment < 0 ) {
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill + 1];
-                }else{
-                    self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
+            if (billDate.day == [NSDate date].day) {
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日:%ld天",daysFromRepayment + 1];
+            }else if(repaymentDate.day == [NSDate date].day){
+                self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBill + 1];
+            }else{
+                if (mostRecentDay == daysFromBill) {
+                    if (daysFromBill > 0 ) {
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日%ld天",mostRecentDay + 1];
+                    }else{
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",daysFromRepayment + 1];
+                    }
+                }else if (mostRecentDay == daysFromRepayment){
+                    if (daysFromRepayment < 0 ) {
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距账单日日%ld天",daysFromBill + 1];
+                    }else{
+                        self.cardBillingDayLabel.text = [NSString stringWithFormat:@"距还款日%ld天",mostRecentDay + 1];
+                    }
                 }
             }
+
             [self.cardBillingDayLabel sizeToFit];
             if ([repaymentDate isEarlierThan:billDate]) {
                 repaymentDate = [repaymentDate dateByAddingMonths:1];

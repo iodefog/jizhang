@@ -169,9 +169,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         }else{
             SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
             [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-                for (SSJLoanModel *model in list) {
-                    
-                }
+                
             } failure:^(NSError * _Nonnull error) {
                 
             }];
@@ -186,7 +184,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-        return CGSizeMake(self.view.width - 20, 85);
+        return CGSizeMake(self.view.width - 20, 95);
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -215,10 +213,10 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     
 }
 
-- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
-    [self collectionViewEndEditing];
-    return YES;
-}
+//- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
+//    [self collectionViewEndEditing];
+//    return YES;
+//}
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
     SSJFinancingHomeitem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
@@ -241,11 +239,13 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-        flowLayout.minimumInteritemSpacing = 10;
+        flowLayout.minimumInteritemSpacing = 0;
+        flowLayout.minimumLineSpacing = 0;
         _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _collectionView.movedCellScale = 1.08;
         _collectionView.editDelegate=self;
         _collectionView.editDataSource=self;
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
         _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
@@ -323,7 +323,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                     SSJCreditCardItem *cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:fundItem.fundingID];
                     cardItem.cardOder = fundItem.fundingOrder;
                     [weakSelf.items removeObject:fundItem];
-                    [weakSelf.items insertObject:cardItem atIndex:cardItem.cardOder - 1];
+                    [weakSelf.items insertObject:cardItem atIndex:i];
                 }
             }
         }
@@ -342,12 +342,12 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 -(void)collectionViewEndEditing{
-    [self.collectionView endEditing];
     _editeModel = NO;
+    [self.collectionView reloadData];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
     [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
-    [self.collectionView reloadData];
+    [self.collectionView endEditing];
 }
 
 -(void)transferButtonClicked{
