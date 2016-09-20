@@ -215,7 +215,9 @@ static NSUInteger kClostOutDateTag = 1004;
     
     if (textField.tag == kMoneyTag) {
         _loanModel.jMoney = money;
-        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        if ([_tableView numberOfRowsInSection:0] > 1) {
+            [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
     } else if (textField.tag == kInterestTag) {
         [self recaculateRateWithInterest:money];
     }
@@ -226,7 +228,9 @@ static NSUInteger kClostOutDateTag = 1004;
 - (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == kMoneyTag) {
         _loanModel.jMoney = 0;
-        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        if ([_tableView numberOfRowsInSection:0] > 1) {
+            [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
     } else if (textField.tag == kInterestTag) {
         _loanModel.rate = 0;
     }
