@@ -33,7 +33,11 @@
     NSDictionary *remindDic = [item mj_keyValues];
     
     NSDate * fireDate = item.remindDate;
-        
+    
+    if (!item.remindState) {
+        return;
+    }
+    
     if (!item.userId.length) {
         item.userId = SSJUSERID();
     }
@@ -390,9 +394,9 @@
     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
     for (UILocalNotification *notification in localNotifications) {
         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-        NSDictionary *remindDict = [userinfo objectForKey:@"remindItem"];
+        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-            if ([remindDict[@"remindId"] isEqualToString:item.remindId]) {
+            if ([remindItem.remindId isEqualToString:item.remindId]) {
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
             }
         }

@@ -12,6 +12,7 @@
 #import "SSJReminderListCell.h"
 #import "SSJReminderEditeViewController.h"
 #import "SSJBudgetNodataRemindView.h"
+#import "SSJLocalNotificationHelper.h"
 
 static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifier";
 
@@ -103,7 +104,11 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderListCell * cell = [tableView dequeueReusableCellWithIdentifier:SSJReminderListCellIdentifier forIndexPath:indexPath];
     cell.switchAction = ^(SSJReminderListCell *cell) {
-        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:(SSJReminderItem *)cell.cellItem Success:NULL failure:^(NSError *error) {
+        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:(SSJReminderItem *)cell.cellItem Success:^(SSJReminderItem *item){
+            if (!item.remindState) {
+                [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:item];
+            }
+        }failure:^(NSError *error) {
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
     };
@@ -123,7 +128,7 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     if (!_noDataRemindView) {
         _noDataRemindView = [[SSJBudgetNodataRemindView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
         _noDataRemindView.image = @"budget_no_data";
-        _noDataRemindView.title = @"报表空空如也";
+        _noDataRemindView.title = @"暂未设置提醒哦~";
     }
     return _noDataRemindView;
 }
