@@ -1,7 +1,7 @@
 platform :ios, '7.0'
 pod 'AFNetworking', '~> 2.5'
 
-pod 'UMengSocialCOM', '~> 5.2.1'
+pod 'UMengSocialCOM'
 
 pod 'YYKeyboardManager'
 
@@ -22,6 +22,8 @@ pod 'MJExtension'
 pod 'UMengAnalytics-NO-IDFA'
 
 pod 'FMDB'
+
+#pod 'FMDB/SQLCipher'
 
 pod 'iOS-WebP', '0.4'
 
