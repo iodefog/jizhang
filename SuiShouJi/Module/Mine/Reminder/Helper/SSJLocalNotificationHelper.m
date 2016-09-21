@@ -8,6 +8,7 @@
 
 #import "SSJLocalNotificationHelper.h"
 #import "SSJStartChecker.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJLocalNotificationHelper()
 
@@ -33,10 +34,14 @@
     NSDictionary *remindDic = [item mj_keyValues];
     
     NSDate * fireDate = item.remindDate;
-        
-    if (!item.userId.length) {
-        item.userId = SSJUSERID();
-    }
+    
+//    if (!item.remindState) {
+//        return;
+//    }
+//    
+//    if (!item.userId.length) {
+//        item.userId = SSJUSERID();
+//    }
     
     if ([fireDate isEarlierThan:[NSDate date]] && item.remindCycle == 7) {
         NSLog(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
@@ -390,9 +395,9 @@
     NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
     for (UILocalNotification *notification in localNotifications) {
         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-        NSDictionary *remindDict = [userinfo objectForKey:@"remindItem"];
+        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
         if ([userinfo[@"key"] isEqualToString:SSJReminderNotificationKey]) {
-            if ([remindDict[@"remindId"] isEqualToString:item.remindId]) {
+            if ([remindItem.remindId isEqualToString:item.remindId]) {
                 [[UIApplication sharedApplication] cancelLocalNotification:notification];
             }
         }

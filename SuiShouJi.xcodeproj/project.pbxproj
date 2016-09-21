@@ -2140,6 +2140,11 @@
 		9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C24D00F1D7838FA0095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C262C7B1CBCDB4000368B48 /* home_calender@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */; };
+		9C2834CC1D921B5200654083 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C2834CB1D921B5200654083 /* test.js */; };
+		9C2834CD1D921B5200654083 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C2834CB1D921B5200654083 /* test.js */; };
+		9C2834CE1D921B5200654083 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C2834CB1D921B5200654083 /* test.js */; };
+		9C2834CF1D921B5200654083 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C2834CB1D921B5200654083 /* test.js */; };
+		9C2834D01D921B5200654083 /* test.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C2834CB1D921B5200654083 /* test.js */; };
 		9C29319C1CEEFFD300484F6E /* SSJPatchUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */; };
 		9C2A670A1D194CA70010F1DA /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C2A670B1D194CA70010F1DA /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -6712,6 +6717,7 @@
 		9C24CFE61D7822110095D150 /* ft_qiankuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_qiankuan@2x.png"; sourceTree = "<group>"; };
 		9C24CFE71D7822110095D150 /* ft_qiankuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ft_qiankuan@3x.png"; sourceTree = "<group>"; };
 		9C262C7A1CBCDB4000368B48 /* home_calender@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "home_calender@3x.png"; path = "SuiShouJi/Resource/Image/homeImage/home_calender@3x.png"; sourceTree = SOURCE_ROOT; };
+		9C2834CB1D921B5200654083 /* test.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPatchUpdateService.h; sourceTree = "<group>"; };
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
 		9C2A6A9D1D194CA70010F1DA /* youyujizhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = youyujizhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -10857,6 +10863,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C2834CB1D921B5200654083 /* test.js */,
 				BD78E4B01C8FF8C7003A1EE1 /* sound */,
 				7DD7D5D51C4C8E6A00ACE71A /* Image */,
 				7D4EF8921C4B5625003C4B20 /* Plist */,
@@ -11487,6 +11494,7 @@
 				7D766A5E1D87E497004F8F82 /* loan_closeOut@3x.png in Resources */,
 				9C6D65E41D8251EB0081A7CE /* founds_jia@2x.png in Resources */,
 				7DBA57671D6D32B700C02D79 /* bt_xie@2x.png in Resources */,
+				9C2834CE1D921B5200654083 /* test.js in Resources */,
 				7DBA57681D6D32B700C02D79 /* bt_youfei@3x.png in Resources */,
 				7DBA57691D6D32B700C02D79 /* chengyuan_guanli@3x.png in Resources */,
 				7DBA576A1D6D32B700C02D79 /* bt_recharge@2x.png in Resources */,
@@ -12596,6 +12604,7 @@
 				9C7B9CC61D338B0700A4F71F /* login_bg@3x.png in Resources */,
 				9C2A69CB1D194CA70010F1DA /* bt_chi@2x.png in Resources */,
 				9C2A69CE1D194CA70010F1DA /* guide_2-568@2x.png in Resources */,
+				9C2834CD1D921B5200654083 /* test.js in Resources */,
 				9C2A69CF1D194CA70010F1DA /* bt_jiayong@2x.png in Resources */,
 				9C2A69D01D194CA70010F1DA /* bt_zujin@2x.png in Resources */,
 				9C4EBCA71D7D622100BE4982 /* card_zhouqi@2x.png in Resources */,
@@ -13394,6 +13403,7 @@
 				9CEC025C1D6D41EB00DB2C8B /* AlipaySDK.bundle in Resources */,
 				7D766AE81D87E527004F8F82 /* bk_lvxing@3x.png in Resources */,
 				9CEC025D1D6D41EB00DB2C8B /* ft_creditcard@2x.png in Resources */,
+				9C2834D01D921B5200654083 /* test.js in Resources */,
 				9CEC025E1D6D41EB00DB2C8B /* defualtMine.png in Resources */,
 				9CEC025F1D6D41EB00DB2C8B /* rain_sound_off@3x.png in Resources */,
 				7D766AD81D87E516004F8F82 /* book_tianjia@3x.png in Resources */,
@@ -14122,6 +14132,7 @@
 				9CECFE641D6D41A700DB2C8B /* AlipaySDK.bundle in Resources */,
 				7D766AE71D87E526004F8F82 /* bk_lvxing@3x.png in Resources */,
 				9CECFE651D6D41A700DB2C8B /* ft_creditcard@2x.png in Resources */,
+				9C2834CF1D921B5200654083 /* test.js in Resources */,
 				9CECFE661D6D41A700DB2C8B /* defualtMine.png in Resources */,
 				9CECFE671D6D41A700DB2C8B /* rain_sound_off@3x.png in Resources */,
 				7D766AD71D87E516004F8F82 /* book_tianjia@3x.png in Resources */,
@@ -14850,6 +14861,7 @@
 				9CB0F7ED1D2771850096E9B7 /* defualtMine.png in Resources */,
 				7D4A432B1CC87187002F0264 /* rain_sound_off@3x.png in Resources */,
 				7DD7D6E11C4C8E6A00ACE71A /* bt_tuikuan@3x.png in Resources */,
+				9C2834CC1D921B5200654083 /* test.js in Resources */,
 				BD37D2E21C55BD680050BDAA /* login_password@2x.png in Resources */,
 				7DDDA7EF1CBE51070029ADAC /* already_water_alert@3x.png in Resources */,
 				BDF510A01C92604500A49D74 /* remind_close@3x.png in Resources */,
@@ -18041,7 +18053,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "f05fc032-e243-4f69-8d1f-7d9bfc94a4cb";
+				PROVISIONING_PROFILE = "b9fa0dc4-a767-45f8-a2fe-2328fb704bae";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
