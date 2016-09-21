@@ -115,7 +115,7 @@
     }
 }
 
-- (void)touchesCancelled:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
     [super touchesCancelled:touches withEvent:event];
     if (self.hideKeyboradWhenTouch) {
         [self.view endEditing:YES];

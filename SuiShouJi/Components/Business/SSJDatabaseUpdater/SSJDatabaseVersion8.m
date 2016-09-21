@@ -61,9 +61,6 @@
         return error;
     }
     
-    // 先前版本有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    
     return nil;
 }
 
@@ -164,15 +161,17 @@
     }
     [result close];
     
-    NSDate *remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day hour:20 minute:0 second:0];
-    NSString *remindDateStr = [remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *remindDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+    remindDate = [NSString stringWithFormat:@"%@ %@:00", remindDate, time];
     
-    result = [db executeQuery:@"select CUSERID from BK_USER"];
-    while ([result next]) {
-        NSString *userID = [result stringForColumn:@"CUSERID"];
-        if (![db executeUpdate:@"insert into BK_USER_REMIND (CREMINDID, CUSERID, CREMINDNAME, CMEMO, CSTARTDATE, ISTATE, ITYPE, ICYCLE, IISEND, CWRITEDATE, IVERSION, OPERATORTYPE) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userID, @"记账提醒", @"", remindDateStr, @1, @1, @0, @0, writeDateStr, @(SSJSyncVersion()), @0]) {
-            return [db lastError];
+    if (open) {
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        result = [db executeQuery:@"select CUSERID from BK_USER"];
+        while ([result next]) {
+            NSString *userID = [result stringForColumn:@"CUSERID"];
+            if (![db executeUpdate:@"insert into BK_USER_REMIND (CREMINDID, CUSERID, CREMINDNAME, CMEMO, CSTARTDATE, ISTATE, ITYPE, ICYCLE, IISEND, CWRITEDATE, IVERSION, OPERATORTYPE) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", SSJUUID(), userID, @"记账提醒", @"", remindDate, @1, @1, @0, @0, writeDateStr, @(SSJSyncVersion()), @0]) {
+                return [db lastError];
+            }
         }
     }
     

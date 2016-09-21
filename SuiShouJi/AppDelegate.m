@@ -74,7 +74,7 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 #ifdef DEBUG
-//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"js"];
+//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"];
 //    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
 //    [JPEngine evaluateScript:script];
 #endif
@@ -91,6 +91,17 @@ NSDate *SCYEnterBackgroundTime() {
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
         //  开启定时同步
         [[SSJDataSynchronizer shareInstance] startTimingSync];
+        
+        // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
+        [[UIApplication sharedApplication] cancelAllLocalNotifications];
+        [SSJRegularManager registerRegularTaskNotification];
+        [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+            for (SSJReminderItem *item in result) {
+                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+            }
+        } failure:^(NSError *error) {
+            SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+        }];
         
         UILocalNotification *notifcation = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey];
         if (notifcation) {
@@ -115,16 +126,6 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
-    
-    [SSJRegularManager registerRegularTaskNotification];
-    [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:SSJUSERID()];
-    [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-        for (SSJReminderItem *item in result) {
-            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-        }
-    } failure:^(NSError *error) {
-        SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-    }];
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
