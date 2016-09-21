@@ -8,6 +8,7 @@
 
 #import "SSJLocalNotificationHelper.h"
 #import "SSJStartChecker.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJLocalNotificationHelper()
 
@@ -34,13 +35,13 @@
     
     NSDate * fireDate = item.remindDate;
     
-    if (!item.remindState) {
-        return;
-    }
-    
-    if (!item.userId.length) {
-        item.userId = SSJUSERID();
-    }
+//    if (!item.remindState) {
+//        return;
+//    }
+//    
+//    if (!item.userId.length) {
+//        item.userId = SSJUSERID();
+//    }
     
     if ([fireDate isEarlierThan:[NSDate date]] && item.remindCycle == 7) {
         NSLog(@"%@早于当前日期,不能添加提醒",[fireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
