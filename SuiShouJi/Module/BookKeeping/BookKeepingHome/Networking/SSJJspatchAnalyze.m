@@ -57,4 +57,9 @@
     [downloadTask resume];
 }
 
++ (void)removePatch {
+    [[NSFileManager defaultManager] removeItemAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"] error:nil];
+    SSJSavePatchVersion(0);
+}
+
 @end
