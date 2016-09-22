@@ -287,7 +287,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         [jsonObject setObject:@[@{@"cuserid":self.userId,
                                   @"crealname":userItem.nickName ?: @"",
                                   @"usersignature":userItem.signature ?: @"",
-                                  @"cimei":[UIDevice currentDevice].identifierForVendor.UUIDString,
+                                  @"cimei":SSJUniqueID(),
                                   @"isource":SSJDefaultSource(),
                                   @"operatortype":@1,
                                   @"cwritedate":userItem.writeDate ?: @""}] forKey:@"bk_user"];

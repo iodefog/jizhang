@@ -331,15 +331,15 @@ NSString *SSJUUID(){
 }
 
 NSString *SSJUniqueID(){
-    NSString *serviceName = @"";
-    NSString *strUUID = [SFHFKeychainUtils getPasswordForUsername:@"UUID" andServiceName:serviceName error:nil];
+    NSString *serviceName = @"com.youyu.jizhang";
+    NSString *userName = @"IMEI";
+    NSString *strUUID = [SFHFKeychainUtils getPasswordForUsername:userName andServiceName:serviceName error:nil];
     if (!strUUID | [strUUID isEqualToString:@""]) {
         CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
         strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
-        [SFHFKeychainUtils storeUsername:@"UUID" andPassword:strUUID forServiceName:serviceName updateExisting:NO error:nil];
+        [SFHFKeychainUtils storeUsername:userName andPassword:strUUID forServiceName:serviceName updateExisting:NO error:nil];
     }
     return strUUID;
-
 }
 
 BOOL SSJSaveImage(UIImage *image , NSString *imageName){
