@@ -9,5 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface SSJJspatchAnalyze : NSObject
+
 +(void)SSJJsPatchAnalyzeWithUrl:(NSString *)urlStr MD5:(NSString *)md5 patchVersion:(NSString *)version;
+
++ (void)removePatch;
+
 @end

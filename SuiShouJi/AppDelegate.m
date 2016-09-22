@@ -79,8 +79,6 @@ NSDate *SCYEnterBackgroundTime() {
 //    [JPEngine evaluateScript:script];
 #endif
     
-    [self analyzeJspatch];
-    
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
         
@@ -126,6 +124,9 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
     }
+    
+    [self analyzeJspatch];
+    [SSJJspatchAnalyze removePatch];
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
