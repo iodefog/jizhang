@@ -436,6 +436,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)saveButtonClicked:(id)sender{
     self.item.remindName = _nameInput.text;
     self.item.remindMemo = _memoInput.text;
+    self.item.remindState = YES;
     if ([self.item.remindDate isEarlierThan:self.item.minimumDate] && self.item.remindType == SSJReminderTypeBorrowing) {
         [CDAutoHideMessageHUD showMessage:@"提醒日期不能晚于借贷的借款日期"];
         return;
