@@ -15,6 +15,7 @@
 #import "SSJReminderDateSelectView.h"
 #import "SSJReminderCircleSelectView.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kTitle1 = @"提醒名称";
 static NSString *const kTitle2 = @"备注";
@@ -452,6 +453,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         __weak typeof(self) weakSelf = self;
         [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:self.item Success:^(SSJReminderItem *item){
 //            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             
@@ -467,6 +469,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)rightButtonCliked:(id)sender{
     if ([SSJLocalNotificationStore deleteReminderWithItem:self.item error:NULL]) {
         [CDAutoHideMessageHUD showMessage:@"删除成功"];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [self.navigationController popViewControllerAnimated:YES];
     }else{
         [CDAutoHideMessageHUD showMessage:@"删除失败"];
