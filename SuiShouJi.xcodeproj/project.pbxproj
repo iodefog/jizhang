@@ -1213,6 +1213,11 @@
 		9C6D66301D86BD770081A7CE /* SSJListAdItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D662C1D86BD710081A7CE /* SSJListAdItem.m */; };
 		9C6D66311D86BD780081A7CE /* SSJListAdItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D662C1D86BD710081A7CE /* SSJListAdItem.m */; };
 		9C7B9CC91D33BFF800A4F71F /* SSJFundingDetailNoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */; };
+		9C91AE171D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
+		9C91AE181D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
+		9C91AE191D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
+		9C91AE1A1D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
+		9C91AE1B1D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C9471761CEB224C00D69079 /* SSJFinancingHomeitem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */; };
 		9C9471771CEB224C00D69079 /* SSJFinancingHomeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471371CEB224C00D69079 /* SSJFinancingHomeHelper.m */; };
 		9C9471791CEB224C00D69079 /* SSJFinancingHomeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C94713C1CEB224C00D69079 /* SSJFinancingHomeCell.m */; };
@@ -2966,6 +2971,8 @@
 		9C6D662C1D86BD710081A7CE /* SSJListAdItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJListAdItem.m; sourceTree = "<group>"; };
 		9C7B9CC71D33BFF800A4F71F /* SSJFundingDetailNoDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingDetailNoDataView.h; sourceTree = "<group>"; };
 		9C7B9CC81D33BFF800A4F71F /* SSJFundingDetailNoDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingDetailNoDataView.m; sourceTree = "<group>"; };
+		9C91AE151D93A4BB00B585AA /* SSJChargeSearchingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeSearchingStore.h; sourceTree = "<group>"; };
+		9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeSearchingStore.m; sourceTree = "<group>"; };
 		9C9471331CEB224C00D69079 /* SSJFinancingHomeitem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeitem.h; sourceTree = "<group>"; };
 		9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFinancingHomeitem.m; sourceTree = "<group>"; };
 		9C9471361CEB224C00D69079 /* SSJFinancingHomeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingHomeHelper.h; sourceTree = "<group>"; };
@@ -3689,6 +3696,7 @@
 		7D5F323F1CEAE6C10086B67E /* BookKeeping */ = {
 			isa = PBXGroup;
 			children = (
+				9C91AE0F1D938AF900B585AA /* Searching */,
 				9C24CFAC1D76C9ED0095D150 /* Books */,
 				7D5F32401CEAE6C10086B67E /* BookKeepingHome */,
 				7D5F32611CEAE6C10086B67E /* Budget */,
@@ -4752,6 +4760,55 @@
 			name = ViewController;
 			path = SuiShouJi/Module/Mine/ThemeManager/ViewController;
 			sourceTree = SOURCE_ROOT;
+		};
+		9C91AE0F1D938AF900B585AA /* Searching */ = {
+			isa = PBXGroup;
+			children = (
+				9C91AE101D938AF900B585AA /* Helper */,
+				9C91AE111D938AF900B585AA /* Model */,
+				9C91AE121D938AF900B585AA /* Store */,
+				9C91AE131D938AF900B585AA /* View */,
+				9C91AE141D938AF900B585AA /* ViewController */,
+			);
+			path = Searching;
+			sourceTree = "<group>";
+		};
+		9C91AE101D938AF900B585AA /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		9C91AE111D938AF900B585AA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9C91AE121D938AF900B585AA /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				9C91AE151D93A4BB00B585AA /* SSJChargeSearchingStore.h */,
+				9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		9C91AE131D938AF900B585AA /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9C91AE141D938AF900B585AA /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
 		};
 		9C9471301CEB224C00D69079 /* Financing */ = {
 			isa = PBXGroup;
@@ -6975,6 +7032,7 @@
 				7DBA56871D6D32B700C02D79 /* SSJMemberSelectView.m in Sources */,
 				7DBA56881D6D32B700C02D79 /* SSJChargeCircleSelectView.m in Sources */,
 				7DBA56891D6D32B700C02D79 /* SSJUserChargeSyncTable.m in Sources */,
+				9C91AE191D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				7DBA568A1D6D32B700C02D79 /* SSJPatchUpdateService.m in Sources */,
 				7DBA568B1D6D32B700C02D79 /* SSJChargeDetailMemberCell.m in Sources */,
 				9C24CFC91D76CA060095D150 /* SSJBooksTypeStore.m in Sources */,
@@ -7189,6 +7247,7 @@
 				9C2A67261D194CA70010F1DA /* SSJTableView.m in Sources */,
 				9C2A67281D194CA70010F1DA /* SSJBookkeepingTreeViewController.m in Sources */,
 				9C2A672B1D194CA70010F1DA /* SSJLoadMoreCell.m in Sources */,
+				9C91AE181D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				7D5432CE1D5C0A340021106E /* SSJThemeDownLoadCompleteService.m in Sources */,
 				9C2A672C1D194CA70010F1DA /* SSJHomeReminderView.m in Sources */,
 				7D87AEBD1D66E05B0024D33C /* SSJUserCreditSyncTable.m in Sources */,
@@ -7859,6 +7918,7 @@
 				9CECFC031D6D41A700DB2C8B /* SSJMemberSelectView.m in Sources */,
 				9CECFC041D6D41A700DB2C8B /* SSJChargeCircleSelectView.m in Sources */,
 				9CECFC051D6D41A700DB2C8B /* SSJUserChargeSyncTable.m in Sources */,
+				9C91AE1A1D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				9CECFC061D6D41A700DB2C8B /* SSJPatchUpdateService.m in Sources */,
 				9CECFC071D6D41A700DB2C8B /* SSJChargeDetailMemberCell.m in Sources */,
 				9C24CFCA1D76CA070095D150 /* SSJBooksTypeStore.m in Sources */,
@@ -8305,6 +8365,7 @@
 				9CECFFFB1D6D41EB00DB2C8B /* SSJMemberSelectView.m in Sources */,
 				9CECFFFC1D6D41EB00DB2C8B /* SSJChargeCircleSelectView.m in Sources */,
 				9CECFFFD1D6D41EB00DB2C8B /* SSJUserChargeSyncTable.m in Sources */,
+				9C91AE1B1D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				9CECFFFE1D6D41EB00DB2C8B /* SSJPatchUpdateService.m in Sources */,
 				9CECFFFF1D6D41EB00DB2C8B /* SSJChargeDetailMemberCell.m in Sources */,
 				9C24CFCB1D76CA070095D150 /* SSJBooksTypeStore.m in Sources */,
@@ -8519,6 +8580,7 @@
 				7D5F33271CEAE6C10086B67E /* SSJBookKeepingHomeHelper.m in Sources */,
 				7D5F33291CEAE6C10086B67E /* SSJBookKeepingHeader.m in Sources */,
 				BD04338F1C1A8DA50051E7AB /* SSJBaseItem.m in Sources */,
+				9C91AE171D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */,
 				9CD9BC101CFD2DAA0061803B /* SSJMagicExportStore.m in Sources */,
 				9CD9BC371CFD2DAA0061803B /* SSJPasswordModifyService.m in Sources */,
 				9CD9BC461CFD72140061803B /* SSJFundingTransferStore.m in Sources */,
@@ -9452,6 +9514,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co.,Ltd (534SCE47WT)";
+				DEVELOPMENT_TEAM = 534SCE47WT;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9482,7 +9545,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhangAppStore;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "49fe08fa-6102-40c0-ad98-acd2bd01c901";
+				PROVISIONING_PROFILE = "baf5cd64-b6df-4069-ad53-afe79aec80d8";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangAppstoreAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
