@@ -188,6 +188,13 @@ BOOL SSJSaveQQList(NSArray *qqList);
 NSString *SSJUUID();
 
 /**
+ 获取设备唯一编号
+
+ @return 设备唯一编号
+ */
+NSString *SSJUniqueID();
+
+/**
  *  将图片存进沙盒
  *
  *  @param image 要保存的图片
