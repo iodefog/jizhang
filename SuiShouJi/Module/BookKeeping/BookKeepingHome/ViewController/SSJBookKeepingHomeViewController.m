@@ -37,6 +37,7 @@
 #import "SSJBookKeepingHomeNoDataHeader.h"
 #import "UIViewController+SSJMotionPassword.h"
 #import "SSJBookKeepingHomeBooksButton.h"
+#import "SSJSearchingViewController.h"
 
 BOOL kHomeNeedLoginPop;
 
@@ -68,6 +69,8 @@ BOOL kHomeNeedLoginPop;
 
 @implementation SSJBookKeepingHomeViewController{
     BOOL _isRefreshing;
+    CFAbsoluteTime _startTime;
+    CFAbsoluteTime _endTime;
 }
 
 #pragma mark - Lifecycle
@@ -590,7 +593,7 @@ BOOL kHomeNeedLoginPop;
 
 #pragma mark - Event
 -(void)rightBarButtonClicked{
-    SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
+    SSJSearchingViewController *calendarVC = [[SSJSearchingViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
@@ -692,7 +695,10 @@ BOOL kHomeNeedLoginPop;
         } failure:^(NSError *error) {
             
         }];
+        _startTime = CFAbsoluteTimeGetCurrent();
         [SSJBookKeepingHomeHelper queryForChargeListExceptNewCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
+            _endTime = CFAbsoluteTimeGetCurrent();
+            NSLog(@"查询%ld条数据耗时%f秒",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime);
             if (!((NSArray *)[result objectForKey:SSJNewAddChargeArrKey]).count) {
                 weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                 [weakSelf.tableView reloadData];
