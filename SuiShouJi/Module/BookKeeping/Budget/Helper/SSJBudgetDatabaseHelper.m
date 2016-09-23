@@ -28,8 +28,8 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         userItem.currentBooksId = SSJUSERID();
     }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSMutableArray *budgetList = [NSMutableArray array];
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ?", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -40,22 +40,61 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
             return;
         }
         
+        NSMutableArray *weekList = [NSMutableArray array];
+        NSMutableArray *monthList = [NSMutableArray array];
+        NSMutableArray *yearList = [NSMutableArray array];
+        
         while ([budgetResult next]) {
-            [budgetList addObject:[self budgetModelWithResultSet:budgetResult inDatabase:db]];
+            SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            
+            switch (budget.type) {
+                case SSJBudgetPeriodTypeWeek:
+                    if (isAllBillType) {
+                        [weekList insertObject:budget atIndex:0];
+                    } else {
+                        [weekList addObject:budget];
+                    }
+                    
+                    break;
+                    
+                case SSJBudgetPeriodTypeMonth:
+                    if (isAllBillType) {
+                        [monthList insertObject:budget atIndex:0];
+                    } else {
+                        [monthList addObject:budget];
+                    }
+
+                    break;
+                    
+                case SSJBudgetPeriodTypeYear:
+                    if (isAllBillType) {
+                        [yearList insertObject:budget atIndex:0];
+                    } else {
+                        [yearList addObject:budget];
+                    }
+                    
+                    break;
+            }
         }
         
-        //  按照周、月、年的顺序排序
-        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            SSJBudgetModel *model1 = obj1;
-            SSJBudgetModel *model2 = obj2;
-            if (model1.type < model2.type) {
-                return NSOrderedAscending;
-            } else if (model1.type > model2.type) {
-                return NSOrderedDescending;
-            } else {
-                return NSOrderedSame;
-            }
-        }];
+        NSMutableArray *budgetList = [NSMutableArray array];
+        [budgetList addObjectsFromArray:weekList];
+        [budgetList addObjectsFromArray:monthList];
+        [budgetList addObjectsFromArray:yearList];
+        
+//        //  按照周、月、年的顺序排序
+//        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//            SSJBudgetModel *model1 = obj1;
+//            SSJBudgetModel *model2 = obj2;
+//            if (model1.type < model2.type) {
+//                return NSOrderedAscending;
+//            } else if (model1.type > model2.type) {
+//                return NSOrderedDescending;
+//            } else {
+//                return NSOrderedSame;
+//            }
+//        }];
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -241,9 +280,10 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
 }
 
 + (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success failure:(void (^)(NSError *error))failure {
+    NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableDictionary *map = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userID];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

@@ -20,6 +20,8 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 
 @property (nonatomic, strong) NSArray *dataList;
 
+@property (nonatomic, strong) NSDictionary *billTypeMapping;
+
 @end
 
 @implementation SSJBudgetListViewController
@@ -45,13 +47,20 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
     [self.view ssj_showLoadingIndicator];
     
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        [self.view ssj_hideLoadingIndicator];
-        self.dataList = result;
-        [self.tableView reloadData];
+        [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
+            [self.view ssj_hideLoadingIndicator];
+            self.billTypeMapping = billTypeMap;
+            self.dataList = result;
+            [self.tableView reloadData];
+        } failure:^(NSError * _Nonnull error) {
+            [self.view ssj_hideLoadingIndicator];
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[error localizedDescription] action:action, nil];
+        }];
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[error localizedDescription] action:action, nil];
     }];
 }
 
@@ -103,23 +112,50 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 #pragma mark - Private
 - (SSJBudgetListCellItem *)convertCellItemFromModel:(SSJBudgetModel *)model {
     SSJBudgetListCellItem *cellItem = [[SSJBudgetListCellItem alloc] init];
-    switch (model.type) {
-        case 0:
-            cellItem.typeName = @"周预算";
-            break;
-            
-        case 1:
-            cellItem.typeName = @"月预算";
-            break;
-            
-        case 2:
-            cellItem.typeName = @"年预算";
-            break;
-    }
+    cellItem.typeName = [self typeNameWithModel:model];
     cellItem.period = [NSString stringWithFormat:@"%@——%@", model.beginDate, model.endDate];
     cellItem.payment = model.payMoney;
     cellItem.budget = model.budgetMoney;
     return cellItem;
+}
+
+- (NSString *)typeNameWithModel:(SSJBudgetModel *)model {
+    NSMutableString *name = [NSMutableString string];
+    switch (model.type) {
+        case 0:
+            [name appendString:@"周"];
+            break;
+            
+        case 1:
+            [name appendString:@"月"];
+            break;
+            
+        case 2:
+            [name appendString:@"年"];
+            break;
+    }
+    
+    if ([[model.billIds firstObject] isEqualToString:@"all"]) {
+        [name appendString:@"总预算"];
+    } else {
+        NSMutableArray *billTypeNames = [NSMutableArray array];
+        for (int i = 0; i < model.billIds.count; i ++) {
+            if (i < 4) {
+                NSString *billID = model.billIds[i];
+                if (billID) {
+                    [billTypeNames addObject:self.billTypeMapping[billID]];
+                }
+            }
+        }
+        
+        [name appendString:@"分类预算："];
+        [name appendString:[billTypeNames componentsJoinedByString:@","]];
+        if (model.billIds.count > 4) {
+            [name appendString:@"等"];
+        }
+    }
+    
+    return name;
 }
 
 - (void)setupAddBarButtonItem {
