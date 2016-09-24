@@ -408,6 +408,7 @@ static NSUInteger kDateTag = 2005;
     } else if (tag == kDateTag) {
         
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFinanceLabelCellId forIndexPath:indexPath];
+        cell.isProduct = YES;
         cell.imageView.image = [[UIImage imageNamed:@"fixed_finance_qixi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         cell.additionalIcon.image = nil;
@@ -477,7 +478,7 @@ static NSUInteger kDateTag = 2005;
     } else if (tag == kMemoTag) {
         return @"备注";
     } else if (tag == kDateTag) {
-        return @"追购日期";
+        return @"追购起息日";
     }
     return nil;
 }

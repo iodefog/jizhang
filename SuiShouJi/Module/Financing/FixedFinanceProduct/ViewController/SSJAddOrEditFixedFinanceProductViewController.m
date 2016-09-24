@@ -631,10 +631,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         return NO;
     }
     
-    if ([self.model.startDate isLaterThan:[NSDate date]]) {
-        [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
-        return NO;
-    }
+//    if ([self.model.startDate isLaterThan:[NSDate date]]) {
+//        [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+//        return NO;
+//    }
 
     return YES;
 }
@@ -1126,10 +1126,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         _borrowDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _borrowDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
-            if ([date isLaterThan:[NSDate date]]) {
-                [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
-                return NO;
-            }
+//            if ([date isLaterThan:[NSDate date]]) {
+//                [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+//                return NO;
+//            }
             return YES;
         };
         _borrowDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
