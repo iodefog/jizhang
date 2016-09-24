@@ -202,7 +202,9 @@ const int kMemoMaxLength = 15;
             }
             
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-            cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
+            if (self.loanModel.jMoney > 0) {
+                cell.textField.text = [NSString stringWithFormat:@"%.2f", self.loanModel.jMoney];
+            }
             cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
             cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;

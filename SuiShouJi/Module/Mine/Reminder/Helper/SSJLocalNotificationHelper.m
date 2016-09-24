@@ -427,7 +427,9 @@
         NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
         SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
         if ([remindItem.userId isEqualToString:userId]) {
-            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            dispatch_main_async_safe(^{
+                [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            });
         }
     }
 }
