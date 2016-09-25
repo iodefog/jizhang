@@ -12,6 +12,7 @@
 #import "MJExtension.h"
 #import "SSJDatePeriod.h"
 #import "SSJUserTableManager.h"
+#import "SSJBudgetBillTypeSelectionCellItem.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
@@ -441,6 +442,79 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         }
     }];
     return [sortArr componentsJoinedByString:@","];
+}
+
++ (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
+                                                    success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
+                                                    failure:(void(^)(NSError *error))failure {
+    NSString *userID = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        // 查询其它相同周期的预算的支出类别，这些类别不能选择
+        FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where itype = ? and csdate = ? and cedate = ? and ibid <> ? and cbooksid = ? and cuserid = ? and operatortype <> 2", model.type, model.beginDate, model.endDate, model.ID, model.booksId, userID];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *billIDs = [NSMutableArray array];
+        while ([resultSet next]) {
+            NSString *billID = [resultSet stringForColumn:@"cbilltype"];
+            if (![billIDs containsObject:billID]) {
+                [billIDs addObject:billID];
+            }
+        }
+        [resultSet close];
+        
+        // 查询所有默认支出类别
+        resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and bt.cparent is null order by ub.iorder, ub.cwritedate, bt.id", userID];
+        
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *list = [NSMutableArray array];
+        
+        while ([resultSet next]) {
+            SSJBudgetBillTypeSelectionCellItem *item = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+            item.billID = [resultSet stringForColumn:@"id"];
+            item.leftImage = [resultSet stringForColumn:@"ccoin"];
+            item.billTypeName = [resultSet stringForColumn:@"cname"];
+            item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
+            item.canSelect = ![billIDs containsObject:item.billID];
+            item.selected = [model.billIds containsObject:item.billID];
+            [list addObject:item];
+        }
+        [resultSet close];
+        
+        if (list.count > 0) {
+            SSJBudgetBillTypeSelectionCellItem *selectAllItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+            selectAllItem.billTypeName = @"全选";
+            selectAllItem.canSelect = YES;
+            selectAllItem.selected = [[model.billIds firstObject] isEqualToString:@"all"];
+            [list insertObject:selectAllItem atIndex:0];
+        }
+        
+        SSJBudgetBillTypeSelectionCellItem *addItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+        addItem.billTypeName = @"添加类别";
+        addItem.canSelect = NO;
+        [list addObject:addItem];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(list);
+            });
+        }
+    }];
 }
 
 @end

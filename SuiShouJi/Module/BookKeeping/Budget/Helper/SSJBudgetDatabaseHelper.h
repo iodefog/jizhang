@@ -10,6 +10,8 @@
 #import "SSJBudgetModel.h"
 #import "SSJBudgetTypeModel.h"
 
+@class SSJBudgetBillTypeSelectionCellItem;
+
 NS_ASSUME_NONNULL_BEGIN
 
 //  预算模型key
@@ -103,6 +105,17 @@ extern NSString *const SSJBudgetPeriodKey;
                 failure:(void (^)(NSError *error))failure;
 
 + (NSString *)queryBookNameForBookId:(NSString *)ID;
+
+/**
+ *  查询支出类别列表
+ *
+ *  @param model     预算模型
+ *  @param success   查询成功的回调
+ *  @param failure   查询失败的回调
+ */
++ (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
+                                                    success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
+                                                    failure:(void(^)(NSError *error))failure;
 
 @end
 
