@@ -103,6 +103,7 @@
     cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
     cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
     return cell;
 }
 
@@ -238,6 +239,7 @@
         item.memberName = @"添加新成员";
         [allMembersArr addObject:item];
         weakSelf.items = [NSArray arrayWithArray:allMembersArr];
+        [weakSelf updateSelectedMemberItems];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
         });
@@ -246,7 +248,17 @@
 
 -(void)setSelectedMemberItems:(NSMutableArray *)selectedMemberItems{
     _selectedMemberItems = selectedMemberItems;
+    [self updateSelectedMemberItems];
     [self.tableView reloadData];
+}
+
+- (void)updateSelectedMemberItems {
+    NSMutableArray *tmpMemberItems = [_selectedMemberItems copy];
+    for (SSJChargeMemberItem *memberItem in tmpMemberItems) {
+        if (self.items && ![self.items containsObject:memberItem]) {
+            [_selectedMemberItems removeObject:memberItem];
+        }
+    }
 }
 
 /*
