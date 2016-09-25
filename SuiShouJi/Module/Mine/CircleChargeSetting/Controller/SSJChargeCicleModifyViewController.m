@@ -470,7 +470,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (!_memberSelectView) {
         __weak typeof(self) weakSelf = self;
         _memberSelectView = [[SSJMemberSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
+        _memberSelectView.selectedMemberDidChangeBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf.tableView reloadData];
         };
@@ -524,6 +524,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [CDAutoHideMessageHUD showMessage:@"请输入金额"];
         return;
     }
+    
+    if (!self.item.membersItem.count) {
+        [CDAutoHideMessageHUD showMessage:@"至少选择一个成员"];
+        return;
+    }
+    
     if (self.selectedImage != nil) {
         NSString *imageName = SSJUUID();
         if (SSJSaveImage(self.selectedImage , imageName) && SSJSaveThumbImage(self.selectedImage, imageName)) {

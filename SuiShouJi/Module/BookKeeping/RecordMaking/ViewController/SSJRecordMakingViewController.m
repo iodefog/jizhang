@@ -267,7 +267,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             __strong typeof(weakSelf) strongSelf = weakSelf;
             strongSelf -> _needToDismiss = YES;
         };
-        _memberSelectView.comfirmBlock = ^(NSArray *selectedMemberItems){
+        _memberSelectView.selectedMemberDidChangeBlock = ^(NSArray *selectedMemberItems){
             weakSelf.item.membersItem = [selectedMemberItems mutableCopy];
             [weakSelf updateMembers];
         };

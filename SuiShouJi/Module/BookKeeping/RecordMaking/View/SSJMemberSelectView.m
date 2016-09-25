@@ -60,13 +60,20 @@
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if (indexPath.row != [tableView numberOfRowsInSection:0] - 1) {
         if ([self.selectedMemberItems containsObject:item]) {
-            [self.selectedMemberItems removeObject:item];
+            if (self.selectedMemberItems.count > 1) {
+                [self.selectedMemberItems removeObject:item];
+            }
         }else{
             [self.selectedMemberItems addObject:item];
         }
         [self.tableView reloadData];
+        
+        if (self.selectedMemberDidChangeBlock) {
+            self.selectedMemberDidChangeBlock(self.selectedMemberItems);
+        }
     }else{
         [MobClick event:@"dialog_add_member"];
+        [self dismiss];
         if (self.addNewMemberBlock) {
             self.addNewMemberBlock();
         }
@@ -139,7 +146,7 @@
         UIButton *comfirmButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
         [comfirmButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        [comfirmButton addTarget:self action:@selector(comfirmButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [comfirmButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
         comfirmButton.titleLabel.font = [UIFont systemFontOfSize:18];
         [_topView addSubview:comfirmButton];
         comfirmButton.size = CGSizeMake(50, 20);
@@ -159,17 +166,6 @@
 }
 
 #pragma mark - Event
--(void)comfirmButtonClick:(id)sender{
-    if (!self.selectedMemberItems.count) {
-        [CDAutoHideMessageHUD showMessage:@"至少选择一个成员"];
-        return;
-    }
-    [self dismiss];
-    if (self.comfirmBlock) {
-        self.comfirmBlock(self.selectedMemberItems);
-    }
-}
-
 - (void)manageButtonClick:(id)sender{
     [self dismiss];
     if (self.manageBlock) {
