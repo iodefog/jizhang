@@ -9,6 +9,7 @@
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetListViewController.h"
 #import "SSJBookKeepingHomeViewController.h"
+#import "SSJBudgetBillTypeSelectionViewController.h"
 #import "SSJBudgetEditPeriodSelectionView.h"
 #import "SSJBudgetEditAccountDaySelectionView.h"
 #import "TPKeyboardAvoidingTableView.h"
@@ -159,7 +160,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString *title = [self.cellTitles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kBudgetPeriodTitle]) {
+    if ([title isEqualToString:kBudgetTypeTitle]) {
+        SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
+        billTypeSelectionController.budgetModel = _model;
+        [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+    } else if ([title isEqualToString:kBudgetPeriodTitle]) {
         [self.periodSelectionView show];
     } else if ([title isEqualToString:kAccountDayTitle]) {
         [self.accountDaySelectionView show];
@@ -276,8 +281,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [self updateSaveButtonState:YES];
     
     //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
-    [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(BOOL isConficted) {
-        if (isConficted) {
+    [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code) {
+        if (code) {
             [self updateSaveButtonState:NO];
             SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudget] action:action, nil];

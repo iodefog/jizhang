@@ -7,6 +7,7 @@
 //
 
 #import "SSJBudgetBillTypeSelectionViewController.h"
+#import "SSJADDNewTypeViewController.h"
 #import "SSJBudgetBillTypeSelectionCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJBudgetModel.h"
@@ -23,6 +24,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 
 @implementation SSJBudgetBillTypeSelectionViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"选择类别";
@@ -47,7 +49,9 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         for (SSJBudgetBillTypeSelectionCellItem *item in list) {
             if (item.selected) {
                 NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:[list indexOfObject:item] inSection:0];
-                [self.tableView selectRowAtIndexPath:selectedIndexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+//                [self.tableView selectRowAtIndexPath:selectedIndexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+                [self.tableView scrollToRowAtIndexPath:selectedIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                break;
             }
         }
         
@@ -77,33 +81,99 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    SSJBudgetBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (item.canSelect) {
-        item.selected = YES;
-        if (![_budgetModel.billIds containsObject:item.billID]) {
-            NSMutableArray *tmpBillIds = [_budgetModel.billIds mutableCopy];
-            [tmpBillIds addObject:item.billID];
-            _budgetModel.billIds = [tmpBillIds copy];
+    SSJBudgetBillTypeSelectionCellItem *selectedItem = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    if (selectedItem.canSelect) {
+        
+        selectedItem.selected = !selectedItem.selected;
+        
+        if ([selectedItem.billID isEqualToString:@"all"]) {
+            for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
+                if (item.canSelect) {
+                    item.selected = selectedItem.selected;
+                }
+            }
+        } else {
+            if (selectedItem.selected) {
+                BOOL isSelectedAll = YES;
+                for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
+                    if ([item.billID isEqualToString:@"all"] || !item.canSelect) {
+                        continue;
+                    }
+                    
+                    if (!item.selected) {
+                        isSelectedAll = NO;
+                        break;
+                    }
+                }
+                
+                if (isSelectedAll) {
+                    SSJBudgetBillTypeSelectionCellItem *allItem = [self.items firstObject];
+                    allItem.selected = YES;
+                }
+                
+            } else {
+                SSJBudgetBillTypeSelectionCellItem *allItem = [self.items firstObject];
+                allItem.selected = NO;
+            }
         }
+        
+        [self updateSelectedBillIds];
+        
+    } else {
+        // 添加类别
+        SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc] init];
+        addNewTypeVc.incomeOrExpence = 1;
+//        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
+//            wself.item.billId = categoryId;
+//            wself.titleSegment.selectedSegmentIndex = incomeOrExpence ? 0 : 1;
+//            [wself.scrollView setContentOffset:CGPointMake(wself.titleSegment.selectedSegmentIndex * wself.scrollView.width, 0) animated:YES];
+//            [wself updateNavigationRightItem];
+//        };
+        [self.navigationController pushViewController:addNewTypeVc animated:YES];
     }
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBudgetBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    if (item.canSelect) {
-        item.selected = NO;
-        if ([_budgetModel.billIds containsObject:item.billID]) {
-            NSMutableArray *tmpBillIds = [_budgetModel.billIds mutableCopy];
-            [tmpBillIds removeObject:item.billID];
-            _budgetModel.billIds = [tmpBillIds copy];
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 10;
+}
+
+//- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    SSJBudgetBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+//    if (item.canSelect) {
+//        item.selected = NO;
+//        if ([_budgetModel.billIds containsObject:item.billID]) {
+//            NSMutableArray *tmpBillIds = [_budgetModel.billIds mutableCopy];
+//            [tmpBillIds removeObject:item.billID];
+//            _budgetModel.billIds = [tmpBillIds copy];
+//        }
+//    }
+//}
+
+#pragma mark - Private
+- (void)updateSelectedBillIds {
+    NSMutableArray *billIds = [NSMutableArray array];
+    for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
+        if (item.selected) {
+            if ([item.billID isEqualToString:@"all"]) {
+                [billIds addObject:@"all"];
+                break;
+            }
+            
+            [billIds addObject:item.billID];
         }
     }
+    
+    _budgetModel.billIds = [billIds copy];
 }
 
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;

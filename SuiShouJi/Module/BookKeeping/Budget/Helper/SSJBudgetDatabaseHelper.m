@@ -316,23 +316,111 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         return;
     }
     
-//    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-//        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and cbilltype = ? and itype = ? and csdate = ? and cbooksid = ?", SSJUSERID(), model.ID, [self billTypeStringWithBillTypeArr:model.billIds], @(model.type), model.beginDate, model.booksId];
-//        if (success) {
-//            SSJDispatch_main_async_safe(^{
-//                success(isConficted);
-//            });
-//        }
-//    }];
+    NSString *userId = SSJUSERID();
+    NSString *billIds = [self billTypeStringWithBillTypeArr:model.billIds];
     
-    // 目前先吧收支id判断去掉，以后增加用户自选支出类别时再加上
+    if (!billIds.length) {
+        SSJPRINT(@"预算类别id为空");
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"预算类别id为空"}];
+        if (failure) {
+            failure(error);
+        }
+        return;
+    }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate <= datetime('now', 'localtime') and cedate >= datetime('now', 'localtime') and cbooksid = ?", SSJUSERID(), model.ID, @(model.type), model.booksId];
+        // 检测相同类型、账本、类别预算有没有周期冲突
+        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate <= datetime('now', 'localtime') and cedate >= datetime('now', 'localtime') and cbooksid = ? and cbilltype = ?", userId, model.ID, @(model.type), model.booksId, billIds];
+        
+        if (isConficted) {
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success(isConficted);
+                });
+            }
+            return;
+        }
+        
+        // 检测相同类型、账本、周期预算有没有类别冲突
+        FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ?", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+        
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        while ([resultSet next]) {
+            NSArray *billIds = [[resultSet stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];
+            for (NSString *billId in billIds) {
+                if ([model.billIds containsObject:billId]) {
+                    isConficted = YES;
+                    break;
+                }
+            }
+        }
+        [resultSet close];
+        
+        if (isConficted) {
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success(isConficted);
+                });
+            }
+            return;
+        }
+        
+        // 检测相同类型、账本、周期分预算不能大于总预算金额
+        if ([billIds isEqualToString:@"all"]) {
+            double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ?", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            if (model.budgetMoney < amount) {
+                if (success) {
+                    SSJDispatch_main_async_safe(^{
+                        success(isConficted);
+                    });
+                }
+            }
+        } else {
+            resultSet = [db executeQuery:@"select imoney from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            
+            if (!resultSet) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            
+            double generalBudgetMoney = -1;
+            while ([resultSet next]) {
+                generalBudgetMoney = [resultSet doubleForColumn:@"imoney"];
+            }
+            [resultSet close];
+            
+            if (generalBudgetMoney >= 0) {
+                double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+                amount += model.budgetMoney;
+                
+                if (amount > generalBudgetMoney) {
+                    if (success) {
+                        SSJDispatch_main_async_safe(^{
+                            success(isConficted);
+                        });
+                    }
+                }
+            }
+        }
+        
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(isConficted);
+                success(NO);
             });
         }
+        
     }];
 }
 
@@ -450,28 +538,28 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
     NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        // 查询其它相同周期的预算的支出类别，这些类别不能选择
-        FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where itype = ? and csdate = ? and cedate = ? and ibid <> ? and cbooksid = ? and cuserid = ? and operatortype <> 2", model.type, model.beginDate, model.endDate, model.ID, model.booksId, userID];
-        if (!resultSet) {
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        NSMutableArray *billIDs = [NSMutableArray array];
-        while ([resultSet next]) {
-            NSString *billID = [resultSet stringForColumn:@"cbilltype"];
-            if (![billIDs containsObject:billID]) {
-                [billIDs addObject:billID];
-            }
-        }
-        [resultSet close];
+//        // 查询其它相同周期的预算的支出类别，这些类别不能选择
+//        FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where itype = ? and csdate = ? and cedate = ? and ibid <> ? and cbooksid = ? and cuserid = ? and operatortype <> 2", @(model.type), model.beginDate, model.endDate, model.ID, model.booksId, userID];
+//        if (!resultSet) {
+//            if (failure) {
+//                SSJDispatchMainAsync(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//            return;
+//        }
+//        
+//        NSMutableArray *billIDs = [NSMutableArray array];
+//        while ([resultSet next]) {
+//            NSString *billID = [resultSet stringForColumn:@"cbilltype"];
+//            if (![billIDs containsObject:billID]) {
+//                [billIDs addObject:billID];
+//            }
+//        }
+//        [resultSet close];
         
         // 查询所有默认支出类别
-        resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and bt.cparent is null order by ub.iorder, ub.cwritedate, bt.id", userID];
+        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and bt.cparent is null order by ub.iorder, ub.cwritedate, bt.id", userID];
         
         if (!resultSet) {
             if (failure) {
@@ -490,14 +578,19 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
             item.leftImage = [resultSet stringForColumn:@"ccoin"];
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
-            item.canSelect = ![billIDs containsObject:item.billID];
-            item.selected = [model.billIds containsObject:item.billID];
+            item.canSelect = YES;
+            item.selected = [model.billIds containsObject:item.billID] || [[model.billIds firstObject] isEqualToString:@"all"];
+//            item.canSelect = ![billIDs containsObject:item.billID];
+//            if (item.canSelect) {
+//                item.selected = [model.billIds containsObject:item.billID] || [[model.billIds firstObject] isEqualToString:@"all"];
+//            }
             [list addObject:item];
         }
         [resultSet close];
         
         if (list.count > 0) {
             SSJBudgetBillTypeSelectionCellItem *selectAllItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+            selectAllItem.billID = @"all";
             selectAllItem.billTypeName = @"全选";
             selectAllItem.canSelect = YES;
             selectAllItem.selected = [[model.billIds firstObject] isEqualToString:@"all"];
