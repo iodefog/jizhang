@@ -282,11 +282,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
     [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code) {
-        if (code) {
-            [self updateSaveButtonState:NO];
-            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudget] action:action, nil];
-        } else {
+        if (code == 0) {
             [SSJBudgetDatabaseHelper saveBudgetModel:self.model success:^{
                 //  保存成功后自动同步
                 [self syncIfNeeded];
@@ -312,6 +308,18 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
             }];
+        } else if (code == 1) {
+            [self updateSaveButtonState:NO];
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudget] action:action, nil];
+        } else if (code == 2) {
+            
+        } else if (code == 3) {
+            if ([self.model.billIds isEqualToArray:@[@"all"]]) {
+                
+            }
+        } else {
+            
         }
     } failure:^(NSError * _Nonnull error) {
         [self updateSaveButtonState:NO];

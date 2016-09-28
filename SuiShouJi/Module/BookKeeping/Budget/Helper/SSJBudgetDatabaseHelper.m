@@ -306,7 +306,7 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
     }];
 }
 
-+ (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model success:(void(^)(BOOL isConficted))success failure:(void (^)(NSError *error))failure {
++ (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model success:(void(^)(int code))success failure:(void (^)(NSError *error))failure {
     if (![model isKindOfClass:[SSJBudgetModel class]]) {
         SSJPRINT(@"model is not kind of class SSJBudgetModel");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"model is not kind of class SSJBudgetModel"}];
@@ -335,42 +335,44 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         if (isConficted) {
             if (success) {
                 SSJDispatch_main_async_safe(^{
-                    success(isConficted);
+                    success(1);
                 });
             }
             return;
         }
         
         // 检测相同类型、账本、周期预算有没有类别冲突
-        FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ?", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
-        
-        if (!resultSet) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
+        if (![billIds isEqualToString:@"all"]) {
+            FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            
+            if (!resultSet) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
             }
-            return;
-        }
-        
-        while ([resultSet next]) {
-            NSArray *billIds = [[resultSet stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];
-            for (NSString *billId in billIds) {
-                if ([model.billIds containsObject:billId]) {
-                    isConficted = YES;
-                    break;
+            
+            while ([resultSet next]) {
+                NSArray *billIds = [[resultSet stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];
+                for (NSString *billId in billIds) {
+                    if ([model.billIds containsObject:billId]) {
+                        isConficted = YES;
+                        break;
+                    }
                 }
             }
-        }
-        [resultSet close];
-        
-        if (isConficted) {
-            if (success) {
-                SSJDispatch_main_async_safe(^{
-                    success(isConficted);
-                });
+            [resultSet close];
+            
+            if (isConficted) {
+                if (success) {
+                    SSJDispatch_main_async_safe(^{
+                        success(2);
+                    });
+                }
+                return;
             }
-            return;
         }
         
         // 检测相同类型、账本、周期分预算不能大于总预算金额
@@ -379,12 +381,12 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
             if (model.budgetMoney < amount) {
                 if (success) {
                     SSJDispatch_main_async_safe(^{
-                        success(isConficted);
+                        success(3);
                     });
                 }
             }
         } else {
-            resultSet = [db executeQuery:@"select imoney from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            FMResultSet *resultSet = [db executeQuery:@"select imoney from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
             
             if (!resultSet) {
                 if (failure) {
@@ -408,7 +410,7 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
                 if (amount > generalBudgetMoney) {
                     if (success) {
                         SSJDispatch_main_async_safe(^{
-                            success(isConficted);
+                            success(3);
                         });
                     }
                 }
@@ -417,10 +419,9 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(NO);
+                success(0);
             });
         }
-        
     }];
 }
 

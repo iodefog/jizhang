@@ -86,7 +86,7 @@ extern NSString *const SSJBudgetPeriodKey;
  *  检测是否有和model冲突的预算（即预算类别、开始时间、预算周期、账本类型三者都相同）
  *
  *  @param model     检测的预算模型
- *  @param success   检测成功的回调；code解释，1:
+ *  @param success   检测成功的回调；code解释，0:没有冲突 1:有周期冲突的预算 2:有类别冲突的预算 3:金额冲突
  *  @param failure   检测失败的回调
  */
 + (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model
