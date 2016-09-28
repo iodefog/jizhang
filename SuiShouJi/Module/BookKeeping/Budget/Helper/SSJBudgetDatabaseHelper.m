@@ -506,7 +506,17 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
     budgetModel.isLastDay = [set boolForColumn:@"islastday"];
     
     // 当前账本所有有效支出流水的总金额
-    budgetModel.payMoney = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
+    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@' and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId] mutableCopy];
+    
+    if (![[budgetModel.billIds firstObject] isEqualToString:@"all"]) {
+        NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
+        for (NSString *billId in budgetModel.billIds) {
+            [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
+        }
+        NSString *billIdStr = [tmpBillIds componentsJoinedByString:@","];
+        [sqlStr appendFormat:@" and ibillid in (%@)", billIdStr];
+    }
+    budgetModel.payMoney = [db doubleForQuery:sqlStr];
     
     return budgetModel;
 }
