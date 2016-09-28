@@ -20,5 +20,4 @@
  */
 @property (nonatomic, copy) void (^addNewCategoryAction)(NSString *categoryId, BOOL incomeOrExpence);
 
-
 @end

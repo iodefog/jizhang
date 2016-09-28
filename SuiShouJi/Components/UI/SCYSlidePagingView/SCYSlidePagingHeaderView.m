@@ -166,6 +166,19 @@
     [self p_setSelectedIndex:index animated:animated];
 }
 
+- (void)setButtonImage:(UIImage *)image layoutType:(SSJButtonLayoutType)type spaceBetweenImageAndTitle:(CGFloat)space forControlState:(UIControlState)state atIndex:(NSInteger)index {
+    UIButton *button = [_buttons ssj_safeObjectAtIndex:index];
+    
+    if (state == UIControlStateNormal) {
+        [button setImage:image forState:UIControlStateNormal];
+    } else if (state == UIControlStateSelected) {
+        [button setImage:image forState:UIControlStateSelected];
+        [button setImage:image forState:(UIControlStateHighlighted | UIControlStateSelected)];
+    }
+    button.contentLayoutType = type;
+    button.spaceBetweenImageAndTitle = space;
+}
+
 #pragma mark - Private
 - (void)reload {
     [_buttons makeObjectsPerformSelector:@selector(removeFromSuperview)];

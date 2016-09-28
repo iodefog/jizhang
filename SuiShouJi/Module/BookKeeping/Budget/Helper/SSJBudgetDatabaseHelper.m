@@ -12,6 +12,7 @@
 #import "MJExtension.h"
 #import "SSJDatePeriod.h"
 #import "SSJUserTableManager.h"
+#import "SSJBudgetBillTypeSelectionCellItem.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
@@ -28,8 +29,8 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         userItem.currentBooksId = SSJUSERID();
     }
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSMutableArray *budgetList = [NSMutableArray array];
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ?", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -40,22 +41,61 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
             return;
         }
         
+        NSMutableArray *weekList = [NSMutableArray array];
+        NSMutableArray *monthList = [NSMutableArray array];
+        NSMutableArray *yearList = [NSMutableArray array];
+        
         while ([budgetResult next]) {
-            [budgetList addObject:[self budgetModelWithResultSet:budgetResult inDatabase:db]];
+            SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            
+            switch (budget.type) {
+                case SSJBudgetPeriodTypeWeek:
+                    if (isAllBillType) {
+                        [weekList insertObject:budget atIndex:0];
+                    } else {
+                        [weekList addObject:budget];
+                    }
+                    
+                    break;
+                    
+                case SSJBudgetPeriodTypeMonth:
+                    if (isAllBillType) {
+                        [monthList insertObject:budget atIndex:0];
+                    } else {
+                        [monthList addObject:budget];
+                    }
+
+                    break;
+                    
+                case SSJBudgetPeriodTypeYear:
+                    if (isAllBillType) {
+                        [yearList insertObject:budget atIndex:0];
+                    } else {
+                        [yearList addObject:budget];
+                    }
+                    
+                    break;
+            }
         }
         
-        //  按照周、月、年的顺序排序
-        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            SSJBudgetModel *model1 = obj1;
-            SSJBudgetModel *model2 = obj2;
-            if (model1.type < model2.type) {
-                return NSOrderedAscending;
-            } else if (model1.type > model2.type) {
-                return NSOrderedDescending;
-            } else {
-                return NSOrderedSame;
-            }
-        }];
+        NSMutableArray *budgetList = [NSMutableArray array];
+        [budgetList addObjectsFromArray:weekList];
+        [budgetList addObjectsFromArray:monthList];
+        [budgetList addObjectsFromArray:yearList];
+        
+//        //  按照周、月、年的顺序排序
+//        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//            SSJBudgetModel *model1 = obj1;
+//            SSJBudgetModel *model2 = obj2;
+//            if (model1.type < model2.type) {
+//                return NSOrderedAscending;
+//            } else if (model1.type > model2.type) {
+//                return NSOrderedDescending;
+//            } else {
+//                return NSOrderedSame;
+//            }
+//        }];
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -241,9 +281,10 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
 }
 
 + (void)queryBillTypeMapWithSuccess:(void(^)(NSDictionary *billTypeMap))success failure:(void (^)(NSError *error))failure {
+    NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableDictionary *map = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", SSJUSERID()];
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userID];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -401,6 +442,79 @@ NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
         }
     }];
     return [sortArr componentsJoinedByString:@","];
+}
+
++ (void)queryBudgetBillTypeSelectionItemListWithBudgetModel:(SSJBudgetModel *)model
+                                                    success:(void(^)(NSArray <SSJBudgetBillTypeSelectionCellItem *>*list))success
+                                                    failure:(void(^)(NSError *error))failure {
+    NSString *userID = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        // 查询其它相同周期的预算的支出类别，这些类别不能选择
+        FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where itype = ? and csdate = ? and cedate = ? and ibid <> ? and cbooksid = ? and cuserid = ? and operatortype <> 2", model.type, model.beginDate, model.endDate, model.ID, model.booksId, userID];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *billIDs = [NSMutableArray array];
+        while ([resultSet next]) {
+            NSString *billID = [resultSet stringForColumn:@"cbilltype"];
+            if (![billIDs containsObject:billID]) {
+                [billIDs addObject:billID];
+            }
+        }
+        [resultSet close];
+        
+        // 查询所有默认支出类别
+        resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and bt.cparent is null order by ub.iorder, ub.cwritedate, bt.id", userID];
+        
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *list = [NSMutableArray array];
+        
+        while ([resultSet next]) {
+            SSJBudgetBillTypeSelectionCellItem *item = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+            item.billID = [resultSet stringForColumn:@"id"];
+            item.leftImage = [resultSet stringForColumn:@"ccoin"];
+            item.billTypeName = [resultSet stringForColumn:@"cname"];
+            item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
+            item.canSelect = ![billIDs containsObject:item.billID];
+            item.selected = [model.billIds containsObject:item.billID];
+            [list addObject:item];
+        }
+        [resultSet close];
+        
+        if (list.count > 0) {
+            SSJBudgetBillTypeSelectionCellItem *selectAllItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+            selectAllItem.billTypeName = @"全选";
+            selectAllItem.canSelect = YES;
+            selectAllItem.selected = [[model.billIds firstObject] isEqualToString:@"all"];
+            [list insertObject:selectAllItem atIndex:0];
+        }
+        
+        SSJBudgetBillTypeSelectionCellItem *addItem = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
+        addItem.billTypeName = @"添加类别";
+        addItem.canSelect = NO;
+        [list addObject:addItem];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(list);
+            });
+        }
+    }];
 }
 
 @end

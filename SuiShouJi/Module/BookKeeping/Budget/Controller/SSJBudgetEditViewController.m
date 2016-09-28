@@ -89,8 +89,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.navigationItem.title = @"添加预算";
     }
     
-    [self queryData];
     [self.view addSubview:self.tableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self queryData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -359,7 +363,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.ID = SSJUUID();
     self.model.userId = SSJUSERID();
     self.model.booksId = userItem.currentBooksId ? : SSJUSERID();
-    self.model.billIds = [self.budgetTypeMap allKeys];
+    self.model.billIds = @[@"all"];
     self.model.type = 1;
     self.model.budgetMoney = 3000;
     self.model.remindMoney = self.model.budgetMoney * self.remindPercent;
@@ -410,8 +414,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
-        budgetTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        budgetTypeCell.customAccessoryType = UITableViewCellAccessoryNone;
+        budgetTypeCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+        budgetTypeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
@@ -568,19 +572,21 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)budgetTypeNames {
-    // 目前只显示所有支出类别，以后增加用户自选类别时再加上
-//    if (self.model.billIds.count < self.budgetTypeMap.count) {
-//        NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:5];
-//        for (NSString *typeId in self.model.billIds) {
-//            [typeNameArr addObject:self.budgetTypeMap[typeId]];
-//            if (typeNameArr.count == 5) {
-//                break;
-//            }
-//        }
-//        return [typeNameArr componentsJoinedByString:@","];
-//    }
+    if ([[self.model.billIds firstObject] isEqualToString:@"all"]) {
+        return @"所有支出类别";
+    }
     
-    return @"所有支出类目";
+    if (self.model.billIds.count <= 4) {
+        NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:4];
+        for (NSString *typeId in self.model.billIds) {
+            if (typeId) {
+                [typeNameArr addObject:self.budgetTypeMap[typeId]];
+            }
+        }
+        return [typeNameArr componentsJoinedByString:@","];
+    }
+    
+    return [NSString stringWithFormat:@"%d个类别", (int)self.model.billIds.count];
 }
 
 //  已有冲突预算配置的提示信息

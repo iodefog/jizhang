@@ -14,7 +14,7 @@
 
 @property (nonatomic, copy) void(^showBlock)();
 
-@property (nonatomic, copy) void(^comfirmBlock)(NSArray *selectedMemberItems);
+@property (nonatomic, copy) void(^selectedMemberDidChangeBlock)(NSArray *selectedMemberItems);
 
 @property (nonatomic, copy) void(^manageBlock)(NSMutableArray *items);
 
