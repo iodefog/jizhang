@@ -6,8 +6,15 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseViewController.h"
+#import "SSJNewBaseTableViewController.h"
 
-@interface SSJSearchingViewController : SSJBaseViewController
+@interface SSJSearchingViewController : SSJNewBaseTableViewController
+
+typedef NS_ENUM(NSInteger, SSJSearchModel) {
+    SSJSearchHistoryModel,   //搜索历史页面
+    SSJSearchResultModel     //搜索结果页面
+};
+
+@property(nonatomic) SSJSearchModel model;
 
 @end

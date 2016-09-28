@@ -53,7 +53,9 @@
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
-                failure([db lastError]);
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
             }
         }
         while ([resultSet next]) {
@@ -95,7 +97,36 @@
             }
         }
         if (success) {
-            success(tempArr);
+            SSJDispatch_main_async_safe(^{
+                success(tempArr);
+            });
+        }
+    }];
+}
+
++ (void)querySearchHistoryWithSuccess:(void(^)(NSArray <SSJSearchHistoryItem *>*result))success
+                                     failure:(void (^)(NSError *error))failure
+{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_search_history where cuserid = ?",userId];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+        }
+        while ([resultSet next]) {
+            SSJSearchHistoryItem *item = [[SSJSearchHistoryItem alloc]init];
+            item.searchHistory = [resultSet stringForColumn:@"csearchcontent"];
+            [tempArr addObject:item];
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(tempArr);
+            });
         }
     }];
 }

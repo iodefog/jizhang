@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJSearchResultItem.h"
+#import "SSJSearchHistoryItem.h"
 
 @interface SSJChargeSearchingStore : NSObject
 
