@@ -165,10 +165,14 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString *title = [self.cellTitles ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kBudgetTypeTitle] && !_isEdit) {
-        SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
-        billTypeSelectionController.budgetModel = _model;
-        [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+    if ([title isEqualToString:kBudgetTypeTitle]) {
+        if (_isEdit) {
+            [CDAutoHideMessageHUD showMessage:@"不支持编辑类别哦，请重新创建一条预算吧。"];
+        } else {
+            SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
+            billTypeSelectionController.budgetModel = _model;
+            [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+        }
     } else if ([title isEqualToString:kBudgetPeriodTitle]) {
         [self.periodSelectionView show];
     } else if ([title isEqualToString:kAccountDayTitle]) {
