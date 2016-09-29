@@ -22,7 +22,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.cancelButton];
         [self addSubview:self.searchTextInput];
     }
@@ -71,7 +71,7 @@
 }
 
 - (void)updateAfterThemeChange{
-    [self.cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor] forState:UIControlStateNormal];
+    [self.cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor] forState:UIControlStateNormal];
     self.searchTextInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
 }

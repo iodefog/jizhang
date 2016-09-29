@@ -13,6 +13,7 @@
 #import "SSJBillingChargeCell.h"
 #import "SSJSearchResultItem.h"
 #import "SSJSearchHistoryCell.h"
+#import "SSJHistoryHeader.h"
 
 static NSString *const kBillingChargeCellId = @"kBillingChargeCellId";
 
@@ -24,6 +25,8 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 @property(nonatomic, strong) SSJSearchBar *searchBar;
 
 @property(nonatomic, strong) NSArray *items;
+
+@property(nonatomic, strong) SSJHistoryHeader *historyHeader;
 
 @end
 
@@ -103,6 +106,13 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     }
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (self.model == SSJSearchResultModel) {
+        return nil;
+    }else{
+        return self.historyHeader;
+    }
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     if (self.model == SSJSearchResultModel) {
@@ -172,6 +182,13 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     return _searchBar;
 }
 
+-(SSJHistoryHeader *)historyHeader{
+    if (!_historyHeader) {
+        _historyHeader = [[SSJHistoryHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
+    }
+    return _historyHeader;
+}
+
 #pragma mark - Private
 - (void)getSearchHistory{
     __weak typeof(self) weakSelf = self;
@@ -186,6 +203,8 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
