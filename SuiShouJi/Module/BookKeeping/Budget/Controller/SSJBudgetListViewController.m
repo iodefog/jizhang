@@ -10,9 +10,11 @@
 #import "SSJBudgetEditViewController.h"
 #import "SSJBudgetDetailViewController.h"
 #import "SSJBudgetListCell.h"
+#import "SSJBudgetListSecondaryCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 
 static NSString *const kBudgetListCellId = @"kBudgetListCellId";
+static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId";
 
 @interface SSJBudgetListViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -79,10 +81,18 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJBudgetListCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListCellId forIndexPath:indexPath];
-    SSJBudgetListCellItem *cellItem = [self convertCellItemFromModel:[self.dataList ssj_safeObjectAtIndex:indexPath.section]];
-    [cell setCellItem:cellItem];
-    return cell;
+    SSJBudgetModel *model = [self.dataList ssj_safeObjectAtIndex:indexPath.section];
+    if ([model.billIds isEqualToArray:@[@"all"]]) {
+        SSJBudgetListCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListCellId forIndexPath:indexPath];
+        SSJBudgetListCellItem *cellItem = [self convertCellItemFromModel:[self.dataList ssj_safeObjectAtIndex:indexPath.section]];
+        [cell setCellItem:cellItem];
+        return cell;
+    } else {
+        SSJBudgetListSecondaryCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListSecondaryCellId forIndexPath:indexPath];
+        SSJBudgetListCellItem *cellItem = [self convertCellItemFromModel:[self.dataList ssj_safeObjectAtIndex:indexPath.section]];
+        [cell setCellItem:cellItem];
+        return cell;
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -175,6 +185,7 @@ static NSString *const kBudgetListCellId = @"kBudgetListCellId";
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView setTableFooterView:[[UIView alloc] init]];
         [_tableView registerClass:[SSJBudgetListCell class] forCellReuseIdentifier:kBudgetListCellId];
+        [_tableView registerClass:[SSJBudgetListSecondaryCell class] forCellReuseIdentifier:kBudgetListSecondaryCellId];
         _tableView.rowHeight = 314;
     }
     return _tableView;
