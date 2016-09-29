@@ -1411,6 +1411,11 @@
 		9CC452D11D9B62AE0044FA87 /* SSJSearchHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */; };
 		9CC452D21D9B62AF0044FA87 /* SSJSearchHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */; };
 		9CC452D31D9B62AF0044FA87 /* SSJSearchHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */; };
+		9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
+		9CD5168D1D9D02550040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
+		9CD5168E1D9D02560040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
+		9CD5168F1D9D02570040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
+		9CD516901D9D02570040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
 		9CD9BBFC1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5A1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m */; };
 		9CD9BBFD1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5C1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.m */; };
 		9CD9BBFE1CFD2DAA0061803B /* SSJBookkeepingTreeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5F1CFD2DAA0061803B /* SSJBookkeepingTreeHelper.m */; };
@@ -3095,6 +3100,8 @@
 		9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMultiFunctionButton.m; sourceTree = "<group>"; };
 		9CC452CD1D9B62A90044FA87 /* SSJSearchHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryItem.h; sourceTree = "<group>"; };
 		9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryItem.m; sourceTree = "<group>"; };
+		9CD5168A1D9D00960040480B /* SSJHistoryHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHistoryHeader.h; sourceTree = "<group>"; };
+		9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHistoryHeader.m; sourceTree = "<group>"; };
 		9CD9BB591CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeHelpViewController.h; sourceTree = "<group>"; };
 		9CD9BB5A1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookkeepingTreeHelpViewController.m; sourceTree = "<group>"; };
 		9CD9BB5B1CFD2DAA0061803B /* SSJBookkeepingTreeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookkeepingTreeViewController.h; sourceTree = "<group>"; };
@@ -4878,6 +4885,8 @@
 				9CE2F89B1D9B9020008099C1 /* SSJSearchBar.m */,
 				9C2692391D9CB58D00B3B5DF /* SSJSearchHistoryCell.h */,
 				9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */,
+				9CD5168A1D9D00960040480B /* SSJHistoryHeader.h */,
+				9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -7103,6 +7112,7 @@
 				7DBA567A1D6D32B700C02D79 /* SSJSyncTable.m in Sources */,
 				7DBA567B1D6D32B700C02D79 /* SSJAboutusTableViewCell.m in Sources */,
 				7DBA567C1D6D32B700C02D79 /* SSJMemberSyncTable.m in Sources */,
+				9CD5168E1D9D02560040480B /* SSJHistoryHeader.m in Sources */,
 				7DBA567D1D6D32B700C02D79 /* SSJCustomKeyboard.m in Sources */,
 				7DBA567E1D6D32B700C02D79 /* SSJMemberCell.m in Sources */,
 				9C9A0C071D6D94DA002AF046 /* SSJReminderItem.m in Sources */,
@@ -7541,6 +7551,7 @@
 				9C2A67B91D194CA70010F1DA /* SSJReportFormsSurplusView.m in Sources */,
 				9C2A67BA1D194CA70010F1DA /* SSJUserBillSyncTable.m in Sources */,
 				9C2A67BB1D194CA70010F1DA /* SSJCircleChargeSettingViewController.m in Sources */,
+				9CD5168D1D9D02550040480B /* SSJHistoryHeader.m in Sources */,
 				9C2A67BC1D194CA70010F1DA /* SSJFontAddition.m in Sources */,
 				9C24D00C1D7838F80095D150 /* SSJLocalNotificationHelper.m in Sources */,
 				9C2A67BD1D194CA70010F1DA /* SSJMagicExportViewController.m in Sources */,
@@ -8007,6 +8018,7 @@
 				9CECFBF61D6D41A700DB2C8B /* SSJSyncTable.m in Sources */,
 				9CECFBF71D6D41A700DB2C8B /* SSJAboutusTableViewCell.m in Sources */,
 				9CECFBF81D6D41A700DB2C8B /* SSJMemberSyncTable.m in Sources */,
+				9CD5168F1D9D02570040480B /* SSJHistoryHeader.m in Sources */,
 				9CECFBF91D6D41A700DB2C8B /* SSJCustomKeyboard.m in Sources */,
 				9CECFBFA1D6D41A700DB2C8B /* SSJMemberCell.m in Sources */,
 				9C9A0C081D6D94DC002AF046 /* SSJReminderItem.m in Sources */,
@@ -8463,6 +8475,7 @@
 				9CECFFEE1D6D41EB00DB2C8B /* SSJSyncTable.m in Sources */,
 				9CECFFEF1D6D41EB00DB2C8B /* SSJAboutusTableViewCell.m in Sources */,
 				9CECFFF01D6D41EB00DB2C8B /* SSJMemberSyncTable.m in Sources */,
+				9CD516901D9D02570040480B /* SSJHistoryHeader.m in Sources */,
 				9CECFFF11D6D41EB00DB2C8B /* SSJCustomKeyboard.m in Sources */,
 				9CECFFF21D6D41EB00DB2C8B /* SSJMemberCell.m in Sources */,
 				9C9A0C091D6D94DD002AF046 /* SSJReminderItem.m in Sources */,
@@ -8901,6 +8914,7 @@
 				9CD9BC081CFD2DAA0061803B /* SSJCircleChargeSettingViewController.m in Sources */,
 				BD0433231C1A78B40051E7AB /* SSJFontAddition.m in Sources */,
 				9CD9BC0E1CFD2DAA0061803B /* SSJMagicExportViewController.m in Sources */,
+				9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */,
 				BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */,
 				BD0433331C1A82110051E7AB /* SSJConstant.m in Sources */,
 				7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */,
