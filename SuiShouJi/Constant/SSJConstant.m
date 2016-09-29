@@ -12,14 +12,8 @@ const int64_t SSJDefaultSyncVersion = -1;
 
 //  接口域名
 #ifdef DEBUG
-<<<<<<< HEAD
 NSString *const SSJBaseURLString = @"http://192.168.1.155:18095";   // 测试环境
 NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";   // 测试环境
-=======
-
-NSString *const SSJBaseURLString = @"http://192.168.1.155:18095";   // 测试环境
-NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
->>>>>>> 2d84cf3c8e4deb76aacb1d7f65d2f81fbbc6f045
 
 //NSString *const SSJBaseURLString = @"http://jz.9188.com";
 //NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";

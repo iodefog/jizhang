@@ -35,14 +35,10 @@
         if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"]]) {
             [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"] withIntermediateDirectories:YES attributes:nil error:nil];
         }
-<<<<<<< HEAD
         NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",version]];
-=======
-        NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/%@",response.suggestedFilename]];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
             [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
         }
->>>>>>> 2d84cf3c8e4deb76aacb1d7f65d2f81fbbc6f045
         NSURL *fileURL = [NSURL fileURLWithPath:path];
         return fileURL;
     } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
