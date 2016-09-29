@@ -263,7 +263,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             
         case SSJBudgetPeriodTypeYear:
             periodType = SSJDatePeriodTypeYear;
-            
             break;
     }
     
