@@ -81,6 +81,7 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  @param failure   查询失败的回调
  */
 + (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type
+                             billIds:(NSArray *)billIds
                              success:(void(^)(NSDictionary *result))success
                              failure:(void (^)(NSError *error))failure;
 

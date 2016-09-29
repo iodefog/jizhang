@@ -208,7 +208,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     }];
 }
 
-+ (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
++ (void)queryForBudgetIdListWithType:(SSJBudgetPeriodType)type billIds:(NSArray *)billIds success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     NSString *userid = SSJUSERID();
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:userid];
     if (!userItem.currentBooksId.length) {
@@ -217,9 +217,21 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
+        NSArray *sortedBillIds = [billIds sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            if ([obj1 intValue] < [obj2 intValue]) {
+                return NSOrderedAscending;
+            } else if ([obj1 intValue] > [obj2 intValue]) {
+                return NSOrderedDescending;
+            } else {
+                return NSOrderedSame;
+            }
+        }];
+        
+        NSString *billIdStr = [sortedBillIds componentsJoinedByString:@","];
+        
         NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = ? and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, @(type), today, userItem.currentBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select ibid, csdate, cedate from bk_user_budget where cuserid = ? and itype = ? and cbilltype = ? and operatortype <> 2 and csdate <= ? and cbooksid = ? order by csdate", userid, @(type), billIdStr, today, userItem.currentBooksId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
