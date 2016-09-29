@@ -14,17 +14,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-//  预算模型key
+// 预算模型key
 extern NSString *const SSJBudgetModelKey;
 
-//  预算图表模型key
+// 预算图表模型key
 extern NSString *const SSJBudgetCircleItemsKey;
 
-//  月预算编号key
+// 月预算编号key
 extern NSString *const SSJBudgetIDKey;
 
-//  月预算标题key
+// 月预算标题key
 extern NSString *const SSJBudgetPeriodKey;
+
+// 冲突的预算类别
+extern NSString *const SSJBudgetConflictBillIdsKey;
+
+// 冲突的总预算金额
+extern NSString *const SSJBudgetConflictMajorBudgetMoneyKey;
+
+// 冲突的分预算总金额
+extern NSString *const SSJBudgetConflictSecondaryBudgetMoneyKey;
+
+// 冲突的总预算模型
+extern NSString *const SSJBudgetConflictBudgetModelKey;
 
 
 @interface SSJBudgetDatabaseHelper : NSObject
@@ -83,14 +95,33 @@ extern NSString *const SSJBudgetPeriodKey;
                             failure:(void (^)(NSError *error))failure;
 
 /**
- *  检测是否有和model冲突的预算（即预算类别、开始时间、预算周期、账本类型三者都相同）
+ *  按顺序监测是否和其他预算有周期、类别、金额冲突；详细监测过程：
+ *  1.检测相同类型、账本、类别预算有没有周期冲突
+ *  2.如果保存的是分预算，检测相同类型、账本、周期的其它预算有没有相同的类别
+ *  3.检测相同类型、账本、周期的各个分预算总金额不能大于总预算金额
  *
  *  @param model     检测的预算模型
- *  @param success   检测成功的回调
+ *  @param success   检测成功的回调；
+                     code解释:
+                         0:没有冲突
+                         1:有周期冲突的预算
+                         2:有类别冲突的预算 
+                         3:设置的总预算金额小于分预算金额 
+                         4:设置的分预算金额大于总预算金额
+ 
+                     additionInfo:
+                         code为0，nil
+                         code为1，nil
+                         code为2，@{SSJBudgetConflictBillIdsKey:@[类别id, ...]} 
+                         code为3，@{SSJBudgetConflictMajorBudgetMoneyKey:@(总预算金额), 
+                                   SSJBudgetConflictSecondaryBudgetMoneyKey:@(分预算总金额)}
+                         code为4，@{SSJBudgetConflictMajorBudgetMoneyKey:@(总预算金额),
+                                   SSJBudgetConflictSecondaryBudgetMoneyKey:@(分预算总金额),
+                                   SSJBudgetConflictBudgetModelKey:总预算模型}
  *  @param failure   检测失败的回调
  */
 + (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model
-                           success:(void(^)(BOOL isConficted))success
+                           success:(void(^)(int code, NSDictionary *additionInfo))success
                            failure:(void (^)(NSError *error))failure;
 
 /**
@@ -103,6 +134,17 @@ extern NSString *const SSJBudgetPeriodKey;
 + (void)saveBudgetModel:(SSJBudgetModel *)model
                 success:(void(^)())success
                 failure:(void (^)(NSError *error))failure;
+
+/**
+ *  存储预算列表
+ *
+ *  @param model     装载预算模型的数组
+ *  @param success   存储成功的回调
+ *  @param failure   存储失败的回调
+ */
++ (void)saveBudgetModels:(NSArray <SSJBudgetModel *>*)models
+                 success:(void(^)())success
+                 failure:(void (^)(NSError *error))failure;
 
 + (NSString *)queryBookNameForBookId:(NSString *)ID;
 

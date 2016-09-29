@@ -8,6 +8,12 @@
 
 #import "SSJBudgetBillTypeSelectionCell.h"
 
+@interface SSJBudgetBillTypeSelectionCell ()
+
+@property (nonatomic, strong) UIImageView *checkMark;
+
+@end
+
 @implementation SSJBudgetBillTypeSelectionCell
 
 - (void)dealloc {
@@ -18,7 +24,9 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.textLabel.font = [UIFont systemFontOfSize:18];
         self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+        
+        _checkMark = [[UIImageView alloc] init];
+        [self.contentView addSubview:_checkMark];
     }
     return self;
 }
@@ -28,10 +36,16 @@
     
     [self.imageView sizeToFit];
     [self.textLabel sizeToFit];
+    [self.checkMark sizeToFit];
     
     self.imageView.left = 15;
-    self.textLabel.left = self.imageView.right + 15;
-    self.imageView.centerY = self.textLabel.centerY = self.contentView.height * 0.5;
+    if (self.imageView.width) {
+        self.textLabel.left = self.imageView.right + 15;
+    } else {
+        self.textLabel.left = 15;
+    }
+    self.checkMark.right = self.contentView.width - 27;
+    self.imageView.centerY = self.textLabel.centerY = self.checkMark.centerY = self.contentView.height * 0.5;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
@@ -58,6 +72,9 @@
     self.imageView.image = [[UIImage imageNamed:item.leftImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.imageView.tintColor = [UIColor ssj_colorWithHex:item.billTypeColor];
     self.textLabel.text = item.billTypeName;
+    self.selectionStyle = item.canSelect ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
+    self.checkMark.image = [UIImage imageNamed:(item.selected ? @"book_sel" : @"book_xuanzhong")];
+    self.checkMark.hidden = !item.canSelect;
 }
 
 @end
