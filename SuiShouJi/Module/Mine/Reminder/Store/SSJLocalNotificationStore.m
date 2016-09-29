@@ -104,7 +104,7 @@
 }
 
 + (void)asyncsaveReminderWithReminderItem:(SSJReminderItem *)item
-                                  Success:(void (^)(void))success
+                                  Success:(void (^)(SSJReminderItem *))success
                                   failure:(void (^)(NSError *error))failure {
     //  保存提醒
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -118,7 +118,7 @@
         } else {
             SSJDispatch_main_async_safe(^{
                 if (success) {
-                    success();
+                    success(item);
                 }
             });
         }

@@ -39,7 +39,7 @@
  *  @param failure 保存失败的回调
  */
 + (void)asyncsaveReminderWithReminderItem:(SSJReminderItem *)item
-                                  Success:(void (^)(void))success
+                                  Success:(void (^)(SSJReminderItem *))success
                                   failure:(void (^)(NSError *error))failure;
 
 /**

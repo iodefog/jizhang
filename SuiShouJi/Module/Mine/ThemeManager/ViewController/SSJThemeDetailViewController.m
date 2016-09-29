@@ -154,8 +154,8 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 -(UIScrollView *)scrollView{
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
-        _scrollView.contentSize = CGSizeMake(self.view.width, 610);
         _scrollView.backgroundColor = [UIColor whiteColor];
+        _scrollView.contentSize = CGSizeMake(self.view.width, 700);
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = NO;
     }

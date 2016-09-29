@@ -77,7 +77,7 @@ PODS:
   - UMengAnalytics-NO-IDFA (4.1.1)
   - UMengSocialCOM (5.2.1)
   - YYKeyboardManager (1.0.1)
-  - YYText (1.0.5)
+  - YYText (1.0.7)
   - ZYCornerRadius (0.5.1)
 
 DEPENDENCIES:
@@ -93,7 +93,7 @@ DEPENDENCIES:
   - SDWebImage (~> 3.7)
   - SDWebImage/WebP
   - UMengAnalytics-NO-IDFA
-  - UMengSocialCOM (~> 5.2.1)
+  - UMengSocialCOM
   - YYKeyboardManager
   - YYText
   - ZYCornerRadius (~> 0.5.1)
@@ -113,7 +113,7 @@ SPEC CHECKSUMS:
   UMengAnalytics-NO-IDFA: 1064992c1b7aaa22823179c0b33a664813fd7a85
   UMengSocialCOM: 074c135ce349aa4c8848d3fb8458757bcb6ffb67
   YYKeyboardManager: ff53d2e80d1808567a7f004028bd200d9469a89f
-  YYText: ac09660c9ccd9b817f409a20caa6f5587444d2ae
+  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
 COCOAPODS: 0.39.0

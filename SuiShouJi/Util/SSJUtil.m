@@ -10,6 +10,7 @@
 #import "SDWebImageManager.h"
 #import "MMDrawerController.h"
 #import "sys/utsname.h"
+#import "SFHFKeychainUtils.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
     return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:SSJBaseURLString]] absoluteString];
@@ -327,6 +328,18 @@ NSString *SSJUUID(){
     NSString *strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
     CFRelease(uuidRef);
     return [strUUID lowercaseString];
+}
+
+NSString *SSJUniqueID(){
+    NSString *serviceName = @"com.youyu.jizhang";
+    NSString *userName = @"IMEI";
+    NSString *strUUID = [SFHFKeychainUtils getPasswordForUsername:userName andServiceName:serviceName error:nil];
+    if (!strUUID | [strUUID isEqualToString:@""]) {
+        CFUUIDRef uuidRef = CFUUIDCreate(kCFAllocatorDefault);
+        strUUID = (NSString *)CFBridgingRelease(CFUUIDCreateString (kCFAllocatorDefault,uuidRef));
+        [SFHFKeychainUtils storeUsername:userName andPassword:strUUID forServiceName:serviceName updateExisting:NO error:nil];
+    }
+    return strUUID;
 }
 
 BOOL SSJSaveImage(UIImage *image , NSString *imageName){
