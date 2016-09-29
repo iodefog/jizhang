@@ -278,53 +278,91 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (void)saveButtonAction {
+    
+    if (self.model.billIds.count == 0) {
+        [CDAutoHideMessageHUD showMessage:@"至少选择一个预算类别"];
+        return;
+    }
+    
+    if (self.model.budgetMoney <= 0) {
+        [CDAutoHideMessageHUD showMessage:@"预算金额必须大于0"];
+        return;
+    }
+    
     [self updateSaveButtonState:YES];
     
     //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
-    [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code) {
+    [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code, NSDictionary *additionalInfo) {
+        
+        [self updateSaveButtonState:NO];
+        
         if (code == 0) {
-            [SSJBudgetDatabaseHelper saveBudgetModel:self.model success:^{
-                //  保存成功后自动同步
-                [self syncIfNeeded];
-                [self updateSaveButtonState:NO];
-                [self ssj_backOffAction];
-                
-                switch (self.model.type) {
-                    case SSJBudgetPeriodTypeWeek:
-                        [MobClick event:@"budget_cycle_week"];
-                        break;
-                        
-                    case SSJBudgetPeriodTypeMonth:
-                        [MobClick event:@"budget_cycle_month"];
-                        break;
-                        
-                    case SSJBudgetPeriodTypeYear:
-                        [MobClick event:@"budget_cycle_year"];
-                        break;
-                }
-                
-            } failure:^(NSError * _Nonnull error) {
-                [self updateSaveButtonState:NO];
-                SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-            }];
+
+            [self saveBudget:@[self.model]];
+            
         } else if (code == 1) {
-            [self updateSaveButtonState:NO];
+            
             SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudget] action:action, nil];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudgetPeriod] action:action, nil];
+            
         } else if (code == 2) {
             
+            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictBillTypeWithAdditionalInfo:additionalInfo[SSJBudgetConflictBillIdsKey]] action:action, nil];
+            
         } else if (code == 3) {
-            if ([self.model.billIds isEqualToArray:@[@"all"]]) {
+            
+            double majorAmount = [additionalInfo[SSJBudgetConflictMajorBudgetMoneyKey] doubleValue];
+            double secondaryAmount = [additionalInfo[SSJBudgetConflictSecondaryBudgetMoneyKey] doubleValue];
+            NSString *message = [NSString stringWithFormat:@"您设置的总预算金额低于各分预算之和¥%.2f。是否将低于的¥%.2f计入总预算，或更改分预算金额？", secondaryAmount, (secondaryAmount - majorAmount)];
+            
+            __weak typeof(self) wself = self;
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"计入总预算" handler:^(SSJAlertViewAction *action) {
                 
-            }
-        } else {
+                wself.model.budgetMoney = secondaryAmount;
+                [wself.tableView reloadData];
+                [wself.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+                SSJBudgetEditTextFieldCell *budgetMoneyCell = [wself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3]];
+                [budgetMoneyCell.textField becomeFirstResponder];
+                
+            }], [SSJAlertViewAction actionWithTitle:@"更改分类金额" handler:^(SSJAlertViewAction *action) {
+                
+                [wself.navigationController popViewControllerAnimated:YES];
+                
+            }], nil];
+            
+        } else if (code == 4) {
+            
+            __weak typeof(self) wself = self;
+            
+            double majorAmount = [additionalInfo[SSJBudgetConflictMajorBudgetMoneyKey] doubleValue];
+            double secondaryAmount = [additionalInfo[SSJBudgetConflictSecondaryBudgetMoneyKey] doubleValue];
+            SSJBudgetModel *majorBudget = additionalInfo[SSJBudgetConflictBudgetModelKey];
+            
+            NSString *message = [NSString stringWithFormat:@"您设置的分预算总金额超过总预算金额¥%.2f。是否将超额的¥%.2f计入总预算，或更改分预算金额？", majorAmount, (secondaryAmount - majorAmount)];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"计入总预算" handler:^(SSJAlertViewAction *action) {
+                
+                majorBudget.budgetMoney = secondaryAmount;
+                [wself saveBudget:@[majorBudget, wself.model]];
+                
+            }], [SSJAlertViewAction actionWithTitle:@"更改分类金额" handler:^(SSJAlertViewAction *action) {
+                
+                wself.model.budgetMoney = majorAmount - (secondaryAmount - wself.model.budgetMoney);
+                [wself.tableView reloadData];
+                [wself.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+                SSJBudgetEditTextFieldCell *budgetMoneyCell = [wself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3]];
+                [budgetMoneyCell.textField becomeFirstResponder];
+                
+            }], nil];
             
         }
+        
     } failure:^(NSError * _Nonnull error) {
+        
         [self updateSaveButtonState:NO];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+        
     }];
 }
 
@@ -603,7 +641,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 //  已有冲突预算配置的提示信息
-- (NSString *)alertMessageForConflictedBudget {
+- (NSString *)alertMessageForConflictedBudgetPeriod {
     switch (self.model.type) {
         case 0:
             return @"亲爱的用户，您已设置过相同支出类别的周预算了，请选其它周期或在原有周预算上编辑吧！";
@@ -612,6 +650,24 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         case 2:
             return @"亲爱的用户，您已设置过相同支出类别的年预算了，请选其它周期或在原有年预算上编辑吧！";
     }
+}
+
+- (NSString *)alertMessageForConflictBillTypeWithAdditionalInfo:(NSArray *)conflictBillIds {
+    NSMutableArray *conflictBillNames = [NSMutableArray array];
+    for (NSString *billId in conflictBillIds) {
+        NSString *billTypeName = self.budgetTypeMap[billId];
+        if (billTypeName) {
+            [conflictBillNames addObject:billTypeName];
+        }
+        if (conflictBillNames.count >= 4) {
+            break;
+        }
+    }
+    if (conflictBillIds.count > 4) {
+        [conflictBillNames addObject:@"等"];
+    }
+    
+    return [NSString stringWithFormat:@"%@已在其它分预算中存在，请选择其它类别吧", [conflictBillNames componentsJoinedByString:@","]];
 }
 
 - (void)updateSaveButtonState:(BOOL)isSaving {
@@ -624,6 +680,34 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self.saveBtn ssj_hideLoadingIndicator];
         [self.saveBtn setTitle:@"保存" forState:UIControlStateNormal];
     }
+}
+
+- (void)saveBudget:(NSArray *)budgets {
+    [SSJBudgetDatabaseHelper saveBudgetModels:budgets success:^{
+        //  保存成功后自动同步
+        [self syncIfNeeded];
+        [self updateSaveButtonState:NO];
+        [self ssj_backOffAction];
+        
+        switch (self.model.type) {
+            case SSJBudgetPeriodTypeWeek:
+                [MobClick event:@"budget_cycle_week"];
+                break;
+                
+            case SSJBudgetPeriodTypeMonth:
+                [MobClick event:@"budget_cycle_month"];
+                break;
+                
+            case SSJBudgetPeriodTypeYear:
+                [MobClick event:@"budget_cycle_year"];
+                break;
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        [self updateSaveButtonState:NO];
+        SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
+    }];
 }
 
 - (void)deleteBudget {
