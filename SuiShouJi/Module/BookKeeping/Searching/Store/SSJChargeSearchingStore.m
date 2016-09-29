@@ -18,6 +18,9 @@
                                   failure:(void (^)(NSError *error))failure
 {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        SSJSearchHistoryItem *historyItem = [[SSJSearchHistoryItem alloc]init];
+        historyItem.searchHistory = content;
+        [self saveSearchHistoryItem:historyItem inDatabase:db];
         NSString *userId = SSJUSERID();
         NSString *lastBillDate = @"";
         NSString *currentBookId = [db stringForQuery:@"select CCURRENTBOOKSID from bk_user where cuserid = ?",userId];
@@ -121,6 +124,7 @@
         while ([resultSet next]) {
             SSJSearchHistoryItem *item = [[SSJSearchHistoryItem alloc]init];
             item.searchHistory = [resultSet stringForColumn:@"csearchcontent"];
+            item.historyID = [resultSet stringForColumn:@"chistoryid"];
             [tempArr addObject:item];
         }
         if (success) {
@@ -130,4 +134,26 @@
         }
     }];
 }
+
++ (NSError *)saveSearchHistoryItem:(SSJSearchHistoryItem *)item
+                               inDatabase:(FMDatabase *)db {
+    if (!item.historyID.length) {
+        item.historyID = SSJUUID();
+    }
+    NSString *userId = SSJUSERID();
+    if ([db executeUpdate:@"insert into bk_search_history (cuserid,csearchcontent,chistoryid) values (?,?,?)",userId,item.searchHistory,item.historyID]) {
+        return [db lastError];
+    };
+    return nil;
+}
+
++ (BOOL)deleteSearchHistoryItem:(SSJSearchHistoryItem *)item error:(NSError **)error{
+    __block BOOL success = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        success = [db executeUpdate:@"delete from bk_search_history where chistoryid = ? and cuserid = ?",item.historyID,userId];
+    }];
+    return success;
+}
+
 @end

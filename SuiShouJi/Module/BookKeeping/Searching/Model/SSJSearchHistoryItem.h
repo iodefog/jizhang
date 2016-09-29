@@ -13,4 +13,7 @@
 // 搜索历史
 @property(nonatomic, strong) NSString *searchHistory;
 
+// 搜索历史id
+@property(nonatomic, strong) NSString *historyID;
+
 @end

@@ -24,4 +24,8 @@ typedef NS_ENUM(NSInteger, SSJChargeListOrder) {
                                      Success:(void(^)(NSArray <SSJSearchResultItem *>*result))success
                                      failure:(void (^)(NSError *error))failure;
 
++ (void)querySearchHistoryWithSuccess:(void(^)(NSArray <SSJSearchHistoryItem *>*result))success
+                              failure:(void (^)(NSError *error))failure;
+
++ (BOOL)deleteSearchHistoryItem:(SSJSearchHistoryItem *)item error:(NSError **)error;
 @end

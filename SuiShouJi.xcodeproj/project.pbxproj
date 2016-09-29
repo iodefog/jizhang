@@ -789,6 +789,11 @@
 		9C24D00D1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C24D00E1D7838F90095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
 		9C24D00F1D7838FA0095D150 /* SSJLocalNotificationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF5942E1D65AE6200006594 /* SSJLocalNotificationHelper.m */; };
+		9C26923B1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
+		9C26923C1D9CB59200B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
+		9C26923D1D9CB59400B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
+		9C26923E1D9CB59500B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
+		9C26923F1D9CB59600B3B5DF /* SSJSearchHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */; };
 		9C29319C1CEEFFD300484F6E /* SSJPatchUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */; };
 		9C2A670A1D194CA70010F1DA /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C2A670B1D194CA70010F1DA /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
@@ -2938,6 +2943,8 @@
 		9C24CFBA1D76C9ED0095D150 /* SSJBooksTypeSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksTypeSelectViewController.m; sourceTree = "<group>"; };
 		9C24CFD41D76CC250095D150 /* SSJBooksEditeOrNewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksEditeOrNewViewController.h; sourceTree = "<group>"; };
 		9C24CFD51D76CC250095D150 /* SSJBooksEditeOrNewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksEditeOrNewViewController.m; sourceTree = "<group>"; };
+		9C2692391D9CB58D00B3B5DF /* SSJSearchHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryCell.h; sourceTree = "<group>"; };
+		9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryCell.m; sourceTree = "<group>"; };
 		9C29319A1CEEFFD300484F6E /* SSJPatchUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJPatchUpdateService.h; sourceTree = "<group>"; };
 		9C29319B1CEEFFD300484F6E /* SSJPatchUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJPatchUpdateService.m; sourceTree = "<group>"; };
 		9C2A6A9D1D194CA70010F1DA /* youyujizhang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = youyujizhang.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4869,6 +4876,8 @@
 			children = (
 				9CE2F89A1D9B9020008099C1 /* SSJSearchBar.h */,
 				9CE2F89B1D9B9020008099C1 /* SSJSearchBar.m */,
+				9C2692391D9CB58D00B3B5DF /* SSJSearchHistoryCell.h */,
+				9C26923A1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6369,7 +6378,7 @@
 					};
 					BD543C3B1C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = GZ7Q3299CT;
+						DevelopmentTeam = 747363KXQ6;
 					};
 					BD543C541C1A6DBC00910D61 = {
 						CreatedOnToolsVersion = 7.2;
@@ -7013,6 +7022,7 @@
 				7DBA563A1D6D32B700C02D79 /* SSJNormalWebViewController.m in Sources */,
 				7DBA563B1D6D32B700C02D79 /* SSJNoneCircleChargeView.m in Sources */,
 				7DBA563C1D6D32B700C02D79 /* SSJBudgetDetailBottomView.m in Sources */,
+				9C26923D1D9CB59400B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C9A0C4E1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				7DBA563D1D6D32B700C02D79 /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				7DBA563E1D6D32B700C02D79 /* SSJWaveWaterViewItem.m in Sources */,
@@ -7289,6 +7299,7 @@
 				7D8C7E851D6ED9D800D72E2D /* SSJLoanDetailViewController.m in Sources */,
 				7DE4A7E71D20DC8500F05BF0 /* SSJThemeSetting.m in Sources */,
 				9C2A670B1D194CA70010F1DA /* SSJForgetPasswordFirstStepViewController.m in Sources */,
+				9C26923C1D9CB59200B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C2A670C1D194CA70010F1DA /* SSJPercentCircleAdditionNodeItem.m in Sources */,
 				9C1723931D5327F700BB13DE /* SSJCalenderDetailHeader.m in Sources */,
 				9CC2C4EE1D7EBF760024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */,
@@ -7915,6 +7926,7 @@
 				9CECFBB61D6D41A700DB2C8B /* SSJNormalWebViewController.m in Sources */,
 				9CECFBB71D6D41A700DB2C8B /* SSJNoneCircleChargeView.m in Sources */,
 				9CECFBB81D6D41A700DB2C8B /* SSJBudgetDetailBottomView.m in Sources */,
+				9C26923E1D9CB59500B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C9A0C4F1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9CECFBB91D6D41A700DB2C8B /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				9CECFBBA1D6D41A700DB2C8B /* SSJWaveWaterViewItem.m in Sources */,
@@ -8370,6 +8382,7 @@
 				9CECFFAE1D6D41EB00DB2C8B /* SSJNormalWebViewController.m in Sources */,
 				9CECFFAF1D6D41EB00DB2C8B /* SSJNoneCircleChargeView.m in Sources */,
 				9CECFFB01D6D41EB00DB2C8B /* SSJBudgetDetailBottomView.m in Sources */,
+				9C26923F1D9CB59600B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				9C9A0C501D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
 				9CECFFB11D6D41EB00DB2C8B /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				9CECFFB21D6D41EB00DB2C8B /* SSJWaveWaterViewItem.m in Sources */,
@@ -8646,6 +8659,7 @@
 				7DEF54531C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
 				7D5F332A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m in Sources */,
 				7DFFD5BE1D670BB7000FDAA6 /* SSJLoanListCell.m in Sources */,
+				9C26923B1D9CB58D00B3B5DF /* SSJSearchHistoryCell.m in Sources */,
 				7D581EB21C50B7DE00E202A2 /* SSJUserUtil.m in Sources */,
 				9CE7D7921D2F4FF80013E97B /* SSJBannerNetworkService.m in Sources */,
 				9C4121931D7EC9B100F29428 /* SSJReminderCircleSelectView.m in Sources */,
@@ -9585,6 +9599,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Can Wu (7Z729NG4UD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Can Wu (7Z729NG4UD)";
+				DEVELOPMENT_TEAM = 747363KXQ6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9615,7 +9630,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "94348158-347e-4654-8cec-4c582bb8c8db";
+				PROVISIONING_PROFILE = "12d63f95-f5cc-484c-9ed3-05623e71842f";
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -9631,7 +9647,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				DEVELOPMENT_TEAM = GZ7Q3299CT;
+				DEVELOPMENT_TEAM = 747363KXQ6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -9663,7 +9679,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
 				PROVISIONING_PROFILE = "94348158-347e-4654-8cec-4c582bb8c8db";
-				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDevelopment;
+				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseDistribute;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

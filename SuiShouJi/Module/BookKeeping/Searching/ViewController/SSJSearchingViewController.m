@@ -10,10 +10,16 @@
 #import "SSJChargeSearchingStore.h"
 #import "SSJSearchBar.h"
 #import "SSJSearchHistoryItem.h"
-#import "SSJBillingChargeCellItem.h"
+#import "SSJBillingChargeCell.h"
 #import "SSJSearchResultItem.h"
+#import "SSJSearchHistoryCell.h"
 
-@interface SSJSearchingViewController ()
+static NSString *const kBillingChargeCellId = @"kBillingChargeCellId";
+
+static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
+
+
+@interface SSJSearchingViewController ()<UITextFieldDelegate>
 
 @property(nonatomic, strong) SSJSearchBar *searchBar;
 
@@ -39,28 +45,32 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.searchBar];
+    [self.tableView registerClass:[SSJSearchHistoryCell class] forCellReuseIdentifier:kSearchHistoryCellId];
+    [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellId];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.searchBar.searchTextInput becomeFirstResponder];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    self.model = SSJSearchHistoryModel;
-#warning test
-    _startTime = CFAbsoluteTimeGetCurrent();
-    [SSJChargeSearchingStore searchForChargeListWithSearchContent:@"餐饮" ListOrder:SSJChargeListOrderMoneyAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
-        _endTime = CFAbsoluteTimeGetCurrent();
-        NSLog(@"查询%ld条数据耗时%f",result.count,_endTime - _startTime);
-    } failure:^(NSError *error) {
-        
-    }];
+    [self getSearchHistory];
+//#warning test
+//    _startTime = CFAbsoluteTimeGetCurrent();
+//    [SSJChargeSearchingStore searchForChargeListWithSearchContent:@"餐饮" ListOrder:SSJChargeListOrderMoneyAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
+//        _endTime = CFAbsoluteTimeGetCurrent();
+//        NSLog(@"查询%ld条数据耗时%f",result.count,_endTime - _startTime);
+//    } failure:^(NSError *error) {
+//        
+//    }];
 }
 
-//- (void)viewWillDisappear:(BOOL)animated{
-//    [super viewWillDisappear:animated];
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.searchBar.searchTextInput becomeFirstResponder];
 //    [self.navigationController setNavigationBarHidden:NO animated:NO];
-//}
+}
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
@@ -68,12 +78,28 @@
     self.tableView.top = self.searchBar.bottom + 10;
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    if (!textField.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入要查询的内容"];
+        return NO;
+    }
+    [SSJChargeSearchingStore searchForChargeListWithSearchContent:textField.text ListOrder:SSJChargeListOrderDateAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
+        self.model = SSJSearchResultModel;
+        self.items = [NSArray arrayWithArray:result];
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
+    return YES;
+}
+
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.model == SSJSearchResultModel) {
         return 75;
     }else{
-        return 55;
+        return 50;
     }
 }
 
@@ -82,7 +108,7 @@
     if (self.model == SSJSearchResultModel) {
         return 37;
     }else{
-        return 55;
+        return 50;
     }
 }
 
@@ -115,10 +141,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.model == SSJSearchResultModel) {
-
+        SSJBillingChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:kBillingChargeCellId forIndexPath:indexPath];
+        SSJSearchResultItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+        SSJBillingChargeCellItem *billItem = [item.chargeList ssj_safeObjectAtIndex:indexPath.row];
+        [cell setCellItem:billItem];
+        return cell;
     }else{
-
+        SSJBaseItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+        SSJSearchHistoryCell *cell = [tableView dequeueReusableCellWithIdentifier:kSearchHistoryCellId forIndexPath:indexPath];
+        __weak typeof(self) weakSelf = self;
+        cell.deleteAction = ^(SSJSearchHistoryItem *item){
+            [weakSelf getSearchHistory];
+        };
+        [cell setCellItem:item];
+        return cell;
     }
+    return nil;
 }
 
 #pragma mark - Getter
@@ -126,11 +164,27 @@
     if (!_searchBar) {
         __weak typeof(self) weakSelf = self;
         _searchBar = [[SSJSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 70)];
+        _searchBar.searchTextInput.delegate = self;
         _searchBar.cancelAction = ^(){
             [weakSelf.navigationController popViewControllerAnimated:YES];
         };
     }
     return _searchBar;
+}
+
+#pragma mark - Private
+- (void)getSearchHistory{
+    __weak typeof(self) weakSelf = self;
+    [self.tableView ssj_showLoadingIndicator];
+    [SSJChargeSearchingStore querySearchHistoryWithSuccess:^(NSArray<SSJSearchHistoryItem *> *result) {
+        weakSelf.items = [NSArray arrayWithArray:result];
+        weakSelf.model = SSJSearchHistoryModel;
+        [weakSelf.tableView reloadData];
+        [self.tableView ssj_hideLoadingIndicator];
+    } failure:^(NSError *error) {
+        [self.tableView ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
