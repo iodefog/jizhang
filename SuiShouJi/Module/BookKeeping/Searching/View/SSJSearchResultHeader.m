@@ -1,4 +1,4 @@
-//
+    //
 //  SSJSearchResultHeader.m
 //  SuiShouJi
 //
@@ -20,7 +20,9 @@
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundView = [UIView new];
+        self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+        self.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.moneyLabel];
     }
@@ -95,12 +97,14 @@
     }
     self.dateLabel.text = [NSString stringWithFormat:@"%@ %@",dateStr,weekStr];
     [self.dateLabel sizeToFit];
-    if (item.balance > 0) {
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
-        self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",item.balance];
-    }else{
-        self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
-        self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.balance];
+    if (item.searchOrder == SSJChargeListOrderDateAscending ||item.searchOrder == SSJChargeListOrderDateDescending) {
+        if (item.balance > 0) {
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurveIncomeColor];
+            self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",item.balance];
+        }else{
+            self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
+            self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.balance];
+        }
     }
     [self.moneyLabel sizeToFit];
 }

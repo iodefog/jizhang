@@ -83,7 +83,9 @@
             }
             if (![item.billDate isEqualToString:lastBillDate]) {
                 SSJSearchResultItem *searchItem = [[SSJSearchResultItem alloc]init];
+                searchItem.searchOrder = order;
                 searchItem.date = item.billDate;
+                searchItem.balance = [item.money doubleValue];
                 if (order == SSJChargeListOrderMoneyAscending || order == SSJChargeListOrderMoneyDescending) {
                     searchItem.balance = [item.money doubleValue];
                 }
@@ -95,6 +97,7 @@
                 if (order == SSJChargeListOrderMoneyAscending || order == SSJChargeListOrderMoneyDescending) {
                     searchItem.balance =  searchItem.balance + [item.money doubleValue];
                 }
+                searchItem.balance = searchItem.balance + [item.money doubleValue];
                 [searchItem.chargeList addObject:item];
                 lastBillDate = item.billDate;
             }
@@ -113,7 +116,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_search_history where cuserid = ?",userId];
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_search_history where cuserid = ? order by csearchdate",userId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -141,7 +144,12 @@
         item.historyID = SSJUUID();
     }
     NSString *userId = SSJUSERID();
-    if ([db executeUpdate:@"insert into bk_search_history (cuserid,csearchcontent,chistoryid) values (?,?,?)",userId,item.searchHistory,item.historyID]) {
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    if ([db intForQuery:@"select count(1) from bk_search_history where csearchcontent = ? and cuserid = ?",item.searchHistory,userId]) {
+        [db executeUpdate:@"update bk_search_history set csearchdate = ? where csearchcontent = ? and cuserid = ?",writeDate,item.searchHistory,userId];
+        return nil;
+    }
+    if ([db executeUpdate:@"insert into bk_search_history (cuserid,csearchcontent,chistoryid,csearchdate) values (?,?,?,?)",userId,item.searchHistory,item.historyID,writeDate]) {
         return [db lastError];
     };
     return nil;

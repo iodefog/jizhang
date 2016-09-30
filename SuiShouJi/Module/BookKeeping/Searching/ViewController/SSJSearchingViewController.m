@@ -14,11 +14,14 @@
 #import "SSJSearchResultItem.h"
 #import "SSJSearchHistoryCell.h"
 #import "SSJHistoryHeader.h"
+#import "SSJSearchResultHeader.h"
+#import "SSJCalenderDetailViewController.h"
 
 static NSString *const kBillingChargeCellId = @"kBillingChargeCellId";
 
 static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 
+static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeaderId";
 
 @interface SSJSearchingViewController ()<UISearchBarDelegate>
 
@@ -48,8 +51,10 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.searchBar];
+    [self getSearchHistory];
     [self.tableView registerClass:[SSJSearchHistoryCell class] forCellReuseIdentifier:kSearchHistoryCellId];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellId];
+    [self.tableView registerClass:[SSJSearchResultHeader class] forHeaderFooterViewReuseIdentifier:kSearchSearchResultHeaderId];
     // Do any additional setup after loading the view.
 }
 
@@ -58,7 +63,6 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     [self.searchBar.searchTextInput becomeFirstResponder];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self getSearchHistory];
 //#warning test
 //    _startTime = CFAbsoluteTimeGetCurrent();
 //    [SSJChargeSearchingStore searchForChargeListWithSearchContent:@"餐饮" ListOrder:SSJChargeListOrderMoneyAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
@@ -73,6 +77,7 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput becomeFirstResponder];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [[UIApplication sharedApplication]setStatusBarHidden:NO];
 }
 
 - (void)viewDidLayoutSubviews{
@@ -87,18 +92,31 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
         [CDAutoHideMessageHUD showMessage:@"请输入要查询的内容"];
         return;
     }
-    [self.view endEditing:YES];
-    [SSJChargeSearchingStore searchForChargeListWithSearchContent:searchBar.text ListOrder:SSJChargeListOrderDateAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
-        self.model = SSJSearchResultModel;
-        self.items = [NSArray arrayWithArray:result];
-        [self.tableView reloadData];
-    } failure:^(NSError *error) {
-        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-    }];
+    [self searchForContent:searchBar.text listOrder:SSJChargeListOrderDateAscending];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    if (self.model == SSJSearchResultModel) {
+        [self getSearchHistory];
+    }
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.model == SSJSearchResultModel) {
+        SSJSearchResultItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
+        SSJBillingChargeCellItem *billItem = [item.chargeList ssj_safeObjectAtIndex:indexPath.row];
+        SSJCalenderDetailViewController *billDetailVc = [[SSJCalenderDetailViewController alloc]init];
+        billDetailVc.item = billItem;
+        [self.navigationController pushViewController:billDetailVc animated:YES];
+    }else{
+        SSJSearchHistoryItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+        self.searchBar.searchTextInput.text = item.searchHistory;
+        [self searchForContent:item.searchHistory listOrder:SSJChargeListOrderDateAscending];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.model == SSJSearchResultModel) {
         return 75;
     }else{
@@ -108,7 +126,10 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if (self.model == SSJSearchResultModel) {
-        return nil;
+        SSJSearchResultItem *resultItem = [self.items ssj_safeObjectAtIndex:section];
+        SSJSearchResultHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kSearchSearchResultHeaderId];
+        headerView.item = resultItem;
+        return headerView;
     }else{
         return self.historyHeader;
     }
@@ -122,17 +143,17 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0;
 }
 
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     return nil;
 }
 
 #pragma mark - UITableViewDataSource
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if (self.model == SSJSearchResultModel) {
         return self.items.count;
     }else{
@@ -140,7 +161,7 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     }
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (self.model == SSJSearchResultModel) {
         SSJSearchResultItem *item = [self.items ssj_safeObjectAtIndex:section];
         return item.chargeList.count;
@@ -204,7 +225,16 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     }];
 }
 
-
+- (void)searchForContent:(NSString *)content listOrder:(SSJChargeListOrder)order{
+    [self.view endEditing:YES];
+    [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result) {
+        self.model = SSJSearchResultModel;
+        self.items = [NSArray arrayWithArray:result];
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
+    }];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
