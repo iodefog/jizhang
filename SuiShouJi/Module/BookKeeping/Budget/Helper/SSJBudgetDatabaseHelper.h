@@ -10,6 +10,7 @@
 #import "SSJBudgetModel.h"
 #import "SSJBudgetTypeModel.h"
 
+@class SSJBudgetListCellItem;
 @class SSJBudgetBillTypeSelectionCellItem;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -47,8 +48,19 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
++ (void)queryForBudgetCellItemListWithBillTypeMapping:(NSDictionary *)mapping
+                                              success:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
+                                              failure:(void (^)(NSError * _Nullable error))failure;
+
+/**
+ *  查询当前有效的预算列表
+ *
+ *  @param success   查询成功的回调
+ *  @param failure   查询失败的回调
+ */
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success
-                                     failure:(void (^)(NSError * _Nullable error))failure;
+                                     failure:(void (^)(NSError *error))failure;
+
 
 /**
  *  查询预算详情

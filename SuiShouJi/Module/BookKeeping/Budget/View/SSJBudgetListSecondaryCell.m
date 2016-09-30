@@ -27,10 +27,6 @@
 
 @implementation SSJBudgetListSecondaryCell
 
-+ (CGFloat)rowHeight {
-    return 206;
-}
-
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLab];
@@ -39,6 +35,7 @@
         [self.contentView addSubview:self.expendLab];
         [self.contentView addSubview:self.budgetLab];
         [self.contentView addSubview:self.progressView];
+        [self updateAppearance];
     }
     return self;
 }
@@ -67,25 +64,26 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     [super updateCellAppearanceAfterThemeChanged];
-    
-    self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.billTypeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.periodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.expendLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.budgetLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [self updateAppearance];
 }
 
 - (void)setCellItem:(SSJBaseItem *)cellItem {
     [self setNeedsLayout];
     
-    SSJBudgetListSecondaryCellItem *item = (SSJBudgetListSecondaryCellItem *)cellItem;
+    SSJBudgetListCellItem *item = (SSJBudgetListCellItem *)cellItem;
     self.titleLab.text = item.title;
     self.billTypeLab.text = item.billTypeName;
     self.periodLab.text = item.period;
     self.expendLab.attributedText = item.expend;
     self.budgetLab.attributedText = item.budget;
-    self.progressView.expend = item.expendValue;
     self.progressView.budget = item.budgetValue;
+    self.progressView.progress = item.expendValue / item.budgetValue;
+}
+
+- (void)updateAppearance {
+    self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.billTypeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.periodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 - (UILabel *)titleLab {
@@ -126,6 +124,14 @@
         _budgetLab.font = [UIFont systemFontOfSize:13];
     }
     return _budgetLab;
+}
+
+- (SSJBudgetProgressView *)progressView {
+    if (!_progressView) {
+        _progressView = [[SSJBudgetProgressView alloc] init];
+        [_progressView setProgressColor:[UIColor orangeColor]];
+    }
+    return _progressView;
 }
 
 @end

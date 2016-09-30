@@ -13,6 +13,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJUserTableManager.h"
 #import "SSJBudgetBillTypeSelectionCellItem.h"
+#import "SSJBudgetListCellItem.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
@@ -25,6 +26,121 @@ NSString *const SSJBudgetConflictSecondaryBudgetMoneyKey = @"SSJBudgetConflictSe
 NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModelKey";
 
 @implementation SSJBudgetDatabaseHelper
+
++ (void)queryForBudgetCellItemListWithBillTypeMapping:(NSDictionary *)mapping
+                                              success:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
+                                              failure:(void (^)(NSError * _Nullable error))failure {
+    
+    NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+    if (!userItem.currentBooksId.length) {
+        userItem.currentBooksId = SSJUSERID();
+    }
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        
+        if (!budgetResult) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *majorWeekList = [NSMutableArray array];
+        NSMutableArray *secondaryWeekList = [NSMutableArray array];
+        NSMutableArray *majorMonthList = [NSMutableArray array];
+        NSMutableArray *secondaryMonthList = [NSMutableArray array];
+        NSMutableArray *majorYearList = [NSMutableArray array];
+        NSMutableArray *secondaryYearList = [NSMutableArray array];
+        
+        while ([budgetResult next]) {
+            SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
+            SSJBudgetListCellItem *cellItem = [SSJBudgetListCellItem cellItemWithBudgetModel:budget billTypeMapping:mapping];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            switch (budget.type) {
+                case SSJBudgetPeriodTypeWeek:
+                    if (isAllBillType) {
+                        [majorWeekList addObject:cellItem];
+                        cellItem.title = @"周总预算";
+                        cellItem.rowHeight = 320;
+                    } else {
+                        [secondaryWeekList addObject:cellItem];
+                        if (secondaryWeekList.count == 1) {
+                            cellItem.title = @"周分类预算";
+                            cellItem.rowHeight = 208;
+                        } else {
+                            cellItem.rowHeight = 174;
+                        }
+                    }
+                    
+                    break;
+                    
+                case SSJBudgetPeriodTypeMonth:
+                    if (isAllBillType) {
+                        [majorMonthList addObject:cellItem];
+                        cellItem.title = @"月总预算";
+                        cellItem.rowHeight = 320;
+                    } else {
+                        [secondaryMonthList addObject:cellItem];
+                        if (secondaryMonthList.count == 1) {
+                            cellItem.title = @"月分类预算";
+                            cellItem.rowHeight = 208;
+                        } else {
+                            cellItem.rowHeight = 174;
+                        }
+                    }
+
+                    break;
+                    
+                case SSJBudgetPeriodTypeYear:
+                    if (isAllBillType) {
+                        [majorYearList addObject:cellItem];
+                        cellItem.title = @"年总预算";
+                        cellItem.rowHeight = 320;
+                    } else {
+                        [secondaryYearList addObject:cellItem];
+                        if (secondaryYearList.count == 1) {
+                            cellItem.title = @"年分类预算";
+                            cellItem.rowHeight = 208;
+                        } else {
+                            cellItem.rowHeight = 174;
+                        }
+                    }
+                    
+                    break;
+            }
+        }
+        
+        NSMutableArray *budgetList = [NSMutableArray array];
+        if (majorWeekList.count) {
+            [budgetList addObject:majorWeekList];
+        }
+        if (secondaryWeekList.count) {
+            [budgetList addObject:secondaryWeekList];
+        }
+        if (majorMonthList.count) {
+            [budgetList addObject:majorMonthList];
+        }
+        if (secondaryMonthList.count) {
+            [budgetList addObject:secondaryMonthList];
+        }
+        if (majorYearList.count) {
+            [budgetList addObject:majorYearList];
+        }
+        if (secondaryYearList.count) {
+            [budgetList addObject:secondaryYearList];
+        }
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(budgetList);
+            });
+        }
+    }];
+}
 
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
     
@@ -70,7 +186,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                     } else {
                         [monthList addObject:budget];
                     }
-
+                    
                     break;
                     
                 case SSJBudgetPeriodTypeYear:
@@ -89,18 +205,18 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         [budgetList addObjectsFromArray:monthList];
         [budgetList addObjectsFromArray:yearList];
         
-//        //  按照周、月、年的顺序排序
-//        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-//            SSJBudgetModel *model1 = obj1;
-//            SSJBudgetModel *model2 = obj2;
-//            if (model1.type < model2.type) {
-//                return NSOrderedAscending;
-//            } else if (model1.type > model2.type) {
-//                return NSOrderedDescending;
-//            } else {
-//                return NSOrderedSame;
-//            }
-//        }];
+        //        //  按照周、月、年的顺序排序
+        //        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        //            SSJBudgetModel *model1 = obj1;
+        //            SSJBudgetModel *model2 = obj2;
+        //            if (model1.type < model2.type) {
+        //                return NSOrderedAscending;
+        //            } else if (model1.type > model2.type) {
+        //                return NSOrderedDescending;
+        //            } else {
+        //                return NSOrderedSame;
+        //            }
+        //        }];
         
         if (success) {
             SSJDispatch_main_async_safe(^{

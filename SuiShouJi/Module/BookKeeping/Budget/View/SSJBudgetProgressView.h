@@ -12,6 +12,8 @@
 
 @property (nonatomic) CGFloat budget;
 
-@property (nonatomic) CGFloat expend;
+@property (nonatomic) CGFloat progress;
+
+- (void)setProgressColor:(UIColor *)progressColor;
 
 @end
