@@ -8,6 +8,7 @@
 //
 
 #import "SSJSearchBar.h"
+#import "SSJSearchBarAddition.h"
 
 @interface SSJSearchBar()
 
@@ -39,16 +40,23 @@
     self.searchTextInput.left = 15;
 }
 
-- (UITextField *)searchTextInput{
+- (UISearchBar *)searchTextInput{
     if (!_searchTextInput) {
-        _searchTextInput = [[UITextField alloc]init];
-        _searchTextInput.backgroundColor = [UIColor clearColor];
-        _searchTextInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _searchTextInput.font = [UIFont systemFontOfSize:15];
-        _searchTextInput.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _searchTextInput = [[UISearchBar alloc]init];
+//        _searchTextInput.backgroundColor = [UIColor clearColor];
+//        _searchTextInput.backgroundColor = [UIColor clearColor];
+        _searchTextInput.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+//        _searchTextInput.font = [UIFont systemFontOfSize:15];
+//        _searchTextInput.clearButtonMode = UITextFieldViewModeWhileEditing;
+        UIImage *clearImage = [UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(self.width - 80  , 30)];
+        [_searchTextInput setSearchFieldBackgroundImage:clearImage forState:UIControlStateNormal];
         _searchTextInput.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor].CGColor;
         _searchTextInput.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
-        _searchTextInput.returnKeyType = UIReturnKeySearch;
+        _searchTextInput.layer.cornerRadius = 15.f;
+        _searchTextInput.searchBarStyle = UISearchBarStyleMinimal;
+        [_searchTextInput searchTextFieldView].font = [UIFont systemFontOfSize:15];
+        [_searchTextInput searchTextFieldView].textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        [_searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"搜索" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     }
     return _searchTextInput;
 }
@@ -72,8 +80,11 @@
 
 - (void)updateAfterThemeChange{
     [self.cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor] forState:UIControlStateNormal];
-    self.searchTextInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.searchTextInput.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
+    [self.searchTextInput searchTextFieldView].font = [UIFont systemFontOfSize:15];
+    [self.searchTextInput searchTextFieldView].textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    [self.searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"搜索" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 }
 
 /*
