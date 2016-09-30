@@ -72,7 +72,7 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput becomeFirstResponder];
-//    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
 - (void)viewDidLayoutSubviews{
@@ -81,12 +81,13 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
     self.tableView.top = self.searchBar.bottom + 10;
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     if (!searchBar.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入要查询的内容"];
         return;
     }
+    [self.view endEditing:YES];
     [SSJChargeSearchingStore searchForChargeListWithSearchContent:searchBar.text ListOrder:SSJChargeListOrderDateAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
         self.model = SSJSearchResultModel;
         self.items = [NSArray arrayWithArray:result];
