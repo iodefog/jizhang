@@ -78,6 +78,7 @@
     self.budgetLab.attributedText = item.budget;
     self.progressView.budget = item.budgetValue;
     self.progressView.progress = item.expendValue / item.budgetValue;
+    [_progressView setProgressColor:[UIColor ssj_colorWithHex:item.progressColorValue]];
 }
 
 - (void)updateAppearance {
@@ -129,7 +130,6 @@
 - (SSJBudgetProgressView *)progressView {
     if (!_progressView) {
         _progressView = [[SSJBudgetProgressView alloc] init];
-        [_progressView setProgressColor:[UIColor orangeColor]];
     }
     return _progressView;
 }

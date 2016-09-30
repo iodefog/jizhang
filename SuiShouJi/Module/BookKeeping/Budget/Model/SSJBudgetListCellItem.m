@@ -18,7 +18,8 @@
     
     NSMutableArray *billTypeNames = [NSMutableArray arrayWithCapacity:model.billIds.count];
     for (NSString *billId in model.billIds) {
-        NSString *typeName = mapping[billId];
+        NSDictionary *billInfo = mapping[billId];
+        NSString *typeName = billInfo[@"name"];
         if (typeName) {
             [billTypeNames addObject:typeName];
         }
@@ -58,6 +59,19 @@
     
     item.expendValue = model.payMoney;
     item.budgetValue = model.budgetMoney;
+    
+    if (!item.isMajor) {
+        if (model.billIds.count == 1) {
+            NSDictionary *billInfo = mapping[[model.billIds firstObject]];
+            item.progressColorValue = billInfo[@"color"];
+        } else if (model.billIds.count > 1) {
+            if (item.expendValue <= item.budgetValue) {
+                item.progressColorValue = @"0fceb6";
+            } else {
+                item.progressColorValue = @"ff654c";
+            }
+        }
+    }
     
     return item;
 }

@@ -24,6 +24,8 @@
 
 @property (nonatomic, copy) NSAttributedString *budget;
 
+@property (nonatomic, copy) NSString *progressColorValue;
+
 @property (nonatomic) CGFloat expendValue;
 
 @property (nonatomic) CGFloat budgetValue;

@@ -8,6 +8,7 @@
 
 #import "SSJBudgetDetailHeaderView.h"
 #import "SSJBudgetWaveWaterView.h"
+#import "SSJBudgetProgressView.h"
 #import "SSJBudgetModel.h"
 
 static const CGFloat kTopViewHeight = 110;
@@ -40,6 +41,8 @@ static const CGFloat kBottomViewHeight2 = 235;
 
 //  波浪比例视图
 @property (nonatomic, strong) SSJBudgetWaveWaterView *waveView;
+
+@property (nonatomic, strong) SSJBudgetProgressView *progressView;
 
 //  已花费金额
 @property (nonatomic, strong) UILabel *payMoneyLab;
@@ -89,16 +92,13 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (self.isHistory) {
         self.bottomView.frame = CGRectMake(0, 0, self.width, kBottomViewHeight2);
         self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
-        
-//        self.payMoneyLab.width = MIN(self.payMoneyLab.width, (self.width - 80) * 0.5);
         self.estimateMoneyLab.width = MIN(self.estimateMoneyLab.width, (self.width - 80) * 0.5);
-//        self.payMoneyLab.top = self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
-//        self.payMoneyLab.left = 30;
         self.estimateMoneyLab.right = self.width - 10;
         self.historyPaymentLab.width = MIN(self.historyPaymentLab.width, (self.width - 80) * 0.5);
         self.historyPaymentLab.left = 10;
     } else {
         self.topView.frame = CGRectMake(0, 0, self.width, kTopViewHeight);
+        [self.topView ssj_relayoutBorder];
         self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, kBottomViewHeight1);
         
         CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
@@ -207,17 +207,20 @@ static const CGFloat kBottomViewHeight2 = 235;
 }
 
 - (void)updateAppearance {
-    _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _budgetMoneyTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _budgetMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _intervalTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _intervalLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
     _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _bottomLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
- 
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.topView.backgroundColor = self.waveView.percent <= 1 ? [UIColor ssj_colorWithHex:@"0fceb6"] : [UIColor ssj_colorWithHex:@"ff654c"];
-    } else {
-        self.topView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:0.4];
-    }
+    _topView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    
+    [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
 }
 
 - (UIView *)topView {
@@ -228,6 +231,8 @@ static const CGFloat kBottomViewHeight2 = 235;
         [_topView addSubview:self.intervalTitleLab];
         [_topView addSubview:self.intervalLab];
         [_topView.layer addSublayer:self.dashLine];
+        [_topView ssj_setBorderWidth:1];
+        [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _topView;
 }
@@ -248,7 +253,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_budgetMoneyTitleLab) {
         _budgetMoneyTitleLab = [[UILabel alloc] init];
         _budgetMoneyTitleLab.backgroundColor = [UIColor clearColor];
-        _budgetMoneyTitleLab.textColor = [UIColor whiteColor];
         _budgetMoneyTitleLab.font = [UIFont systemFontOfSize:13];
     }
     return _budgetMoneyTitleLab;
@@ -258,7 +262,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_budgetMoneyLab) {
         _budgetMoneyLab = [[UILabel alloc] init];
         _budgetMoneyLab.backgroundColor = [UIColor clearColor];
-        _budgetMoneyLab.textColor = [UIColor whiteColor];
         _budgetMoneyLab.font = [UIFont systemFontOfSize:22];
         _budgetMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
@@ -269,7 +272,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_intervalTitleLab) {
         _intervalTitleLab = [[UILabel alloc] init];
         _intervalTitleLab.backgroundColor = [UIColor clearColor];
-        _intervalTitleLab.textColor = [UIColor whiteColor];
         _intervalTitleLab.font = [UIFont systemFontOfSize:13];
         _intervalTitleLab.text = @"距结算日";
         [_intervalTitleLab sizeToFit];
@@ -281,7 +283,6 @@ static const CGFloat kBottomViewHeight2 = 235;
     if (!_intervalLab) {
         _intervalLab = [[UILabel alloc] init];
         _intervalLab.backgroundColor = [UIColor clearColor];
-        _intervalLab.textColor = [UIColor whiteColor];
         _intervalLab.font = [UIFont systemFontOfSize:22];
     }
     return _intervalLab;
@@ -294,10 +295,9 @@ static const CGFloat kBottomViewHeight2 = 235;
         [path addLineToPoint:CGPointMake(0, 52)];
         
         _dashLine = [CAShapeLayer layer];
-        _dashLine.lineDashPattern = @[@4, @4];
+//        _dashLine.lineDashPattern = @[@4, @4];
         _dashLine.lineWidth = 1 / [UIScreen mainScreen].scale;
         _dashLine.fillColor = [UIColor whiteColor].CGColor;
-        _dashLine.strokeColor = [UIColor whiteColor].CGColor;
         _dashLine.path = path.CGPath;
     }
     return _dashLine;
@@ -318,6 +318,13 @@ static const CGFloat kBottomViewHeight2 = 235;
         _waveView.showText = YES;
     }
     return _waveView;
+}
+
+- (SSJBudgetProgressView *)progressView {
+    if (!_progressView) {
+        _progressView = [[SSJBudgetProgressView alloc] init];
+    }
+    return _progressView;
 }
 
 - (UILabel *)payMoneyLab {

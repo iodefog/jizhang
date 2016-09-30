@@ -48,9 +48,8 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryForBudgetCellItemListWithBillTypeMapping:(NSDictionary *)mapping
-                                              success:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
-                                              failure:(void (^)(NSError * _Nullable error))failure;
++ (void)queryForBudgetCellItemListWithSuccess:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
+                                      failure:(void (^)(NSError * _Nullable error))failure;
 
 /**
  *  查询当前有效的预算列表

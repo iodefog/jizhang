@@ -41,34 +41,17 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
     [super viewDidLoad];
     [self setupAddBarButtonItem];
     [self.view addSubview:self.tableView];
-    
-//    SSJBudgetProgressView *progressView = [[SSJBudgetProgressView alloc] initWithFrame:CGRectMake(40, 100, 240, 30)];
-//    [progressView setProgressColor:[UIColor orangeColor]];
-//    progressView.budget = 100;
-//    [self.view addSubview:progressView];
-//    
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        progressView.progress = 0.6;
-//    });
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [self.view ssj_showLoadingIndicator];
-    
-    [SSJBudgetDatabaseHelper queryBillTypeMapWithSuccess:^(NSDictionary * _Nonnull billTypeMap) {
-        [SSJBudgetDatabaseHelper queryForBudgetCellItemListWithBillTypeMapping:billTypeMap success:^(NSArray<SSJBudgetListCellItem *> * _Nonnull result) {
-            [self.view ssj_hideLoadingIndicator];
-            self.dataList = result;
-            [self.tableView reloadData];
-        } failure:^(NSError * _Nullable error) {
-            [self.view ssj_hideLoadingIndicator];
-            SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[error localizedDescription] action:action, nil];
-        }];
-    } failure:^(NSError * _Nonnull error) {
+    [SSJBudgetDatabaseHelper queryForBudgetCellItemListWithSuccess:^(NSArray<SSJBudgetListCellItem *> * _Nonnull result) {
+        [self.view ssj_hideLoadingIndicator];
+        self.dataList = result;
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[error localizedDescription] action:action, nil];
@@ -95,12 +78,11 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
     if (item.isMajor) {
         SSJBudgetListCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListCellId forIndexPath:indexPath];
         cell.cellItem = item;
-//        [cell layoutIfNeeded];
         return cell;
     } else {
         SSJBudgetListSecondaryCell *cell = [tableView dequeueReusableCellWithIdentifier:kBudgetListSecondaryCellId forIndexPath:indexPath];
         cell.cellItem = item;
-//        [cell layoutIfNeeded];
+        [cell layoutIfNeeded];
         return cell;
     }
 }

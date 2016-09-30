@@ -27,18 +27,37 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 
 @implementation SSJBudgetDatabaseHelper
 
-+ (void)queryForBudgetCellItemListWithBillTypeMapping:(NSDictionary *)mapping
-                                              success:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
-                                              failure:(void (^)(NSError * _Nullable error))failure {
++ (void)queryForBudgetCellItemListWithSuccess:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
+                                      failure:(void (^)(NSError * _Nullable error))failure {
     
     NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
     SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
     if (!userItem.currentBooksId.length) {
         userItem.currentBooksId = SSJUSERID();
     }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, userItem.currentBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userItem.userId];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableDictionary *mapping = [NSMutableDictionary dictionary];
+        while ([resultSet next]) {
+            NSString *billId = [resultSet stringForColumn:@"cbillid"];
+            NSString *billName = [resultSet stringForColumn:@"cname"];
+            NSString *billColor = [resultSet stringForColumn:@"ccolor"];
+            [mapping setObject:@{@"name":billName, @"color":billColor} forKey:billId];
+        }
+        [resultSet close];
+        
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", userItem.userId, currentDate, currentDate, userItem.currentBooksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -92,7 +111,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                             cellItem.rowHeight = 174;
                         }
                     }
-
+                    
                     break;
                     
                 case SSJBudgetPeriodTypeYear:
