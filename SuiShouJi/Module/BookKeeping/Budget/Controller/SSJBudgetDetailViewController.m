@@ -157,11 +157,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         self.budgetModel = result[SSJBudgetModelKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
         
-//        if (self.budgetModel) {
-//            self.periodType = self.budgetModel.type;
-//        }
-        
-        [SSJBudgetDatabaseHelper queryForBudgetIdListWithType:self.budgetModel.type success:^(NSDictionary * _Nonnull result) {
+        [SSJBudgetDatabaseHelper queryForBudgetIdListWithType:self.budgetModel.type billIds:self.budgetModel.billIds success:^(NSDictionary * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
             
             self.budgetIDs = result[SSJBudgetIDKey];

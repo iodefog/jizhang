@@ -66,6 +66,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 //  提醒百分比
 @property (nonatomic) double remindPercent;
 
+// 是否编辑
+@property (nonatomic) BOOL isEdit;
+
 @end
 
 @implementation SSJBudgetEditViewController
@@ -82,7 +85,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (self.model) {
+    _isEdit = self.model;
+    
+    if (_isEdit) {
         self.navigationItem.title = @"编辑预算";
         UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"budget_delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteBudgetAction)];
         self.navigationItem.rightBarButtonItem = deleteItem;
@@ -161,9 +166,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     NSString *title = [self.cellTitles ssj_objectAtIndexPath:indexPath];
     if ([title isEqualToString:kBudgetTypeTitle]) {
-        SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
-        billTypeSelectionController.budgetModel = _model;
-        [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+        if (_isEdit) {
+            [CDAutoHideMessageHUD showMessage:@"不支持编辑类别哦，请重新创建一条预算吧。"];
+        } else {
+            SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
+            billTypeSelectionController.budgetModel = _model;
+            [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+        }
     } else if ([title isEqualToString:kBudgetPeriodTitle]) {
         [self.periodSelectionView show];
     } else if ([title isEqualToString:kAccountDayTitle]) {
@@ -464,8 +473,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetTypeCell.subtitleLab.text = [self budgetTypeNames];
         budgetTypeCell.detailTextLabel.text = nil;
         [budgetTypeCell.detailTextLabel sizeToFit];
-        budgetTypeCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-        budgetTypeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        budgetTypeCell.selectionStyle = _isEdit ? UITableViewCellSelectionStyleNone : SSJ_CURRENT_THEME.cellSelectionStyle;
+        budgetTypeCell.customAccessoryType = _isEdit ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
 
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
