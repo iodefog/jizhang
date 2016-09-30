@@ -10,7 +10,7 @@
 
 @interface SSJSearchBar : UIView
 
-@property(nonatomic, strong) UITextField *searchTextInput;
+@property(nonatomic, strong) UISearchBar *searchTextInput;
 
 @property (nonatomic, copy) void (^cancelAction)();
 

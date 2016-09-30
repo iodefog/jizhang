@@ -20,7 +20,7 @@ static NSString *const kBillingChargeCellId = @"kBillingChargeCellId";
 static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 
 
-@interface SSJSearchingViewController ()<UITextFieldDelegate>
+@interface SSJSearchingViewController ()<UISearchBarDelegate>
 
 @property(nonatomic, strong) SSJSearchBar *searchBar;
 
@@ -82,19 +82,18 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    if (!textField.text.length) {
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    if (!searchBar.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入要查询的内容"];
-        return NO;
+        return;
     }
-    [SSJChargeSearchingStore searchForChargeListWithSearchContent:textField.text ListOrder:SSJChargeListOrderDateAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
+    [SSJChargeSearchingStore searchForChargeListWithSearchContent:searchBar.text ListOrder:SSJChargeListOrderDateAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
         self.model = SSJSearchResultModel;
         self.items = [NSArray arrayWithArray:result];
         [self.tableView reloadData];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
-    return YES;
 }
 
 #pragma mark - UITableViewDelegate
