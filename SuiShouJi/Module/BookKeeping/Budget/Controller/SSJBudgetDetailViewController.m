@@ -41,13 +41,17 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 //  没有消费记录的提示视图
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
+@property (nonatomic, strong) UIBarButtonItem *editItem;
+
 //  预算数据模型
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
-@property (nonatomic, strong) UIBarButtonItem *editItem;
+@property (nonatomic, strong) SSJBudgetDetailHeaderViewItem *headerItem;
 
 //  预算消费明细图表的数据源
 @property (nonatomic, strong) NSArray *circleItems;
+
+@property (nonatomic, strong) NSArray *cellItems;
 
 @property (nonatomic, strong) NSArray *budgetIDs;
 
@@ -124,7 +128,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
-        self.budgetModel = result[SSJBudgetModelKey];
+        self.budgetModel = result[SSJBudgetDetailHeaderViewItemKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
         [self updateView];
     } failure:^(NSError * _Nullable error) {
@@ -154,8 +158,11 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 - (void)loadAllData {
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:self.budgetId success:^(NSDictionary * _Nonnull result) {
+        
         self.budgetModel = result[SSJBudgetModelKey];
+        self.headerItem = result[SSJBudgetDetailHeaderViewItemKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
+        self.cellItems = result[SSJBudgetListCellItemKey];
         
         [SSJBudgetDatabaseHelper queryForBudgetIdListWithType:self.budgetModel.type billIds:self.budgetModel.billIds success:^(NSDictionary * _Nonnull result) {
             [self.view ssj_hideLoadingIndicator];
@@ -210,8 +217,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     }
     
     self.scrollView.hidden = NO;
-    self.headerView.isHistory = ![self.budgetModel.ID isEqualToString:self.budgetId];
-    [self.headerView setBudgetModel:self.budgetModel];
+    self.headerView.item = self.headerItem;
     
     self.scrollView.contentSize = CGSizeMake(self.view.width, kHeaderMargin + self.headerView.height + self.middleView.height + self.bottomView.height);
     self.headerView.top = kHeaderMargin;

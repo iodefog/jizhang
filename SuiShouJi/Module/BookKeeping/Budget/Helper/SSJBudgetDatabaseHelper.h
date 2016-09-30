@@ -18,8 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 // 预算模型key
 extern NSString *const SSJBudgetModelKey;
 
-// 预算图表模型key
+// 预算详情header视图模型key
+extern NSString *const SSJBudgetDetailHeaderViewItemKey;
+
+// 预算详情图表模型key
 extern NSString *const SSJBudgetCircleItemsKey;
+
+// 预算详情列表key
+extern NSString *const SSJBudgetListCellItemKey;
 
 // 月预算编号key
 extern NSString *const SSJBudgetIDKey;
@@ -66,7 +72,7 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *
  *  @param ID        预算编号
  *  @param success   查询成功的回调；
-                     参数result的结构：@{SSJBudgetModelKey:SSJBudgetModel实例, SSJBudgetCircleItemsKey:@[SSJPercentCircleViewItem实例]}
+                     参数result的结构：@{SSJBudgetDetailHeaderViewItemKey:SSJBudgetDetailHeaderViewItem实例, SSJBudgetCircleItemsKey:@[SSJPercentCircleViewItem实例]}
  *  @param failure   查询失败的回调
  */
 + (void)queryForBudgetDetailWithID:(NSString *)ID

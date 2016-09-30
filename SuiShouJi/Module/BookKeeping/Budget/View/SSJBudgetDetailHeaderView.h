@@ -7,14 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class SSJBudgetModel;
+#import "SSJBudgetDetailHeaderViewItem.h"
 
 @interface SSJBudgetDetailHeaderView : UIView
 
-@property (nonatomic) BOOL isHistory;
-
-- (void)setBudgetModel:(SSJBudgetModel *)model;
+@property (nonatomic, strong) SSJBudgetDetailHeaderViewItem *item;
 
 - (void)updateAppearance;
 

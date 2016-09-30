@@ -13,16 +13,22 @@
 
 static const CGFloat kTopViewHeight = 110;
 
-static const CGFloat kBottomViewHeight1 = 265;
+static const CGFloat kCurrentMajorMiddleViewHeight = 265;
 
-static const CGFloat kBottomViewHeight2 = 235;
+static const CGFloat kHistoryMajorMiddleViewHeight = 235;
+
+static const CGFloat kSecondaryMiddleViewHeight = 188;
+
+static const CGFloat kBottomViewHeight = 398;
 
 @interface SSJBudgetDetailHeaderView ()
 
 //  包涵本周期预算金额、据结算日天数的视图
 @property (nonatomic, strong) UIView *topView;
 
-//  包涵waveView、payMoneyLab、estimateMoneyLab、bottomLab的视图
+//  包涵waveView、payMoneyLab、estimateMoneyLab、payOrOverrunLab的视图
+@property (nonatomic, strong) UIView *middleView;
+
 @property (nonatomic, strong) UIView *bottomView;
 
 //  顶部的本月预算标题
@@ -54,7 +60,7 @@ static const CGFloat kBottomViewHeight2 = 235;
 @property (nonatomic, strong) UILabel *estimateMoneyLab;
 
 //  每天可以花费金额、超支金额
-@property (nonatomic, strong) UILabel *bottomLab;
+@property (nonatomic, strong) UILabel *payOrOverrunLab;
 
 //  时间格式
 @property (nonatomic, strong) NSDateFormatter *formatter;
@@ -70,7 +76,7 @@ static const CGFloat kBottomViewHeight2 = 235;
         self.formatter.dateFormat = @"yyyy-MM-dd";
         
         [self addSubview:self.topView];
-        [self addSubview:self.bottomView];
+        [self addSubview:self.middleView];
         self.backgroundColor = [UIColor clearColor];
         [self updateAppearance];
     }
@@ -79,7 +85,13 @@ static const CGFloat kBottomViewHeight2 = 235;
 
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat width = CGRectGetWidth([UIScreen mainScreen].bounds);
-    CGFloat height = self.isHistory ? kBottomViewHeight2 : kTopViewHeight + kBottomViewHeight1;
+    CGFloat height = 0;
+    
+    if (_item.isHistory) {
+        height = _item.isMajor ? (kHistoryMajorMiddleViewHeight + kBottomViewHeight) : (kSecondaryMiddleViewHeight + kBottomViewHeight);
+    } else {
+        height = _item.isMajor ? (kCurrentMajorMiddleViewHeight + kBottomViewHeight) : (kSecondaryMiddleViewHeight + kBottomViewHeight);
+    }
     return CGSizeMake(width, height);
 }
 
@@ -89,8 +101,17 @@ static const CGFloat kBottomViewHeight2 = 235;
     self.waveView.top = 15;
     self.waveView.centerX = self.width * 0.5;
     
-    if (self.isHistory) {
-        self.bottomView.frame = CGRectMake(0, 0, self.width, kBottomViewHeight2);
+    [self.budgetMoneyTitleLab sizeToFit];
+    [self.budgetMoneyLab sizeToFit];
+    [self.intervalTitleLab sizeToFit];
+    [self.intervalLab sizeToFit];
+    [self.payMoneyLab sizeToFit];
+    [self.historyPaymentLab sizeToFit];
+    [self.estimateMoneyLab sizeToFit];
+    [self.payOrOverrunLab sizeToFit];
+    
+    if (_item.isHistory) {
+        self.middleView.frame = CGRectMake(0, 0, self.width, kHistoryMajorMiddleViewHeight);
         self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
         self.estimateMoneyLab.width = MIN(self.estimateMoneyLab.width, (self.width - 80) * 0.5);
         self.estimateMoneyLab.right = self.width - 10;
@@ -99,7 +120,7 @@ static const CGFloat kBottomViewHeight2 = 235;
     } else {
         self.topView.frame = CGRectMake(0, 0, self.width, kTopViewHeight);
         [self.topView ssj_relayoutBorder];
-        self.bottomView.frame = CGRectMake(0, self.topView.bottom, self.width, kBottomViewHeight1);
+        self.middleView.frame = CGRectMake(0, self.topView.bottom, self.width, kCurrentMajorMiddleViewHeight);
         
         CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
         
@@ -113,98 +134,123 @@ static const CGFloat kBottomViewHeight2 = 235;
         self.intervalTitleLab.centerX = self.intervalLab.centerX = self.width * 0.75;
         
         self.payMoneyLab.width = MIN(self.payMoneyLab.width, self.width - 20);
-        self.bottomLab.width = MIN(self.bottomLab.width, self.width - 20);
+        self.payOrOverrunLab.width = MIN(self.payOrOverrunLab.width, self.width - 20);
         self.payMoneyLab.top = self.waveView.bottom + 15;
-        self.bottomLab.top = self.payMoneyLab.bottom + 13;
-        self.payMoneyLab.centerX = self.bottomLab.centerX = self.width * 0.5;
+        self.payOrOverrunLab.top = self.payMoneyLab.bottom + 13;
+        self.payMoneyLab.centerX = self.payOrOverrunLab.centerX = self.width * 0.5;
         
         self.dashLine.left = self.topView.width * 0.5;
         self.dashLine.top = 30;
     }
 }
 
-- (void)setIsHistory:(BOOL)isHistory {
-    _isHistory = isHistory;
+- (void)updateSubviewHidden {
+    self.topView.hidden = _item.isHistory;
+    self.payMoneyLab.hidden = _item.isHistory;
+    self.estimateMoneyLab.hidden = !_item.isHistory;
+    self.historyPaymentLab.hidden = !_item.isHistory;
+    self.payOrOverrunLab.hidden = _item.isHistory;
+}
+
+- (void)setItem:(SSJBudgetDetailHeaderViewItem *)item {
+    _item = item;
+    [self setNeedsLayout];
     
-    self.topView.hidden = isHistory;
-    self.payMoneyLab.hidden = isHistory;
-    self.estimateMoneyLab.hidden = !isHistory;
-    self.historyPaymentLab.hidden = !isHistory;
-    self.bottomLab.hidden = isHistory;
+    self.budgetMoneyTitleLab.text = item.budgetMoneyTitle;
+    self.budgetMoneyLab.text = item.budgetMoneyValue;
     
+    self.intervalTitleLab.text = item.intervalTitle;
+    self.intervalLab.text = item.intervalValue;
+    
+    self.waveView.percent = item.waveViewPercent;
+    self.waveView.money = item.waveViewMoney;
+    
+    self.progressView.progress = item.progressViewPercent;
+    self.progressView.budget = item.progressViewMoney;
+    [self.progressView setProgressColor:[UIColor ssj_colorWithHex:item.progressColorValue]];
+    
+    self.payMoneyLab.text = item.payment;
+    
+    self.historyPaymentLab.attributedText = item.historyPayment;
+    self.estimateMoneyLab.attributedText = item.historyBudget;
+    self.payOrOverrunLab.attributedText = item.payOrOverrun;
+    
+    [self updateAppearance];
+    [self updateSubviewHidden];
     [self sizeToFit];
 }
 
-- (void)setBudgetModel:(SSJBudgetModel *)model {
-    [self setNeedsLayout];
-    
-    NSString *budgetType = @"";
-    
-    switch (model.type) {
-        case SSJBudgetPeriodTypeWeek:
-            budgetType = @"周";
-            self.budgetMoneyTitleLab.text = @"周预算金额";
-            break;
-            
-        case SSJBudgetPeriodTypeMonth:
-            budgetType = @"月";
-            self.budgetMoneyTitleLab.text = @"月预算金额";
-            break;
-            
-        case SSJBudgetPeriodTypeYear:
-            budgetType = @"年";
-            
-            break;
-    }
-    
-    self.budgetMoneyTitleLab.text = [NSString stringWithFormat:@"%@预算金额", budgetType];
-    [self.budgetMoneyTitleLab sizeToFit];
-    
-    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", model.budgetMoney];
-    [self.budgetMoneyLab sizeToFit];
-    
-    NSString *dateString = [self.formatter stringFromDate:[NSDate date]];
-    NSDate *currentDate = [self.formatter dateFromString:dateString];
-    NSDate *endDate = [self.formatter dateFromString:model.endDate];
-    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60);
-    self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
-    [self.intervalLab sizeToFit];
-    
-    self.waveView.percent = (model.payMoney / model.budgetMoney);
-    self.waveView.money = model.budgetMoney - model.payMoney;
-    
-    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
-    [self.payMoneyLab sizeToFit];
-    
-    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", model.payMoney]];
-    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
-                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
-    self.historyPaymentLab.attributedText = paymentStr;
-    [self.historyPaymentLab sizeToFit];
-    
-    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算：%.2f", budgetType, model.budgetMoney]];
-    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
-                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(4, budgetStr.length - 4)];
-    self.estimateMoneyLab.attributedText = budgetStr;
-    [self.estimateMoneyLab sizeToFit];
-    
-    double balance = model.budgetMoney - model.payMoney;
-    if (balance >= 0) {
-        NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
-        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"距结算日前，您每天还可花%@元哦", money]];
-        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
-        self.bottomLab.attributedText = text;
-        [self.bottomLab sizeToFit];
-    } else {
-        NSString *money = [NSString stringWithFormat:@"%.2f", ABS(balance)];
-        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您目前已超支%@元喽", money]];
-        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
-        self.bottomLab.attributedText = text;
-        [self.bottomLab sizeToFit];
-    }
-    
-    [self updateAppearance];
-}
+//- (void)setBudgetModel:(SSJBudgetModel *)budgetModel {
+//    [self setNeedsLayout];
+//    _budgetModel = budgetModel;
+//    
+//    NSString *budgetType = @"";
+//    
+//    switch (_budgetModel.type) {
+//        case SSJBudgetPeriodTypeWeek:
+//            budgetType = @"周";
+//            self.budgetMoneyTitleLab.text = @"周预算金额";
+//            break;
+//            
+//        case SSJBudgetPeriodTypeMonth:
+//            budgetType = @"月";
+//            self.budgetMoneyTitleLab.text = @"月预算金额";
+//            break;
+//            
+//        case SSJBudgetPeriodTypeYear:
+//            budgetType = @"年";
+//            
+//            break;
+//    }
+//    
+//    self.budgetMoneyTitleLab.text = [NSString stringWithFormat:@"%@预算", budgetType];
+//    [self.budgetMoneyTitleLab sizeToFit];
+//    
+//    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", _budgetModel.budgetMoney];
+//    [self.budgetMoneyLab sizeToFit];
+//    
+//    NSString *dateString = [self.formatter stringFromDate:[NSDate date]];
+//    NSDate *currentDate = [self.formatter dateFromString:dateString];
+//    NSDate *endDate = [self.formatter dateFromString:_budgetModel.endDate];
+//    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60);
+//    self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
+//    [self.intervalLab sizeToFit];
+//    
+//    self.waveView.percent = (_budgetModel.payMoney / _budgetModel.budgetMoney);
+//    self.waveView.money = _budgetModel.budgetMoney - _budgetModel.payMoney;
+//    
+//    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", _budgetModel.payMoney];
+//    [self.payMoneyLab sizeToFit];
+//    
+//    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", _budgetModel.payMoney]];
+//    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
+//                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
+//    self.historyPaymentLab.attributedText = paymentStr;
+//    [self.historyPaymentLab sizeToFit];
+//    
+//    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算：%.2f", budgetType, _budgetModel.budgetMoney]];
+//    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
+//                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(4, budgetStr.length - 4)];
+//    self.estimateMoneyLab.attributedText = budgetStr;
+//    [self.estimateMoneyLab sizeToFit];
+//    
+//    double balance = _budgetModel.budgetMoney - _budgetModel.payMoney;
+//    if (balance >= 0) {
+//        NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
+//        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"距结算日前，您每天还可花%@元哦", money]];
+//        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
+//        self.payOrOverrunLab.attributedText = text;
+//        [self.payOrOverrunLab sizeToFit];
+//    } else {
+//        NSString *money = [NSString stringWithFormat:@"%.2f", ABS(balance)];
+//        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您目前已超支%@元喽", money]];
+//        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
+//        self.payOrOverrunLab.attributedText = text;
+//        [self.payOrOverrunLab sizeToFit];
+//    }
+//    
+//    [self updateAppearance];
+//}
 
 - (void)updateAppearance {
     _budgetMoneyTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
@@ -215,9 +261,9 @@ static const CGFloat kBottomViewHeight2 = 235;
     _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _bottomLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _topView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _payOrOverrunLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
     [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
@@ -237,14 +283,23 @@ static const CGFloat kBottomViewHeight2 = 235;
     return _topView;
 }
 
+- (UIView *)middleView {
+    if (!_middleView) {
+        _middleView = [[UIView alloc] init];
+        [_middleView addSubview:self.waveView];
+        [_middleView addSubview:self.progressView];
+        [_middleView addSubview:self.payMoneyLab];
+        [_middleView addSubview:self.payOrOverrunLab];
+        [_middleView addSubview:self.historyPaymentLab];
+        [_middleView addSubview:self.estimateMoneyLab];
+    }
+    return _middleView;
+}
+
 - (UIView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[UIView alloc] init];
-        [_bottomView addSubview:self.waveView];
-        [_bottomView addSubview:self.payMoneyLab];
-        [_bottomView addSubview:self.bottomLab];
-        [_bottomView addSubview:self.historyPaymentLab];
-        [_bottomView addSubview:self.estimateMoneyLab];
+        
     }
     return _bottomView;
 }
@@ -358,13 +413,13 @@ static const CGFloat kBottomViewHeight2 = 235;
     return _estimateMoneyLab;
 }
 
-- (UILabel *)bottomLab {
-    if (!_bottomLab) {
-        _bottomLab = [[UILabel alloc] init];
-        _bottomLab.backgroundColor = [UIColor clearColor];
-        _bottomLab.font = [UIFont systemFontOfSize:13];
+- (UILabel *)payOrOverrunLab {
+    if (!_payOrOverrunLab) {
+        _payOrOverrunLab = [[UILabel alloc] init];
+        _payOrOverrunLab.backgroundColor = [UIColor clearColor];
+        _payOrOverrunLab.font = [UIFont systemFontOfSize:13];
     }
-    return _bottomLab;
+    return _payOrOverrunLab;
 }
 
 @end

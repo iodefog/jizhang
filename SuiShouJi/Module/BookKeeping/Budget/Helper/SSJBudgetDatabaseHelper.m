@@ -14,9 +14,13 @@
 #import "SSJUserTableManager.h"
 #import "SSJBudgetBillTypeSelectionCellItem.h"
 #import "SSJBudgetListCellItem.h"
+#import "SSJReportFormsItem.h"
+#import "SSJBudgetDetailHeaderViewItem.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
+NSString *const SSJBudgetDetailHeaderViewItemKey = @"SSJBudgetDetailHeaderViewItemKey";
 NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
+NSString *const SSJBudgetListCellItemKey = @"SSJBudgetListCellItemKey";
 NSString *const SSJBudgetIDKey = @"SSJBudgetIDKey";
 NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
 
@@ -246,6 +250,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)queryForBudgetDetailWithID:(NSString *)ID success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
+    
     if (!ID || !ID.length) {
         SSJPRINT(@">>> SSJ warning:budget is nil or empty");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"budget is nil or empty"}];
@@ -258,7 +263,28 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
+        
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userid];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableDictionary *mapping = [NSMutableDictionary dictionary];
+        while ([resultSet next]) {
+            NSString *billId = [resultSet stringForColumn:@"cbillid"];
+            NSString *billName = [resultSet stringForColumn:@"cname"];
+            NSString *billColor = [resultSet stringForColumn:@"ccolor"];
+            [mapping setObject:@{SSJBudgetDetailBillInfoNameKey:billName,
+                                 SSJBudgetDetailBillInfoColorKey:billColor} forKey:billId];
+        }
+        [resultSet close];
+        
+        resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -270,6 +296,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         while ([resultSet next]) {
             budgetModel = [self budgetModelWithResultSet:resultSet inDatabase:db];
         }
+        [resultSet close];
+        
+        SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
         NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.itype = 1 and b.istate <> 2 group by a.ibillid"];
@@ -287,6 +316,8 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         double amount = 0;
         NSMutableArray *circleItemArr = [NSMutableArray array];
         NSMutableArray *moneyArr = [NSMutableArray array];
+        NSMutableArray *listItem = [NSMutableArray array];
+        
         while ([resultSet next]) {
             double money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             double scale = money / budgetModel.payMoney;
@@ -301,7 +332,15 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 circleItem.imageBorderShowed = YES;
                 [circleItemArr addObject:circleItem];
             }
+            
+            SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.imageName = [resultSet stringForColumn:@"ccoin"];
+            item.name = [resultSet stringForColumn:@"ccoin"];
+            item.colorValue = [resultSet stringForColumn:@"ccolor"];
+            item.money = money;
+            [listItem addObject:item];
         }
+        [resultSet close];
         
         for (int i = 0; i < circleItemArr.count; i ++) {
             SSJPercentCircleViewItem *circleItem = circleItemArr[i];
@@ -309,12 +348,21 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:2];
+        
         if (budgetModel) {
             [result setObject:budgetModel forKey:SSJBudgetModelKey];
         }
         
+        if (headerItem) {
+            [result setObject:headerItem forKey:SSJBudgetDetailHeaderViewItemKey];
+        }
+        
         if (circleItemArr) {
             [result setObject:circleItemArr forKey:SSJBudgetCircleItemsKey];
+        }
+        
+        if (listItem) {
+            [result setObject:listItem forKey:SSJBudgetListCellItemKey];
         }
         
         if (success) {
