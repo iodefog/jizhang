@@ -29,6 +29,8 @@
 
 @property (nonatomic) NSUInteger animateCounter;
 
+@property (nonatomic) BOOL reloadFailedCauseByEmptyFrame;
+
 @end
 
 @implementation SSJPercentCircleView
@@ -61,6 +63,10 @@
 - (void)layoutSubviews {
     self.contentView.frame = self.bounds;
     [self updateCircleFrame];
+    
+    if (_reloadFailedCauseByEmptyFrame) {
+        [self reloadData];
+    }
 }
 
 - (void)reloadData {
@@ -68,11 +74,17 @@
     if (!self.dataSource
         || ![self.dataSource respondsToSelector:@selector(numberOfComponentsInPercentCircle:)]
         || ![self.dataSource respondsToSelector:@selector(percentCircle:itemForComponentAtIndex:)]
-        || self.circleThickness <= 0
-        || CGRectIsEmpty(self.bounds)
-        || CGRectIsEmpty(self.circleFrame)) {
+        || self.circleThickness <= 0) {
         return;
     }
+    
+    if (CGRectIsEmpty(self.bounds)
+        || CGRectIsEmpty(self.circleFrame)) {
+        _reloadFailedCauseByEmptyFrame = YES;
+        return;
+    }
+    
+    _reloadFailedCauseByEmptyFrame = NO;
     
     self.skinView.hidden = YES;
     

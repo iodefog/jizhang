@@ -21,22 +21,15 @@ static const CGFloat kHeaderMargin = 8;
 
 static NSString *const kDateFomat = @"yyyy-MM-dd";
 
-@interface SSJBudgetDetailViewController () <SSJReportFormsPercentCircleDataSource>
+@interface SSJBudgetDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
 //  导航栏标题视图
 @property (nonatomic, strong) SSJBudgetDetailPeriodSwitchControl *titleView;
 
-//  底层滚动视图
-@property (nonatomic, strong) UIScrollView *scrollView;
-
 //  包含本月预算、距结算日、已花、超支、波浪图表的视图
 @property (nonatomic, strong) SSJBudgetDetailHeaderView *headerView;
 
-//  预算消费明细的标题视图
-@property (nonatomic, strong) SSJBudgetDetailMiddleTitleView *middleView;
-
-//  包含预算消费明细图表、编辑按钮
-@property (nonatomic, strong) SSJBudgetDetailBottomView *bottomView;
+@property (nonatomic, strong) UITableView *tableView;
 
 //  没有消费记录的提示视图
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
@@ -77,11 +70,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     
     self.navigationItem.titleView = self.titleView;
     self.navigationItem.rightBarButtonItem = self.editItem;
-    
-    [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.headerView];
-    [self.scrollView addSubview:self.middleView];
-    [self.scrollView addSubview:self.bottomView];
+    [self.view addSubview:self.tableView];
+//    self.tableView.tableHeaderView = self.headerView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -93,18 +83,19 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     [super updateAppearanceAfterThemeChanged];
     [self.titleView updateAppearance];
     [self.headerView updateAppearance];
-    [self.middleView updateAppearance];
-    self.bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
-#pragma mark - SSJReportFormsPercentCircleDataSource
-- (NSUInteger)numberOfComponentsInPercentCircle:(SSJPercentCircleView *)circle {
-    return self.circleItems.count;
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.cellItems.count;
 }
 
-- (SSJPercentCircleViewItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index {
-    return [self.circleItems ssj_safeObjectAtIndex:index];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
 }
+
+#pragma mark - UITableViewDelegate
 
 #pragma mark - Event
 - (void)editButtonAction {
@@ -128,8 +119,10 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     [self.view ssj_showLoadingIndicator];
     [SSJBudgetDatabaseHelper queryForBudgetDetailWithID:budgetId success:^(NSDictionary * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
-        self.budgetModel = result[SSJBudgetDetailHeaderViewItemKey];
+        self.budgetModel = result[SSJBudgetModelKey];
+        self.headerItem = result[SSJBudgetDetailHeaderViewItemKey];
         self.circleItems = result[SSJBudgetCircleItemsKey];
+        self.cellItems = result[SSJBudgetListCellItemKey];
         [self updateView];
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
@@ -210,33 +203,17 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     }
     
     if (!self.budgetModel) {
-        self.scrollView.hidden = YES;
+        self.tableView.hidden = YES;
         self.noDataRemindView.title = [NSString stringWithFormat:@"您在这个%@没有设置预算哦", tStr];
         [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         return;
     }
     
-    self.scrollView.hidden = NO;
+    self.tableView.hidden = NO;
     self.headerView.item = self.headerItem;
-    
-    self.scrollView.contentSize = CGSizeMake(self.view.width, kHeaderMargin + self.headerView.height + self.middleView.height + self.bottomView.height);
-    self.headerView.top = kHeaderMargin;
-    self.middleView.top = self.headerView.bottom;
-    self.bottomView.top = self.middleView.bottom;
-    
-    [self.bottomView.circleView reloadData];
-//    self.bottomView.button.hidden = ![self.budgetModel.ID isEqualToString:self.budgetId];
-    
-    if (self.circleItems.count > 0) {
-        [self.view ssj_hideWatermark:YES];
-        [self.bottomView.circleView ssj_hideWatermark:YES];
-    } else {
-        self.noDataRemindView.title = @"NO，小主居然忘记记账了！";
-        [self.bottomView.circleView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
-    }
-    
-    [self.middleView setTitle:[NSString stringWithFormat:@"%@预算消费明细", tStr]];
-//    [self.middleView setPeriod:[NSString stringWithFormat:@"%@——%@", beginDate, endDate]];
+    self.headerView.circleItems = self.circleItems;
+    self.tableView.tableHeaderView = nil;
+    self.tableView.tableHeaderView = self.headerView;
 }
 
 #pragma mark - Getter
@@ -248,13 +225,17 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     return _titleView;
 }
 
-- (UIScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM)];
-        _scrollView.backgroundColor = [UIColor clearColor];
-        _scrollView.hidden = YES;
+- (UITableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.rowHeight = 54;
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.separatorInset = UIEdgeInsetsZero;
+        _tableView.tableFooterView = [[UIView alloc] init];
     }
-    return _scrollView;
+    return _tableView;
 }
 
 - (SSJBudgetDetailHeaderView *)headerView {
@@ -262,23 +243,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         _headerView = [[SSJBudgetDetailHeaderView alloc] init];
     }
     return _headerView;
-}
-
-- (SSJBudgetDetailMiddleTitleView *)middleView {
-    if (!_middleView) {
-        _middleView = [[SSJBudgetDetailMiddleTitleView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 40)];
-    }
-    return _middleView;
-}
-
-- (SSJBudgetDetailBottomView *)bottomView {
-    if (!_bottomView) {
-        _bottomView = [[SSJBudgetDetailBottomView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 340)];
-        _bottomView.circleView.dataSource = self;
-        _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-//        [_bottomView.button addTarget:self action:@selector(editButtonAction)];
-    }
-    return _bottomView;
 }
 
 - (UIBarButtonItem *)editItem {

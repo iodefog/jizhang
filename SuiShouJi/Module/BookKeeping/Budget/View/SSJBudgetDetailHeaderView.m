@@ -9,7 +9,11 @@
 #import "SSJBudgetDetailHeaderView.h"
 #import "SSJBudgetWaveWaterView.h"
 #import "SSJBudgetProgressView.h"
+#import "SSJPercentCircleView.h"
+#import "SSJBudgetNodataRemindView.h"
 #import "SSJBudgetModel.h"
+
+static const CGFloat kTopGap = 8;
 
 static const CGFloat kTopViewHeight = 110;
 
@@ -21,7 +25,7 @@ static const CGFloat kSecondaryMiddleViewHeight = 188;
 
 static const CGFloat kBottomViewHeight = 398;
 
-@interface SSJBudgetDetailHeaderView ()
+@interface SSJBudgetDetailHeaderView () <SSJReportFormsPercentCircleDataSource>
 
 //  包涵本周期预算金额、据结算日天数的视图
 @property (nonatomic, strong) UIView *topView;
@@ -62,22 +66,24 @@ static const CGFloat kBottomViewHeight = 398;
 //  每天可以花费金额、超支金额
 @property (nonatomic, strong) UILabel *payOrOverrunLab;
 
-//  时间格式
-@property (nonatomic, strong) NSDateFormatter *formatter;
+//  预算类别
+@property (nonatomic, strong) UILabel *billTypeLab;
+
+@property (nonatomic, strong) SSJPercentCircleView *circleView;
+
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @end
 
 @implementation SSJBudgetDetailHeaderView
 
+#pragma mark -
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         
-        self.formatter = [[NSDateFormatter alloc] init];
-        self.formatter.dateFormat = @"yyyy-MM-dd";
-        
         [self addSubview:self.topView];
         [self addSubview:self.middleView];
-        self.backgroundColor = [UIColor clearColor];
+        [self addSubview:self.bottomView];
         [self updateAppearance];
     }
     return self;
@@ -88,9 +94,9 @@ static const CGFloat kBottomViewHeight = 398;
     CGFloat height = 0;
     
     if (_item.isHistory) {
-        height = _item.isMajor ? (kHistoryMajorMiddleViewHeight + kBottomViewHeight) : (kSecondaryMiddleViewHeight + kBottomViewHeight);
+        height = _item.isMajor ? (kTopGap + kHistoryMajorMiddleViewHeight + kBottomViewHeight) : (kTopGap + kSecondaryMiddleViewHeight + kBottomViewHeight);
     } else {
-        height = _item.isMajor ? (kCurrentMajorMiddleViewHeight + kBottomViewHeight) : (kSecondaryMiddleViewHeight + kBottomViewHeight);
+        height = _item.isMajor ? (kTopGap + kTopViewHeight + kCurrentMajorMiddleViewHeight + kBottomViewHeight) : (kTopGap + kTopViewHeight + kSecondaryMiddleViewHeight + kBottomViewHeight);
     }
     return CGSizeMake(width, height);
 }
@@ -98,8 +104,11 @@ static const CGFloat kBottomViewHeight = 398;
 - (void)layoutSubviews {
     CGFloat gap = 10;
     
+    UIView *tmpView = _item.isMajor ? self.waveView : self.progressView;
     self.waveView.top = 15;
     self.waveView.centerX = self.width * 0.5;
+    self.progressView.top = 30;
+    self.progressView.centerX = self.width * 0.5;
     
     [self.budgetMoneyTitleLab sizeToFit];
     [self.budgetMoneyLab sizeToFit];
@@ -109,18 +118,26 @@ static const CGFloat kBottomViewHeight = 398;
     [self.historyPaymentLab sizeToFit];
     [self.estimateMoneyLab sizeToFit];
     [self.payOrOverrunLab sizeToFit];
+    [self.billTypeLab sizeToFit];
     
     if (_item.isHistory) {
-        self.middleView.frame = CGRectMake(0, 0, self.width, kHistoryMajorMiddleViewHeight);
-        self.estimateMoneyLab.top = self.historyPaymentLab.top = self.waveView.bottom + 15;
+        
+        self.middleView.frame = CGRectMake(0, kTopGap, self.width, kHistoryMajorMiddleViewHeight);
+        [self.middleView ssj_relayoutBorder];
+        
+        self.estimateMoneyLab.top = self.historyPaymentLab.top = tmpView.bottom + 15;
         self.estimateMoneyLab.width = MIN(self.estimateMoneyLab.width, (self.width - 80) * 0.5);
         self.estimateMoneyLab.right = self.width - 10;
         self.historyPaymentLab.width = MIN(self.historyPaymentLab.width, (self.width - 80) * 0.5);
         self.historyPaymentLab.left = 10;
+        
     } else {
-        self.topView.frame = CGRectMake(0, 0, self.width, kTopViewHeight);
+        
+        self.topView.frame = CGRectMake(0, kTopGap, self.width, kTopViewHeight);
         [self.topView ssj_relayoutBorder];
+        
         self.middleView.frame = CGRectMake(0, self.topView.bottom, self.width, kCurrentMajorMiddleViewHeight);
+        [self.middleView ssj_relayoutBorder];
         
         CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
         
@@ -135,15 +152,39 @@ static const CGFloat kBottomViewHeight = 398;
         
         self.payMoneyLab.width = MIN(self.payMoneyLab.width, self.width - 20);
         self.payOrOverrunLab.width = MIN(self.payOrOverrunLab.width, self.width - 20);
-        self.payMoneyLab.top = self.waveView.bottom + 15;
+        self.payMoneyLab.top = tmpView.bottom + 15;
         self.payOrOverrunLab.top = self.payMoneyLab.bottom + 13;
         self.payMoneyLab.centerX = self.payOrOverrunLab.centerX = self.width * 0.5;
         
         self.dashLine.left = self.topView.width * 0.5;
         self.dashLine.top = 30;
     }
+    
+    self.bottomView.frame = CGRectMake(0, self.middleView.bottom, self.width, kBottomViewHeight);
+    [self.bottomView ssj_relayoutBorder];
+    [self.bottomView ssj_relayoutWatermark];
+    
+    self.billTypeLab.top = 26;
+    self.billTypeLab.width = MIN(self.billTypeLab.width, self.bottomView.width - 48);
+    if (_item.isMajor) {
+        self.billTypeLab.centerX = self.bottomView.width * 0.5;
+    } else {
+        self.billTypeLab.left = 24;
+    }
+    
+    self.circleView.frame = CGRectMake(0, 70, self.width, 320);
 }
 
+#pragma mark - SSJReportFormsPercentCircleDataSource
+- (NSUInteger)numberOfComponentsInPercentCircle:(SSJPercentCircleView *)circle {
+    return self.circleItems.count;
+}
+
+- (SSJPercentCircleViewItem *)percentCircle:(SSJPercentCircleView *)circle itemForComponentAtIndex:(NSUInteger)index {
+    return [self.circleItems ssj_safeObjectAtIndex:index];
+}
+
+#pragma mark - Private
 - (void)updateSubviewHidden {
     self.topView.hidden = _item.isHistory;
     self.payMoneyLab.hidden = _item.isHistory;
@@ -152,8 +193,10 @@ static const CGFloat kBottomViewHeight = 398;
     self.payOrOverrunLab.hidden = _item.isHistory;
 }
 
+#pragma mark - Public
 - (void)setItem:(SSJBudgetDetailHeaderViewItem *)item {
     _item = item;
+    [self sizeToFit];
     [self setNeedsLayout];
     
     self.budgetMoneyTitleLab.text = item.budgetMoneyTitle;
@@ -174,10 +217,48 @@ static const CGFloat kBottomViewHeight = 398;
     self.historyPaymentLab.attributedText = item.historyPayment;
     self.estimateMoneyLab.attributedText = item.historyBudget;
     self.payOrOverrunLab.attributedText = item.payOrOverrun;
+    self.billTypeLab.text = item.billTypeNames;
     
     [self updateAppearance];
     [self updateSubviewHidden];
-    [self sizeToFit];
+}
+
+- (void)setCircleItems:(NSArray<SSJPercentCircleViewItem *> *)circleItems {
+    if (![_circleItems isEqualToArray:circleItems]) {
+        _circleItems = circleItems;
+        [self.circleView reloadData];
+        
+        if (self.circleItems.count > 0) {
+            self.billTypeLab.hidden = NO;
+            [self.bottomView ssj_hideWatermark:YES];
+        } else {
+            self.billTypeLab.hidden = YES;
+            [self.bottomView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
+        }
+    }
+}
+
+- (void)updateAppearance {
+    _budgetMoneyTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _budgetMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _intervalTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _intervalLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
+    _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _payOrOverrunLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _billTypeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    
+    _topView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _middleView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    _bottomView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    
+    [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_middleView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    
+    _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
 }
 
 //- (void)setBudgetModel:(SSJBudgetModel *)budgetModel {
@@ -252,23 +333,7 @@ static const CGFloat kBottomViewHeight = 398;
 //    [self updateAppearance];
 //}
 
-- (void)updateAppearance {
-    _budgetMoneyTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _budgetMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    _intervalTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _intervalLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    
-    _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    _payOrOverrunLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    
-    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    
-    [_topView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
-}
-
+#pragma mark - Getter
 - (UIView *)topView {
     if (!_topView) {
         _topView = [[UIView alloc] init];
@@ -278,7 +343,7 @@ static const CGFloat kBottomViewHeight = 398;
         [_topView addSubview:self.intervalLab];
         [_topView.layer addSublayer:self.dashLine];
         [_topView ssj_setBorderWidth:1];
-        [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_topView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
     }
     return _topView;
 }
@@ -292,6 +357,9 @@ static const CGFloat kBottomViewHeight = 398;
         [_middleView addSubview:self.payOrOverrunLab];
         [_middleView addSubview:self.historyPaymentLab];
         [_middleView addSubview:self.estimateMoneyLab];
+        [_middleView ssj_setBorderInsets:UIEdgeInsetsMake(0, 16, 0, 16)];
+        [_middleView ssj_setBorderWidth:1];
+        [_middleView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _middleView;
 }
@@ -299,7 +367,10 @@ static const CGFloat kBottomViewHeight = 398;
 - (UIView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[UIView alloc] init];
-        
+        [_bottomView addSubview:self.billTypeLab];
+        [_bottomView addSubview:self.circleView];
+        [_bottomView ssj_setBorderWidth:1];
+        [_bottomView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _bottomView;
 }
@@ -386,7 +457,7 @@ static const CGFloat kBottomViewHeight = 398;
     if (!_payMoneyLab) {
         _payMoneyLab = [[UILabel alloc] init];
         _payMoneyLab.backgroundColor = [UIColor clearColor];
-        _payMoneyLab.font = [UIFont systemFontOfSize:20];
+        _payMoneyLab.font = [UIFont systemFontOfSize:18];
         _payMoneyLab.adjustsFontSizeToFitWidth = YES;
     }
     return _payMoneyLab;
@@ -420,6 +491,36 @@ static const CGFloat kBottomViewHeight = 398;
         _payOrOverrunLab.font = [UIFont systemFontOfSize:13];
     }
     return _payOrOverrunLab;
+}
+
+- (UILabel *)billTypeLab {
+    if (!_billTypeLab) {
+        _billTypeLab = [[UILabel alloc] init];
+        _billTypeLab.backgroundColor = [UIColor clearColor];
+        _billTypeLab.font = [UIFont systemFontOfSize:18];
+    }
+    return _billTypeLab;
+}
+
+- (SSJPercentCircleView *)circleView {
+    if (!_circleView) {
+        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:39];
+        _circleView.backgroundColor = [UIColor clearColor];
+        _circleView.dataSource = self;
+        
+//        _circleView.layer.borderWidth = 1;
+//        _circleView.layer.borderColor = [UIColor orangeColor].CGColor;
+    }
+    return _circleView;
+}
+
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
+        _noDataRemindView.image = @"loan_noDataRemind";
+        _noDataRemindView.title = @"NO，小主居然忘记记账了！";
+    }
+    return _noDataRemindView;
 }
 
 @end

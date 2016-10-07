@@ -43,10 +43,15 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
         if (model.billIds.count > 1) {
             item.budgetMoneyTitle = [NSString stringWithFormat:@"分类%@预算", budgetType];
         } else {
-            NSDictionary *billInfo = billMapping[model.ID];
-            item.budgetMoneyTitle = [NSString stringWithFormat:@"%@%@预算", billInfo[SSJBudgetDetailBillInfoNameKey], budgetType];
+            NSString *bllId = [model.billIds firstObject];
+            if (bllId) {
+                NSDictionary *billInfo = billMapping[bllId];
+                item.budgetMoneyTitle = [NSString stringWithFormat:@"%@%@预算", billInfo[SSJBudgetDetailBillInfoNameKey], budgetType];
+            }
         }
     }
+    
+    item.budgetMoneyValue = [NSString stringWithFormat:@"¥%.2f", model.budgetMoney];
     
     item.intervalTitle = @"距结算日";
     item.intervalValue = [NSString stringWithFormat:@"%d天", (int)[endDate daysFrom:nowDate]];
@@ -60,8 +65,11 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
     if (model.billIds.count > 1) {
         item.progressColorValue = model.payMoney > model.budgetMoney ? @"ff654c" : @"0fceb6";
     } else {
-        NSDictionary *billInfo = billMapping[model.ID];
-        item.progressColorValue = billInfo[SSJBudgetDetailBillInfoColorKey];
+        NSString *bllId = [model.billIds firstObject];
+        if (bllId) {
+            NSDictionary *billInfo = billMapping[bllId];
+            item.progressColorValue = billInfo[SSJBudgetDetailBillInfoColorKey];
+        }
     }
     
     item.payment = [NSString stringWithFormat:@"已花：%.2f", model.payMoney];
@@ -87,6 +95,25 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您目前已超支%@元喽", money]];
         [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
         item.payOrOverrun = text;
+    }
+    
+    if (item.isMajor) {
+        item.billTypeNames = [NSString stringWithFormat:@"%@预算消费明细", budgetType];
+    } else {
+        NSMutableArray *billNames = [NSMutableArray array];
+        for (NSString *billId in model.billIds) {
+            NSDictionary *billInfo = billMapping[billId];
+            [billNames addObject:billInfo[SSJBudgetDetailBillInfoNameKey]];
+            if (billNames.count == 4) {
+                break;
+            }
+        }
+        
+        item.billTypeNames = [NSString stringWithFormat:@"类别：%@", [billNames componentsJoinedByString:@"、"]];
+        
+        if (model.billIds.count > 4) {
+            item.billTypeNames = [NSString stringWithFormat:@"%@等", item.billTypeNames];
+        }
     }
     
     return item;

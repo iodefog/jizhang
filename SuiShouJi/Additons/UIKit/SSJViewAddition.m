@@ -337,6 +337,13 @@ static const NSTimeInterval kAnimationDuration = 0.25;
     }
 }
 
+- (void)ssj_relayoutWatermark {
+    UIView *watermark = objc_getAssociatedObject(self, kDefaultWatermarkKey);
+    if (watermark.superview == self) {
+        watermark.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+    }
+}
+
 @end
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
