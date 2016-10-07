@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJPercentCircleViewItem.h"
 
 @class SSJBudgetModel;
 
@@ -65,6 +66,8 @@ extern NSString *const SSJBudgetDetailBillInfoColorKey;
 
 // 预算类别
 @property (nonatomic, copy) NSString *billTypeNames;
+
+@property (nonatomic, strong) NSArray <SSJPercentCircleViewItem *>*circleItems;
 
 + (instancetype)itemWithBudgetModel:(SSJBudgetModel *)model billMapping:(NSDictionary *)billMapping;
 

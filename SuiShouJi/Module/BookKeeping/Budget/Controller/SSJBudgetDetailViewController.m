@@ -15,11 +15,14 @@
 #import "SSJBorderButton.h"
 #import "SSJPercentCircleView.h"
 #import "SSJBudgetNodataRemindView.h"
+#import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 
 static const CGFloat kHeaderMargin = 8;
 
 static NSString *const kDateFomat = @"yyyy-MM-dd";
+
+static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 
 @interface SSJBudgetDetailViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -40,9 +43,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 @property (nonatomic, strong) SSJBudgetModel *budgetModel;
 
 @property (nonatomic, strong) SSJBudgetDetailHeaderViewItem *headerItem;
-
-//  预算消费明细图表的数据源
-@property (nonatomic, strong) NSArray *circleItems;
 
 @property (nonatomic, strong) NSArray *cellItems;
 
@@ -92,7 +92,10 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;
+    SSJReportFormsIncomeAndPayCell *incomeAndPayCell = [tableView dequeueReusableCellWithIdentifier:kIncomeAndPayCellID forIndexPath:indexPath];
+    incomeAndPayCell.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    [incomeAndPayCell setCellItem:[self.cellItems ssj_safeObjectAtIndex:indexPath.row]];
+    return incomeAndPayCell;
 }
 
 #pragma mark - UITableViewDelegate
@@ -108,7 +111,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     NSString *budgetId = [self.budgetIDs ssj_safeObjectAtIndex:self.titleView.selectedIndex];
     if (!budgetId.length) {
         self.budgetModel = nil;
-        self.circleItems = nil;
         [self updateView];
         return;
     }
@@ -121,7 +123,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         [self.view ssj_hideLoadingIndicator];
         self.budgetModel = result[SSJBudgetModelKey];
         self.headerItem = result[SSJBudgetDetailHeaderViewItemKey];
-        self.circleItems = result[SSJBudgetCircleItemsKey];
         self.cellItems = result[SSJBudgetListCellItemKey];
         [self updateView];
     } failure:^(NSError * _Nullable error) {
@@ -154,7 +155,6 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         
         self.budgetModel = result[SSJBudgetModelKey];
         self.headerItem = result[SSJBudgetDetailHeaderViewItemKey];
-        self.circleItems = result[SSJBudgetCircleItemsKey];
         self.cellItems = result[SSJBudgetListCellItemKey];
         
         [SSJBudgetDatabaseHelper queryForBudgetIdListWithType:self.budgetModel.type billIds:self.budgetModel.billIds success:^(NSDictionary * _Nonnull result) {
@@ -210,8 +210,8 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
     }
     
     self.tableView.hidden = NO;
+    [self.tableView reloadData];
     self.headerView.item = self.headerItem;
-    self.headerView.circleItems = self.circleItems;
     self.tableView.tableHeaderView = nil;
     self.tableView.tableHeaderView = self.headerView;
 }
@@ -234,6 +234,7 @@ static NSString *const kDateFomat = @"yyyy-MM-dd";
         _tableView.delegate = self;
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.tableFooterView = [[UIView alloc] init];
+        [_tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
     }
     return _tableView;
 }

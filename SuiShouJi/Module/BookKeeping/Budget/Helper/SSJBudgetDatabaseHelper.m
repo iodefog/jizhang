@@ -19,7 +19,6 @@
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetDetailHeaderViewItemKey = @"SSJBudgetDetailHeaderViewItemKey";
-NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
 NSString *const SSJBudgetListCellItemKey = @"SSJBudgetListCellItemKey";
 NSString *const SSJBudgetIDKey = @"SSJBudgetIDKey";
 NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
@@ -301,7 +300,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.itype = 1 and b.istate <> 2 group by a.ibillid"];
+        NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.itype = 1 and b.istate <> 2 group by a.ibillid"];
         resultSet = [db executeQuery:query, userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
         if (!resultSet) {
@@ -335,7 +334,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
             item.imageName = [resultSet stringForColumn:@"ccoin"];
-            item.name = [resultSet stringForColumn:@"ccoin"];
+            item.name = [resultSet stringForColumn:@"cname"];
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
             item.money = money;
             [listItem addObject:item];
@@ -346,6 +345,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             SSJPercentCircleViewItem *circleItem = circleItemArr[i];
             circleItem.scale = [moneyArr[i] doubleValue] / amount;
         }
+        headerItem.circleItems = circleItemArr;
         
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:2];
         
@@ -355,10 +355,6 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         if (headerItem) {
             [result setObject:headerItem forKey:SSJBudgetDetailHeaderViewItemKey];
-        }
-        
-        if (circleItemArr) {
-            [result setObject:circleItemArr forKey:SSJBudgetCircleItemsKey];
         }
         
         if (listItem) {

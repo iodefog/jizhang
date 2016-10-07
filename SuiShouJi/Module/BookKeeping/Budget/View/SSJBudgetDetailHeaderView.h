@@ -14,8 +14,6 @@
 
 @property (nonatomic, strong) SSJBudgetDetailHeaderViewItem *item;
 
-@property (nonatomic, strong) NSArray <SSJPercentCircleViewItem *>*circleItems;
-
 - (void)updateAppearance;
 
 @end

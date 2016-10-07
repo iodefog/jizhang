@@ -73,6 +73,8 @@ static const CGFloat kBottomViewHeight = 398;
 
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
+@property (nonatomic, strong) NSArray <SSJPercentCircleViewItem *>*circleItems;
+
 @end
 
 @implementation SSJBudgetDetailHeaderView
@@ -218,6 +220,8 @@ static const CGFloat kBottomViewHeight = 398;
     self.estimateMoneyLab.attributedText = item.historyBudget;
     self.payOrOverrunLab.attributedText = item.payOrOverrun;
     self.billTypeLab.text = item.billTypeNames;
+    
+    self.circleItems = item.circleItems;
     
     [self updateAppearance];
     [self updateSubviewHidden];

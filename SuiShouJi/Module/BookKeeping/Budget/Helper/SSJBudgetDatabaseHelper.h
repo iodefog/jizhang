@@ -21,9 +21,6 @@ extern NSString *const SSJBudgetModelKey;
 // 预算详情header视图模型key
 extern NSString *const SSJBudgetDetailHeaderViewItemKey;
 
-// 预算详情图表模型key
-extern NSString *const SSJBudgetCircleItemsKey;
-
 // 预算详情列表key
 extern NSString *const SSJBudgetListCellItemKey;
 
