@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseNetworkService.h"
+#import "SSJJsPatchItem.h"
 
 @interface SSJPatchUpdateService : SSJBaseNetworkService
 
@@ -17,6 +18,6 @@
  */
 - (void)requestPatchWithCurrentVersion:(NSString *)version;
 
-@property(nonatomic, strong) NSArray *patchArray;
+@property(nonatomic, strong) SSJJsPatchItem *patchItem;
 
 @end

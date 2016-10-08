@@ -74,15 +74,13 @@ NSDate *SCYEnterBackgroundTime() {
 #pragma mark - Lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 #ifdef DEBUG
-//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"test" ofType:@"js"];
+//    NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"js"];
 //    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
 //    [JPEngine evaluateScript:script];
 #endif
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
-        
-    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -123,10 +121,11 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
+        [SSJJspatchAnalyze removePatch];
     }
     
-    [self analyzeJspatch];
-    [SSJJspatchAnalyze removePatch];
+    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
+    
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
@@ -301,6 +300,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 - (void)serverDidFinished:(SSJBaseNetworkService *)service{
     if ([service.returnCode isEqualToString:@"1"]) {
+        [self analyzeJspatch];
         for (int i = 0; i < self.service.patchArray.count; i ++) {
             SSJJsPatchItem *item = [self.service.patchArray objectAtIndex:i];
             if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
@@ -324,7 +324,7 @@ NSDate *SCYEnterBackgroundTime() {
         }
     });
 }
-
+    
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     return [TencentOAuth HandleOpenURL:url] ||

@@ -23,8 +23,7 @@
 - (void)requestDidFinish:(NSDictionary *)rootElement{
     [super requestDidFinish:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
-        self.patchArray = [NSArray array];
-        self.patchArray = [SSJJsPatchItem mj_objectArrayWithKeyValuesArray:[rootElement objectForKey:@"results"]];
+        self.patchItem = [SSJJsPatchItem mj_objectWithKeyValues:[rootElement objectForKey:@"results"]];
     }
 }
 
