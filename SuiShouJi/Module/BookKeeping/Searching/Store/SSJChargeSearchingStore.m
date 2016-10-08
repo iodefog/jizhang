@@ -28,7 +28,7 @@
         if (!currentBookId.length) {
             currentBookId = userId;
         }
-        NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.istate, b.ccoin, b.ccolor from bk_user_charge a, bk_bill_type b , bk_user_bill c where a.operatortype <> 2 and a.cuserid = '%@' and a.cbooksid = '%@' and a.ibillid = b.id and b.id = c.cbillid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and b.istate <> 2 and a.cbilldate <= '%@' and b.istate <> 2 and c.cuserid = '%@'",userId,currentBookId,content,content,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"],userId];
+        NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.istate, b.ccoin, b.ccolor , b.itype from bk_user_charge a, bk_bill_type b , bk_user_bill c where a.operatortype <> 2 and a.cuserid = '%@' and a.cbooksid = '%@' and a.ibillid = b.id and b.id = c.cbillid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and b.istate <> 2 and a.cbilldate <= '%@' and b.istate <> 2 and c.cuserid = '%@'",userId,currentBookId,content,content,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"],userId];
         switch (order) {
             case SSJChargeListOrderMoneyAscending:{
                 [sql appendString:@" order by a.imoney asc"];
@@ -76,11 +76,8 @@
             item.configId = [resultSet stringForColumn:@"iconfigid"];
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.loanId = [resultSet stringForColumn:@"loanid"];
-            if (item.incomeOrExpence && ![item.money hasPrefix:@"-"]) {
-                item.money = [NSString stringWithFormat:@"-%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
-            }else if(!item.incomeOrExpence && ![item.money hasPrefix:@"+"]){
-                item.money = [NSString stringWithFormat:@"+%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
-            }
+            item.incomeOrExpence = [resultSet boolForColumn:@"itype"];
+            item.money = [NSString stringWithFormat:@"%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             if (![item.billDate isEqualToString:lastBillDate]) {
                 SSJSearchResultItem *searchItem = [[SSJSearchResultItem alloc]init];
                 searchItem.searchOrder = order;

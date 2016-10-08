@@ -250,6 +250,10 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     if (!_resultOrderHeader) {
         _resultOrderHeader = [[SSJSearchResultOrderHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 78)];
         _resultOrderHeader.order = SSJChargeListOrderDateAscending;
+        __weak typeof(self) weakSelf = self;
+        _resultOrderHeader.orderSelectBlock = ^(SSJChargeListOrder order){
+            [weakSelf searchForContent:weakSelf.searchBar.searchTextInput.text listOrder:order];
+        };
     }
     return _resultOrderHeader;
 }
@@ -292,6 +296,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
             self.resultOrderHeader.resultCount = result.count;
             self.tableView.tableHeaderView = self.resultOrderHeader;
         }else{
+            self.tableView.tableHeaderView = nil;
             [self.tableView ssj_showWatermarkWithCustomView:self.noResultHeader animated:NO target:self action:NULL];
         }
         [self.tableView reloadData];
