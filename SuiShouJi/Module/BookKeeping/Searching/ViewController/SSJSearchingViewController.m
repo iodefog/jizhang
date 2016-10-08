@@ -16,6 +16,8 @@
 #import "SSJHistoryHeader.h"
 #import "SSJSearchResultHeader.h"
 #import "SSJCalenderDetailViewController.h"
+#import "SSJBudgetNodataRemindView.h"
+#import "SSJSearchResultOrderHeader.h"
 
 static NSString *const kBillingChargeCellId = @"kBillingChargeCellId";
 
@@ -31,6 +33,11 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 @property(nonatomic, strong) SSJHistoryHeader *historyHeader;
 
+@property(nonatomic, strong) SSJBudgetNodataRemindView *noHistoryHeader;
+
+@property(nonatomic, strong) SSJBudgetNodataRemindView *noResultHeader;
+
+@property(nonatomic, strong) SSJSearchResultOrderHeader *resultOrderHeader;
 @end
 
 @implementation SSJSearchingViewController{
@@ -60,7 +67,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.searchBar.searchTextInput becomeFirstResponder];
+//    [self.searchBar.searchTextInput becomeFirstResponder];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 //#warning test
@@ -75,7 +82,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.searchBar.searchTextInput becomeFirstResponder];
+    [self.searchBar.searchTextInput resignFirstResponder];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
 }
@@ -133,6 +140,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     }else{
         return self.historyHeader;
     }
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -157,8 +165,11 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     if (self.model == SSJSearchResultModel) {
         return self.items.count;
     }else{
-        return 1;
+        if (self.items.count) {
+            return 1;
+        }
     }
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -217,15 +228,47 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     return _historyHeader;
 }
 
+- (SSJBudgetNodataRemindView *)noHistoryHeader{
+    if (!_noHistoryHeader) {
+        _noHistoryHeader = [[SSJBudgetNodataRemindView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noHistoryHeader.title = @"开启第一次神奇的搜索吧";
+        _noHistoryHeader.image = @"search_none";
+    }
+    return _noHistoryHeader;
+}
+
+- (SSJBudgetNodataRemindView *)noResultHeader{
+    if (!_noResultHeader) {
+        _noResultHeader = [[SSJBudgetNodataRemindView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
+        _noResultHeader.title = @"您还没有任何记账记录哦";
+        _noResultHeader.image = @"calendar_norecord";
+    }
+    return _noResultHeader;
+}
+
+- (SSJSearchResultOrderHeader *)resultOrderHeader{
+    if (!_resultOrderHeader) {
+        _resultOrderHeader = [[SSJSearchResultOrderHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 78)];
+        _resultOrderHeader.order = SSJChargeListOrderDateAscending;
+    }
+    return _resultOrderHeader;
+}
+
 #pragma mark - Private
 - (void)getSearchHistory{
     __weak typeof(self) weakSelf = self;
     [self.tableView ssj_showLoadingIndicator];
     [SSJChargeSearchingStore querySearchHistoryWithSuccess:^(NSArray<SSJSearchHistoryItem *> *result) {
-        weakSelf.items = [NSArray arrayWithArray:result];
-        weakSelf.model = SSJSearchHistoryModel;
-        [weakSelf.tableView reloadData];
         [self.tableView ssj_hideLoadingIndicator];
+        weakSelf.model = SSJSearchHistoryModel;
+        weakSelf.items = [NSArray arrayWithArray:result];
+        if (!result.count) {
+            [self.tableView ssj_showWatermarkWithCustomView:self.noHistoryHeader animated:NO target:self action:NULL];
+        }else{
+            [self.tableView ssj_hideWatermark:YES];
+        }
+        [weakSelf.tableView reloadData];
+
     } failure:^(NSError *error) {
         [self.tableView ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
@@ -234,11 +277,26 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)searchForContent:(NSString *)content listOrder:(SSJChargeListOrder)order{
     [self.view endEditing:YES];
+    _startTime = CFAbsoluteTimeGetCurrent();
+    [self.tableView ssj_showLoadingIndicator];
+    __weak typeof(self) weakSelf = self;
     [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result) {
-        self.model = SSJSearchResultModel;
+        weakSelf.model = SSJSearchResultModel;
+        [self.tableView ssj_hideLoadingIndicator];
         self.items = [NSArray arrayWithArray:result];
+        _endTime = CFAbsoluteTimeGetCurrent();
+        NSLog(@"查询%ld条数据耗时%f",result.count,_endTime - _startTime);
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",result.count,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
+        if (result.count) {
+            [self.tableView ssj_hideWatermark:YES];
+            self.resultOrderHeader.resultCount = result.count;
+            self.tableView.tableHeaderView = self.resultOrderHeader;
+        }else{
+            [self.tableView ssj_showWatermarkWithCustomView:self.noResultHeader animated:NO target:self action:NULL];
+        }
         [self.tableView reloadData];
     } failure:^(NSError *error) {
+        [self.tableView ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
 }

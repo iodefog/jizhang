@@ -685,6 +685,8 @@ BOOL kHomeNeedLoginPop;
         [SSJBookKeepingHomeHelper queryForChargeListExceptNewCharge:self.newlyAddChargeArr Success:^(NSDictionary *result) {
             _endTime = CFAbsoluteTimeGetCurrent();
             NSLog(@"查询%ld条数据耗时%f秒",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime);
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",((NSArray *)[result objectForKey:SSJOrginalChargeArrKey]).count,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
+
             if (!((NSArray *)[result objectForKey:SSJNewAddChargeArrKey]).count) {
                 weakSelf.items = [[NSMutableArray alloc]initWithArray:[result objectForKey:SSJOrginalChargeArrKey]];
                 [weakSelf.tableView reloadData];
