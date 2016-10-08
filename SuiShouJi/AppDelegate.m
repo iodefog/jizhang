@@ -124,6 +124,8 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJJspatchAnalyze removePatch];
     }
     
+    [SSJJspatchAnalyze SSJJsPatchAnalyzeLocalPatch];
+    
     [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     
@@ -301,28 +303,11 @@ NSDate *SCYEnterBackgroundTime() {
 - (void)serverDidFinished:(SSJBaseNetworkService *)service{
     if ([service.returnCode isEqualToString:@"1"]) {
         [self analyzeJspatch];
-        for (int i = 0; i < self.service.patchArray.count; i ++) {
-            SSJJsPatchItem *item = [self.service.patchArray objectAtIndex:i];
-            if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
-                [SSJJspatchAnalyze SSJJsPatchAnalyzeWithUrl:item.patchUrl MD5:item.patchMD5 patchVersion:item.patchVersion];
-            }
-        }
     }
 }
 
 -(void)analyzeJspatch{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (SSJLastPatchVersion()) {
-            for (int i = 0; i <= [SSJLastPatchVersion() integerValue]; i ++) {
-                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%d.js",i]];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                    [JPEngine startEngine];
-                    NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-                    [JPEngine evaluateScript:script];
-                }
-            }
-        }
-    });
+    [SSJJspatchAnalyze SSJJsPatchAnalyzeWithPatchItem:self.service.patchItem];
 }
     
 #pragma mark - qq快登

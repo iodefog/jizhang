@@ -13,6 +13,8 @@
 
 + (void)SSJJsPatchAnalyzeWithPatchItem:(SSJJsPatchItem *)item;
 
++ (void)SSJJsPatchAnalyzeLocalPatch;
+
 + (void)removePatch;
 
 @end

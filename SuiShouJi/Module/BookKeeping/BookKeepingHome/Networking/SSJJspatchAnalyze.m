@@ -56,11 +56,17 @@
         }];
         [downloadTask resume];
     }else{
-        NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",SSJLastPatchVersion()]];
+        [self SSJJsPatchAnalyzeLocalPatch];
+    }
+}
+
++ (void)SSJJsPatchAnalyzeLocalPatch{
+    NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",SSJLastPatchVersion()]];
+    dispatch_async([self sharedQueue], ^{
         [JPEngine startEngine];
         NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
         [JPEngine evaluateScript:script];
-    }
+    });
 }
 
 + (void)removePatch {
