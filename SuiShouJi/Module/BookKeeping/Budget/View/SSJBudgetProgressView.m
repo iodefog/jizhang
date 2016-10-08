@@ -66,7 +66,7 @@
 }
 
 - (void)updateMoney {
-    if (_progress > 0 && _progress <= 1) {
+    if (_progress >= 0 && _progress <= 1) {
         _surplusLab.text = [NSString stringWithFormat:@"剩余：%.2f", _budget * (1 - _progress)];
     } else if (_progress > 1) {
         _surplusLab.text = [NSString stringWithFormat:@"超支：%.2f", _budget * (_progress - 1)];

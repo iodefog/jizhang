@@ -69,7 +69,9 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *
  *  @param ID        预算编号
  *  @param success   查询成功的回调；
-                     参数result的结构：@{SSJBudgetDetailHeaderViewItemKey:SSJBudgetDetailHeaderViewItem实例, SSJBudgetCircleItemsKey:@[SSJPercentCircleViewItem实例]}
+                     参数result的结构：@{SSJBudgetModelKey:SSJBudgetModel实例,
+                                      SSJBudgetDetailHeaderViewItemKey:SSJBudgetDetailHeaderViewItem实例,
+                                      SSJBudgetListCellItemKey:@[SSJReportFormsItem实例]}
  *  @param failure   查询失败的回调
  */
 + (void)queryForBudgetDetailWithID:(NSString *)ID

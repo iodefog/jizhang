@@ -8,6 +8,7 @@
 
 #import "SSJBudgetDetailViewController.h"
 #import "SSJBudgetEditViewController.h"
+#import "SSJBillingChargeViewController.h"
 #import "SSJBudgetDetailPeriodSwitchControl.h"
 #import "SSJBudgetDetailHeaderView.h"
 #import "SSJBudgetDetailBottomView.h"
@@ -17,6 +18,8 @@
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJReportFormsIncomeAndPayCell.h"
 #import "SSJBudgetDatabaseHelper.h"
+#import "SSJReportFormsItem.h"
+#import "SSJDatePeriod.h"
 
 static const CGFloat kHeaderMargin = 8;
 
@@ -99,6 +102,22 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 }
 
 #pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.cellItems.count > indexPath.row) {
+        SSJReportFormsItem *item = self.cellItems[indexPath.row];
+        NSDate *beginDate = [NSDate dateWithString:_budgetModel.beginDate formatString:@"yyyy-MM-dd"];
+        NSDate *endDate = [NSDate dateWithString:_budgetModel.endDate formatString:@"yyyy-MM-dd"];
+        
+        SSJBillingChargeViewController *billingChargeVC = [[SSJBillingChargeViewController alloc] init];
+        billingChargeVC.ID = item.ID;
+        billingChargeVC.color = [UIColor ssj_colorWithHex:item.colorValue];
+        billingChargeVC.period = [SSJDatePeriod datePeriodWithStartDate:beginDate endDate:endDate];
+        billingChargeVC.isMemberCharge = NO;
+        [self.navigationController pushViewController:billingChargeVC animated:YES];
+    }
+}
 
 #pragma mark - Event
 - (void)editButtonAction {

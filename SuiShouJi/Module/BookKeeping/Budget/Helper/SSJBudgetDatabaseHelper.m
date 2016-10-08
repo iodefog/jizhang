@@ -300,8 +300,19 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.itype = 1 and b.istate <> 2 group by a.ibillid"];
-        resultSet = [db executeQuery:query, userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
+        NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname, b.id from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1 and b.istate <> 2", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
+        
+        if (![budgetModel.billIds isEqualToArray:@[@"all"]]) {
+            NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
+            for (NSString *billId in budgetModel.billIds) {
+                [billIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
+            }
+            [query appendFormat:@" and a.ibillid in (%@)", [billIds componentsJoinedByString:@","]];
+        }
+        
+        [query appendFormat:@" group by a.ibillid"];
+        
+        resultSet = [db executeQuery:query];
         
         if (!resultSet) {
             if (failure) {
@@ -333,6 +344,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             }
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.ID = [resultSet stringForColumn:@"id"];
             item.imageName = [resultSet stringForColumn:@"ccoin"];
             item.name = [resultSet stringForColumn:@"cname"];
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
