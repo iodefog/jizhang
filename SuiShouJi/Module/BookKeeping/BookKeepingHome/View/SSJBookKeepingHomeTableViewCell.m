@@ -92,6 +92,7 @@
             self.deleteButton.centerX = self.width / 2;
             self.editeButton.centerX = self.width / 2;
         }completion:^(BOOL success){
+    
             self.editeButton.hidden = YES;
             self.deleteButton.hidden = YES;
             self.expenditureLabel.hidden = NO;

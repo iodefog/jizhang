@@ -196,8 +196,15 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         __weak typeof(self) weakSelf = self;
         _searchBar = [[SSJSearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 70)];
         _searchBar.searchTextInput.delegate = self;
-        _searchBar.cancelAction = ^(){
-            [weakSelf.navigationController popViewControllerAnimated:YES];
+        _searchBar.searchAction = ^(){
+            if (!weakSelf.searchBar.searchTextInput.text.length) {
+                [CDAutoHideMessageHUD showMessage:@"请输入要查询的内容"];
+                return;
+            }
+            [weakSelf searchForContent:weakSelf.searchBar.searchTextInput.text listOrder:SSJChargeListOrderDateAscending];
+        };
+        _searchBar.backAction = ^(){
+            [weakSelf goBackAction];
         };
     }
     return _searchBar;

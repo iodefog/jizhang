@@ -12,6 +12,9 @@
 
 @property(nonatomic, strong) UISearchBar *searchTextInput;
 
-@property (nonatomic, copy) void (^cancelAction)();
+@property (nonatomic, copy) void (^searchAction)();
+
+@property (nonatomic, copy) void (^backAction)();
+
 
 @end
