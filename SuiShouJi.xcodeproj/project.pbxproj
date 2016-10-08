@@ -1197,7 +1197,6 @@
 		9C4EBCA01D7D1D0D00BE4982 /* SSJThirdPartLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */; };
 		9C4EBCA11D7D1D0E00BE4982 /* SSJThirdPartLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */; };
 		9C4EBCA21D7D1D0E00BE4982 /* SSJThirdPartLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */; };
-		9C5069881DA884C700029765 /* sample.js in Resources */ = {isa = PBXBuildFile; fileRef = 9C5069871DA884C700029765 /* sample.js */; };
 		9C5377231D75202E002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
 		9C5377241D752036002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
 		9C5377251D752037002B230A /* SSJCreditCardListDetailItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */; };
@@ -3028,7 +3027,6 @@
 		9C47E6F11D224BEF005F338A /* SSJThemeService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeService.m; sourceTree = "<group>"; };
 		9C4EBC931D7D1C4B00BE4982 /* SSJThirdPartLoginItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThirdPartLoginItem.h; sourceTree = "<group>"; };
 		9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThirdPartLoginItem.m; sourceTree = "<group>"; };
-		9C5069871DA884C700029765 /* sample.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = sample.js; sourceTree = "<group>"; };
 		9C5377211D75202E002B230A /* SSJCreditCardListDetailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardListDetailItem.h; sourceTree = "<group>"; };
 		9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardListDetailItem.m; sourceTree = "<group>"; };
 		9C53772B1D752BF3002B230A /* SSJCreditCardDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardDetailHeader.h; sourceTree = "<group>"; };
@@ -6031,7 +6029,6 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				9C5069871DA884C700029765 /* sample.js */,
 				BD78E4B01C8FF8C7003A1EE1 /* sound */,
 				7D4EF8921C4B5625003C4B20 /* Plist */,
 				7D6AAB721C322E020007C0A3 /* database */,
@@ -6642,7 +6639,6 @@
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
-				9C5069881DA884C700029765 /* sample.js in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				9C3277591CE471A900109C4C /* yw_1222.jpg in Resources */,

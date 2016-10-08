@@ -23,7 +23,7 @@ if (scrollView.contentOffset().y < -46) {
         } else {
             self.tableView().setHasData(YES);
         }
-         if (!_isRefreshing) {
+        if (!scrollView.isDecelerating() && !_isRefreshing) {
             self.homeButton().startAnimating();
             _isRefreshing = YES;
         }
