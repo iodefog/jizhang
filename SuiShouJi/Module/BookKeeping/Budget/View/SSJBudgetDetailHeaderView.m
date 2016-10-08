@@ -21,7 +21,9 @@ static const CGFloat kCurrentMajorMiddleViewHeight = 265;
 
 static const CGFloat kHistoryMajorMiddleViewHeight = 235;
 
-static const CGFloat kSecondaryMiddleViewHeight = 188;
+static const CGFloat kCurrentSecondaryMiddleViewHeight = 180;
+
+static const CGFloat kHistorySecondaryMiddleViewHeight = 140;
 
 static const CGFloat kBottomViewHeight = 398;
 
@@ -96,9 +98,9 @@ static const CGFloat kBottomViewHeight = 398;
     CGFloat height = 0;
     
     if (_item.isHistory) {
-        height = _item.isMajor ? (kTopGap + kHistoryMajorMiddleViewHeight + kBottomViewHeight) : (kTopGap + kSecondaryMiddleViewHeight + kBottomViewHeight);
+        height = _item.isMajor ? (kTopGap + kHistoryMajorMiddleViewHeight + kBottomViewHeight) : (kTopGap + kHistorySecondaryMiddleViewHeight + kBottomViewHeight);
     } else {
-        height = _item.isMajor ? (kTopGap + kTopViewHeight + kCurrentMajorMiddleViewHeight + kBottomViewHeight) : (kTopGap + kTopViewHeight + kSecondaryMiddleViewHeight + kBottomViewHeight);
+        height = _item.isMajor ? (kTopGap + kTopViewHeight + kCurrentMajorMiddleViewHeight + kBottomViewHeight) : (kTopGap + kTopViewHeight + kCurrentSecondaryMiddleViewHeight + kBottomViewHeight);
     }
     return CGSizeMake(width, height);
 }
@@ -106,11 +108,9 @@ static const CGFloat kBottomViewHeight = 398;
 - (void)layoutSubviews {
     CGFloat gap = 10;
     
-    UIView *tmpView = _item.isMajor ? self.waveView : self.progressView;
     self.waveView.top = 15;
     self.waveView.centerX = self.width * 0.5;
-    self.progressView.top = 30;
-    self.progressView.centerX = self.width * 0.5;
+    self.progressView.frame = CGRectMake(17, 30, self.width - 34, 34);
     
     [self.budgetMoneyTitleLab sizeToFit];
     [self.budgetMoneyLab sizeToFit];
@@ -122,9 +122,12 @@ static const CGFloat kBottomViewHeight = 398;
     [self.payOrOverrunLab sizeToFit];
     [self.billTypeLab sizeToFit];
     
+    UIView *tmpView = _item.isMajor ? self.waveView : self.progressView;
+    
     if (_item.isHistory) {
         
-        self.middleView.frame = CGRectMake(0, kTopGap, self.width, kHistoryMajorMiddleViewHeight);
+        CGFloat middleHeight = _item.isMajor ? kHistoryMajorMiddleViewHeight : kHistorySecondaryMiddleViewHeight;
+        self.middleView.frame = CGRectMake(0, kTopGap, self.width, middleHeight);
         [self.middleView ssj_relayoutBorder];
         
         self.estimateMoneyLab.top = self.historyPaymentLab.top = tmpView.bottom + 15;
@@ -138,7 +141,8 @@ static const CGFloat kBottomViewHeight = 398;
         self.topView.frame = CGRectMake(0, kTopGap, self.width, kTopViewHeight);
         [self.topView ssj_relayoutBorder];
         
-        self.middleView.frame = CGRectMake(0, self.topView.bottom, self.width, kCurrentMajorMiddleViewHeight);
+        CGFloat middleHeight = _item.isMajor ? kCurrentMajorMiddleViewHeight : kCurrentSecondaryMiddleViewHeight;
+        self.middleView.frame = CGRectMake(0, self.topView.bottom, self.width, middleHeight);
         [self.middleView ssj_relayoutBorder];
         
         CGFloat top1 = (self.topView.height - self.budgetMoneyTitleLab.height - self.budgetMoneyLab.height - gap) * 0.5;
@@ -193,6 +197,23 @@ static const CGFloat kBottomViewHeight = 398;
     self.estimateMoneyLab.hidden = !_item.isHistory;
     self.historyPaymentLab.hidden = !_item.isHistory;
     self.payOrOverrunLab.hidden = _item.isHistory;
+    self.waveView.hidden = !_item.isMajor;
+    self.progressView.hidden = _item.isMajor;
+}
+
+- (void)setCircleItems:(NSArray<SSJPercentCircleViewItem *> *)circleItems {
+    if (![_circleItems isEqualToArray:circleItems]) {
+        _circleItems = circleItems;
+        [self.circleView reloadData];
+        
+        if (self.circleItems.count > 0) {
+            self.billTypeLab.hidden = NO;
+            [self.bottomView ssj_hideWatermark:YES];
+        } else {
+            self.billTypeLab.hidden = YES;
+            [self.bottomView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
+        }
+    }
 }
 
 #pragma mark - Public
@@ -227,21 +248,6 @@ static const CGFloat kBottomViewHeight = 398;
     [self updateSubviewHidden];
 }
 
-- (void)setCircleItems:(NSArray<SSJPercentCircleViewItem *> *)circleItems {
-    if (![_circleItems isEqualToArray:circleItems]) {
-        _circleItems = circleItems;
-        [self.circleView reloadData];
-        
-        if (self.circleItems.count > 0) {
-            self.billTypeLab.hidden = NO;
-            [self.bottomView ssj_hideWatermark:YES];
-        } else {
-            self.billTypeLab.hidden = YES;
-            [self.bottomView ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:NULL];
-        }
-    }
-}
-
 - (void)updateAppearance {
     _budgetMoneyTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _budgetMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
@@ -263,6 +269,7 @@ static const CGFloat kBottomViewHeight = 398;
     [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+//    _dashLine.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
 }
 
 //- (void)setBudgetModel:(SSJBudgetModel *)budgetModel {
@@ -346,7 +353,7 @@ static const CGFloat kBottomViewHeight = 398;
         [_topView addSubview:self.intervalTitleLab];
         [_topView addSubview:self.intervalLab];
         [_topView.layer addSublayer:self.dashLine];
-        [_topView ssj_setBorderWidth:1];
+        [_topView ssj_setBorderWidth:2];
         [_topView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
     }
     return _topView;
@@ -362,7 +369,7 @@ static const CGFloat kBottomViewHeight = 398;
         [_middleView addSubview:self.historyPaymentLab];
         [_middleView addSubview:self.estimateMoneyLab];
         [_middleView ssj_setBorderInsets:UIEdgeInsetsMake(0, 16, 0, 16)];
-        [_middleView ssj_setBorderWidth:1];
+        [_middleView ssj_setBorderWidth:2];
         [_middleView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _middleView;
@@ -373,7 +380,7 @@ static const CGFloat kBottomViewHeight = 398;
         _bottomView = [[UIView alloc] init];
         [_bottomView addSubview:self.billTypeLab];
         [_bottomView addSubview:self.circleView];
-        [_bottomView ssj_setBorderWidth:1];
+        [_bottomView ssj_setBorderWidth:2];
         [_bottomView ssj_setBorderStyle:SSJBorderStyleBottom];
     }
     return _bottomView;
@@ -426,8 +433,7 @@ static const CGFloat kBottomViewHeight = 398;
         
         _dashLine = [CAShapeLayer layer];
 //        _dashLine.lineDashPattern = @[@4, @4];
-        _dashLine.lineWidth = 1 / [UIScreen mainScreen].scale;
-        _dashLine.fillColor = [UIColor whiteColor].CGColor;
+        _dashLine.lineWidth = 1;
         _dashLine.path = path.CGPath;
     }
     return _dashLine;
