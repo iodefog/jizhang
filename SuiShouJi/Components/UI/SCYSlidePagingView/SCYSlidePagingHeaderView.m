@@ -227,9 +227,9 @@
         return;
     }
     
-    if (_selectedIndex == index) {
-        return;
-    }
+//    if (_selectedIndex == index) {
+//        return;
+//    }
     
     _selectedIndex = index;
     
