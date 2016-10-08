@@ -122,9 +122,8 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJJspatchAnalyze removePatch];
     }
     
+    //每次启动打一次补丁
     [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
-    
-    
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
@@ -155,6 +154,8 @@ NSDate *SCYEnterBackgroundTime() {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    //每次从后台进入打一次补丁
+    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
