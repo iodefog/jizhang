@@ -7,7 +7,7 @@
 //
 
 #import "SSJBaseTableViewCell.h"
-#import "SSJBudgetListSecondaryCellItem.h"
+#import "SSJBudgetListCellItem.h"
 
 @interface SSJBudgetListSecondaryCell : SSJBaseTableViewCell
 

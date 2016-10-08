@@ -85,6 +85,7 @@ static const CGFloat imageDiam = 26;
         self.textLabel.textColor = _percentLabel.textColor = _moneyLabel.textColor = [UIColor ssj_colorWithHex:item.titleColor];
         
         [self.percentLabel sizeToFit];
+        self.percentLabel.hidden = item.percentHiden;
 //        [self.moneyLabel sizeToFit];
         
         [self setNeedsLayout];

@@ -13,9 +13,13 @@
 #import "SSJDatePeriod.h"
 #import "SSJUserTableManager.h"
 #import "SSJBudgetBillTypeSelectionCellItem.h"
+#import "SSJBudgetListCellItem.h"
+#import "SSJReportFormsItem.h"
+#import "SSJBudgetDetailHeaderViewItem.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
-NSString *const SSJBudgetCircleItemsKey = @"SSJBudgetCircleItemsKey";
+NSString *const SSJBudgetDetailHeaderViewItemKey = @"SSJBudgetDetailHeaderViewItemKey";
+NSString *const SSJBudgetListCellItemKey = @"SSJBudgetListCellItemKey";
 NSString *const SSJBudgetIDKey = @"SSJBudgetIDKey";
 NSString *const SSJBudgetPeriodKey = @"SSJBudgetPeriodKey";
 
@@ -25,6 +29,140 @@ NSString *const SSJBudgetConflictSecondaryBudgetMoneyKey = @"SSJBudgetConflictSe
 NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModelKey";
 
 @implementation SSJBudgetDatabaseHelper
+
++ (void)queryForBudgetCellItemListWithSuccess:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
+                                      failure:(void (^)(NSError * _Nullable error))failure {
+    
+    NSString *currentDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+    SSJUserItem *userItem = [SSJUserTableManager queryProperty:@[@"currentBooksId"] forUserId:SSJUSERID()];
+    if (!userItem.currentBooksId.length) {
+        userItem.currentBooksId = SSJUSERID();
+    }
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userItem.userId];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableDictionary *mapping = [NSMutableDictionary dictionary];
+        while ([resultSet next]) {
+            NSString *billId = [resultSet stringForColumn:@"cbillid"];
+            NSString *billName = [resultSet stringForColumn:@"cname"];
+            NSString *billColor = [resultSet stringForColumn:@"ccolor"];
+            [mapping setObject:@{@"name":billName, @"color":billColor} forKey:billId];
+        }
+        [resultSet close];
+        
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", userItem.userId, currentDate, currentDate, userItem.currentBooksId];
+        
+        if (!budgetResult) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableArray *majorWeekList = [NSMutableArray array];
+        NSMutableArray *secondaryWeekList = [NSMutableArray array];
+        NSMutableArray *majorMonthList = [NSMutableArray array];
+        NSMutableArray *secondaryMonthList = [NSMutableArray array];
+        NSMutableArray *majorYearList = [NSMutableArray array];
+        NSMutableArray *secondaryYearList = [NSMutableArray array];
+        
+        while ([budgetResult next]) {
+            SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
+            SSJBudgetListCellItem *cellItem = [SSJBudgetListCellItem cellItemWithBudgetModel:budget billTypeMapping:mapping];
+            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:@"all"];
+            switch (budget.type) {
+                case SSJBudgetPeriodTypeWeek:
+                    if (isAllBillType) {
+                        [majorWeekList addObject:cellItem];
+                        cellItem.title = @"周总预算";
+                        cellItem.rowHeight = 320;
+                    } else {
+                        [secondaryWeekList addObject:cellItem];
+                        if (secondaryWeekList.count == 1) {
+                            cellItem.title = @"周分类预算";
+                            cellItem.rowHeight = 208;
+                        } else {
+                            cellItem.rowHeight = 174;
+                        }
+                    }
+                    
+                    break;
+                    
+                case SSJBudgetPeriodTypeMonth:
+                    if (isAllBillType) {
+                        [majorMonthList addObject:cellItem];
+                        cellItem.title = @"月总预算";
+                        cellItem.rowHeight = 320;
+                    } else {
+                        [secondaryMonthList addObject:cellItem];
+                        if (secondaryMonthList.count == 1) {
+                            cellItem.title = @"月分类预算";
+                            cellItem.rowHeight = 208;
+                        } else {
+                            cellItem.rowHeight = 174;
+                        }
+                    }
+                    
+                    break;
+                    
+                case SSJBudgetPeriodTypeYear:
+                    if (isAllBillType) {
+                        [majorYearList addObject:cellItem];
+                        cellItem.title = @"年总预算";
+                        cellItem.rowHeight = 320;
+                    } else {
+                        [secondaryYearList addObject:cellItem];
+                        if (secondaryYearList.count == 1) {
+                            cellItem.title = @"年分类预算";
+                            cellItem.rowHeight = 208;
+                        } else {
+                            cellItem.rowHeight = 174;
+                        }
+                    }
+                    
+                    break;
+            }
+        }
+        
+        NSMutableArray *budgetList = [NSMutableArray array];
+        if (majorWeekList.count) {
+            [budgetList addObject:majorWeekList];
+        }
+        if (secondaryWeekList.count) {
+            [budgetList addObject:secondaryWeekList];
+        }
+        if (majorMonthList.count) {
+            [budgetList addObject:majorMonthList];
+        }
+        if (secondaryMonthList.count) {
+            [budgetList addObject:secondaryMonthList];
+        }
+        if (majorYearList.count) {
+            [budgetList addObject:majorYearList];
+        }
+        if (secondaryYearList.count) {
+            [budgetList addObject:secondaryYearList];
+        }
+        
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success(budgetList);
+            });
+        }
+    }];
+}
 
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success failure:(void (^)(NSError *error))failure {
     
@@ -70,7 +208,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                     } else {
                         [monthList addObject:budget];
                     }
-
+                    
                     break;
                     
                 case SSJBudgetPeriodTypeYear:
@@ -89,18 +227,18 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         [budgetList addObjectsFromArray:monthList];
         [budgetList addObjectsFromArray:yearList];
         
-//        //  按照周、月、年的顺序排序
-//        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-//            SSJBudgetModel *model1 = obj1;
-//            SSJBudgetModel *model2 = obj2;
-//            if (model1.type < model2.type) {
-//                return NSOrderedAscending;
-//            } else if (model1.type > model2.type) {
-//                return NSOrderedDescending;
-//            } else {
-//                return NSOrderedSame;
-//            }
-//        }];
+        //        //  按照周、月、年的顺序排序
+        //        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        //            SSJBudgetModel *model1 = obj1;
+        //            SSJBudgetModel *model2 = obj2;
+        //            if (model1.type < model2.type) {
+        //                return NSOrderedAscending;
+        //            } else if (model1.type > model2.type) {
+        //                return NSOrderedDescending;
+        //            } else {
+        //                return NSOrderedSame;
+        //            }
+        //        }];
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -111,6 +249,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)queryForBudgetDetailWithID:(NSString *)ID success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
+    
     if (!ID || !ID.length) {
         SSJPRINT(@">>> SSJ warning:budget is nil or empty");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"budget is nil or empty"}];
@@ -123,7 +262,28 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
+        
+        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userid];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableDictionary *mapping = [NSMutableDictionary dictionary];
+        while ([resultSet next]) {
+            NSString *billId = [resultSet stringForColumn:@"cbillid"];
+            NSString *billName = [resultSet stringForColumn:@"cname"];
+            NSString *billColor = [resultSet stringForColumn:@"ccolor"];
+            [mapping setObject:@{SSJBudgetDetailBillInfoNameKey:billName,
+                                 SSJBudgetDetailBillInfoColorKey:billColor} forKey:billId];
+        }
+        [resultSet close];
+        
+        resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -135,10 +295,24 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         while ([resultSet next]) {
             budgetModel = [self budgetModelWithResultSet:resultSet inDatabase:db];
         }
+        [resultSet close];
+        
+        SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        NSString *query = [NSString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and a.cbilldate >= ? and a.cbilldate <= ? and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = ? and b.itype = 1 and b.istate <> 2 group by a.ibillid"];
-        resultSet = [db executeQuery:query, userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
+        NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname, b.id from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1 and b.istate <> 2", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
+        
+        if (![budgetModel.billIds isEqualToArray:@[@"all"]]) {
+            NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
+            for (NSString *billId in budgetModel.billIds) {
+                [billIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
+            }
+            [query appendFormat:@" and a.ibillid in (%@)", [billIds componentsJoinedByString:@","]];
+        }
+        
+        [query appendFormat:@" group by a.ibillid"];
+        
+        resultSet = [db executeQuery:query];
         
         if (!resultSet) {
             if (failure) {
@@ -152,6 +326,8 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         double amount = 0;
         NSMutableArray *circleItemArr = [NSMutableArray array];
         NSMutableArray *moneyArr = [NSMutableArray array];
+        NSMutableArray *listItem = [NSMutableArray array];
+        
         while ([resultSet next]) {
             double money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             double scale = money / budgetModel.payMoney;
@@ -166,20 +342,36 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 circleItem.imageBorderShowed = YES;
                 [circleItemArr addObject:circleItem];
             }
+            
+            SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
+            item.ID = [resultSet stringForColumn:@"id"];
+            item.imageName = [resultSet stringForColumn:@"ccoin"];
+            item.name = [resultSet stringForColumn:@"cname"];
+            item.colorValue = [resultSet stringForColumn:@"ccolor"];
+            item.money = money;
+            item.percentHiden = YES;
+            [listItem addObject:item];
         }
+        [resultSet close];
         
         for (int i = 0; i < circleItemArr.count; i ++) {
             SSJPercentCircleViewItem *circleItem = circleItemArr[i];
             circleItem.scale = [moneyArr[i] doubleValue] / amount;
         }
+        headerItem.circleItems = circleItemArr;
         
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:2];
+        
         if (budgetModel) {
             [result setObject:budgetModel forKey:SSJBudgetModelKey];
         }
         
-        if (circleItemArr) {
-            [result setObject:circleItemArr forKey:SSJBudgetCircleItemsKey];
+        if (headerItem) {
+            [result setObject:headerItem forKey:SSJBudgetDetailHeaderViewItemKey];
+        }
+        
+        if (listItem) {
+            [result setObject:listItem forKey:SSJBudgetListCellItemKey];
         }
         
         if (success) {
@@ -324,6 +516,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model success:(void(^)(int code, NSDictionary *additionInfo))success failure:(void (^)(NSError *error))failure {
+    
     if (![model isKindOfClass:[SSJBudgetModel class]]) {
         SSJPRINT(@"model is not kind of class SSJBudgetModel");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"model is not kind of class SSJBudgetModel"}];
@@ -358,8 +551,22 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return;
         }
         
-        // 检测相同类型、账本、周期预算有没有类别冲突
-        if (![billIds isEqualToString:@"all"]) {
+        if ([billIds isEqualToString:@"all"]) {
+            
+            // 检测所有相同类型（周、月、年）、账本、周期分预算总额是否大于当前设置的总预算金额
+            double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            if (model.budgetMoney < amount) {
+                if (success) {
+                    SSJDispatch_main_async_safe(^{
+                        success(3, @{SSJBudgetConflictMajorBudgetMoneyKey:@(model.budgetMoney),
+                                     SSJBudgetConflictSecondaryBudgetMoneyKey:@(amount)});
+                    });
+                }
+                return;
+            }
+        } else {
+            
+            // 检测相同类型（周、月、年）、账本、周期的分预算有没有类别冲突
             FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
             
             if (!resultSet) {
@@ -394,21 +601,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 }
                 return;
             }
-        }
-        
-        // 检测相同类型、账本、周期分预算不能大于总预算金额
-        if ([billIds isEqualToString:@"all"]) {
-            double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
-            if (model.budgetMoney < amount) {
-                if (success) {
-                    SSJDispatch_main_async_safe(^{
-                        success(3, @{SSJBudgetConflictMajorBudgetMoneyKey:@(model.budgetMoney),
-                                     SSJBudgetConflictSecondaryBudgetMoneyKey:@(amount)});
-                    });
-                }
-            }
-        } else {
-            FMResultSet *resultSet = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            
+            // 检测设置的分预算金额是否大于相同类型（周、月、年）、账本、周期的总预算金额额
+            resultSet = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
             
             if (!resultSet) {
                 if (failure) {
@@ -437,6 +632,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                                          SSJBudgetConflictBudgetModelKey:budgetModel});
                         });
                     }
+                    return;
                 }
             }
         }

@@ -8,14 +8,33 @@
 
 #import "SSJBaseItem.h"
 
+@class SSJBudgetModel;
+
 @interface SSJBudgetListCellItem : SSJBaseItem
 
-@property (nonatomic, copy) NSString *typeName;
+@property (nonatomic, copy) NSString *budgetID;
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, copy) NSString *billTypeName;
 
 @property (nonatomic, copy) NSString *period;
 
-@property (nonatomic) double payment;
+@property (nonatomic, copy) NSAttributedString *expend;
 
-@property (nonatomic) double budget;
+@property (nonatomic, copy) NSAttributedString *budget;
+
+@property (nonatomic, copy) NSString *progressColorValue;
+
+@property (nonatomic) CGFloat expendValue;
+
+@property (nonatomic) CGFloat budgetValue;
+
+@property (nonatomic) CGFloat rowHeight;
+
+// 是否总预算
+@property (nonatomic) BOOL isMajor;
+
++ (instancetype)cellItemWithBudgetModel:(SSJBudgetModel *)model billTypeMapping:(NSDictionary *)mapping;
 
 @end

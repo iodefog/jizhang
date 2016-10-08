@@ -10,6 +10,7 @@
 #import "SSJBudgetModel.h"
 #import "SSJBudgetTypeModel.h"
 
+@class SSJBudgetListCellItem;
 @class SSJBudgetBillTypeSelectionCellItem;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,8 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 // 预算模型key
 extern NSString *const SSJBudgetModelKey;
 
-// 预算图表模型key
-extern NSString *const SSJBudgetCircleItemsKey;
+// 预算详情header视图模型key
+extern NSString *const SSJBudgetDetailHeaderViewItemKey;
+
+// 预算详情列表key
+extern NSString *const SSJBudgetListCellItemKey;
 
 // 月预算编号key
 extern NSString *const SSJBudgetIDKey;
@@ -47,15 +51,27 @@ extern NSString *const SSJBudgetConflictBudgetModelKey;
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
++ (void)queryForBudgetCellItemListWithSuccess:(void(^)(NSArray<SSJBudgetListCellItem *> *result))success
+                                      failure:(void (^)(NSError * _Nullable error))failure;
+
+/**
+ *  查询当前有效的预算列表
+ *
+ *  @param success   查询成功的回调
+ *  @param failure   查询失败的回调
+ */
 + (void)queryForCurrentBudgetListWithSuccess:(void(^)(NSArray<SSJBudgetModel *> *result))success
-                                     failure:(void (^)(NSError * _Nullable error))failure;
+                                     failure:(void (^)(NSError *error))failure;
+
 
 /**
  *  查询预算详情
  *
  *  @param ID        预算编号
  *  @param success   查询成功的回调；
-                     参数result的结构：@{SSJBudgetModelKey:SSJBudgetModel实例, SSJBudgetCircleItemsKey:@[SSJPercentCircleViewItem实例]}
+                     参数result的结构：@{SSJBudgetModelKey:SSJBudgetModel实例,
+                                      SSJBudgetDetailHeaderViewItemKey:SSJBudgetDetailHeaderViewItem实例,
+                                      SSJBudgetListCellItemKey:@[SSJReportFormsItem实例]}
  *  @param failure   查询失败的回调
  */
 + (void)queryForBudgetDetailWithID:(NSString *)ID
