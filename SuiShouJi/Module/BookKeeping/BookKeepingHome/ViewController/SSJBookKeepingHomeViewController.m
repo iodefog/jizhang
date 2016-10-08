@@ -346,7 +346,7 @@ BOOL kHomeNeedLoginPop;
         if (self.items.count == 0) {
             return;
         }else{
-            CGPoint currentPostion = CGPointMake(self.view.width / 2, scrollView.contentOffset.y + 46);
+            CGPoint currentPostion = CGPointMake(self.view.frame.size.width / 2, scrollView.contentOffset.y + 46);
             NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
             SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
             NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(6, 2)] integerValue];

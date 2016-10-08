@@ -116,7 +116,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_search_history where cuserid = ? order by csearchdate",userId];
+        FMResultSet *resultSet = [db executeQuery:@"select * from bk_search_history where cuserid = ? order by csearchdate desc",userId];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{

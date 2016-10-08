@@ -12,7 +12,9 @@
 
 @interface SSJSearchBar()
 
-@property(nonatomic, strong) UIButton *cancelButton;
+@property(nonatomic, strong) UIButton *searchButton;
+
+@property(nonatomic, strong) UIButton *backButton;
 
 @end
 
@@ -24,7 +26,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        [self addSubview:self.cancelButton];
+        [self addSubview:self.backButton];
+        [self addSubview:self.searchButton];
         [self addSubview:self.searchTextInput];
     }
     return self;
@@ -32,12 +35,14 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.cancelButton.centerY = self.height / 2;
-    self.cancelButton.right = self.width - 10;
-    self.searchTextInput.size = CGSizeMake(self.width - 80, 30);
+    self.backButton.centerY = self.height / 2;
+    self.backButton.left = 10;
+    self.searchButton.centerY = self.height / 2;
+    self.searchButton.right = self.width - 10;
+    self.searchTextInput.size = CGSizeMake(self.width - 100 - self.backButton.left, 30);
     self.searchTextInput.layer.cornerRadius = 15;
     self.searchTextInput.centerY = self.height / 2;
-    self.searchTextInput.left = 15;
+    self.searchTextInput.left = self.backButton.right + 10;
 }
 
 - (UISearchBar *)searchTextInput{
@@ -61,30 +66,47 @@
     return _searchTextInput;
 }
 
-- (UIButton *)cancelButton{
-    if (!_cancelButton) {
-        _cancelButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
-        [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor] forState:UIControlStateNormal];
-        [_cancelButton addTarget:self action:@selector(cancelButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+- (UIButton *)searchButton{
+    if (!_searchButton) {
+        _searchButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+        [_searchButton setTitle:@"搜索" forState:UIControlStateNormal];
+        _searchButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_searchButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor] forState:UIControlStateNormal];
+        [_searchButton addTarget:self action:@selector(searchButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _cancelButton;
+    return _searchButton;
 }
 
-- (void)cancelButtonClicked:(id)sender{
-    if (self.cancelAction) {
-        self.cancelAction();
+- (UIButton *)backButton{
+    if (!_backButton) {
+        _backButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [_backButton setImage:[[UIImage imageNamed:@"navigation_backOff"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _backButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        [_backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _backButton;
+}
+
+- (void)searchButtonClicked:(id)sender{
+    if (self.searchAction) {
+        self.searchAction();
+    }
+}
+
+- (void)backButtonClicked:(id)sender{
+    if (self.backAction) {
+        self.backAction();
     }
 }
 
 - (void)updateAfterThemeChange{
-    [self.cancelButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor] forState:UIControlStateNormal];
+    [self.searchButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor] forState:UIControlStateNormal];
     self.searchTextInput.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
     [self.searchTextInput searchTextFieldView].font = [UIFont systemFontOfSize:15];
     [self.searchTextInput searchTextFieldView].textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"搜索" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+    self.backButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
 }
 
 /*
