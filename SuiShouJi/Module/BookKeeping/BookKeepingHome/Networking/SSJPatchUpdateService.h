@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseNetworkService.h"
+#import "SSJJsPatchItem.h"
 
 @interface SSJPatchUpdateService : SSJBaseNetworkService
 
@@ -15,8 +16,8 @@
  *
  *  @param version 当前客户端版本号
  */
-- (void)requestPatchWithCurrentVersion:(NSString *)version;
+- (void)requestPatchWithCurrentVersion:(NSString *)version Success:(void (^)(SSJJsPatchItem *item))success;
 
-@property(nonatomic, strong) NSArray *patchArray;
+@property(nonatomic, strong) SSJJsPatchItem *patchItem;
 
 @end

@@ -47,9 +47,6 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
     }else{
         self.titles = @[@[kTitle1,kTitle2,kTitle3,kTitle5]];
     }
-    if (self.item.editable) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
-    }
     [self.tableView registerClass:[SSJFundingTransferEdite class] forCellReuseIdentifier:SSJTransferEditeCellIdentifier];
     // Do any additional setup after loading the view.
 }
@@ -178,8 +175,12 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
             tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
             NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
             NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
-            if ([transferInParent isEqualToString:@"10"] || [transferOutParent isEqualToString:@"11"]) {
+            if ([transferInParent isEqualToString:@"10"] || [transferInParent isEqualToString:@"11"] || [transferOutParent isEqualToString:@"10"] || [transferOutParent isEqualToString:@"11"]) {
                 tansferItem.editable = NO;
+                self.navigationItem.rightBarButtonItem = nil;
+            }else{
+                tansferItem.editable = YES;
+                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
             }
         }else{
             tansferItem.transferDate = weakSelf.chargeItem.billDate;
@@ -196,8 +197,12 @@ static NSString * SSJTransferEditeCellIdentifier = @"SSJTransferEditeCellIdentif
             tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[weakSelf.chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
             NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
             NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
-            if ([transferInParent isEqualToString:@"10"] || [transferOutParent isEqualToString:@"11"]) {
+            if ([transferInParent isEqualToString:@"10"] || [transferInParent isEqualToString:@"11"] || [transferOutParent isEqualToString:@"10"] || [transferOutParent isEqualToString:@"11"]) {
                 tansferItem.editable = NO;
+                self.navigationItem.rightBarButtonItem = nil;
+            }else{
+                tansferItem.editable = YES;
+                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
             }
         }
         self.item = tansferItem;
