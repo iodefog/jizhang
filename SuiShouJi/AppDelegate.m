@@ -64,8 +64,6 @@ NSDate *SCYEnterBackgroundTime() {
 
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
-@property(nonatomic, strong) SSJPatchUpdateService *service;
-
 @property(nonatomic, strong) SSJGradientMaskView *maskView;
 @end
 
@@ -124,9 +122,8 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJJspatchAnalyze removePatch];
     }
     
-    [SSJJspatchAnalyze SSJJsPatchAnalyzeLocalPatch];
+    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
-    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     
     //微信登录
@@ -186,13 +183,6 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 #pragma mark - Getter
--(SSJPatchUpdateService *)service{
-    if (!_service) {
-        _service = [[SSJPatchUpdateService alloc]initWithDelegate:self];
-    }
-    return _service;
-}
-
 -(SSJGradientMaskView *)maskView{
     if (!_maskView) {
         _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
@@ -300,15 +290,6 @@ NSDate *SCYEnterBackgroundTime() {
     [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
 }
 
-- (void)serverDidFinished:(SSJBaseNetworkService *)service{
-    if ([service.returnCode isEqualToString:@"1"]) {
-        [self analyzeJspatch];
-    }
-}
-
--(void)analyzeJspatch{
-    [SSJJspatchAnalyze SSJJsPatchAnalyzeWithPatchItem:self.service.patchItem];
-}
     
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{

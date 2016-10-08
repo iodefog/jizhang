@@ -8,12 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJJsPatchItem.h"
+#import "SSJBaseNetworkService.h"
 
-@interface SSJJspatchAnalyze : NSObject
+@interface SSJJspatchAnalyze : NSObject<SSJBaseNetworkServiceDelegate>
 
-+ (void)SSJJsPatchAnalyzeWithPatchItem:(SSJJsPatchItem *)item;
-
-+ (void)SSJJsPatchAnalyzeLocalPatch;
++ (void)SSJJsPatchAnalyzePatch;
 
 + (void)removePatch;
 

@@ -9,6 +9,8 @@
 #import "SSJJspatchAnalyze.h"
 #import "AFNetworking.h"
 #import "JPEngine.h"
+#import "SSJPatchUpdateService.h"
+
 
 @implementation SSJJspatchAnalyze
 
@@ -21,7 +23,16 @@
     return queue;
 }
 
-+ (void)SSJJsPatchAnalyzeWithPatchItem:(SSJJsPatchItem *)item{
++ (void)SSJJsPatchAnalyzePatch{
+    [self SSJJsPatchAnalyzeLocalPatch];
+    SSJPatchUpdateService *service = [[SSJPatchUpdateService alloc]init];
+    __weak typeof(self) weakSelf = self;
+    [service requestPatchWithCurrentVersion:SSJAppVersion() Success:^(SSJJsPatchItem *item) {
+        [weakSelf SSJJsPatchAnalyzePatchWithItem:item];
+    }];
+}
+
++ (void)SSJJsPatchAnalyzePatchWithItem:(SSJJsPatchItem *)item{
     if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
@@ -61,12 +72,14 @@
 }
 
 + (void)SSJJsPatchAnalyzeLocalPatch{
-    NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",SSJLastPatchVersion()]];
-    dispatch_async([self sharedQueue], ^{
-        [JPEngine startEngine];
-        NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-        [JPEngine evaluateScript:script];
-    });
+    if ([SSJLastPatchVersion() integerValue]) {
+        NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",SSJLastPatchVersion()]];
+        dispatch_async([self sharedQueue], ^{
+            [JPEngine startEngine];
+            NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+            [JPEngine evaluateScript:script];
+        });
+    }
 }
 
 + (void)removePatch {
