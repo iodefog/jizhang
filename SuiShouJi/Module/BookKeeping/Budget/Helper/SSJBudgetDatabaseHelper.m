@@ -515,6 +515,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (void)checkIfConflictBudgetModel:(SSJBudgetModel *)model success:(void(^)(int code, NSDictionary *additionInfo))success failure:(void (^)(NSError *error))failure {
+    
     if (![model isKindOfClass:[SSJBudgetModel class]]) {
         SSJPRINT(@"model is not kind of class SSJBudgetModel");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"model is not kind of class SSJBudgetModel"}];
@@ -549,8 +550,22 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return;
         }
         
-        // 检测相同类型、账本、周期预算有没有类别冲突
-        if (![billIds isEqualToString:@"all"]) {
+        if ([billIds isEqualToString:@"all"]) {
+            
+            // 检测所有相同类型（周、月、年）、账本、周期分预算总额是否大于当前设置的总预算金额
+            double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            if (model.budgetMoney < amount) {
+                if (success) {
+                    SSJDispatch_main_async_safe(^{
+                        success(3, @{SSJBudgetConflictMajorBudgetMoneyKey:@(model.budgetMoney),
+                                     SSJBudgetConflictSecondaryBudgetMoneyKey:@(amount)});
+                    });
+                }
+                return;
+            }
+        } else {
+            
+            // 检测相同类型（周、月、年）、账本、周期的分预算有没有类别冲突
             FMResultSet *resultSet = [db executeQuery:@"select cbilltype from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
             
             if (!resultSet) {
@@ -585,21 +600,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 }
                 return;
             }
-        }
-        
-        // 检测相同类型、账本、周期分预算不能大于总预算金额
-        if ([billIds isEqualToString:@"all"]) {
-            double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
-            if (model.budgetMoney < amount) {
-                if (success) {
-                    SSJDispatch_main_async_safe(^{
-                        success(3, @{SSJBudgetConflictMajorBudgetMoneyKey:@(model.budgetMoney),
-                                     SSJBudgetConflictSecondaryBudgetMoneyKey:@(amount)});
-                    });
-                }
-            }
-        } else {
-            FMResultSet *resultSet = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
+            
+            // 检测设置的分预算金额是否大于相同类型（周、月、年）、账本、周期的总预算金额额
+            resultSet = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype = 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];
             
             if (!resultSet) {
                 if (failure) {
@@ -628,6 +631,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                                          SSJBudgetConflictBudgetModelKey:budgetModel});
                         });
                     }
+                    return;
                 }
             }
         }
