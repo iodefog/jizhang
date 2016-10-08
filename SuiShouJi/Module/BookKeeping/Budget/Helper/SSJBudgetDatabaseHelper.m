@@ -349,6 +349,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             item.name = [resultSet stringForColumn:@"cname"];
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
             item.money = money;
+            item.percentHiden = YES;
             [listItem addObject:item];
         }
         [resultSet close];

@@ -254,6 +254,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         _tableView.separatorInset = UIEdgeInsetsZero;
         _tableView.tableFooterView = [[UIView alloc] init];
         [_tableView registerClass:[SSJReportFormsIncomeAndPayCell class] forCellReuseIdentifier:kIncomeAndPayCellID];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _tableView;
 }

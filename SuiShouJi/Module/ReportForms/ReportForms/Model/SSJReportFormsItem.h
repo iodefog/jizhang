@@ -42,4 +42,7 @@ typedef NS_ENUM(NSInteger, SSJReportFormsType) {
 // 是否成员（不是成员就是分类）
 @property (nonatomic) BOOL isMember;
 
+// 是否隐藏比例
+@property (nonatomic) BOOL percentHiden;
+
 @end
