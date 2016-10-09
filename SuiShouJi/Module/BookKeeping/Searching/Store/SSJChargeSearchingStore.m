@@ -82,19 +82,25 @@
                 SSJSearchResultItem *searchItem = [[SSJSearchResultItem alloc]init];
                 searchItem.searchOrder = order;
                 searchItem.date = item.billDate;
-                searchItem.balance = [item.money doubleValue];
-                if (order == SSJChargeListOrderMoneyAscending || order == SSJChargeListOrderMoneyDescending) {
-                    searchItem.balance = [item.money doubleValue];
+                if (order == SSJChargeListOrderDateAscending || order == SSJChargeListOrderDateDescending) {
+                    if (item.incomeOrExpence) {
+                        searchItem.balance = - [item.money doubleValue];
+                    }else{
+                        searchItem.balance = [item.money doubleValue];
+                    }
                 }
                 searchItem.chargeList = [NSMutableArray arrayWithObject:item];
                 lastBillDate = item.billDate;
                 [tempArr addObject:searchItem];
             }else{
                 SSJSearchResultItem *searchItem = [tempArr lastObject];
-                if (order == SSJChargeListOrderMoneyAscending || order == SSJChargeListOrderMoneyDescending) {
-                    searchItem.balance =  searchItem.balance + [item.money doubleValue];
+                if (order == SSJChargeListOrderDateAscending || order == SSJChargeListOrderDateDescending) {\
+                    if (item.incomeOrExpence) {
+                        searchItem.balance =  searchItem.balance - [item.money doubleValue];
+                    }else{
+                        searchItem.balance =  searchItem.balance +  [item.money doubleValue];
+                    }
                 }
-                searchItem.balance = searchItem.balance + [item.money doubleValue];
                 [searchItem.chargeList addObject:item];
                 lastBillDate = item.billDate;
             }

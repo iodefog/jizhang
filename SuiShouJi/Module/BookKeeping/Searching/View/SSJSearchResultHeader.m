@@ -105,6 +105,8 @@
             self.moneyLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.reportFormsCurvePaymentColor];
             self.moneyLabel.text = [NSString stringWithFormat:@"%.2f",item.balance];
         }
+    }else{
+        self.moneyLabel.text = @"";
     }
     [self.moneyLabel sizeToFit];
 }
