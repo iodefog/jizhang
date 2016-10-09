@@ -112,18 +112,7 @@ BOOL kHomeNeedLoginPop;
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDateFromDatebase];
-        [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.budgetButton.model = [result firstObject];
-            for (int i = 0; i < result.count; i++) {
-                if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
-                    self.remindView.model = [result objectAtIndex:i];
-                    [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
-                    break;
-                }
-            }
-        } failure:^(NSError * _Nullable error) {
-            NSLog(@"%@",error.localizedDescription);
-        }];
+        [self reloadBudgetData];
         NSString *booksid = SSJGetCurrentBooksType();
         SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
         self.leftButton.item = currentBooksItem;
@@ -802,9 +791,12 @@ BOOL kHomeNeedLoginPop;
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
         self.budgetButton.model = [result firstObject];
         for (int i = 0; i < result.count; i++) {
-            if ([result objectAtIndex:i].remindMoney >= [result objectAtIndex:i].budgetMoney - [result objectAtIndex:i].payMoney && [result objectAtIndex:i].isRemind == 1 && [result objectAtIndex:i].isAlreadyReminded == 0) {
-                self.remindView.model = [result objectAtIndex:i];
-                [[UIApplication sharedApplication].keyWindow addSubview:self.remindView];
+            SSJBudgetModel *model = [result objectAtIndex:i];
+            if (model.isRemind
+                && !model.isAlreadyReminded
+                && model.remindMoney >= model.budgetMoney - model.payMoney) {
+                self.remindView.model = model;
+                [self.remindView show];
                 break;
             }
         }
@@ -818,20 +810,5 @@ BOOL kHomeNeedLoginPop;
     self.hasLoad = NO;
     [self getDateFromDatebase];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
