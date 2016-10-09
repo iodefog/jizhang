@@ -38,6 +38,7 @@
 #import "UIViewController+SSJMotionPassword.h"
 #import "SSJBookKeepingHomeBooksButton.h"
 #import "SSJSearchingViewController.h"
+#import "SSJBookKeepingHomeDateView.h"
 
 BOOL kHomeNeedLoginPop;
 
@@ -55,6 +56,7 @@ BOOL kHomeNeedLoginPop;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
 @property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
+@property(nonatomic, strong) SSJBookKeepingHomeDateView *floatingDateView;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -316,6 +318,7 @@ BOOL kHomeNeedLoginPop;
         }];
     }
     if (scrollView.contentOffset.y < - 46) {
+        [self.floatingDateView dismiss];
         self.tableView.lineHeight = - scrollView.contentOffset.y;
         if (self.items.count == 0) {
             self.tableView.hasData = NO;
@@ -329,6 +332,9 @@ BOOL kHomeNeedLoginPop;
         }
 
     }else {
+        if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
+            [self.floatingDateView show];
+        }
         _isRefreshing = NO;
         if (self.items.count == 0) {
             return;
@@ -345,6 +351,12 @@ BOOL kHomeNeedLoginPop;
             }
         }
 
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y <= 46) {
+        [self.floatingDateView dismiss];
     }
 }
 
@@ -569,6 +581,13 @@ BOOL kHomeNeedLoginPop;
         [_leftButton.button addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _leftButton;
+}
+
+- (SSJBookKeepingHomeDateView *)floatingDateView{
+    if (!_floatingDateView) {
+        _floatingDateView = [[SSJBookKeepingHomeDateView alloc]init];
+    }
+    return _floatingDateView;
 }
 
 #pragma mark - Event
