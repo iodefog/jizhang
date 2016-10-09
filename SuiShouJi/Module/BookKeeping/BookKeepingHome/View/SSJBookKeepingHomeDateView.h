@@ -12,6 +12,8 @@
 
 @property (nonatomic, copy) void(^dismissBlock)();
 
+@property (nonatomic, copy) void(^showBlock)();
+
 @property(nonatomic, strong) NSString *currentDate;
 
 - (void)show;
