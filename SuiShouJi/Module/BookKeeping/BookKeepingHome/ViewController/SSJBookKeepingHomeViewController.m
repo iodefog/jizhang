@@ -65,6 +65,9 @@ BOOL kHomeNeedLoginPop;
 @property (nonatomic) long currentYear;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
+
+@property (nonatomic, strong) NSMutableDictionary *budgetRemindInfo;
+
 @end
 
 @implementation SSJBookKeepingHomeViewController{
@@ -79,6 +82,7 @@ BOOL kHomeNeedLoginPop;
         self.statisticsTitle = @"首页";
         self.extendedLayoutIncludesOpaqueBars = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
+        _budgetRemindInfo = [NSMutableDictionary dictionary];
 //        [[UIApplication sharedApplication]setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     return self;
@@ -792,11 +796,24 @@ BOOL kHomeNeedLoginPop;
         self.budgetButton.model = [result firstObject];
         for (int i = 0; i < result.count; i++) {
             SSJBudgetModel *model = [result objectAtIndex:i];
+            NSArray *remindedBookTypes = _budgetRemindInfo[SSJUSERID()];
+            NSString *booksType = SSJGetCurrentBooksType();
+            
             if (model.isRemind
                 && !model.isAlreadyReminded
+                && ![remindedBookTypes containsObject:booksType]
                 && model.remindMoney >= model.budgetMoney - model.payMoney) {
+                
                 self.remindView.model = model;
                 [self.remindView show];
+                
+                NSMutableArray *tmpRemindBookTypes = [remindedBookTypes mutableCopy];
+                if (!tmpRemindBookTypes) {
+                    tmpRemindBookTypes = [NSMutableArray array];
+                }
+                [tmpRemindBookTypes addObject:booksType];
+                [_budgetRemindInfo setObject:tmpRemindBookTypes forKey:SSJUSERID()];
+                
                 break;
             }
         }
