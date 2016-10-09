@@ -72,26 +72,90 @@
 - (void)setOrder:(SSJChargeListOrder)order{
     _order = order;
     switch (order) {
-        case SSJChargeListOrderMoneyAscending:
+        case SSJChargeListOrderMoneyAscending:{
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:1 animated:YES];
             break;
+        }
             
-        case SSJChargeListOrderMoneyDescending:
+        case SSJChargeListOrderMoneyDescending:{
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:1 animated:YES];
+            break;
+        }
+            
+        case SSJChargeListOrderDateAscending:{
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:0 animated:YES];
+            break;
+        }
+            
+        case SSJChargeListOrderDateDescending:{
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:0 animated:YES];
+            break;
+        }
+            
+        default:{
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:0 animated:YES];
+            break;
+        }
+    }
+}
 
-            break;
-            
-        case SSJChargeListOrderDateAscending:
-            [self.slidePageView setSelectedIndex:0 animated:YES];
-            break;
-            
-        case SSJChargeListOrderDateDescending:
-            [self.slidePageView setSelectedIndex:0 animated:YES];
-            break;
-            
-        default:
-            [self.slidePageView setSelectedIndex:0 animated:YES];
-            break;
+#pragma mark - SCYSlidePagingHeaderViewDelegate
+- (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index{
+    if (index == 0) {
+        switch (self.order) {
+            case SSJChargeListOrderMoneyAscending:
+                self.order = SSJChargeListOrderDateAscending;
+                break;
+                
+            case SSJChargeListOrderMoneyDescending:
+                self.order = SSJChargeListOrderDateAscending;
+                break;
+                
+            case SSJChargeListOrderDateAscending:
+                self.order = SSJChargeListOrderDateDescending;
+                break;
+                
+            case SSJChargeListOrderDateDescending:
+                self.order = SSJChargeListOrderDateAscending;
+                break;
+                
+            default:
+                break;
+        }
+    }else if(index == 1){
+        switch (self.order) {
+            case SSJChargeListOrderMoneyAscending:
+                self.order = SSJChargeListOrderMoneyDescending;
+                break;
+                
+            case SSJChargeListOrderMoneyDescending:
+                self.order = SSJChargeListOrderMoneyAscending;
+                break;
+                
+            case SSJChargeListOrderDateAscending:
+                self.order = SSJChargeListOrderMoneyAscending;
+                break;
+                
+            case SSJChargeListOrderDateDescending:
+                self.order = SSJChargeListOrderMoneyAscending;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    if (self.orderSelectBlock) {
+        self.orderSelectBlock(self.order);
     }
 }
 

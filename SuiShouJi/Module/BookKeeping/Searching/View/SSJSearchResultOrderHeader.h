@@ -13,7 +13,8 @@
 
 @property(nonatomic) SSJChargeListOrder order;
 
-
 @property(nonatomic) NSInteger resultCount;
+
+@property (nonatomic, copy) void(^orderSelectBlock)(SSJChargeListOrder order);
 
 @end
