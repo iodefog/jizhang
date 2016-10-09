@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJJsPatchItem.h"
+#import "SSJBaseNetworkService.h"
 
-@interface SSJJspatchAnalyze : NSObject
+@interface SSJJspatchAnalyze : NSObject<SSJBaseNetworkServiceDelegate>
 
-+(void)SSJJsPatchAnalyzeWithUrl:(NSString *)urlStr MD5:(NSString *)md5 patchVersion:(NSString *)version;
++ (void)SSJJsPatchAnalyzePatch;
 
 + (void)removePatch;
 

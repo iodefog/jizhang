@@ -10,5 +10,9 @@
 #import "SSJBudgetModel.h"
 
 @interface SSJHomeReminderView : UIView
+
 @property (nonatomic,strong) SSJBudgetModel *model;
+
+- (void)show;
+
 @end

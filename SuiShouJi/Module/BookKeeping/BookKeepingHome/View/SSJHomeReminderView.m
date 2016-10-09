@@ -8,6 +8,7 @@
 
 #import "SSJHomeReminderView.h"
 #import "SSJDatabaseQueue.h"
+#import "UIView+SSJViewAnimatioin.h"
 
 @interface SSJHomeReminderView()
 @property (nonatomic,strong) UIImageView *remindImage;
@@ -36,6 +37,14 @@
     self.remindLabel.centerX = self.width / 2;
     self.closeButton.centerX = self.width / 2;
     self.closeButton.top = self.remindLabel.bottom + 15;
+}
+
+- (void)show {
+    self.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.alpha = 1;
+    }];
 }
 
 -(UIImageView *)remindImage{
@@ -116,7 +125,11 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         [db executeUpdate:@"update BK_USER_BUDGET set ihasremind = 1 where IBID = ? and CUSERID = ?",self.model.ID,SSJUSERID()];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self removeFromSuperview];
+            [UIView animateWithDuration:0.25 animations:^{
+                self.alpha = 0;
+            } completion:^(BOOL finished) {
+                [self removeFromSuperview];
+            }];
         });
     }];
 }

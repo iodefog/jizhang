@@ -39,6 +39,10 @@
     
     NSDate * fireDate = item.remindDate;
     
+    if (!item.userId.length) {
+        item.userId = SSJUSERID();
+    }
+    
     if (!item.remindState) {
         return;
     }
