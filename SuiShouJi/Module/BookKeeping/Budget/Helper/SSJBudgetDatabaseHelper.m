@@ -540,7 +540,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         // 检测相同类型、账本、类别预算有没有周期冲突
-        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate <= datetime('now', 'localtime') and cedate >= datetime('now', 'localtime') and cbooksid = ? and cbilltype = ?", userId, model.ID, @(model.type), model.booksId, billIds];
+        BOOL isConficted = [db boolForQuery:@"select count(*) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and csdate <= date('now', 'localtime') and cedate >= date('now', 'localtime') and cbooksid = ? and cbilltype = ?", userId, model.ID, @(model.type), model.booksId, billIds];
         
         if (isConficted) {
             if (success) {
