@@ -8,11 +8,11 @@
 
 #import "SSJBudgetEditLabelCell.h"
 
-@interface SSJBudgetEditLabelCell ()
-
-@property (nonatomic, strong) UILabel *subtitleLab;
-
-@end
+//@interface SSJBudgetEditLabelCell ()
+//
+//@property (nonatomic, strong) UILabel *subtitleLab;
+//
+//@end
 
 @implementation SSJBudgetEditLabelCell
 
@@ -20,17 +20,10 @@
     if (self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier]) {
         
         self.textLabel.font = [UIFont systemFontOfSize:18];
-        self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        self.detailTextLabel.font = [UIFont systemFontOfSize:18];
+        self.detailTextLabel.textAlignment = NSTextAlignmentRight;
         
-        self.detailTextLabel.font = [UIFont systemFontOfSize:11];
-        self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        
-        self.subtitleLab = [[UILabel alloc] init];
-        self.subtitleLab.backgroundColor = [UIColor clearColor];
-        self.subtitleLab.font = [UIFont systemFontOfSize:18];
-        self.subtitleLab.textAlignment = NSTextAlignmentRight;
-        self.subtitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        [self.contentView addSubview:self.subtitleLab];
+        [self updateAppearance];
     }
     return self;
 }
@@ -38,14 +31,29 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.textLabel.left = self.detailTextLabel.left = 10;
+    [self.imageView sizeToFit];
+    self.imageView.left = 10;
+    self.imageView.centerY = self.contentView.height * 0.5;
+    
+    self.textLabel.left = self.imageView.right + 10;
     self.textLabel.centerY = self.contentView.height * 0.5;
-    self.detailTextLabel.centerY = self.contentView.height - (self.contentView.height - self.textLabel.bottom) * 0.5;
+    
     if (self.customAccessoryType == UITableViewCellAccessoryNone) {
-        self.subtitleLab.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 30, self.contentView.height);
+        self.detailTextLabel.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 30, self.contentView.height);
     } else {
-        self.subtitleLab.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 20, self.contentView.height);
+        self.detailTextLabel.frame = CGRectMake(self.textLabel.right + 20, 0, self.contentView.width - self.textLabel.right - 20, self.contentView.height);
     }
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 @end
