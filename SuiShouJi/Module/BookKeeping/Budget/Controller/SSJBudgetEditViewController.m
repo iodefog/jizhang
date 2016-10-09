@@ -157,8 +157,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     return 10;
 }
 
-- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[UIView alloc] init];
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.1;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -191,7 +191,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.model.budgetMoney = [text doubleValue];
         self.model.remindMoney = self.remindPercent * self.model.budgetMoney;
         
-        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:4]];
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
         if (cell) {
             [self updateRemindMoneyScaleWithCell:cell];
             [self updateRemindMoneyWithCell:cell];
@@ -205,7 +205,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         self.remindPercent = MIN([textField.text doubleValue], 100) / 100;
         self.model.remindMoney = self.remindPercent * self.model.budgetMoney;
         
-        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:4]];
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
         if (cell) {
             [self updateRemindMoneyWithCell:cell];
         }
@@ -218,10 +218,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.tag == kBudgetMoneyTextFieldTag) {
-        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3]];
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
         cell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
     } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
-        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:4]];
+        SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:2]];
         if (cell) {
             [self updateRemindMoneyScaleWithCell:cell];
         }
@@ -255,7 +255,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     self.model.isRemind = switchCtrl.isOn;
     [self updateCellTitles];
     [self.tableView beginUpdates];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
 }
 
@@ -330,7 +330,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 wself.model.budgetMoney = secondaryAmount;
                 [wself.tableView reloadData];
                 [wself.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-                SSJBudgetEditTextFieldCell *budgetMoneyCell = [wself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3]];
+                SSJBudgetEditTextFieldCell *budgetMoneyCell = [wself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
                 [budgetMoneyCell.textField becomeFirstResponder];
                 
             }], [SSJAlertViewAction actionWithTitle:@"更改分类金额" handler:^(SSJAlertViewAction *action) {
@@ -358,7 +358,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 wself.model.budgetMoney = majorAmount - (secondaryAmount - wself.model.budgetMoney);
                 [wself.tableView reloadData];
                 [wself.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-                SSJBudgetEditTextFieldCell *budgetMoneyCell = [wself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:3]];
+                SSJBudgetEditTextFieldCell *budgetMoneyCell = [wself.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
                 [budgetMoneyCell.textField becomeFirstResponder];
                 
             }], nil];
@@ -472,8 +472,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         SSJBudgetEditLabelCell *budgetTypeCell = cell;
         budgetTypeCell.imageView.image = [[UIImage imageNamed:@"xuhuan_leibie"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetTypeCell.detailTextLabel.text = [self budgetTypeNames];
-//        budgetTypeCell.detailTextLabel.text = nil;
-//        [budgetTypeCell.detailTextLabel sizeToFit];
         budgetTypeCell.selectionStyle = _isEdit ? UITableViewCellSelectionStyleNone : SSJ_CURRENT_THEME.cellSelectionStyle;
         budgetTypeCell.customAccessoryType = _isEdit ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
 
@@ -481,8 +479,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         //  账本类型
         SSJBudgetEditLabelCell *bookTypeCell = cell;
         bookTypeCell.detailTextLabel.text = _bookName;
-//        bookTypeCell.detailTextLabel.text = nil;
-//        [bookTypeCell.detailTextLabel sizeToFit];
         bookTypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         bookTypeCell.customAccessoryType = UITableViewCellAccessoryNone;
         bookTypeCell.imageView.image = [[UIImage imageNamed:@"xuhuan_zhangben"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -545,8 +541,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
         budgetPeriodCell.imageView.image = [[UIImage imageNamed:@"xuhuan_xuhuan"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetPeriodCell.detailTextLabel.text = [self budgetPeriod];
-//        budgetPeriodCell.detailTextLabel.text = nil;
-//        [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         
@@ -555,15 +549,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         SSJBudgetEditLabelCell *budgetPeriodCell = cell;
         budgetPeriodCell.imageView.image = [[UIImage imageNamed:@"budget_jiesuan"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetPeriodCell.detailTextLabel.text = [self accountday];
-//        budgetPeriodCell.detailTextLabel.text = nil;
-//        [budgetPeriodCell.detailTextLabel sizeToFit];
         budgetPeriodCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         budgetPeriodCell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
 }
 
 - (NSString *)accountday {
-    // 这里没有判断一种情况，如果是2月份，并且只有28天，选择的截止日是28日的话，如何区分是每月28号还是每月最后一天
     NSString *accountday = nil;
     NSDate *endDate = [NSDate dateWithString:_model.endDate formatString:@"yyyy-MM-dd"];
     
@@ -611,9 +602,13 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 
 - (void)updateCellTitles {
     if (self.model.isRemind) {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
+//        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
+        
+        self.cellTitles = @[@[kBudgetTypeTitle, kBooksTypeTitle, kBudgetMoneyTitle], @[kAutoContinueTitle], @[kBudgetRemindTitle, kBudgetRemindScaleTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
     } else {
-        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
+//        self.cellTitles = @[@[kBudgetTypeTitle], @[kBooksTypeTitle], @[kAutoContinueTitle], @[kBudgetMoneyTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
+        
+        self.cellTitles = @[@[kBudgetTypeTitle, kBooksTypeTitle, kBudgetMoneyTitle], @[kAutoContinueTitle], @[kBudgetRemindTitle], @[kBudgetPeriodTitle, kAccountDayTitle]];
     }
 }
 
@@ -755,7 +750,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 #pragma mark - Getter
 - (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStylePlain];
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];
