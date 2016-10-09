@@ -1431,11 +1431,11 @@
 		9CC2C4F61D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F71D7EBF770024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
 		9CC2C4F81D7EBF780024BC74 /* SSJBookKeepingHomeBooksButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */; };
-		9CC452C11D9B59EE0044FA87 /* SSJMultiFunctionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */; };
-		9CC452C91D9B59F40044FA87 /* SSJMultiFunctionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */; };
-		9CC452CA1D9B59F50044FA87 /* SSJMultiFunctionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */; };
-		9CC452CB1D9B59F50044FA87 /* SSJMultiFunctionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */; };
-		9CC452CC1D9B59F60044FA87 /* SSJMultiFunctionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */; };
+		9CC452C11D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */; };
+		9CC452C91D9B59F40044FA87 /* SSJMultiFunctionButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */; };
+		9CC452CA1D9B59F50044FA87 /* SSJMultiFunctionButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */; };
+		9CC452CB1D9B59F50044FA87 /* SSJMultiFunctionButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */; };
+		9CC452CC1D9B59F60044FA87 /* SSJMultiFunctionButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */; };
 		9CC452CF1D9B62A90044FA87 /* SSJSearchHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */; };
 		9CC452D01D9B62AD0044FA87 /* SSJSearchHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */; };
 		9CC452D11D9B62AE0044FA87 /* SSJSearchHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */; };
@@ -3139,8 +3139,8 @@
 		9C9DD65F1D4768F5001FA3C5 /* SSJClearUserDataService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJClearUserDataService.m; sourceTree = "<group>"; };
 		9C9DD6681D49FA31001FA3C5 /* SSJThemeManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeManagerViewController.h; sourceTree = "<group>"; };
 		9C9DD6691D49FA31001FA3C5 /* SSJThemeManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeManagerViewController.m; sourceTree = "<group>"; };
-		9CC452BF1D9B59EE0044FA87 /* SSJMultiFunctionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMultiFunctionButton.h; sourceTree = "<group>"; };
-		9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMultiFunctionButton.m; sourceTree = "<group>"; };
+		9CC452BF1D9B59EE0044FA87 /* SSJMultiFunctionButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMultiFunctionButtonView.h; sourceTree = "<group>"; };
+		9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMultiFunctionButtonView.m; sourceTree = "<group>"; };
 		9CC452CD1D9B62A90044FA87 /* SSJSearchHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchHistoryItem.h; sourceTree = "<group>"; };
 		9CC452CE1D9B62A90044FA87 /* SSJSearchHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchHistoryItem.m; sourceTree = "<group>"; };
 		9CC97D6B1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBookKeepingHomeDateView.h; sourceTree = "<group>"; };
@@ -3874,8 +3874,8 @@
 				9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */,
 				9C1A9CA91D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.h */,
 				9C1A9CAA1D7D76AE0032BA0D /* SSJBookKeepingHomeBooksButton.m */,
-				9CC452BF1D9B59EE0044FA87 /* SSJMultiFunctionButton.h */,
-				9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButton.m */,
+				9CC452BF1D9B59EE0044FA87 /* SSJMultiFunctionButtonView.h */,
+				9CC452C01D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m */,
 				9CC97D6B1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.h */,
 				9CC97D6C1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.m */,
 			);
@@ -6984,7 +6984,7 @@
 				7DBA55E11D6D32B700C02D79 /* SSJFundingTransferEditeViewController.m in Sources */,
 				7DBA55E21D6D32B700C02D79 /* SSJFundingDetailItem.m in Sources */,
 				9C9A0C5C1D6D9759002AF046 /* SSJLoanFundAccountSelectionCellItem.m in Sources */,
-				9CC452CA1D9B59F50044FA87 /* SSJMultiFunctionButton.m in Sources */,
+				9CC452CA1D9B59F50044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
 				7DBA55E31D6D32B700C02D79 /* SSJPercentCircleView.m in Sources */,
 				7DBA55E41D6D32B700C02D79 /* SSJPersonalDetailHelper.m in Sources */,
 				7DBA55E51D6D32B700C02D79 /* SSJMagicExportCalendarView.m in Sources */,
@@ -7497,7 +7497,7 @@
 				9C2A67631D194CA70010F1DA /* SSJForgotPSWSendVerCodeService.m in Sources */,
 				9C2A67641D194CA70010F1DA /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9C2A67651D194CA70010F1DA /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
-				9CC452C91D9B59F40044FA87 /* SSJMultiFunctionButton.m in Sources */,
+				9CC452C91D9B59F40044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
 				9C2A67661D194CA70010F1DA /* SSJGradientMaskView.m in Sources */,
 				9C2A67671D194CA70010F1DA /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				9C2A67681D194CA70010F1DA /* SSJChargeDetailMemoCell.m in Sources */,
@@ -7902,7 +7902,7 @@
 				9CECFB5D1D6D41A700DB2C8B /* SSJFundingTransferEditeViewController.m in Sources */,
 				9CECFB5E1D6D41A700DB2C8B /* SSJFundingDetailItem.m in Sources */,
 				9C9A0C5D1D6D9759002AF046 /* SSJLoanFundAccountSelectionCellItem.m in Sources */,
-				9CC452CB1D9B59F50044FA87 /* SSJMultiFunctionButton.m in Sources */,
+				9CC452CB1D9B59F50044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
 				9CECFB5F1D6D41A700DB2C8B /* SSJPercentCircleView.m in Sources */,
 				9CECFB601D6D41A700DB2C8B /* SSJPersonalDetailHelper.m in Sources */,
 				9CECFB611D6D41A700DB2C8B /* SSJMagicExportCalendarView.m in Sources */,
@@ -8365,7 +8365,7 @@
 				9CECFF551D6D41EB00DB2C8B /* SSJFundingTransferEditeViewController.m in Sources */,
 				9CECFF561D6D41EB00DB2C8B /* SSJFundingDetailItem.m in Sources */,
 				9C9A0C5E1D6D975B002AF046 /* SSJLoanFundAccountSelectionCellItem.m in Sources */,
-				9CC452CC1D9B59F60044FA87 /* SSJMultiFunctionButton.m in Sources */,
+				9CC452CC1D9B59F60044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
 				9CECFF571D6D41EB00DB2C8B /* SSJPercentCircleView.m in Sources */,
 				9CECFF581D6D41EB00DB2C8B /* SSJPersonalDetailHelper.m in Sources */,
 				9CECFF591D6D41EB00DB2C8B /* SSJMagicExportCalendarView.m in Sources */,
@@ -8878,7 +8878,7 @@
 				9CD9BC141CFD2DAA0061803B /* SSJMagicExportCalendarIndexPath.m in Sources */,
 				9CD9BC341CFD2DAA0061803B /* SSJMotionPasswordLoginPasswordAlertView.m in Sources */,
 				9C2ABB8D1CF7E969002FC79E /* SSJGradientMaskView.m in Sources */,
-				9CC452C11D9B59EE0044FA87 /* SSJMultiFunctionButton.m in Sources */,
+				9CC452C11D9B59EE0044FA87 /* SSJMultiFunctionButtonView.m in Sources */,
 				9C66F11A1D20C19B0094125D /* SSJThemeHomeViewController.m in Sources */,
 				9CD9BBFF1CFD2DAA0061803B /* SSJBookkeepingTreeCheckInModel.m in Sources */,
 				7D5F33521CEAE6C10086B67E /* SSJChargeDetailMemoCell.m in Sources */,

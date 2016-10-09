@@ -131,9 +131,6 @@ BOOL kHomeNeedLoginPop;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self ssj_remindUserToSetMotionPasswordIfNeeded];
-    if (!_dateViewHasDismiss) {
-        [self.floatingDateView dismiss];
-    }
 }
 
 - (void)viewDidLoad {
@@ -159,6 +156,10 @@ BOOL kHomeNeedLoginPop;
     self.selectIndex = nil;
     [self getCurrentDate];
     [self.tableView reloadData];
+    if (!_dateViewHasDismiss) {
+        [self.floatingDateView dismiss];
+        _dateViewHasDismiss = YES;
+    }
 }
 
 -(void)viewDidLayoutSubviews{
