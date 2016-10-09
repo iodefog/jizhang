@@ -66,6 +66,7 @@ BOOL kHomeNeedLoginPop;
 @property (nonatomic) long currentMonth;
 @property (nonatomic) long currentDay;
 
+// 保存用户哪个账本的预算提醒过 @{userId:@[booksType, ...], ...}
 @property (nonatomic, strong) NSMutableDictionary *budgetRemindInfo;
 
 @end
