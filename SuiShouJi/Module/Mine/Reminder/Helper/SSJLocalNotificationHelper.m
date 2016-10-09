@@ -29,6 +29,10 @@
 
 + (void)registerLocalNotificationWithremindItem:(SSJReminderItem *)item
 {
+    if (!item.userId.length) {
+        item.userId = SSJUSERID();
+    }
+    
     NSMutableArray *notificationsArr = [NSMutableArray array];
     
     NSDictionary *remindDic = [item mj_keyValues];
