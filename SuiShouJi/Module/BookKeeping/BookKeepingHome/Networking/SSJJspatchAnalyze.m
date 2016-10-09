@@ -9,6 +9,8 @@
 #import "SSJJspatchAnalyze.h"
 #import "AFNetworking.h"
 #import "JPEngine.h"
+#import "SSJPatchUpdateService.h"
+
 
 @implementation SSJJspatchAnalyze
 
@@ -21,40 +23,63 @@
     return queue;
 }
 
-+(void)SSJJsPatchAnalyzeWithUrl:(NSString *)urlStr MD5:(NSString *)md5 patchVersion:(NSString *)version{
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-    if (![urlStr hasPrefix:@"http"]) {
-        urlStr = [NSString stringWithFormat:@"http://%@",urlStr];
-    }
-    NSURL *URL = [NSURL URLWithString:urlStr];
-    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-
-    
-    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-        if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"]]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"] withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-        NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/%@",response.suggestedFilename]];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-            [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
-        }
-        NSURL *fileURL = [NSURL fileURLWithPath:path];
-        return fileURL;
-    } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-        if (error) {
-            NSLog(@"%@",[error localizedDescription]);
-        }else{
-            NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/%@",response.suggestedFilename]];
-            dispatch_async([self sharedQueue], ^{
-                [JPEngine startEngine];
-                NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-                [JPEngine evaluateScript:script];
-                SSJSavePatchVersion([version integerValue]);
-            });
-        }
++ (void)SSJJsPatchAnalyzePatch{
+    [self SSJJsPatchAnalyzeLocalPatch];
+    SSJPatchUpdateService *service = [[SSJPatchUpdateService alloc]init];
+    __weak typeof(self) weakSelf = self;
+    [service requestPatchWithCurrentVersion:SSJAppVersion() Success:^(SSJJsPatchItem *item) {
+        [weakSelf SSJJsPatchAnalyzePatchWithItem:item];
     }];
-    [downloadTask resume];
+}
+
++ (void)SSJJsPatchAnalyzePatchWithItem:(SSJJsPatchItem *)item{
+    if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        if (![item.patchUrl hasPrefix:@"http"]) {
+            item.patchUrl = [NSString stringWithFormat:@"http://%@",item.patchUrl];
+        }
+        NSURL *URL = [NSURL URLWithString:item.patchUrl];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"]]) {
+                [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"JsPatch"] withIntermediateDirectories:YES attributes:nil error:nil];
+            }
+            NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",item.patchVersion]];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+                [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
+            }
+            NSURL *fileURL = [NSURL fileURLWithPath:path];
+            return fileURL;
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            if (error) {
+                NSLog(@"%@",[error localizedDescription]);
+            }else{
+                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",item.patchVersion]];
+                dispatch_async([self sharedQueue], ^{
+                    [JPEngine startEngine];
+                    NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+                    [JPEngine evaluateScript:script];
+                    SSJSavePatchVersion([item.patchVersion integerValue]);
+                });
+            }
+        }];
+        [downloadTask resume];
+    }else{
+        [self SSJJsPatchAnalyzeLocalPatch];
+    }
+}
+
++ (void)SSJJsPatchAnalyzeLocalPatch{
+    if ([SSJLastPatchVersion() integerValue]) {
+        NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%@",SSJLastPatchVersion()]];
+        dispatch_async([self sharedQueue], ^{
+            [JPEngine startEngine];
+            NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+            [JPEngine evaluateScript:script];
+        });
+    }
 }
 
 + (void)removePatch {

@@ -64,8 +64,6 @@ NSDate *SCYEnterBackgroundTime() {
 
 @property (nonatomic, strong) SSJStartViewManager *startViewManager;
 
-@property(nonatomic, strong) SSJPatchUpdateService *service;
-
 @property(nonatomic, strong) SSJGradientMaskView *maskView;
 @end
 
@@ -81,8 +79,6 @@ NSDate *SCYEnterBackgroundTime() {
     
     [SSJUmengManager umengTrack];
     [SSJUmengManager umengShare];
-        
-    [self.service requestPatchWithCurrentVersion:SSJAppVersion()];
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
@@ -123,10 +119,11 @@ NSDate *SCYEnterBackgroundTime() {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
+        [SSJJspatchAnalyze removePatch];
     }
     
-    [self analyzeJspatch];
-    [SSJJspatchAnalyze removePatch];
+    //每次启动打一次补丁
+    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey") withDescription:kWeiXinDescription];
@@ -157,6 +154,8 @@ NSDate *SCYEnterBackgroundTime() {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    //每次从后台进入打一次补丁
+    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
@@ -185,13 +184,6 @@ NSDate *SCYEnterBackgroundTime() {
 }
 
 #pragma mark - Getter
--(SSJPatchUpdateService *)service{
-    if (!_service) {
-        _service = [[SSJPatchUpdateService alloc]initWithDelegate:self];
-    }
-    return _service;
-}
-
 -(SSJGradientMaskView *)maskView{
     if (!_maskView) {
         _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
@@ -299,31 +291,6 @@ NSDate *SCYEnterBackgroundTime() {
     [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
 }
 
-- (void)serverDidFinished:(SSJBaseNetworkService *)service{
-    if ([service.returnCode isEqualToString:@"1"]) {
-        for (int i = 0; i < self.service.patchArray.count; i ++) {
-            SSJJsPatchItem *item = [self.service.patchArray objectAtIndex:i];
-            if ([item.patchVersion integerValue] > [SSJLastPatchVersion() integerValue]) {
-                [SSJJspatchAnalyze SSJJsPatchAnalyzeWithUrl:item.patchUrl MD5:item.patchMD5 patchVersion:item.patchVersion];
-            }
-        }
-    }
-}
-
--(void)analyzeJspatch{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (SSJLastPatchVersion()) {
-            for (int i = 0; i <= [SSJLastPatchVersion() integerValue]; i ++) {
-                NSString *path = [SSJDocumentPath() stringByAppendingPathComponent:[NSString stringWithFormat:@"JsPatch/patch%d.js",i]];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                    [JPEngine startEngine];
-                    NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-                    [JPEngine evaluateScript:script];
-                }
-            }
-        }
-    });
-}
     
 #pragma mark - qq快登
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
