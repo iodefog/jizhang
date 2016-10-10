@@ -85,7 +85,7 @@ static const CGFloat kButtonGap = 8.0;
 
 - (void)setButtonStatus:(BOOL)buttonStatus{
     _buttonStatus = buttonStatus;
-    if (!_buttonStatus) {
+    if (_buttonStatus) {
         for (int i = 0; i < _buttons.count; i ++) {
             UIButton *button = [_buttons ssj_safeObjectAtIndex:i];
             if (i == _mainButtonIndex) {
@@ -109,13 +109,10 @@ static const CGFloat kButtonGap = 8.0;
             }
             [UIView animateWithDuration:0.3
                              animations:^{
-                                 if (i == _mainButtonIndex) {
-                                     button.transform = CGAffineTransformIdentity;
-                                 }
-                                 button.bottom = 0;
+                                 button.bottom = self.height;
                              }
                              completion:^(BOOL complation) {
-                                 if (i != 0) {
+                                 if (i != _mainButtonIndex) {
                                      button.hidden = YES;
                                  }
                                  [self sizeToFit];
