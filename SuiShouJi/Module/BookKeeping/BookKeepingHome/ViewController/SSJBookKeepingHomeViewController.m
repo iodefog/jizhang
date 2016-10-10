@@ -75,6 +75,7 @@ BOOL kHomeNeedLoginPop;
 
 @implementation SSJBookKeepingHomeViewController{
     BOOL _isRefreshing;
+    BOOL _dateViewHasDismiss;
     CFAbsoluteTime _startTime;
     CFAbsoluteTime _endTime;
 }
@@ -155,6 +156,10 @@ BOOL kHomeNeedLoginPop;
     self.selectIndex = nil;
     [self getCurrentDate];
     [self.tableView reloadData];
+    if (!_dateViewHasDismiss) {
+        [self.floatingDateView dismiss];
+        _dateViewHasDismiss = YES;
+    }
 }
 
 -(void)viewDidLayoutSubviews{
@@ -318,7 +323,10 @@ BOOL kHomeNeedLoginPop;
         }];
     }
     if (scrollView.contentOffset.y < - 46) {
-        [self.floatingDateView dismiss];
+        if (!_dateViewHasDismiss) {
+            [self.floatingDateView dismiss];
+            _dateViewHasDismiss = YES;
+        }
         self.tableView.lineHeight = - scrollView.contentOffset.y;
         if (self.items.count == 0) {
             self.tableView.hasData = NO;
@@ -327,7 +335,7 @@ BOOL kHomeNeedLoginPop;
         }
         if (!scrollView.decelerating && !_isRefreshing) {
             [self.homeButton startAnimating];
-
+            
             _isRefreshing = YES;
         }
 
@@ -335,6 +343,10 @@ BOOL kHomeNeedLoginPop;
         if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
             [self.floatingDateView show];
         }
+        CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];
+        NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
+        SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
+        self.floatingDateView.currentDate = item.billDate;
         _isRefreshing = NO;
         if (self.items.count == 0) {
             return;
@@ -356,7 +368,10 @@ BOOL kHomeNeedLoginPop;
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.y <= 46) {
-        [self.floatingDateView dismiss];
+        if (!_dateViewHasDismiss) {
+            [self.floatingDateView dismiss];
+            _dateViewHasDismiss = YES;
+        }
     }
 }
 
@@ -586,6 +601,12 @@ BOOL kHomeNeedLoginPop;
 - (SSJBookKeepingHomeDateView *)floatingDateView{
     if (!_floatingDateView) {
         _floatingDateView = [[SSJBookKeepingHomeDateView alloc]init];
+        _floatingDateView.dismissBlock = ^(){
+
+        };
+        _floatingDateView.showBlock = ^(){
+            _dateViewHasDismiss = NO;
+        };
     }
     return _floatingDateView;
 }

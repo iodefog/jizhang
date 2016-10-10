@@ -37,7 +37,7 @@
 }
 
 -(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake(86, 36);
+    return CGSizeMake(92, 36);
 }
 
 - (void)show {
@@ -51,19 +51,22 @@
     self.right = keyWindow.width;
     self.centerY = keyWindow.height / 2;
     self.alpha = 0;
-    [UIView animateWithDuration:10
+    [UIView animateWithDuration:0.5
                    animations:^{
                        self.alpha = 1;
                    }
-                   completion:NULL];
+                     completion:^(BOOL complation) {
+                         if (_showBlock) {
+                             _showBlock();
+                         }
+                     }];
 }
 
 - (void)dismiss {
     if (!self.superview) {
         return;
     }
-    
-    [UIView animateWithDuration:10
+    [UIView animateWithDuration:0.5
                      animations:^{
                          self.alpha = 0;
                      }
@@ -95,6 +98,7 @@
 - (void)setCurrentDate:(NSString *)currentDate{
     _currentDate = currentDate;
     self.dateLab.text = [NSString stringWithFormat:@"%@",_currentDate];
+    [self.dateLab sizeToFit];
 }
 
 /*
