@@ -403,6 +403,16 @@ BOOL kHomeNeedLoginPop;
 //    }
 //}
 
+#pragma mark - SSJMultiFunctionButtonDelegate
+- (void)multiFunctionButtonView:(SSJMultiFunctionButtonView *)buttonView willSelectButtonAtIndex:(NSUInteger)index{
+    if (index == 1) {
+        [self.tableView scrollsToTop];
+    }else if (index == 2){
+        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
+        [self.navigationController pushViewController:searchVC animated:YES];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.items.count;
