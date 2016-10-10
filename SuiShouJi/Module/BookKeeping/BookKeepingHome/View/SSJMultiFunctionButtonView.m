@@ -107,6 +107,7 @@ static const CGFloat kButtonGap = 8.0;
             if (i == _mainButtonIndex) {
                 button.selected = YES;
             }
+            [self sizeToFit];
             [UIView animateWithDuration:0.3
                              animations:^{
                                  button.bottom = self.height;
@@ -115,7 +116,7 @@ static const CGFloat kButtonGap = 8.0;
                                  if (i != _mainButtonIndex) {
                                      button.hidden = YES;
                                  }
-                                 [self sizeToFit];
+                                 
                              }];
         }
     }
