@@ -619,9 +619,9 @@ BOOL kHomeNeedLoginPop;
         _mutiFunctionButton = [[SSJMultiFunctionButtonView alloc]init];
         _mutiFunctionButton.customDelegate = self;
         _mutiFunctionButton.images = @[@"home_plus",@"home_backtotop",@"home_search"];
-        _mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        _mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:@"f5b52a"];
         _mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:@"f5b52a"];
-        _mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:@"f5b52a"];
+        _mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
     return _mutiFunctionButton;
 }

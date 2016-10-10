@@ -95,6 +95,10 @@ static const CGFloat kButtonGap = 8.0;
             }
             [UIView animateWithDuration:0.3
                              animations:^{
+                                 if (i == _mainButtonIndex) {
+                                     button.layer.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
+                                     button.backgroundColor = self.mainButtonSelectedColor;
+                                 }
                                  button.bottom = self.height - (i - _mainButtonIndex)*(kButtonWidth + kButtonGap);
                              }
                              completion:^(BOOL complation) {
@@ -110,6 +114,10 @@ static const CGFloat kButtonGap = 8.0;
             [self sizeToFit];
             [UIView animateWithDuration:0.3
                              animations:^{
+                                 if (i == _mainButtonIndex) {
+                                     button.layer.transform = CATransform3DMakeRotation(M_PI_4, 0, 0, 1);
+                                     button.backgroundColor = self.mainButtonNormalColor;
+                                 }
                                  button.bottom = self.height;
                              }
                              completion:^(BOOL complation) {
