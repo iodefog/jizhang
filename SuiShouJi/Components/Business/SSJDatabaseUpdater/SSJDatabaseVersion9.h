@@ -6,8 +6,11 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+//  1.8.0
 
-@interface SSJDatabaseVersion9 : NSObject
+#import "SSJBaseSyncTable.h"
+#import "SSJDatabaseVersionProtocol.h"
+
+@interface SSJDatabaseVersion9 : SSJBaseSyncTable <SSJDatabaseVersionProtocol>
 
 @end

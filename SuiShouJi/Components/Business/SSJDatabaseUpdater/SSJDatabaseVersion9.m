@@ -10,4 +10,20 @@
 
 @implementation SSJDatabaseVersion9
 
++ (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
+    NSError *error = [self createSearchHistoryTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
+    return nil;
+}
+
++ (NSError *)createSearchHistoryTableWithDatabase:(FMDatabase *)db {
+    if (![db executeQuery:@"CREATE TABLE BK_SEARCH_HISTORY (CUSERID TEXT NOT NULL, CSEARCHCONTENT TEXT NOT NULL, CHISTORYID TEXT NOT NULL, CSEARCHDATE	TEXT, PRIMARY KEY(CUSERID, CHISTORYID))"]) {
+        return [db lastError];
+    }
+    return nil;
+}
+
 @end
