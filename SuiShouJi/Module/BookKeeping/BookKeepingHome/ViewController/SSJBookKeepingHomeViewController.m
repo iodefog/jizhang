@@ -39,10 +39,11 @@
 #import "SSJBookKeepingHomeBooksButton.h"
 #import "SSJSearchingViewController.h"
 #import "SSJBookKeepingHomeDateView.h"
+#import "SSJMultiFunctionButtonView.h"
 
 BOOL kHomeNeedLoginPop;
 
-@interface SSJBookKeepingHomeViewController ()
+@interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
 
 @property (nonatomic,strong) SSJHomeBarCalenderButton *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
@@ -57,6 +58,7 @@ BOOL kHomeNeedLoginPop;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
 @property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
 @property(nonatomic, strong) SSJBookKeepingHomeDateView *floatingDateView;
+@property(nonatomic, strong) SSJMultiFunctionButtonView *mutiFunctionButton;
 @property(nonatomic, strong) UILabel *statusLabel;
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 @property(nonatomic, strong) NSString *currentIncome;
@@ -342,6 +344,7 @@ BOOL kHomeNeedLoginPop;
     }else {
         if (scrollView.contentOffset.y > - 20 && self.items.count != 0)  {
             [self.floatingDateView show];
+            [self.mutiFunctionButton show];
         }
         CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];
         NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
@@ -609,6 +612,18 @@ BOOL kHomeNeedLoginPop;
         };
     }
     return _floatingDateView;
+}
+
+- (SSJMultiFunctionButtonView *)mutiFunctionButton{
+    if (!_mutiFunctionButton) {
+        _mutiFunctionButton = [[SSJMultiFunctionButtonView alloc]init];
+        _mutiFunctionButton.customDelegate = self;
+        _mutiFunctionButton.images = @[@"home_plus",@"home_backtotop",@"home_search"];
+        _mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        _mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:@"f5b52a"];
+        _mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:@"f5b52a"];
+    }
+    return _mutiFunctionButton;
 }
 
 #pragma mark - Event

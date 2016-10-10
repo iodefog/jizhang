@@ -211,14 +211,6 @@
             [_customDelegate slidePagingHeaderView:self willSelectButtonAtIndex:selectedIndex];
         }
         
-        _userTapped = YES;
-        [self p_setSelectedIndex:selectedIndex animated:_buttonClickAnimated];
-        
-        if (!_buttonClickAnimated) {
-            if (_customDelegate && [_customDelegate respondsToSelector:@selector(slidePagingHeaderView:didSelectButtonAtIndex:)]) {
-                [_customDelegate slidePagingHeaderView:self didSelectButtonAtIndex:selectedIndex];
-            }
-        }
     }
 }
 
