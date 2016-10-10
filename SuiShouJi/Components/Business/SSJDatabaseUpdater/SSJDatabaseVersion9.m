@@ -16,11 +16,23 @@
         return error;
     }
     
+    error = [self createIndexOnUserChargeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
 + (NSError *)createSearchHistoryTableWithDatabase:(FMDatabase *)db {
-    if (![db executeQuery:@"CREATE TABLE BK_SEARCH_HISTORY (CUSERID TEXT NOT NULL, CSEARCHCONTENT TEXT NOT NULL, CHISTORYID TEXT NOT NULL, CSEARCHDATE	TEXT, PRIMARY KEY(CUSERID, CHISTORYID))"]) {
+    if (![db executeUpdate:@"CREATE TABLE BK_SEARCH_HISTORY (CUSERID TEXT NOT NULL, CSEARCHCONTENT TEXT NOT NULL, CHISTORYID TEXT NOT NULL, CSEARCHDATE TEXT, PRIMARY KEY(CUSERID, CHISTORYID))"]) {
+        return [db lastError];
+    }
+    return nil;
+}
+
++ (NSError *)createIndexOnUserChargeTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"CREATE INDEX UserIndex ON BK_USER_CHARGE (CUSERID)"]) {
         return [db lastError];
     }
     return nil;
