@@ -25,8 +25,62 @@
     return userId;
 }
 
-+ (void)mergeNotloginDataWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure {
++ (void)mergeUserDataForUserID:(NSString *)userId success:(void (^)())success failure:(void (^)(NSError *error))failure {
     
+    NSString *currentUserId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        
+        // 查询名称重复的资金账户id
+        FMResultSet *resultSet = [db executeQuery:@"select a.cfundid as oldFundId, b.cfundid as newFundId from bk_fund_info as a, bk_fund_info as b where a.cuserid = ? and b.cuserid = ? and a.cacctname = b.cacctname", userId, currentUserId];
+        
+        NSMutableArray *repeatedFundIds = [NSMutableArray array];
+        while ([resultSet next]) {
+            NSString *oldFundId = [resultSet stringForColumn:@"oldFundId"];
+            if (oldFundId) {
+                [repeatedFundIds addObject:[NSString stringWithFormat:@"'%@'", oldFundId]];
+            }
+        }
+        [resultSet close];
+        
+        // 把名称未重复的资金账户移到登录账户下
+        NSMutableString *sql = [@"update bk_fund_info set cuserid = ? where cuserid = ?" mutableCopy];
+        if (repeatedFundIds.count) {
+            [sql appendFormat:@" and cfundid not in (%@)", [repeatedFundIds componentsJoinedByString:@","]];
+        }
+        
+        if (![db executeUpdate:sql]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 查询名称重复的收支类别id
+        if (![db executeUpdate:@"create temporary table tmpTable (id text, name text, userid text, primary key(id, userid))"]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        if (![db executeUpdate:@"insert into tmpTable (id, name, userid) select bt.id, bt.cname, ub.cuserid from bk_user_bill as ub, bk_bill_type as bt where ub.cbillid = bt.id"]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        resultSet = [db executeQuery:@"select a.cbillid as oldBillId, b.cbillid as newBillId from bk_user_bill as a, bk_user_bill as b where a.cuserid = ? and b.cuserid = ? and a."];
+    }];
 }
 
 @end
