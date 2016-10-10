@@ -43,12 +43,12 @@
         [resultSet close];
         
         // 把名称未重复的资金账户移到登录账户下
-        NSMutableString *sql = [@"update bk_fund_info set cuserid = ? where cuserid = ?" mutableCopy];
+        NSMutableString *sql = [@"update bk_fund_info set cuserid = ?, iversion = ?, cwritedate = ?, operatortype = 1 where cuserid = ?" mutableCopy];
         if (repeatedFundIds.count) {
             [sql appendFormat:@" and cfundid not in (%@)", [repeatedFundIds componentsJoinedByString:@","]];
         }
         
-        if (![db executeUpdate:sql]) {
+        if (![db executeUpdate:sql, currentUserId, @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], userId]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -79,7 +79,31 @@
             return;
         }
         
-        resultSet = [db executeQuery:@"select a.cbillid as oldBillId, b.cbillid as newBillId from bk_user_bill as a, bk_user_bill as b where a.cuserid = ? and b.cuserid = ? and a."];
+        resultSet = [db executeQuery:@"select a.id as oldBillId, b.id as newBillId from tmpTable as a, tmpTable as b where a.userid = ? and b.userid = ? and a.name = b.name", userId, currentUserId];
+        
+        NSMutableArray *repeatedBillIds = [NSMutableArray array];
+        while ([resultSet next]) {
+            NSString *oldBillId = [resultSet stringForColumn:@"oldBillId"];
+            if (oldBillId) {
+                [repeatedBillIds addObject:[NSString stringWithFormat:@"'%@'", oldBillId]];
+            }
+        }
+        [resultSet close];
+        
+        sql = [@"update bk_user_bill set cuserid = ?, iversion = ?, cwritedate = ?, operatortype = 1 where cuserid = ?" mutableCopy];
+        if (repeatedBillIds.count) {
+            [sql appendFormat:@" and cbillid not in (%@)", [repeatedBillIds componentsJoinedByString:@","]];
+        }
+        
+        if (![db executeUpdate:sql, currentUserId, @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], userId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
     }];
 }
 
