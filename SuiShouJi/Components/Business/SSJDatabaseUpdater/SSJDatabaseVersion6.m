@@ -7,6 +7,7 @@
 //
 
 #import "SSJDatabaseVersion6.h"
+#import <FMDB/FMDB.h>
 
 @implementation SSJDatabaseVersion6
 

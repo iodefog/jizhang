@@ -223,10 +223,9 @@ static NSString *const kSegmentTitleIncome = @"收入";
 - (NSString *)scaleAxisView:(SSJReportFormsScaleAxisView *)scaleAxisView titleForAxisAtIndex:(NSUInteger)index {
     SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
     if (period.periodType == SSJDatePeriodTypeMonth) {
-        if (period.startDate.year != [NSDate date].year) {
-            return [period.startDate formattedDateWithFormat:@"yyyy年M月"];
-        }
         return [NSString stringWithFormat:@"%d月", (int)period.startDate.month];
+    } else if (period.periodType == SSJDatePeriodTypeYear) {
+        return [NSString stringWithFormat:@"%d年", (int)period.startDate.year];
     } else if (period.periodType == SSJDatePeriodTypeCustom) {
         return @"合计";
     } else {
@@ -238,7 +237,7 @@ static NSString *const kSegmentTitleIncome = @"收入";
     SSJDatePeriod *period = [_periods ssj_safeObjectAtIndex:index];
     if (period.periodType == SSJDatePeriodTypeMonth) {
         return 12;
-    } else if (period.periodType == SSJDatePeriodTypeMonth
+    } else if (period.periodType == SSJDatePeriodTypeYear
                || period.periodType == SSJDatePeriodTypeCustom) {
         return 20;
     } else {
