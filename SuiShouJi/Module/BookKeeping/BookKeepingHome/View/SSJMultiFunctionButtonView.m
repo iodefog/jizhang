@@ -93,16 +93,18 @@ static const CGFloat kButtonGap = 8.0;
             }else{
                 button.hidden = NO;
             }
+            [self sizeToFit];
             [UIView animateWithDuration:0.3
                              animations:^{
                                  if (i == _mainButtonIndex) {
                                      button.layer.transform = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
                                      button.backgroundColor = self.mainButtonSelectedColor;
+                                 }else{
+                                     button.bottom = self.height - (i - _mainButtonIndex)*(kButtonWidth + kButtonGap);
                                  }
-                                 button.bottom = self.height - (i - _mainButtonIndex)*(kButtonWidth + kButtonGap);
                              }
                              completion:^(BOOL complation) {
-                                 [self sizeToFit];
+                                 self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 104);
                              }];
         }
     }else{
@@ -115,10 +117,11 @@ static const CGFloat kButtonGap = 8.0;
             [UIView animateWithDuration:0.3
                              animations:^{
                                  if (i == _mainButtonIndex) {
-                                     button.layer.transform = CATransform3DMakeRotation(M_PI_4, 0, 0, 1);
+                                     button.layer.transform = CATransform3DIdentity;
                                      button.backgroundColor = self.mainButtonNormalColor;
+                                 }else{
+                                     button.bottom = self.height;
                                  }
-                                 button.bottom = self.height;
                              }
                              completion:^(BOOL complation) {
                                  if (i != _mainButtonIndex) {
