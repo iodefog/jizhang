@@ -30,8 +30,8 @@
     NSString *currentUserId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        // 查询名称重复的资金账户id
-        FMResultSet *resultSet = [db executeQuery:@"select a.cfundid as oldFundId, b.cfundid as newFundId from bk_fund_info as a, bk_fund_info as b where a.cuserid = ? and b.cuserid = ? and a.cacctname = b.cacctname", userId, currentUserId];
+        // 查询名称重复的资金账户id，需要排除信用卡的账户，因为同一账户可以有多个重名的信用卡账户
+        FMResultSet *resultSet = [db executeQuery:@"select a.cfundid as oldFundId, b.cfundid as newFundId from bk_fund_info as a, bk_fund_info as b where a.cuserid = ? and b.cuserid = ? and a.cacctname = b.cacctname and cparent <> '3'", userId, currentUserId];
         
         NSMutableArray *repeatedFundIds = [NSMutableArray array];
         while ([resultSet next]) {
@@ -58,7 +58,35 @@
             return;
         }
         
-        // 查询名称重复的收支类别id
+        // 查询名称重复的账本id
+        resultSet = [db executeQuery:@"select a.cbooksid as oldBooksId, b.cbooksid as newBooksId from bk_books_type as a, bk_books_type as b where a.cuserid = ? and b.cuserid = ? and a.cbooksname = b.cbooksname", userId, currentUserId];
+        
+        NSMutableArray *repeatedBooksIds = [NSMutableArray array];
+        while ([resultSet next]) {
+            NSString *oldBooksId = [resultSet stringForColumn:@"oldBooksId"];
+            if (oldBooksId) {
+                [repeatedBooksIds addObject:[NSString stringWithFormat:@"'%@'", oldBooksId]];
+            }
+        }
+        [resultSet close];
+        
+        // 将未重名的账本转移到登录账户下
+        sql = [@"update bk_books_type set cuserid = ?, iversion = ?, cwritedate = ?, operatortype = 1 where cuserid = ?" mutableCopy];
+        if (repeatedBooksIds.count) {
+            [sql appendFormat:@" and cbooksid not in (%@)", [repeatedBooksIds componentsJoinedByString:@","]];
+        }
+        
+        if (![db executeUpdate:sql, currentUserId, @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], userId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 创建个临时表存储类别ID、类别名称、userid，再从临时表中查询名称重复的收支类别id
         if (![db executeUpdate:@"create temporary table tmpTable (id text, name text, userid text, primary key(id, userid))"]) {
             *rollback = YES;
             if (failure) {
@@ -89,7 +117,9 @@
             }
         }
         [resultSet close];
+        [db executeUpdate:@"drop table tmpTable"];
         
+        // 把名称未重复的收支类型转移到登录账户下
         sql = [@"update bk_user_bill set cuserid = ?, iversion = ?, cwritedate = ?, operatortype = 1 where cuserid = ?" mutableCopy];
         if (repeatedBillIds.count) {
             [sql appendFormat:@" and cbillid not in (%@)", [repeatedBillIds componentsJoinedByString:@","]];
@@ -104,6 +134,19 @@
             }
             return;
         }
+        
+        // 把定期记账转移到登录账户下
+        if (![db executeUpdate:@"update bk_charge_period_config set cuserid = ? where cuserid = ?", userId, currentUserId]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        // 把流水转移到
     }];
 }
 
