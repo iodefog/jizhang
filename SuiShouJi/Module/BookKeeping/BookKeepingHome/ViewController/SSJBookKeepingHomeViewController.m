@@ -160,6 +160,7 @@ BOOL kHomeNeedLoginPop;
     [self.tableView reloadData];
     if (!_dateViewHasDismiss) {
         [self.floatingDateView dismiss];
+        [self.mutiFunctionButton dismiss];
         _dateViewHasDismiss = YES;
     }
 }
@@ -327,6 +328,7 @@ BOOL kHomeNeedLoginPop;
     if (scrollView.contentOffset.y < - 46) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
+            [self.mutiFunctionButton dismiss];
             _dateViewHasDismiss = YES;
         }
         self.tableView.lineHeight = - scrollView.contentOffset.y;
@@ -370,9 +372,10 @@ BOOL kHomeNeedLoginPop;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    if (scrollView.contentOffset.y <= 46) {
+    if (scrollView.contentOffset.y <= -46) {
         if (!_dateViewHasDismiss) {
             [self.floatingDateView dismiss];
+            [self.mutiFunctionButton dismiss];
             _dateViewHasDismiss = YES;
         }
     }
@@ -406,7 +409,7 @@ BOOL kHomeNeedLoginPop;
 #pragma mark - SSJMultiFunctionButtonDelegate
 - (void)multiFunctionButtonView:(SSJMultiFunctionButtonView *)buttonView willSelectButtonAtIndex:(NSUInteger)index{
     if (index == 1) {
-        [self.tableView scrollsToTop];
+        [self.tableView setContentOffset:CGPointMake(0, -46) animated:YES];
     }else if (index == 2){
         SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
         [self.navigationController pushViewController:searchVC animated:YES];
