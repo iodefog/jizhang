@@ -16,6 +16,7 @@
         NSString *userid = SSJUSERID();
         NSMutableArray *booksList = [NSMutableArray array];
         FMResultSet *booksResult = [db executeQuery:@"select * from bk_books_type where cuserid = ? and operatortype <> 2 order by iorder asc , cwritedate asc",userid];
+        int order = 1;
         if (!booksResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -32,8 +33,12 @@
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksIcoin = [booksResult stringForColumn:@"cicoin"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
+            if (item.booksOrder == 0) {
+                item.booksOrder = order;
+            }
             item.selectToEdite = NO;
             [booksList addObject:item];
+            order ++;
         }
         SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc]init];
         item.booksName = @"添加账本";
@@ -90,6 +95,30 @@
     }];
     
     return success;
+}
+
++ (void)saveBooksOrderWithItems:(NSArray *)items
+                         sucess:(void(^)())success
+                             failure:(void (^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+        for (SSJBooksTypeItem *item in items) {
+            NSInteger order = [items indexOfObject:item] + 1;
+            NSString *userid = SSJUSERID();
+            if (![db executeUpdate:@"update bk_books_type set iorder = ? where cbooksid = ? and cuserid = ?",@(order),item.booksId,userid]) {
+                if (failure) {
+                    SSJDispatch_main_async_safe(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+        }
+        if (success) {
+            SSJDispatch_main_async_safe(^{
+                success();
+            });
+        }
+    }];
 }
 
 + (NSDictionary *)fieldMapWithTypeItem:(SSJBooksTypeItem *)item {

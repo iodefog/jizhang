@@ -16,10 +16,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #import "SSJBooksTypeEditeView.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksEditeOrNewViewController.h"
+#import "SSJEditableCollectionView.h"
 
-@interface SSJBooksTypeSelectViewController ()
+@interface SSJBooksTypeSelectViewController ()<SSJEditableCollectionViewDelegate,SSJEditableCollectionViewDataSource>
 
-@property(nonatomic, strong) UICollectionView *collectionView;
+@property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
 @property(nonatomic, strong) NSMutableArray *items;
 
@@ -75,6 +76,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.editeButton.hidden = YES;
     self.deleteButton.hidden = YES;
     self.editeButton.enabled = NO;
+    [self.collectionView endEditing];
 }
 
 -(void)dealloc {
@@ -123,7 +125,6 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             [self.navigationController pushViewController:booksEditeVc animated:YES];
         }
     }
-
 }
 
 
@@ -187,6 +188,41 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     return UIEdgeInsetsMake(12, 18, 0, 12);
 }
 
+#pragma mark - SSJEditableCollectionViewDelegate
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    [MobClick event:@"fund_sort"];
+    return YES;
+}
+
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    return YES;
+}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+    _editeModel = YES;
+    self.rightButton.selected = YES;
+    self.editeButton.hidden = NO;
+    self.deleteButton.hidden = NO;
+    for (SSJBooksTypeItem *item in self.items) {
+        item.editeModel = self.rightButton.isSelected;
+    }
+}
+
+- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
+    
+}
+
+//- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
+//    [self collectionViewEndEditing];
+//    return YES;
+//}
+
+- (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
+    SSJBooksTypeItem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
+    [self.items removeObjectAtIndex:fromIndexPath.row];
+    [self.items insertObject:currentItem atIndex:toIndexPath.row];
+}
+
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
     _editeModel = !_editeModel;
@@ -194,9 +230,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.editeButton.hidden = !self.rightButton.isSelected;
     self.deleteButton.hidden = !self.rightButton.isSelected;
     if (self.rightButton.isSelected) {
-        [self.selectedBooks removeAllObjects];
-    }else{
         [MobClick event:@"accountbook_manage"];
+    }else{
+        [self.collectionView endEditing];
+        [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:NULL failure:NULL];
+        [self.selectedBooks removeAllObjects];
     }
     for (SSJBooksTypeItem *item in self.items) {
         item.editeModel = self.rightButton.isSelected;
@@ -231,7 +269,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 }
 
 #pragma mark - Getter
--(UICollectionView *)collectionView{
+-(SSJEditableCollectionView *)collectionView{
     if (_collectionView==nil) {
         UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc]init];
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
@@ -240,10 +278,12 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }else{
             flowLayout.minimumInteritemSpacing = 15;
         }
-        _collectionView=[[UICollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 55) collectionViewLayout:flowLayout];
-        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        _collectionView.delegate=self;
-        _collectionView.dataSource=self;
+        _collectionView=[[SSJEditableCollectionView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - 55) collectionViewLayout:flowLayout];
+        _collectionView.movedCellScale = 1.08;
+        _collectionView.editDelegate=self;
+        _collectionView.editDataSource=self;
+        _collectionView.exchangeCellRegion = UIEdgeInsetsMake(5, 0, 5, 0);
+        _collectionView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _collectionView;
 }

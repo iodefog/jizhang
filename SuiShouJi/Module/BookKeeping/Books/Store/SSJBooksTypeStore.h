@@ -37,6 +37,18 @@
 +(SSJBooksTypeItem *)queryCurrentBooksTypeForBooksId:(NSString *)booksid;
 
 
+/**
+ 保存账本顺序
+
+ @param items   账本item的数组
+ @param success 保存成功的回调
+ @param failure 保存失败的回调
+ */
++ (void)saveBooksOrderWithItems:(NSArray *)items
+                         sucess:(void(^)())success
+                        failure:(void (^)(NSError *error))failure;
+
+
 + (BOOL)deleteBooksTypeWithBooksId:(NSString *)booksId error:(NSError **)error;
 
 @end
