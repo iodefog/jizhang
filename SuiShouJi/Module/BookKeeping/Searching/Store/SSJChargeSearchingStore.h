@@ -14,7 +14,7 @@
 
 + (void)searchForChargeListWithSearchContent:(NSString *)content
                                    ListOrder:(SSJChargeListOrder)order
-                                     Success:(void(^)(NSArray <SSJSearchResultItem *>*result))success
+                                     Success:(void(^)(NSArray <SSJSearchResultItem *>*result , NSInteger chargeCount))success
                                      failure:(void (^)(NSError *error))failure;
 
 + (void)querySearchHistoryWithSuccess:(void(^)(NSArray <SSJSearchHistoryItem *>*result))success

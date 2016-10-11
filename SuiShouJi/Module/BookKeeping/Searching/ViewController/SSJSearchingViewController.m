@@ -284,16 +284,17 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     _startTime = CFAbsoluteTimeGetCurrent();
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
-    [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result) {
+    [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result , NSInteger chargeCount) {
         weakSelf.model = SSJSearchResultModel;
         [self.tableView ssj_hideLoadingIndicator];
         self.items = [NSArray arrayWithArray:result];
         _endTime = CFAbsoluteTimeGetCurrent();
-        NSLog(@"查询%ld条数据耗时%f",result.count,_endTime - _startTime);
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",result.count,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
+#ifdef DEBUG
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",chargeCount,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
+#endif
         if (result.count) {
             [self.tableView ssj_hideWatermark:YES];
-            self.resultOrderHeader.resultCount = result.count;
+            self.resultOrderHeader.resultCount = chargeCount;
             self.tableView.tableHeaderView = self.resultOrderHeader;
         }else{
             self.tableView.tableHeaderView = nil;

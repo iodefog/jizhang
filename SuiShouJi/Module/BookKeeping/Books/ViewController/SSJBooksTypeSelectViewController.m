@@ -386,6 +386,7 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.rightButton.selected = NO;
     self.deleteButton.hidden = YES;
     self.editeButton.hidden = YES;
+    [self.collectionView endEditing];
     [self getDateFromDB];
 }
 

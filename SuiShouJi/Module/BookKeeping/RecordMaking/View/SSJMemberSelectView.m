@@ -215,12 +215,18 @@
         FMResultSet *allMembersResult = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0 order by cadddate asc",userid];
         NSMutableArray *allMembersArr = [NSMutableArray array];
         NSMutableArray *idsArr = [NSMutableArray array];
+        int count = 1;
         while ([allMembersResult next]) {
             SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
             item.memberId = [allMembersResult stringForColumn:@"CMEMBERID"];
             [idsArr addObject:[NSString stringWithFormat:@"'%@'",item.memberId]];
             item.memberName = [allMembersResult stringForColumn:@"CNAME"];
             item.memberColor = [allMembersResult stringForColumn:@"CCOLOR"];
+            item.memberOrder = [allMembersResult intForColumn:@"IORDER"];
+            if (!item.memberOrder) {
+                item.memberOrder = count;
+            }
+            count ++;
             [allMembersArr addObject:item];
         }
         [allMembersResult close];

@@ -14,7 +14,7 @@
 
 + (void)searchForChargeListWithSearchContent:(NSString *)content
                                    ListOrder:(SSJChargeListOrder)order
-                                  Success:(void(^)(NSArray <SSJSearchResultItem *>*result))success
+                                  Success:(void(^)(NSArray <SSJSearchResultItem *>*result , NSInteger chargeCount))success
                                   failure:(void (^)(NSError *error))failure
 {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -61,6 +61,7 @@
                 });
             }
         }
+        NSInteger count = 0;
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
             item.imageName = [resultSet stringForColumn:@"CCOIN"];
@@ -78,6 +79,7 @@
             item.loanId = [resultSet stringForColumn:@"loanid"];
             item.incomeOrExpence = [resultSet boolForColumn:@"itype"];
             item.money = [NSString stringWithFormat:@"%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
+            count ++;
             if (![item.billDate isEqualToString:lastBillDate]) {
                 SSJSearchResultItem *searchItem = [[SSJSearchResultItem alloc]init];
                 searchItem.searchOrder = order;
@@ -107,7 +109,7 @@
         }
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(tempArr);
+                success(tempArr,count);
             });
         }
     }];
