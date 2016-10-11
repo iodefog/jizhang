@@ -147,32 +147,11 @@
 - (void)saveMemberOrder{
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        for (SSJChargeMemberItem *item in self.items) {
-            [db executeUpdate:@"update bk_member"]
+        NSString *userId = SSJUSERID();
+        for (SSJChargeMemberItem *item in weakSelf.items) {
+            NSInteger order = [weakSelf.items indexOfObject:item];
+            [db executeUpdate:@"update bk_member set iorder = ? where cmemberid = ? and cuserid = ?",@(order),item.memberId,userId];
         }
-        NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select * from bk_member where cuserid = ? and istate <> 0 order by iorder asc , cadddate asc",userid];
-        NSMutableArray *tempArr = [NSMutableArray array];
-        int count = 1;
-        while ([result next]) {
-            SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-            item.memberId = [result stringForColumn:@"CMEMBERID"];
-            item.memberName = [result stringForColumn:@"CNAME"];
-            item.memberColor = [result stringForColumn:@"CCOLOR"];
-            item.memberOrder = [result intForColumn:@"IORDER"];
-            if (!item.memberOrder) {
-                item.memberOrder = count;
-            }
-            count ++;
-            [tempArr addObject:item];
-        }
-        SSJChargeMemberItem *item = [[SSJChargeMemberItem alloc]init];
-        item.memberName = @"添加新成员";
-        [tempArr addObject:item];
-        weakSelf.items = [NSMutableArray arrayWithArray:tempArr];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        });
     }];
 }
 
@@ -216,6 +195,7 @@
 
 - (void)editeButtonClicked:(id)sender{
     _editeButton.selected = !_editeButton.isSelected;
+    [self saveMemberOrder];
     [self.tableView setEditing:_editeButton.isSelected animated:NO];
 }
 
