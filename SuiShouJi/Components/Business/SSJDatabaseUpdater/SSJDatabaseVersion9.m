@@ -22,6 +22,11 @@
         return error;
     }
     
+    error = [self updateMemberTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -34,6 +39,13 @@
 
 + (NSError *)createIndexOnUserChargeTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"CREATE INDEX UserIndex ON BK_USER_CHARGE (CUSERID)"]) {
+        return [db lastError];
+    }
+    return nil;
+}
+
++ (NSError *)updateMemberTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"ALTER TABLE BK_MEMBER ADD IORDER INTEGER"]) {
         return [db lastError];
     }
     return nil;
