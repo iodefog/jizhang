@@ -72,11 +72,13 @@ static const CGFloat kButtonGap = 8.0;
     if (!self.superview) {
         return;
     }
+    self.buttonStatus = NO;
     [UIView animateWithDuration:0.5
                      animations:^{
                          self.alpha = 0;
                      }
                      completion:^(BOOL complation) {
+                         [self removeFromSuperview];
                          if (_dismissBlock) {
                              _dismissBlock();
                          }
@@ -86,6 +88,11 @@ static const CGFloat kButtonGap = 8.0;
 - (void)setButtonStatus:(BOOL)buttonStatus{
     _buttonStatus = buttonStatus;
     if (_buttonStatus) {
+        [self sizeToFit];
+        self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 104);
+        for (UIButton *button in _buttons) {
+            button.leftBottom = CGPointMake(0, self.height);
+        }
         for (int i = 0; i < _buttons.count; i ++) {
             UIButton *button = [_buttons ssj_safeObjectAtIndex:i];
             if (i == _mainButtonIndex) {
@@ -93,7 +100,6 @@ static const CGFloat kButtonGap = 8.0;
             }else{
                 button.hidden = NO;
             }
-            [self sizeToFit];
             [UIView animateWithDuration:0.3
                              animations:^{
                                  if (i == _mainButtonIndex) {
@@ -104,16 +110,14 @@ static const CGFloat kButtonGap = 8.0;
                                  }
                              }
                              completion:^(BOOL complation) {
-                                 self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 104);
                              }];
         }
     }else{
         for (int i = 0; i < _buttons.count; i ++) {
             UIButton *button = [_buttons ssj_safeObjectAtIndex:i];
             if (i == _mainButtonIndex) {
-                button.selected = YES;
+                [self bringSubviewToFront:button];
             }
-            [self sizeToFit];
             [UIView animateWithDuration:0.3
                              animations:^{
                                  if (i == _mainButtonIndex) {
@@ -124,10 +128,14 @@ static const CGFloat kButtonGap = 8.0;
                                  }
                              }
                              completion:^(BOOL complation) {
+                                 self.leftBottom = CGPointMake(20, SSJSCREENHEIGHT - 104);
+                                 [self sizeToFit];
+                                 button.frame = CGRectMake(0, 0, kButtonWidth, kButtonWidth);
                                  if (i != _mainButtonIndex) {
                                      button.hidden = YES;
+                                 }else{
+                                     button.hidden = NO;
                                  }
-                                 
                              }];
         }
     }
