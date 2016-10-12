@@ -650,7 +650,7 @@ BOOL kHomeNeedLoginPop;
 
 #pragma mark - Event
 -(void)rightBarButtonClicked{
-    SSJSearchingViewController *calendarVC = [[SSJSearchingViewController alloc]init];
+    SSJCalendarViewController *calendarVC = [[SSJCalendarViewController alloc]init];
     [self.navigationController pushViewController:calendarVC animated:YES];
 }
 
