@@ -191,10 +191,16 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 #pragma mark - SSJEditableCollectionViewDelegate
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
     [MobClick event:@"fund_sort"];
+    if (indexPath.row == self.items.count - 1) {
+        return NO;
+    }
     return YES;
 }
 
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
+    if (toIndexPath.row == self.items.count - 1) {
+        return NO;
+    }
     return YES;
 }
 

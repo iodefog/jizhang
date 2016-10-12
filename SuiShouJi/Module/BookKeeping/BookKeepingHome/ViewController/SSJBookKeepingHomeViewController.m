@@ -96,8 +96,15 @@ BOOL kHomeNeedLoginPop;
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-
-//    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    __weak typeof(self) weakSelf = self;
+    [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
+        __strong typeof(weakSelf) sself = weakSelf;
+        if (!sself->_dateViewHasDismiss) {
+            [weakSelf.floatingDateView dismiss];
+            [weakSelf.mutiFunctionButton dismiss];
+            sself->_dateViewHasDismiss = YES;
+        }
+    }];
 //    _hasLoad = YES;
     [self popIfNeeded];
     self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
@@ -410,6 +417,8 @@ BOOL kHomeNeedLoginPop;
 - (void)multiFunctionButtonView:(SSJMultiFunctionButtonView *)buttonView willSelectButtonAtIndex:(NSUInteger)index{
     if (index == 1) {
         [self.tableView setContentOffset:CGPointMake(0, -46) animated:YES];
+        [self.floatingDateView dismiss];
+        [self.mutiFunctionButton dismiss];
     }else if (index == 2){
         SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
         [self.navigationController pushViewController:searchVC animated:YES];
@@ -646,7 +655,13 @@ BOOL kHomeNeedLoginPop;
 }
 
 -(void)leftBarButtonClicked:(id)sender{
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:NULL];
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:^(BOOL finished) {
+        if (!_dateViewHasDismiss) {
+            [self.floatingDateView dismiss];
+            [self.mutiFunctionButton dismiss];
+            _dateViewHasDismiss = YES;
+        }
+    }];
 }
 
 -(void)budgetButtonClicked:(id)sender{

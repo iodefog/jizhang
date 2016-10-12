@@ -21,4 +21,6 @@
                               failure:(void (^)(NSError *error))failure;
 
 + (BOOL)deleteSearchHistoryItem:(SSJSearchHistoryItem *)item error:(NSError **)error;
+
++ (BOOL)clearAllSearchHistoryWitherror:(NSError **)error;
 @end

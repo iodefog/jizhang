@@ -38,6 +38,8 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 @property(nonatomic, strong) SSJBudgetNodataRemindView *noResultHeader;
 
 @property(nonatomic, strong) SSJSearchResultOrderHeader *resultOrderHeader;
+
+@property(nonatomic, strong) UIView *clearHistoryFooterView;
 @end
 
 @implementation SSJSearchingViewController{
@@ -152,11 +154,17 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    if (self.model == SSJSearchHistoryModel && self.items.count) {
+        return 50;
+    }
     return 0;
 }
 
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (self.model == SSJSearchHistoryModel && self.items.count) {
+        return self.clearHistoryFooterView;
+    }
     return nil;
 }
 
@@ -258,12 +266,39 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     return _resultOrderHeader;
 }
 
+-(UIView *)clearHistoryFooterView{
+    if (_clearHistoryFooterView == nil) {
+        _clearHistoryFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 50)];
+        _clearHistoryFooterView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        [_clearHistoryFooterView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        [_clearHistoryFooterView ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
+        UIButton *clearButton = [[UIButton alloc]initWithFrame:_clearHistoryFooterView.bounds];
+        [clearButton setTitle:@"清空所有历史搜索" forState:UIControlStateNormal];
+        [clearButton setImage:[[UIImage imageNamed:@"search_clear"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        clearButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        clearButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [clearButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+        [clearButton addTarget:self action:@selector(clearButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        clearButton.center = CGPointMake(_clearHistoryFooterView.width / 2, _clearHistoryFooterView.height / 2);
+        [_clearHistoryFooterView addSubview:clearButton];
+    }
+    return _clearHistoryFooterView;
+}
+
+#pragma mark - Event
+- (void)clearButtonClicked:(id)sender{
+    if ([SSJChargeSearchingStore clearAllSearchHistoryWitherror:NULL]) {
+        [self getSearchHistory];
+    }
+}
+
 #pragma mark - Private
 - (void)getSearchHistory{
     __weak typeof(self) weakSelf = self;
     [self.tableView ssj_showLoadingIndicator];
     [SSJChargeSearchingStore querySearchHistoryWithSuccess:^(NSArray<SSJSearchHistoryItem *> *result) {
-        [self.tableView ssj_hideLoadingIndicator];
+        [weakSelf.tableView ssj_hideLoadingIndicator];
+        weakSelf.tableView.tableHeaderView = nil;
         weakSelf.model = SSJSearchHistoryModel;
         weakSelf.items = [NSArray arrayWithArray:result];
         if (!result.count) {

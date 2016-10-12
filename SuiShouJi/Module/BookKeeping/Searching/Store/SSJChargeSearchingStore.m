@@ -169,4 +169,13 @@
     return success;
 }
 
++ (BOOL)clearAllSearchHistoryWitherror:(NSError **)error{
+    __block BOOL success = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        NSString *userId = SSJUSERID();
+        success = [db executeUpdate:@"delete from bk_search_history where cuserid = ?",userId];
+    }];
+    return success;
+}
+
 @end

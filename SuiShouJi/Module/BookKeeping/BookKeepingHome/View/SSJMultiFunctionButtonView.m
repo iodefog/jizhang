@@ -56,6 +56,7 @@ static const CGFloat kButtonGap = 8.0;
     self.leftBottom = CGPointMake(20, keyWindow.height - 104);
     self.alpha = 0;
     self.size = CGSizeMake(kButtonWidth, kButtonWidth);
+    self.buttonStatus = YES;
     [UIView animateWithDuration:0.5
                      animations:^{
                          self.alpha = 1;
