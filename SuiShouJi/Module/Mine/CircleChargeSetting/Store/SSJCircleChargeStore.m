@@ -241,26 +241,6 @@
                             }
                         }
                     }
-                    //修改账户余额表
-                    if (!item.incomeOrExpence) {
-                        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cfundid = ?",@([item.money doubleValue]),item.fundId]) {
-                            if (failure) {
-                                SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            *rollback = YES;
-                        }
-                    }else{
-                        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ?",item.money,item.fundId]) {
-                            if (failure) {
-                                SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            *rollback = YES;
-                        }
-                    }
                 }
             }else{
                 NSString *chargeId = SSJUUID();

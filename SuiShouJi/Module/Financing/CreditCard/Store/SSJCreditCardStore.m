@@ -18,7 +18,7 @@
     SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        FMResultSet *resultSet = [db executeQuery:@"select c.* , d.ibalance from (select a.* , b.iquota , b.ibilldatesettlement , b.crepaymentdate , b.cbilldate , b.cremindid from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?) c , bk_funs_acct d where c.cfundid = d.cfundid",cardId,userId];
+        FMResultSet *resultSet = [db executeQuery:@"select a.* , b.iquota , b.ibilldatesettlement , b.crepaymentdate , b.cbilldate , b.cremindid from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?",cardId,userId];
         if (!resultSet) {
             return;
         }
@@ -26,7 +26,6 @@
             item.cardId = cardId;
             item.cardName = [resultSet stringForColumn:@"cacctname"];
             item.cardLimit = [resultSet doubleForColumn:@"iquota"];
-            item.cardBalance = [resultSet doubleForColumn:@"d.ibalance"];
             item.settleAtRepaymentDay = [resultSet boolForColumn:@"ibilldatesettlement"];
             item.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
             item.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
@@ -37,6 +36,8 @@
         }
         [resultSet close];
         item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
+        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+        item.cardBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,cardId];
     }];
     return item;
 }
@@ -95,11 +96,6 @@
             return [db lastError];
         }
         
-        // 插入账户余额表
-        if (![db executeUpdate:@"insert into bk_funs_acct (cfundid ,ibalance ,cuserid) values (?,?,?)",item.cardId,@(item.cardBalance),userId]) {
-            return [db lastError];
-        }
-        
         if (item.cardBalance > 0) {
             // 如果余额大于0,在流水里插入一条平帐收入
             if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f",item.cardBalance],@"1",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
@@ -122,7 +118,8 @@
             return [db lastError];
         }
         
-        double originalBalance = [db doubleForQuery:@"select ibalance from bk_funs_acct where cfundid = ? and cuserid = ?",item.cardId,userId];
+        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+        double originalBalance = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userId,currentDate,item.cardId] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userId,currentDate,item.cardId];
         
         double differenceBalance = item.cardBalance - originalBalance;
         
@@ -136,11 +133,6 @@
             if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid , cwritedate , iversion , operatortype  , cbilldate ) values (?,?,?,?,?,?,?,0,?)",SSJUUID(),userId,[NSString stringWithFormat:@"%.2f", - differenceBalance],@"2",item.cardId,editeDate,@(SSJSyncVersion()),[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]]) {
                 return [db lastError];
             }
-        }
-        
-        // 修改账户余额表
-        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ? and cuserid = ?",@(item.cardBalance),item.cardId,userId]) {
-            return [db lastError];
         }
         
         // 查询在信用卡表中有没有数据,如果没有则插入一条(对老的信用卡账户)

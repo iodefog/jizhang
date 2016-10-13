@@ -136,22 +136,6 @@
             }
             *rollback = YES;
         }
-        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance + ? where cfundid = ?",item.transferMoney,item.transferOutId]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            *rollback = YES;
-        }
-        if (![db executeUpdate:@"update bk_funs_acct set ibalance = ibalance - ? where cfundid = ?",item.transferMoney,item.transferInId]) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-                *rollback = YES;
-            }
-        }
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success();

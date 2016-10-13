@@ -17,8 +17,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSMutableArray *fundingList = [[NSMutableArray alloc]init];
-        NSMutableArray *orderArr = [[NSMutableArray alloc]init];
-        FMResultSet * fundingResult = [db executeQuery:@"select a.* , b.ibalance from bk_fund_info  a , bk_funs_acct b where a.cparent != 'root' and a.cfundid = b.cfundid and a.operatortype <> 2 and a.cuserid = ? order by a.iorder asc, a.cparent asc , a.cwritedate desc",userid];
+        FMResultSet * fundingResult = [db executeQuery:@"select a.* from bk_fund_info a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? order by a.iorder asc, a.cparent asc , a.cwritedate desc",userid];
         if (!fundingResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -27,6 +26,7 @@
             }
             return;
         }
+        int count = 1;
         while ([fundingResult next]) {
             SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
             item.fundingColor = [fundingResult stringForColumn:@"CCOLOR"];
@@ -34,21 +34,21 @@
             item.fundingID = [fundingResult stringForColumn:@"CFUNDID"];
             item.fundingName = [fundingResult stringForColumn:@"CACCTNAME"];
             item.fundingParent = [fundingResult stringForColumn:@"CPARENT"];
-            item.fundingAmount = [fundingResult doubleForColumn:@"IBALANCE"];
             item.fundingMemo = [fundingResult stringForColumn:@"CMEMO"];
             item.fundingOrder = [fundingResult intForColumn:@"IORDER"];
-            [orderArr addObject:@(item.fundingOrder)];
+            if (item.fundingOrder == 0) {
+                item.fundingOrder = count;
+            }
             if ([fundingResult boolForColumn:@"idisplay"] || (![item.fundingParent isEqualToString:@"11"] && ![item.fundingParent isEqualToString:@"10"])) {
                 [fundingList addObject:item];
             }
-        }
-        if ([orderArr containsObject:@(0)]) {
-            for (int i = 0; i < fundingList.count; i ++) {
-                SSJFinancingHomeitem *item = [fundingList ssj_safeObjectAtIndex:i];
-                item.fundingOrder = i + 1;
-            }
+            count ++;
         }
         [fundingResult close];
+        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+        for (SSJFinancingHomeitem *item in fundingList) {
+            item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userid,currentDate,item.fundingID] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userid,currentDate,item.fundingID];
+        }
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(fundingList);
@@ -61,18 +61,8 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         double fundingSum = 0;
-        FMResultSet *result = [db executeQuery:@"SELECT SUM(A.IBALANCE) FROM BK_FUNS_ACCT A , BK_FUND_INFO B WHERE A.CFUNDID = B.CFUNDID AND A.CUSERID = ? AND B.OPERATORTYPE <> 2",userid];
-        if (!result) {
-            if (failure) {
-                SSJDispatch_main_async_safe(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        while ([result next]) {
-            fundingSum = [result doubleForColumn:@"SUM(A.IBALANCE)"];
-        }
+        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+        fundingSum = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a, bk_bill_type b ,bk_fund_info c where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = c.cfundid and c.idisplay = 1 and c.operatortype <> 2",userid,currentDate];
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(fundingSum);
@@ -88,7 +78,6 @@
     item.fundingID = [set stringForColumn:@"CFUNDID"];
     item.fundingName = [set stringForColumn:@"CACCTNAME"];
     item.fundingParent = [set stringForColumn:@"CPARENT"];
-    item.fundingAmount = [set doubleForColumn:@"IBALANCE"];
     item.fundingMemo = [set stringForColumn:@"CMEMO"];
     item.fundingOrder = [set intForColumn:@"IORDER"];
     return item;
@@ -139,7 +128,7 @@
     __block SSJFinancingHomeitem *fundItem = [[SSJFinancingHomeitem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select a.* , b.ibalance from bk_fund_info  a , bk_funs_acct b where a.cparent != 'root' and a.cfundid = b.cfundid and a.operatortype <> 2 and a.cuserid = ? and a.cfundid = ?",userid,fundingId];
+        FMResultSet *result = [db executeQuery:@"select a.* from bk_fund_info  a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cfundid = ?",userid,fundingId];
         while ([result next]) {
             fundItem = [self fundingItemWithResultSet:result inDatabase:db];
         }
