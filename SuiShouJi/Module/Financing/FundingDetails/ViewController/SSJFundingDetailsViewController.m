@@ -92,7 +92,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:21]};
     [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
+    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    }else{
+        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:financingItem.fundingColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+    }
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
