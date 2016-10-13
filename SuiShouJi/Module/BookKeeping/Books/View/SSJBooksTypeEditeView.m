@@ -276,10 +276,8 @@
 -(void)deleteButtonClicked:(id)sender{
     [self dismiss];
     [MobClick event:@"delete_account_book"];
-    if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:self.item.booksId error:NULL]) {
-        if (self.deleteButtonClickedBlock) {
-            self.deleteButtonClickedBlock(self.item);
-        }
+    if (self.deleteButtonClickedBlock) {
+        self.deleteButtonClickedBlock(self.item);
     }
 }
 

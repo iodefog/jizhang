@@ -265,8 +265,16 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
             return;
         }
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
-            [MobClick event:@"accountbook_delete"];
-            [weakSelf deleteBooks];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该账本后，是否将涉及相关资金账户的流水一并删除？" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"保留资金流水" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteBooksWithType:0];
+            }];
+            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteBooksWithType:1];
+            }];
+            [alert addAction:cancel];
+            [alert addAction:destructive];
+            [weakSelf presentViewController:alert animated:YES completion:NULL];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"删除后关于该账本的流水数据将会被彻底清除哦." action:cancelAction , comfirmAction, nil];
@@ -380,20 +388,24 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     }];
 }
 
-- (void)deleteBooks{
+- (void)deleteBooksWithType:(BOOL)type{
     for (SSJBooksTypeItem *booksItem in self.selectedBooks) {
-        if ([SSJBooksTypeStore deleteBooksTypeWithBooksId:booksItem.booksId error:NULL]) {
             if ([booksItem.booksId isEqualToString:SSJGetCurrentBooksType()]) {
                 SSJSelectBooksType(SSJUSERID());
                 [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-            }
         };
     }
-    self.rightButton.selected = NO;
-    self.deleteButton.hidden = YES;
-    self.editeButton.hidden = YES;
-    [self.collectionView endEditing];
-    [self getDateFromDB];
+    __weak typeof(self) weakSelf = self;
+    [SSJBooksTypeStore deleteBooksTypeWithbooksItems:self.selectedBooks deleteType:type Success:^{
+        weakSelf.rightButton.selected = NO;
+        weakSelf.deleteButton.hidden = YES;
+        weakSelf.editeButton.hidden = YES;
+        [weakSelf.collectionView endEditing];
+        [weakSelf getDateFromDB];
+    } failure:^(NSError *error) {
+        
+    }];
+
 }
 
 -(void)updateAppearanceAfterThemeChanged{
