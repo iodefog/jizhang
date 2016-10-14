@@ -357,24 +357,25 @@ BOOL kHomeNeedLoginPop;
         }
         CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];
         NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
-        SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
-        self.floatingDateView.currentDate = item.billDate;
-        _isRefreshing = NO;
-        if (self.items.count == 0) {
-            return;
-        }else{
-            CGPoint currentPostion = CGPointMake(self.view.frame.size.width / 2, scrollView.contentOffset.y + 46);
-            NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
+        if (currentRow <= self.items.count) {
             SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
-            NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(5, 2)] integerValue];
-            NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
-            if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
-                self.currentYear = currentYear;
-                self.currentMonth = currentMonth;
-                [self reloadCurrentMonthData];
+            self.floatingDateView.currentDate = item.billDate;
+            _isRefreshing = NO;
+            if (self.items.count == 0) {
+                return;
+            }else{
+                CGPoint currentPostion = CGPointMake(self.view.frame.size.width / 2, scrollView.contentOffset.y + 46);
+                NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
+                SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
+                NSInteger currentMonth = [[item.billDate substringWithRange:NSMakeRange(5, 2)] integerValue];
+                NSInteger currentYear = [[item.billDate substringWithRange:NSMakeRange(0, 4)] integerValue];
+                if (currentMonth != self.currentMonth || currentYear != self.currentYear) {
+                    self.currentYear = currentYear;
+                    self.currentMonth = currentMonth;
+                    [self reloadCurrentMonthData];
+                }
             }
         }
-
     }
 }
 

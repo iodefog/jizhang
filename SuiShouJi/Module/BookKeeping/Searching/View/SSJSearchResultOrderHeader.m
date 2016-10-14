@@ -114,11 +114,11 @@
     if (index == 0) {
         switch (self.order) {
             case SSJChargeListOrderMoneyAscending:
-                self.order = SSJChargeListOrderDateAscending;
+                self.order = SSJChargeListOrderDateDescending;
                 break;
                 
             case SSJChargeListOrderMoneyDescending:
-                self.order = SSJChargeListOrderDateAscending;
+                self.order = SSJChargeListOrderDateDescending;
                 break;
                 
             case SSJChargeListOrderDateAscending:
@@ -143,11 +143,11 @@
                 break;
                 
             case SSJChargeListOrderDateAscending:
-                self.order = SSJChargeListOrderMoneyAscending;
+                self.order = SSJChargeListOrderMoneyDescending;
                 break;
                 
             case SSJChargeListOrderDateDescending:
-                self.order = SSJChargeListOrderMoneyAscending;
+                self.order = SSJChargeListOrderMoneyDescending;
                 break;
                 
             default:

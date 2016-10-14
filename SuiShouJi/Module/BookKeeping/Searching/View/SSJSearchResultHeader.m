@@ -20,14 +20,20 @@
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
-        self.backgroundView = [UIView new];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
         self.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [self.contentView addSubview:self.dateLabel];
         [self.contentView addSubview:self.moneyLabel];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 -(void)layoutSubviews{
     [super layoutSubviews];
@@ -57,7 +63,7 @@
 -(void)setItem:(SSJSearchResultItem *)item{
     _item = item;
     NSDate *billDate = [NSDate dateWithString:_item.date formatString:@"yyyy-MM-dd"];
-    NSString *dateStr = [billDate formattedDateWithFormat:@"yyyy年MM月dd日"];
+    NSString *dateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *weekStr;
     
     switch (billDate.weekday) {
@@ -109,6 +115,11 @@
         self.moneyLabel.text = @"";
     }
     [self.moneyLabel sizeToFit];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    self.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 /*
