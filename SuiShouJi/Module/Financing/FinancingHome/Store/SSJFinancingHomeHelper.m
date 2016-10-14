@@ -11,6 +11,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardStore.h"
 #import "SSJCreditCardItem.h"
+#import "SSJLoanHelper.h"
 
 @implementation SSJFinancingHomeHelper
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
@@ -104,24 +105,120 @@
     }];
 }
 
-+ (BOOL)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item{
-    __block BOOL success = YES;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
-        if ([item.fundingParent isEqualToString:@"10"] || [item.fundingParent isEqualToString:@"11"]) {
-            if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID]) {
-                success = NO;
-                return;
-            };
++ (void)deleteFundingWithFundingItem:(SSJBaseItem *)item
+                          deleteType:(BOOL)type
+                             Success:(void(^)())success
+                             failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance]asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *userId = SSJUSERID();
+        if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)item;
+            if ([fundingItem.fundingParent isEqualToString:@"10"] || [fundingItem.fundingParent isEqualToString:@"11"]) {
+                if (!type) {
+                    //如果保留数据只要将响应的借贷隐藏
+                    if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID]) {
+                        *rollback = YES;
+                        if (failure) {
+                            SSJDispatchMainAsync(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    };
+                }else{
+                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", fundingItem.fundingID];
+                    if (!resultSet) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatchMainAsync(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    }
+                    SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
+                    while ([resultSet next]) {
+                        loanModel.ID = [resultSet stringForColumn:@"loanid"];
+                        loanModel.userID = [resultSet stringForColumn:@"cuserid"];
+                        loanModel.lender = [resultSet stringForColumn:@"lender"];
+                        loanModel.jMoney = [resultSet doubleForColumn:@"jmoney"];
+                        loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
+                        loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
+                        loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
+                        loanModel.chargeID = [resultSet stringForColumn:@"cthecharge"];
+                        loanModel.targetChargeID = [resultSet stringForColumn:@"ctargetcharge"];
+                        loanModel.endChargeID = [resultSet stringForColumn:@"cethecharge"];
+                        loanModel.endTargetChargeID = [resultSet stringForColumn:@"cetargetcharge"];
+                        loanModel.interestChargeID = [resultSet stringForColumn:@"cinterestid"];
+                        loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
+                        loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
+                        loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
+                        loanModel.rate = [resultSet doubleForColumn:@"rate"];
+                        loanModel.memo = [resultSet stringForColumn:@"memo"];
+                        loanModel.remindID = [resultSet stringForColumn:@"cremindid"];
+                        loanModel.interest = [resultSet boolForColumn:@"interest"];
+                        loanModel.closeOut = [resultSet boolForColumn:@"iend"];
+                        loanModel.type = [resultSet intForColumn:@"itype"];
+                        loanModel.operatorType = [resultSet intForColumn:@"operatorType"];
+                        loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
+                        loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+                    }
+                    [resultSet close];
+                    if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatchMainAsync(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    };
+                }
+            }else{
+                if ([fundingItem.fundingParent isEqualToString:@"3"]) {
+                
+                }else{
+                    if (!type) {
+                        // 如果保留数据只要删掉资金帐户
+                        if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                    }else{
+                        // 如果不保留先删掉资金帐户
+                        if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                        //删除资金账户所对应的流水
+                        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),fundingItem.fundingID]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                        //找出所有和当前资金帐户有关的借贷
+                        FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select loanid from bk_user_charge where ifunsid = ? and operatortype <> 2)", fundingItem.fundingID];
+                    }
+                }
+            }
         }else{
-            if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.fundingID]) {
-                NSLog(@"%@",[db lastError].description);
-                success = NO;
-                return;
-            };
+ 
         }
-        success = YES;
     }];
-    return success;
 }
 
 + (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId{

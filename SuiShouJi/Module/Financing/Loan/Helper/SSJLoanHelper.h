@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSJLoanModel.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
+#import "SSJDatabaseQueue.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,6 +63,20 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)deleteLoanModel:(SSJLoanModel *)model
                 success:(void (^)())success
                 failure:(void (^)(NSError *error))failure;
+
+
+/**
+ 删除借贷模型
+
+ @param model  借贷模型
+ @param db     db FMDatabase实例
+
+ @return 是否合并成功
+ */
++ (BOOL)deleteLoanModel:(SSJLoanModel *)model
+             inDatabase:(FMDatabase *)db
+              forUserId:(NSString *)userId
+                  error:(NSError **)error;
 
 /**
  *  结清借贷
