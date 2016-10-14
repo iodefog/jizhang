@@ -61,6 +61,14 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     }];
 }
 
+- (void)goBackAction {
+    if (_budgetModel.billIds.count) {
+        [super goBackAction];
+    } else {
+        [CDAutoHideMessageHUD showMessage:@"至少选择一个类别"];
+    }
+}
+
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
@@ -121,14 +129,16 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         
     } else {
         // 添加类别
+        __weak typeof(self) wself = self;
         SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc] init];
         addNewTypeVc.incomeOrExpence = 1;
-//        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
-//            wself.item.billId = categoryId;
-//            wself.titleSegment.selectedSegmentIndex = incomeOrExpence ? 0 : 1;
-//            [wself.scrollView setContentOffset:CGPointMake(wself.titleSegment.selectedSegmentIndex * wself.scrollView.width, 0) animated:YES];
-//            [wself updateNavigationRightItem];
-//        };
+        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
+            if (incomeOrExpence) {
+                NSMutableArray *tmpBillIds = [wself.budgetModel.billIds mutableCopy];
+                [tmpBillIds addObject:categoryId];
+                wself.budgetModel.billIds = tmpBillIds;
+            }
+        };
         [self.navigationController pushViewController:addNewTypeVc animated:YES];
     }
 }

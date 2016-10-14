@@ -66,6 +66,7 @@
         CGFloat axisX = width *idx;
         CGFloat axisY = 0;
         button.frame = CGRectMake(axisX, axisY, width, height);
+        [button ssj_layoutContent];
     }
     
     if (CGSizeEqualToSize(_tabSize, CGSizeZero)) {
