@@ -29,7 +29,10 @@ static const CGFloat kVerticalGap = 10;
         [self addSubview:_imageView];
         
         _titleLab = [[UILabel alloc] init];
+        _titleLab.numberOfLines = 0;
+        
         _titleLab.font = [UIFont systemFontOfSize:18];
+        _titleLab.textAlignment = NSTextAlignmentCenter;
         _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [self addSubview:_titleLab];
     }

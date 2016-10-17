@@ -31,22 +31,22 @@
         NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.istate, b.ccoin, b.ccolor , b.itype from bk_user_charge a, bk_bill_type b , bk_user_bill c where a.operatortype <> 2 and a.cuserid = '%@' and a.cbooksid = '%@' and a.ibillid = b.id and b.id = c.cbillid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and b.istate <> 2 and a.cbilldate <= '%@' and b.istate <> 2 and c.cuserid = '%@'",userId,currentBookId,content,content,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"],userId];
         switch (order) {
             case SSJChargeListOrderMoneyAscending:{
-                [sql appendString:@" order by a.imoney asc"];
+                [sql appendString:@" order by cast(a.imoney as double) asc , a.cbilldate desc"];
                 break;
             }
                 
             case SSJChargeListOrderMoneyDescending:{
-                [sql appendString:@" order by a.imoney desc"];
+                [sql appendString:@" order by cast(a.imoney as double) desc , a.cbilldate desc"];
                 break;
             }
                 
             case SSJChargeListOrderDateAscending:{
-                [sql appendString:@" order by a.cbilldate asc"];
+                [sql appendString:@" order by a.cbilldate asc , cast(a.imoney as double) desc"];
                 break;
             }
                 
             case SSJChargeListOrderDateDescending:{
-                [sql appendString:@" order by a.cbilldate desc"];
+                [sql appendString:@" order by a.cbilldate desc , cast(a.imoney as double) desc"];
                 break;
             }
                 

@@ -19,6 +19,8 @@
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJSearchResultOrderHeader.h"
 
+static NSString *const khasSearchByMoney = @"khasSearchByMoney";
+
 static NSString *const kBillingChargeCellId = @"kBillingChargeCellId";
 
 static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
@@ -71,7 +73,10 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [super viewWillAppear:animated];
 //    [self.searchBar.searchTextInput becomeFirstResponder];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];\
+    if (self.model == SSJSearchResultModel) {
+        [self searchForContent:self.searchBar.searchTextInput.text listOrder:self.resultOrderHeader.order];
+    }
 //#warning test
 //    _startTime = CFAbsoluteTimeGetCurrent();
 //    [SSJChargeSearchingStore searchForChargeListWithSearchContent:@"餐饮" ListOrder:SSJChargeListOrderMoneyAscending Success:^(NSArray<SSJSearchResultItem *> *result) {
@@ -101,7 +106,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         [CDAutoHideMessageHUD showMessage:@"请输入要查询的内容"];
         return;
     }
-    [self searchForContent:searchBar.text listOrder:SSJChargeListOrderDateAscending];
+    [self searchForContent:searchBar.text listOrder:SSJChargeListOrderDateDescending];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
@@ -248,7 +253,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (SSJBudgetNodataRemindView *)noResultHeader{
     if (!_noResultHeader) {
         _noResultHeader = [[SSJBudgetNodataRemindView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 260)];
-        _noResultHeader.title = @"您还没有任何记账记录哦";
         _noResultHeader.image = @"calendar_norecord";
     }
     return _noResultHeader;
@@ -257,9 +261,14 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (SSJSearchResultOrderHeader *)resultOrderHeader{
     if (!_resultOrderHeader) {
         _resultOrderHeader = [[SSJSearchResultOrderHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 78)];
-        _resultOrderHeader.order = SSJChargeListOrderDateAscending;
+        _resultOrderHeader.order = SSJChargeListOrderDateDescending;
         __weak typeof(self) weakSelf = self;
         _resultOrderHeader.orderSelectBlock = ^(SSJChargeListOrder order){
+            BOOL hasSearchByMoney = [[NSUserDefaults standardUserDefaults] boolForKey:khasSearchByMoney];
+            if (!hasSearchByMoney) {
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:khasSearchByMoney];
+                [CDAutoHideMessageHUD showMessage:@"已收支类别的具体金额数目排序，不区分正负数"];
+            }
             [weakSelf searchForContent:weakSelf.searchBar.searchTextInput.text listOrder:order];
         };
     }
@@ -321,23 +330,24 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     __weak typeof(self) weakSelf = self;
     [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result , NSInteger chargeCount) {
         weakSelf.model = SSJSearchResultModel;
-        [self.tableView ssj_hideLoadingIndicator];
-        self.items = [NSArray arrayWithArray:result];
+        [weakSelf.tableView ssj_hideLoadingIndicator];
+        weakSelf.items = [NSArray arrayWithArray:result];
         _endTime = CFAbsoluteTimeGetCurrent();
-#ifdef DEBUG
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",chargeCount,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
-#endif
+//#ifdef DEBUG
+//        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",chargeCount,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
+//#endif
         if (result.count) {
-            [self.tableView ssj_hideWatermark:YES];
-            self.resultOrderHeader.resultCount = chargeCount;
-            self.tableView.tableHeaderView = self.resultOrderHeader;
+            [weakSelf.tableView ssj_hideWatermark:YES];
+            weakSelf.resultOrderHeader.resultCount = chargeCount;
+            weakSelf.tableView.tableHeaderView = weakSelf.resultOrderHeader;
         }else{
-            self.tableView.tableHeaderView = nil;
-            [self.tableView ssj_showWatermarkWithCustomView:self.noResultHeader animated:NO target:self action:NULL];
+            weakSelf.tableView.tableHeaderView = nil;
+            weakSelf.noResultHeader.title = [NSString stringWithFormat:@"没有搜索到与\"%@\"相关的流水哦,\n换个搜索词再试试吧~",content];
+            [weakSelf.tableView ssj_showWatermarkWithCustomView:weakSelf.noResultHeader animated:NO target:weakSelf action:NULL];
         }
-        [self.tableView reloadData];
+        [weakSelf.tableView reloadData];
     } failure:^(NSError *error) {
-        [self.tableView ssj_hideLoadingIndicator];
+        [weakSelf.tableView ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
     }];
 }

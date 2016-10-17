@@ -8,6 +8,7 @@
 
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDailySumChargeTable.h"
 
 @implementation SSJBooksTypeStore
 + (void)queryForBooksListWithSuccess:(void(^)(NSMutableArray<SSJBooksTypeItem *> *result))success
@@ -167,6 +168,7 @@
                            Success:(void(^)())success
                            failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSString *userId = SSJUSERID();
         if (!type) {
             for (SSJBooksTypeItem *item in items) {
                 if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
@@ -199,6 +201,17 @@
                     }
                     return;
                 }
+                //更新日常统计表
+                if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+                    if (failure) {
+                        *rollback = YES;
+                        SSJDispatchMainAsync(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                
             }
         }
         if (success) {

@@ -7,10 +7,10 @@
 //
 
 #import "SSJLoanHelper.h"
-#import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
 #import "SSJFundAccountTable.h"
+#import "SSJLocalNotificationHelper.h"
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
 NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
@@ -312,16 +312,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 更新资金账户余额
-        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+        //取消提醒
+        SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+        remindItem.remindId = model.remindID;
+        remindItem.userId = model.userID;
+        [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
         
         if (success) {
             SSJDispatchMainAsync(^{
@@ -329,6 +324,62 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             });
         }
     }];
+}
+
++ (BOOL)deleteLoanModel:(SSJLoanModel *)model
+             inDatabase:(FMDatabase *)db
+              forUserId:(NSString *)userId
+                  error:(NSError **)error{
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    // 将借贷记录的operatortype改为2
+    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
+        *error = [db lastError];
+        return NO;
+    }
+    
+    // 拼接要删除的转帐流水id
+    NSMutableString *chargeIDs = [NSMutableString string];
+    if (model.chargeID.length) {
+        [chargeIDs appendFormat:@"'%@'", model.chargeID];
+    }
+    
+    if (model.targetChargeID.length) {
+        [chargeIDs appendFormat:@", '%@'", model.targetChargeID];
+    }
+    
+    if (model.endChargeID.length) {
+        [chargeIDs appendFormat:@", '%@'", model.endChargeID];
+    }
+    
+    if (model.endTargetChargeID.length) {
+        [chargeIDs appendFormat:@", '%@'", model.endTargetChargeID];
+    }
+    
+    if (model.interestChargeID.length) {
+        [chargeIDs appendFormat:@", '%@'", model.interestChargeID];
+    }
+    
+    // 将要删除的转帐流水operatortype改为2
+    NSString *sqlStr = [NSString stringWithFormat:@"update bk_user_charge set operatortype = %@, iversion = %@, cwritedate = '%@' where ichargeid in (%@)", @2, @(SSJSyncVersion()), writeDate, chargeIDs];
+    if (![db executeUpdate:sqlStr]) {
+        *error = [db lastError];
+        return NO;
+    }
+    
+    // 将提醒的operatortype改为2
+    if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ?", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
+        *error = [db lastError];
+        return NO;
+    }
+    
+    //取消提醒
+    SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+    remindItem.remindId = model.remindID;
+    remindItem.userId = model.userID;
+    [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+    
+    return YES;
 }
 
 + (void)closeOutLoanModel:(SSJLoanModel *)model

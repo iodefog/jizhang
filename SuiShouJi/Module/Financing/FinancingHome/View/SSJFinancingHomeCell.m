@@ -260,23 +260,9 @@
 
 
 -(void)deleteButtonClicked:(id)sender{
-    [MobClick event:@"fund_delete"];
-    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
-        [SSJFinancingHomeHelper deleteFundingWithFundingItem:item];
-        if (self.deleteButtonClickBlock) {
-            self.deleteButtonClickBlock(self);
-        };
-    }else{
-        __weak typeof(self) weakSelf = self;
-        [SSJCreditCardStore deleteCreditCardWithCardItem:(SSJCreditCardItem *)self.item Success:^{
-            if (weakSelf.deleteButtonClickBlock) {
-                weakSelf.deleteButtonClickBlock(weakSelf);
-            }
-        } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:@"删除失败"];
-        }];
-    }
+    if (self.deleteButtonClickBlock) {
+        self.deleteButtonClickBlock(self);
+    };
 }
 
 @end

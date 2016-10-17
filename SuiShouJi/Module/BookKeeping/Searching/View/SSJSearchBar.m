@@ -61,7 +61,7 @@
         _searchTextInput.searchBarStyle = UISearchBarStyleMinimal;
         [_searchTextInput searchTextFieldView].font = [UIFont systemFontOfSize:15];
         [_searchTextInput searchTextFieldView].textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        [_searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"搜索" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        [_searchTextInput searchTextFieldView].attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"可搜索收支类别,备注" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     }
     return _searchTextInput;
 }

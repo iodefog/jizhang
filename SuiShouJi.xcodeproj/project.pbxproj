@@ -2193,7 +2193,6 @@
 		9CECFF601D6D41EB00DB2C8B /* SSJFinancingHomePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9471401CEB224C00D69079 /* SSJFinancingHomePopView.m */; };
 		9CECFF611D6D41EB00DB2C8B /* SSJBookkeepingTreeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB731CFD2DAA0061803B /* SSJBookkeepingTreeView.m */; };
 		9CECFF621D6D41EB00DB2C8B /* SSJReportFormsCurveModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D6F93341D0812A9000CCDB3 /* SSJReportFormsCurveModel.m */; };
-		9CECFF631D6D41EB00DB2C8B /* SSJRecordMakingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F33261CEAE6C10086B67E /* SSJRecordMakingViewController.m */; };
 		9CECFF641D6D41EB00DB2C8B /* SCYMotionEncryptionUitlities.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE69C361C8EC401001D31C1 /* SCYMotionEncryptionUitlities.m */; };
 		9CECFF651D6D41EB00DB2C8B /* SSJStartChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D3955511C5F7D25004D807C /* SSJStartChecker.m */; };
 		9CECFF661D6D41EB00DB2C8B /* SSJFundingTransferEdite.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */; };
@@ -8390,7 +8389,6 @@
 				9CECFF601D6D41EB00DB2C8B /* SSJFinancingHomePopView.m in Sources */,
 				9CECFF611D6D41EB00DB2C8B /* SSJBookkeepingTreeView.m in Sources */,
 				9CECFF621D6D41EB00DB2C8B /* SSJReportFormsCurveModel.m in Sources */,
-				9CECFF631D6D41EB00DB2C8B /* SSJRecordMakingViewController.m in Sources */,
 				9CECFF641D6D41EB00DB2C8B /* SCYMotionEncryptionUitlities.m in Sources */,
 				7D738A921DAB267F000CD629 /* SSJDatabaseVersion9.m in Sources */,
 				9CECFF651D6D41EB00DB2C8B /* SSJStartChecker.m in Sources */,

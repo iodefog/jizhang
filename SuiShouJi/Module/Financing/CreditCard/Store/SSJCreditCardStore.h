@@ -28,4 +28,9 @@
                         remindItem:(SSJReminderItem *)remindItem
                            Success:(void (^)(NSInteger operatortype))success
                            failure:(void (^)(NSError *error))failure ;
+
++ (BOOL)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
+                          inDatabase:(FMDatabase *)db
+                           forUserId:(NSString *)userId
+                               error:(NSError **)error;
 @end

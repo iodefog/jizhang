@@ -82,11 +82,25 @@
     return self.items.count;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath{
+    if (proposedDestinationIndexPath.row == self.items.count - 1) {
+        return [NSIndexPath indexPathForRow:self.items.count - 2 inSection:0];
+    }
+    return proposedDestinationIndexPath;
+}
+
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     SSJChargeMemberItem *currentItem = [self.items ssj_safeObjectAtIndex:sourceIndexPath.row];
     [self.items removeObjectAtIndex:sourceIndexPath.row];
     [self.items insertObject:currentItem atIndex:destinationIndexPath.row];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == self.items.count - 1) {
+        return NO;
+    }
+    return YES;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
