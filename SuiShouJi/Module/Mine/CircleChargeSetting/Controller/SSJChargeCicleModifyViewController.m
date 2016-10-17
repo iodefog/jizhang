@@ -471,6 +471,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             weakSelf.item.incomeOrExpence = !selectType;
             SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:weakSelf.item.incomeOrExpence];
             weakSelf.item.typeName = categoryItem.categoryTitle;
+            weakSelf.item.imageName = categoryItem.categoryImage;
             weakSelf.item.billId = categoryItem.categoryID;
             [weakSelf.tableView reloadData];
         };

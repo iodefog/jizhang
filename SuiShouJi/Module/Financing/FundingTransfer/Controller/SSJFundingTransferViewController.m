@@ -120,7 +120,7 @@
 #pragma mark - Getter
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked:)];
+        _rightButton = [[UIBarButtonItem alloc]initWithTitle:@"转账记录" style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         _rightButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
     }
     return _rightButton;

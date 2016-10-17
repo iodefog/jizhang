@@ -44,11 +44,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 @property(nonatomic, strong) UIView *clearHistoryFooterView;
 @end
 
-@implementation SSJSearchingViewController{
-#warning test
-    CFAbsoluteTime _startTime;
-    CFAbsoluteTime _endTime;
-}
+@implementation SSJSearchingViewController
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
@@ -325,14 +321,12 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)searchForContent:(NSString *)content listOrder:(SSJChargeListOrder)order{
     [self.view endEditing:YES];
-    _startTime = CFAbsoluteTimeGetCurrent();
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
     [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result , NSInteger chargeCount) {
         weakSelf.model = SSJSearchResultModel;
         [weakSelf.tableView ssj_hideLoadingIndicator];
         weakSelf.items = [NSArray arrayWithArray:result];
-        _endTime = CFAbsoluteTimeGetCurrent();
 //#ifdef DEBUG
 //        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"查询%ld条数据耗时%f",chargeCount,_endTime - _startTime] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL],NULL];
 //#endif

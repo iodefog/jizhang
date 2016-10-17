@@ -197,7 +197,7 @@
 
 -(UIBarButtonItem *)rightButton{
     if (!_rightButton) {
-        _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightButtonClicked)];
+        _rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked)];
     }
     return _rightButton;
 }
@@ -269,7 +269,8 @@
     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     [db close];
     UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 3];
-    [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];}
+    [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
+}
 
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];

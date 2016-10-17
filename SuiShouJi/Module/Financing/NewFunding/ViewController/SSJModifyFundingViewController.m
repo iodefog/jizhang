@@ -236,7 +236,7 @@
 
 -(UIBarButtonItem*)rightBarButton{
     if (!_rightBarButton) {
-        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStyleBordered target:self action:@selector(rightBarButtonClicked:)];
+        _rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonClicked:)];
 //        _rightBarButton.tintColor = [UIColor ssj_colorWithHex:@"cccccc"];
     }
     return _rightBarButton;
