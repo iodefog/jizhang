@@ -160,25 +160,61 @@ static NSString *const kGreenColorValue = @"0fceb6";
     }
 }
 
+- (void)decline {
+    for (SSJWaveWaterViewItem *item in self.growingView.items) {
+        item.wavePercent = 0;
+        item.waveGrowth = _waveGrowth;
+    }
+    [self performSelector:@selector(reset) withObject:nil afterDelay:self.growingView.height / (12 * _waveGrowth)];
+}
+
+- (void)reset {
+    [self.growingView reset];
+}
+
 - (void)setPercent:(CGFloat)percent {
     _percent = percent;
-    if (percent >= 0 && percent < 1) {
+    
+    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
+    if (percent == 0) {
         self.growingView.hidden = NO;
         self.fullView.hidden = YES;
         self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
-        if (percent == 0) {
-            [self.growingView reset];
-        } else {
-            
-            if (!self.growingView.items) {
-                self.growingView.items = self.growingItems;
-            }
-            [self.growingView startWave];
+        
+        if (!self.growingView.items) {
+            self.growingView.items = self.growingItems;
         }
+        
+        [self.growingView startWave];
+        [self.fullView stopWave];
+        
+        for (SSJWaveWaterViewItem *item in self.growingView.items) {
+            item.wavePercent = 1;
+            item.waveGrowth = 0;
+        }
+        [self performSelector:@selector(decline) withObject:nil afterDelay:0.2];
+        
+        if (self.showText) {
+            self.growingView.topTitle = @"剩余";
+            self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
+        }
+        
+    } else if (percent > 0 && percent < 1) {
+        self.growingView.hidden = NO;
+        self.fullView.hidden = YES;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
+        
+        if (!self.growingView.items) {
+            self.growingView.items = self.growingItems;
+        }
+        
+        [self.growingView startWave];
         
         [self.fullView stopWave];
         for (SSJWaveWaterViewItem *item in self.growingView.items) {
             item.wavePercent = percent;
+            item.waveGrowth = _waveGrowth;
         }
         
         if (self.showText) {

@@ -83,14 +83,17 @@
 
 - (void)updateProgress {
     if (!CGRectIsEmpty(self.bounds)) {
-        _progressView.size = CGSizeMake(0, self.height);
-//        _surplusLab.left = 10;
-//        _surplusLab.centerY = self.height * 0.5;
-        
-        [UIView animateWithDuration:MAX(1, _progress) * 1.5 animations:^{
-            _progressView.width = self.width * _progress;
-//            _surplusLab.left = MIN(self.width - _surplusLab.width - 10, self.width * _progress + 10);
-        }];
+        if (_progress == 0) {
+            _progressView.size = CGSizeMake(self.width, self.height);
+            [UIView animateWithDuration:1.5 animations:^{
+                _progressView.width = 0;
+            }];
+        } else {
+            _progressView.size = CGSizeMake(0, self.height);
+            [UIView animateWithDuration:MAX(1, _progress) * 1.5 animations:^{
+                _progressView.width = self.width * _progress;
+            }];
+        }
     }
 }
 
