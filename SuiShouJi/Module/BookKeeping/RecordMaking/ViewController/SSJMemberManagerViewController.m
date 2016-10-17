@@ -11,6 +11,9 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJNewMemberViewController.h"
+#import "SSJMemberTableViewCell.h"
+
+static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellIdentifier";
 
 @interface SSJMemberManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic, strong) UITableView *tableView;
@@ -32,6 +35,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - 10 - SSJ_NAVIBAR_BOTTOM);
     self.tableView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM + 10);
+    [self.tableView registerClass:[SSJMemberTableViewCell class] forCellReuseIdentifier:kMemberTableViewCellIdentifier];
     // Do any additional setup after loading the view.
 }
 
@@ -104,27 +108,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJMemberCell";
-    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJMemberTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMemberTableViewCellIdentifier forIndexPath:indexPath];
     if (!cell) {
-        cell = [[SSJBaseTableViewCell alloc] initWithStyle :UITableViewCellStyleValue1 reuseIdentifier:cellId];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        cell = [[SSJMemberTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kMemberTableViewCellIdentifier];
     }
+    cell.selectable = NO;
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    NSString *title = item.memberName;
-    cell.textLabel.font = [UIFont systemFontOfSize:18];
-    cell.textLabel.text = title;
-    cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
-    cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:18];
-    cell.detailTextLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    if ([item.memberId isEqualToString:[NSString stringWithFormat:@"%@-0",SSJUSERID()]]) {
-        cell.detailTextLabel.text = @"默认";
-    }else{
-        cell.detailTextLabel.text = @"";
-    }
+    cell.memberItem = item;
     return cell;
 }
 

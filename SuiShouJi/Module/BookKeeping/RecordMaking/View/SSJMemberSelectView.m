@@ -11,6 +11,9 @@
 #import "SSJChargeMemberItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJNewMemberViewController.h"
+#import "SSJMemberTableViewCell.h"
+
+static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellIdentifier";
 
 @interface SSJMemberSelectView()
 
@@ -33,6 +36,7 @@
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [self addSubview:self.topView];
         [self addSubview:self.tableView];
+        [self.tableView registerClass:[SSJMemberTableViewCell class] forCellReuseIdentifier:kMemberTableViewCellIdentifier];
         [self sizeToFit];
     }
     return self;
@@ -86,24 +90,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJMemberCell";
-    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJMemberTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMemberTableViewCellIdentifier forIndexPath:indexPath];
     if (!cell) {
-        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        cell = [[SSJMemberTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kMemberTableViewCellIdentifier];
     }
+    cell.selectable = YES;
     SSJChargeMemberItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
-    NSString *title = item.memberName;
-    cell.textLabel.text = title;
+    cell.memberItem = item;
     UIImageView *checkMarkImage = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     checkMarkImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     cell.accessoryView = [self.selectedMemberItems containsObject:item] ? checkMarkImage : nil;
-    cell.imageView.image = [title isEqualToString:@"添加新成员"] ? [[UIImage imageNamed:@"border_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
-    cell.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    cell.textLabel.textColor = [title isEqualToString:@"添加新成员"] ? [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] : [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    
     return cell;
 }
 
