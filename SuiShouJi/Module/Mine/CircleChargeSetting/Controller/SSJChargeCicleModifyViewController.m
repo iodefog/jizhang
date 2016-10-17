@@ -30,6 +30,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJFundingTypeSelectView.h"
 #import "SSJChargeCircleSelectView.h"
 #import "SSJBillTypeSelectViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 #import "SSJChargeCircleTimeSelectView.h"
 #import "SSJCircleChargeTypeSelectView.h"
 #import "SSJImaageBrowseViewController.h"
@@ -41,6 +42,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJCreditCardItem.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic, strong) NSArray *titles;
@@ -411,12 +413,22 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 [weakSelf.tableView reloadData];
                 [weakSelf.fundSelectView dismiss];
             }else{
-                SSJNewFundingViewController *NewFundingVC = [[SSJNewFundingViewController alloc]init];
-                NewFundingVC.addNewFundBlock = ^(SSJFundingItem *newFundingItem){
-                    weakSelf.item.fundId = newFundingItem.fundingID;
-                    weakSelf.item.fundName = newFundingItem.fundingName;
-                    weakSelf.item.fundImage = newFundingItem.fundingIcon;
-                    [weakSelf.tableView reloadData];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.item.fundId = fundItem.fundingID;
+                        weakSelf.item.fundName = fundItem.fundingName;
+                        weakSelf.item.fundImage = fundItem.fundingIcon;
+                        [weakSelf.tableView reloadData];
+                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+                        weakSelf.item.fundId = cardItem.cardId;
+                        weakSelf.item.fundName = cardItem.cardName;
+                        weakSelf.item.fundImage = @"ft_creditcard";
+                        [weakSelf.tableView reloadData];
+                    }
+
                 };
                 [weakSelf.fundSelectView dismiss];
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];

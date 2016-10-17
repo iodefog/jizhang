@@ -386,7 +386,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 //    }];
     [SSJCreditCardStore saveCreditCardWithCardItem:weakSelf.item remindItem:weakSelf.remindItem Success:^(NSInteger operatortype){
         if (!operatortype) {
-            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+            UIViewController *viewControllerNeedToPop = [weakSelf.navigationController.viewControllers objectAtIndex:weakSelf.navigationController.viewControllers.count - 3];
+            [weakSelf.navigationController popToViewController:viewControllerNeedToPop animated:YES];
         }else{
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }
