@@ -51,6 +51,7 @@
         NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
         for (SSJFinancingHomeitem *item in fundingList) {
             item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 0 and a.ifunsid = ?",userid,currentDate,item.fundingID] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or length(a.loanid) > 0) and b.itype = 1 and a.ifunsid = ?",userid,currentDate,item.fundingID];
+            item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",item.fundingID,userid];
         }
         if (success) {
             SSJDispatch_main_async_safe(^{

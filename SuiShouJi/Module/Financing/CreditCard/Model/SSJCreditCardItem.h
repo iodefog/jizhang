@@ -46,4 +46,7 @@
 // 提醒的状态
 @property(nonatomic) BOOL remindState;
 
+// 信用卡流水
+@property(nonatomic) NSInteger chargeCount;
+
 @end

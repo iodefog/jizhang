@@ -22,13 +22,17 @@
         historyItem.searchHistory = content;
         [self saveSearchHistoryItem:historyItem inDatabase:db];
         NSString *userId = SSJUSERID();
+        NSString *booksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        if (!booksId.length) {
+            booksId = userId;
+        }
         NSString *lastBillDate = @"";
         NSString *currentBookId = [db stringForQuery:@"select CCURRENTBOOKSID from bk_user where cuserid = ?",userId];
         NSMutableArray *tempArr = [NSMutableArray array];
         if (!currentBookId.length) {
             currentBookId = userId;
         }
-        NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.istate, b.ccoin, b.ccolor , b.itype from bk_user_charge a, bk_bill_type b , bk_user_bill c where a.operatortype <> 2 and a.cuserid = '%@' and a.cbooksid = '%@' and a.ibillid = b.id and b.id = c.cbillid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and b.istate <> 2 and a.cbilldate <= '%@' and b.istate <> 2 and c.cuserid = '%@'",userId,currentBookId,content,content,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"],userId];
+        NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.istate, b.ccoin, b.ccolor , b.itype from bk_user_charge a, bk_bill_type b , bk_user_bill c where a.operatortype <> 2 and a.cuserid = '%@' and a.cbooksid = '%@' and a.ibillid = b.id and b.id = c.cbillid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and b.istate <> 2 and a.cbilldate <= '%@' and b.istate <> 2 and c.cuserid = '%@' and a.cbooksid = '%@'",userId,currentBookId,content,content,[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"],userId,booksId];
         switch (order) {
             case SSJChargeListOrderMoneyAscending:{
                 [sql appendString:@" order by cast(a.imoney as double) asc , a.cbilldate desc"];

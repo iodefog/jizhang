@@ -260,8 +260,14 @@
 
 
 -(void)deleteButtonClicked:(id)sender{
+    NSInteger chargeCount = 0;
+    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+        chargeCount = ((SSJCreditCardItem *)self.item).chargeCount;
+    }else{
+        chargeCount = ((SSJFinancingHomeitem *)self.item).chargeCount;
+    }
     if (self.deleteButtonClickBlock) {
-        self.deleteButtonClickBlock(self);
+        self.deleteButtonClickBlock(self,chargeCount);
     };
 }
 

@@ -34,4 +34,7 @@
 
 @property(nonatomic) NSInteger fundingOrder;
 
+//账户下流水数量
+@property(nonatomic) NSInteger chargeCount;
+
 @end

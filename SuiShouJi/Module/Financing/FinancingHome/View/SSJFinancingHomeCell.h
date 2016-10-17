@@ -21,7 +21,7 @@
 @property(nonatomic) BOOL editeModel;
 
 //点击删除按钮的回调
-typedef void (^deleteButtonClickBlock)(SSJFinancingHomeCell *cell);
+typedef void (^deleteButtonClickBlock)(SSJFinancingHomeCell *cell,NSInteger chargeCount);
 
 @property (nonatomic, copy) deleteButtonClickBlock deleteButtonClickBlock;
 
