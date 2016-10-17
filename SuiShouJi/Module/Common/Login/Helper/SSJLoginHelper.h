@@ -14,6 +14,6 @@
 
 + (void)updateBillTypeOrderIfNeededForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
 
-+ (void)mergeNotloginDataWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure;
++ (void)mergeUserDataForUserID:(NSString *)userId success:(void (^)())success failure:(void (^)(NSError *error))failure;
 
 @end
