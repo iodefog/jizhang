@@ -155,20 +155,24 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     SSJFinancingHomeCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
     cell.item = item;
     cell.editeModel = _editeModel;
-    cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
+    cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell,NSInteger chargeCount){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            if (chargeCount) {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf deleteFundingItem:cell.item type:0];
+                }];
+                UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                    [weakSelf deleteFundingItem:cell.item type:1];
+                }];
+                [alert addAction:cancel];
+                [alert addAction:comfirm];
+                [weakSelf presentViewController:alert animated:YES completion:NULL];
+            }else{
                 [weakSelf deleteFundingItem:cell.item type:0];
-            }];
-            UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:cell.item type:1];
-            }];
-            [alert addAction:cancel];
-            [alert addAction:comfirm];
-            [weakSelf presentViewController:alert animated:YES completion:NULL];
+            }
         }];
         [alert addAction:cancel];
         [alert addAction:comfirm];
