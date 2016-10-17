@@ -328,6 +328,7 @@ BOOL kHomeNeedLoginPop;
     if (scrollView.contentOffset.y <= -46) {
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
             self.budgetButton.model = [result firstObject];
+            self.budgetButton.button.enabled = YES;
         } failure:^(NSError * _Nullable error) {
             NSLog(@"%@",error.localizedDescription);
         }];
@@ -362,8 +363,10 @@ BOOL kHomeNeedLoginPop;
             self.floatingDateView.currentDate = item.billDate;
             _isRefreshing = NO;
             if (self.items.count == 0) {
+                self.budgetButton.button.enabled = YES;
                 return;
             }else{
+                self.budgetButton.button.enabled = NO;
                 CGPoint currentPostion = CGPointMake(self.view.frame.size.width / 2, scrollView.contentOffset.y + 46);
                 NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
                 SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];

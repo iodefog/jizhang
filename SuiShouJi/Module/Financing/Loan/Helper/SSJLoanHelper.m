@@ -10,6 +10,7 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
 #import "SSJFundAccountTable.h"
+#import "SSJLocalNotificationHelper.h"
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
 NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
@@ -311,16 +312,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 更新资金账户余额
-        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+        //取消提醒
+        SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+        remindItem.remindId = model.remindID;
+        remindItem.userId = model.userID;
+        [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
         
         if (success) {
             SSJDispatchMainAsync(^{
@@ -376,6 +372,13 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         *error = [db lastError];
         return NO;
     }
+    
+    //取消提醒
+    SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+    remindItem.remindId = model.remindID;
+    remindItem.userId = model.userID;
+    [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+    
     return YES;
 }
 

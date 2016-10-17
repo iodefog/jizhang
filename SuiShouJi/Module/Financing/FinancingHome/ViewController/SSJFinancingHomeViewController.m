@@ -156,27 +156,41 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     cell.item = item;
     cell.editeModel = _editeModel;
     cell.deleteButtonClickBlock = ^(SSJFinancingHomeCell *cell){
-        if ([cell.item isKindOfClass:[SSJCreditCardItem class]]) {
-            SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
-            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
-                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
-                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
-                [weakSelf getDateFromDateBase];
-                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            } failure:^(NSError *error) {
-                
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金帐户吗?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:cell.item type:0];
             }];
-        }else{
-            SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
-            [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
-                
-            } failure:^(NSError * _Nonnull error) {
-                
+            UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf deleteFundingItem:cell.item type:1];
             }];
-            [self.items removeObject:deleteItem];
-            [weakSelf.collectionView reloadData];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        }
+            [alert addAction:cancel];
+            [alert addAction:comfirm];
+            [weakSelf presentViewController:alert animated:YES completion:NULL];
+        }];
+        [alert addAction:cancel];
+        [alert addAction:comfirm];
+        [self presentViewController:alert animated:YES completion:NULL];
+//        if ([cell.item isKindOfClass:[SSJCreditCardItem class]]) {
+//            SSJCreditCardItem *deleteItem = (SSJCreditCardItem *)cell.item;
+//            [SSJCreditCardStore deleteCreditCardWithCardItem:deleteItem Success:^{
+//                //            [weakSelf.items removeObjectAtIndex:deleteIndex.item];
+//                //            [weakSelf.collectionView deleteItemsAtIndexPaths:@[deleteIndex]];
+//                [weakSelf getDateFromDateBase];
+//                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//            } failure:^(NSError *error) {
+//                
+//            }];
+//        }else{
+//            SSJFinancingHomeitem *deleteItem = (SSJFinancingHomeitem *)cell.item;
+//            [SSJLoanHelper queryForLoanModelsWithFundID:deleteItem.fundingParent colseOutState:2 success:^(NSArray<SSJLoanModel *> * _Nonnull list) {
+//                
+//            } failure:^(NSError * _Nonnull error) {
+//                
+//            }];
+//        }
     };
     return cell;
 }
@@ -338,6 +352,16 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         
     } failure:^(NSError *error) {
         [weakSelf.collectionView ssj_hideLoadingIndicator];
+    }];
+}
+
+- (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
+        [weakSelf getDateFromDateBase];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
     }];
 }
 
