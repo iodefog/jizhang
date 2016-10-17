@@ -14,6 +14,8 @@
 
 @property (nonatomic) CGFloat progress;
 
-- (void)setProgressColor:(UIColor *)progressColor;
+@property (nonatomic, strong) UIColor *progressColor;
+
+@property (nonatomic, strong) UIColor *overrunProgressColor;
 
 @end

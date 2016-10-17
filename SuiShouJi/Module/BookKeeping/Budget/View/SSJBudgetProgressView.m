@@ -38,7 +38,7 @@
     self.layer.cornerRadius = self.height * 0.5;
 //    _progressView.size = self.size;
 //    _progressView.left = - self.width;
-    _surplusLab.centerY = self.height * 0.5;
+    _surplusLab.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     [self updateProgress];
 }
 
@@ -56,13 +56,20 @@
     }
     if (_progress != progress) {
         _progress = progress;
+        _progressView.backgroundColor = _progress > 1 ? _overrunProgressColor : _progressColor;
         [self updateMoney];
         [self updateProgress];
     }
 }
 
 - (void)setProgressColor:(UIColor *)progressColor {
-    _progressView.backgroundColor = progressColor;
+    _progressColor = progressColor;
+    _progressView.backgroundColor = _progress > 1 ? _overrunProgressColor : _progressColor;
+}
+
+- (void)setOverrunProgressColor:(UIColor *)overrunProgressColor {
+    _overrunProgressColor = overrunProgressColor;
+    _progressView.backgroundColor = _progress > 1 ? _overrunProgressColor : _progressColor;
 }
 
 - (void)updateMoney {
@@ -77,11 +84,11 @@
 - (void)updateProgress {
     if (!CGRectIsEmpty(self.bounds)) {
         _progressView.size = CGSizeMake(0, self.height);
-        _surplusLab.left = 10;
-        _surplusLab.centerY = self.height * 0.5;
+//        _surplusLab.left = 10;
+//        _surplusLab.centerY = self.height * 0.5;
         [UIView animateWithDuration:1 animations:^{
             _progressView.width = self.width * _progress;
-            _surplusLab.left = MIN(self.width - _surplusLab.width - 10, self.width * _progress + 10);
+//            _surplusLab.left = MIN(self.width - _surplusLab.width - 10, self.width * _progress + 10);
         }];
     }
 }

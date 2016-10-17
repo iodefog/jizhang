@@ -13,8 +13,6 @@
 #import "SSJBudgetListSecondaryCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 
-#import "SSJBudgetProgressView.h"
-
 static NSString *const kBudgetListCellId = @"kBudgetListCellId";
 static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId";
 

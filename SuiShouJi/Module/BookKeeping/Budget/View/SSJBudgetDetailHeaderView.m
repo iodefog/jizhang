@@ -234,6 +234,7 @@ static const CGFloat kBottomViewHeight = 398;
     self.progressView.progress = item.progressViewPercent;
     self.progressView.budget = item.progressViewMoney;
     [self.progressView setProgressColor:[UIColor ssj_colorWithHex:item.progressColorValue]];
+    [self.progressView setOverrunProgressColor:[UIColor ssj_colorWithHex:@"ff654c"]];
     
     self.payMoneyLab.text = item.payment;
     

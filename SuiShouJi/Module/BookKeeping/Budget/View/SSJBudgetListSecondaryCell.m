@@ -79,6 +79,7 @@
     self.progressView.budget = item.budgetValue;
     self.progressView.progress = item.expendValue / item.budgetValue;
     [_progressView setProgressColor:[UIColor ssj_colorWithHex:item.progressColorValue]];
+    [_progressView setOverrunProgressColor:[UIColor ssj_colorWithHex:@"ff654c"]];
 }
 
 - (void)updateAppearance {
