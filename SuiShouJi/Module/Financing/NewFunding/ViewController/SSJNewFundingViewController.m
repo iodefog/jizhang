@@ -268,8 +268,8 @@
     
     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     [db close];
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
+    UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 3];
+    [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];}
 
 -(void)closeButtonClicked:(id)sender{
     [self ssj_backOffAction];
