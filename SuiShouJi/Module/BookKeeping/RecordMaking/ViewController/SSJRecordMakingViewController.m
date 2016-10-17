@@ -524,6 +524,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 - (void)endEditingAction {
     _paymentTypeView.editing = NO;
     _incomeTypeView.editing = NO;
+    [self updateNavigationRightItem];
 //    [self.navigationItem setRightBarButtonItem:nil animated:YES];
 }
 
