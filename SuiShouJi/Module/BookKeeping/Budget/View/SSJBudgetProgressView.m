@@ -20,7 +20,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor lightGrayColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"e6e6e6"];
         self.clipsToBounds = YES;
         
         _progressView = [[UIView alloc] init];
@@ -86,7 +86,8 @@
         _progressView.size = CGSizeMake(0, self.height);
 //        _surplusLab.left = 10;
 //        _surplusLab.centerY = self.height * 0.5;
-        [UIView animateWithDuration:1 animations:^{
+        
+        [UIView animateWithDuration:MAX(1, _progress) * 1.5 animations:^{
             _progressView.width = self.width * _progress;
 //            _surplusLab.left = MIN(self.width - _surplusLab.width - 10, self.width * _progress + 10);
         }];

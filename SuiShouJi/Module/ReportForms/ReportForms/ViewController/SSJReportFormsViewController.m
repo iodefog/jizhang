@@ -436,8 +436,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
         _periods = periods;
         [_dateAxisView reloadData];
         
-        if (_periods.count >= 2) {
-            _dateAxisView.selectedIndex = _periods.count - 2;
+        if (_periods.count >= 3) {
+            _dateAxisView.selectedIndex = _periods.count - 3;
         }
         
         [self updateSurplusViewTitle];
