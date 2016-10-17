@@ -122,7 +122,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     }else{
         SSJSearchHistoryItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
         self.searchBar.searchTextInput.text = item.searchHistory;
-        [self searchForContent:item.searchHistory listOrder:SSJChargeListOrderDateAscending];
+        [self searchForContent:item.searchHistory listOrder:SSJChargeListOrderDateDescending];
     }
 }
 
