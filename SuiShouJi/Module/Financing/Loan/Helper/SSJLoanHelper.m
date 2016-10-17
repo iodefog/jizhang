@@ -9,7 +9,7 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanFundAccountSelectionViewItem.h"
-#import "SSJFundAccountTable.h"
+//#import "SSJFundAccountTable.h"
 #import "SSJLocalNotificationHelper.h"
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
@@ -204,16 +204,16 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 更新资金账户的余额
-        if (![SSJFundAccountTable updateBalanceForUserId:loanModel.userID inDatabase:db]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+//        // 更新资金账户的余额
+//        if (![SSJFundAccountTable updateBalanceForUserId:loanModel.userID inDatabase:db]) {
+//            *rollback = YES;
+//            if (failure) {
+//                SSJDispatchMainAsync(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//            return;
+//        }
         
         // 存储提醒记录
         if (remindModel) {
@@ -526,16 +526,16 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 更新资金账户的余额
-        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+//        // 更新资金账户的余额
+//        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
+//            *rollback = YES;
+//            if (failure) {
+//                SSJDispatchMainAsync(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//            return;
+//        }
         
         NSString *remindName = nil;
         switch (model.type) {
@@ -653,16 +653,16 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-        // 更新资金账户的余额
-        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
-            *rollback = YES;
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
+//        // 更新资金账户的余额
+//        if (![SSJFundAccountTable updateBalanceForUserId:model.userID inDatabase:db]) {
+//            *rollback = YES;
+//            if (failure) {
+//                SSJDispatchMainAsync(^{
+//                    failure([db lastError]);
+//                });
+//            }
+//            return;
+//        }
         
         if (success) {
             SSJDispatchMainAsync(^{

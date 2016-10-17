@@ -2588,8 +2588,8 @@
 		7D4A431D1CC86F51002F0264 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		7D4CF7021D38D16D009CC8ED /* SSJBudgetNodataRemindView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBudgetNodataRemindView.h; sourceTree = "<group>"; };
 		7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetNodataRemindView.m; sourceTree = "<group>"; };
-		7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundAccountTable.h; sourceTree = "<group>"; };
-		7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundAccountTable.m; sourceTree = "<group>"; };
+		7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJFundAccountTable.h; path = OtherTable/SSJFundAccountTable.h; sourceTree = "<group>"; };
+		7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJFundAccountTable.m; path = OtherTable/SSJFundAccountTable.m; sourceTree = "<group>"; };
 		7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDailySumChargeTable.h; sourceTree = "<group>"; };
 		7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDailySumChargeTable.m; sourceTree = "<group>"; };
 		7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizerTests.m; sourceTree = "<group>"; };
@@ -3719,6 +3719,7 @@
 		7D2B24011C3AA3AD009A74A8 /* DataSync */ = {
 			isa = PBXGroup;
 			children = (
+				7DDB9DFF1DB4A33D007AF877 /* Deprecated */,
 				7DDBB01D1C9AAA22003433D0 /* Model */,
 				7D2B241E1C3E093E009A74A8 /* SyncTable */,
 				7D4EF87C1C43A47D003C4B20 /* OtherTable */,
@@ -3798,8 +3799,6 @@
 			children = (
 				7D581EB61C5107C300E202A2 /* SSJSyncTable.h */,
 				7D581EB71C5107C300E202A2 /* SSJSyncTable.m */,
-				7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */,
-				7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */,
 				7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */,
 				7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */,
 			);
@@ -4499,6 +4498,15 @@
 				7DDA48991C8821F20010EB01 /* SSJDatePeriod.m */,
 			);
 			path = Foundation;
+			sourceTree = "<group>";
+		};
+		7DDB9DFF1DB4A33D007AF877 /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				7D4EF8801C43B10C003C4B20 /* SSJFundAccountTable.h */,
+				7D4EF8811C43B10C003C4B20 /* SSJFundAccountTable.m */,
+			);
+			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		7DDBB01D1C9AAA22003433D0 /* Model */ = {
