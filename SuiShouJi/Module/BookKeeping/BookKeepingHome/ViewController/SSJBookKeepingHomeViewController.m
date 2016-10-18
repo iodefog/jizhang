@@ -738,6 +738,11 @@ BOOL kHomeNeedLoginPop;
     [self.homeBar.budgetButton updateAfterThemeChange];
     [self.homeBar.rightBarButton updateAfterThemeChange];
     [self.noDataHeader updateAfterThemeChanged];
+    [self.homeBar updateAfterThemeChange];
+    [self.floatingDateView updateAfterThemeChange];
+    self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
+    self.mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
+    self.mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonNormalColor];
 }
 
 -(void)getDateFromDatebase{

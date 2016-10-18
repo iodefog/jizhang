@@ -14,7 +14,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         [self addSubview:self.budgetButton];
         [self addSubview:self.leftButton];
         [self addSubview:self.rightBarButton];
@@ -53,6 +53,10 @@
         //        buttonView.layer.borderWidth = 1;
     }
     return _rightBarButton;
+}
+
+- (void)updateAfterThemeChange{
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
 }
 
 /*
