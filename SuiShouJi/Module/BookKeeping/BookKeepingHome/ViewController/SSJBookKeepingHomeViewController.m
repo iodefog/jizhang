@@ -361,7 +361,7 @@ BOOL kHomeNeedLoginPop;
         }
         CGPoint currentPostion = [self.view convertPoint:CGPointMake(self.view.width / 2, self.view.height / 2) toView:self.tableView];
         NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
-        if (currentRow <= self.items.count) {
+        if (currentRow <= self.items.count && self.items.count) {
             SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
             self.floatingDateView.currentDate = item.billDate;
             _isRefreshing = NO;
