@@ -167,7 +167,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                 UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                     [weakSelf deleteFundingItem:cell.item type:1];
                 }];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 }];
                 [alert addAction:reserve];
                 [alert addAction:destructive];

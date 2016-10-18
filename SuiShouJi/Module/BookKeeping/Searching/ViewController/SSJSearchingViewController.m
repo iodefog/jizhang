@@ -125,7 +125,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     if (self.model == SSJSearchResultModel) {
         SSJSearchResultItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
         SSJBillingChargeCellItem *billItem = [item.chargeList ssj_safeObjectAtIndex:indexPath.row];
-        SSJCalenderDetailViewController *billDetailVc = [[SSJCalenderDetailViewController alloc]init];
+        SSJCalenderDetailViewController *billDetailVc = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         billDetailVc.item = billItem;
         [self.navigationController pushViewController:billDetailVc animated:YES];
     }else{
