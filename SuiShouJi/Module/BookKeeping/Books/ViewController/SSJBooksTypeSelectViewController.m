@@ -266,18 +266,21 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         }
         SSJAlertViewAction *comfirmAction = [SSJAlertViewAction actionWithTitle:@"删除" handler:^(SSJAlertViewAction * _Nonnull action) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该账本后，是否将涉及相关资金账户的流水一并删除？" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"保留资金流水" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"保留资金流水" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf deleteBooksWithType:0];
             }];
             UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf deleteBooksWithType:1];
             }];
-            [alert addAction:cancel];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:reserve];
             [alert addAction:destructive];
+            [alert addAction:cancel];
             [weakSelf presentViewController:alert animated:YES completion:NULL];
         }];
         SSJAlertViewAction *cancelAction = [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"删除后关于该账本的流水数据将会被彻底清除哦." action:cancelAction , comfirmAction, nil];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"你确定要删除该账本吗?" action:cancelAction , comfirmAction, nil];
 
     }
 }
