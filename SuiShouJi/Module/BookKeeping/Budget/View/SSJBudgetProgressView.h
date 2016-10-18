@@ -10,9 +10,9 @@
 
 @interface SSJBudgetProgressView : UIView
 
-@property (nonatomic) CGFloat budget;
+@property (nonatomic) CGFloat budgetMoney;
 
-@property (nonatomic) CGFloat progress;
+@property (nonatomic) CGFloat expendMoney;
 
 @property (nonatomic, strong) UIColor *progressColor;
 

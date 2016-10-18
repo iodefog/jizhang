@@ -37,17 +37,11 @@ extern NSString *const SSJBudgetDetailBillInfoColorKey;
 // 距结算日天数
 @property (nonatomic, copy) NSString *intervalValue;
 
-// 波浪进度百分比
-@property (nonatomic) CGFloat waveViewPercent;
+// 预算金额
+@property (nonatomic) CGFloat budgetMoney;
 
-// 波浪剩余或超支金额
-@property (nonatomic) CGFloat waveViewMoney;
-
-// 进度条百分比
-@property (nonatomic) CGFloat progressViewPercent;
-
-// 进度条预算总金额
-@property (nonatomic) CGFloat progressViewMoney;
+// 支出金额
+@property (nonatomic) CGFloat expendMoney;
 
 // 进度条颜色
 @property (nonatomic, copy) NSString *progressColorValue;

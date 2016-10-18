@@ -67,7 +67,7 @@ static NSString *const kGreenColorValue = @"0ac082";
 }
 
 - (void)drawRect:(CGRect)rect {
-    if (_percent < 1) {
+    if (_budgetMoney > _expendMoney) {
         return;
     }
     
@@ -75,9 +75,11 @@ static NSString *const kGreenColorValue = @"0ac082";
     circlePath.lineWidth = _outerBorderWidth;
     [circlePath addClip];
     
-    NSString *imageName = _percent > 1 ? @"budget_wave_red" : @"budget_wave_green";
-    NSString *topStr = _percent > 1 ? @"超支" : @"剩余";
-    NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney * (1 - _percent))];
+    CGFloat percent = [self percent];
+    
+    NSString *imageName = percent > 1 ? @"budget_wave_red" : @"budget_wave_green";
+    NSString *topStr = percent > 1 ? @"超支" : @"剩余";
+    NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney * (1 - percent))];
     
     [[UIImage imageNamed:imageName] drawInRect:self.bounds];
     
@@ -151,15 +153,23 @@ static NSString *const kGreenColorValue = @"0ac082";
 }
 
 - (void)setBudgetMoney:(double)budgetMoney {
+    if (budgetMoney <= 0) {
+        return;
+    }
+    
     if (_budgetMoney != budgetMoney) {
         _budgetMoney = budgetMoney;
         [self updateAppearance];
     }
 }
 
-- (void)setPercent:(CGFloat)percent {
-    if (_percent != percent) {
-        _percent = percent;
+- (void)setExpendMoney:(double)expendMoney {
+    if (expendMoney < 0) {
+        return;
+    }
+    
+    if (_expendMoney != expendMoney) {
+        _expendMoney = expendMoney;
         [self updateAppearance];
     }
 }
@@ -170,14 +180,15 @@ static NSString *const kGreenColorValue = @"0ac082";
 
 #pragma mark - Private
 - (void)updateAppearance {
-    if (_percent < 0) {
+    
+    if (_budgetMoney <= 0 || _expendMoney < 0) {
         return;
     }
     
     [self setNeedsDisplay];
     [[self class] cancelPreviousPerformRequestsWithTarget:self];
     
-    if (_percent >= 0 && _percent < 1) {
+    if (_expendMoney < _budgetMoney) {
         self.growingView.hidden = NO;
         self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
         
@@ -195,20 +206,31 @@ static NSString *const kGreenColorValue = @"0ac082";
         [self performSelector:@selector(decline) withObject:nil afterDelay:0.2];
         
         self.growingView.topTitle = @"剩余";
-        self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _budgetMoney * _percent];
+        self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney];
     } else {
         self.growingView.hidden = YES;
     }
 }
 
 - (void)decline {
+    CGFloat percent;
+    
+    
     for (SSJWaveWaterViewItem *item in self.growingView.items) {
-        item.wavePercent = _percent;
+        item.wavePercent = percent;
         item.waveGrowth = _waveGrowth;
     }
     
-    if (_percent == 0) {
+    if (percent == 0) {
         [self performSelector:@selector(reset) withObject:nil afterDelay:self.growingView.height / (12 * _waveGrowth)];
+    }
+}
+
+- (CGFloat)percent {
+    if (_expendMoney >= _budgetMoney) {
+        return 1;
+    } else {
+        return 1 - (_expendMoney / _budgetMoney);
     }
 }
 

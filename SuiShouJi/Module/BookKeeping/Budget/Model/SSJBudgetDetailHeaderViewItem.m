@@ -56,11 +56,8 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
     item.intervalTitle = @"距结算日";
     item.intervalValue = [NSString stringWithFormat:@"%d天", (int)[endDate daysFrom:nowDate]];
     
-    item.waveViewPercent = (model.payMoney / model.budgetMoney);
-    item.waveViewMoney = model.budgetMoney;
-    
-    item.progressViewPercent = (model.payMoney / model.budgetMoney);
-    item.progressViewMoney = model.budgetMoney;
+    item.budgetMoney = model.budgetMoney;
+    item.expendMoney = model.payMoney;
     
     if (model.billIds.count > 1) {
         item.progressColorValue = model.payMoney > model.budgetMoney ? @"ff654c" : @"0fceb6";

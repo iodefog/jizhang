@@ -36,65 +36,78 @@
 
 - (void)layoutSubviews {
     self.layer.cornerRadius = self.height * 0.5;
-//    _progressView.size = self.size;
-//    _progressView.left = - self.width;
     _surplusLab.center = CGPointMake(self.width * 0.5, self.height * 0.5);
     [self updateProgress];
 }
 
-- (void)setBudget:(CGFloat)budget {
-    if (_budget != budget) {
-        _budget = budget;
+- (void)setBudgetMoney:(CGFloat)budgetMoney {
+    if (budgetMoney <= 0) {
+        SSJPRINT(@"预算金额必须大于0");
+        return;
+    }
+    
+    if (_budgetMoney != budgetMoney) {
+        _budgetMoney = budgetMoney;
         [self updateMoney];
+        [self updateProgress];
+        [self updateProgressColor];
     }
 }
 
-- (void)setProgress:(CGFloat)progress {
-    if (progress < 0) {
-        SSJPRINT(@"progress不能为负数");
+- (void)setExpendMoney:(CGFloat)expendMoney {
+    if (expendMoney < 0) {
+        SSJPRINT(@"支出金额不小于0");
         return;
     }
-    if (_progress != progress) {
-        _progress = progress;
-        _progressView.backgroundColor = _progress > 1 ? _overrunProgressColor : _progressColor;
+    
+    if (_expendMoney != expendMoney) {
+        _expendMoney = expendMoney;
         [self updateMoney];
         [self updateProgress];
+        [self updateProgressColor];
     }
 }
 
 - (void)setProgressColor:(UIColor *)progressColor {
     _progressColor = progressColor;
-    _progressView.backgroundColor = _progress > 1 ? _overrunProgressColor : _progressColor;
+    [self updateProgressColor];
 }
 
 - (void)setOverrunProgressColor:(UIColor *)overrunProgressColor {
     _overrunProgressColor = overrunProgressColor;
-    _progressView.backgroundColor = _progress > 1 ? _overrunProgressColor : _progressColor;
+    [self updateProgressColor];
 }
 
 - (void)updateMoney {
-    if (_progress >= 0 && _progress <= 1) {
-        _surplusLab.text = [NSString stringWithFormat:@"剩余：%.2f", _budget * (1 - _progress)];
-    } else if (_progress > 1) {
-        _surplusLab.text = [NSString stringWithFormat:@"超支：%.2f", _budget * (_progress - 1)];
+    if (_budgetMoney >= _expendMoney) {
+        _surplusLab.text = [NSString stringWithFormat:@"剩余：%.2f", _budgetMoney - _expendMoney];
+    } else {
+        _surplusLab.text = [NSString stringWithFormat:@"超支：%.2f", _budgetMoney - _expendMoney];
     }
     [_surplusLab sizeToFit];
 }
 
 - (void)updateProgress {
-    if (!CGRectIsEmpty(self.bounds)) {
-        if (_progress == 0) {
-            _progressView.size = CGSizeMake(self.width, self.height);
-            [UIView animateWithDuration:1.5 animations:^{
-                _progressView.width = 0;
-            }];
-        } else {
-            _progressView.size = CGSizeMake(0, self.height);
-            [UIView animateWithDuration:MAX(1, _progress) * 1.5 animations:^{
-                _progressView.width = self.width * _progress;
-            }];
-        }
+    if (_budgetMoney <= 0 || _expendMoney < 0) {
+        return;
     }
+    
+    if (!CGRectIsEmpty(self.bounds)) {
+        CGFloat progress = 0;
+        if (_budgetMoney >= _expendMoney) {
+            progress = 1 - (_expendMoney / _budgetMoney);
+        } else {
+            progress = 1;
+        }
+        _progressView.size = CGSizeMake(self.width, self.height);
+        [UIView animateWithDuration:progress * 1.5 animations:^{
+            _progressView.width = self.width * progress;
+        }];
+    }
+}
+
+- (void)updateProgressColor {
+    _progressView.backgroundColor = _expendMoney > _budgetMoney ? _overrunProgressColor : _progressColor;
 }
 
 @end

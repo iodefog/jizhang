@@ -228,11 +228,12 @@ static const CGFloat kBottomViewHeight = 398;
     self.intervalTitleLab.text = item.intervalTitle;
     self.intervalLab.text = item.intervalValue;
     
-    self.waveView.percent = item.waveViewPercent;
-    self.waveView.budgetMoney = item.waveViewMoney;
+    self.waveView.budgetMoney = item.budgetMoney;
+    self.waveView.expendMoney = item.expendMoney;
     
-    self.progressView.progress = item.progressViewPercent;
-    self.progressView.budget = item.progressViewMoney;
+    self.progressView.budgetMoney = item.budgetMoney;
+    self.progressView.expendMoney = item.expendMoney;
+    
     [self.progressView setProgressColor:[UIColor ssj_colorWithHex:item.progressColorValue]];
     [self.progressView setOverrunProgressColor:[UIColor ssj_colorWithHex:@"ff654c"]];
     

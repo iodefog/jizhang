@@ -76,8 +76,8 @@
     self.periodLab.text = item.period;
     self.expendLab.attributedText = item.expend;
     self.budgetLab.attributedText = item.budget;
-    self.progressView.budget = item.budgetValue;
-    self.progressView.progress = item.expendValue / item.budgetValue;
+    self.progressView.budgetMoney = item.budgetValue;
+    self.progressView.expendMoney = item.expendValue;
     [_progressView setProgressColor:[UIColor ssj_colorWithHex:item.progressColorValue]];
     [_progressView setOverrunProgressColor:[UIColor ssj_colorWithHex:@"ff654c"]];
 }
