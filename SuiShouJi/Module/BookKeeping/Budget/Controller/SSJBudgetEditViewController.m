@@ -165,18 +165,21 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString *title = [self.cellTitles ssj_objectAtIndexPath:indexPath];
+    
     if ([title isEqualToString:kBudgetTypeTitle]) {
-        if (_isEdit) {
-            [CDAutoHideMessageHUD showMessage:@"不支持编辑类别哦，请重新创建一条预算吧。"];
-        } else {
-            SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
-            billTypeSelectionController.budgetModel = _model;
-            [self.navigationController pushViewController:billTypeSelectionController animated:YES];
-        }
+        
+        SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
+        billTypeSelectionController.budgetModel = _model;
+        [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+        
     } else if ([title isEqualToString:kBudgetPeriodTitle]) {
+        
         [self.periodSelectionView show];
+        
     } else if ([title isEqualToString:kAccountDayTitle]) {
+        
         [self.accountDaySelectionView show];
+        
     }
 }
 
@@ -473,7 +476,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetTypeCell.imageView.image = [[UIImage imageNamed:@"xuhuan_leibie"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetTypeCell.detailTextLabel.text = [self budgetTypeNames];
         budgetTypeCell.selectionStyle = _isEdit ? UITableViewCellSelectionStyleNone : SSJ_CURRENT_THEME.cellSelectionStyle;
-        budgetTypeCell.customAccessoryType = _isEdit ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
+        budgetTypeCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
     } else if ([cellTitle isEqualToString:kBooksTypeTitle]) {
         //  账本类型
