@@ -8,7 +8,7 @@
 
 #import "SSJNewBaseTableViewController.h"
 
-@interface SSJSearchingViewController : SSJNewBaseTableViewController
+@interface SSJSearchingViewController : SSJBaseViewController
 
 typedef NS_ENUM(NSInteger, SSJSearchModel) {
     SSJSearchHistoryModel,   //搜索历史页面

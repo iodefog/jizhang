@@ -18,6 +18,7 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJSearchResultOrderHeader.h"
+#import "TPKeyboardAvoidingTableView.h"
 
 static NSString *const khasSearchByMoney = @"khasSearchByMoney";
 
@@ -27,7 +28,8 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 
 static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeaderId";
 
-@interface SSJSearchingViewController ()<UISearchBarDelegate>
+@interface SSJSearchingViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource
+>
 
 @property(nonatomic, strong) SSJSearchBar *searchBar;
 
@@ -42,6 +44,9 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 @property(nonatomic, strong) SSJSearchResultOrderHeader *resultOrderHeader;
 
 @property(nonatomic, strong) UIView *clearHistoryFooterView;
+
+@property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
+
 @end
 
 @implementation SSJSearchingViewController
@@ -59,6 +64,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [super viewDidLoad];
     [self.view addSubview:self.searchBar];
     [self getSearchHistory];
+    [self.view addSubview:self.tableView];
     [self.tableView registerClass:[SSJSearchHistoryCell class] forCellReuseIdentifier:kSearchHistoryCellId];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellId];
     [self.tableView registerClass:[SSJSearchResultHeader class] forHeaderFooterViewReuseIdentifier:kSearchSearchResultHeaderId];
@@ -92,7 +98,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.searchBar.bottom);
+    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.searchBar.bottom - 10);
     self.tableView.top = self.searchBar.bottom + 10;
 }
 
@@ -211,6 +217,19 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 }
 
 #pragma mark - Getter
+-(TPKeyboardAvoidingTableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.tableFooterView = [[UIView alloc] init];
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    return _tableView;
+}
+
 - (SSJSearchBar *)searchBar{
     if (!_searchBar) {
         __weak typeof(self) weakSelf = self;
@@ -303,7 +322,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [self.tableView ssj_showLoadingIndicator];
     [SSJChargeSearchingStore querySearchHistoryWithSuccess:^(NSArray<SSJSearchHistoryItem *> *result) {
         [weakSelf.tableView ssj_hideLoadingIndicator];
-        weakSelf.tableView.tableHeaderView = nil;
+//        weakSelf.tableView.tableHeaderView = nil;
         weakSelf.model = SSJSearchHistoryModel;
         weakSelf.items = [NSArray arrayWithArray:result];
         if (!result.count) {
