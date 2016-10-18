@@ -424,7 +424,7 @@ BOOL kHomeNeedLoginPop;
         [self.floatingDateView dismiss];
         [self.mutiFunctionButton dismiss];
     }else if (index == 2){
-        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]init];
+        SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]initWithTableViewStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:searchVC animated:YES];
     }
 }

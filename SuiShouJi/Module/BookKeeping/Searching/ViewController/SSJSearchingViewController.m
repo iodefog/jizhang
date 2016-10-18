@@ -19,6 +19,7 @@
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJSearchResultOrderHeader.h"
 #import "TPKeyboardAvoidingTableView.h"
+#import <YYKeyboardManager/YYKeyboardManager.h>
 
 static NSString *const khasSearchByMoney = @"khasSearchByMoney";
 
@@ -28,8 +29,7 @@ static NSString *const kSearchHistoryCellId = @"kSearchHistoryCellId";
 
 static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeaderId";
 
-@interface SSJSearchingViewController ()<UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource
->
+@interface SSJSearchingViewController ()<UISearchBarDelegate,YYKeyboardObserver>
 
 @property(nonatomic, strong) SSJSearchBar *searchBar;
 
@@ -44,8 +44,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 @property(nonatomic, strong) SSJSearchResultOrderHeader *resultOrderHeader;
 
 @property(nonatomic, strong) UIView *clearHistoryFooterView;
-
-@property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
 
 @end
 
@@ -68,14 +66,15 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [self.tableView registerClass:[SSJSearchHistoryCell class] forCellReuseIdentifier:kSearchHistoryCellId];
     [self.tableView registerClass:[SSJBillingChargeCell class] forCellReuseIdentifier:kBillingChargeCellId];
     [self.tableView registerClass:[SSJSearchResultHeader class] forHeaderFooterViewReuseIdentifier:kSearchSearchResultHeaderId];
+    [[YYKeyboardManager defaultManager] addObserver:self];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-//    [self.searchBar.searchTextInput becomeFirstResponder];
+    [self.searchBar.searchTextInput becomeFirstResponder];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];\
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     if (self.model == SSJSearchResultModel) {
         [self searchForContent:self.searchBar.searchTextInput.text listOrder:self.resultOrderHeader.order];
     }
@@ -100,6 +99,10 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [super viewDidLayoutSubviews];
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.searchBar.bottom - 10);
     self.tableView.top = self.searchBar.bottom + 10;
+}
+
+-(void)dealloc{
+    [[YYKeyboardManager defaultManager] removeObserver:self];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -216,20 +219,25 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     return nil;
 }
 
-#pragma mark - Getter
--(TPKeyboardAvoidingTableView *)tableView{
-    if (!_tableView) {
-        _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-        _tableView.dataSource = self;
-        _tableView.delegate = self;
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.tableFooterView = [[UIView alloc] init];
-        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+#pragma mark - @protocol YYKeyboardObserver
+- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+    CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.view];
+    if (transition.toVisible) {
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
+    }else{
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
-    return _tableView;
+//    [UIView animateWithDuration:transition.animationCurve delay:0 options:transition.animationOption animations:^{
+//        CGRect kbFrame = [[YYKeyboardManager defaultManager] convertRect:transition.toFrame toView:self.superview];
+//        CGRect popframe = self.frame;
+//        popframe.origin.y = kbFrame.origin.y - popframe.size.height - 20;
+//        self.frame = popframe;
+//    } completion:^(BOOL finished) {
+//        
+//    }];
 }
 
+#pragma mark - Getter
 - (SSJSearchBar *)searchBar{
     if (!_searchBar) {
         __weak typeof(self) weakSelf = self;
@@ -322,7 +330,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [self.tableView ssj_showLoadingIndicator];
     [SSJChargeSearchingStore querySearchHistoryWithSuccess:^(NSArray<SSJSearchHistoryItem *> *result) {
         [weakSelf.tableView ssj_hideLoadingIndicator];
-//        weakSelf.tableView.tableHeaderView = nil;
+        weakSelf.tableView.tableHeaderView = nil;
         weakSelf.model = SSJSearchHistoryModel;
         weakSelf.items = [NSArray arrayWithArray:result];
         if (!result.count) {
