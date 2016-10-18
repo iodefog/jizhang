@@ -40,15 +40,7 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
     if (item.isMajor) {
         item.budgetMoneyTitle = [NSString stringWithFormat:@"本%@预算", budgetType];
     } else {
-        if (model.billIds.count > 1) {
-            item.budgetMoneyTitle = [NSString stringWithFormat:@"分类%@预算", budgetType];
-        } else {
-            NSString *bllId = [model.billIds firstObject];
-            if (bllId) {
-                NSDictionary *billInfo = billMapping[bllId];
-                item.budgetMoneyTitle = [NSString stringWithFormat:@"%@%@预算", billInfo[SSJBudgetDetailBillInfoNameKey], budgetType];
-            }
-        }
+        item.budgetMoneyTitle = [NSString stringWithFormat:@"%@分类预算", budgetType];
     }
     
     item.budgetMoneyValue = [NSString stringWithFormat:@"¥%.2f", model.budgetMoney];
@@ -106,7 +98,7 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
             }
         }
         
-        item.billTypeNames = [NSString stringWithFormat:@"类别：%@", [billNames componentsJoinedByString:@"、"]];
+        item.billTypeNames = [NSString stringWithFormat:@"预算分类：%@", [billNames componentsJoinedByString:@"、"]];
         
         if (model.billIds.count > 4) {
             item.billTypeNames = [NSString stringWithFormat:@"%@等", item.billTypeNames];
