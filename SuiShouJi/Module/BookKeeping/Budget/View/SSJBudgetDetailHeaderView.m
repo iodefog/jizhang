@@ -229,7 +229,7 @@ static const CGFloat kBottomViewHeight = 398;
     self.intervalLab.text = item.intervalValue;
     
     self.waveView.percent = item.waveViewPercent;
-    self.waveView.money = item.waveViewMoney;
+    self.waveView.budgetMoney = item.waveViewMoney;
     
     self.progressView.progress = item.progressViewPercent;
     self.progressView.budget = item.progressViewMoney;
@@ -258,7 +258,6 @@ static const CGFloat kBottomViewHeight = 398;
     _payMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _historyPaymentLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _estimateMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-//    _payOrOverrunLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _billTypeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
     _topView.backgroundColor = [UIColor ssj_colorWithHex:@"#FFFFFF" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
@@ -270,80 +269,7 @@ static const CGFloat kBottomViewHeight = 398;
     [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
-//    _dashLine.fillColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
 }
-
-//- (void)setBudgetModel:(SSJBudgetModel *)budgetModel {
-//    [self setNeedsLayout];
-//    _budgetModel = budgetModel;
-//    
-//    NSString *budgetType = @"";
-//    
-//    switch (_budgetModel.type) {
-//        case SSJBudgetPeriodTypeWeek:
-//            budgetType = @"周";
-//            self.budgetMoneyTitleLab.text = @"周预算金额";
-//            break;
-//            
-//        case SSJBudgetPeriodTypeMonth:
-//            budgetType = @"月";
-//            self.budgetMoneyTitleLab.text = @"月预算金额";
-//            break;
-//            
-//        case SSJBudgetPeriodTypeYear:
-//            budgetType = @"年";
-//            
-//            break;
-//    }
-//    
-//    self.budgetMoneyTitleLab.text = [NSString stringWithFormat:@"%@预算", budgetType];
-//    [self.budgetMoneyTitleLab sizeToFit];
-//    
-//    self.budgetMoneyLab.text = [NSString stringWithFormat:@"￥%.2f", _budgetModel.budgetMoney];
-//    [self.budgetMoneyLab sizeToFit];
-//    
-//    NSString *dateString = [self.formatter stringFromDate:[NSDate date]];
-//    NSDate *currentDate = [self.formatter dateFromString:dateString];
-//    NSDate *endDate = [self.formatter dateFromString:_budgetModel.endDate];
-//    int interval = [endDate timeIntervalSinceDate:currentDate] / (24 * 60 * 60);
-//    self.intervalLab.text = [NSString stringWithFormat:@"%d天", interval];
-//    [self.intervalLab sizeToFit];
-//    
-//    self.waveView.percent = (_budgetModel.payMoney / _budgetModel.budgetMoney);
-//    self.waveView.money = _budgetModel.budgetMoney - _budgetModel.payMoney;
-//    
-//    self.payMoneyLab.text = [NSString stringWithFormat:@"已花：%.2f", _budgetModel.payMoney];
-//    [self.payMoneyLab sizeToFit];
-//    
-//    NSMutableAttributedString *paymentStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已花：%.2f", _budgetModel.payMoney]];
-//    [paymentStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
-//                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(3, paymentStr.length - 3)];
-//    self.historyPaymentLab.attributedText = paymentStr;
-//    [self.historyPaymentLab sizeToFit];
-//    
-//    NSMutableAttributedString *budgetStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@预算：%.2f", budgetType, _budgetModel.budgetMoney]];
-//    [budgetStr setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20],
-//                                NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(4, budgetStr.length - 4)];
-//    self.estimateMoneyLab.attributedText = budgetStr;
-//    [self.estimateMoneyLab sizeToFit];
-//    
-//    double balance = _budgetModel.budgetMoney - _budgetModel.payMoney;
-//    if (balance >= 0) {
-//        NSString *money = [NSString stringWithFormat:@"%.2f", balance / interval];
-//        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"距结算日前，您每天还可花%@元哦", money]];
-//        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
-//        self.payOrOverrunLab.attributedText = text;
-//        [self.payOrOverrunLab sizeToFit];
-//    } else {
-//        NSString *money = [NSString stringWithFormat:@"%.2f", ABS(balance)];
-//        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您目前已超支%@元喽", money]];
-//        [text setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]} range:NSMakeRange(12, money.length)];
-//        self.payOrOverrunLab.attributedText = text;
-//        [self.payOrOverrunLab sizeToFit];
-//    }
-//    
-//    [self updateAppearance];
-//}
 
 #pragma mark - Getter
 - (UIView *)topView {
@@ -448,11 +374,7 @@ static const CGFloat kBottomViewHeight = 398;
         _waveView.waveCycle = 1;
         _waveView.waveGrowth = 3;
         _waveView.waveOffset = 60;
-        _waveView.fullWaveAmplitude = 8;
-        _waveView.fullWaveSpeed = 4;
-        _waveView.fullWaveCycle = 4;
         _waveView.outerBorderWidth = 8;
-        _waveView.showText = YES;
     }
     return _waveView;
 }

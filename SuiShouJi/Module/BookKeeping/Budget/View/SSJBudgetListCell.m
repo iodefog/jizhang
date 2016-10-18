@@ -71,7 +71,7 @@
     self.paymentLab.attributedText = item.expend;
     self.budgetLab.attributedText = item.budget;
     self.waveView.percent = (item.expendValue / item.budgetValue);
-    self.waveView.money = item.budgetValue - item.expendValue;
+    self.waveView.budgetMoney = item.budgetValue;
 }
 
 - (UILabel *)typeLab {
@@ -122,11 +122,7 @@
         _waveView.waveCycle = 1;
         _waveView.waveGrowth = 3;
         _waveView.waveOffset = 60;
-        _waveView.fullWaveAmplitude = 8;
-        _waveView.fullWaveSpeed = 4;
-        _waveView.fullWaveCycle = 4;
         _waveView.outerBorderWidth = 8;
-        _waveView.showText = YES;
     }
     return _waveView;
 }
