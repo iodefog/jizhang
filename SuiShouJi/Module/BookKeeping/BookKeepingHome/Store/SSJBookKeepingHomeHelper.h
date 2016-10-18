@@ -53,4 +53,7 @@ extern NSString *const SSJDateStartIndexDicKey;
 + (void)queryForChargeListExceptNewCharge:(NSArray *)newCharge
                               Success:(void(^)(NSDictionary *result))success
                               failure:(void (^)(NSError *error))failure;
+
++ (NSString *)queryBillNameForBillIds:(NSArray *)billIds;
+
 @end

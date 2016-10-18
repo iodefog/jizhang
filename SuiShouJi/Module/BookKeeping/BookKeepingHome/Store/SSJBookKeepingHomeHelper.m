@@ -175,4 +175,29 @@ NSString *const SSJDateStartIndexDicKey = @"SSJDateStartIndexDicKey";
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     return item;
 }
+
++ (NSString *)queryBillNameForBillIds:(NSArray *)billIds {
+    __block NSString *billName = nil;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+        
+        NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:billIds.count];
+        for (NSString *billId in billIds) {
+            [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
+        }
+        
+        NSString *sql = [NSString stringWithFormat:@"select cname from bk_bill_type where id in (%@)", [tmpBillIds componentsJoinedByString:@","]];
+        FMResultSet *resultSet = [db executeQuery:sql];
+        
+        NSMutableArray *tmpBillNames = [NSMutableArray arrayWithCapacity:billIds.count];
+        while ([resultSet next]) {
+            NSString *name = [resultSet stringForColumn:@"cname"];
+            [tmpBillNames addObject:name];
+        }
+        [resultSet close];
+        
+        billName = [tmpBillNames componentsJoinedByString:@"、"];
+    }];
+    return billName;
+}
+
 @end

@@ -9,6 +9,7 @@
 #import "SSJHomeReminderView.h"
 #import "SSJDatabaseQueue.h"
 #import "UIView+SSJViewAnimatioin.h"
+#import "SSJBookKeepingHomeHelper.h"
 
 @interface SSJHomeReminderView()
 @property (nonatomic,strong) UIImageView *remindImage;
@@ -86,21 +87,23 @@
 
 -(void)setModel:(SSJBudgetModel *)model{
     _model = model;
-    NSString *typeStr;
-    switch (_model.type) {
-        case SSJBudgetPeriodTypeWeek:
-            typeStr = @"本周";
-            break;
-        case SSJBudgetPeriodTypeMonth:
-            typeStr = @"这个月";
-            break;
-        case SSJBudgetPeriodTypeYear:
-            typeStr = @"今年";
-            break;
-        default:
-            break;
-    }
     if ([_model.billIds isEqualToArray:@[@"all"]]) {
+        
+        NSString *typeStr;
+        switch (_model.type) {
+            case SSJBudgetPeriodTypeWeek:
+                typeStr = @"本周";
+                break;
+            case SSJBudgetPeriodTypeMonth:
+                typeStr = @"这个月";
+                break;
+            case SSJBudgetPeriodTypeYear:
+                typeStr = @"今年";
+                break;
+            default:
+                break;
+        }
+        
         if (_model.budgetMoney < _model.payMoney) {
             NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney]];
             NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
@@ -120,6 +123,48 @@
             self.remindLabel.attributedText = attriString;
             [self.remindLabel sizeToFit];
         }
+    } else {
+        
+        NSString *typeStr;
+        switch (_model.type) {
+            case SSJBudgetPeriodTypeWeek:
+                typeStr = @"周";
+                break;
+            case SSJBudgetPeriodTypeMonth:
+                typeStr = @"月";
+                break;
+            case SSJBudgetPeriodTypeYear:
+                typeStr = @"年";
+                break;
+            default:
+                break;
+        }
+        
+        NSString *billNames = nil;
+        if (_model.billIds.count > 2) {
+            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:[_model.billIds subarrayWithRange:NSMakeRange(0, 2)]];
+            billNames = [NSString stringWithFormat:@"%@等", billNames];
+        } else {
+            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:_model.billIds];
+        }
+        
+        NSString *moneyStr = nil;
+        NSMutableAttributedString *attriString = nil;
+        
+        if (_model.budgetMoney < _model.payMoney) {
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-(%@)已经超支%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
+        } else {
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-(%@)只剩下%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
+        }
+        
+        NSRange range = [attriString.string rangeOfString:moneyStr];
+        [attriString addAttribute:NSForegroundColorAttributeName
+                            value:[UIColor ssj_colorWithHex:@"45fffd"]
+                            range:range];
+        self.remindLabel.attributedText = attriString;
+        [self.remindLabel sizeToFit];
     }
 
 }
