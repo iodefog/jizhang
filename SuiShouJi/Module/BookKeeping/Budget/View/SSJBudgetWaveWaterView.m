@@ -75,11 +75,9 @@ static NSString *const kGreenColorValue = @"0ac082";
     circlePath.lineWidth = _outerBorderWidth;
     [circlePath addClip];
     
-    CGFloat percent = [self percent];
-    
-    NSString *imageName = percent > 1 ? @"budget_wave_red" : @"budget_wave_green";
-    NSString *topStr = percent > 1 ? @"超支" : @"剩余";
-    NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney * (1 - percent))];
+    NSString *imageName = _expendMoney > _budgetMoney ? @"budget_wave_red" : @"budget_wave_green";
+    NSString *topStr = _expendMoney > _budgetMoney ? @"超支" : @"剩余";
+    NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney - _expendMoney)];
     
     [[UIImage imageNamed:imageName] drawInRect:self.bounds];
     
@@ -214,7 +212,11 @@ static NSString *const kGreenColorValue = @"0ac082";
 
 - (void)decline {
     CGFloat percent;
-    
+    if (_expendMoney >= _budgetMoney) {
+        percent = 1;
+    } else {
+        percent = 1 - (_expendMoney / _budgetMoney);
+    }
     
     for (SSJWaveWaterViewItem *item in self.growingView.items) {
         item.wavePercent = percent;
@@ -223,14 +225,6 @@ static NSString *const kGreenColorValue = @"0ac082";
     
     if (percent == 0) {
         [self performSelector:@selector(reset) withObject:nil afterDelay:self.growingView.height / (12 * _waveGrowth)];
-    }
-}
-
-- (CGFloat)percent {
-    if (_expendMoney >= _budgetMoney) {
-        return 1;
-    } else {
-        return 1 - (_expendMoney / _budgetMoney);
     }
 }
 
