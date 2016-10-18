@@ -28,10 +28,12 @@
         }
     }
     
+    NSMutableString *billTypeName = [[billTypeNames componentsJoinedByString:@","] mutableCopy];
+    
     if (model.billIds.count > 4) {
-        [billTypeNames addObject:@"等"];
+        [billTypeName appendString:@"等"];
     }
-    item.billTypeName = [billTypeNames componentsJoinedByString:@","];
+    item.billTypeName = billTypeName;
     
     item.period = [NSString stringWithFormat:@"%@——%@", model.beginDate, model.endDate];
     
