@@ -107,6 +107,8 @@
     model.reportFormsCurveIncomeFillColor = @"#fae5e5";
     model.reportFormsCurvePaymentFillColor = @"#e9f4ea";
     model.recordMakingInputViewAlpha = 1;
+    model.bookKeepingHomeMutiButtonNormalColor = @"#cccccc";
+    model.bookKeepingHomeMutiButtonSelectColor = @"#f5b52a";
     
     return model;
 }
