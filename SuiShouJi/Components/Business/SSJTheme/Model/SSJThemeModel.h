@@ -148,4 +148,7 @@
 // 首页搜索按钮普通颜色
 @property (nonatomic, copy) NSString *bookKeepingHomeMutiButtonNormalColor;
 
+// 搜索页面结果头的背景色
+@property (nonatomic, copy) NSString *searchResultHeaderBackgroundColor;
+
 @end

@@ -81,7 +81,7 @@
 - (UIImageView *)backImage{
     if (!_backImage) {
         _backImage = [[UIImageView alloc]init];
-        _backImage.image = [UIImage ssj_themeImageWithName:@"hoome_riqi"];
+        _backImage.image = [UIImage ssj_themeImageWithName:@"home_riqi"];
     }
     return _backImage;
 }
@@ -99,6 +99,10 @@
     _currentDate = currentDate;
     self.dateLab.text = [NSString stringWithFormat:@"%@",_currentDate];
     [self.dateLab sizeToFit];
+}
+
+- (void)updateAfterThemeChange{
+    self.backImage.image = [UIImage ssj_themeImageWithName:@"home_riqi"];
 }
 
 /*

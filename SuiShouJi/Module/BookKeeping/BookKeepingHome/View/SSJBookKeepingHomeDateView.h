@@ -16,6 +16,8 @@
 
 @property(nonatomic, strong) NSString *currentDate;
 
+- (void)updateAfterThemeChange;
+
 - (void)show;
 
 - (void)dismiss;
