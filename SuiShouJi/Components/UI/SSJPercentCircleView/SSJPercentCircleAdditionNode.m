@@ -10,7 +10,7 @@
 
 static NSString *const kAnimationKey = @"kAnimationKey";
 
-@interface SSJPercentCircleAdditionNode ()
+@interface SSJPercentCircleAdditionNode () <CAAnimationDelegate>
 
 @property (nonatomic, readwrite, strong) SSJPercentCircleAdditionNodeItem *item;
 

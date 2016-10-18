@@ -70,8 +70,8 @@
     self.periodLab.text = item.period;
     self.paymentLab.attributedText = item.expend;
     self.budgetLab.attributedText = item.budget;
-    self.waveView.percent = (item.expendValue / item.budgetValue);
     self.waveView.budgetMoney = item.budgetValue;
+    self.waveView.expendMoney = item.expendValue;
 }
 
 - (UILabel *)typeLab {
