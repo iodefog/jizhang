@@ -54,6 +54,8 @@
     [aCoder encodeObject:_reportFormsCurveIncomeFillColor forKey:@"reportFormsCurveIncomeFillColor"];
     [aCoder encodeObject:_reportFormsCurvePaymentFillColor forKey:@"reportFormsCurvePaymentFillColor"];
     [aCoder encodeFloat:_recordMakingInputViewAlpha forKey:@"recordMakingInputViewAlpha"];
+    [aCoder encodeObject:_bookKeepingHomeMutiButtonSelectColor forKey:@"bookKeepingHomeMutiButtonSelectColor"];
+    [aCoder encodeObject:_bookKeepingHomeMutiButtonNormalColor forKey:@"bookKeepingHomeMutiButtonNormalColor"];
 }
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -149,7 +151,9 @@
                                                           @"reportFormsCurvePaymentColor":_reportFormsCurvePaymentColor,
                                                           @"reportFormsCurveIncomeFillColor":_reportFormsCurveIncomeFillColor,
                                                           @"reportFormsCurvePaymentFillColor":_reportFormsCurvePaymentFillColor,
-                                                          @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha)}];
+                                                          @"recordMakingInputViewAlpha":@(_recordMakingInputViewAlpha),
+                                                          @"bookKeepingHomeMutiButtonSelectColor":_bookKeepingHomeMutiButtonSelectColor,
+                                                          @"bookKeepingHomeMutiButtonNormalColor":_bookKeepingHomeMutiButtonNormalColor}];
 }
 
 @end

@@ -72,11 +72,12 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.searchBar.searchTextInput becomeFirstResponder];
     [[UIApplication sharedApplication]setStatusBarHidden:YES];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     if (self.model == SSJSearchResultModel) {
         [self searchForContent:self.searchBar.searchTextInput.text listOrder:self.resultOrderHeader.order];
+    }else{
+        [self.searchBar.searchTextInput becomeFirstResponder];
     }
 //#warning test
 //    _startTime = CFAbsoluteTimeGetCurrent();
@@ -91,7 +92,6 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput resignFirstResponder];
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
 }
 
@@ -137,7 +137,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.model == SSJSearchResultModel) {
-        return 75;
+        return 90;
     }else{
         return 50;
     }

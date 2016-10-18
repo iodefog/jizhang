@@ -101,18 +101,18 @@
             break;
     }
     if (_model.budgetMoney < _model.payMoney) {
-        NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney]];
+        NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney]];
         NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
-        NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney] rangeOfString:moneyStr];
+        NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney] rangeOfString:moneyStr];
         [attriString addAttribute:NSForegroundColorAttributeName
                             value:[UIColor ssj_colorWithHex:@"45fffd"]
                             range:range];
         self.remindLabel.attributedText = attriString;
         [self.remindLabel sizeToFit];
     }else{
-        NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]];
+        NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]];
         NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
-        NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，财富要积累，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]rangeOfString:moneyStr];
+        NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]rangeOfString:moneyStr];
         [attriString addAttribute:NSForegroundColorAttributeName
                             value:[UIColor ssj_colorWithHex:@"45fffd"]
                             range:range];

@@ -40,23 +40,22 @@
 #import "SSJSearchingViewController.h"
 #import "SSJBookKeepingHomeDateView.h"
 #import "SSJMultiFunctionButtonView.h"
+#import "SSJBookKeepingHomeBar.h"
 
 BOOL kHomeNeedLoginPop;
 
 @interface SSJBookKeepingHomeViewController ()<SSJMultiFunctionButtonDelegate>
 
-@property (nonatomic,strong) SSJHomeBarCalenderButton *rightBarButton;
 @property (nonatomic,strong) NSMutableArray *items;
 @property (nonatomic,strong) UIButton *button;
 @property (nonatomic,strong) SSJBookKeepingHeader *bookKeepingHeader;
 @property (nonatomic,strong) SSJBudgetModel *lastBudgetModel;
-@property (nonatomic,strong) SSJHomeBudgetButton *budgetButton;
 @property (nonatomic,strong) SSJHomeReminderView *remindView;
+@property(nonatomic, strong) SSJBookKeepingHomeBar *homeBar;
 @property (nonatomic,strong) SSJBudgetModel *model;
 @property (nonatomic,strong) UIView *clearView;
 @property(nonatomic, strong) SSJBookKeepingButton *homeButton;
 @property(nonatomic, strong) SSJBookKeepingHomeNoDataHeader *noDataHeader;
-@property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
 @property(nonatomic, strong) SSJBookKeepingHomeDateView *floatingDateView;
 @property(nonatomic, strong) SSJMultiFunctionButtonView *mutiFunctionButton;
 @property(nonatomic, strong) UILabel *statusLabel;
@@ -97,6 +96,7 @@ BOOL kHomeNeedLoginPop;
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
         if (!sself->_dateViewHasDismiss) {
@@ -113,18 +113,18 @@ BOOL kHomeNeedLoginPop;
     [self getCurrentDate];
     
 //    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont systemFontOfSize:20]};
-    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
-    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithCustomView:self.leftButton];
-    self.navigationItem.leftBarButtonItem = leftButton;
-    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
-    rightSpace.width = -15;
-//    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
-//    leftSpace.width = -10;
-//    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
-    self.navigationItem.titleView = self.budgetButton;
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightBarButton];
-    self.navigationItem.rightBarButtonItems = @[rightSpace, rightItem];
+//    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
+//    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]initWithCustomView:self.leftButton];
+//    self.navigationItem.leftBarButtonItem = leftButton;
+//    UIBarButtonItem *rightSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+//    rightSpace.width = -15;
+////    UIBarButtonItem *leftSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace  target:nil action:nil];
+////    leftSpace.width = -10;
+////    self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+//    self.navigationItem.titleView = self.budgetButton;
+//    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithCustomView:self.rightBarButton];
+//    self.navigationItem.rightBarButtonItems = @[rightSpace, rightItem];
     
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
@@ -132,8 +132,8 @@ BOOL kHomeNeedLoginPop;
         [self reloadBudgetData];
         NSString *booksid = SSJGetCurrentBooksType();
         SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-        self.leftButton.item = currentBooksItem;
-        self.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
+        self.homeBar.leftButton.item = currentBooksItem;
+        self.homeBar.leftButton.tintColor = [UIColor ssj_colorWithHex:currentBooksItem.booksColor];
     }
 }
 
@@ -145,6 +145,7 @@ BOOL kHomeNeedLoginPop;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.homeBar];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bookKeepingHeader];
     [self.view addSubview:self.homeButton];
@@ -173,8 +174,10 @@ BOOL kHomeNeedLoginPop;
 }
 
 -(void)viewDidLayoutSubviews{
-    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 200);
-    self.bookKeepingHeader.top = 0;
+    [super viewDidLayoutSubviews];
+    self.homeBar.leftTop = CGPointMake(0, 0);
+    self.bookKeepingHeader.size = CGSizeMake(self.view.width, 136);
+    self.bookKeepingHeader.top = self.homeBar.bottom;
     self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - 49);
     self.tableView.top = self.bookKeepingHeader.bottom;
     self.clearView.frame = self.view.frame;
@@ -327,8 +330,8 @@ BOOL kHomeNeedLoginPop;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.y <= -46) {
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.budgetButton.model = [result firstObject];
-            self.budgetButton.button.enabled = YES;
+            self.homeBar.budgetButton.model = [result firstObject];
+            self.homeBar.budgetButton.button.enabled = YES;
         } failure:^(NSError * _Nullable error) {
             NSLog(@"%@",error.localizedDescription);
         }];
@@ -363,10 +366,10 @@ BOOL kHomeNeedLoginPop;
             self.floatingDateView.currentDate = item.billDate;
             _isRefreshing = NO;
             if (self.items.count == 0) {
-                self.budgetButton.button.enabled = YES;
+                self.homeBar.budgetButton.button.enabled = YES;
                 return;
             }else{
-                self.budgetButton.button.enabled = NO;
+                self.homeBar.budgetButton.button.enabled = NO;
                 CGPoint currentPostion = CGPointMake(self.view.frame.size.width / 2, scrollView.contentOffset.y + 46);
                 NSInteger currentRow = [self.tableView indexPathForRowAtPoint:currentPostion].row;
                 SSJBillingChargeCellItem *item = [self.items ssj_safeObjectAtIndex:currentRow];
@@ -482,7 +485,7 @@ BOOL kHomeNeedLoginPop;
         [weakSelf getDateFromDatebase];
         [weakSelf.tableView reloadData];
         [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-            self.budgetButton.model = [result firstObject];
+            self.homeBar.budgetButton.model = [result firstObject];
         } failure:^(NSError * _Nullable error) {
             NSLog(@"%@",error.localizedDescription);
         }];
@@ -514,16 +517,16 @@ BOOL kHomeNeedLoginPop;
     return _tableView;
 }
 
--(SSJHomeBarCalenderButton*)rightBarButton{
-    if (!_rightBarButton) {
-        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
-//        buttonView.layer.borderColor = [UIColor redColor].CGColor;
-//        buttonView.layer.borderWidth = 1;
-        _rightBarButton.currentDay = _currentDay;
-        [_rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _rightBarButton;
-}
+//-(SSJHomeBarCalenderButton*)rightBarButton{
+//    if (!_rightBarButton) {
+//        _rightBarButton = [[SSJHomeBarCalenderButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+////        buttonView.layer.borderColor = [UIColor redColor].CGColor;
+////        buttonView.layer.borderWidth = 1;
+//        _rightBarButton.currentDay = _currentDay;
+//        [_rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+//    }
+//    return _rightBarButton;
+//}
 
 -(SSJHomeReminderView *)remindView{
     if (!_remindView) {
@@ -540,26 +543,7 @@ BOOL kHomeNeedLoginPop;
     return _bookKeepingHeader;
 }
 
--(SSJHomeBudgetButton *)budgetButton{
-    if (!_budgetButton) {
-        _budgetButton = [[SSJHomeBudgetButton alloc]initWithFrame:CGRectMake(0, 0, 200, 46)];
-        __weak typeof(self) weakSelf = self;
-        _budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
-            if (model == nil) {
-                SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
-                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc] init];
-                NSMutableArray *viewControllers = [weakSelf.navigationController.viewControllers mutableCopy];
-                [viewControllers addObject:budgetListVC];
-                [viewControllers addObject:budgetEditVC];
-                [weakSelf.navigationController setViewControllers:viewControllers animated:YES];
-            }else{
-                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
-                [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
-            }
-        };
-    }
-    return _budgetButton;
-}
+
 
 -(SSJBookKeepingButton *)homeButton{
     if (!_homeButton) {
@@ -619,13 +603,12 @@ BOOL kHomeNeedLoginPop;
 //    return _statusLabel;
 //}
 
-- (SSJBookKeepingHomeBooksButton *)leftButton{
-    if (!_leftButton) {
-        _leftButton = [[SSJBookKeepingHomeBooksButton alloc]initWithFrame:CGRectMake(0, 0, 30, 32)];
-        [_leftButton.button addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _leftButton;
-}
+//- (SSJBookKeepingHomeBooksButton *)leftButton{
+//    if (!_leftButton) {
+//        _leftButton = [[SSJBookKeepingHomeBooksButton alloc]initWithFrame:CGRectMake(0, 0, 30, 32)];
+//    }
+//    return _leftButton;
+//}
 
 - (SSJBookKeepingHomeDateView *)floatingDateView{
     if (!_floatingDateView) {
@@ -645,11 +628,35 @@ BOOL kHomeNeedLoginPop;
         _mutiFunctionButton = [[SSJMultiFunctionButtonView alloc]init];
         _mutiFunctionButton.customDelegate = self;
         _mutiFunctionButton.images = @[@"home_plus",@"home_backtotop",@"home_search"];
-        _mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:@"f5b52a"];
-        _mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:@"f5b52a"];
-        _mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:@"cccccc"];
+        _mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
+        _mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
+        _mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonNormalColor];
     }
     return _mutiFunctionButton;
+}
+
+- (SSJBookKeepingHomeBar *)homeBar{
+    if (!_homeBar) {
+        _homeBar = [[SSJBookKeepingHomeBar alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 64)];
+        __weak typeof(self) weakSelf = self;
+        _homeBar.budgetButton.budgetButtonClickBlock = ^(SSJBudgetModel *model){
+            if (model == nil) {
+                SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
+                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc] init];
+                NSMutableArray *viewControllers = [weakSelf.navigationController.viewControllers mutableCopy];
+                [viewControllers addObject:budgetListVC];
+                [viewControllers addObject:budgetEditVC];
+                [weakSelf.navigationController setViewControllers:viewControllers animated:YES];
+            }else{
+                SSJBudgetListViewController *budgetListVC = [[SSJBudgetListViewController alloc]init];
+                [weakSelf.navigationController pushViewController:budgetListVC animated:YES];
+            }
+        };
+        _homeBar.rightBarButton.currentDay = _currentDay;
+        [_homeBar.rightBarButton.btn addTarget:self action:@selector(rightBarButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+        [_homeBar.leftButton.button addTarget:self action:@selector(leftBarButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _homeBar;
 }
 
 #pragma mark - Event
@@ -669,7 +676,7 @@ BOOL kHomeNeedLoginPop;
 }
 
 -(void)budgetButtonClicked:(id)sender{
-    if (self.budgetButton.model == nil) {
+    if (self.homeBar.budgetButton.model == nil) {
         SSJBudgetEditViewController *budgetEditVC = [[SSJBudgetEditViewController alloc]init];
         [self.navigationController pushViewController:budgetEditVC animated:YES];
     }else{
@@ -727,10 +734,9 @@ BOOL kHomeNeedLoginPop;
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
     [self.tableView updateAfterThemeChange];
-    [self.budgetButton updateAfterThemeChange];
     [self.homeButton updateAfterThemeChange];
-    [self.budgetButton updateAfterThemeChange];
-    [self.rightBarButton updateAfterThemeChange];
+    [self.homeBar.budgetButton updateAfterThemeChange];
+    [self.homeBar.rightBarButton updateAfterThemeChange];
     [self.noDataHeader updateAfterThemeChanged];
 }
 
@@ -828,8 +834,8 @@ BOOL kHomeNeedLoginPop;
         weakSelf.bookKeepingHeader.expenditureView.scrollAble = NO;
         weakSelf.bookKeepingHeader.income = [NSString stringWithFormat:@"%.2f",[result[SSJIncomeSumlKey] doubleValue]];
         weakSelf.bookKeepingHeader.expenditure = [NSString stringWithFormat:@"%.2f",[result[SSJExpentureSumKey] doubleValue]];
-        self.budgetButton.currentMonth = self.currentMonth;
-        weakSelf.budgetButton.currentBalance = [result[SSJIncomeSumlKey] doubleValue] - [result[SSJExpentureSumKey] doubleValue];
+        self.homeBar.budgetButton.currentMonth = self.currentMonth;
+        weakSelf.homeBar.budgetButton.currentBalance = [result[SSJIncomeSumlKey] doubleValue] - [result[SSJExpentureSumKey] doubleValue];
     } failure:^(NSError *error) {
         
     }];
@@ -841,6 +847,7 @@ BOOL kHomeNeedLoginPop;
     _currentDay = now.day;
     _currentMonth = now.month;
     self.bookKeepingHeader.currentMonth = self.currentMonth;
+    self.homeBar.rightBarButton.currentDay = self.currentDay;
 }
 
 -(void)reloadDataAfterSync{
@@ -856,7 +863,7 @@ BOOL kHomeNeedLoginPop;
     [self reloadBudgetData];
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.leftButton.item = currentBooksItem;
+    self.homeBar.leftButton.item = currentBooksItem;
 }
 
 - (void)reloadDataAfterInitDatabase {
@@ -866,7 +873,7 @@ BOOL kHomeNeedLoginPop;
     
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.leftButton.item = currentBooksItem;
+    self.homeBar.leftButton.item = currentBooksItem;
 }
 
 - (void)reloadAfterBooksTypeChange{
@@ -876,12 +883,12 @@ BOOL kHomeNeedLoginPop;
     
     NSString *booksid = SSJGetCurrentBooksType();
     SSJBooksTypeItem *currentBooksItem = [SSJBooksTypeStore queryCurrentBooksTypeForBooksId:booksid];
-    self.leftButton.item = currentBooksItem;
+    self.homeBar.leftButton.item = currentBooksItem;
 }
 
 - (void)reloadBudgetData {
     [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-        self.budgetButton.model = [result firstObject];
+        self.homeBar.budgetButton.model = [result firstObject];
         for (int i = 0; i < result.count; i++) {
             SSJBudgetModel *model = [result objectAtIndex:i];
             NSArray *remindedBookTypes = _budgetRemindInfo[SSJUSERID()];
