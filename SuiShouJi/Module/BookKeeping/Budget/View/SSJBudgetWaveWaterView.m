@@ -9,15 +9,19 @@
 #import "SSJBudgetWaveWaterView.h"
 #import "SSJWaveWaterView.h"
 
+static CGFloat kTitleGap = 2;
+
+static CGFloat kTopTitleSize = 12;
+
+static CGFloat kBottomTitleSize = 22;
+
 static NSString *const kRedColorValue = @"ff654c";
 
-static NSString *const kGreenColorValue = @"0fceb6";
+static NSString *const kGreenColorValue = @"0ac082";
 
 @interface SSJBudgetWaveWaterView ()
 
 @property (nonatomic, strong) SSJWaveWaterView *growingView;
-
-@property (nonatomic, strong) SSJWaveWaterView *fullView;
 
 @property (nonatomic, strong) NSArray *growingItems;
 
@@ -33,7 +37,6 @@ static NSString *const kGreenColorValue = @"0fceb6";
 
 - (void)dealloc {
     [_growingView stopWave];
-    [_fullView stopWave];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -48,13 +51,8 @@ static NSString *const kGreenColorValue = @"0fceb6";
         self.waveGrowth = 1;
         self.waveAmplitude = 1;
         
-        self.fullWaveAmplitude = 1;
-        self.fullWaveSpeed = 1;
-        self.fullWaveCycle = 1;
-        
         self.backgroundColor = [UIColor whiteColor];
         [self addSubview:self.growingView];
-        [self addSubview:self.fullView];
         
         self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
 //        self.layer.borderColor = [UIColor ssj_colorWithHex:@"f4f4f4"].CGColor;
@@ -65,8 +63,35 @@ static NSString *const kGreenColorValue = @"0fceb6";
 
 - (void)layoutSubviews {
     self.growingView.frame = CGRectInset(self.bounds, _outerBorderWidth, _outerBorderWidth);
-    self.fullView.frame = CGRectInset(self.bounds, _outerBorderWidth, _outerBorderWidth);
     self.layer.cornerRadius = self.width * 0.5;
+}
+
+- (void)drawRect:(CGRect)rect {
+    if (_percent < 1) {
+        return;
+    }
+    
+    UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
+    circlePath.lineWidth = _outerBorderWidth;
+    [circlePath addClip];
+    
+    NSString *imageName = _percent > 1 ? @"budget_wave_red" : @"budget_wave_green";
+    NSString *topStr = _percent > 1 ? @"超支" : @"剩余";
+    NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney * (1 - _percent))];
+    
+    [[UIImage imageNamed:imageName] drawInRect:self.bounds];
+    
+    CGSize topSize = [topStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize]}];
+    CGSize bottomSize = [bottomStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize]}];
+    
+    CGFloat top = (self.height - topSize.height - bottomSize.height - kTitleGap) * 0.5;
+    CGRect topRect = CGRectMake((self.width - topSize.width) * 0.5, top, topSize.width, topSize.height);
+    CGRect bottomRect = CGRectMake((self.width - bottomSize.width) * 0.5, CGRectGetMaxY(topRect) + kTitleGap, bottomSize.width, bottomSize.height);
+    
+    [topStr drawInRect:topRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize],
+                                                NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    [bottomStr drawInRect:bottomRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize],
+                                                      NSForegroundColorAttributeName:[UIColor whiteColor]}];
 }
 
 - (void)setWaveAmplitude:(CGFloat)waveAmplitude {
@@ -113,33 +138,6 @@ static NSString *const kGreenColorValue = @"0fceb6";
     }
 }
 
-- (void)setFullWaveAmplitude:(CGFloat)fullWaveAmplitude {
-    if (_fullWaveAmplitude != fullWaveAmplitude) {
-        _fullWaveAmplitude = fullWaveAmplitude;
-        for (SSJWaveWaterViewItem *item in _fullView.items) {
-            item.waveAmplitude = fullWaveAmplitude;
-        }
-    }
-}
-
-- (void)setFullWaveSpeed:(CGFloat)fullWaveSpeed {
-    if (_fullWaveSpeed != fullWaveSpeed) {
-        _fullWaveSpeed = fullWaveSpeed;
-        for (SSJWaveWaterViewItem *item in _fullView.items) {
-            item.waveSpeed = fullWaveSpeed;
-        }
-    }
-}
-
-- (void)setFullWaveCycle:(CGFloat)fullWaveCycle {
-    if (_fullWaveCycle != fullWaveCycle) {
-        _fullWaveCycle = fullWaveCycle;
-        for (SSJWaveWaterViewItem *item in _fullView.items) {
-            item.waveCycle = fullWaveCycle;
-        }
-    }
-}
-
 - (void)setInnerBorderWidth:(CGFloat)innerBorderWidth {
     _innerBorderWidth = innerBorderWidth;
     self.growingView.borderWidth = _innerBorderWidth;
@@ -152,156 +150,86 @@ static NSString *const kGreenColorValue = @"0fceb6";
     }
 }
 
-- (void)setMoney:(double)money {
-    _money = money;
-    if (self.showText) {
-        _fullView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
-        _growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
+- (void)setBudgetMoney:(double)budgetMoney {
+    if (_budgetMoney != budgetMoney) {
+        _budgetMoney = budgetMoney;
+        [self updateAppearance];
+    }
+}
+
+- (void)setPercent:(CGFloat)percent {
+    if (_percent != percent) {
+        _percent = percent;
+        [self updateAppearance];
+    }
+}
+
+- (void)stopWave {
+    [self.growingView stopWave];
+}
+
+#pragma mark - Private
+- (void)updateAppearance {
+    if (_percent < 0) {
+        return;
+    }
+    
+    [self setNeedsDisplay];
+    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+    
+    if (_percent >= 0 && _percent < 1) {
+        self.growingView.hidden = NO;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
+        
+        if (!self.growingView.items) {
+            self.growingView.items = self.growingItems;
+        }
+        
+        [self.growingView startWave];
+        
+        for (SSJWaveWaterViewItem *item in self.growingView.items) {
+            item.wavePercent = 1;
+            item.waveGrowth = 0;
+        }
+        
+        [self performSelector:@selector(decline) withObject:nil afterDelay:0.2];
+        
+        self.growingView.topTitle = @"剩余";
+        self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _budgetMoney * _percent];
+    } else {
+        self.growingView.hidden = YES;
     }
 }
 
 - (void)decline {
     for (SSJWaveWaterViewItem *item in self.growingView.items) {
-        item.wavePercent = 0;
+        item.wavePercent = _percent;
         item.waveGrowth = _waveGrowth;
     }
-    [self performSelector:@selector(reset) withObject:nil afterDelay:self.growingView.height / (12 * _waveGrowth)];
+    
+    if (_percent == 0) {
+        [self performSelector:@selector(reset) withObject:nil afterDelay:self.growingView.height / (12 * _waveGrowth)];
+    }
 }
 
 - (void)reset {
     [self.growingView reset];
 }
 
-- (void)setPercent:(CGFloat)percent {
-    _percent = percent;
-    
-    [[self class] cancelPreviousPerformRequestsWithTarget:self];
-    
-    if (percent == 0) {
-        self.growingView.hidden = NO;
-        self.fullView.hidden = YES;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
-        
-        if (!self.growingView.items) {
-            self.growingView.items = self.growingItems;
-        }
-        
-        [self.growingView startWave];
-        [self.fullView stopWave];
-        
-        for (SSJWaveWaterViewItem *item in self.growingView.items) {
-            item.wavePercent = 1;
-            item.waveGrowth = 0;
-        }
-        [self performSelector:@selector(decline) withObject:nil afterDelay:0.2];
-        
-        if (self.showText) {
-            self.growingView.topTitle = @"剩余";
-            self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
-        }
-        
-    } else if (percent > 0 && percent < 1) {
-        self.growingView.hidden = NO;
-        self.fullView.hidden = YES;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
-        
-        if (!self.growingView.items) {
-            self.growingView.items = self.growingItems;
-        }
-        
-        [self.growingView startWave];
-        
-        [self.fullView stopWave];
-        for (SSJWaveWaterViewItem *item in self.growingView.items) {
-            item.wavePercent = percent;
-            item.waveGrowth = _waveGrowth;
-        }
-        
-        if (self.showText) {
-            self.growingView.topTitle = @"剩余";
-            self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
-        }
-        
-    } else if (percent == 1) {
-        self.growingView.hidden = YES;
-        self.fullView.hidden = NO;
-        [self.growingView stopWave];
-        [self.fullView startWave];
-//        [self.fullView drawWave];
-        self.fullView.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue];
-        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
-        for (int i = 0; i < self.fullView.items.count; i ++) {
-            SSJWaveWaterViewItem *item = self.fullView.items[i];
-            item.waveColor = self.fullColors[i];
-        }
-        
-        if (self.showText) {
-            self.fullView.topTitle = @"剩余";
-            self.fullView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
-        }
-        
-    } else if (percent > 1) {
-        self.growingView.hidden = YES;
-        self.fullView.hidden = NO;
-        [self.growingView stopWave];
-        [self.fullView startWave];
-//        [self.fullView drawWave];
-        self.fullView.borderColor = [UIColor ssj_colorWithHex:kRedColorValue];
-        self.layer.borderColor = [UIColor ssj_colorWithHex:kRedColorValue alpha:0.1].CGColor;
-        for (int i = 0; i < self.fullView.items.count; i ++) {
-            SSJWaveWaterViewItem *item = self.fullView.items[i];
-            item.waveColor = self.overrunColors[i];
-        }
-        
-        if (self.showText) {
-            self.fullView.topTitle = @"超支";
-            self.fullView.bottomTitle = [NSString stringWithFormat:@"%.2f", _money];
-        }
-    }
-}
-
-- (void)stopWave {
-    [self.growingView stopWave];
-    [self.fullView stopWave];
-}
-
+#pragma mark - Getter
 - (SSJWaveWaterView *)growingView {
     if (!_growingView) {
         _growingView = [[SSJWaveWaterView alloc] initWithRadius:40];
         _growingView.backgroundColor = [UIColor clearColor];
         _growingView.topTitleColor = [UIColor blackColor];
         _growingView.bottomTitleColor = [UIColor blackColor];
-        _growingView.titleGap = 2;
+        _growingView.titleGap = kTitleGap;
         _growingView.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue];
+        _growingView.titleGap = kTitleGap;
+        _growingView.topTitleFontSize = kTopTitleSize;
+        _growingView.bottomTitleFontSize = kBottomTitleSize;
     }
     return _growingView;
-}
-
-- (SSJWaveWaterView *)fullView {
-    if (!_fullView) {
-        NSMutableArray *items = [NSMutableArray arrayWithCapacity:self.fullColors.count];
-        CGFloat toffset = 0;
-        CGFloat percent = 1;
-        for (int i = 0; i < self.fullColors.count; i ++) {
-            [items addObject:[SSJWaveWaterViewItem itemWithAmplitude:_fullWaveAmplitude
-                                                               speed:_fullWaveSpeed
-                                                               cycle:_fullWaveCycle
-                                                              growth:0
-                                                             percent:percent
-                                                          waveOffset:0
-                                                               color:self.fullColors[i]]];
-            toffset += 5;
-            percent -= 0.125;
-        }
-        
-        _fullView = [[SSJWaveWaterView alloc] initWithRadius:40];
-        _fullView.backgroundColor = [UIColor clearColor];
-        _fullView.topTitleColor = [UIColor whiteColor];
-        _fullView.bottomTitleColor = [UIColor whiteColor];
-        _fullView.items = items;
-        _fullView.titleGap = 2;
-    }
-    return _fullView;
 }
 
 - (NSArray *)growingItems {
