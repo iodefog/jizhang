@@ -1715,13 +1715,11 @@
 		9CEC01FB1D6D41EB00DB2C8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4B1C1A6DBC00910D61 /* Assets.xcassets */; };
 		9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9C3277501CE471A900109C4C /* yw_1222.jpg */; };
 		9CEC023E1D6D41EB00DB2C8B /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
-		9CEC02461D6D41EB00DB2C8B /* SuiShouJi copy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */; };
 		9CEC025C1D6D41EB00DB2C8B /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		9CEC02AD1D6D41EB00DB2C8B /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		9CEC02D01D6D41EB00DB2C8B /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
 		9CEC02FB1D6D41EB00DB2C8B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD543C481C1A6DBC00910D61 /* Main.storyboard */; };
 		9CECFB061D6BF36600DB2C8B /* SSJReminderDateSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CECFB051D6BF36600DB2C8B /* SSJReminderDateSelectView.m */; };
-		9CECFB171D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */; };
 		9CECFB1C1D6D41A700DB2C8B /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9CECFB1D1D6D41A700DB2C8B /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9CECFB1E1D6D41A700DB2C8B /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
@@ -2126,7 +2124,6 @@
 		9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD543C4B1C1A6DBC00910D61 /* Assets.xcassets */; };
 		9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 9C3277501CE471A900109C4C /* yw_1222.jpg */; };
 		9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = BD0432DA1C1A77BB0051E7AB /* sr_refresh.png */; };
-		9CECFE4E1D6D41A700DB2C8B /* SuiShouJi copy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */; };
 		9CECFE641D6D41A700DB2C8B /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = BD0432CF1C1A77BB0051E7AB /* AlipaySDK.bundle */; };
 		9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
@@ -3325,7 +3322,6 @@
 		9CEC03001D6D41EB00DB2C8B /* YouYuJiZhangLiCai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangLiCai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CECFB041D6BF36600DB2C8B /* SSJReminderDateSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJReminderDateSelectView.h; sourceTree = "<group>"; };
 		9CECFB051D6BF36600DB2C8B /* SSJReminderDateSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJReminderDateSelectView.m; sourceTree = "<group>"; };
-		9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy-Info.plist"; sourceTree = "<group>"; };
 		9CECFF081D6D41A700DB2C8B /* YouYuJiZhangBen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouYuJiZhangBen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF593ED1D63FFBB00006594 /* SSJColorSelectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJColorSelectCollectionViewCell.h; sourceTree = "<group>"; };
 		9CF593EE1D63FFBB00006594 /* SSJColorSelectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJColorSelectCollectionViewCell.m; sourceTree = "<group>"; };
@@ -6161,7 +6157,6 @@
 				BD04332B1C1A7C900051E7AB /* PrefixHeader.pch */,
 				BD543C401C1A6DBC00910D61 /* main.m */,
 				BD543C501C1A6DBC00910D61 /* Info.plist */,
-				9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */,
 				9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */,
 			);
 			name = "Supporting Files";
@@ -6645,7 +6640,6 @@
 				9CEC01FB1D6D41EB00DB2C8B /* Assets.xcassets in Resources */,
 				9CEC02131D6D41EB00DB2C8B /* yw_1222.jpg in Resources */,
 				9CEC023E1D6D41EB00DB2C8B /* sr_refresh.png in Resources */,
-				9CEC02461D6D41EB00DB2C8B /* SuiShouJi copy-Info.plist in Resources */,
 				9CEC025C1D6D41EB00DB2C8B /* AlipaySDK.bundle in Resources */,
 				9CEC02AD1D6D41EB00DB2C8B /* ProjectSettings.plist in Resources */,
 				9CEC02D01D6D41EB00DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
@@ -6668,7 +6662,6 @@
 				9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */,
 				9CECFE1B1D6D41A700DB2C8B /* yw_1222.jpg in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
-				9CECFE4E1D6D41A700DB2C8B /* SuiShouJi copy-Info.plist in Resources */,
 				9CECFE641D6D41A700DB2C8B /* AlipaySDK.bundle in Resources */,
 				9CECFEB51D6D41A700DB2C8B /* ProjectSettings.plist in Resources */,
 				9CECFED81D6D41A700DB2C8B /* SSJFinancingHomePopView.xib in Resources */,
@@ -6691,7 +6684,6 @@
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				9C3277591CE471A900109C4C /* yw_1222.jpg in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
-				9CECFB171D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
