@@ -338,7 +338,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 
             }], [SSJAlertViewAction actionWithTitle:@"更改分类金额" handler:^(SSJAlertViewAction *action) {
                 
-                [wself.navigationController popViewControllerAnimated:YES];
+                for (UIViewController *vc in wself.navigationController.viewControllers) {
+                    if ([vc isKindOfClass:[SSJBudgetListViewController class]]) {
+                        [wself.navigationController popToViewController:vc animated:YES];
+                    }
+                }
                 
             }], nil];
             

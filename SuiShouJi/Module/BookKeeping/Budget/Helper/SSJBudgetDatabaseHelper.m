@@ -781,15 +781,16 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 }
 
 + (NSString *)billTypeStringWithBillTypeArr:(NSArray *)billTypeArr {
-    NSArray *sortArr = [billTypeArr sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        if ([obj1 integerValue] < [obj2 integerValue]) {
-            return NSOrderedAscending;
-        } else if ([obj1 integerValue] > [obj2 integerValue]) {
-            return NSOrderedDescending;
-        } else {
-            return NSOrderedSame;
-        }
-    }];
+//    NSArray *sortArr = [billTypeArr sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//        if ([obj1 integerValue] < [obj2 integerValue]) {
+//            return NSOrderedAscending;
+//        } else if ([obj1 integerValue] > [obj2 integerValue]) {
+//            return NSOrderedDescending;
+//        } else {
+//            return NSOrderedSame;
+//        }
+//    }];
+    NSArray *sortArr = [billTypeArr sortedArrayUsingSelector:@selector(compare:)];
     return [sortArr componentsJoinedByString:@","];
 }
 
