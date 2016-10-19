@@ -11,6 +11,7 @@
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJBooksEditeOrNewViewController ()
 
@@ -98,6 +99,7 @@
         return;
     }
     if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [self.navigationController popViewControllerAnimated:YES];
     }else{
         [CDAutoHideMessageHUD showMessage:@"保存失败"];
