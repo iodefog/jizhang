@@ -198,7 +198,7 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                     return;
                 }
                 
-                //  合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
+                // 合并数据完成后根据定期记账和定期预算进行补充；即使补充失败，也不影响同步，在其他时机可以再次补充
                 [SSJRegularManager supplementBookkeepingIfNeededForUserId:self.userId];
                 [SSJRegularManager supplementBudgetIfNeededForUserId:self.userId];
                 
@@ -263,12 +263,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
 //    __block NSString *userId = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
-//        //  把当前同步的版本号插入到BK_SYNC表中
-//        if (![SSJSyncTable insertUnderwaySyncVersion:(self.lastSuccessSyncVersion + 1) forUserId:self.userId inDatabase:db]) {
-//            *error = [db lastError];
-//            return;
-//        }
-        
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
@@ -278,8 +272,6 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
                 [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
             }
         }
-        
-//        userId = [SSJUserTableManager unregisteredUserIdInDatabase:db error:error];
     }];
     
     if (self.userId.length) {
