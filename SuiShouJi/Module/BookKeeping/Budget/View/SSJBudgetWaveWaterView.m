@@ -67,9 +67,12 @@ static NSString *const kGreenColorValue = @"0ac082";
 }
 
 - (void)drawRect:(CGRect)rect {
+    [[UIColor whiteColor] setFill];
+    
+    UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
+    [circlePath fill];
+    
     if (_expendMoney > _budgetMoney || _expendMoney == 0) {
-        UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
-        circlePath.lineWidth = _outerBorderWidth;
         [circlePath addClip];
         
         NSString *imageName = _expendMoney > _budgetMoney ? @"budget_wave_red" : @"budget_wave_green";
