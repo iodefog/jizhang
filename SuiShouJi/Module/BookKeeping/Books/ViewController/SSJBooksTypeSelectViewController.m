@@ -76,9 +76,6 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
     self.editeButton.hidden = YES;
     self.deleteButton.hidden = YES;
     self.editeButton.enabled = NO;
-    [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:NULL];
     [self.collectionView endEditing];
 }
 
@@ -218,7 +215,11 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    
+    [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        NSLog(@"%@",[error localizedDescription]);
+    }];
 }
 
 //- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
@@ -242,9 +243,6 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         [MobClick event:@"accountbook_manage"];
     }else{
         [self.collectionView endEditing];
-        [SSJBooksTypeStore saveBooksOrderWithItems:self.items sucess:^{
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        } failure:NULL];
         [self.selectedBooks removeAllObjects];
     }
     for (SSJBooksTypeItem *item in self.items) {
