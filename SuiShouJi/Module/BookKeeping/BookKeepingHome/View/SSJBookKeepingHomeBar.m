@@ -55,9 +55,6 @@
     return _rightBarButton;
 }
 
-- (void)updateAfterThemeChange{
-    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-}
 
 /*
 // Only override drawRect: if you perform custom drawing.

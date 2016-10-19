@@ -1268,6 +1268,9 @@
 		9C7C9E6B1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
 		9C7C9E6C1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
 		9C7C9E6D1DB706E20095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
+		9C7C9E751DB74B310095F49B /* SuiShouJi copy3-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7C9E721DB74B310095F49B /* SuiShouJi copy3-Info.plist */; };
+		9C7C9E761DB74B310095F49B /* SuiShouJi copy2-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7C9E731DB74B310095F49B /* SuiShouJi copy2-Info.plist */; };
+		9C7C9E771DB74B310095F49B /* SuiShouJi copy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7C9E741DB74B310095F49B /* SuiShouJi copy-Info.plist */; };
 		9C91AE171D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C91AE181D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C91AE191D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -3090,6 +3093,9 @@
 		9C7C9E5A1DB5F30A0095F49B /* SSJBookKeepingHomeBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeBar.m; sourceTree = "<group>"; };
 		9C7C9E671DB706DC0095F49B /* SSJSearchResultSummaryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchResultSummaryItem.h; sourceTree = "<group>"; };
 		9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchResultSummaryItem.m; sourceTree = "<group>"; };
+		9C7C9E721DB74B310095F49B /* SuiShouJi copy3-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy3-Info.plist"; sourceTree = "<group>"; };
+		9C7C9E731DB74B310095F49B /* SuiShouJi copy2-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy2-Info.plist"; sourceTree = "<group>"; };
+		9C7C9E741DB74B310095F49B /* SuiShouJi copy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy-Info.plist"; sourceTree = "<group>"; };
 		9C91AE151D93A4BB00B585AA /* SSJChargeSearchingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeSearchingStore.h; sourceTree = "<group>"; };
 		9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeSearchingStore.m; sourceTree = "<group>"; };
 		9C91AE1C1D94D8C700B585AA /* SSJSearchResultItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchResultItem.h; sourceTree = "<group>"; };
@@ -6152,6 +6158,9 @@
 		BD543C3F1C1A6DBC00910D61 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9C7C9E721DB74B310095F49B /* SuiShouJi copy3-Info.plist */,
+				9C7C9E731DB74B310095F49B /* SuiShouJi copy2-Info.plist */,
+				9C7C9E741DB74B310095F49B /* SuiShouJi copy-Info.plist */,
 				BD543C421C1A6DBC00910D61 /* AppDelegate.h */,
 				BD543C431C1A6DBC00910D61 /* AppDelegate.m */,
 				BD04332B1C1A7C900051E7AB /* PrefixHeader.pch */,
@@ -6677,16 +6686,19 @@
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
+				9C7C9E771DB74B310095F49B /* SuiShouJi copy-Info.plist in Resources */,
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D4A430A1CC63755002F0264 /* rain_sound.wav in Resources */,
+				9C7C9E761DB74B310095F49B /* SuiShouJi copy2-Info.plist in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
 				9C3277591CE471A900109C4C /* yw_1222.jpg in Resources */,
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				BD0432EA1C1A77BB0051E7AB /* AlipaySDK.bundle in Resources */,
 				7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */,
 				9C94717C1CEB224C00D69079 /* SSJFinancingHomePopView.xib in Resources */,
+				9C7C9E751DB74B310095F49B /* SuiShouJi copy3-Info.plist in Resources */,
 				BD543C4A1C1A6DBC00910D61 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9803,8 +9815,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shanghai CaiYi Financial Information Service Co. Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: XiaoYong  Wu (6CF3K2UQ7J)";
 				DEVELOPMENT_TEAM = 747363KXQ6;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -9836,7 +9848,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.9188.jizhang;
 				PRODUCT_NAME = SuiShouJi;
-				PROVISIONING_PROFILE = "cc299689-cec6-4ad4-ad85-2270ff299d21";
+				PROVISIONING_PROFILE = "f05fc032-e243-4f69-8d1f-7d9bfc94a4cb";
 				PROVISIONING_PROFILE_SPECIFIER = JiZhangEnterpriseAdHoc;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = 1;

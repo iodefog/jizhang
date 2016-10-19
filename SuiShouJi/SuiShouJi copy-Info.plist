@@ -5,7 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
-	<string>9188记账</string>
+	<string>记账管家</string>
+    <key>NSCameraUsageDescription</key>
+    <string>App需要您的同意,才能访问相机</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>App需要您的同意,才能访问相册</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.8.0</string>
+	<string>1.7.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -66,7 +70,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>6</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wechat</string>
@@ -188,12 +192,8 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>App需要您的同意,才能访问相机</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App需要您的同意,才能访问相册</string>
 	<key>UIFileSharingEnabled</key>
-	<true/>
+	<false/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

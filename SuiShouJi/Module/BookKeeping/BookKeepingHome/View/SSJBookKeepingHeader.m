@@ -30,7 +30,7 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.seperatorLine.size = CGSizeMake(1, self.height - 64);
+    self.seperatorLine.size = CGSizeMake(1, self.height - 60);
     self.seperatorLine.centerX = self.width / 2;
     self.seperatorLine.top = 0;
     self.incomeView.centerX = self.width / 2 / 2;
