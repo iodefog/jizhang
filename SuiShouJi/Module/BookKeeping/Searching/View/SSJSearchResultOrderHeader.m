@@ -67,13 +67,14 @@
     if (!_slidePageView) {
         _slidePageView = [[SCYSlidePagingHeaderView alloc]init];
         _slidePageView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _slidePageView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _slidePageView.displayedButtonCount = 2;
         _slidePageView.titleFont = 18;
         _slidePageView.buttonClickAnimated = YES;
         _slidePageView.titles = @[@"时间",@"金额"];
         _slidePageView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
-        [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
-        [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+        [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+        [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
         _slidePageView.customDelegate = self;
     }
     return _slidePageView;
@@ -236,6 +237,7 @@
 - (void)updateCellAppearanceAfterThemeChanged {
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.searchResultHeaderBackgroundColor];
     self.slidePageView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.slidePageView.titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.resultCountLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.singleLineLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.doubleLineExpentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
