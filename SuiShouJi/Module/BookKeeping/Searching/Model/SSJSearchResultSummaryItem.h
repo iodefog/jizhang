@@ -10,4 +10,10 @@
 
 @interface SSJSearchResultSummaryItem : SSJBaseItem
 
+@property(nonatomic) NSInteger resultCount;
+
+@property(nonatomic) double resultIncome;
+
+@property(nonatomic) double resultExpenture;
+
 @end

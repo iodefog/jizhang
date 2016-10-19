@@ -16,6 +16,12 @@
 
 @property(nonatomic, strong) UILabel *resultCountLabel;
 
+@property(nonatomic, strong) UILabel *singleLineLabel;
+
+@property(nonatomic, strong) UILabel *doubleLineIncomeLabel;
+
+@property(nonatomic, strong) UILabel *doubleLineExpentureLabel;
+
 @end
 
 @implementation SSJSearchResultOrderHeader
@@ -24,19 +30,37 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.searchResultHeaderBackgroundColor];
         [self addSubview:self.slidePageView];
         [self addSubview:self.resultCountLabel];
+        [self addSubview:self.singleLineLabel];
+        [self addSubview:self.doubleLineIncomeLabel];
+        [self addSubview:self.doubleLineExpentureLabel];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
     self.slidePageView.leftTop = CGPointMake(0, 0);
-    self.slidePageView.size = CGSizeMake(self.width, self.height - 34);
-    self.resultCountLabel.centerY = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2;
-    self.resultCountLabel.left = 10;
+    self.slidePageView.size = CGSizeMake(self.width, 44);
+    if (self.sumItem.resultExpenture && self.sumItem.resultIncome) {
+        self.resultCountLabel.bottom = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2 - 9;
+        self.resultCountLabel.left = 10;
+        self.doubleLineIncomeLabel.top = self.doubleLineExpentureLabel.top = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2 + 9;
+        self.doubleLineIncomeLabel.left = 10;
+        self.doubleLineExpentureLabel.right = self.width - 10;
+    }else{
+        self.resultCountLabel.centerY = self.slidePageView.bottom + (self.height - self.slidePageView.bottom) / 2;
+        self.resultCountLabel.left = 10;
+        self.singleLineLabel.centerY = self.resultCountLabel.centerY;
+        self.singleLineLabel.right = self.width - 10;
+    }
 }
 
 - (SCYSlidePagingHeaderView *)slidePageView{
@@ -63,46 +87,95 @@
     return _resultCountLabel;
 }
 
-- (void)setResultCount:(NSInteger)resultCount{
-    _resultCount = resultCount;
-    self.resultCountLabel.text = [NSString stringWithFormat:@"搜索到%ld条相关流水记录",_resultCount];
+- (UILabel *)singleLineLabel{
+    if (!_singleLineLabel) {
+        _singleLineLabel = [[UILabel alloc]init];
+        _singleLineLabel.font = [UIFont systemFontOfSize:12];
+        _singleLineLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    }
+    return _singleLineLabel;
+}
+
+- (UILabel *)doubleLineIncomeLabel{
+    if (!_doubleLineIncomeLabel) {
+        _doubleLineIncomeLabel = [[UILabel alloc]init];
+        _doubleLineIncomeLabel.font = [UIFont systemFontOfSize:12];
+        _doubleLineIncomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    }
+    return _doubleLineIncomeLabel;
+}
+
+- (UILabel *)doubleLineExpentureLabel{
+    if (!_doubleLineExpentureLabel) {
+        _doubleLineExpentureLabel = [[UILabel alloc]init];
+        _doubleLineExpentureLabel.font = [UIFont systemFontOfSize:12];
+        _doubleLineExpentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    }
+    return _doubleLineExpentureLabel;
+}
+
+- (void)setSumItem:(SSJSearchResultSummaryItem *)sumItem{
+    _sumItem = sumItem;
+    self.resultCountLabel.text = [NSString stringWithFormat:@"搜索到%ld条相关流水记录",sumItem.resultCount];
     [self.resultCountLabel sizeToFit];
+    if (!sumItem.resultIncome) {
+        self.singleLineLabel.hidden = NO;
+        self.singleLineLabel.text = [NSString stringWithFormat:@"支出: -%.2f",sumItem.resultExpenture];
+        [self.singleLineLabel sizeToFit];
+        self.doubleLineIncomeLabel.hidden = YES;
+        self.doubleLineExpentureLabel.hidden = YES;
+    }else if (!sumItem.resultExpenture){
+        self.singleLineLabel.hidden = NO;
+        self.singleLineLabel.text = [NSString stringWithFormat:@"收入: +%.2f",sumItem.resultIncome];
+        [self.singleLineLabel sizeToFit];
+        self.doubleLineIncomeLabel.hidden = YES;
+        self.doubleLineExpentureLabel.hidden = YES;
+    }else{
+        self.doubleLineIncomeLabel.hidden = NO;
+        self.doubleLineExpentureLabel.hidden = NO;
+        self.doubleLineIncomeLabel.text = [NSString stringWithFormat:@"收入: +%.2f",sumItem.resultIncome];
+        self.doubleLineExpentureLabel.text = [NSString stringWithFormat:@"支出: -%.2f",sumItem.resultExpenture];
+        [self.doubleLineIncomeLabel sizeToFit];
+        [self.doubleLineExpentureLabel sizeToFit];
+        self.singleLineLabel.hidden = YES;
+    }
+    [self setNeedsLayout];
 }
 
 - (void)setOrder:(SSJChargeListOrder)order{
     _order = order;
     switch (order) {
         case SSJChargeListOrderMoneyAscending:{
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
             [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:1 animated:YES];
             break;
         }
             
         case SSJChargeListOrderMoneyDescending:{
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:1 animated:YES];
             break;
         }
             
         case SSJChargeListOrderDateAscending:{
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:0 animated:YES];
             break;
         }
             
         case SSJChargeListOrderDateDescending:{
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:0 animated:YES];
             break;
         }
             
         default:{
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
-            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
             [self.slidePageView setSelectedIndex:0 animated:YES];
             break;
         }
@@ -157,6 +230,52 @@
     if (self.orderSelectBlock) {
         self.orderSelectBlock(self.order);
     }
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.searchResultHeaderBackgroundColor];
+    self.slidePageView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    self.resultCountLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.singleLineLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.doubleLineExpentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.doubleLineIncomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    switch (self.order) {
+        case SSJChargeListOrderMoneyAscending:{
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage imageNamed:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:1 animated:YES];
+            break;
+        }
+            
+        case SSJChargeListOrderMoneyDescending:{
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:1 animated:YES];
+            break;
+        }
+            
+        case SSJChargeListOrderDateAscending:{
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderasc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:0 animated:YES];
+            break;
+        }
+            
+        case SSJChargeListOrderDateDescending:{
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_orderdesc"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:0 animated:YES];
+            break;
+        }
+            
+        default:{
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:0];
+            [_slidePageView setButtonImage:[UIImage ssj_themeImageWithName:@"search_ordernormal"] layoutType:SSJButtonLayoutTypeImageRightTitleLeft spaceBetweenImageAndTitle:13 forControlState:UIControlStateNormal atIndex:1];
+            [self.slidePageView setSelectedIndex:0 animated:YES];
+            break;
+        }
+    }
+    self.slidePageView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }
 
 /*

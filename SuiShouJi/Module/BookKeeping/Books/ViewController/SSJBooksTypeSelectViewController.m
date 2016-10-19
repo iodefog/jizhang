@@ -404,11 +404,15 @@ static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
         weakSelf.deleteButton.hidden = YES;
         weakSelf.editeButton.hidden = YES;
         [weakSelf.collectionView endEditing];
+        for (SSJBooksTypeItem *item in self.items) {
+            item.editeModel = NO;
+        }
+        _editeModel = NO;
+        [self.selectedBooks removeAllObjects];
         [weakSelf getDateFromDB];
     } failure:^(NSError *error) {
         
     }];
-
 }
 
 -(void)updateAppearanceAfterThemeChanged{

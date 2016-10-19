@@ -9,12 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "SSJSearchResultItem.h"
 #import "SSJSearchHistoryItem.h"
+#import "SSJSearchResultSummaryItem.h"
 
 @interface SSJChargeSearchingStore : NSObject
 
 + (void)searchForChargeListWithSearchContent:(NSString *)content
                                    ListOrder:(SSJChargeListOrder)order
-                                     Success:(void(^)(NSArray <SSJSearchResultItem *>*result , NSInteger chargeCount))success
+                                     Success:(void(^)(NSArray <SSJSearchResultItem *>*result , SSJSearchResultSummaryItem *sumItem))success
                                      failure:(void (^)(NSError *error))failure;
 
 + (void)querySearchHistoryWithSuccess:(void(^)(NSArray <SSJSearchHistoryItem *>*result))success

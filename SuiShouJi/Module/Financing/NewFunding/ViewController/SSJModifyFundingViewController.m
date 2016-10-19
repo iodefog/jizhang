@@ -247,7 +247,7 @@
 - (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         NSLog(@"%@",[error localizedDescription]);

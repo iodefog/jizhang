@@ -20,6 +20,7 @@
 #import "SSJSearchResultOrderHeader.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import <YYKeyboardManager/YYKeyboardManager.h>
+#import "SSJSearchResultSummaryItem.h"
 
 static NSString *const khasSearchByMoney = @"khasSearchByMoney";
 
@@ -92,6 +93,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchBar.searchTextInput resignFirstResponder];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [[UIApplication sharedApplication]setStatusBarHidden:NO];
 }
 
@@ -350,7 +352,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     [self.view endEditing:YES];
     [self.tableView ssj_showLoadingIndicator];
     __weak typeof(self) weakSelf = self;
-    [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result , NSInteger chargeCount) {
+    [SSJChargeSearchingStore searchForChargeListWithSearchContent:content ListOrder:order Success:^(NSArray<SSJSearchResultItem *> *result , SSJSearchResultSummaryItem *sumItem) {
         weakSelf.model = SSJSearchResultModel;
         [weakSelf.tableView ssj_hideLoadingIndicator];
         weakSelf.items = [NSArray arrayWithArray:result];
@@ -359,7 +361,12 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 //#endif
         if (result.count) {
             [weakSelf.tableView ssj_hideWatermark:YES];
-            weakSelf.resultOrderHeader.resultCount = chargeCount;
+            weakSelf.resultOrderHeader.sumItem = sumItem;
+            if (sumItem.resultIncome && sumItem.resultExpenture) {
+                weakSelf.resultOrderHeader.height = 113;
+            }else{
+                weakSelf.resultOrderHeader.height = 78;
+            }
             weakSelf.tableView.tableHeaderView = weakSelf.resultOrderHeader;
         }else{
             weakSelf.tableView.tableHeaderView = nil;

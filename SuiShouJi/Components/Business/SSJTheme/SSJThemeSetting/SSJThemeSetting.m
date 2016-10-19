@@ -109,7 +109,8 @@
     model.recordMakingInputViewAlpha = 1;
     model.bookKeepingHomeMutiButtonNormalColor = @"#cccccc";
     model.bookKeepingHomeMutiButtonSelectColor = @"#f5b52a";
-    
+    model.searchResultHeaderBackgroundColor = @"#ffebeb";
+
     return model;
 }
 
