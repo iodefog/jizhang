@@ -66,6 +66,7 @@
 - (SCYSlidePagingHeaderView *)slidePageView{
     if (!_slidePageView) {
         _slidePageView = [[SCYSlidePagingHeaderView alloc]init];
+        _slidePageView.backgroundColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _slidePageView.displayedButtonCount = 2;
         _slidePageView.titleFont = 18;
         _slidePageView.buttonClickAnimated = YES;

@@ -1268,6 +1268,8 @@
 		9C7C9E6B1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
 		9C7C9E6C1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
 		9C7C9E6D1DB706E20095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
+		9C7C9E701DB724940095F49B /* SuiShouJi copy3-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7C9E6E1DB724940095F49B /* SuiShouJi copy3-Info.plist */; };
+		9C7C9E711DB724940095F49B /* SuiShouJi copy2-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7C9E6F1DB724940095F49B /* SuiShouJi copy2-Info.plist */; };
 		9C91AE171D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C91AE181D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
 		9C91AE191D93A4BB00B585AA /* SSJChargeSearchingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */; };
@@ -3093,6 +3095,8 @@
 		9C7C9E5A1DB5F30A0095F49B /* SSJBookKeepingHomeBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBookKeepingHomeBar.m; sourceTree = "<group>"; };
 		9C7C9E671DB706DC0095F49B /* SSJSearchResultSummaryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchResultSummaryItem.h; sourceTree = "<group>"; };
 		9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSearchResultSummaryItem.m; sourceTree = "<group>"; };
+		9C7C9E6E1DB724940095F49B /* SuiShouJi copy3-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy3-Info.plist"; sourceTree = "<group>"; };
+		9C7C9E6F1DB724940095F49B /* SuiShouJi copy2-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SuiShouJi copy2-Info.plist"; sourceTree = "<group>"; };
 		9C91AE151D93A4BB00B585AA /* SSJChargeSearchingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeSearchingStore.h; sourceTree = "<group>"; };
 		9C91AE161D93A4BB00B585AA /* SSJChargeSearchingStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJChargeSearchingStore.m; sourceTree = "<group>"; };
 		9C91AE1C1D94D8C700B585AA /* SSJSearchResultItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSearchResultItem.h; sourceTree = "<group>"; };
@@ -6163,6 +6167,8 @@
 				BD543C501C1A6DBC00910D61 /* Info.plist */,
 				9CECFB161D6D3E4400DB2C8B /* SuiShouJi copy-Info.plist */,
 				9C2A6AA11D195E7B0010F1DA /* youyu-Info.plist */,
+				9C7C9E6E1DB724940095F49B /* SuiShouJi copy3-Info.plist */,
+				9C7C9E6F1DB724940095F49B /* SuiShouJi copy2-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -6683,7 +6689,9 @@
 				BD6C388F1C910A8F000E2E42 /* pushsound.wav in Resources */,
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
+				9C7C9E701DB724940095F49B /* SuiShouJi copy3-Info.plist in Resources */,
 				BD543C4F1C1A6DBC00910D61 /* LaunchScreen.storyboard in Resources */,
+				9C7C9E711DB724940095F49B /* SuiShouJi copy2-Info.plist in Resources */,
 				9C2A6AA21D195E7B0010F1DA /* youyu-Info.plist in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,

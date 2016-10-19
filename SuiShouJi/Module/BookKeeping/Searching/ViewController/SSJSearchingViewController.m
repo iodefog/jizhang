@@ -291,8 +291,10 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         _resultOrderHeader.orderSelectBlock = ^(SSJChargeListOrder order){
             BOOL hasSearchByMoney = [[NSUserDefaults standardUserDefaults] boolForKey:khasSearchByMoney];
             if (!hasSearchByMoney) {
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:khasSearchByMoney];
-                [CDAutoHideMessageHUD showMessage:@"已收支类别的具体金额数目排序，不区分正负数"];
+                if (order == SSJChargeListOrderMoneyDescending || order == SSJChargeListOrderMoneyAscending) {
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:khasSearchByMoney];
+                    [CDAutoHideMessageHUD showMessage:@"已收支类别的具体金额数目排序，不区分正负数"];
+                }
             }
             [weakSelf searchForContent:weakSelf.searchBar.searchTextInput.text listOrder:order];
         };
