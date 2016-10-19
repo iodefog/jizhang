@@ -105,7 +105,8 @@
         for (SSJBooksTypeItem *item in items) {
             NSInteger order = [items indexOfObject:item] + 1;
             NSString *userid = SSJUSERID();
-            if (![db executeUpdate:@"update bk_books_type set iorder = ? where cbooksid = ? and cuserid = ?",@(order),item.booksId,userid]) {
+            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            if (![db executeUpdate:@"update bk_books_type set iorder = ?, iversion = ?, cwritedate = ? ,operatortype = 1 where cbooksid = ? and cuserid = ?",@(order),@(SSJSyncVersion()),writeDate,item.booksId,userid]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
