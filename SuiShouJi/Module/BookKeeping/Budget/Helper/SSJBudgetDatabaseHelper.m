@@ -310,7 +310,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             [query appendFormat:@" and a.ibillid in (%@)", [billIds componentsJoinedByString:@","]];
         }
         
-        [query appendFormat:@" group by a.ibillid"];
+        [query appendFormat:@" group by a.ibillid order by sum(a.imoney) desc"];
         
         resultSet = [db executeQuery:query];
         
