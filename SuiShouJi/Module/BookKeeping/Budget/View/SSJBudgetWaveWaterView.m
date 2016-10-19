@@ -51,7 +51,7 @@ static NSString *const kGreenColorValue = @"0ac082";
         self.waveGrowth = 1;
         self.waveAmplitude = 1;
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.growingView];
         
         self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
@@ -67,31 +67,29 @@ static NSString *const kGreenColorValue = @"0ac082";
 }
 
 - (void)drawRect:(CGRect)rect {
-    if (_budgetMoney > _expendMoney) {
-        return;
+    if (_expendMoney > _budgetMoney || _expendMoney == 0) {
+        UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
+        circlePath.lineWidth = _outerBorderWidth;
+        [circlePath addClip];
+        
+        NSString *imageName = _expendMoney > _budgetMoney ? @"budget_wave_red" : @"budget_wave_green";
+        NSString *topStr = _expendMoney > _budgetMoney ? @"超支" : @"剩余";
+        NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney - _expendMoney)];
+        
+        [[UIImage imageNamed:imageName] drawInRect:self.bounds];
+        
+        CGSize topSize = [topStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize]}];
+        CGSize bottomSize = [bottomStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize]}];
+        
+        CGFloat top = (self.height - topSize.height - bottomSize.height - kTitleGap) * 0.5;
+        CGRect topRect = CGRectMake((self.width - topSize.width) * 0.5, top, topSize.width, topSize.height);
+        CGRect bottomRect = CGRectMake((self.width - bottomSize.width) * 0.5, CGRectGetMaxY(topRect) + kTitleGap, bottomSize.width, bottomSize.height);
+        
+        [topStr drawInRect:topRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize],
+                                                    NSForegroundColorAttributeName:[UIColor whiteColor]}];
+        [bottomStr drawInRect:bottomRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize],
+                                                          NSForegroundColorAttributeName:[UIColor whiteColor]}];
     }
-    
-    UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
-    circlePath.lineWidth = _outerBorderWidth;
-    [circlePath addClip];
-    
-    NSString *imageName = _expendMoney > _budgetMoney ? @"budget_wave_red" : @"budget_wave_green";
-    NSString *topStr = _expendMoney > _budgetMoney ? @"超支" : @"剩余";
-    NSString *bottomStr = [NSString stringWithFormat:@"%.2f", (_budgetMoney - _expendMoney)];
-    
-    [[UIImage imageNamed:imageName] drawInRect:self.bounds];
-    
-    CGSize topSize = [topStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize]}];
-    CGSize bottomSize = [bottomStr sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize]}];
-    
-    CGFloat top = (self.height - topSize.height - bottomSize.height - kTitleGap) * 0.5;
-    CGRect topRect = CGRectMake((self.width - topSize.width) * 0.5, top, topSize.width, topSize.height);
-    CGRect bottomRect = CGRectMake((self.width - bottomSize.width) * 0.5, CGRectGetMaxY(topRect) + kTitleGap, bottomSize.width, bottomSize.height);
-    
-    [topStr drawInRect:topRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTopTitleSize],
-                                                NSForegroundColorAttributeName:[UIColor whiteColor]}];
-    [bottomStr drawInRect:bottomRect withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kBottomTitleSize],
-                                                      NSForegroundColorAttributeName:[UIColor whiteColor]}];
 }
 
 - (void)setWaveAmplitude:(CGFloat)waveAmplitude {
@@ -186,7 +184,9 @@ static NSString *const kGreenColorValue = @"0ac082";
     [self setNeedsDisplay];
     [[self class] cancelPreviousPerformRequestsWithTarget:self];
     
-    if (_expendMoney < _budgetMoney) {
+    if (_expendMoney > _budgetMoney || _expendMoney == 0) {
+        self.growingView.hidden = YES;
+    } else {
         self.growingView.hidden = NO;
         self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
         
@@ -205,15 +205,13 @@ static NSString *const kGreenColorValue = @"0ac082";
         
         self.growingView.topTitle = @"剩余";
         self.growingView.bottomTitle = [NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney];
-    } else {
-        self.growingView.hidden = YES;
     }
 }
 
 - (void)decline {
     CGFloat percent;
     if (_expendMoney >= _budgetMoney) {
-        percent = 1;
+        percent = 0;
     } else {
         percent = 1 - (_expendMoney / _budgetMoney);
     }
