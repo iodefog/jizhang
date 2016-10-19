@@ -22,6 +22,11 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
 
 @property (nonatomic, strong) NSArray *dataList;
 
+/**
+ 新建的预算id
+ */
+@property (nonatomic, copy) NSString *addBudgetId;
+
 @end
 
 @implementation SSJBudgetListViewController
@@ -49,11 +54,32 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
         [self.view ssj_hideLoadingIndicator];
         self.dataList = result;
         [self.tableView reloadData];
+        
+        // 如果是新建预算返回后，滑动到新建预算的位置
+        if (self.addBudgetId) {
+            for (int section = 0; section < self.dataList.count; section ++) {
+                NSArray *sectionArr = self.dataList[section];
+                for (int row = 0; row < sectionArr.count; row ++) {
+                    SSJBudgetListCellItem *item = sectionArr[row];
+                    if ([item.budgetID isEqualToString:self.addBudgetId]) {
+                        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                        break;
+                    }
+                }
+            }
+        }
+        
     } failure:^(NSError * _Nullable error) {
         [self.view ssj_hideLoadingIndicator];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[error localizedDescription] action:action, nil];
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.addBudgetId = nil;
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -114,7 +140,11 @@ static NSString *const kBudgetListSecondaryCellId = @"kBudgetListSecondaryCellId
 
 #pragma mark - Event
 - (void)addNewBudgetAction {
+    __weak typeof(self) wself = self;
     SSJBudgetEditViewController *newBudgetVC = [[SSJBudgetEditViewController alloc] init];
+    newBudgetVC.addNewBudgetBlock = ^(NSString *budgetId) {
+        wself.addBudgetId = budgetId;
+    };
     [self.navigationController pushViewController:newBudgetVC animated:YES];
 }
 

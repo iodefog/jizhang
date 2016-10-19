@@ -707,6 +707,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self updateSaveButtonState:NO];
         [self ssj_backOffAction];
         
+        if (!_isEdit) {
+            _addNewBudgetBlock(self.model.ID);
+        }
+        
         switch (self.model.type) {
             case SSJBudgetPeriodTypeWeek:
                 [MobClick event:@"budget_cycle_week"];
