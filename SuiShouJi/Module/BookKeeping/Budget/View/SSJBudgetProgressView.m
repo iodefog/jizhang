@@ -20,7 +20,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor ssj_colorWithHex:@"e6e6e6"];
+        self.backgroundColor = [UIColor ssj_colorWithHex:@"cacaca"];
         self.clipsToBounds = YES;
         
         _progressView = [[UIView alloc] init];
@@ -28,7 +28,7 @@
         
         _surplusLab = [[UILabel alloc] init];
         _surplusLab.font = [UIFont systemFontOfSize:13];
-        _surplusLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _surplusLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
         [self addSubview:_surplusLab];
     }
     return self;

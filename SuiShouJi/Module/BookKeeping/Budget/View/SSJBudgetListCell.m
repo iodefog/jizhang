@@ -79,7 +79,7 @@
         _typeLab = [[UILabel alloc] init];
         _typeLab.backgroundColor = [UIColor clearColor];
         _typeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _typeLab.font = [UIFont systemFontOfSize:18];
+        _typeLab.font = [UIFont systemFontOfSize:15];
     }
     return _typeLab;
 }
