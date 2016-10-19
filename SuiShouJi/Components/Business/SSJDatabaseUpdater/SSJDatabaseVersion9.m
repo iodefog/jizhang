@@ -17,7 +17,7 @@
         return error;
     }
     
-    error = [self createIndexOnUserChargeTableWithDatabase:db];
+    error = [self updateUserChargeTableWithDatabase:db];
     if (error) {
         return error;
     }
@@ -37,10 +37,15 @@
     return nil;
 }
 
-+ (NSError *)createIndexOnUserChargeTableWithDatabase:(FMDatabase *)db {
++ (NSError *)updateUserChargeTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"CREATE INDEX UserIndex ON BK_USER_CHARGE (CUSERID)"]) {
         return [db lastError];
     }
+    
+    if (![db executeUpdate:@"ALTER TABLE BK_USER_CHARGE ADD CLIENTADDDATE TEXT"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
