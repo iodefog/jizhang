@@ -141,7 +141,7 @@
                         }
                         return;
                     };
-                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid = ?", fundingItem.fundingID];
+                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where cthefundid = ?",fundingItem.fundingID];
                     if (!resultSet) {
                         if (failure) {
                             *rollback = YES;

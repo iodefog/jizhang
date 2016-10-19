@@ -19,6 +19,4 @@
 
 @property(nonatomic, strong) SSJBookKeepingHomeBooksButton *leftButton;
 
-- (void)updateAfterThemeChange;
-
 @end

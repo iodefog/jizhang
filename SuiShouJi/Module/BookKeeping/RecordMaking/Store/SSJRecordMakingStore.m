@@ -53,7 +53,7 @@
             editeItem = item;
             editeItem.operatorType = 0;
             //新建流水
-            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid,cimgurl,thumburl) values(?,?,?,?,?,?,?,0,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage]) {
+            if (![db executeUpdate:@"insert into bk_user_charge (ichargeid , cuserid , imoney , ibillid , ifunsid  , cwritedate , iversion , operatortype , cbilldate , cmemo , cbooksid, cimgurl, thumburl,clientadddate) values(?,?,?,?,?,?,?,0,?,?,?,?,?,?)",item.ID,userId,moneyStr,item.billId,item.fundId,editeTime,@(SSJSyncVersion()),item.billDate,item.chargeMemo,item.booksId,item.chargeImage,item.chargeThumbImage,editeTime]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
