@@ -18,7 +18,6 @@
                                                @"name":(_name ?: @""),
                                                @"colorValue":(_colorValue ?: @""),
                                                @"ID":(_ID ?: @""),
-                                               @"titleColor":(_titleColor ?: @""),
                                                @"isMember":@(_isMember)}];
 }
 
