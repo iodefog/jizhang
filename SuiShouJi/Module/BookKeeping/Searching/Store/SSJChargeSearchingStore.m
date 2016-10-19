@@ -14,7 +14,7 @@
 
 + (void)searchForChargeListWithSearchContent:(NSString *)content
                                    ListOrder:(SSJChargeListOrder)order
-                                  Success:(void(^)(NSArray <SSJSearchResultItem *>*result , NSInteger chargeCount))success
+                                  Success:(void(^)(NSArray <SSJSearchResultItem *>*result , SSJSearchResultSummaryItem *sumItem))success
                                   failure:(void (^)(NSError *error))failure
 {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -66,6 +66,8 @@
             }
         }
         NSInteger count = 0;
+        double income = 0;
+        double expenture = 0;
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
             item.imageName = [resultSet stringForColumn:@"CCOIN"];
@@ -84,6 +86,11 @@
             item.incomeOrExpence = [resultSet boolForColumn:@"itype"];
             item.money = [NSString stringWithFormat:@"%.2f",[[resultSet stringForColumn:@"IMONEY"] doubleValue]];
             count ++;
+            if (item.incomeOrExpence) {
+                expenture =  expenture + [item.money doubleValue];
+            }else{
+                income =  income +  [item.money doubleValue];
+            }
             if (![item.billDate isEqualToString:lastBillDate]) {
                 SSJSearchResultItem *searchItem = [[SSJSearchResultItem alloc]init];
                 searchItem.searchOrder = order;
@@ -100,7 +107,7 @@
                 [tempArr addObject:searchItem];
             }else{
                 SSJSearchResultItem *searchItem = [tempArr lastObject];
-                if (order == SSJChargeListOrderDateAscending || order == SSJChargeListOrderDateDescending) {\
+                if (order == SSJChargeListOrderDateAscending || order == SSJChargeListOrderDateDescending) {
                     if (item.incomeOrExpence) {
                         searchItem.balance =  searchItem.balance - [item.money doubleValue];
                     }else{
@@ -111,9 +118,13 @@
                 lastBillDate = item.billDate;
             }
         }
+        SSJSearchResultSummaryItem *sumItem = [[SSJSearchResultSummaryItem alloc]init];
+        sumItem.resultCount = count;
+        sumItem.resultIncome = income;
+        sumItem.resultExpenture = expenture;
         if (success) {
             SSJDispatch_main_async_safe(^{
-                success(tempArr,count);
+                success(tempArr,sumItem);
             });
         }
     }];

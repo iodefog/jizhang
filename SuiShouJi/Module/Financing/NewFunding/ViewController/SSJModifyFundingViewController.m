@@ -247,7 +247,7 @@
 - (void)deleteFundingItem:(SSJBaseItem *)item type:(BOOL)type{
     __weak typeof(self) weakSelf = self;
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         NSLog(@"%@",[error localizedDescription]);
@@ -322,7 +322,7 @@
             UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf deleteFundingItem:weakSelf.item type:0];
             }];
-            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 [weakSelf deleteFundingItem:weakSelf.item type:1];
             }];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {

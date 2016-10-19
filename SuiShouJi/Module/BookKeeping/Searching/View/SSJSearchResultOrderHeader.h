@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJSearchResultItem.h"
+#import "SSJSearchResultSummaryItem.h"
 
 @interface SSJSearchResultOrderHeader : UIView
 
 @property(nonatomic) SSJChargeListOrder order;
 
-@property(nonatomic) NSInteger resultCount;
+@property(nonatomic,strong) SSJSearchResultSummaryItem *sumItem;
 
 @property (nonatomic, copy) void(^orderSelectBlock)(SSJChargeListOrder order);
 
