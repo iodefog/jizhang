@@ -432,6 +432,7 @@ static const CGFloat kBottomViewHeight = 398;
         _billTypeLab = [[UILabel alloc] init];
         _billTypeLab.backgroundColor = [UIColor clearColor];
         _billTypeLab.font = [UIFont systemFontOfSize:18];
+        _billTypeLab.adjustsFontSizeToFitWidth = YES;
     }
     return _billTypeLab;
 }
