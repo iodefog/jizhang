@@ -91,7 +91,7 @@
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
-        _titleLab.font = [UIFont systemFontOfSize:18];
+        _titleLab.font = [UIFont systemFontOfSize:15];
     }
     return _titleLab;
 }
@@ -99,7 +99,7 @@
 - (UILabel *)billTypeLab {
     if (!_billTypeLab) {
         _billTypeLab = [[UILabel alloc] init];
-        _billTypeLab.font = [UIFont systemFontOfSize:18];
+        _billTypeLab.font = [UIFont systemFontOfSize:15];
     }
     return _billTypeLab;
 }
