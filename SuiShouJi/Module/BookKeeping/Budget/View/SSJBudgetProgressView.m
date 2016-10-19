@@ -100,7 +100,7 @@
             progress = 1;
         }
         _progressView.size = CGSizeMake(self.width, self.height);
-        [UIView animateWithDuration:(1 - progress) * 1.5 animations:^{
+        [UIView animateWithDuration:(1 - progress) * 2 animations:^{
             _progressView.width = self.width * progress;
         }];
     }
