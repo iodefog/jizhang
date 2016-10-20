@@ -34,5 +34,7 @@ typedef NSAttributedString* (^UICountingLabelAttributedFormatBlock)(CGFloat valu
 
 - (CGFloat)currentValue;
 
+- (void)stopCounting;
+
 @end
 

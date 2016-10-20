@@ -101,6 +101,7 @@
         CGSize toSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
         _surplusValueLab.size = CGSizeMake(MAX(formSize.width, toSize.width), MAX(formSize.height, toSize.height));
     } else {
+        [_surplusValueLab stopCounting];
         _surplusLab.text = @"超支：";
         _surplusValueLab.text = [NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney];
         [_surplusValueLab sizeToFit];
