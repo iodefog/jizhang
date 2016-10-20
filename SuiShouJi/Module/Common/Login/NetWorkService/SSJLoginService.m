@@ -138,7 +138,7 @@
                      @"openid":@"oauthid"};
         }];
         self.item = [SSJUserItem mj_objectWithKeyValues:result];
-        self.item.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+        self.item.loginType = [NSString stringWithFormat:@"%luld",(unsigned long)self.loginType];
         if (self.loginType != SSJLoginTypeNormal) {
             self.item.mobileNo = @"";
         }
