@@ -7,12 +7,15 @@
 //
 
 #import "SSJBudgetProgressView.h"
+#import "UICountingLabel.h"
 
 @interface SSJBudgetProgressView ()
 
 @property (nonatomic, strong) UIView *progressView;
 
 @property (nonatomic, strong) UILabel *surplusLab;
+
+@property (nonatomic, strong) UICountingLabel *surplusValueLab;
 
 @end
 
@@ -30,13 +33,23 @@
         _surplusLab.font = [UIFont systemFontOfSize:13];
         _surplusLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
         [self addSubview:_surplusLab];
+        
+        _surplusValueLab = [[UICountingLabel alloc] init];
+        _surplusValueLab.font = [UIFont systemFontOfSize:13];
+        _surplusValueLab.textColor = [UIColor ssj_colorWithHex:@"#FFFFFF"];
+        _surplusValueLab.format = @"%.2f";
+        [self addSubview:_surplusValueLab];
     }
     return self;
 }
 
 - (void)layoutSubviews {
     self.layer.cornerRadius = self.height * 0.5;
-    _surplusLab.center = CGPointMake(self.width * 0.5, self.height * 0.5);
+    
+    CGFloat left = (self.width - _surplusLab.width - _surplusValueLab.width) * 0.5;
+    _surplusLab.left = left;
+    _surplusValueLab.left = _surplusLab.right;
+    _surplusLab.centerY = _surplusValueLab.centerY = self.height * 0.5;
     [self updateProgress];
 }
 
@@ -79,12 +92,19 @@
 }
 
 - (void)updateMoney {
+    [self setNeedsLayout];
+    
     if (_budgetMoney >= _expendMoney) {
-        _surplusLab.text = [NSString stringWithFormat:@"剩余：%.2f", _budgetMoney - _expendMoney];
+        _surplusLab.text = @"剩余：";
     } else {
-        _surplusLab.text = [NSString stringWithFormat:@"超支：%.2f", _budgetMoney - _expendMoney];
+        _surplusLab.text = @"超支：";
     }
     [_surplusLab sizeToFit];
+    
+    [_surplusValueLab countFrom:_budgetMoney to:_budgetMoney - _expendMoney withDuration:MAX((_expendMoney / _budgetMoney) * 1.5, 1.5)];
+    CGSize formSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
+    CGSize toSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
+    _surplusValueLab.size = CGSizeMake(MAX(formSize.width, toSize.width), MAX(formSize.height, toSize.height));
 }
 
 - (void)updateProgress {
