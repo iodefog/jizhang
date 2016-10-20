@@ -21,6 +21,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
+#import <UMMobClick/MobClick.h>
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
 static NSString *const kBudgetEditTextFieldCellId = @"kBudgetEditTextFieldCellId";
@@ -171,6 +172,8 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         SSJBudgetBillTypeSelectionViewController *billTypeSelectionController = [[SSJBudgetBillTypeSelectionViewController alloc] init];
         billTypeSelectionController.budgetModel = _model;
         [self.navigationController pushViewController:billTypeSelectionController animated:YES];
+        
+        [MobClick event:@"budget_pick_bill_type"];
         
     } else if ([title isEqualToString:kBudgetPeriodTitle]) {
         
@@ -685,7 +688,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [conflictBillNames addObject:@"等"];
     }
     
-    return [NSString stringWithFormat:@"%@已在其它分预算中存在，请选择其它类别吧", [conflictBillNames componentsJoinedByString:@","]];
+    return [NSString stringWithFormat:@"同周期的分类预算不能重复哦，您已设置过%@分类了，请选择其它类别吧！", [conflictBillNames componentsJoinedByString:@"、"]];
 }
 
 - (void)updateSaveButtonState:(BOOL)isSaving {
@@ -723,6 +726,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             case SSJBudgetPeriodTypeYear:
                 [MobClick event:@"budget_cycle_year"];
                 break;
+        }
+        
+        if (![self.model.billIds isEqualToArray:@[@"all"]]) {
+            [MobClick event:@"budget_add_part"];
         }
         
     } failure:^(NSError * _Nonnull error) {
