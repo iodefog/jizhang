@@ -246,7 +246,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     circleModifyCell.cellImageName = image;
     if ([title isEqualToString:kTitle4]) {
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.text = self.item.money;
+        circleModifyCell.cellInput.text = [NSString stringWithFormat:@"%.2f",[self.item.money doubleValue]];
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
