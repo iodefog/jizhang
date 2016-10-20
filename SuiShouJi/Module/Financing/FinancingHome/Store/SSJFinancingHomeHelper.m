@@ -213,27 +213,6 @@
                         }
                         return;
                     };
-                    //删除资金账户所对应的流水
-                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatchMainAsync(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    };
-                    
-                    //更新日常统计表
-                    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatchMainAsync(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
                     
                     //找出所有和当前资金帐户有关的借贷
                     FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select loanid from bk_user_charge where ifunsid = ? and operatortype <> 2)", fundingItem.fundingID];
@@ -266,6 +245,43 @@
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
                         [tempArr addObject:loanModel];
                         [resultSet close];
+<<<<<<< HEAD
+=======
+                    }
+                    
+                    for (SSJLoanModel *model in tempArr) {
+                        if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                    }
+                    
+                    //删除资金账户所对应的流水
+                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatchMainAsync(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    };
+                    
+                    //更新日常统计表
+                    if (![SSJDailySumChargeTable updateDailySumChargeForUserId:userId inDatabase:db]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatchMainAsync(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+>>>>>>> da2b8fdd966d204ddd3c94806d5f78dde4f231fb
                     }
                     for (SSJLoanModel *model in tempArr) {
                         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {

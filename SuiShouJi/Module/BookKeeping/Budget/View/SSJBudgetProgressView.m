@@ -96,15 +96,16 @@
     
     if (_budgetMoney >= _expendMoney) {
         _surplusLab.text = @"剩余：";
+        [_surplusValueLab countFrom:_budgetMoney to:_budgetMoney - _expendMoney withDuration:MAX((_expendMoney / _budgetMoney) * 1.5, 1.5)];
+        CGSize formSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
+        CGSize toSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
+        _surplusValueLab.size = CGSizeMake(MAX(formSize.width, toSize.width), MAX(formSize.height, toSize.height));
     } else {
         _surplusLab.text = @"超支：";
+        _surplusValueLab.text = [NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney];
+        [_surplusValueLab sizeToFit];
     }
     [_surplusLab sizeToFit];
-    
-    [_surplusValueLab countFrom:_budgetMoney to:_budgetMoney - _expendMoney withDuration:MAX((_expendMoney / _budgetMoney) * 1.5, 1.5)];
-    CGSize formSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
-    CGSize toSize = [[NSString stringWithFormat:@"%.2f", _budgetMoney - _expendMoney] sizeWithAttributes:@{NSFontAttributeName:_surplusValueLab.font}];
-    _surplusValueLab.size = CGSizeMake(MAX(formSize.width, toSize.width), MAX(formSize.height, toSize.height));
 }
 
 - (void)updateProgress {
