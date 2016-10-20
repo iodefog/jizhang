@@ -73,6 +73,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         popView.frame = [UIScreen mainScreen].bounds;
         [[UIApplication sharedApplication].keyWindow addSubview:popView];
         [[NSUserDefaults standardUserDefaults]setBool:YES forKey:SSJHaveEnterFundingHomeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 

@@ -118,7 +118,6 @@ NSDate *SCYEnterBackgroundTime() {
     if (SSJIsFirstLaunchForCurrentVersion()) {
         [[NSUserDefaults standardUserDefaults]setObject:[NSDate date]forKey:SSJLastPopTimeKey];
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveLoginOrRegistKey];
-        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:SSJHaveEnterFundingHomeKey];
         [SSJJspatchAnalyze removePatch];
     }
     
