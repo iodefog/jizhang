@@ -12,6 +12,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJMemberTableViewCell.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellIdentifier";
 
@@ -152,10 +153,12 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         for (SSJChargeMemberItem *item in weakSelf.items) {
             NSInteger order = [weakSelf.items indexOfObject:item];
-            [db executeUpdate:@"update bk_member set iorder = ? where cmemberid = ? and cuserid = ?",@(order),item.memberId,userId];
+            [db executeUpdate:@"update bk_member set iorder = ?, cwritedate = ?, iversion = ? where cmemberid = ? and cuserid = ?",@(order),writeDate,@(SSJSyncVersion()),item.memberId,userId];
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     }];
 }
 
