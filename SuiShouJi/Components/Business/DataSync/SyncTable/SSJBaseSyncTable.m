@@ -61,7 +61,8 @@
         NSMutableDictionary *recordInfo = [NSMutableDictionary dictionaryWithCapacity:[self columns].count];
         for (NSString *column in [self columns]) {
             NSString *value = [result stringForColumn:column];
-            [recordInfo setObject:(value ?: @"") forKey:column];
+            NSString *mappedKey = [[self fieldMapping] objectForKey:column];
+            [recordInfo setObject:(value ?: @"") forKey:(mappedKey ?: column)];
         }
         [syncRecords addObject:recordInfo];
     }
@@ -100,13 +101,25 @@
 }
 
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-    for (NSDictionary *recordInfo in records) {
-        if (![recordInfo isKindOfClass:[NSDictionary class]]) {
+    for (NSDictionary *record in records) {
+        if (![record isKindOfClass:[NSDictionary class]]) {
             if (error) {
                 *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
             }
-            SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", recordInfo);
+            SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", record);
             return NO;
+        }
+        
+        NSMutableDictionary *recordInfo = [record mutableCopy];
+        NSDictionary *mapping = [self fieldMapping];
+        if (mapping) {
+            [mapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                id value = recordInfo[obj];
+                if (value) {
+                    [recordInfo removeObjectForKey:obj];
+                    [recordInfo setObject:value forKey:key];
+                }
+            }];
         }
         
         if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
@@ -256,6 +269,10 @@
     }];
     
     return [keyValues componentsJoinedByString:joinString];
+}
+
++ (NSDictionary *)fieldMapping {
+    return nil;
 }
 
 @end

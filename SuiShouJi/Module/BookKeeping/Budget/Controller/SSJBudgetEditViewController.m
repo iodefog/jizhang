@@ -707,7 +707,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self updateSaveButtonState:NO];
         [self ssj_backOffAction];
         
-        if (!_isEdit) {
+        if (!_isEdit && _addNewBudgetBlock) {
             _addNewBudgetBlock(self.model.ID);
         }
         

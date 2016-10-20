@@ -19,11 +19,12 @@ NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";   // 测
 //NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
 
 #else
-NSString *const SSJBaseURLString = @"http://192.168.1.155:18095";   // 测试环境
-NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
+//NSString *const SSJBaseURLString = @"http://192.168.1.155:18095";   // 测试环境
+//NSString *const SSJImageBaseUrlString = @"http://account.gs.9188.com/";
 
-//NSString *const SSJBaseURLString = @"http://jz.9188.com";
-//NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
+NSString *const SSJBaseURLString = @"http://jz.9188.com";
+NSString *const SSJImageBaseUrlString = @"http://jz.9188.com";
+
 #endif
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
@@ -81,4 +82,8 @@ NSString *const SSJYWAppKey = @"23359906";
 NSString *const SSJWeiBoAppKey = @"4058368695";
 
 NSString *const SSJWeiBoSecret = @"b0584e24371e5ad6118dfa0e3de3197c";
+
+NSString *const SSJOverrunRedColorValue = @"#ff654c";
+
+NSString *const SSJSurplusGreenColorValue = @"#0ac082";
 
