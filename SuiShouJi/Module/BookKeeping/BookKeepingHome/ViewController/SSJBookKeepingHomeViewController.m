@@ -423,10 +423,12 @@ BOOL kHomeNeedLoginPop;
 #pragma mark - SSJMultiFunctionButtonDelegate
 - (void)multiFunctionButtonView:(SSJMultiFunctionButtonView *)buttonView willSelectButtonAtIndex:(NSUInteger)index{
     if (index == 1) {
+        [MobClick event:@"main_to_top"];
         [self.tableView setContentOffset:CGPointMake(0, -46) animated:YES];
         [self.floatingDateView dismiss];
         [self.mutiFunctionButton dismiss];
     }else if (index == 2){
+        [MobClick event:@"main_search"];
         SSJSearchingViewController *searchVC = [[SSJSearchingViewController alloc]initWithTableViewStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:searchVC animated:YES];
     }

@@ -193,7 +193,7 @@
                 //如果是普通资金帐户
                 if (!type) {
                     // 如果保留数据只要删掉资金帐户
-                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatchMainAsync(^{
@@ -204,7 +204,7 @@
                     };
                 }else{
                     // 如果不保留先删掉资金帐户
-                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatchMainAsync(^{
@@ -286,7 +286,7 @@
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
             if (!type) {
                 //删掉资金帐户
-                if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.cardId]) {
+                if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.cardId]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatchMainAsync(^{

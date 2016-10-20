@@ -230,6 +230,11 @@ static const CGFloat kButtonGap = 8.0;
         NSUInteger selectedIndex = [_buttons indexOfObject:button];
         if (selectedIndex == _mainButtonIndex) {
             self.buttonStatus = !self.buttonStatus;
+            if (self.buttonStatus) {
+                [MobClick event:@"main_float_collapsed"];
+            }else{
+                [MobClick event:@"main_float_expand"];
+            }
         }
         if (_customDelegate && [_customDelegate respondsToSelector:@selector(multiFunctionButtonView:willSelectButtonAtIndex:)]) {
             [_customDelegate multiFunctionButtonView:self willSelectButtonAtIndex:selectedIndex];

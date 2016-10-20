@@ -125,6 +125,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (self.model == SSJSearchResultModel) {
+        [MobClick event:@"search_click_result"];
         SSJSearchResultItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
         SSJBillingChargeCellItem *billItem = [item.chargeList ssj_safeObjectAtIndex:indexPath.row];
         SSJCalenderDetailViewController *billDetailVc = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
@@ -133,6 +134,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
     }else{
         SSJSearchHistoryItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
         self.searchBar.searchTextInput.text = item.searchHistory;
+        [MobClick event:@"search_pick_history"];
         [self searchForContent:item.searchHistory listOrder:SSJChargeListOrderDateDescending];
     }
 }
@@ -213,6 +215,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
         SSJSearchHistoryCell *cell = [tableView dequeueReusableCellWithIdentifier:kSearchHistoryCellId forIndexPath:indexPath];
         __weak typeof(self) weakSelf = self;
         cell.deleteAction = ^(SSJSearchHistoryItem *item){
+            [MobClick event:@"search_delete_history"];
             [weakSelf getSearchHistory];
         };
         [cell setCellItem:item];
@@ -323,6 +326,7 @@ static NSString *const kSearchSearchResultHeaderId = @"kSearchSearchResultHeader
 
 #pragma mark - Event
 - (void)clearButtonClicked:(id)sender{
+    [MobClick event:@"search_clear_history"];
     if ([SSJChargeSearchingStore clearAllSearchHistoryWitherror:NULL]) {
         [self getSearchHistory];
     }
