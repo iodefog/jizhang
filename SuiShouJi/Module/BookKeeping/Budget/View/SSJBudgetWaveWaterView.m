@@ -15,10 +15,6 @@ static CGFloat kTopTitleSize = 12;
 
 static CGFloat kBottomTitleSize = 22;
 
-static NSString *const kRedColorValue = @"ff654c";
-
-static NSString *const kGreenColorValue = @"0ac082";
-
 @interface SSJBudgetWaveWaterView ()
 
 @property (nonatomic, strong) SSJWaveWaterView *growingView;
@@ -54,9 +50,7 @@ static NSString *const kGreenColorValue = @"0ac082";
         self.backgroundColor = [UIColor clearColor];
         [self addSubview:self.growingView];
         
-        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
-//        self.layer.borderColor = [UIColor ssj_colorWithHex:@"f4f4f4"].CGColor;
-//        self.layer.borderColor = [UIColor orangeColor].CGColor;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:SSJSurplusGreenColorValue alpha:0.1].CGColor;
     }
     return self;
 }
@@ -191,7 +185,7 @@ static NSString *const kGreenColorValue = @"0ac082";
         self.growingView.hidden = YES;
     } else {
         self.growingView.hidden = NO;
-        self.layer.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue alpha:0.1].CGColor;
+        self.layer.borderColor = [UIColor ssj_colorWithHex:SSJSurplusGreenColorValue alpha:0.1].CGColor;
         
         if (!self.growingView.items) {
             self.growingView.items = self.growingItems;
@@ -241,7 +235,7 @@ static NSString *const kGreenColorValue = @"0ac082";
         _growingView.topTitleColor = [UIColor blackColor];
         _growingView.bottomTitleColor = [UIColor blackColor];
         _growingView.titleGap = kTitleGap;
-        _growingView.borderColor = [UIColor ssj_colorWithHex:kGreenColorValue];
+        _growingView.borderColor = [UIColor ssj_colorWithHex:SSJSurplusGreenColorValue];
         _growingView.titleGap = kTitleGap;
         _growingView.topTitleFontSize = kTopTitleSize;
         _growingView.bottomTitleFontSize = kBottomTitleSize;

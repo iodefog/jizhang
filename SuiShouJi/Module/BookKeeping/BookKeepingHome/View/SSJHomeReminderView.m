@@ -104,25 +104,26 @@
                 break;
         }
         
+        NSString *moneyStr = nil;
+        NSMutableAttributedString *attriString = nil;
+        UIColor *highlightedColor = nil;
+        
         if (_model.budgetMoney < _model.payMoney) {
-            NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney]];
-            NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
-            NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.payMoney - _model.budgetMoney] rangeOfString:moneyStr];
-            [attriString addAttribute:NSForegroundColorAttributeName
-                                value:[UIColor ssj_colorWithHex:@"45fffd"]
-                                range:range];
-            self.remindLabel.attributedText = attriString;
-            [self.remindLabel sizeToFit];
-        }else{
-            NSMutableAttributedString *attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]];
-            NSString *moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
-            NSRange range = [[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%.2f元预算了。\n养鱼要蓄水，省点花钱吧",typeStr,_model.budgetMoney - _model.payMoney]rangeOfString:moneyStr];
-            [attriString addAttribute:NSForegroundColorAttributeName
-                                value:[UIColor ssj_colorWithHex:@"45fffd"]
-                                range:range];
-            self.remindLabel.attributedText = attriString;
-            [self.remindLabel sizeToFit];
+            highlightedColor = [UIColor ssj_colorWithHex:SSJOverrunRedColorValue];
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您已经超支%@预算了。\n养鱼要蓄水，省点花钱吧", typeStr, moneyStr]];
+        } else {
+            highlightedColor = [UIColor ssj_colorWithHex:@"45fffd"];
+            moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，%@您只剩下%@预算了。\n养鱼要蓄水，省点花钱吧", typeStr, moneyStr]];
         }
+        
+        NSRange range = [attriString.string rangeOfString:moneyStr];
+        [attriString addAttribute:NSForegroundColorAttributeName
+                            value:highlightedColor
+                            range:range];
+        self.remindLabel.attributedText = attriString;
+        [self.remindLabel sizeToFit];
     } else {
         
         NSString *typeStr;
@@ -150,18 +151,21 @@
         
         NSString *moneyStr = nil;
         NSMutableAttributedString *attriString = nil;
+        UIColor *highlightedColor = nil;
         
         if (_model.budgetMoney < _model.payMoney) {
+            highlightedColor = [UIColor ssj_colorWithHex:SSJOverrunRedColorValue];
             moneyStr = [NSString stringWithFormat:@"%.2f元",_model.payMoney - _model.budgetMoney];
-            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-(%@)已经超支%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-%@已经超支%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
         } else {
+            highlightedColor = [UIColor ssj_colorWithHex:@"45fffd"];
             moneyStr = [NSString stringWithFormat:@"%.2f元",_model.budgetMoney - _model.payMoney];
-            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-(%@)只剩下%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
+            attriString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"亲爱的小主，您的%@分类预算-%@只剩下%@了。\n养鱼要蓄水，省点花钱吧！", typeStr, billNames, moneyStr]];
         }
         
         NSRange range = [attriString.string rangeOfString:moneyStr];
         [attriString addAttribute:NSForegroundColorAttributeName
-                            value:[UIColor ssj_colorWithHex:@"45fffd"]
+                            value:highlightedColor
                             range:range];
         self.remindLabel.attributedText = attriString;
         [self.remindLabel sizeToFit];

@@ -103,6 +103,12 @@ extern NSString *const SSJWeiBoAppKey;
 //微博secret
 extern NSString *const SSJWeiBoSecret;
 
+//预算超支红色
+extern NSString *const SSJOverrunRedColorValue;
+
+//预算剩余绿色
+extern NSString *const SSJSurplusGreenColorValue;
+
 /** -------------------- KEY -------------------- */
 //保存上次弹窗的时间
 extern NSString *const SSJLastPopTimeKey;
