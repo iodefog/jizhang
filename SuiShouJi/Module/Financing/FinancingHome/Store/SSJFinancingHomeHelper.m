@@ -14,6 +14,7 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDailySumChargeTable.h"
+#import "SSJBillingChargeCellItem.h"
 
 @implementation SSJFinancingHomeHelper
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
@@ -259,6 +260,17 @@
                         };
                     }
                     
+                    // 删掉账户所对应的转账
+                    if (![self deleteTransferChargeInDataBase:db withFundId:fundingItem.fundingID userId:userId error:NULL]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatchMainAsync(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    }
+                    
                     //删除资金账户所对应的流水
                     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
@@ -280,7 +292,6 @@
                         }
                         return;
                     }
-                    
                 }
             }
         }else{
@@ -333,6 +344,17 @@
                         return;
                     });
                 };
+                
+                // 删掉账户所对应的转账
+                if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.cardId userId:userId error:NULL]) {
+                    if (failure) {
+                        *rollback = YES;
+                        SSJDispatchMainAsync(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
             }
         }
         if (success) {
@@ -341,6 +363,45 @@
             });
         }
     }];
+}
+
++ (BOOL)deleteTransferChargeInDataBase:(FMDatabase *)db withFundId:(NSString *)fundId userId:(NSString *)userId error:(NSError *)error{
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+    FMResultSet *transferResult = [db executeQuery:@"select * from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2 and ibillid in (3,4)",fundId,userId];
+    if (!transferResult) {
+        error = [db lastError];
+    }
+    while ([transferResult next]) {
+        SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
+        item.billId = [transferResult stringForColumn:@"ibillid"];
+        item.ID = [transferResult stringForColumn:@"ichargeid"];
+        item.editeDate = [transferResult stringForColumn:@"cwritedate"];
+        item.billDate = [transferResult stringForColumn:@"cbilldate"];
+        item.money = [transferResult stringForColumn:@"imoney"];
+        [tempArr addObject:item];
+    }
+    [transferResult close];
+    
+    for (SSJBillingChargeCellItem *item in tempArr) {
+        NSDate *writeDate = [NSDate dateWithString:item.editeDate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSDate *maxDate = [writeDate dateByAddingSeconds:1];
+        NSDate *minDate = [writeDate dateBySubtractingMinutes:1];
+        NSString *maxDateStr = [maxDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSString *minDateStr = [minDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if ([item.billId isEqualToString:@"3"]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and cwritedate between (?,?) and imoney = ? and ibillid = 4 limit 1",userId,item.billDate,minDateStr,maxDateStr,item.money]) {
+                error = [db lastError];
+                return NO;
+            }
+        }else{
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3 limit 1",userId,item.billDate,minDateStr,maxDateStr,item.money]) {
+                error = [db lastError];
+                return NO;
+            }
+        }
+    }
+    
+    return YES;
 }
 
 + (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId{

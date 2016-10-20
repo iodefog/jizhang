@@ -47,6 +47,19 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    {
+        NSURL *url = [request URL];
+        if([[UIApplication sharedApplication]canOpenURL:url])
+        {
+            [[UIApplication sharedApplication]openURL:url];
+        }
+        return NO;
+    }
+    return YES;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
