@@ -147,7 +147,7 @@
 
         self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
         self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
-        self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"booksType"]];
+        self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
         self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
         self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
     }
