@@ -232,7 +232,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    
+    [MobClick event:@"account_book_sort"];
+    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
 }
 
 //- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
@@ -378,7 +379,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.collectionView reloadData];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
-    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
     [self.collectionView endEditing];
 }
 

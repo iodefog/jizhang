@@ -151,6 +151,7 @@ static NSString *const kMemberTableViewCellIdentifier = @"kMemberTableViewCellId
 
 - (void)saveMemberOrder{
     __weak typeof(self) weakSelf = self;
+    [MobClick event:@"account_book_sort"];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
