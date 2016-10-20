@@ -58,6 +58,10 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
 }
 
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Getter
 - (SSJNewOrEditCustomCategoryView *)booksEditeView{
     if (!_booksEditeView) {
@@ -100,6 +104,7 @@
     }
     if ([SSJBooksTypeStore saveBooksTypeItem:self.item]) {
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        [[NSNotificationCenter defaultCenter]postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
         [self.navigationController popViewControllerAnimated:YES];
     }else{
         [CDAutoHideMessageHUD showMessage:@"保存失败"];
