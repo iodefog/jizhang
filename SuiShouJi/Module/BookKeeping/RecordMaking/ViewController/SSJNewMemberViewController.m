@@ -12,6 +12,7 @@
 #import "SSJColorSelectCollectionViewCell.h"
 #import "SSJNewMemberHeaderView.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJNewMemberViewController ()<UICollectionViewDelegate,UICollectionViewDataSource,UITextFieldDelegate>
 @property(nonatomic, strong) UICollectionView *collectionView;
@@ -163,6 +164,7 @@
                 });
             }
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     }];
 }
 
