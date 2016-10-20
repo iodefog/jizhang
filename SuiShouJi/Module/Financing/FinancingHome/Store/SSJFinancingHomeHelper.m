@@ -266,19 +266,18 @@
                         loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
                         [tempArr addObject:loanModel];
                         [resultSet close];
-                        for (SSJLoanModel *model in tempArr) {
-                            if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
-                                if (failure) {
-                                    *rollback = YES;
-                                    SSJDispatchMainAsync(^{
-                                        failure([db lastError]);
-                                    });
-                                }
-                                return;
-                            };
-                        }
                     }
-                    
+                    for (SSJLoanModel *model in tempArr) {
+                        if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
+                            if (failure) {
+                                *rollback = YES;
+                                SSJDispatchMainAsync(^{
+                                    failure([db lastError]);
+                                });
+                            }
+                            return;
+                        };
+                    }
                 }
             }
         }else{
