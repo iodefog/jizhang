@@ -82,7 +82,10 @@ NSDate *SCYEnterBackgroundTime() {
     
     [self initializeDatabaseWithFinishHandler:^{
         //  启动时强制同步一次
-        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        if (SSJIsUserLogined()) {
+            [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+        }
+        
         //  开启定时同步
         [[SSJDataSynchronizer shareInstance] startTimingSync];
         

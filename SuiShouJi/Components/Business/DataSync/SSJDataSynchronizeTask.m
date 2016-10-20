@@ -383,7 +383,9 @@ static NSString *const kSyncZipFileName = @"sync_data.zip";
         int operatorType = [db intForQuery:@"select bt.operatortype from bk_books_type as bt, bk_user as u where u.cuserid = ? and bt.cuserid = u.cuserid and u.ccurrentbooksid = bt.cbooksid", self.userId];
         if (operatorType == 2) {
             [db executeUpdate:@"update bk_user set ccurrentbooksid = ?", self.userId];
-            [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            SSJDispatchMainAsync(^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+            });
         }
     }];
     

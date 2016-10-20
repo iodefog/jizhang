@@ -10,6 +10,8 @@
 
 @interface SSJMineSyncButton : UIView
 
+@property (nonatomic, copy) BOOL (^shouldSyncBlock)();
+
 - (void)updateAfterThemeChange;
 
 @end
